@@ -1,0 +1,341 @@
+:root {
+  --bg: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-hover: #1a2744;
+  --accent: #e94560;
+  --accent-dim: #a3324a;
+  --text: #eee;
+  --text-dim: #8899aa;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --border: #2a3a5e;
+  --bar-bg: #0f1529;
+  --bar-fill: #e94560;
+  --bar-xp: #6366f1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  min-height: 100dvh;
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header h1 {
+  font-size: 1.25rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.reset-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.reset-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Resource bar */
+.resource-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.resource-chip {
+  font-size: 0.75rem;
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.resource-chip .amount {
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Current action */
+.current-action {
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+
+.current-action-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.current-action-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stop-btn {
+  background: var(--accent-dim);
+  border: none;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--bar-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--bar-fill);
+  border-radius: 4px;
+  transition: width 0.1s linear;
+}
+
+.progress-time {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Panel area */
+.panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+}
+
+/* Action cards */
+.action-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.action-card:hover:not(.disabled) {
+  border-color: var(--accent);
+}
+
+.action-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.action-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.action-time {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.action-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.action-drops,
+.action-requires {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.action-drops span {
+  color: var(--success);
+}
+
+.action-requires span {
+  color: var(--warning);
+}
+
+.action-xp {
+  font-size: 0.72rem;
+  color: var(--bar-xp);
+}
+
+/* Crafting */
+.recipe-inputs {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.recipe-inputs .has {
+  color: var(--success);
+}
+
+.recipe-inputs .missing {
+  color: var(--accent);
+}
+
+.recipe-output {
+  font-size: 0.72rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* Skills */
+.skill-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.skill-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.skill-level {
+  font-size: 0.8rem;
+  color: var(--bar-xp);
+  font-weight: 600;
+}
+
+.xp-bar {
+  height: 6px;
+  background: var(--bar-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.xp-fill {
+  height: 100%;
+  background: var(--bar-xp);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.xp-text {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Log */
+.log-entry {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-entry:first-child {
+  color: var(--text);
+}
+
+.log-time {
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  margin-right: 6px;
+}
+
+/* Section headers */
+.section-title {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 12px 0 6px;
+}
+
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.empty-message {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 32px 0;
+}
