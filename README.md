@@ -15,6 +15,8 @@ Choose an action, watch the progress bar fill, collect resources, level up skill
 
 This is a progress bar / idle progression game, not a real-time survival game. The interface is panels, progress bars, resource counters, and action buttons — not a graphical world.
 
+The game supports offline progress — actions continue while the player is away and resources and experience accumulate when they return.
+
 ## Inspirations
 
 - **RuneScape** — skill leveling, skilling actions, progression unlocks
@@ -49,11 +51,15 @@ The early game focuses on primitive technology and bootstrapping basic infrastru
 
 ## Exploration
 
-Exploring takes time and can return:
+Exploration is an expedition-style action that takes time to complete.
+
+Exploration can return:
 
 - Random resources from loot tables
-- Rare drops
-- New biomes that contain new materials and actions
+- Rare items
+- New biomes containing new materials and actions
+
+Discovering a biome permanently unlocks new gathering options.
 
 Some areas may be gated by combat strength, required consumables (food), or skill levels. Food is not required to survive — there is no way to die — but it may be a necessary consumable for actions like exploring.
 
@@ -67,6 +73,28 @@ As the player progresses, the camp gradually grows into a small settlement. New 
 - **Farms** — crop growing for food and materials
 - **Workshops** — specialized crafting stations
 - **Storage buildings** — expanded inventory
+
+## Example Gameplay
+
+You start in an ancient forest with nothing but your hands.
+
+You begin foraging to gather sticks, berries and plant fibers.
+With enough sticks and stones you can knap a crude axe.
+The axe lets you cut branches, unlocking woodcutting actions.
+
+Soon you build a **hearth**, which allows cooking and new crafting recipes.
+Exploration reveals nearby forests and hills with new materials.
+
+Over time your camp grows into a small settlement with workshops, farms, and specialized production.
+
+## Design Goals
+
+- Focus on satisfying progression — no dark patterns or predatory monetization
+- No artificial waiting or pay-to-skip mechanics
+- Deep crafting and resource chains
+- A world that grows with the player
+- Systems that unlock gradually and interconnect over time
+- A sandbox endgame where players show off found and crafted gear or cool modular automations
 
 ## MVP Scope
 
