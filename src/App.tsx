@@ -16,7 +16,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Hearthrise</h1>
+        <h1>SeaBound</h1>
         <button className="reset-btn" onClick={game.resetGame}>
           Reset
         </button>

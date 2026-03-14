@@ -22,7 +22,7 @@ export function createInitialState(): GameState {
   };
 }
 
-const SAVE_KEY = "hearthrise_save";
+const SAVE_KEY = "seabound_save";
 
 export function saveGame(state: GameState): void {
   localStorage.setItem(SAVE_KEY, JSON.stringify(state));
