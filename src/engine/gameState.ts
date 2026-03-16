@@ -1,3 +1,5 @@
+import { BUILDINGS } from "../data/buildings";
+import { RESOURCES } from "../data/resources";
 import { BuildingId, GameState, ResourceId, SkillId } from "../data/types";
 
 const ALL_SKILLS: SkillId[] = [
@@ -66,6 +68,43 @@ export function loadGame(): GameState | null {
 
 export function getResource(state: GameState, id: string): number {
   return state.resources[id] ?? 0;
+}
+
+/** Default per-item storage limit before any building bonuses. */
+export const BASE_STORAGE_LIMIT = 10;
+
+/** Get the storage limit for a specific resource, accounting for building bonuses. */
+export function getStorageLimit(state: GameState, resourceId: string): number {
+  const def = RESOURCES[resourceId];
+  if (!def) return BASE_STORAGE_LIMIT;
+
+  let limit = BASE_STORAGE_LIMIT;
+  for (const bid of state.buildings) {
+    const bdef = BUILDINGS[bid];
+    if (bdef?.storageBonus) {
+      for (const bonus of bdef.storageBonus) {
+        if (bonus.category === def.category) {
+          limit += bonus.amount;
+        }
+      }
+    }
+  }
+  return limit;
+}
+
+/** Add resource, clamping to the storage limit. Returns the amount actually added.
+ *  If current amount already exceeds the limit (e.g. old save), no more is added but nothing is removed. */
+export function addResource(state: GameState, resourceId: string, amount: number): number {
+  const current = state.resources[resourceId] ?? 0;
+  const limit = getStorageLimit(state, resourceId);
+  if (current >= limit) {
+    // Already at or over cap — don't add, but don't reduce either
+    return 0;
+  }
+  const space = limit - current;
+  const actuallyAdded = Math.min(amount, space);
+  state.resources[resourceId] = current + actuallyAdded;
+  return actuallyAdded;
 }
 
 /** Resources that count as food for expedition costs. */

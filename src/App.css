@@ -90,6 +90,14 @@ body {
   font-weight: 600;
 }
 
+.resource-chip.at-cap {
+  border-color: var(--warning);
+}
+
+.resource-chip.at-cap .amount {
+  color: var(--warning);
+}
+
 /* Current action */
 .current-action {
   padding: 10px 16px;
@@ -421,4 +429,10 @@ body {
 .building-unlocks {
   font-size: 0.72rem;
   color: var(--bar-xp);
+}
+
+.building-storage {
+  font-size: 0.72rem;
+  color: var(--success);
+  margin-top: 2px;
 }
