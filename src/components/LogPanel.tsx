@@ -1,23 +1,35 @@
-import { GameLog } from "../engine/useGame";
+import { DiscoveryEntry } from "../data/types";
 
-export function LogPanel({ logs }: { logs: GameLog[] }) {
-  if (logs.length === 0) {
-    return <div className="empty-message">No activity yet. Start gathering!</div>;
+const TYPE_LABELS: Record<string, string> = {
+  biome: "Exploration",
+  level: "Milestone",
+  craft: "Crafting",
+  building: "Settlement",
+  resource: "Discovery",
+};
+
+export function LogPanel({ entries }: { entries: DiscoveryEntry[] }) {
+  if (entries.length === 0) {
+    return (
+      <div className="empty-message">
+        No discoveries yet. Start exploring!
+      </div>
+    );
   }
 
   return (
     <div>
-      {logs.map((log) => {
-        const time = new Date(log.timestamp);
-        const ts = time.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
+      {entries.map((entry) => {
+        const time = new Date(entry.timestamp);
+        const ts = time.toLocaleDateString([], {
+          month: "short",
+          day: "numeric",
         });
         return (
-          <div key={log.id} className="log-entry">
+          <div key={entry.id} className={`log-entry log-${entry.type}`}>
             <span className="log-time">{ts}</span>
-            {log.message}
+            <span className="log-type">{TYPE_LABELS[entry.type] ?? entry.type}</span>
+            {entry.message}
           </div>
         );
       })}

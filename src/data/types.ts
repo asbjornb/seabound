@@ -148,6 +148,15 @@ export interface ExpeditionOutcome {
   drops?: Drop[];
 }
 
+export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource";
+
+export interface DiscoveryEntry {
+  id: number;
+  type: DiscoveryType;
+  message: string;
+  timestamp: number;
+}
+
 export interface GameState {
   resources: Record<string, number>;
   skills: Record<SkillId, { xp: number; level: number }>;
@@ -163,4 +172,6 @@ export interface GameState {
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;
+  discoveryLog: DiscoveryEntry[];
+  discoveredResources: string[];
 }

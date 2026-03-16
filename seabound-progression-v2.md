@@ -34,6 +34,10 @@
 - Navigation effects on expedition odds
 - Maritime vessel chain (raft → dugout → outrigger → sailing canoe)
 
+### Design Ideas (Not Yet Planned)
+
+- **Resource obsolescence** — As players progress, early-phase resources (e.g. rough_fiber, round_stone) should become obsolete. Unlike Unnamed Space Idle's approach of making early resources infinite, we need a thematic solution. Possible approaches: auto-conversion (rough fiber → fiber when you unlock it), removal of obsolete actions/recipes from the UI once superseded, or a "mastery" mechanic where reaching a skill threshold trivializes early resources. Goal: reduce inventory clutter and action list bloat in late game without breaking the castaway theme.
+
 ---
 
 ## TAB 1: DESIGN PRINCIPLES
