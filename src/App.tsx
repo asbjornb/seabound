@@ -11,11 +11,12 @@ import { getTotalFood } from "./engine/gameState";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
-type Tab = "gather" | "craft" | "camp" | "explore" | "skills" | "log";
+type Tab = "gather" | "craft" | "camp" | "explore" | "skills";
 
 export default function App() {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
+  const [showLog, setShowLog] = useState(false);
 
   // Split recipes: building recipes go to Camp tab, others stay in Craft
   const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput);
@@ -39,7 +40,6 @@ export default function App() {
     if (craftRecipes.length > 0) tabs.push("craft");
     if (buildingRecipes.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
-    tabs.push("log");
     return tabs;
   }, [hasFood, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
 
@@ -67,9 +67,17 @@ export default function App() {
     <div className="app">
       <header className="header">
         <h1>SeaBound</h1>
-        <button className="reset-btn" onClick={game.resetGame}>
-          Reset
-        </button>
+        <div className="header-actions">
+          <button
+            className={`log-toggle-btn${showLog ? " active" : ""}`}
+            onClick={() => setShowLog((v) => !v)}
+          >
+            Log
+          </button>
+          <button className="reset-btn" onClick={game.resetGame}>
+            Reset
+          </button>
+        </div>
       </header>
 
       <ResourcePanel state={game.state} />
@@ -110,6 +118,12 @@ export default function App() {
         ))}
       </nav>
 
+      {showLog && (
+        <div className="log-drawer">
+          <LogPanel logs={game.logs} />
+        </div>
+      )}
+
       <main className="panel">
         {activeTab === "gather" && (
           <ActionPanel
@@ -140,7 +154,6 @@ export default function App() {
           />
         )}
         {activeTab === "skills" && <SkillsPanel state={game.state} />}
-        {activeTab === "log" && <LogPanel logs={game.logs} />}
       </main>
     </div>
   );
