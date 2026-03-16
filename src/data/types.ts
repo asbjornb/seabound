@@ -3,7 +3,6 @@ export type ResourceId =
   | "coconut"
   | "coconut_husk"
   | "driftwood_branch"
-  | "round_stone"
   | "flat_stone"
   | "vine"
   | "palm_frond"
@@ -13,9 +12,7 @@ export type ResourceId =
   // Phase 1 - Bamboo Tier
   | "bamboo_cane"
   | "bamboo_splinter"
-  | "bamboo_strip"
   | "rough_fiber"
-  | "rough_cordage"
   | "dried_fiber"
   | "cordage"
   | "bamboo_knife"
