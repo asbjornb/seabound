@@ -236,6 +236,37 @@ export function useGame() {
     setLogs([]);
   }, []);
 
+  const exportSave = useCallback(() => {
+    saveGame(stateRef.current);
+    const data = JSON.stringify(stateRef.current);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "seabound-save.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const importSave = useCallback(
+    (file: File) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const loaded = JSON.parse(reader.result as string) as GameState;
+          saveGame(loaded);
+          setState(loaded);
+          setLogs([]);
+          addLog("Save file loaded successfully.");
+        } catch {
+          addLog("Failed to load save file.");
+        }
+      };
+      reader.readAsText(file);
+    },
+    [addLog]
+  );
+
   // Filter actions by skill level, biome discovery, building requirements, AND tool availability
   const availableActions = ACTIONS.filter((a) => {
     const skill = state.skills[a.skillId];
@@ -336,6 +367,8 @@ export function useGame() {
     startExpedition,
     stopAction,
     resetGame,
+    exportSave,
+    importSave,
   };
 }
 

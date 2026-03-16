@@ -50,7 +50,12 @@ body {
   letter-spacing: 0.05em;
 }
 
-.reset-btn {
+/* Settings dropdown */
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text-dim);
@@ -60,9 +65,46 @@ body {
   cursor: pointer;
 }
 
-.reset-btn:hover {
+.settings-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.settings-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  z-index: 100;
+  min-width: 140px;
+}
+
+.settings-menu-item {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 0.8rem;
+  padding: 8px 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.settings-menu-item.danger {
+  color: #f87171;
+}
+
+.settings-menu-item.danger:hover {
+  background: rgba(248, 113, 113, 0.1);
 }
 
 /* App body layout */
