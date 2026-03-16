@@ -1,5 +1,7 @@
 # SeaBound
 
+**[Play now at seabound.pages.dev](https://seabound.pages.dev)**
+
 A crafting progression idle game. Mobile-first, web-based.
 
 Choose an action, watch the progress bar fill, collect resources, level up skills, unlock new recipes and areas, build your settlement from a campfire into a thriving settlement and explore the surroundings.
