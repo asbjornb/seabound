@@ -84,7 +84,7 @@ export default function App() {
             className={`log-toggle-btn${showLog ? " active" : ""}`}
             onClick={() => setShowLog((v) => !v)}
           >
-            Log
+            Journal
           </button>
           <div className="settings-wrapper">
             <button
@@ -184,7 +184,7 @@ export default function App() {
 
           {showLog && (
             <div className="log-drawer">
-              <LogPanel logs={game.logs} />
+              <LogPanel entries={game.state.discoveryLog} />
             </div>
           )}
 

@@ -27,6 +27,8 @@ export function createInitialState(): GameState {
     currentAction: null,
     lastTickAt: Date.now(),
     totalPlayTimeMs: 0,
+    discoveryLog: [],
+    discoveredResources: [],
   };
 }
 
@@ -59,6 +61,16 @@ export function loadGame(): GameState | null {
       if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
         loaded.buildings.push("camp_fire");
       }
+    }
+    // Migration: ensure discoveryLog exists
+    if (!loaded.discoveryLog) {
+      loaded.discoveryLog = [];
+    }
+    // Migration: ensure discoveredResources exists (backfill from inventory)
+    if (!loaded.discoveredResources) {
+      loaded.discoveredResources = Object.keys(loaded.resources).filter(
+        (id) => (loaded.resources[id] ?? 0) > 0
+      );
     }
     return loaded;
   } catch {

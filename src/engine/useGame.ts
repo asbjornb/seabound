@@ -1,9 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ACTIONS } from "../data/actions";
+import { BUILDINGS } from "../data/buildings";
 import { EXPEDITIONS } from "../data/expeditions";
 import { getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
-import { ActionDef, ExpeditionDef, GameState, RecipeDef } from "../data/types";
+import { RESOURCES } from "../data/resources";
+import {
+  ActionDef,
+  DiscoveryType,
+  ExpeditionDef,
+  GameState,
+  RecipeDef,
+} from "../data/types";
 import {
   addResource,
   createInitialState,
@@ -37,8 +45,6 @@ function refundCurrentAction(state: GameState) {
       (e) => e.id === state.currentAction!.expeditionId
     );
     if (exp?.foodCost && state.currentAction.foodPaid) {
-      // Refund the food that was paid for the current (unfinished) cycle
-      // We store which resources were deducted so we can refund accurately
       for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
         addResource(state, resId, amount);
       }
@@ -46,32 +52,58 @@ function refundCurrentAction(state: GameState) {
   }
 }
 
-export interface GameLog {
-  id: number;
-  message: string;
-  timestamp: number;
+let nextDiscoveryId = 0;
+
+function addDiscovery(
+  state: GameState,
+  type: DiscoveryType,
+  message: string
+): void {
+  state.discoveryLog.unshift({
+    id: nextDiscoveryId++,
+    type,
+    message,
+    timestamp: Date.now(),
+  });
+}
+
+function processCompletionDiscoveries(
+  state: GameState,
+  c: CompletionEvent
+): void {
+  if (c.biomeDiscovery) {
+    const name = c.biomeDiscovery.replace(/_/g, " ");
+    addDiscovery(state, "biome", `Discovered the ${name}`);
+  }
+  if (c.buildingBuilt) {
+    const bdef = BUILDINGS[c.buildingBuilt];
+    const name = bdef?.name ?? c.buildingBuilt.replace(/_/g, " ");
+    addDiscovery(state, "building", `Built a ${name}`);
+  }
+  if (c.newResources) {
+    for (const resId of c.newResources) {
+      const rdef = RESOURCES[resId];
+      const name = rdef?.name ?? resId.replace(/_/g, " ");
+      addDiscovery(state, "resource", `Found ${name} for the first time`);
+    }
+  }
+  if (c.levelUp) {
+    const skillName = c.skillId.charAt(0).toUpperCase() + c.skillId.slice(1);
+    addDiscovery(state, "level", `Reached ${skillName} level ${c.levelUp}`);
+  }
 }
 
 export function useGame() {
   const [state, setState] = useState<GameState>(() => {
-    return loadGame() ?? createInitialState();
+    const loaded = loadGame() ?? createInitialState();
+    // Initialize discovery ID counter from existing log
+    if (loaded.discoveryLog.length > 0) {
+      nextDiscoveryId = Math.max(...loaded.discoveryLog.map((e) => e.id)) + 1;
+    }
+    return loaded;
   });
-  const [logs, setLogs] = useState<GameLog[]>([]);
-  const logIdRef = useRef(0);
   const stateRef = useRef(state);
   stateRef.current = state;
-
-  const addLog = useCallback((message: string) => {
-    setLogs((prev) => {
-      const entry: GameLog = {
-        id: logIdRef.current++,
-        message,
-        timestamp: Date.now(),
-      };
-      const next = [entry, ...prev];
-      return next.length > 50 ? next.slice(0, 50) : next;
-    });
-  }, []);
 
   // Game tick loop
   useEffect(() => {
@@ -81,13 +113,8 @@ export function useGame() {
       setState((prev) => {
         const next = structuredClone(prev);
         const result = processTick(next, Date.now());
-        if (result.completions.length > 0) {
-          addLog(
-            `While away: completed ${result.completions.length} action(s) (${Math.round(offlineMs / 1000)}s offline)`
-          );
-          for (const c of result.completions) {
-            logCompletion(c, addLog);
-          }
+        for (const c of result.completions) {
+          processCompletionDiscoveries(next, c);
         }
         return next;
       });
@@ -98,14 +125,14 @@ export function useGame() {
         const next = structuredClone(prev);
         const result = processTick(next, Date.now());
         for (const c of result.completions) {
-          logCompletion(c, addLog);
+          processCompletionDiscoveries(next, c);
         }
         return next;
       });
     }, TICK_INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, [addLog]);
+  }, []);
 
   // Auto-save
   useEffect(() => {
@@ -182,11 +209,10 @@ export function useGame() {
           type: "craft",
           recipeId: recipe.id,
         };
-        addLog(`Started crafting: ${recipe.name}`);
         return next;
       });
     },
-    [addLog]
+    []
   );
 
   const startExpedition = useCallback(
@@ -212,11 +238,10 @@ export function useGame() {
           expeditionId: expedition.id,
           foodPaid,
         };
-        addLog(`Set out on expedition: ${expedition.name}`);
         return next;
       });
     },
-    [addLog]
+    []
   );
 
   const stopAction = useCallback(() => {
@@ -233,7 +258,6 @@ export function useGame() {
     const fresh = createInitialState();
     setState(fresh);
     saveGame(fresh);
-    setLogs([]);
   }, []);
 
   const exportSave = useCallback(() => {
@@ -254,17 +278,22 @@ export function useGame() {
       reader.onload = () => {
         try {
           const loaded = JSON.parse(reader.result as string) as GameState;
+          // Ensure migration fields exist
+          if (!loaded.discoveryLog) loaded.discoveryLog = [];
+          if (!loaded.discoveredResources) {
+            loaded.discoveredResources = Object.keys(loaded.resources).filter(
+              (id) => (loaded.resources[id] ?? 0) > 0
+            );
+          }
           saveGame(loaded);
           setState(loaded);
-          setLogs([]);
-          addLog("Save file loaded successfully.");
         } catch {
-          addLog("Failed to load save file.");
+          // silently fail — could add error UI later
         }
       };
       reader.readAsText(file);
     },
-    [addLog]
+    []
   );
 
   // Filter actions by skill level, biome discovery, building requirements, AND tool availability
@@ -356,7 +385,6 @@ export function useGame() {
 
   return {
     state,
-    logs,
     availableActions,
     availableRecipes,
     availableExpeditions,
@@ -370,26 +398,4 @@ export function useGame() {
     exportSave,
     importSave,
   };
-}
-
-function logCompletion(c: CompletionEvent, addLog: (msg: string) => void) {
-  if (c.expeditionMessage) {
-    addLog(c.expeditionMessage);
-  }
-  if (c.biomeDiscovery) {
-    addLog(
-      `New area discovered: ${c.biomeDiscovery.replace(/_/g, " ")}! New actions unlocked.`
-    );
-  }
-  const dropStr = c.drops.map((d) => `${d.amount}x ${d.name}`).join(", ");
-  if (dropStr) {
-    addLog(
-      `${c.actionName}: +${dropStr} (+${c.xpGain} ${c.skillId} xp)`
-    );
-  } else if (!c.expeditionMessage) {
-    addLog(`${c.actionName}: +${c.xpGain} ${c.skillId} xp`);
-  }
-  if (c.levelUp) {
-    addLog(`Level up! ${c.skillId} is now level ${c.levelUp}!`);
-  }
 }

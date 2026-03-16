@@ -19,6 +19,8 @@ export interface CompletionEvent {
   levelUp?: number;
   biomeDiscovery?: BiomeId;
   expeditionMessage?: string;
+  newResources?: string[]; // resource IDs seen for the first time
+  buildingBuilt?: string; // building ID if a building was constructed
 }
 
 /**
@@ -116,7 +118,12 @@ function applyGatherCompletion(
 
   const skillLevel = state.skills[def.skillId].level;
   const drops = rollDrops(def.drops, def.skillId, skillLevel, def.id);
+  const newResources: string[] = [];
   for (const drop of drops) {
+    if (!state.discoveredResources.includes(drop.resourceId)) {
+      newResources.push(drop.resourceId);
+      state.discoveredResources.push(drop.resourceId);
+    }
     addResource(state, drop.resourceId, drop.amount);
   }
 
@@ -131,6 +138,7 @@ function applyGatherCompletion(
     xpGain: def.xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
+    newResources: newResources.length > 0 ? newResources : undefined,
   };
 }
 
@@ -142,15 +150,22 @@ function applyCraftCompletion(
   if (!def) return null;
 
   const drops: { name: string; amount: number }[] = [];
+  const newResources: string[] = [];
+  let buildingBuilt: string | undefined;
 
   if (def.buildingOutput) {
     // Building construction — add to buildings list
     if (!state.buildings.includes(def.buildingOutput)) {
       state.buildings.push(def.buildingOutput);
     }
+    buildingBuilt = def.buildingOutput;
     drops.push({ name: def.buildingOutput, amount: 1 });
   } else {
     // Normal craft — add output to resources
+    if (!state.discoveredResources.includes(def.output.resourceId)) {
+      newResources.push(def.output.resourceId);
+      state.discoveredResources.push(def.output.resourceId);
+    }
     addResource(state, def.output.resourceId, def.output.amount);
     drops.push({ name: def.output.resourceId, amount: def.output.amount });
   }
@@ -166,6 +181,8 @@ function applyCraftCompletion(
     xpGain: def.xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
+    newResources: newResources.length > 0 ? newResources : undefined,
+    buildingBuilt,
   };
 }
 
@@ -186,10 +203,15 @@ function applyExpeditionCompletion(
 
   // Apply drops
   const drops: { name: string; amount: number }[] = [];
+  const newResources: string[] = [];
   if (outcome.drops) {
     for (const drop of outcome.drops) {
       const rolled = rollDrops([drop]);
       for (const r of rolled) {
+        if (!state.discoveredResources.includes(r.resourceId)) {
+          newResources.push(r.resourceId);
+          state.discoveredResources.push(r.resourceId);
+        }
         addResource(state, r.resourceId, r.amount);
         drops.push({ name: r.resourceId, amount: r.amount });
       }
@@ -210,6 +232,7 @@ function applyExpeditionCompletion(
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     biomeDiscovery: outcome.biomeDiscovery,
     expeditionMessage: outcome.description,
+    newResources: newResources.length > 0 ? newResources : undefined,
   };
 }
 
