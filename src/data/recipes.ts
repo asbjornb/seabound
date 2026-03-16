@@ -2,6 +2,20 @@ import { RecipeDef } from "./types";
 
 export const RECIPES: RecipeDef[] = [
   // ═══════════════════════════════════════
+  // PHASE 0 — Bare Hands
+  // ═══════════════════════════════════════
+  {
+    id: "shred_coconut_husk",
+    name: "Shred Coconut Husk",
+    description: "Pull apart coconut husk by hand into rough fiber.",
+    skillId: "crafting",
+    inputs: [{ resourceId: "coconut_husk", amount: 1 }],
+    output: { resourceId: "rough_fiber", amount: 1 },
+    durationMs: 5000,
+    xpGain: 6,
+  },
+
+  // ═══════════════════════════════════════
   // PHASE 1 — Bamboo Tier: First Tools
   // ═══════════════════════════════════════
   {
