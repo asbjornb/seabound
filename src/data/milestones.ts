@@ -25,6 +25,26 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
       ],
     },
+    {
+      level: 4,
+      description: "Practiced wading — tidal pools 10% faster",
+      effects: [
+        { type: "duration", actionId: "wade_tidal_pool", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 5,
+      description: "Sharp eyes — +5% fish chance from tidal pools",
+      effects: [
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.05 },
+      ],
+    },
+  ],
+  weaving: [
+    {
+      level: 2,
+      description: "Nimble fingers — ready to weave palm fronds into useful items",
+    },
   ],
 };
 
