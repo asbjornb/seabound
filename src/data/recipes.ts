@@ -51,16 +51,6 @@ export const RECIPES: RecipeDef[] = [
   // Fiber & Cordage Chain
   // ═══════════════════════════════════════
   {
-    id: "roll_fiber",
-    name: "Roll Rough Cordage",
-    description: "Roll rough fibers together into crude rope.",
-    skillId: "crafting",
-    inputs: [{ resourceId: "rough_fiber", amount: 3 }],
-    output: { resourceId: "rough_cordage", amount: 1 },
-    durationMs: 3000,
-    xpGain: 8,
-  },
-  {
     id: "dry_fiber",
     name: "Dry Fiber",
     description: "Lay rough fibers out to dry in the sun.",
@@ -92,7 +82,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "driftwood_branch", amount: 1 },
-      { resourceId: "rough_cordage", amount: 1 },
+      { resourceId: "cordage", amount: 1 },
       { resourceId: "flat_stone", amount: 1 },
     ],
     output: { resourceId: "bow_drill_kit", amount: 1 },

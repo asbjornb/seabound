@@ -28,8 +28,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You find some useful stones along a creek bed, but nothing remarkable.",
         drops: [
-          { resourceId: "round_stone", amount: 2 },
-          { resourceId: "flat_stone", amount: 1 },
+          { resourceId: "flat_stone", amount: 2 },
         ],
       },
       {

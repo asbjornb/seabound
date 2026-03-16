@@ -35,7 +35,6 @@ export const ACTIONS: ActionDef[] = [
     skillId: "foraging",
     durationMs: 3000,
     drops: [
-      { resourceId: "round_stone", amount: 1 },
       { resourceId: "flat_stone", amount: 1, chance: 0.25 },
     ],
     requiredSkillLevel: 2,
@@ -105,17 +104,6 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "bamboo_grove",
     xpGain: 8,
   },
-  {
-    id: "strip_green_bamboo",
-    name: "Strip Green Bamboo",
-    description: "Peel thin strips from fresh bamboo canes.",
-    skillId: "woodworking",
-    durationMs: 4500,
-    drops: [{ resourceId: "bamboo_strip", amount: 3 }],
-    requiredBiome: "bamboo_grove",
-    xpGain: 10,
-  },
-
   // Foraging (bamboo-enabled)
   {
     id: "strip_fibrous_bark",

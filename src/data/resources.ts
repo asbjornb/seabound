@@ -20,12 +20,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "Sun-bleached wood washed ashore.",
     category: "raw",
   },
-  round_stone: {
-    id: "round_stone",
-    name: "Round Stone",
-    description: "A smooth beach stone. Good as a hammerstone.",
-    category: "raw",
-  },
   flat_stone: {
     id: "flat_stone",
     name: "Flat Stone",
@@ -76,23 +70,11 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A split section of bamboo. Sharp and useful.",
     category: "processed",
   },
-  bamboo_strip: {
-    id: "bamboo_strip",
-    name: "Bamboo Strip",
-    description: "Thin flexible bamboo strip. Good for weaving.",
-    category: "processed",
-  },
   rough_fiber: {
     id: "rough_fiber",
     name: "Rough Fiber",
     description: "Fibrous bark stripped from bamboo. Needs processing.",
     category: "raw",
-  },
-  rough_cordage: {
-    id: "rough_cordage",
-    name: "Rough Cordage",
-    description: "Rolled fiber rope. Crude but functional.",
-    category: "processed",
   },
   dried_fiber: {
     id: "dried_fiber",
