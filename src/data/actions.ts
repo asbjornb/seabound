@@ -53,11 +53,11 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "collect_palm_frond",
     name: "Collect Palm Frond",
-    description: "Gather fallen palm fronds from the coconut grove floor.",
+    description: "Gather fallen palm fronds from the ground.",
     skillId: "foraging",
     durationMs: 3000,
     drops: [{ resourceId: "palm_frond", amount: 2 }],
-    requiredBiome: "coconut_grove",
+    requiredSkillLevel: 2,
     xpGain: 5,
   },
   {

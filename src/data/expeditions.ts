@@ -12,13 +12,13 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     xpGain: 15,
     outcomes: [
       {
-        weight: 60,
+        weight: 30,
         description:
           "You follow a trail inland and discover a grove thick with coconut palms and lush undergrowth!",
         biomeDiscovery: "coconut_grove",
       },
       {
-        weight: 25,
+        weight: 20,
         description: "You push through the brush and discover a bamboo grove!",
         biomeDiscovery: "bamboo_grove",
       },
@@ -32,7 +32,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         ],
       },
       {
-        weight: 15,
+        weight: 25,
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },
