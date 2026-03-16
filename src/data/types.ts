@@ -75,6 +75,21 @@ export interface Drop {
   chance?: number; // 0-1, defaults to 1
 }
 
+// ═══════════════════════════════════════
+// Skill Milestones
+// ═══════════════════════════════════════
+
+export type MilestoneEffect =
+  | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
+  | { type: "duration"; actionId: string; multiplier: number }; // e.g. 0.9 = 10% faster
+
+export interface SkillMilestone {
+  level: number;
+  description: string;
+  hidden?: boolean; // if true, show generic hint until player reaches this level
+  effects?: MilestoneEffect[];
+}
+
 export interface ActionDef {
   id: string;
   name: string;

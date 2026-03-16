@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ACTIONS } from "../data/actions";
 import { EXPEDITIONS } from "../data/expeditions";
+import { getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef } from "../data/types";
 import {
@@ -283,9 +284,13 @@ export function useGame() {
         (a) => a.id === state.currentAction!.actionId
       );
       if (def) {
-        actionDuration = def.durationMs;
+        const skillLevel = state.skills[def.skillId].level;
+        const effectiveDuration = Math.round(
+          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id)
+        );
+        actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / def.durationMs);
+        actionProgress = Math.min(1, elapsed / effectiveDuration);
       }
     } else if (state.currentAction.type === "craft") {
       const def = RECIPES.find(

@@ -1,5 +1,6 @@
 import { ACTIONS } from "../data/actions";
 import { EXPEDITIONS } from "../data/expeditions";
+import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
@@ -45,9 +46,14 @@ export function processTick(state: GameState, now: number): TickResult {
       return { completions, elapsedMs };
     }
 
+    const skillLevel = state.skills[def.skillId].level;
+    const effectiveDuration = Math.round(
+      def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id)
+    );
+
     let remaining = timeAvailable;
-    while (remaining >= def.durationMs) {
-      remaining -= def.durationMs;
+    while (remaining >= effectiveDuration) {
+      remaining -= effectiveDuration;
       const event = applyGatherCompletion(state, def.id);
       if (event) completions.push(event);
     }
@@ -108,7 +114,8 @@ function applyGatherCompletion(
   const def = ACTIONS.find((a) => a.id === actionId);
   if (!def) return null;
 
-  const drops = rollDrops(def.drops);
+  const skillLevel = state.skills[def.skillId].level;
+  const drops = rollDrops(def.drops, def.skillId, skillLevel, def.id);
   for (const drop of drops) {
     state.resources[drop.resourceId] =
       (state.resources[drop.resourceId] ?? 0) + drop.amount;
@@ -247,11 +254,20 @@ function pickWeightedOutcome(
 }
 
 function rollDrops(
-  drops: Drop[]
+  drops: Drop[],
+  skillId?: string,
+  skillLevel?: number,
+  actionId?: string
 ): { resourceId: string; amount: number }[] {
   const result: { resourceId: string; amount: number }[] = [];
   for (const drop of drops) {
-    const chance = drop.chance ?? 1;
+    let chance = drop.chance ?? 1;
+    if (skillId && skillLevel && actionId) {
+      chance = Math.min(
+        1,
+        chance + getDropChanceBonus(skillId as any, skillLevel, actionId, drop.resourceId)
+      );
+    }
     if (Math.random() < chance) {
       result.push({ resourceId: drop.resourceId, amount: drop.amount });
     }
