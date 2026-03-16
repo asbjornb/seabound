@@ -16,7 +16,7 @@
 - **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers) + auto-generated unlock previews from skill-gated actions/recipes.
 - **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
-- **Gradual unlocks** — Early actions gated behind skill levels (palm fronds at Foraging 2) to prevent overwhelming new players.
+- **Gradual unlocks** — Early actions gated behind biome discovery (palm fronds/vines require coconut grove) and skill levels (beach stones at Foraging 2, dry tinder at Foraging 3).
 - **9 skills** — Foraging, Fishing, Woodworking, Crafting, Weaving, Construction, Farming, Navigation, Preservation.
 - **Offline progress** — All action types progress while away.
 - **Save/load** — With migration support for old save formats.

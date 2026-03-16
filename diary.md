@@ -172,11 +172,11 @@ Major rework of the first few minutes of gameplay to create a smoother onboardin
 
 **Changes made:**
 
-1. **Tidal pool food loop** — Tidal pool wading now reliably drops food (small fish, crab) to establish an immediate gather→eat→explore loop. Players can feed themselves from the start.
+1. **Tidal pool food loop** — Tidal pool wading drops food (small fish at 10% chance, crab at 10% chance) plus shells every time. Combined with milestone bonuses at Fishing 2/3, this establishes the early gather→explore loop.
 
 2. **Coconut grove as milestone** — Coconut gathering moved behind a discoverable "coconut grove" biome (found via early scouting), making it a progression reward instead of an always-available action. The first expedition now has two possible discovers: coconut grove and bamboo grove.
 
-3. **Gradual action unlocks** — Not all beach actions are available from the start anymore. Palm frond collection unlocks at Foraging 2, vine collection and driftwood stay available. This prevents overwhelming new players with too many options.
+3. **Gradual action unlocks** — Not all beach actions are available from the start anymore. Palm fronds and vines are gated behind coconut grove discovery, beach stones unlock at Foraging 2, dry tinder at Foraging 3. This prevents overwhelming new players with too many options.
 
 4. **Lowered coconut grove discovery chance** — Tuned RNG so coconut grove isn't found immediately; bamboo grove chance also adjusted. Multiple scout trips expected.
 
@@ -190,7 +190,7 @@ Major rework of the first few minutes of gameplay to create a smoother onboardin
 
 ### What Works
 
-- First minutes feel much better: wade tidal pools → get food → scout island → discover coconut grove → gather coconuts → scout more → discover bamboo grove
+- First minutes feel much better: wade tidal pools → collect shells and occasional food → scout island → discover coconut grove → gather coconuts → scout more → discover bamboo grove
 - Skill milestones give visible goals ("2 more levels until I unlock X")
 - Drop chance bonuses from milestones make leveling feel rewarding
 - Gradual action unlocks prevent early-game overwhelm
