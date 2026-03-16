@@ -5,8 +5,11 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "scout_island",
     name: "Scout the Island",
     description:
-      "A short scouting trip along the shore and into the treeline. No supplies needed.",
+      "A short scouting trip along the shore and into the treeline. Costs a coconut per trip.",
+    skillId: "navigation",
     durationMs: 8000,
+    foodCost: [{ resourceId: "coconut", amount: 1 }],
+    xpGain: 15,
     outcomes: [
       {
         weight: 35,

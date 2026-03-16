@@ -73,10 +73,35 @@ export function processTick(state: GameState, now: number): TickResult {
       return { completions, elapsedMs };
     }
 
-    if (timeAvailable >= def.durationMs) {
+    let remaining = timeAvailable;
+    while (remaining >= def.durationMs) {
+      remaining -= def.durationMs;
       const event = applyExpeditionCompletion(state, def.id);
       if (event) completions.push(event);
-      state.currentAction = null;
+
+      // Check if we can afford the next cycle's food cost
+      if (def.foodCost) {
+        let canAfford = true;
+        for (const cost of def.foodCost) {
+          if ((state.resources[cost.resourceId] ?? 0) < cost.amount) {
+            canAfford = false;
+            break;
+          }
+        }
+        if (!canAfford) {
+          state.currentAction = null;
+          break;
+        }
+        // Deduct food for next cycle
+        for (const cost of def.foodCost) {
+          state.resources[cost.resourceId] =
+            (state.resources[cost.resourceId] ?? 0) - cost.amount;
+        }
+      }
+    }
+
+    if (state.currentAction) {
+      state.currentAction.startedAt = now - remaining;
     }
   }
 
@@ -174,18 +199,18 @@ function applyExpeditionCompletion(
     }
   }
 
-  // Navigation XP for expeditions
-  const navSkill = state.skills.navigation;
-  const prevLevel = navSkill.level;
-  navSkill.xp += 15;
-  navSkill.level = levelFromXp(navSkill.xp);
+  // XP for expeditions
+  const skill = state.skills[def.skillId];
+  const prevLevel = skill.level;
+  skill.xp += def.xpGain;
+  skill.level = levelFromXp(skill.xp);
 
   return {
     actionName: def.name,
     drops,
-    xpGain: 15,
-    skillId: "navigation",
-    levelUp: navSkill.level > prevLevel ? navSkill.level : undefined,
+    xpGain: def.xpGain,
+    skillId: def.skillId,
+    levelUp: skill.level > prevLevel ? skill.level : undefined,
     biomeDiscovery: outcome.biomeDiscovery,
     expeditionMessage: outcome.description,
   };

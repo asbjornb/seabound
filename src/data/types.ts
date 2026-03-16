@@ -108,10 +108,12 @@ export interface ExpeditionDef {
   id: string;
   name: string;
   description: string;
+  skillId: SkillId;
   durationMs: number;
   foodCost?: { resourceId: ResourceId; amount: number }[];
   requiredVessel?: ResourceId;
   outcomes: ExpeditionOutcome[];
+  xpGain: number;
 }
 
 export interface ExpeditionOutcome {
