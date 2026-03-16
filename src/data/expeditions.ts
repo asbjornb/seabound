@@ -8,16 +8,23 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       "A short scouting trip along the shore and into the treeline. Costs a coconut per trip.",
     skillId: "navigation",
     durationMs: 8000,
-    foodCost: [{ resourceId: "coconut", amount: 1 }],
+    foodCost: 5,
     xpGain: 15,
     outcomes: [
       {
-        weight: 35,
-        description: "You push through the brush and discover a bamboo grove!",
-        biomeDiscovery: "bamboo_grove",
+        weight: 25,
+        description:
+          "You follow a trail inland and discover a grove thick with coconut palms and lush undergrowth!",
+        biomeDiscovery: "coconut_grove",
       },
       {
-        weight: 25,
+        weight: 10,
+        description: "You push through the brush and discover a bamboo grove!",
+        biomeDiscovery: "bamboo_grove",
+        requiredBiomes: ["coconut_grove"],
+      },
+      {
+        weight: 30,
         description:
           "You find some useful stones along a creek bed, but nothing remarkable.",
         drops: [
@@ -26,15 +33,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         ],
       },
       {
-        weight: 20,
-        description: "You spot some vines tangled in the canopy and gather a few.",
-        drops: [
-          { resourceId: "vine", amount: 3 },
-          { resourceId: "palm_frond", amount: 2 },
-        ],
-      },
-      {
-        weight: 20,
+        weight: 35,
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },

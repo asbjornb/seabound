@@ -42,7 +42,7 @@ export type SkillId =
   | "navigation"
   | "preservation";
 
-export type BiomeId = "beach" | "bamboo_grove" | "jungle_interior";
+export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_interior";
 
 export type BuildingId =
   | "camp_fire"
@@ -73,6 +73,21 @@ export interface Drop {
   resourceId: ResourceId;
   amount: number;
   chance?: number; // 0-1, defaults to 1
+}
+
+// ═══════════════════════════════════════
+// Skill Milestones
+// ═══════════════════════════════════════
+
+export type MilestoneEffect =
+  | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
+  | { type: "duration"; actionId: string; multiplier: number }; // e.g. 0.9 = 10% faster
+
+export interface SkillMilestone {
+  level: number;
+  description: string;
+  hidden?: boolean; // if true, show generic hint until player reaches this level
+  effects?: MilestoneEffect[];
 }
 
 export interface ActionDef {
@@ -110,7 +125,7 @@ export interface ExpeditionDef {
   description: string;
   skillId: SkillId;
   durationMs: number;
-  foodCost?: { resourceId: ResourceId; amount: number }[];
+  foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
   requiredVessel?: ResourceId;
   outcomes: ExpeditionOutcome[];
   xpGain: number;
@@ -120,6 +135,7 @@ export interface ExpeditionOutcome {
   weight: number; // relative weight for RNG selection
   description: string;
   biomeDiscovery?: BiomeId;
+  requiredBiomes?: BiomeId[]; // must have discovered these biomes for this outcome to be possible
   drops?: Drop[];
 }
 
@@ -134,6 +150,7 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
+    foodPaid?: Record<string, number>; // tracks food deducted for refund
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

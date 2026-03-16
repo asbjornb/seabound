@@ -1,5 +1,5 @@
 import { ExpeditionDef, GameState } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { getTotalFood } from "../engine/gameState";
 
 interface Props {
   expeditions: ExpeditionDef[];
@@ -9,9 +9,7 @@ interface Props {
 
 function canAfford(exp: ExpeditionDef, state: GameState): boolean {
   if (!exp.foodCost) return true;
-  return exp.foodCost.every(
-    (c) => getResource(state, c.resourceId) >= c.amount
-  );
+  return getTotalFood(state) >= exp.foodCost;
 }
 
 export function ExpeditionPanel({
@@ -48,24 +46,19 @@ export function ExpeditionPanel({
               </span>
             </div>
             <div className="action-desc">{exp.description}</div>
-            {exp.foodCost && exp.foodCost.length > 0 && (
+            {exp.foodCost != null && exp.foodCost > 0 && (
               <div className="action-requires">
                 Cost:{" "}
-                {exp.foodCost.map((c, i) => (
-                  <span key={i}>
-                    {i > 0 && ", "}
-                    <span
-                      style={{
-                        color:
-                          getResource(state, c.resourceId) < c.amount
-                            ? "#e74c3c"
-                            : undefined,
-                      }}
-                    >
-                      {c.amount}x {c.resourceId.replace(/_/g, " ")}
-                    </span>
-                  </span>
-                ))}
+                <span
+                  style={{
+                    color:
+                      getTotalFood(state) < exp.foodCost
+                        ? "#e74c3c"
+                        : undefined,
+                  }}
+                >
+                  {exp.foodCost} food ({getTotalFood(state)} available)
+                </span>
               </div>
             )}
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>
