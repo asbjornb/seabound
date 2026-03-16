@@ -236,7 +236,7 @@ export function useGame() {
     setLogs([]);
   }, []);
 
-  // Filter actions by skill level, biome discovery, AND building requirements
+  // Filter actions by skill level, biome discovery, building requirements, AND tool availability
   const availableActions = ACTIONS.filter((a) => {
     const skill = state.skills[a.skillId];
     if (a.requiredSkillLevel && skill.level < a.requiredSkillLevel) return false;
@@ -245,6 +245,12 @@ export function useGame() {
     if (a.requiredBuildings) {
       for (const bid of a.requiredBuildings) {
         if (!state.buildings.includes(bid)) return false;
+      }
+    }
+    // Hide actions whose required tools the player doesn't have yet
+    if (a.requiredTools) {
+      for (const toolId of a.requiredTools) {
+        if (getResource(state, toolId) < 1) return false;
       }
     }
     return true;
