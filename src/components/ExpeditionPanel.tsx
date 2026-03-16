@@ -4,14 +4,12 @@ interface Props {
   expeditions: ExpeditionDef[];
   state: GameState;
   onStart: (expedition: ExpeditionDef) => void;
-  busy: boolean;
 }
 
 export function ExpeditionPanel({
   expeditions,
   state,
   onStart,
-  busy,
 }: Props) {
   return (
     <div>
@@ -30,8 +28,8 @@ export function ExpeditionPanel({
       {expeditions.map((exp) => (
         <div
           key={exp.id}
-          className={`action-card ${busy ? "disabled" : ""}`}
-          onClick={() => !busy && onStart(exp)}
+          className="action-card"
+          onClick={() => onStart(exp)}
         >
           <div className="action-card-header">
             <span className="action-name">{exp.name}</span>

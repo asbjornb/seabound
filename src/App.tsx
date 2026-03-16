@@ -91,7 +91,6 @@ export default function App() {
             actions={game.availableActions}
             state={game.state}
             onStart={game.startAction}
-            busy={!!game.state.currentAction}
           />
         )}
         {tab === "craft" && (
@@ -99,7 +98,6 @@ export default function App() {
             recipes={craftRecipes}
             state={game.state}
             onCraft={game.startCraft}
-            busy={!!game.state.currentAction}
           />
         )}
         {tab === "camp" && (
@@ -107,7 +105,6 @@ export default function App() {
             buildingRecipes={buildingRecipes}
             state={game.state}
             onBuild={game.startCraft}
-            busy={!!game.state.currentAction}
           />
         )}
         {tab === "explore" && (
@@ -115,7 +112,6 @@ export default function App() {
             expeditions={game.availableExpeditions}
             state={game.state}
             onStart={game.startExpedition}
-            busy={!!game.state.currentAction}
           />
         )}
         {tab === "skills" && <SkillsPanel state={game.state} />}
