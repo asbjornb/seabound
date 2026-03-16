@@ -12,7 +12,13 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     xpGain: 15,
     outcomes: [
       {
-        weight: 35,
+        weight: 60,
+        description:
+          "You follow a trail inland and discover a grove thick with coconut palms and lush undergrowth!",
+        biomeDiscovery: "coconut_grove",
+      },
+      {
+        weight: 25,
         description: "You push through the brush and discover a bamboo grove!",
         biomeDiscovery: "bamboo_grove",
       },
@@ -26,15 +32,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         ],
       },
       {
-        weight: 20,
-        description: "You spot some vines tangled in the canopy and gather a few.",
-        drops: [
-          { resourceId: "vine", amount: 3 },
-          { resourceId: "palm_frond", amount: 2 },
-        ],
-      },
-      {
-        weight: 20,
+        weight: 15,
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
@@ -6,6 +6,7 @@ import { LogPanel } from "./components/LogPanel";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
+import { SkillId } from "./data/types";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
@@ -18,6 +19,31 @@ export default function App() {
   // Split recipes: building recipes go to Camp tab, others stay in Craft
   const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput);
   const buildingRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput);
+
+  // Progressive tab visibility
+  const hasAnyXp = useMemo(
+    () =>
+      (Object.keys(game.state.skills) as SkillId[]).some(
+        (id) => game.state.skills[id].xp > 0
+      ),
+    [game.state.skills]
+  );
+  const hasCoconut =
+    (game.state.resources["coconut"] ?? 0) >= 1 ||
+    game.state.discoveredBiomes.length > 1; // already explored
+
+  const visibleTabs = useMemo(() => {
+    const tabs: Tab[] = ["gather"];
+    if (hasCoconut) tabs.push("explore");
+    if (craftRecipes.length > 0) tabs.push("craft");
+    if (buildingRecipes.length > 0) tabs.push("camp");
+    if (hasAnyXp) tabs.push("skills");
+    tabs.push("log");
+    return tabs;
+  }, [hasCoconut, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
+
+  // Fall back to gather if current tab isn't visible
+  const activeTab = visibleTabs.includes(tab) ? tab : "gather";
 
   const currentActionName = (() => {
     if (!game.state.currentAction) return null;
@@ -72,50 +98,48 @@ export default function App() {
       )}
 
       <nav className="tabs">
-        {(["gather", "craft", "camp", "explore", "skills", "log"] as Tab[]).map(
-          (t) => (
-            <button
-              key={t}
-              className={`tab ${tab === t ? "active" : ""}`}
-              onClick={() => setTab(t)}
-            >
-              {t.charAt(0).toUpperCase() + t.slice(1)}
-            </button>
-          )
-        )}
+        {visibleTabs.map((t) => (
+          <button
+            key={t}
+            className={`tab ${activeTab === t ? "active" : ""}`}
+            onClick={() => setTab(t)}
+          >
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
       </nav>
 
       <main className="panel">
-        {tab === "gather" && (
+        {activeTab === "gather" && (
           <ActionPanel
             actions={game.availableActions}
             state={game.state}
             onStart={game.startAction}
           />
         )}
-        {tab === "craft" && (
+        {activeTab === "craft" && (
           <CraftingPanel
             recipes={craftRecipes}
             state={game.state}
             onCraft={game.startCraft}
           />
         )}
-        {tab === "camp" && (
+        {activeTab === "camp" && (
           <SettlementPanel
             buildingRecipes={buildingRecipes}
             state={game.state}
             onBuild={game.startCraft}
           />
         )}
-        {tab === "explore" && (
+        {activeTab === "explore" && (
           <ExpeditionPanel
             expeditions={game.availableExpeditions}
             state={game.state}
             onStart={game.startExpedition}
           />
         )}
-        {tab === "skills" && <SkillsPanel state={game.state} />}
-        {tab === "log" && <LogPanel logs={game.logs} />}
+        {activeTab === "skills" && <SkillsPanel state={game.state} />}
+        {activeTab === "log" && <LogPanel logs={game.logs} />}
       </main>
     </div>
   );

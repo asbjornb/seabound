@@ -2,7 +2,19 @@ import { SKILLS, xpForLevel } from "../data/skills";
 import { GameState, SkillId } from "../data/types";
 
 export function SkillsPanel({ state }: { state: GameState }) {
-  const skillIds = Object.keys(SKILLS) as SkillId[];
+  const skillIds = (Object.keys(SKILLS) as SkillId[]).filter(
+    (id) => state.skills[id].xp > 0
+  );
+
+  if (skillIds.length === 0) {
+    return (
+      <div>
+        <div className="empty-panel">
+          Start gathering to discover your skills.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
