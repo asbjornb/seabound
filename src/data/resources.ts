@@ -6,7 +6,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "coconut",
     name: "Coconut",
     description: "A fallen coconut. Food and water source.",
-    category: "raw",
+    category: "food",
   },
   coconut_husk: {
     id: "coconut_husk",
