@@ -3,6 +3,7 @@ import { EXPEDITIONS } from "../data/expeditions";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import { deductFood, getTotalFood } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -81,21 +82,13 @@ export function processTick(state: GameState, now: number): TickResult {
 
       // Check if we can afford the next cycle's food cost
       if (def.foodCost) {
-        let canAfford = true;
-        for (const cost of def.foodCost) {
-          if ((state.resources[cost.resourceId] ?? 0) < cost.amount) {
-            canAfford = false;
-            break;
-          }
-        }
-        if (!canAfford) {
+        if (getTotalFood(state) < def.foodCost) {
           state.currentAction = null;
           break;
         }
-        // Deduct food for next cycle
-        for (const cost of def.foodCost) {
-          state.resources[cost.resourceId] =
-            (state.resources[cost.resourceId] ?? 0) - cost.amount;
+        const paid = deductFood(state, def.foodCost);
+        if (state.currentAction && paid) {
+          state.currentAction.foodPaid = paid;
         }
       }
     }
@@ -220,11 +213,18 @@ function pickWeightedOutcome(
   outcomes: ExpeditionOutcome[],
   state: GameState
 ): ExpeditionOutcome {
-  // Filter out biome discoveries the player already has
+  // Filter out biome discoveries the player already has,
+  // and outcomes whose required biomes haven't been discovered yet
   const adjusted = outcomes.map((o) => {
     if (o.biomeDiscovery && state.discoveredBiomes.includes(o.biomeDiscovery)) {
-      // If already discovered, redistribute weight to other outcomes
       return { ...o, weight: 0 };
+    }
+    if (o.requiredBiomes) {
+      for (const req of o.requiredBiomes) {
+        if (!state.discoveredBiomes.includes(req)) {
+          return { ...o, weight: 0 };
+        }
+      }
     }
     return o;
   });

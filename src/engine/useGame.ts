@@ -5,7 +5,9 @@ import { RECIPES } from "../data/recipes";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef } from "../data/types";
 import {
   createInitialState,
+  deductFood,
   getResource,
+  getTotalFood,
   loadGame,
   saveGame,
 } from "./gameState";
@@ -33,10 +35,11 @@ function refundCurrentAction(state: GameState) {
     const exp = EXPEDITIONS.find(
       (e) => e.id === state.currentAction!.expeditionId
     );
-    if (exp?.foodCost) {
-      for (const cost of exp.foodCost) {
-        state.resources[cost.resourceId] =
-          (state.resources[cost.resourceId] ?? 0) + cost.amount;
+    if (exp?.foodCost && state.currentAction.foodPaid) {
+      // Refund the food that was paid for the current (unfinished) cycle
+      // We store which resources were deducted so we can refund accurately
+      for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
+        state.resources[resId] = (state.resources[resId] ?? 0) + amount;
       }
     }
   }
@@ -189,25 +192,24 @@ export function useGame() {
     (expedition: ExpeditionDef) => {
       setState((prev) => {
         // Check food costs
-        if (expedition.foodCost) {
-          for (const cost of expedition.foodCost) {
-            if (getResource(prev, cost.resourceId) < cost.amount) return prev;
-          }
+        if (expedition.foodCost && getTotalFood(prev) < expedition.foodCost) {
+          return prev;
         }
         const next = structuredClone(prev);
         refundCurrentAction(next);
         // Deduct food
+        let foodPaid: Record<string, number> | undefined;
         if (expedition.foodCost) {
-          for (const cost of expedition.foodCost) {
-            next.resources[cost.resourceId] =
-              (next.resources[cost.resourceId] ?? 0) - cost.amount;
-          }
+          const paid = deductFood(next, expedition.foodCost);
+          if (!paid) return prev;
+          foodPaid = paid;
         }
         next.currentAction = {
           actionId: expedition.id,
           startedAt: Date.now(),
           type: "expedition",
           expeditionId: expedition.id,
+          foodPaid,
         };
         addLog(`Set out on expedition: ${expedition.name}`);
         return next;

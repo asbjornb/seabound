@@ -1,4 +1,4 @@
-import { BuildingId, GameState, SkillId } from "../data/types";
+import { BuildingId, GameState, ResourceId, SkillId } from "../data/types";
 
 const ALL_SKILLS: SkillId[] = [
   "foraging",
@@ -66,4 +66,37 @@ export function loadGame(): GameState | null {
 
 export function getResource(state: GameState, id: string): number {
   return state.resources[id] ?? 0;
+}
+
+/** Resources that count as food for expedition costs. */
+export const FOOD_RESOURCES: ResourceId[] = [
+  "small_fish",
+  "crab",
+  "coconut",
+  "cooked_fish",
+  "cooked_crab",
+];
+
+/** Total food items the player currently has. */
+export function getTotalFood(state: GameState): number {
+  return FOOD_RESOURCES.reduce(
+    (sum, id) => sum + (state.resources[id] ?? 0),
+    0
+  );
+}
+
+/** Deduct `amount` food from inventory, drawing from available food resources. Returns record of what was taken, or null if insufficient. */
+export function deductFood(state: GameState, amount: number): Record<string, number> | null {
+  if (getTotalFood(state) < amount) return null;
+  const taken: Record<string, number> = {};
+  let remaining = amount;
+  for (const id of FOOD_RESOURCES) {
+    if (remaining <= 0) break;
+    const have = state.resources[id] ?? 0;
+    const take = Math.min(have, remaining);
+    state.resources[id] = have - take;
+    if (take > 0) taken[id] = take;
+    remaining -= take;
+  }
+  return taken;
 }

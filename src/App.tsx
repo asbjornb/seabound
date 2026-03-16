@@ -7,6 +7,7 @@ import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { SkillId } from "./data/types";
+import { getTotalFood } from "./engine/gameState";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
@@ -28,19 +29,19 @@ export default function App() {
       ),
     [game.state.skills]
   );
-  const hasCoconut =
-    (game.state.resources["coconut"] ?? 0) >= 1 ||
+  const hasFood =
+    getTotalFood(game.state) >= 1 ||
     game.state.discoveredBiomes.length > 1; // already explored
 
   const visibleTabs = useMemo(() => {
     const tabs: Tab[] = ["gather"];
-    if (hasCoconut) tabs.push("explore");
+    if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
     if (buildingRecipes.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
     tabs.push("log");
     return tabs;
-  }, [hasCoconut, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
+  }, [hasFood, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
 
   // Fall back to gather if current tab isn't visible
   const activeTab = visibleTabs.includes(tab) ? tab : "gather";

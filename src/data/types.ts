@@ -110,7 +110,7 @@ export interface ExpeditionDef {
   description: string;
   skillId: SkillId;
   durationMs: number;
-  foodCost?: { resourceId: ResourceId; amount: number }[];
+  foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
   requiredVessel?: ResourceId;
   outcomes: ExpeditionOutcome[];
   xpGain: number;
@@ -120,6 +120,7 @@ export interface ExpeditionOutcome {
   weight: number; // relative weight for RNG selection
   description: string;
   biomeDiscovery?: BiomeId;
+  requiredBiomes?: BiomeId[]; // must have discovered these biomes for this outcome to be possible
   drops?: Drop[];
 }
 
@@ -134,6 +135,7 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
+    foodPaid?: Record<string, number>; // tracks food deducted for refund
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

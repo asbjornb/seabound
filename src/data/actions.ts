@@ -9,13 +9,14 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "gather_coconuts",
     name: "Gather Fallen Coconuts",
-    description: "Pick up coconuts from beneath the palm trees.",
+    description: "Pick up coconuts from beneath the palm trees in the grove.",
     skillId: "foraging",
     durationMs: 3000,
     drops: [
       { resourceId: "coconut", amount: 1 },
       { resourceId: "coconut_husk", amount: 1, chance: 0.4 },
     ],
+    requiredBiome: "coconut_grove",
     xpGain: 5,
   },
   {
@@ -53,11 +54,11 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "collect_palm_frond",
     name: "Collect Palm Frond",
-    description: "Gather fallen palm fronds from the ground.",
+    description: "Gather fallen palm fronds from the coconut grove floor.",
     skillId: "foraging",
     durationMs: 3000,
     drops: [{ resourceId: "palm_frond", amount: 2 }],
-    requiredSkillLevel: 2,
+    requiredBiome: "coconut_grove",
     xpGain: 5,
   },
   {
@@ -82,8 +83,8 @@ export const ACTIONS: ActionDef[] = [
     skillId: "fishing",
     durationMs: 4000,
     drops: [
-      { resourceId: "small_fish", amount: 1, chance: 0.6 },
-      { resourceId: "crab", amount: 1, chance: 0.4 },
+      { resourceId: "small_fish", amount: 1, chance: 0.1 },
+      { resourceId: "crab", amount: 1, chance: 0.1 },
       { resourceId: "shell", amount: 1 },
     ],
     xpGain: 8,
