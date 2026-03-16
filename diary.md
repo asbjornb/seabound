@@ -133,3 +133,115 @@ Implemented the settlement buildings system — the first item on the "next step
 - **Placeholder output for building recipes** — Building recipes still need the `output` field to satisfy the RecipeDef type, but it's set to `amount: 0` and ignored when `buildingOutput` is present. Could make output optional later but this avoids a larger refactor.
 
 ---
+
+## Session 3 — Action Switching & Expedition Costs (2026-03-16)
+
+### What We Did
+
+Two quality-of-life improvements that change how the game feels to play.
+
+**PR #6 — Allow action switching:**
+- Starting a new action now cancels the current one instead of blocking all buttons while busy
+- Resources from cancelled crafts/expeditions are refunded automatically via a shared `refundCurrentAction` helper
+- Removed the global "busy" disable from all panels (ActionPanel, CraftingPanel, ExpeditionPanel, SettlementPanel)
+
+**PR #7 — Expedition food costs and auto-repeat:**
+- Expeditions now auto-repeat like gather actions — keep scouting until food runs out
+- Scout the Island costs 1 coconut per trip, making coconut gathering a meaningful early progression goal
+- `ExpeditionDef` gained `skillId` and `xpGain` fields for consistency with other action types
+- UI disables expeditions when food is insufficient, highlights missing resources in red
+
+### What Works
+
+- Fluid action switching — tap any action to start it, previous action cancels with full refund
+- Expeditions feel integrated with the gather loop instead of being a separate one-shot mechanic
+- Coconut as expedition fuel creates a natural early-game economy: forage coconuts → scout → discover bamboo grove
+
+### Design Decisions
+
+- **Cancel-and-refund over queue** — Could have implemented an action queue, but cancel-and-refund is simpler and fits the idle game feel. Players should always be able to switch tasks instantly.
+- **Coconut cost for scouting** — Makes the early game less trivial. Players must balance eating coconuts (future cooking) vs spending them on exploration. Creates a real decision point.
+
+---
+
+## Session 4 — Early Game Progression Rework (2026-03-16)
+
+### What We Did
+
+Major rework of the first few minutes of gameplay to create a smoother onboarding curve and a satisfying early loop (PR #8, 4 commits).
+
+**Changes made:**
+
+1. **Tidal pool food loop** — Tidal pool wading now reliably drops food (small fish, crab) to establish an immediate gather→eat→explore loop. Players can feed themselves from the start.
+
+2. **Coconut grove as milestone** — Coconut gathering moved behind a discoverable "coconut grove" biome (found via early scouting), making it a progression reward instead of an always-available action. The first expedition now has two possible discovers: coconut grove and bamboo grove.
+
+3. **Gradual action unlocks** — Not all beach actions are available from the start anymore. Palm frond collection unlocks at Foraging 2, vine collection and driftwood stay available. This prevents overwhelming new players with too many options.
+
+4. **Lowered coconut grove discovery chance** — Tuned RNG so coconut grove isn't found immediately; bamboo grove chance also adjusted. Multiple scout trips expected.
+
+5. **Skill milestone system** — New `milestones.ts` file. Two types of milestones:
+   - **Authored milestones** with mechanical effects (e.g. Fishing 2/3: +2% fish and crab chance from tidal pools)
+   - **Auto-generated milestones** from action/recipe skill requirements (e.g. "Unlock action: Strip Fibrous Bark" at the required level)
+   - `getDropChanceBonus()` and `getDurationMultiplier()` functions apply milestone effects to the game engine
+   - Skills panel shows upcoming milestones so players can see what to work toward
+
+6. **UI improvements** — Skills panel now shows milestone progress. Expedition panel simplified.
+
+### What Works
+
+- First minutes feel much better: wade tidal pools → get food → scout island → discover coconut grove → gather coconuts → scout more → discover bamboo grove
+- Skill milestones give visible goals ("2 more levels until I unlock X")
+- Drop chance bonuses from milestones make leveling feel rewarding
+- Gradual action unlocks prevent early-game overwhelm
+
+### What's Missing / Next Steps
+
+- **More authored milestones** — Only Fishing has hand-crafted milestones so far; other skills need them
+- **Storage caps** — No limit on resources yet; storage buildings have no mechanical purpose
+- **Building effects** — Buildings should grant bonuses, not just gate recipes
+- **Shell adze** — Still missing
+- **Farming, fishing tiers, stone tools** — Still on the roadmap
+
+### Design Decisions
+
+- **Coconut grove as discovery** — Coconuts being always available made the early game too easy and exploration pointless. Gating them behind a biome discovery creates a "first win" moment.
+- **Milestone system architecture** — Authored milestones with effects + auto-generated unlock previews. This lets us hand-tune important progression beats while automatically showing every skill-gated unlock without manual maintenance.
+- **Drop chance bonuses over flat yields** — Milestones boost drop *chances* rather than giving flat resource increases. This feels more natural and keeps the RNG element that makes gathering interesting.
+
+---
+
+## Session 5 — Inventory Limits & Storage Building Effects (2026-03-16)
+
+### What We Did
+
+Added per-item storage caps to make storage buildings mechanically meaningful (PR #10).
+
+**Changes made:**
+
+1. **Per-item storage cap** — Default cap of 10 per resource. Resources at cap show a yellow warning in the UI. Items over cap (from old saves) are kept but can't gain more until consumed below the limit.
+
+2. **Building storage bonuses** — Buildings now grant category-based storage increases:
+   - Palm Leaf Pile: +20 raw material capacity
+   - Drying Rack: +20 processed material capacity
+   - Camp Fire: +10 food capacity
+   - `StorageBonus` type added to `BuildingDef`
+
+3. **`getStorageCap()` function** — Computes effective cap per resource by checking category and summing bonuses from all constructed buildings.
+
+4. **UI feedback** — Resources at or near cap show yellow styling. Settlement panel displays storage bonuses granted by each building.
+
+### What Works
+
+- Storage caps create real pressure to build storage buildings early
+- Palm Leaf Pile (buildable with just beach resources) is now a meaningful early priority
+- Players who ignore buildings hit the cap quickly and feel the need to invest in infrastructure
+- Old save migration works cleanly — excess items preserved but capped going forward
+
+### Design Decisions
+
+- **Per-item cap, not total inventory** — Per-item caps are simpler to reason about and avoid the "inventory Tetris" problem. Each resource has its own limit.
+- **Category-based bonuses** — Buildings boost whole categories (raw, processed, food) rather than specific items. This keeps the building system clean and avoids needing a building for every resource.
+- **Default 10 cap** — Low enough to be felt quickly, high enough that you don't hit it every few seconds. Forces engagement with the building system within the first few minutes.
+
+---

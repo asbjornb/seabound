@@ -2,6 +2,40 @@
 
 ---
 
+## IMPLEMENTATION STATUS
+
+*Last updated: 2026-03-16*
+
+### What's Built
+
+- **Phase 0 gameplay loop** — All beach gathering actions (coconuts, driftwood, stones, vine, palm fronds, tidal pool wading). Coconut grove and bamboo grove as discoverable biomes via scouting expeditions.
+- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, fiber/cordage chain, bamboo knife, shell scraper, bow drill kit.
+- **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened tools (spear, digging stick).
+- **Settlement buildings** — Camp Fire, Palm Leaf Pile, Drying Rack. Buildings gate recipes/actions and grant storage bonuses.
+- **Expedition system** — Scout the Island with RNG biome discovery (coconut grove, bamboo grove). Auto-repeating with food cost (1 coconut per trip). Navigation XP on completion.
+- **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers) + auto-generated unlock previews from skill-gated actions/recipes.
+- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food).
+- **Action switching** — Starting a new action cancels the current one with full resource refund.
+- **Gradual unlocks** — Early actions gated behind skill levels (palm fronds at Foraging 2) to prevent overwhelming new players.
+- **9 skills** — Foraging, Fishing, Woodworking, Crafting, Weaving, Construction, Farming, Navigation, Preservation.
+- **Offline progress** — All action types progress while away.
+- **Save/load** — With migration support for old save formats.
+
+### What's Next
+
+- Shell adze (needs large_shell drops)
+- Farming system (cleared plots, planting, semi-idle set-and-claim)
+- Phase 2 fishing tiers (drop line, basket trap, stone weir)
+- Jungle interior expedition (food/water costs, basalt/clay/crop discoveries)
+- Stone tools chain (knapping: chert → flakes → blades → points)
+- More settlement buildings (Stone Hearth, Woven Basket, Smoking Rack, Workbench)
+- More authored skill milestones (currently only Fishing has hand-crafted ones)
+- Weaving and Construction skill actions
+- Navigation effects on expedition odds
+- Maritime vessel chain (raft → dugout → outrigger → sailing canoe)
+
+---
+
 ## TAB 1: DESIGN PRINCIPLES
 
 ### Progression Philosophy
