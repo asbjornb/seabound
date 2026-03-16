@@ -1,124 +1,142 @@
 import { ActionDef } from "./types";
 
 export const ACTIONS: ActionDef[] = [
-  // Woodcutting
-  {
-    id: "gather_sticks",
-    name: "Gather Sticks",
-    description: "Pick up fallen sticks from the forest floor.",
-    skillId: "woodcutting",
-    durationMs: 3000,
-    drops: [{ resourceId: "sticks", amount: 2 }],
-    xpGain: 5,
-  },
-  {
-    id: "strip_bark",
-    name: "Strip Bark",
-    description: "Peel bark from fallen logs.",
-    skillId: "woodcutting",
-    durationMs: 4000,
-    drops: [
-      { resourceId: "bark", amount: 1 },
-      { resourceId: "sticks", amount: 1, chance: 0.3 },
-    ],
-    xpGain: 8,
-  },
-  {
-    id: "chop_wood",
-    name: "Chop Wood",
-    description: "Fell a tree and split it into logs. Requires an axe.",
-    skillId: "woodcutting",
-    durationMs: 6000,
-    drops: [
-      { resourceId: "wood", amount: 1 },
-      { resourceId: "sticks", amount: 1, chance: 0.5 },
-    ],
-    requiredTools: ["stone_axe"],
-    requiredSkillLevel: 3,
-    xpGain: 20,
-  },
-
-  // Mining
-  {
-    id: "knap_flint",
-    name: "Knap Flint",
-    description: "Strike stones together to produce sharp flint flakes.",
-    skillId: "mining",
-    durationMs: 4000,
-    drops: [
-      { resourceId: "flint", amount: 1 },
-      { resourceId: "stone", amount: 1, chance: 0.5 },
-    ],
-    xpGain: 8,
-  },
-  {
-    id: "collect_stones",
-    name: "Collect Stones",
-    description: "Gather loose stones from the ground.",
-    skillId: "mining",
-    durationMs: 3000,
-    drops: [
-      { resourceId: "stone", amount: 2 },
-      { resourceId: "flint", amount: 1, chance: 0.15 },
-    ],
-    xpGain: 5,
-  },
-  {
-    id: "mine_stone",
-    name: "Mine Stone",
-    description: "Break chunks from a rock face. Requires a pickaxe.",
-    skillId: "mining",
-    durationMs: 6000,
-    drops: [
-      { resourceId: "stone", amount: 3 },
-      { resourceId: "flint", amount: 1, chance: 0.3 },
-      { resourceId: "clay", amount: 1, chance: 0.2 },
-    ],
-    requiredTools: ["stone_pickaxe"],
-    requiredSkillLevel: 3,
-    xpGain: 20,
-  },
+  // ═══════════════════════════════════════
+  // PHASE 0 — Bare Hands (Beach biome, always available)
+  // ═══════════════════════════════════════
 
   // Foraging
   {
-    id: "gather_fiber",
-    name: "Gather Fiber",
-    description: "Pull tough fibers from wild plants.",
+    id: "gather_coconuts",
+    name: "Gather Fallen Coconuts",
+    description: "Pick up coconuts from beneath the palm trees.",
     skillId: "foraging",
     durationMs: 3000,
-    drops: [{ resourceId: "fiber", amount: 2 }],
+    drops: [
+      { resourceId: "coconut", amount: 1 },
+      { resourceId: "coconut_husk", amount: 1, chance: 0.4 },
+    ],
     xpGain: 5,
   },
   {
-    id: "pick_berries",
-    name: "Pick Berries",
-    description: "Search bushes for ripe berries.",
+    id: "collect_driftwood",
+    name: "Collect Driftwood",
+    description: "Gather sun-bleached branches washed up on the shore.",
+    skillId: "foraging",
+    durationMs: 3000,
+    drops: [{ resourceId: "driftwood_branch", amount: 1 }],
+    xpGain: 5,
+  },
+  {
+    id: "collect_beach_stone",
+    name: "Collect Beach Stone",
+    description: "Search the beach for useful stones.",
+    skillId: "foraging",
+    durationMs: 3000,
+    drops: [
+      { resourceId: "round_stone", amount: 1 },
+      { resourceId: "flat_stone", amount: 1, chance: 0.25 },
+    ],
+    xpGain: 5,
+  },
+  {
+    id: "collect_vine",
+    name: "Collect Vine",
+    description: "Pull tough vines from the treeline.",
+    skillId: "foraging",
+    durationMs: 3500,
+    drops: [{ resourceId: "vine", amount: 2 }],
+    xpGain: 6,
+  },
+  {
+    id: "collect_palm_frond",
+    name: "Collect Palm Frond",
+    description: "Gather fallen palm fronds from the ground.",
+    skillId: "foraging",
+    durationMs: 3000,
+    drops: [{ resourceId: "palm_frond", amount: 2 }],
+    xpGain: 5,
+  },
+  {
+    id: "collect_dry_tinder",
+    name: "Collect Dry Tinder",
+    description: "Shred coconut husk and gather dry grass for fire-starting.",
     skillId: "foraging",
     durationMs: 4000,
     drops: [
-      { resourceId: "berries", amount: 2 },
-      { resourceId: "fiber", amount: 1, chance: 0.3 },
+      { resourceId: "coconut_husk_fiber", amount: 1 },
+      { resourceId: "dry_grass", amount: 1 },
+    ],
+    requiredSkillLevel: 2,
+    xpGain: 8,
+  },
+
+  // Fishing
+  {
+    id: "wade_tidal_pool",
+    name: "Wade Tidal Pool",
+    description: "Wade into shallow pools to catch small fish and crabs.",
+    skillId: "fishing",
+    durationMs: 4000,
+    drops: [
+      { resourceId: "small_fish", amount: 1, chance: 0.6 },
+      { resourceId: "crab", amount: 1, chance: 0.4 },
+      { resourceId: "shell", amount: 1 },
     ],
     xpGain: 8,
   },
+
+  // ═══════════════════════════════════════
+  // PHASE 1 — Bamboo Tier (requires bamboo_grove biome)
+  // ═══════════════════════════════════════
+
+  // Woodworking
   {
-    id: "hunt_mushrooms",
-    name: "Hunt Mushrooms",
-    description: "Search damp areas for edible mushrooms.",
-    skillId: "foraging",
-    durationMs: 5000,
-    drops: [{ resourceId: "mushrooms", amount: 1 }],
-    requiredSkillLevel: 2,
-    xpGain: 12,
+    id: "harvest_bamboo",
+    name: "Harvest Bamboo Cane",
+    description: "Cut bamboo canes from the grove.",
+    skillId: "woodworking",
+    durationMs: 4000,
+    drops: [{ resourceId: "bamboo_cane", amount: 1 }],
+    requiredBiome: "bamboo_grove",
+    xpGain: 8,
   },
   {
-    id: "dig_clay",
-    name: "Dig Clay",
-    description: "Dig soft clay from the riverbank.",
+    id: "strip_green_bamboo",
+    name: "Strip Green Bamboo",
+    description: "Peel thin strips from fresh bamboo canes.",
+    skillId: "woodworking",
+    durationMs: 4500,
+    drops: [{ resourceId: "bamboo_strip", amount: 3 }],
+    requiredBiome: "bamboo_grove",
+    xpGain: 10,
+  },
+
+  // Foraging (bamboo-enabled)
+  {
+    id: "strip_fibrous_bark",
+    name: "Strip Fibrous Bark",
+    description:
+      "Use a bamboo splinter to strip fibrous bark for rope-making.",
     skillId: "foraging",
+    durationMs: 3500,
+    drops: [{ resourceId: "rough_fiber", amount: 2 }],
+    requiredTools: ["bamboo_splinter"],
+    xpGain: 7,
+  },
+
+  // Fishing (spear tier)
+  {
+    id: "spear_fish",
+    name: "Spear Fish",
+    description: "Use your bamboo spear to catch larger fish.",
+    skillId: "fishing",
     durationMs: 5000,
-    drops: [{ resourceId: "clay", amount: 2 }],
-    requiredSkillLevel: 3,
-    xpGain: 15,
+    drops: [
+      { resourceId: "small_fish", amount: 1 },
+      { resourceId: "shell", amount: 1, chance: 0.3 },
+    ],
+    requiredTools: ["bamboo_spear"],
+    xpGain: 12,
   },
 ];

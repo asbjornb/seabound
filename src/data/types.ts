@@ -1,35 +1,54 @@
 export type ResourceId =
-  | "wood"
-  | "stone"
-  | "fiber"
-  | "clay"
-  | "flint"
-  | "sticks"
-  | "berries"
-  | "mushrooms"
-  | "bark"
+  // Phase 0 - Bare Hands
+  | "coconut"
+  | "coconut_husk"
+  | "driftwood_branch"
+  | "round_stone"
+  | "flat_stone"
+  | "vine"
+  | "palm_frond"
+  | "small_fish"
+  | "crab"
+  | "shell"
+  // Phase 1 - Bamboo Tier
+  | "bamboo_cane"
+  | "bamboo_splinter"
+  | "bamboo_strip"
+  | "rough_fiber"
+  | "rough_cordage"
   | "dried_fiber"
-  | "stone_axe"
-  | "stone_pickaxe"
-  | "stone_knife"
-  | "rope"
-  | "campfire"
-  | "clay_pot"
-  | "wooden_shelter";
+  | "cordage"
+  | "bamboo_knife"
+  | "shell_scraper"
+  | "large_shell"
+  // Phase 1b - Fire
+  | "coconut_husk_fiber"
+  | "dry_grass"
+  | "bow_drill_kit"
+  | "bamboo_spear"
+  | "digging_stick"
+  // Food
+  | "cooked_fish"
+  | "cooked_crab";
 
 export type SkillId =
-  | "woodcutting"
-  | "mining"
   | "foraging"
+  | "fishing"
+  | "woodworking"
   | "crafting"
-  | "firemaking"
-  | "exploration";
+  | "weaving"
+  | "construction"
+  | "farming"
+  | "navigation"
+  | "preservation";
+
+export type BiomeId = "beach" | "bamboo_grove" | "jungle_interior";
 
 export interface ResourceDef {
   id: ResourceId;
   name: string;
   description: string;
-  category: "raw" | "processed" | "tool" | "structure";
+  category: "raw" | "processed" | "tool" | "food" | "structure";
 }
 
 export interface SkillDef {
@@ -53,6 +72,7 @@ export interface ActionDef {
   drops: Drop[];
   requiredSkillLevel?: number;
   requiredTools?: ResourceId[];
+  requiredBiome?: BiomeId;
   xpGain: number;
 }
 
@@ -65,17 +85,37 @@ export interface RecipeDef {
   output: { resourceId: ResourceId; amount: number };
   durationMs: number;
   requiredSkillLevel?: number;
+  requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
   xpGain: number;
+}
+
+export interface ExpeditionDef {
+  id: string;
+  name: string;
+  description: string;
+  durationMs: number;
+  foodCost?: { resourceId: ResourceId; amount: number }[];
+  requiredVessel?: ResourceId;
+  outcomes: ExpeditionOutcome[];
+}
+
+export interface ExpeditionOutcome {
+  weight: number; // relative weight for RNG selection
+  description: string;
+  biomeDiscovery?: BiomeId;
+  drops?: Drop[];
 }
 
 export interface GameState {
   resources: Record<string, number>;
   skills: Record<SkillId, { xp: number; level: number }>;
+  discoveredBiomes: BiomeId[];
   currentAction: {
     actionId: string;
     startedAt: number;
-    type: "gather" | "craft";
+    type: "gather" | "craft" | "expedition";
     recipeId?: string;
+    expeditionId?: string;
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

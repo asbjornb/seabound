@@ -9,7 +9,12 @@ interface Props {
   busy: boolean;
 }
 
-const SKILL_ORDER: SkillId[] = ["woodcutting", "mining", "foraging"];
+const SKILL_ORDER: SkillId[] = [
+  "foraging",
+  "fishing",
+  "woodworking",
+  "crafting",
+];
 
 export function ActionPanel({ actions, state, onStart, busy }: Props) {
   const grouped = new Map<SkillId, ActionDef[]>();
@@ -53,7 +58,8 @@ export function ActionPanel({ actions, state, onStart, busy }: Props) {
                       <span key={i}>
                         {i > 0 && ", "}
                         <span>
-                          {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                          {d.amount}x{" "}
+                          {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                           {d.chance && d.chance < 1
                             ? ` (${Math.round(d.chance * 100)}%)`
                             : ""}
@@ -64,7 +70,9 @@ export function ActionPanel({ actions, state, onStart, busy }: Props) {
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span>{RESOURCES[missingTool]?.name ?? missingTool}</span>
+                      <span>
+                        {RESOURCES[missingTool]?.name ?? missingTool}
+                      </span>
                     </div>
                   )}
                   <div className="action-xp">

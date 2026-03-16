@@ -11,7 +11,11 @@ interface Props {
 
 export function CraftingPanel({ recipes, state, onCraft, busy }: Props) {
   if (recipes.length === 0) {
-    return <div className="empty-message">No recipes unlocked yet. Level up crafting!</div>;
+    return (
+      <div className="empty-message">
+        No recipes unlocked yet. Discover new areas and gather materials!
+      </div>
+    );
   }
 
   return (
@@ -52,6 +56,17 @@ export function CraftingPanel({ recipes, state, onCraft, busy }: Props) {
                 );
               })}
             </div>
+            {recipe.requiredItems && (
+              <div className="action-requires">
+                Requires:{" "}
+                {recipe.requiredItems.map((id, i) => (
+                  <span key={i}>
+                    {i > 0 && ", "}
+                    <span>{RESOURCES[id]?.name ?? id}</span>
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="recipe-output">
               Produces: {recipe.output.amount}x{" "}
               {RESOURCES[recipe.output.resourceId]?.name ??

@@ -1,17 +1,33 @@
 import { useState } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { CraftingPanel } from "./components/CraftingPanel";
+import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { LogPanel } from "./components/LogPanel";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
-type Tab = "gather" | "craft" | "skills" | "log";
+type Tab = "gather" | "craft" | "explore" | "skills" | "log";
 
 export default function App() {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
+
+  const currentActionName = (() => {
+    if (!game.state.currentAction) return null;
+    const { type, actionId, recipeId, expeditionId } = game.state.currentAction;
+    if (type === "gather") {
+      return game.availableActions.find((a) => a.id === actionId)?.name;
+    }
+    if (type === "craft") {
+      return game.availableRecipes.find((r) => r.id === recipeId)?.name;
+    }
+    if (type === "expedition") {
+      return game.availableExpeditions.find((e) => e.id === expeditionId)?.name;
+    }
+    return null;
+  })();
 
   return (
     <div className="app">
@@ -27,15 +43,7 @@ export default function App() {
       {game.state.currentAction && (
         <div className="current-action">
           <div className="current-action-info">
-            <span className="current-action-name">
-              {game.state.currentAction.type === "gather"
-                ? game.availableActions.find(
-                    (a) => a.id === game.state.currentAction!.actionId
-                  )?.name
-                : game.availableRecipes.find(
-                    (r) => r.id === game.state.currentAction!.recipeId
-                  )?.name}
-            </span>
+            <span className="current-action-name">{currentActionName}</span>
             <button className="stop-btn" onClick={game.stopAction}>
               Stop
             </button>
@@ -47,30 +55,27 @@ export default function App() {
             />
           </div>
           <span className="progress-time">
-            {((game.actionDuration / 1000) * (1 - game.actionProgress)).toFixed(
-              1
-            )}
+            {(
+              (game.actionDuration / 1000) *
+              (1 - game.actionProgress)
+            ).toFixed(1)}
             s
           </span>
         </div>
       )}
 
       <nav className="tabs">
-        {(["gather", "craft", "skills", "log"] as Tab[]).map((t) => (
-          <button
-            key={t}
-            className={`tab ${tab === t ? "active" : ""}`}
-            onClick={() => setTab(t)}
-          >
-            {t === "gather"
-              ? "Gather"
-              : t === "craft"
-                ? "Craft"
-                : t === "skills"
-                  ? "Skills"
-                  : "Log"}
-          </button>
-        ))}
+        {(["gather", "craft", "explore", "skills", "log"] as Tab[]).map(
+          (t) => (
+            <button
+              key={t}
+              className={`tab ${tab === t ? "active" : ""}`}
+              onClick={() => setTab(t)}
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          )
+        )}
       </nav>
 
       <main className="panel">
@@ -87,6 +92,14 @@ export default function App() {
             recipes={game.availableRecipes}
             state={game.state}
             onCraft={game.startCraft}
+            busy={!!game.state.currentAction}
+          />
+        )}
+        {tab === "explore" && (
+          <ExpeditionPanel
+            expeditions={game.availableExpeditions}
+            state={game.state}
+            onStart={game.startExpedition}
             busy={!!game.state.currentAction}
           />
         )}

@@ -1,17 +1,17 @@
 :root {
-  --bg: #1a1a2e;
-  --bg-card: #16213e;
-  --bg-hover: #1a2744;
-  --accent: #e94560;
-  --accent-dim: #a3324a;
-  --text: #eee;
-  --text-dim: #8899aa;
+  --bg: #0c1a1a;
+  --bg-card: #132626;
+  --bg-hover: #1a3333;
+  --accent: #f0a050;
+  --accent-dim: #b07030;
+  --text: #e8e4d8;
+  --text-dim: #7a9a8a;
   --success: #4ade80;
   --warning: #fbbf24;
-  --border: #2a3a5e;
-  --bar-bg: #0f1529;
-  --bar-fill: #e94560;
-  --bar-xp: #6366f1;
+  --border: #1e3a3a;
+  --bar-bg: #0a1515;
+  --bar-fill: #f0a050;
+  --bar-xp: #38bdf8;
 }
 
 * {
@@ -338,4 +338,12 @@ body {
   font-size: 0.85rem;
   text-align: center;
   padding: 32px 0;
+}
+
+/* Biome list */
+.biome-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
 }

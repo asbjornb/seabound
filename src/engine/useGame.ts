@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ACTIONS } from "../data/actions";
+import { EXPEDITIONS } from "../data/expeditions";
 import { RECIPES } from "../data/recipes";
-import { ActionDef, GameState, RecipeDef } from "../data/types";
-import { createInitialState, getResource, loadGame, saveGame } from "./gameState";
+import { ActionDef, ExpeditionDef, GameState, RecipeDef } from "../data/types";
+import {
+  createInitialState,
+  getResource,
+  loadGame,
+  saveGame,
+} from "./gameState";
 import { CompletionEvent, processTick } from "./tick";
 
 const TICK_INTERVAL_MS = 100;
@@ -86,7 +92,6 @@ export function useGame() {
 
   const startAction = useCallback((action: ActionDef) => {
     setState((prev) => {
-      // Check requirements
       const skill = prev.skills[action.skillId];
       if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) {
         return prev;
@@ -95,6 +100,12 @@ export function useGame() {
         for (const toolId of action.requiredTools) {
           if (getResource(prev, toolId) < 1) return prev;
         }
+      }
+      if (
+        action.requiredBiome &&
+        !prev.discoveredBiomes.includes(action.requiredBiome)
+      ) {
+        return prev;
       }
       const next = structuredClone(prev);
       next.currentAction = {
@@ -109,16 +120,23 @@ export function useGame() {
   const startCraft = useCallback(
     (recipe: RecipeDef) => {
       setState((prev) => {
-        // Check skill level
         const skill = prev.skills[recipe.skillId];
-        if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) {
+        if (
+          recipe.requiredSkillLevel &&
+          skill.level < recipe.requiredSkillLevel
+        ) {
           return prev;
+        }
+        // Check required items (item-trigger gate)
+        if (recipe.requiredItems) {
+          for (const itemId of recipe.requiredItems) {
+            if (getResource(prev, itemId) < 1) return prev;
+          }
         }
         // Check resources
         for (const input of recipe.inputs) {
           if (getResource(prev, input.resourceId) < input.amount) return prev;
         }
-        // Deduct resources
         const next = structuredClone(prev);
         for (const input of recipe.inputs) {
           next.resources[input.resourceId] =
@@ -131,6 +149,36 @@ export function useGame() {
           recipeId: recipe.id,
         };
         addLog(`Started crafting: ${recipe.name}`);
+        return next;
+      });
+    },
+    [addLog]
+  );
+
+  const startExpedition = useCallback(
+    (expedition: ExpeditionDef) => {
+      setState((prev) => {
+        // Check food costs
+        if (expedition.foodCost) {
+          for (const cost of expedition.foodCost) {
+            if (getResource(prev, cost.resourceId) < cost.amount) return prev;
+          }
+        }
+        const next = structuredClone(prev);
+        // Deduct food
+        if (expedition.foodCost) {
+          for (const cost of expedition.foodCost) {
+            next.resources[cost.resourceId] =
+              (next.resources[cost.resourceId] ?? 0) - cost.amount;
+          }
+        }
+        next.currentAction = {
+          actionId: expedition.id,
+          startedAt: Date.now(),
+          type: "expedition",
+          expeditionId: expedition.id,
+        };
+        addLog(`Set out on expedition: ${expedition.name}`);
         return next;
       });
     },
@@ -153,6 +201,21 @@ export function useGame() {
           }
         }
       }
+      // If it was an expedition, refund food
+      if (
+        next.currentAction?.type === "expedition" &&
+        next.currentAction.expeditionId
+      ) {
+        const exp = EXPEDITIONS.find(
+          (e) => e.id === next.currentAction!.expeditionId
+        );
+        if (exp?.foodCost) {
+          for (const cost of exp.foodCost) {
+            next.resources[cost.resourceId] =
+              (next.resources[cost.resourceId] ?? 0) + cost.amount;
+          }
+        }
+      }
       next.currentAction = null;
       return next;
     });
@@ -165,15 +228,29 @@ export function useGame() {
     setLogs([]);
   }, []);
 
+  // Filter actions by skill level AND biome discovery
   const availableActions = ACTIONS.filter((a) => {
     const skill = state.skills[a.skillId];
-    return !a.requiredSkillLevel || skill.level >= a.requiredSkillLevel;
+    if (a.requiredSkillLevel && skill.level < a.requiredSkillLevel) return false;
+    if (a.requiredBiome && !state.discoveredBiomes.includes(a.requiredBiome))
+      return false;
+    return true;
   });
 
+  // Filter recipes by skill level AND item-trigger gates
   const availableRecipes = RECIPES.filter((r) => {
     const skill = state.skills[r.skillId];
-    return !r.requiredSkillLevel || skill.level >= r.requiredSkillLevel;
+    if (r.requiredSkillLevel && skill.level < r.requiredSkillLevel) return false;
+    if (r.requiredItems) {
+      for (const itemId of r.requiredItems) {
+        if (getResource(state, itemId) < 1) return false;
+      }
+    }
+    return true;
   });
+
+  // All expeditions (for now just scout_island)
+  const availableExpeditions = EXPEDITIONS;
 
   // Current action progress (0..1)
   let actionProgress = 0;
@@ -197,6 +274,15 @@ export function useGame() {
         const elapsed = Date.now() - state.currentAction.startedAt;
         actionProgress = Math.min(1, elapsed / def.durationMs);
       }
+    } else if (state.currentAction.type === "expedition") {
+      const def = EXPEDITIONS.find(
+        (e) => e.id === state.currentAction!.expeditionId
+      );
+      if (def) {
+        actionDuration = def.durationMs;
+        const elapsed = Date.now() - state.currentAction.startedAt;
+        actionProgress = Math.min(1, elapsed / def.durationMs);
+      }
     }
   }
 
@@ -205,18 +291,34 @@ export function useGame() {
     logs,
     availableActions,
     availableRecipes,
+    availableExpeditions,
     actionProgress,
     actionDuration,
     startAction,
     startCraft,
+    startExpedition,
     stopAction,
     resetGame,
   };
 }
 
 function logCompletion(c: CompletionEvent, addLog: (msg: string) => void) {
+  if (c.expeditionMessage) {
+    addLog(c.expeditionMessage);
+  }
+  if (c.biomeDiscovery) {
+    addLog(
+      `New area discovered: ${c.biomeDiscovery.replace(/_/g, " ")}! New actions unlocked.`
+    );
+  }
   const dropStr = c.drops.map((d) => `${d.amount}x ${d.name}`).join(", ");
-  addLog(`${c.actionName}: +${dropStr} (+${c.xpGain} ${c.skillId} xp)`);
+  if (dropStr) {
+    addLog(
+      `${c.actionName}: +${dropStr} (+${c.xpGain} ${c.skillId} xp)`
+    );
+  } else if (!c.expeditionMessage) {
+    addLog(`${c.actionName}: +${c.xpGain} ${c.skillId} xp`);
+  }
   if (c.levelUp) {
     addLog(`Level up! ${c.skillId} is now level ${c.levelUp}!`);
   }
