@@ -41,16 +41,6 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 5,
   },
   {
-    id: "collect_vine",
-    name: "Collect Vine",
-    description: "Pull tough vines from the undergrowth of the coconut grove.",
-    skillId: "foraging",
-    durationMs: 3500,
-    drops: [{ resourceId: "vine", amount: 2 }],
-    requiredBiome: "coconut_grove",
-    xpGain: 6,
-  },
-  {
     id: "collect_palm_frond",
     name: "Collect Palm Frond",
     description: "Gather fallen palm fronds from the coconut grove floor.",
@@ -104,19 +94,6 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "bamboo_grove",
     xpGain: 8,
   },
-  // Foraging (bamboo-enabled)
-  {
-    id: "strip_fibrous_bark",
-    name: "Strip Fibrous Bark",
-    description:
-      "Use a bamboo splinter to strip fibrous bark for rope-making.",
-    skillId: "foraging",
-    durationMs: 3500,
-    drops: [{ resourceId: "rough_fiber", amount: 2 }],
-    requiredTools: ["bamboo_splinter"],
-    xpGain: 7,
-  },
-
   // Fishing (spear tier)
   {
     id: "spear_fish",

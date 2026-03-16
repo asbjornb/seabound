@@ -26,12 +26,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A flat beach stone. Useful for scraping and grinding.",
     category: "raw",
   },
-  vine: {
-    id: "vine",
-    name: "Vine",
-    description: "A tough, flexible vine. Natural lashing material.",
-    category: "raw",
-  },
   palm_frond: {
     id: "palm_frond",
     name: "Palm Frond",
@@ -95,12 +89,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A sharp bamboo blade. Unlocks new processing actions.",
     category: "tool",
   },
-  shell_scraper: {
-    id: "shell_scraper",
-    name: "Shell Scraper",
-    description: "A shell bound to stone. Good for scraping bark.",
-    category: "tool",
-  },
   large_shell: {
     id: "large_shell",
     name: "Large Shell",
@@ -133,13 +121,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A fire-hardened bamboo spear. Good for fishing.",
     category: "tool",
   },
-  digging_stick: {
-    id: "digging_stick",
-    name: "Digging Stick",
-    description: "A fire-hardened bamboo stick. Dig clay, till soil.",
-    category: "tool",
-  },
-
   // Cooked food
   cooked_fish: {
     id: "cooked_fish",
