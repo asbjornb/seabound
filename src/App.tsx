@@ -1,6 +1,7 @@
 import { useRef, useMemo, useState } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { CraftingPanel } from "./components/CraftingPanel";
+import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { LogPanel } from "./components/LogPanel";
@@ -15,6 +16,10 @@ import "./App.css";
 type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
 
 export default function App() {
+  // Dev wiki: show at ?dev
+  if (window.location.search.includes("dev")) {
+    return <DevWiki />;
+  }
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
