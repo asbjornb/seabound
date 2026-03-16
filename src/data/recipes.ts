@@ -33,11 +33,11 @@ export const RECIPES: RecipeDef[] = [
     id: "craft_bamboo_knife",
     name: "Bamboo Knife",
     description:
-      "Bind a bamboo splinter into a cutting blade. Unlocks new gathering.",
+      "Wrap a bamboo splinter with rough fiber into a cutting blade.",
     skillId: "crafting",
     inputs: [
       { resourceId: "bamboo_splinter", amount: 1 },
-      { resourceId: "vine", amount: 2 },
+      { resourceId: "rough_fiber", amount: 2 },
     ],
     output: { resourceId: "bamboo_knife", amount: 1 },
     durationMs: 4000,
@@ -45,22 +45,6 @@ export const RECIPES: RecipeDef[] = [
     oneTimeCraft: true,
     xpGain: 12,
   },
-  {
-    id: "craft_shell_scraper",
-    name: "Shell Scraper",
-    description: "Bind a shell to a flat stone for scraping bark.",
-    skillId: "crafting",
-    inputs: [
-      { resourceId: "flat_stone", amount: 1 },
-      { resourceId: "shell", amount: 1 },
-    ],
-    output: { resourceId: "shell_scraper", amount: 1 },
-    durationMs: 3000,
-    requiredSkillLevel: 1,
-    oneTimeCraft: true,
-    xpGain: 8,
-  },
-
   // ═══════════════════════════════════════
   // Fiber & Cordage Chain
   // ═══════════════════════════════════════
@@ -174,20 +158,6 @@ export const RECIPES: RecipeDef[] = [
     oneTimeCraft: true,
     xpGain: 12,
   },
-  {
-    id: "craft_digging_stick",
-    name: "Digging Stick",
-    description:
-      "Fire-harden a bamboo point for digging. Requires camp fire.",
-    skillId: "crafting",
-    inputs: [{ resourceId: "bamboo_cane", amount: 1 }],
-    output: { resourceId: "digging_stick", amount: 1 },
-    requiredBuildings: ["camp_fire"],
-    durationMs: 4000,
-    oneTimeCraft: true,
-    xpGain: 10,
-  },
-
   // ═══════════════════════════════════════
   // Cooking (requires camp_fire building)
   // ═══════════════════════════════════════

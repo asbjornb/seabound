@@ -4,7 +4,6 @@ export type ResourceId =
   | "coconut_husk"
   | "driftwood_branch"
   | "flat_stone"
-  | "vine"
   | "palm_frond"
   | "small_fish"
   | "crab"
@@ -16,14 +15,12 @@ export type ResourceId =
   | "dried_fiber"
   | "cordage"
   | "bamboo_knife"
-  | "shell_scraper"
   | "large_shell"
   // Phase 1b - Fire
   | "coconut_husk_fiber"
   | "dry_grass"
   | "bow_drill_kit"
   | "bamboo_spear"
-  | "digging_stick"
   // Food
   | "cooked_fish"
   | "cooked_crab";
