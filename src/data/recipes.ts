@@ -12,6 +12,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [{ resourceId: "coconut_husk", amount: 1 }],
     output: { resourceId: "rough_fiber", amount: 1 },
     durationMs: 5000,
+    repeatable: true,
     xpGain: 6,
   },
 
@@ -27,6 +28,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bamboo_splinter", amount: 2 },
     durationMs: 3000,
     requiredSkillLevel: 1,
+    repeatable: true,
     xpGain: 8,
   },
   {
@@ -56,6 +58,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [{ resourceId: "rough_fiber", amount: 2 }],
     output: { resourceId: "dried_fiber", amount: 2 },
     durationMs: 5000,
+    repeatable: true,
     xpGain: 10,
   },
   {
@@ -66,6 +69,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [{ resourceId: "dried_fiber", amount: 2 }],
     output: { resourceId: "cordage", amount: 1 },
     durationMs: 4000,
+    repeatable: true,
     xpGain: 10,
   },
 
@@ -170,6 +174,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "cooked_fish", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 3000,
+    repeatable: true,
     xpGain: 5,
   },
   {
@@ -181,6 +186,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "cooked_crab", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 3000,
+    repeatable: true,
     xpGain: 5,
   },
 ];
