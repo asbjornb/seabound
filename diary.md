@@ -147,7 +147,7 @@ Two quality-of-life improvements that change how the game feels to play.
 
 **PR #7 — Expedition food costs and auto-repeat:**
 - Expeditions now auto-repeat like gather actions — keep scouting until food runs out
-- Scout the Island costs 1 coconut per trip, making coconut gathering a meaningful early progression goal
+- Scout the Island costs 5 food per trip (drawn from any food resource), making the tidal pool food loop essential for fueling exploration
 - `ExpeditionDef` gained `skillId` and `xpGain` fields for consistency with other action types
 - UI disables expeditions when food is insufficient, highlights missing resources in red
 
@@ -155,12 +155,12 @@ Two quality-of-life improvements that change how the game feels to play.
 
 - Fluid action switching — tap any action to start it, previous action cancels with full refund
 - Expeditions feel integrated with the gather loop instead of being a separate one-shot mechanic
-- Coconut as expedition fuel creates a natural early-game economy: forage coconuts → scout → discover bamboo grove
+- Food as expedition fuel creates a natural early-game economy: wade tidal pools → stockpile food → scout → discover biomes
 
 ### Design Decisions
 
 - **Cancel-and-refund over queue** — Could have implemented an action queue, but cancel-and-refund is simpler and fits the idle game feel. Players should always be able to switch tasks instantly.
-- **Coconut cost for scouting** — Makes the early game less trivial. Players must balance eating coconuts (future cooking) vs spending them on exploration. Creates a real decision point.
+- **Food cost for scouting** — 5 food per trip makes the early game less trivial. Players must stockpile food from tidal pools before they can afford to explore, creating a natural gather→explore rhythm.
 
 ---
 

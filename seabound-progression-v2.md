@@ -12,7 +12,7 @@
 - **Phase 1 bamboo tier** — Bamboo harvesting, splitting, fiber/cordage chain, bamboo knife, shell scraper, bow drill kit.
 - **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened tools (spear, digging stick).
 - **Settlement buildings** — Camp Fire, Palm Leaf Pile, Drying Rack. Buildings gate recipes/actions and grant storage bonuses.
-- **Expedition system** — Scout the Island with RNG biome discovery (coconut grove, bamboo grove). Auto-repeating with food cost (1 coconut per trip). Navigation XP on completion.
+- **Expedition system** — Scout the Island with RNG biome discovery (coconut grove, bamboo grove). Auto-repeating with food cost (5 food per trip, drawn from any food resource). Navigation XP on completion.
 - **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers) + auto-generated unlock previews from skill-gated actions/recipes.
 - **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
