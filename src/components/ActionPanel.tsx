@@ -1,3 +1,4 @@
+import { getDropChanceBonus } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { ActionDef, GameState, SkillId } from "../data/types";
 import { getResource } from "../engine/gameState";
@@ -60,7 +61,7 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                           {d.amount}x{" "}
                           {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                           {d.chance && d.chance < 1
-                            ? ` (${Math.round(d.chance * 100)}%)`
+                            ? ` (${Math.round(Math.min(1, d.chance + getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)) * 100)}%)`
                             : ""}
                         </span>
                       </span>
