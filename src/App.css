@@ -99,6 +99,25 @@ body {
   background: var(--bg-card);
 }
 
+/* App body layout */
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Desktop sidebar: hidden on mobile */
+.inventory-sidebar {
+  display: none;
+}
+
 /* Resource bar */
 .resource-panel {
   display: flex;
@@ -469,4 +488,125 @@ body {
   font-size: 0.72rem;
   color: var(--success);
   margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════
+   Inventory Panel
+   ═══════════════════════════════════════ */
+
+.inventory-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.inventory-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.inventory-filter {
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.inventory-filter:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+
+.inventory-filter.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.inventory-category {
+  margin-bottom: 8px;
+}
+
+.inventory-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inventory-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.inventory-item.at-cap {
+  border-color: var(--warning);
+}
+
+.inventory-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inventory-item-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.inventory-item-count {
+  font-size: 0.78rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.inventory-item-count.at-cap {
+  color: var(--warning);
+}
+
+.inventory-item-desc {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════
+   Desktop: sidebar layout (≥768px)
+   ═══════════════════════════════════════ */
+
+@media (min-width: 768px) {
+  .app {
+    max-width: 840px;
+  }
+
+  .inventory-sidebar {
+    display: block;
+    width: 280px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    padding: 12px;
+    overflow-y: auto;
+    background: var(--bg);
+  }
+
+  /* Hide the compact resource bar on desktop — sidebar replaces it */
+  .resource-panel {
+    display: none;
+  }
+
+  /* Hide inventory tab button on desktop */
+  .mobile-only-tab {
+    display: none;
+  }
+
+  /* Hide inline inventory panel on desktop (it's in the sidebar) */
+  .mobile-only-panel {
+    display: none;
+  }
 }

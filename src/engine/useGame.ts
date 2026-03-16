@@ -275,6 +275,10 @@ export function useGame() {
     if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
       return false;
     }
+    // Hide one-time-craft recipes once the player owns the output
+    if (r.oneTimeCraft && getResource(state, r.output.resourceId) >= 1) {
+      return false;
+    }
     return true;
   });
 
