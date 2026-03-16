@@ -28,6 +28,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bamboo_knife", amount: 1 },
     durationMs: 4000,
     requiredSkillLevel: 2,
+    oneTimeCraft: true,
     xpGain: 12,
   },
   {
@@ -42,6 +43,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "shell_scraper", amount: 1 },
     durationMs: 3000,
     requiredSkillLevel: 1,
+    oneTimeCraft: true,
     xpGain: 8,
   },
 
@@ -96,6 +98,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bow_drill_kit", amount: 1 },
     durationMs: 6000,
     requiredSkillLevel: 2,
+    oneTimeCraft: true,
     xpGain: 15,
   },
 
@@ -164,6 +167,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bamboo_spear", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 5000,
+    oneTimeCraft: true,
     xpGain: 12,
   },
   {
@@ -176,6 +180,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "digging_stick", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 4000,
+    oneTimeCraft: true,
     xpGain: 10,
   },
 
