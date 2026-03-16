@@ -7,14 +7,12 @@ interface Props {
   buildingRecipes: RecipeDef[];
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
-  busy: boolean;
 }
 
 export function SettlementPanel({
   buildingRecipes,
   state,
   onBuild,
-  busy,
 }: Props) {
   return (
     <div>
@@ -49,7 +47,7 @@ export function SettlementPanel({
             const canAfford = recipe.inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
-            const disabled = busy || !canAfford;
+            const disabled = !canAfford;
 
             return (
               <div

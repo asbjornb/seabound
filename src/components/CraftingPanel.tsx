@@ -6,10 +6,9 @@ interface Props {
   recipes: RecipeDef[];
   state: GameState;
   onCraft: (recipe: RecipeDef) => void;
-  busy: boolean;
 }
 
-export function CraftingPanel({ recipes, state, onCraft, busy }: Props) {
+export function CraftingPanel({ recipes, state, onCraft }: Props) {
   if (recipes.length === 0) {
     return (
       <div className="empty-message">
@@ -24,7 +23,7 @@ export function CraftingPanel({ recipes, state, onCraft, busy }: Props) {
         const canAfford = recipe.inputs.every(
           (inp) => getResource(state, inp.resourceId) >= inp.amount
         );
-        const disabled = busy || !canAfford;
+        const disabled = !canAfford;
 
         return (
           <div

@@ -6,7 +6,6 @@ interface Props {
   actions: ActionDef[];
   state: GameState;
   onStart: (action: ActionDef) => void;
-  busy: boolean;
 }
 
 const SKILL_ORDER: SkillId[] = [
@@ -16,7 +15,7 @@ const SKILL_ORDER: SkillId[] = [
   "crafting",
 ];
 
-export function ActionPanel({ actions, state, onStart, busy }: Props) {
+export function ActionPanel({ actions, state, onStart }: Props) {
   const grouped = new Map<SkillId, ActionDef[]>();
   for (const a of actions) {
     const list = grouped.get(a.skillId) ?? [];
@@ -38,7 +37,7 @@ export function ActionPanel({ actions, state, onStart, busy }: Props) {
               const missingTool = action.requiredTools?.find(
                 (t) => getResource(state, t) < 1
               );
-              const disabled = busy || !!missingTool;
+              const disabled = !!missingTool;
               return (
                 <div
                   key={action.id}

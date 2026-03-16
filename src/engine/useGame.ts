@@ -14,6 +14,34 @@ import { CompletionEvent, processTick } from "./tick";
 const TICK_INTERVAL_MS = 100;
 const SAVE_INTERVAL_MS = 10000;
 
+/** Refund resources consumed by the current action (craft inputs / expedition food). */
+function refundCurrentAction(state: GameState) {
+  if (!state.currentAction) return;
+  if (state.currentAction.type === "craft" && state.currentAction.recipeId) {
+    const recipe = RECIPES.find((r) => r.id === state.currentAction!.recipeId);
+    if (recipe) {
+      for (const input of recipe.inputs) {
+        state.resources[input.resourceId] =
+          (state.resources[input.resourceId] ?? 0) + input.amount;
+      }
+    }
+  }
+  if (
+    state.currentAction.type === "expedition" &&
+    state.currentAction.expeditionId
+  ) {
+    const exp = EXPEDITIONS.find(
+      (e) => e.id === state.currentAction!.expeditionId
+    );
+    if (exp?.foodCost) {
+      for (const cost of exp.foodCost) {
+        state.resources[cost.resourceId] =
+          (state.resources[cost.resourceId] ?? 0) + cost.amount;
+      }
+    }
+  }
+}
+
 export interface GameLog {
   id: number;
   message: string;
@@ -108,6 +136,7 @@ export function useGame() {
         return prev;
       }
       const next = structuredClone(prev);
+      refundCurrentAction(next);
       next.currentAction = {
         actionId: action.id,
         startedAt: Date.now(),
@@ -138,6 +167,7 @@ export function useGame() {
           if (getResource(prev, input.resourceId) < input.amount) return prev;
         }
         const next = structuredClone(prev);
+        refundCurrentAction(next);
         for (const input of recipe.inputs) {
           next.resources[input.resourceId] =
             (next.resources[input.resourceId] ?? 0) - input.amount;
@@ -165,6 +195,7 @@ export function useGame() {
           }
         }
         const next = structuredClone(prev);
+        refundCurrentAction(next);
         // Deduct food
         if (expedition.foodCost) {
           for (const cost of expedition.foodCost) {
@@ -189,33 +220,7 @@ export function useGame() {
     setState((prev) => {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
-      // If it was a craft, refund resources
-      if (next.currentAction?.type === "craft" && next.currentAction.recipeId) {
-        const recipe = RECIPES.find(
-          (r) => r.id === next.currentAction!.recipeId
-        );
-        if (recipe) {
-          for (const input of recipe.inputs) {
-            next.resources[input.resourceId] =
-              (next.resources[input.resourceId] ?? 0) + input.amount;
-          }
-        }
-      }
-      // If it was an expedition, refund food
-      if (
-        next.currentAction?.type === "expedition" &&
-        next.currentAction.expeditionId
-      ) {
-        const exp = EXPEDITIONS.find(
-          (e) => e.id === next.currentAction!.expeditionId
-        );
-        if (exp?.foodCost) {
-          for (const cost of exp.foodCost) {
-            next.resources[cost.resourceId] =
-              (next.resources[cost.resourceId] ?? 0) + cost.amount;
-          }
-        }
-      }
+      refundCurrentAction(next);
       next.currentAction = null;
       return next;
     });
