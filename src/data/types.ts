@@ -119,6 +119,7 @@ export interface RecipeDef {
   requiredBuildings?: BuildingId[]; // must have these buildings constructed
   buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
   oneTimeCraft?: boolean; // if true, recipe disappears once player owns ≥1 of the output
+  repeatable?: boolean; // if true, auto-repeats until inputs run out (like gathering actions)
   xpGain: number;
 }
 

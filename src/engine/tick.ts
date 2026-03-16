@@ -70,10 +70,36 @@ export function processTick(state: GameState, now: number): TickResult {
       return { completions, elapsedMs };
     }
 
-    if (timeAvailable >= def.durationMs) {
-      const event = applyCraftCompletion(state, def.id);
-      if (event) completions.push(event);
-      state.currentAction = null;
+    if (def.repeatable) {
+      let remaining = timeAvailable;
+      while (remaining >= def.durationMs) {
+        remaining -= def.durationMs;
+        const event = applyCraftCompletion(state, def.id);
+        if (event) completions.push(event);
+
+        // Try to deduct inputs for the next cycle
+        const canAfford = def.inputs.every(
+          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+        );
+        if (!canAfford) {
+          state.currentAction = null;
+          break;
+        }
+        for (const input of def.inputs) {
+          state.resources[input.resourceId] =
+            (state.resources[input.resourceId] ?? 0) - input.amount;
+        }
+      }
+
+      if (state.currentAction) {
+        state.currentAction.startedAt = now - remaining;
+      }
+    } else {
+      if (timeAvailable >= def.durationMs) {
+        const event = applyCraftCompletion(state, def.id);
+        if (event) completions.push(event);
+        state.currentAction = null;
+      }
     }
   } else if (action.type === "expedition") {
     const def = EXPEDITIONS.find((e) => e.id === action.expeditionId);
