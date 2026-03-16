@@ -4,7 +4,7 @@ import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { deductFood, getTotalFood } from "./gameState";
+import { addResource, deductFood, getTotalFood } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -117,8 +117,7 @@ function applyGatherCompletion(
   const skillLevel = state.skills[def.skillId].level;
   const drops = rollDrops(def.drops, def.skillId, skillLevel, def.id);
   for (const drop of drops) {
-    state.resources[drop.resourceId] =
-      (state.resources[drop.resourceId] ?? 0) + drop.amount;
+    addResource(state, drop.resourceId, drop.amount);
   }
 
   const skill = state.skills[def.skillId];
@@ -152,8 +151,7 @@ function applyCraftCompletion(
     drops.push({ name: def.buildingOutput, amount: 1 });
   } else {
     // Normal craft — add output to resources
-    state.resources[def.output.resourceId] =
-      (state.resources[def.output.resourceId] ?? 0) + def.output.amount;
+    addResource(state, def.output.resourceId, def.output.amount);
     drops.push({ name: def.output.resourceId, amount: def.output.amount });
   }
 
@@ -192,8 +190,7 @@ function applyExpeditionCompletion(
     for (const drop of outcome.drops) {
       const rolled = rollDrops([drop]);
       for (const r of rolled) {
-        state.resources[r.resourceId] =
-          (state.resources[r.resourceId] ?? 0) + r.amount;
+        addResource(state, r.resourceId, r.amount);
         drops.push({ name: r.resourceId, amount: r.amount });
       }
     }

@@ -5,6 +5,7 @@ import { getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef } from "../data/types";
 import {
+  addResource,
   createInitialState,
   deductFood,
   getResource,
@@ -24,8 +25,7 @@ function refundCurrentAction(state: GameState) {
     const recipe = RECIPES.find((r) => r.id === state.currentAction!.recipeId);
     if (recipe) {
       for (const input of recipe.inputs) {
-        state.resources[input.resourceId] =
-          (state.resources[input.resourceId] ?? 0) + input.amount;
+        addResource(state, input.resourceId, input.amount);
       }
     }
   }
@@ -40,7 +40,7 @@ function refundCurrentAction(state: GameState) {
       // Refund the food that was paid for the current (unfinished) cycle
       // We store which resources were deducted so we can refund accurately
       for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
-        state.resources[resId] = (state.resources[resId] ?? 0) + amount;
+        addResource(state, resId, amount);
       }
     }
   }

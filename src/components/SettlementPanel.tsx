@@ -31,6 +31,11 @@ export function SettlementPanel({
                   <div className="building-unlocks">
                     Unlocks: {bdef?.unlocks ?? ""}
                   </div>
+                  {bdef?.storageBonus && (
+                    <div className="building-storage">
+                      Storage: {bdef.storageBonus.map(b => `+${b.amount} ${b.category}`).join(", ")}
+                    </div>
+                  )}
                 </div>
               );
             })}

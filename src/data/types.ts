@@ -49,18 +49,26 @@ export type BuildingId =
   | "palm_leaf_pile"
   | "drying_rack";
 
+export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
+
+export interface StorageBonus {
+  category: ResourceCategory;
+  amount: number; // extra storage slots per item in this category
+}
+
 export interface BuildingDef {
   id: BuildingId;
   name: string;
   description: string;
   unlocks: string; // human-readable description of what this building enables
+  storageBonus?: StorageBonus[];
 }
 
 export interface ResourceDef {
   id: ResourceId;
   name: string;
   description: string;
-  category: "raw" | "processed" | "tool" | "food" | "structure";
+  category: ResourceCategory;
 }
 
 export interface SkillDef {

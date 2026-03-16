@@ -7,6 +7,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A crackling fire built from a bow drill. Provides cooking, fire-hardening, and warmth.",
     unlocks: "Cooking, fire-hardened tools, smoking (later)",
+    storageBonus: [{ category: "food", amount: 10 }],
   },
   palm_leaf_pile: {
     id: "palm_leaf_pile",
@@ -14,6 +15,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A heap of palm fronds to keep materials off the sand. Basic storage.",
     unlocks: "Organized storage for raw materials",
+    storageBonus: [{ category: "raw", amount: 20 }],
   },
   drying_rack: {
     id: "drying_rack",
@@ -21,5 +23,6 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A bamboo frame for drying fiber, fish, and hides in the sun.",
     unlocks: "Faster fiber drying, dried fish, cured hide",
+    storageBonus: [{ category: "processed", amount: 20 }],
   },
 };
