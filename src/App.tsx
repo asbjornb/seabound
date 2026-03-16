@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useRef, useMemo, useState } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
@@ -17,6 +17,8 @@ type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
 export default function App() {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
 
   // Split recipes: building recipes go to Camp tab, others stay in Craft
@@ -79,9 +81,58 @@ export default function App() {
           >
             Log
           </button>
-          <button className="reset-btn" onClick={game.resetGame}>
-            Reset
-          </button>
+          <div className="settings-wrapper">
+            <button
+              className="settings-btn"
+              onClick={() => setSettingsOpen((o) => !o)}
+            >
+              Settings
+            </button>
+            {settingsOpen && (
+              <div className="settings-menu">
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    game.exportSave();
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Save to file
+                </button>
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    fileInputRef.current?.click();
+                  }}
+                >
+                  Load from file
+                </button>
+                <button
+                  className="settings-menu-item danger"
+                  onClick={() => {
+                    game.resetGame();
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  game.importSave(file);
+                  e.target.value = "";
+                }
+                setSettingsOpen(false);
+              }}
+            />
+          </div>
         </div>
       </header>
 
