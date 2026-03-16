@@ -12,13 +12,14 @@ import { getTotalFood } from "./engine/gameState";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
-type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills" | "log";
+type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
 
 export default function App() {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showLog, setShowLog] = useState(false);
 
   // Split recipes: building recipes go to Camp tab, others stay in Craft
   const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput);
@@ -46,7 +47,6 @@ export default function App() {
     if (craftRecipes.length > 0) tabs.push("craft");
     if (buildingRecipes.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
-    tabs.push("log");
     return tabs;
   }, [hasAnyResource, hasFood, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
 
@@ -74,57 +74,65 @@ export default function App() {
     <div className="app">
       <header className="header">
         <h1>SeaBound</h1>
-        <div className="settings-wrapper">
+        <div className="header-actions">
           <button
-            className="settings-btn"
-            onClick={() => setSettingsOpen((o) => !o)}
+            className={`log-toggle-btn${showLog ? " active" : ""}`}
+            onClick={() => setShowLog((v) => !v)}
           >
-            Settings
+            Log
           </button>
-          {settingsOpen && (
-            <div className="settings-menu">
-              <button
-                className="settings-menu-item"
-                onClick={() => {
-                  game.exportSave();
-                  setSettingsOpen(false);
-                }}
-              >
-                Save to file
-              </button>
-              <button
-                className="settings-menu-item"
-                onClick={() => {
-                  fileInputRef.current?.click();
-                }}
-              >
-                Load from file
-              </button>
-              <button
-                className="settings-menu-item danger"
-                onClick={() => {
-                  game.resetGame();
-                  setSettingsOpen(false);
-                }}
-              >
-                Reset
-              </button>
-            </div>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                game.importSave(file);
-                e.target.value = "";
-              }
-              setSettingsOpen(false);
-            }}
-          />
+          <div className="settings-wrapper">
+            <button
+              className="settings-btn"
+              onClick={() => setSettingsOpen((o) => !o)}
+            >
+              Settings
+            </button>
+            {settingsOpen && (
+              <div className="settings-menu">
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    game.exportSave();
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Save to file
+                </button>
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    fileInputRef.current?.click();
+                  }}
+                >
+                  Load from file
+                </button>
+                <button
+                  className="settings-menu-item danger"
+                  onClick={() => {
+                    game.resetGame();
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  game.importSave(file);
+                  e.target.value = "";
+                }
+                setSettingsOpen(false);
+              }}
+            />
+          </div>
         </div>
       </header>
 
@@ -169,6 +177,12 @@ export default function App() {
             ))}
           </nav>
 
+          {showLog && (
+            <div className="log-drawer">
+              <LogPanel logs={game.logs} />
+            </div>
+          )}
+
           <main className="panel">
             {activeTab === "gather" && (
               <ActionPanel
@@ -204,7 +218,6 @@ export default function App() {
               />
             )}
             {activeTab === "skills" && <SkillsPanel state={game.state} />}
-            {activeTab === "log" && <LogPanel logs={game.logs} />}
           </main>
         </div>
 

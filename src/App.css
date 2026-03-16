@@ -50,6 +50,40 @@ body {
   letter-spacing: 0.05em;
 }
 
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.log-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.log-toggle-btn:hover {
+  border-color: var(--text-dim);
+  color: var(--text);
+}
+
+.log-toggle-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.log-drawer {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
 /* Settings dropdown */
 .settings-wrapper {
   position: relative;
