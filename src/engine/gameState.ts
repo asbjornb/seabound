@@ -1,21 +1,26 @@
 import { GameState, SkillId } from "../data/types";
 
+const ALL_SKILLS: SkillId[] = [
+  "foraging",
+  "fishing",
+  "woodworking",
+  "crafting",
+  "weaving",
+  "construction",
+  "farming",
+  "navigation",
+  "preservation",
+];
+
 export function createInitialState(): GameState {
   const skills = {} as GameState["skills"];
-  const allSkills: SkillId[] = [
-    "woodcutting",
-    "mining",
-    "foraging",
-    "crafting",
-    "firemaking",
-    "exploration",
-  ];
-  for (const id of allSkills) {
+  for (const id of ALL_SKILLS) {
     skills[id] = { xp: 0, level: 1 };
   }
   return {
     resources: {},
     skills,
+    discoveredBiomes: ["beach"],
     currentAction: null,
     lastTickAt: Date.now(),
     totalPlayTimeMs: 0,
@@ -32,7 +37,18 @@ export function loadGame(): GameState | null {
   const raw = localStorage.getItem(SAVE_KEY);
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as GameState;
+    const loaded = JSON.parse(raw) as GameState;
+    // Migration: ensure new fields exist
+    if (!loaded.discoveredBiomes) {
+      loaded.discoveredBiomes = ["beach"];
+    }
+    // Ensure all skills exist (in case save is from old version)
+    for (const id of ALL_SKILLS) {
+      if (!loaded.skills[id]) {
+        loaded.skills[id] = { xp: 0, level: 1 };
+      }
+    }
+    return loaded;
   } catch {
     return null;
   }

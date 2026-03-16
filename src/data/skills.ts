@@ -1,35 +1,53 @@
 import { SkillDef, SkillId } from "./types";
 
 export const SKILLS: Record<SkillId, SkillDef> = {
-  woodcutting: {
-    id: "woodcutting",
-    name: "Woodcutting",
-    description: "The art of felling trees and processing timber.",
-  },
-  mining: {
-    id: "mining",
-    name: "Mining",
-    description: "Breaking rock and extracting useful stone.",
-  },
   foraging: {
     id: "foraging",
     name: "Foraging",
-    description: "Finding useful plants, fungi, and materials in the wild.",
+    description: "Gathering plants, fruits, fiber, roots, seeds, shells.",
+  },
+  fishing: {
+    id: "fishing",
+    name: "Fishing",
+    description: "All fishing methods — wading, spearing, lines, traps, nets.",
+  },
+  woodworking: {
+    id: "woodworking",
+    name: "Woodworking",
+    description:
+      "Working with bamboo and wood — harvesting, shaping, splitting, felling.",
   },
   crafting: {
     id: "crafting",
     name: "Crafting",
-    description: "Shaping raw materials into useful items.",
+    description:
+      "General tool-making, lashing, assembly, knapping, pottery shaping.",
   },
-  firemaking: {
-    id: "firemaking",
-    name: "Firemaking",
-    description: "Creating and managing fire for warmth and crafting.",
+  weaving: {
+    id: "weaving",
+    name: "Weaving",
+    description: "Mats, baskets, traps, nets, cloth, sail.",
   },
-  exploration: {
-    id: "exploration",
-    name: "Exploration",
-    description: "Venturing into the unknown to discover new resources.",
+  construction: {
+    id: "construction",
+    name: "Construction",
+    description: "Structures, buildings, platforms, stone-work.",
+  },
+  farming: {
+    id: "farming",
+    name: "Farming",
+    description: "Plot clearing, planting, tending, harvesting, seed saving.",
+  },
+  navigation: {
+    id: "navigation",
+    name: "Navigation",
+    description:
+      "Improves expedition outcomes — discovery chance, loot quality, risk reduction.",
+  },
+  preservation: {
+    id: "preservation",
+    name: "Preservation",
+    description: "Drying, smoking, pottery firing, sealing, fermenting.",
   },
 };
 
