@@ -1,4 +1,4 @@
-import { GameState, SkillId } from "../data/types";
+import { BuildingId, GameState, SkillId } from "../data/types";
 
 const ALL_SKILLS: SkillId[] = [
   "foraging",
@@ -21,6 +21,7 @@ export function createInitialState(): GameState {
     resources: {},
     skills,
     discoveredBiomes: ["beach"],
+    buildings: [] as BuildingId[],
     currentAction: null,
     lastTickAt: Date.now(),
     totalPlayTimeMs: 0,
@@ -46,6 +47,15 @@ export function loadGame(): GameState | null {
     for (const id of ALL_SKILLS) {
       if (!loaded.skills[id]) {
         loaded.skills[id] = { xp: 0, level: 1 };
+      }
+    }
+    // Migration: ensure buildings array exists
+    if (!loaded.buildings) {
+      loaded.buildings = [];
+      // If player already has bow_drill_kit, auto-grant camp_fire building
+      // so they don't lose access to fire-dependent recipes
+      if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
+        loaded.buildings.push("camp_fire");
       }
     }
     return loaded;

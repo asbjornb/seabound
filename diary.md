@@ -69,3 +69,67 @@ Completely rewrote the game data layer and engine to match the new tropical isla
 - **Drop amounts** — Design doc says "coconut x1-2" (variable drops). Current system uses fixed amounts with chance-based bonus drops. Could add min/max ranges later.
 
 ---
+
+## Session 2 — Settlement Buildings System (2026-03-16)
+
+### What We Did
+
+Implemented the settlement buildings system — the first item on the "next steps" list from Session 1. Buildings are permanent structures that persist and act as unlock gates for recipes and actions, replacing the old `bow_drill_kit` item-trigger pattern for fire-dependent content.
+
+**Changes made:**
+
+1. **types.ts** — Added `BuildingId` type (`camp_fire`, `palm_leaf_pile`, `drying_rack`), `BuildingDef` interface, added `buildings: BuildingId[]` to `GameState`, added `requiredBuildings` to both `ActionDef` and `RecipeDef`, added `buildingOutput` to `RecipeDef` for recipes that construct buildings.
+
+2. **buildings.ts** — New file. Three initial building definitions with names, descriptions, and unlock descriptions: Camp Fire (cooking, fire-hardening), Palm Leaf Pile (basic storage), Drying Rack (fiber/fish/hide drying).
+
+3. **recipes.ts** — Three new building construction recipes:
+   - **Light Camp Fire** (Crafting 2): bow_drill_kit + tinder + driftwood → Camp Fire building
+   - **Palm Leaf Pile** (Construction 1): palm_fronds + driftwood → basic storage building
+   - **Drying Rack** (Crafting 5): bamboo + cordage → processing station
+   - Migrated fire-dependent recipes (bamboo spear, digging stick, cook fish, cook crab) from `requiredItems: ["bow_drill_kit"]` to `requiredBuildings: ["camp_fire"]`
+
+4. **gameState.ts** — Added `buildings: []` to initial state. Save migration: auto-grants `camp_fire` building to players who already have a `bow_drill_kit` in inventory (prevents breaking existing saves).
+
+5. **tick.ts** — `applyCraftCompletion` now checks for `buildingOutput` — if set, adds the building ID to `state.buildings` instead of producing a resource output.
+
+6. **useGame.ts** — Recipe and action filtering now checks `requiredBuildings` gate. Building recipes for already-built buildings are hidden from the available list.
+
+7. **SettlementPanel.tsx** — New component. Shows built buildings (green accent border, name, description, what it unlocks) and available building construction recipes (same card UI as crafting with resource requirements).
+
+8. **App.tsx** — Added "Camp" tab (6 tabs total: Gather, Craft, Camp, Explore, Skills, Log). Recipes are split: building recipes go to Camp tab, regular recipes stay in Craft.
+
+9. **App.css** — New styles for `.building-list`, `.building-card`, `.building-name`, `.building-desc`, `.building-unlocks` with green accent for built buildings.
+
+### What Works
+
+- Full building construction flow: gather materials → go to Camp tab → build
+- Camp Fire properly gates cooking and fire-hardened tools (replaces old bow_drill_kit item-trigger)
+- Palm Leaf Pile buildable early with just beach resources
+- Drying Rack requires mid-game resources (bamboo + cordage, Crafting 5)
+- Buildings persist in save and display in the Camp tab
+- Already-built building recipes disappear from the list
+- Save migration handles old saves gracefully (auto-grants camp_fire if player had bow_drill_kit)
+- Build passes clean (tsc + vite, zero errors)
+
+### What's Missing / Next Steps
+
+- **More buildings** — Stone Hearth (Construction 10), Woven Basket storage (Weaving 5), Smoking Rack (Crafting 8 + hearth), Workbench (Crafting 15)
+- **Building effects** — Buildings should mechanically affect gameplay (e.g. storage buildings increase resource cap, drying rack enables better fiber drying recipe)
+- **Shell adze** — Design doc mentions it but we need `large_shell` drops and the recipe
+- **Farming** — Cleared plots as buildings, planting, semi-idle set-and-claim loop
+- **Phase 2 fishing tiers** — Drop line (Fishing 8), basket trap (Fishing 10 + Weaving 15)
+- **Jungle interior expedition** — Food/water costs, basalt/clay/crop discoveries
+- **Stone tools chain** — Knapping: chert → flakes → blades → points
+- **Navigation skill effects** — Should improve expedition discovery odds
+- **Weaving skill actions** — Mats, baskets, traps
+- **Action speed scaling** — Higher skill levels should reduce action duration
+- **Building upgrade chains** — Camp Fire → Stone Hearth → Cooking Hearth
+
+### Design Decisions
+
+- **Buildings as RecipeDef with buildingOutput** — Rather than creating a whole new action system, buildings are crafted via the existing recipe system with a `buildingOutput` field. This keeps the engine simple and reuses all existing crafting logic (resource deduction, progress bar, XP award, completion handling).
+- **Separate Camp tab** — Building recipes could live in the Craft tab, but a dedicated Camp tab gives the settlement its own identity and keeps Craft focused on tools and consumables.
+- **requiredBuildings vs requiredItems** — Created a parallel gating system specifically for buildings rather than overloading the item-trigger system. This is cleaner because buildings aren't consumed and don't sit in the resource inventory.
+- **Placeholder output for building recipes** — Building recipes still need the `output` field to satisfy the RecipeDef type, but it's set to `amount: 0` and ignored when `buildingOutput` is present. Could make output optional later but this avoids a larger refactor.
+
+---

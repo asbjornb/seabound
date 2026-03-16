@@ -44,6 +44,18 @@ export type SkillId =
 
 export type BiomeId = "beach" | "bamboo_grove" | "jungle_interior";
 
+export type BuildingId =
+  | "camp_fire"
+  | "palm_leaf_pile"
+  | "drying_rack";
+
+export interface BuildingDef {
+  id: BuildingId;
+  name: string;
+  description: string;
+  unlocks: string; // human-readable description of what this building enables
+}
+
 export interface ResourceDef {
   id: ResourceId;
   name: string;
@@ -73,6 +85,7 @@ export interface ActionDef {
   requiredSkillLevel?: number;
   requiredTools?: ResourceId[];
   requiredBiome?: BiomeId;
+  requiredBuildings?: BuildingId[];
   xpGain: number;
 }
 
@@ -86,6 +99,8 @@ export interface RecipeDef {
   durationMs: number;
   requiredSkillLevel?: number;
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
+  requiredBuildings?: BuildingId[]; // must have these buildings constructed
+  buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
   xpGain: number;
 }
 
@@ -110,6 +125,7 @@ export interface GameState {
   resources: Record<string, number>;
   skills: Record<SkillId, { xp: number; level: number }>;
   discoveredBiomes: BiomeId[];
+  buildings: BuildingId[];
   currentAction: {
     actionId: string;
     startedAt: number;

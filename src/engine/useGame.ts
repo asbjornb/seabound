@@ -228,16 +228,22 @@ export function useGame() {
     setLogs([]);
   }, []);
 
-  // Filter actions by skill level AND biome discovery
+  // Filter actions by skill level, biome discovery, AND building requirements
   const availableActions = ACTIONS.filter((a) => {
     const skill = state.skills[a.skillId];
     if (a.requiredSkillLevel && skill.level < a.requiredSkillLevel) return false;
     if (a.requiredBiome && !state.discoveredBiomes.includes(a.requiredBiome))
       return false;
+    if (a.requiredBuildings) {
+      for (const bid of a.requiredBuildings) {
+        if (!state.buildings.includes(bid)) return false;
+      }
+    }
     return true;
   });
 
-  // Filter recipes by skill level AND item-trigger gates
+  // Filter recipes by skill level, item-trigger gates, AND building requirements
+  // Also hide building recipes for buildings already constructed
   const availableRecipes = RECIPES.filter((r) => {
     const skill = state.skills[r.skillId];
     if (r.requiredSkillLevel && skill.level < r.requiredSkillLevel) return false;
@@ -245,6 +251,15 @@ export function useGame() {
       for (const itemId of r.requiredItems) {
         if (getResource(state, itemId) < 1) return false;
       }
+    }
+    if (r.requiredBuildings) {
+      for (const bid of r.requiredBuildings) {
+        if (!state.buildings.includes(bid)) return false;
+      }
+    }
+    // Hide building recipes for already-built buildings
+    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
+      return false;
     }
     return true;
   });
