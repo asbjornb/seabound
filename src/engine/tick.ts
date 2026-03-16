@@ -117,8 +117,20 @@ function applyCraftCompletion(
   const def = RECIPES.find((r) => r.id === recipeId);
   if (!def) return null;
 
-  state.resources[def.output.resourceId] =
-    (state.resources[def.output.resourceId] ?? 0) + def.output.amount;
+  const drops: { name: string; amount: number }[] = [];
+
+  if (def.buildingOutput) {
+    // Building construction — add to buildings list
+    if (!state.buildings.includes(def.buildingOutput)) {
+      state.buildings.push(def.buildingOutput);
+    }
+    drops.push({ name: def.buildingOutput, amount: 1 });
+  } else {
+    // Normal craft — add output to resources
+    state.resources[def.output.resourceId] =
+      (state.resources[def.output.resourceId] ?? 0) + def.output.amount;
+    drops.push({ name: def.output.resourceId, amount: def.output.amount });
+  }
 
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
@@ -127,7 +139,7 @@ function applyCraftCompletion(
 
   return {
     actionName: def.name,
-    drops: [{ name: def.output.resourceId, amount: def.output.amount }],
+    drops,
     xpGain: def.xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,

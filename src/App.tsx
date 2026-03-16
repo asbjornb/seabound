@@ -4,15 +4,20 @@ import { CraftingPanel } from "./components/CraftingPanel";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { LogPanel } from "./components/LogPanel";
 import { ResourcePanel } from "./components/ResourcePanel";
+import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { useGame } from "./engine/useGame";
 import "./App.css";
 
-type Tab = "gather" | "craft" | "explore" | "skills" | "log";
+type Tab = "gather" | "craft" | "camp" | "explore" | "skills" | "log";
 
 export default function App() {
   const game = useGame();
   const [tab, setTab] = useState<Tab>("gather");
+
+  // Split recipes: building recipes go to Camp tab, others stay in Craft
+  const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput);
+  const buildingRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput);
 
   const currentActionName = (() => {
     if (!game.state.currentAction) return null;
@@ -21,7 +26,9 @@ export default function App() {
       return game.availableActions.find((a) => a.id === actionId)?.name;
     }
     if (type === "craft") {
-      return game.availableRecipes.find((r) => r.id === recipeId)?.name;
+      // Check both craft and building recipes
+      const allRecipes = game.availableRecipes;
+      return allRecipes.find((r) => r.id === recipeId)?.name;
     }
     if (type === "expedition") {
       return game.availableExpeditions.find((e) => e.id === expeditionId)?.name;
@@ -65,7 +72,7 @@ export default function App() {
       )}
 
       <nav className="tabs">
-        {(["gather", "craft", "explore", "skills", "log"] as Tab[]).map(
+        {(["gather", "craft", "camp", "explore", "skills", "log"] as Tab[]).map(
           (t) => (
             <button
               key={t}
@@ -89,9 +96,17 @@ export default function App() {
         )}
         {tab === "craft" && (
           <CraftingPanel
-            recipes={game.availableRecipes}
+            recipes={craftRecipes}
             state={game.state}
             onCraft={game.startCraft}
+            busy={!!game.state.currentAction}
+          />
+        )}
+        {tab === "camp" && (
+          <SettlementPanel
+            buildingRecipes={buildingRecipes}
+            state={game.state}
+            onBuild={game.startCraft}
             busy={!!game.state.currentAction}
           />
         )}

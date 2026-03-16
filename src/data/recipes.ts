@@ -98,15 +98,71 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 2,
     xpGain: 15,
   },
+
+  // ═══════════════════════════════════════
+  // Settlement Building Recipes
+  // ═══════════════════════════════════════
+  {
+    id: "build_camp_fire",
+    name: "Light Camp Fire",
+    description:
+      "Use the bow drill kit with tinder to start a fire. A permanent settlement building.",
+    skillId: "crafting",
+    inputs: [
+      { resourceId: "bow_drill_kit", amount: 1 },
+      { resourceId: "coconut_husk_fiber", amount: 2 },
+      { resourceId: "dry_grass", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 3 },
+    ],
+    output: { resourceId: "bow_drill_kit", amount: 0 }, // placeholder, buildingOutput takes precedence
+    buildingOutput: "camp_fire",
+    durationMs: 8000,
+    requiredSkillLevel: 2,
+    xpGain: 20,
+  },
+  {
+    id: "build_palm_leaf_pile",
+    name: "Palm Leaf Pile",
+    description:
+      "Heap palm fronds together to keep materials off the wet sand.",
+    skillId: "construction",
+    inputs: [
+      { resourceId: "palm_frond", amount: 8 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    output: { resourceId: "palm_frond", amount: 0 }, // placeholder
+    buildingOutput: "palm_leaf_pile",
+    durationMs: 5000,
+    xpGain: 15,
+  },
+  {
+    id: "build_drying_rack",
+    name: "Drying Rack",
+    description:
+      "Build a bamboo frame for drying fiber, fish, and hides in the sun.",
+    skillId: "crafting",
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 4 },
+      { resourceId: "cordage", amount: 3 },
+    ],
+    output: { resourceId: "bamboo_cane", amount: 0 }, // placeholder
+    buildingOutput: "drying_rack",
+    durationMs: 8000,
+    requiredSkillLevel: 5,
+    xpGain: 25,
+  },
+
+  // ═══════════════════════════════════════
+  // Fire-dependent recipes (require camp_fire building)
+  // ═══════════════════════════════════════
   {
     id: "craft_bamboo_spear",
     name: "Bamboo Spear",
-    description:
-      "Fire-harden a bamboo tip into a spear. Requires bow drill kit (fire).",
+    description: "Fire-harden a bamboo tip into a spear. Requires camp fire.",
     skillId: "crafting",
     inputs: [{ resourceId: "bamboo_cane", amount: 2 }],
     output: { resourceId: "bamboo_spear", amount: 1 },
-    requiredItems: ["bow_drill_kit"],
+    requiredBuildings: ["camp_fire"],
     durationMs: 5000,
     xpGain: 12,
   },
@@ -114,17 +170,17 @@ export const RECIPES: RecipeDef[] = [
     id: "craft_digging_stick",
     name: "Digging Stick",
     description:
-      "Fire-harden a bamboo point for digging. Requires bow drill kit (fire).",
+      "Fire-harden a bamboo point for digging. Requires camp fire.",
     skillId: "crafting",
     inputs: [{ resourceId: "bamboo_cane", amount: 1 }],
     output: { resourceId: "digging_stick", amount: 1 },
-    requiredItems: ["bow_drill_kit"],
+    requiredBuildings: ["camp_fire"],
     durationMs: 4000,
     xpGain: 10,
   },
 
   // ═══════════════════════════════════════
-  // Cooking (requires bow_drill_kit / fire)
+  // Cooking (requires camp_fire building)
   // ═══════════════════════════════════════
   {
     id: "cook_fish",
@@ -133,7 +189,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "crafting",
     inputs: [{ resourceId: "small_fish", amount: 1 }],
     output: { resourceId: "cooked_fish", amount: 1 },
-    requiredItems: ["bow_drill_kit"],
+    requiredBuildings: ["camp_fire"],
     durationMs: 3000,
     xpGain: 5,
   },
@@ -144,7 +200,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "crafting",
     inputs: [{ resourceId: "crab", amount: 1 }],
     output: { resourceId: "cooked_crab", amount: 1 },
-    requiredItems: ["bow_drill_kit"],
+    requiredBuildings: ["camp_fire"],
     durationMs: 3000,
     xpGain: 5,
   },

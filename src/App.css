@@ -347,3 +347,41 @@ body {
   gap: 6px;
   margin-bottom: 8px;
 }
+
+/* Settlement buildings */
+.building-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.building-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.building-card.built {
+  border-color: var(--success);
+  border-left: 3px solid var(--success);
+}
+
+.building-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.building-desc {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.building-unlocks {
+  font-size: 0.72rem;
+  color: var(--bar-xp);
+}
