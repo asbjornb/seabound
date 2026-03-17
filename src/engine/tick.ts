@@ -1,6 +1,6 @@
 import { ACTIONS } from "../data/actions";
 import { EXPEDITIONS } from "../data/expeditions";
-import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
+import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
@@ -207,8 +207,17 @@ function applyCraftCompletion(
       newResources.push(def.output.resourceId);
       state.discoveredResources.push(def.output.resourceId);
     }
-    addResource(state, def.output.resourceId, def.output.amount);
-    drops.push({ name: def.output.resourceId, amount: def.output.amount });
+    let outputAmount = def.output.amount;
+
+    // Double output milestone check
+    const skill = state.skills[def.skillId];
+    const doubleChance = getDoubleOutputChance(def.skillId, skill.level);
+    if (doubleChance > 0 && Math.random() < doubleChance) {
+      outputAmount *= 2;
+    }
+
+    addResource(state, def.output.resourceId, outputAmount);
+    drops.push({ name: def.output.resourceId, amount: outputAmount });
   }
   // else: XP-only recipe (e.g. Maintain Camp) — no output to process
 

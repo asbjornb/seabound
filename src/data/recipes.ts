@@ -252,6 +252,7 @@ export const RECIPES: RecipeDef[] = [
     name: "Cook Large Fish",
     description: "Grill a large fish over the campfire. Needs extra fuel.",
     skillId: "cooking",
+    requiredSkillLevel: 4,
     inputs: [
       { resourceId: "large_fish", amount: 1 },
       { resourceId: "driftwood_branch", amount: 2 },
@@ -267,6 +268,7 @@ export const RECIPES: RecipeDef[] = [
     name: "Cook Crab",
     description: "Roast crab over the fire using driftwood as fuel.",
     skillId: "cooking",
+    requiredSkillLevel: 2,
     inputs: [
       { resourceId: "crab", amount: 1 },
       { resourceId: "driftwood_branch", amount: 1 },
