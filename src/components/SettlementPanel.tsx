@@ -1,23 +1,78 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
-import { GameState, RecipeDef } from "../data/types";
+import { ActionDef, GameState, RecipeDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
   campRecipes: RecipeDef[];
+  campActions: ActionDef[];
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
+  onStartAction: (action: ActionDef) => void;
 }
 
 export function SettlementPanel({
   campRecipes,
+  campActions,
   state,
   onBuild,
+  onStartAction,
 }: Props) {
   const buildingRecipes = campRecipes.filter((r) => !!r.buildingOutput);
   const maintenanceRecipes = campRecipes.filter((r) => !r.buildingOutput);
   return (
     <div>
+      {campActions.length > 0 && (
+        <>
+          <div className="section-title">Camp Tasks</div>
+          {campActions.map((action) => {
+            const missingTool = action.requiredTools?.find(
+              (t) => getResource(state, t) < 1
+            );
+            const disabled = !!missingTool;
+            return (
+              <div
+                key={action.id}
+                className={`action-card ${disabled ? "disabled" : ""}`}
+                onClick={() => !disabled && onStartAction(action)}
+              >
+                <div className="action-card-header">
+                  <span className="action-name">{action.name}</span>
+                  <span className="action-time">
+                    {(action.durationMs / 1000).toFixed(1)}s
+                  </span>
+                </div>
+                <div className="action-desc">{action.description}</div>
+                {action.drops.length > 0 ? (
+                  <div className="action-drops">
+                    Drops:{" "}
+                    {action.drops.map((d, i) => (
+                      <span key={i}>
+                        {i > 0 && ", "}
+                        {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {d.chance != null && d.chance < 1
+                          ? ` (${Math.round(d.chance * 100)}%)`
+                          : ""}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="action-drops">XP only</div>
+                )}
+                {missingTool && (
+                  <div className="action-requires">
+                    Requires: {RESOURCES[missingTool]?.name ?? missingTool}
+                  </div>
+                )}
+                <div className="action-xp">
+                  +{action.xpGain} {action.skillId} XP
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+
       {maintenanceRecipes.length > 0 && (
         <>
           <div className="section-title">Camp Maintenance</div>

@@ -31,6 +31,10 @@ export default function App() {
   const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput && !campRecipeIds.has(r.id));
   const campRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput || campRecipeIds.has(r.id));
 
+  // Split actions: construction actions go to Camp tab, others stay in Gather
+  const gatherActions = game.availableActions.filter((a) => a.skillId !== "construction");
+  const campActions = game.availableActions.filter((a) => a.skillId === "construction");
+
   // Progressive tab visibility
   const hasAnyXp = useMemo(
     () =>
@@ -51,10 +55,10 @@ export default function App() {
     if (hasAnyResource) tabs.push("inventory");
     if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
-    if (campRecipes.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
+    if (campRecipes.length > 0 || campActions.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
     return tabs;
-  }, [hasAnyResource, hasFood, craftRecipes.length, campRecipes.length, game.state.buildings.length, hasAnyXp]);
+  }, [hasAnyResource, hasFood, craftRecipes.length, campRecipes.length, campActions.length, game.state.buildings.length, hasAnyXp]);
 
   // Fall back to gather if current tab isn't visible
   const activeTab = visibleTabs.includes(tab) ? tab : "gather";
@@ -192,7 +196,7 @@ export default function App() {
           <main className="panel">
             {activeTab === "gather" && (
               <ActionPanel
-                actions={game.availableActions}
+                actions={gatherActions}
                 state={game.state}
                 onStart={game.startAction}
               />
@@ -212,8 +216,10 @@ export default function App() {
             {activeTab === "camp" && (
               <SettlementPanel
                 campRecipes={campRecipes}
+                campActions={campActions}
                 state={game.state}
                 onBuild={game.startCraft}
+                onStartAction={game.startAction}
               />
             )}
             {activeTab === "explore" && (
