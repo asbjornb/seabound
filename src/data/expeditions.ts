@@ -55,7 +55,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You follow a creek upstream and find a riverbank thick with clay deposits deep in the jungle interior!",
         biomeDiscovery: "jungle_interior",
-        requiredBiomes: ["bamboo_grove"],
       },
       {
         weight: 25,
