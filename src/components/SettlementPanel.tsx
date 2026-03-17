@@ -4,18 +4,74 @@ import { GameState, RecipeDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
-  buildingRecipes: RecipeDef[];
+  campRecipes: RecipeDef[];
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
 }
 
 export function SettlementPanel({
-  buildingRecipes,
+  campRecipes,
   state,
   onBuild,
 }: Props) {
+  const buildingRecipes = campRecipes.filter((r) => !!r.buildingOutput);
+  const maintenanceRecipes = campRecipes.filter((r) => !r.buildingOutput);
   return (
     <div>
+      {maintenanceRecipes.length > 0 && (
+        <>
+          <div className="section-title">Camp Maintenance</div>
+          {maintenanceRecipes.map((recipe) => {
+            const canAfford = recipe.inputs.every(
+              (inp) => getResource(state, inp.resourceId) >= inp.amount
+            );
+            const disabled = !canAfford;
+            return (
+              <div
+                key={recipe.id}
+                className={`action-card ${disabled ? "disabled" : ""}`}
+                onClick={() => !disabled && onBuild(recipe)}
+              >
+                <div className="action-card-header">
+                  <span className="action-name">{recipe.name}</span>
+                  <span className="action-time">
+                    {(recipe.durationMs / 1000).toFixed(1)}s
+                  </span>
+                </div>
+                <div className="action-desc">{recipe.description}</div>
+                <div className="recipe-inputs">
+                  Needs:{" "}
+                  {recipe.inputs.map((inp, i) => {
+                    const have = getResource(state, inp.resourceId);
+                    const enough = have >= inp.amount;
+                    return (
+                      <span key={i}>
+                        {i > 0 && ", "}
+                        <span className={enough ? "has" : "missing"}>
+                          {inp.amount}x{" "}
+                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                          {have})
+                        </span>
+                      </span>
+                    );
+                  })}
+                </div>
+                {recipe.output && (
+                  <div className="recipe-output">
+                    Makes: {recipe.output.amount}x{" "}
+                    {RESOURCES[recipe.output.resourceId]?.name ??
+                      recipe.output.resourceId}
+                  </div>
+                )}
+                <div className="action-xp">
+                  +{recipe.xpGain} {recipe.skillId} XP
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+
       {buildingRecipes.length > 0 && (
         <>
           <div className="section-title">Available to Build</div>
@@ -114,7 +170,7 @@ export function SettlementPanel({
         </>
       )}
 
-      {state.buildings.length === 0 && buildingRecipes.length === 0 && (
+      {state.buildings.length === 0 && campRecipes.length === 0 && (
         <div className="empty-message">
           No buildings available yet. Gather materials and level up skills!
         </div>

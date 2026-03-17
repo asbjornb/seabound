@@ -26,9 +26,10 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
 
-  // Split recipes: building recipes go to Camp tab, others stay in Craft
-  const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput);
-  const buildingRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput);
+  // Split recipes: building recipes + camp maintenance go to Camp tab, others stay in Craft
+  const campRecipeIds = new Set(["maintain_camp"]);
+  const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput && !campRecipeIds.has(r.id));
+  const campRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput || campRecipeIds.has(r.id));
 
   // Progressive tab visibility
   const hasAnyXp = useMemo(
@@ -50,10 +51,10 @@ export default function App() {
     if (hasAnyResource) tabs.push("inventory");
     if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
-    if (buildingRecipes.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
+    if (campRecipes.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
     return tabs;
-  }, [hasAnyResource, hasFood, craftRecipes.length, buildingRecipes.length, game.state.buildings.length, hasAnyXp]);
+  }, [hasAnyResource, hasFood, craftRecipes.length, campRecipes.length, game.state.buildings.length, hasAnyXp]);
 
   // Fall back to gather if current tab isn't visible
   const activeTab = visibleTabs.includes(tab) ? tab : "gather";
@@ -210,7 +211,7 @@ export default function App() {
             )}
             {activeTab === "camp" && (
               <SettlementPanel
-                buildingRecipes={buildingRecipes}
+                campRecipes={campRecipes}
                 state={game.state}
                 onBuild={game.startCraft}
               />
