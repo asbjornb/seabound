@@ -80,9 +80,11 @@ export function InventoryPanel({ state }: { state: GameState }) {
                     <span className="inventory-item-name">
                       {def?.name ?? id}
                     </span>
-                    <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
-                      {amount}/{limit}
-                    </span>
+                    {cat !== "tool" && (
+                      <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
+                        {amount}/{limit}
+                      </span>
+                    )}
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}

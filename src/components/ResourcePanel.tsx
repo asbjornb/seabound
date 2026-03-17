@@ -26,10 +26,15 @@ export function ResourcePanel({ state }: { state: GameState }) {
             className={`resource-chip${atCap ? " at-cap" : ""}`}
             title={RESOURCES[id]?.description}
           >
-            {RESOURCES[id]?.name ?? id}:{" "}
-            <span className="amount">
-              {amount}/{limit}
-            </span>
+            {RESOURCES[id]?.name ?? id}
+            {RESOURCES[id]?.category !== "tool" && (
+              <>
+                :{" "}
+                <span className="amount">
+                  {amount}/{limit}
+                </span>
+              </>
+            )}
           </span>
         );
       })}
