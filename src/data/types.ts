@@ -188,6 +188,30 @@ export interface ExpeditionOutcome {
   drops?: Drop[];
 }
 
+// ═══════════════════════════════════════
+// Stations (set-wait-collect passive system)
+// ═══════════════════════════════════════
+
+export interface StationDef {
+  id: string;
+  name: string;
+  description: string;
+  skillId: SkillId;
+  durationMs: number; // time until ready to collect
+  requiredTool?: ResourceId; // must own (not consumed)
+  requiredSkillLevel?: number;
+  requiredBuildings?: BuildingId[];
+  setupInputs?: { resourceId: ResourceId; amount: number }[]; // consumed on deploy
+  yields: Drop[];
+  xpGain: number;
+  maxDeployed?: number; // max simultaneous deployments, default 1
+}
+
+export interface PlacedStation {
+  stationId: string;
+  deployedAt: number;
+}
+
 export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource";
 
 export interface DiscoveryEntry {
@@ -216,4 +240,5 @@ export interface GameState {
   morale: number; // 0-100, affects action speed
   discoveryLog: DiscoveryEntry[];
   discoveredResources: string[];
+  stations: PlacedStation[];
 }
