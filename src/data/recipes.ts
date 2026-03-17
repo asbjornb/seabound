@@ -68,7 +68,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Hang rough fibers on the drying rack to cure in the sun.",
     skillId: "preservation",
     inputs: [{ resourceId: "rough_fiber", amount: 2 }],
-    output: { resourceId: "dried_fiber", amount: 2 },
+    output: { resourceId: "dried_fiber", amount: 1 },
     durationMs: 5000,
     requiredBuildings: ["drying_rack"],
     repeatable: true,

@@ -72,6 +72,24 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  preservation: [
+    {
+      level: 3,
+      description: "Sun-dried mastery — 50% chance to double drying output",
+      effects: [
+        { type: "double_output", chance: 0.5 },
+      ],
+    },
+  ],
+  crafting: [
+    {
+      level: 5,
+      description: "Rope hand — 15% chance to twist extra cordage",
+      effects: [
+        { type: "double_output", chance: 0.15 },
+      ],
+    },
+  ],
   weaving: [
     {
       level: 2,
