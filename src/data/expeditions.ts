@@ -81,4 +81,55 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
   },
+  {
+    id: "sail_nearby_island",
+    name: "Sail to Nearby Island",
+    description:
+      "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 3 food per trip.",
+    skillId: "navigation",
+    durationMs: 16000,
+    foodCost: 3,
+    xpGain: 35,
+    requiredVessel: "raft",
+    outcomes: [
+      {
+        weight: 10,
+        description:
+          "You beach the raft on black volcanic sand and discover a cove rich with obsidian outcrops!",
+        biomeDiscovery: "nearby_island",
+      },
+      {
+        weight: 25,
+        description:
+          "You scour the volcanic slopes and find chunks of glassy obsidian among the rocks.",
+        requiredBiomes: ["nearby_island"],
+        drops: [{ resourceId: "obsidian", amount: 2 }],
+      },
+      {
+        weight: 15,
+        description:
+          "You find a smaller obsidian deposit near the tide line.",
+        requiredBiomes: ["nearby_island"],
+        drops: [{ resourceId: "obsidian", amount: 1 }],
+      },
+      {
+        weight: 15,
+        description:
+          "You discover wild seed pods growing in the volcanic soil.",
+        requiredBiomes: ["nearby_island"],
+        drops: [{ resourceId: "wild_seed", amount: 2 }],
+      },
+      {
+        weight: 10,
+        description:
+          "You find useful flat stones of a different composition on the island shore.",
+        drops: [{ resourceId: "flat_stone", amount: 3 }],
+      },
+      {
+        weight: 25,
+        description:
+          "Rough seas slow the crossing. You arrive exhausted and return with nothing useful.",
+      },
+    ],
+  },
 ];

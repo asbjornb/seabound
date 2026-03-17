@@ -1,3 +1,4 @@
+import { RESOURCES } from "../data/resources";
 import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood } from "../engine/gameState";
 
@@ -57,6 +58,11 @@ export function ExpeditionPanel({
             {unfound > 0 && (
               <div className="action-desc" style={{ fontStyle: "italic", color: "#f0c040" }}>
                 {unfound} undiscovered {unfound === 1 ? "area" : "areas"} remaining
+              </div>
+            )}
+            {exp.requiredVessel && (
+              <div className="action-requires">
+                Vessel: {RESOURCES[exp.requiredVessel]?.name ?? exp.requiredVessel}
               </div>
             )}
             {exp.foodCost != null && exp.foodCost > 0 && (
