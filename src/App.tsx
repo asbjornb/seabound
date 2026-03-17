@@ -54,10 +54,10 @@ export default function App() {
   // On mobile, inventory is a tab; on desktop it's always visible as sidebar
   const visibleTabs = useMemo(() => {
     const tabs: Tab[] = ["gather"];
-    if (hasAnyResource) tabs.push("inventory");
     if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
     if (campRecipes.length > 0 || campActions.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
+    if (hasAnyResource) tabs.push("inventory");
     if (hasAnyXp) tabs.push("skills");
     return tabs;
   }, [hasAnyResource, hasFood, craftRecipes.length, campRecipes.length, campActions.length, game.state.buildings.length, hasAnyXp]);
