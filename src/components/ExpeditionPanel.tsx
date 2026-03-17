@@ -1,4 +1,3 @@
-import { EXPEDITIONS } from "../data/expeditions";
 import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood } from "../engine/gameState";
 
@@ -13,20 +12,18 @@ function canAfford(exp: ExpeditionDef, state: GameState): boolean {
   return getTotalFood(state) >= exp.foodCost;
 }
 
+function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
+  const biomes = exp.outcomes
+    .filter((o) => o.biomeDiscovery)
+    .map((o) => o.biomeDiscovery!);
+  return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+}
+
 export function ExpeditionPanel({
   expeditions,
   state,
   onStart,
 }: Props) {
-  // Count total discoverable biomes from expedition outcomes (plus beach)
-  const allBiomes = new Set(["beach"]);
-  for (const exp of EXPEDITIONS) {
-    for (const o of exp.outcomes) {
-      if (o.biomeDiscovery) allBiomes.add(o.biomeDiscovery);
-    }
-  }
-  const undiscoveredCount = allBiomes.size - state.discoveredBiomes.length;
-
   return (
     <div>
       <div className="section-title">Discovered Areas</div>
@@ -37,17 +34,13 @@ export function ExpeditionPanel({
           </span>
         ))}
       </div>
-      {undiscoveredCount > 0 && (
-        <div className="action-desc" style={{ marginTop: 4, fontStyle: "italic" }}>
-          {undiscoveredCount} undiscovered {undiscoveredCount === 1 ? "area" : "areas"} remaining…
-        </div>
-      )}
 
       <div className="section-title" style={{ marginTop: 16 }}>
         Expeditions
       </div>
       {expeditions.map((exp) => {
         const affordable = canAfford(exp, state);
+        const unfound = undiscoveredBiomeCount(exp, state);
         return (
           <div
             key={exp.id}
@@ -61,6 +54,11 @@ export function ExpeditionPanel({
               </span>
             </div>
             <div className="action-desc">{exp.description}</div>
+            {unfound > 0 && (
+              <div className="action-desc" style={{ fontStyle: "italic" }}>
+                {unfound} undiscovered {unfound === 1 ? "area" : "areas"} remaining
+              </div>
+            )}
             {exp.foodCost != null && exp.foodCost > 0 && (
               <div className="action-requires">
                 Cost:{" "}

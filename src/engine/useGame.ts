@@ -342,8 +342,28 @@ export function useGame() {
     return true;
   });
 
-  // All expeditions (for now just scout_island)
-  const availableExpeditions = EXPEDITIONS;
+  // Filter expeditions by visibility rules
+  const availableExpeditions = EXPEDITIONS.filter((exp) => {
+    // Must have discovered required biomes to see this expedition
+    if (exp.requiredBiomes) {
+      for (const req of exp.requiredBiomes) {
+        if (!state.discoveredBiomes.includes(req)) return false;
+      }
+    }
+    // Hide expedition once all its discoverable biomes have been found
+    if (exp.hideWhenAllFound) {
+      const discoverableBiomes = exp.outcomes
+        .filter((o) => o.biomeDiscovery)
+        .map((o) => o.biomeDiscovery!);
+      if (
+        discoverableBiomes.length > 0 &&
+        discoverableBiomes.every((b) => state.discoveredBiomes.includes(b))
+      ) {
+        return false;
+      }
+    }
+    return true;
+  });
 
   // Current action progress (0..1)
   let actionProgress = 0;
