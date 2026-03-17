@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { RESOURCES } from "../data/resources";
 import { GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 export function ResourcePanel({ state }: { state: GameState }) {
+  const [showMoraleTip, setShowMoraleTip] = useState(false);
   const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
   const moraleEffect = getMoraleDurationMultiplier(state.morale);
   const moralePercent = Math.round((1 - moraleEffect) * 100);
@@ -27,7 +29,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
     <div className="resource-panel">
       <span
         className={`resource-chip morale-chip${state.morale <= 25 ? " low-morale" : ""}`}
-        title={`Morale: ${moraleLabel}. Maintain Camp to boost.`}
+        onClick={() => setShowMoraleTip((v) => !v)}
       >
         Morale:{" "}
         <span className="amount">{state.morale}</span>
@@ -38,6 +40,11 @@ export function ResourcePanel({ state }: { state: GameState }) {
           />
         </span>
       </span>
+      {showMoraleTip && (
+        <span className="morale-tooltip" onClick={() => setShowMoraleTip(false)}>
+          {moraleLabel} — Decays over time. Craft comfort items or Maintain Camp to restore.
+        </span>
+      )}
       {entries.map(([id, amount]) => {
         const limit = getStorageLimit(state, id);
         const atCap = amount >= limit;
