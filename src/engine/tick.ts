@@ -32,18 +32,19 @@ export function processTick(state: GameState, now: number): TickResult {
   state.lastTickAt = now;
   state.totalPlayTimeMs += elapsedMs;
 
-  // Morale decay: 1 point per MORALE_DECAY_INTERVAL_MS
+  const completions: CompletionEvent[] = [];
+
+  if (!state.currentAction) {
+    // No action running — skip morale decay so idle players aren't punished
+    return { completions, elapsedMs };
+  }
+
+  // Morale decay: 1 point per MORALE_DECAY_INTERVAL_MS (only while an action is active)
   if (state.morale > 0) {
     const decayPoints = Math.floor(elapsedMs / MORALE_DECAY_INTERVAL_MS);
     if (decayPoints > 0) {
       state.morale = Math.max(0, state.morale - decayPoints);
     }
-  }
-
-  const completions: CompletionEvent[] = [];
-
-  if (!state.currentAction) {
-    return { completions, elapsedMs };
   }
 
   const action = state.currentAction;
