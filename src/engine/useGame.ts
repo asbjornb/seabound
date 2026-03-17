@@ -152,6 +152,9 @@ export function useGame() {
 
   const startAction = useCallback((action: ActionDef) => {
     setState((prev) => {
+      if (prev.currentAction?.actionId === action.id) {
+        return prev;
+      }
       const skill = prev.skills[action.skillId];
       if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) {
         return prev;
