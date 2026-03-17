@@ -12,6 +12,7 @@
   --bar-bg: #0a1515;
   --bar-fill: #f0a050;
   --bar-xp: #38bdf8;
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -22,6 +23,7 @@
 
 body {
   background: var(--bg);
+  background-image: radial-gradient(ellipse at 50% 0%, #132e2e 0%, var(--bg) 70%);
   color: var(--text);
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   min-height: 100dvh;
@@ -60,6 +62,7 @@ body {
   font-size: 1.25rem;
   color: var(--accent);
   letter-spacing: 0.05em;
+  text-shadow: 0 0 12px rgba(240, 160, 80, 0.3);
 }
 
 .header-actions {
@@ -339,9 +342,17 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: var(--bar-fill);
+  background: linear-gradient(90deg, var(--bar-fill), #f5c070, var(--bar-fill));
+  background-size: 200% 100%;
   border-radius: 4px;
   transition: width 0.1s linear;
+  animation: progress-shimmer 2s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(240, 160, 80, 0.4);
+}
+
+@keyframes progress-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .progress-time {
@@ -374,6 +385,7 @@ body {
 .tab.active {
   color: var(--accent);
   border-bottom-color: var(--accent);
+  text-shadow: 0 0 8px rgba(240, 160, 80, 0.25);
 }
 
 /* Panel area */
@@ -391,11 +403,18 @@ body {
   padding: 12px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--card-shadow);
 }
 
 .action-card:hover:not(.disabled) {
   border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(240, 160, 80, 0.15);
+}
+
+.action-card:active:not(.disabled) {
+  transform: translateY(0);
 }
 
 .action-card.disabled {
@@ -472,6 +491,7 @@ body {
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 8px;
+  box-shadow: var(--card-shadow);
 }
 
 .skill-header {
@@ -502,9 +522,11 @@ body {
 
 .xp-fill {
   height: 100%;
-  background: var(--bar-xp);
+  background: linear-gradient(90deg, var(--bar-xp), #7dd3fc, var(--bar-xp));
+  background-size: 200% 100%;
   border-radius: 3px;
   transition: width 0.3s;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.3);
 }
 
 .xp-text {
@@ -677,11 +699,13 @@ body {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
+  box-shadow: var(--card-shadow);
 }
 
 .building-card.built {
   border-color: var(--success);
   border-left: 3px solid var(--success);
+  box-shadow: 0 1px 8px rgba(74, 222, 128, 0.1);
 }
 
 .building-name {
@@ -761,6 +785,12 @@ body {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 8px 10px;
+  box-shadow: var(--card-shadow);
+  transition: border-color 0.15s;
+}
+
+.inventory-item:hover {
+  border-color: var(--text-dim);
 }
 
 .inventory-item.at-cap {

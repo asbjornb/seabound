@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SKILL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { GameState, RecipeDef, SkillId } from "../data/types";
 import { getResource } from "../engine/gameState";
@@ -83,7 +84,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               onClick={() => toggleSkill(skillId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              {skillId} (Lvl {state.skills[skillId].level})
+              {SKILL_ICONS[skillId]} {skillId} (Lvl {state.skills[skillId].level})
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((recipe) => {
