@@ -133,6 +133,7 @@ export interface RecipeDef {
   oneTimeCraft?: boolean; // if true, recipe disappears once player owns ≥1 of the output
   repeatable?: boolean; // if true, auto-repeats until inputs run out (like gathering actions)
   xpGain: number;
+  moraleGain?: number; // if set, completing this recipe boosts morale
 }
 
 export interface ExpeditionDef {
