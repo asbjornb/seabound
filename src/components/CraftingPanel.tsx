@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SKILL_ICONS } from "../data/icons";
+import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { GameState, RecipeDef, SkillId } from "../data/types";
 import { getResource } from "../engine/gameState";
@@ -140,6 +141,16 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {RESOURCES[recipe.output.resourceId]?.name ??
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
+                      {(() => {
+                        const doubleChance = getDoubleOutputChance(
+                          recipe.skillId,
+                          state.skills[recipe.skillId].level,
+                          recipe.id
+                        );
+                        return doubleChance > 0
+                          ? ` — ${Math.round(doubleChance * 100)}% chance to double`
+                          : null;
+                      })()}
                     </div>
                   ) : recipe.moraleGain ? (
                     <div className="recipe-output">+{recipe.moraleGain} Morale</div>
