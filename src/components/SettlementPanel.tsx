@@ -23,7 +23,7 @@ export function SettlementPanel({
   const maintenanceRecipes = campRecipes.filter((r) => !r.buildingOutput);
   return (
     <div>
-      {campActions.length > 0 && (
+      {(campActions.length > 0 || maintenanceRecipes.length > 0) && (
         <>
           <div className="section-title">Camp Tasks</div>
           {campActions.map((action) => {
@@ -71,12 +71,6 @@ export function SettlementPanel({
               </div>
             );
           })}
-        </>
-      )}
-
-      {maintenanceRecipes.length > 0 && (
-        <>
-          <div className="section-title">Camp Maintenance</div>
           {maintenanceRecipes.map((recipe) => {
             const canAfford = recipe.inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
