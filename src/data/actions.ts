@@ -56,7 +56,10 @@ export const ACTIONS: ActionDef[] = [
     description: "Gather dry grass for fire-starting.",
     skillId: "foraging",
     durationMs: 4000,
-    drops: [{ resourceId: "dry_grass", amount: 1 }],
+    drops: [
+      { resourceId: "dry_grass", amount: 1 },
+      { resourceId: "wild_seed", amount: 1, chance: 0 },
+    ],
     requiredSkillLevel: 3,
     xpGain: 8,
   },
