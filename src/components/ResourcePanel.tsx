@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { RESOURCE_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { GameState } from "../data/types";
+import { GameState, ResourceId } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 export function ResourcePanel({ state }: { state: GameState }) {
@@ -54,7 +55,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
             className={`resource-chip${atCap ? " at-cap" : ""}`}
             title={RESOURCES[id]?.description}
           >
-            {RESOURCES[id]?.name ?? id}
+            {RESOURCE_ICONS[id as ResourceId] ?? ""} {RESOURCES[id]?.name ?? id}
             {RESOURCES[id]?.category !== "tool" && (
               <>
                 :{" "}

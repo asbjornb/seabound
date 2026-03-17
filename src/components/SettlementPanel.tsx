@@ -1,6 +1,7 @@
 import { BUILDINGS } from "../data/buildings";
+import { BUILDING_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { ActionDef, GameState, RecipeDef } from "../data/types";
+import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
@@ -203,7 +204,7 @@ export function SettlementPanel({
               const bdef = BUILDINGS[bid];
               return (
                 <div key={bid} className="building-card built">
-                  <div className="building-name">{bdef?.name ?? bid}</div>
+                  <div className="building-name">{BUILDING_ICONS[bid as BuildingId] ?? ""} {bdef?.name ?? bid}</div>
                   <div className="building-desc">
                     {bdef?.description ?? ""}
                   </div>

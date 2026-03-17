@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { RESOURCE_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { ResourceCategory, GameState } from "../data/types";
+import { ResourceCategory, ResourceId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 const CATEGORY_LABELS: Record<ResourceCategory, string> = {
@@ -95,7 +96,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
-                      {def?.name ?? id}
+                      {RESOURCE_ICONS[id as ResourceId] ?? ""} {def?.name ?? id}
                     </span>
                     {cat !== "tool" && (
                       <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
