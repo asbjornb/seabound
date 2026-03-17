@@ -11,6 +11,7 @@ import { SkillsPanel } from "./components/SkillsPanel";
 import { SkillId } from "./data/types";
 import { getTotalFood } from "./engine/gameState";
 import { useGame } from "./engine/useGame";
+import { useUpdateChecker } from "./engine/useUpdateChecker";
 import "./App.css";
 
 type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
@@ -21,6 +22,7 @@ export default function App() {
     return <DevWiki />;
   }
   const game = useGame();
+  const updateAvailable = useUpdateChecker();
   const [tab, setTab] = useState<Tab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -82,6 +84,11 @@ export default function App() {
 
   return (
     <div className="app">
+      {updateAvailable && (
+        <div className="update-bar" onClick={() => window.location.reload()}>
+          A new version is available — tap to refresh
+        </div>
+      )}
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
