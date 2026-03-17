@@ -199,22 +199,5 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 18,
   },
 
-  // Fishing (basket trap tier)
-  {
-    id: "basket_trap_fish",
-    name: "Check Basket Trap",
-    description:
-      "Haul up your submerged basket trap and collect whatever swam in.",
-    skillId: "fishing",
-    durationMs: 12000,
-    drops: [
-      { resourceId: "small_fish", amount: 2 },
-      { resourceId: "large_fish", amount: 1, chance: 0.15 },
-      { resourceId: "crab", amount: 1, chance: 0.3 },
-      { resourceId: "shell", amount: 1, chance: 0.25 },
-    ],
-    requiredSkillLevel: 10,
-    requiredTools: ["basket_trap"],
-    xpGain: 25,
-  },
+  // Basket trap moved to stations system (set-wait-collect)
 ];

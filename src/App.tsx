@@ -8,7 +8,9 @@ import { LogPanel } from "./components/LogPanel";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
+import { StationsPanel } from "./components/StationsPanel";
 import { TAB_ICONS } from "./data/icons";
+import { STATIONS } from "./data/stations";
 import { SkillId } from "./data/types";
 import { getTotalFood } from "./engine/gameState";
 import { useGame } from "./engine/useGame";
@@ -57,7 +59,7 @@ export default function App() {
     const tabs: Tab[] = ["gather"];
     if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
-    if (campRecipes.length > 0 || campActions.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
+    if (campRecipes.length > 0 || campActions.length > 0 || game.state.buildings.length > 0 || game.availableStations.length > 0 || game.state.stations.length > 0) tabs.push("camp");
     if (hasAnyResource) tabs.push("inventory");
     if (hasAnyXp) tabs.push("skills");
     return tabs;
@@ -183,6 +185,24 @@ export default function App() {
             </div>
           )}
 
+          {(() => {
+            const now = Date.now();
+            const readyStations = game.state.stations.filter((s) => {
+              const def = STATIONS.find((d) => d.id === s.stationId);
+              return def && now >= s.deployedAt + def.durationMs;
+            });
+            return readyStations.length > 0 ? (
+              <div
+                className="station-ready-banner"
+                onClick={() => setTab("camp")}
+              >
+                {readyStations.length === 1
+                  ? "1 station ready to collect!"
+                  : `${readyStations.length} stations ready to collect!`}
+              </div>
+            ) : null;
+          })()}
+
           <nav className="tabs">
             {visibleTabs.map((t) => (
               <button
@@ -222,13 +242,23 @@ export default function App() {
               />
             )}
             {activeTab === "camp" && (
-              <SettlementPanel
-                campRecipes={campRecipes}
-                campActions={campActions}
-                state={game.state}
-                onBuild={game.startCraft}
-                onStartAction={game.startAction}
-              />
+              <>
+                {(game.availableStations.length > 0 || game.state.stations.length > 0) && (
+                  <StationsPanel
+                    availableStations={game.availableStations}
+                    state={game.state}
+                    onDeploy={game.deployStation}
+                    onCollect={game.collectStation}
+                  />
+                )}
+                <SettlementPanel
+                  campRecipes={campRecipes}
+                  campActions={campActions}
+                  state={game.state}
+                  onBuild={game.startCraft}
+                  onStartAction={game.startAction}
+                />
+              </>
             )}
             {activeTab === "explore" && (
               <ExpeditionPanel

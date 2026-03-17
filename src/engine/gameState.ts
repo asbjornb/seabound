@@ -31,6 +31,7 @@ export function createInitialState(): GameState {
     morale: 100,
     discoveryLog: [],
     discoveredResources: [],
+    stations: [],
   };
 }
 
@@ -77,6 +78,10 @@ export function loadGame(): GameState | null {
       loaded.discoveredResources = Object.keys(loaded.resources).filter(
         (id) => (loaded.resources[id] ?? 0) > 0
       );
+    }
+    // Migration: ensure stations array exists
+    if (!loaded.stations) {
+      loaded.stations = [];
     }
     // Migration: remove items/buildings that no longer exist in current data
     for (const id of Object.keys(loaded.resources)) {

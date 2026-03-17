@@ -3,14 +3,17 @@ import { ACTIONS } from "../data/actions";
 import { BUILDINGS } from "../data/buildings";
 import { EXPEDITIONS } from "../data/expeditions";
 import { getDurationMultiplier } from "../data/milestones";
+import { levelFromXp } from "../data/skills";
 import { RECIPES } from "../data/recipes";
 import { RESOURCES } from "../data/resources";
+import { STATIONS } from "../data/stations";
 import {
   ActionDef,
   DiscoveryType,
   ExpeditionDef,
   GameState,
   RecipeDef,
+  StationDef,
 } from "../data/types";
 import {
   addResource,
@@ -280,6 +283,84 @@ export function useGame() {
     });
   }, []);
 
+  const deployStation = useCallback((station: StationDef) => {
+    setState((prev) => {
+      const skill = prev.skills[station.skillId];
+      if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return prev;
+      if (station.requiredTool && getResource(prev, station.requiredTool) < 1) return prev;
+      if (station.requiredBuildings) {
+        for (const bid of station.requiredBuildings) {
+          if (!prev.buildings.includes(bid)) return prev;
+        }
+      }
+      // Check max deployed
+      const maxDeployed = station.maxDeployed ?? 1;
+      const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
+      if (currentCount >= maxDeployed) return prev;
+      // Check setup inputs
+      if (station.setupInputs) {
+        for (const inp of station.setupInputs) {
+          if (getResource(prev, inp.resourceId) < inp.amount) return prev;
+        }
+      }
+      const next = structuredClone(prev);
+      // Deduct setup inputs
+      if (station.setupInputs) {
+        for (const inp of station.setupInputs) {
+          next.resources[inp.resourceId] =
+            (next.resources[inp.resourceId] ?? 0) - inp.amount;
+        }
+      }
+      next.stations.push({
+        stationId: station.id,
+        deployedAt: Date.now(),
+      });
+      return next;
+    });
+  }, []);
+
+  const collectStation = useCallback((index: number) => {
+    setState((prev) => {
+      if (index < 0 || index >= prev.stations.length) return prev;
+      const placed = prev.stations[index];
+      const def = STATIONS.find((s) => s.id === placed.stationId);
+      if (!def) return prev;
+      const readyAt = placed.deployedAt + def.durationMs;
+      if (Date.now() < readyAt) return prev; // not ready yet
+      const next = structuredClone(prev);
+      // Roll drops
+      const newResources: string[] = [];
+      for (const drop of def.yields) {
+        const chance = drop.chance ?? 1;
+        if (Math.random() < chance) {
+          if (!next.discoveredResources.includes(drop.resourceId)) {
+            newResources.push(drop.resourceId);
+            next.discoveredResources.push(drop.resourceId);
+          }
+          addResource(next, drop.resourceId, drop.amount);
+        }
+      }
+      // Award XP
+      const skill = next.skills[def.skillId];
+      const prevLevel = skill.level;
+      skill.xp += def.xpGain;
+      skill.level = levelFromXp(skill.xp);
+      // Discovery log
+      for (const resId of newResources) {
+        const rdef = RESOURCES[resId];
+        const name = rdef?.name ?? resId.replace(/_/g, " ");
+        addDiscovery(next, "resource", `Found ${name} for the first time`);
+      }
+      if (skill.level > prevLevel) {
+        const skillName = def.skillId.charAt(0).toUpperCase() + def.skillId.slice(1);
+        addDiscovery(next, "level", `Reached ${skillName} level ${skill.level}`);
+      }
+      // Remove the collected station
+      next.stations.splice(index, 1);
+      return next;
+    });
+  }, []);
+
   const resetGame = useCallback(() => {
     const fresh = createInitialState();
     setState(fresh);
@@ -397,6 +478,19 @@ export function useGame() {
     return true;
   });
 
+  // Filter stations by requirements
+  const availableStations = STATIONS.filter((s) => {
+    const skill = state.skills[s.skillId];
+    if (s.requiredSkillLevel && skill.level < s.requiredSkillLevel) return false;
+    if (s.requiredTool && getResource(state, s.requiredTool) < 1) return false;
+    if (s.requiredBuildings) {
+      for (const bid of s.requiredBuildings) {
+        if (!state.buildings.includes(bid)) return false;
+      }
+    }
+    return true;
+  });
+
   // Current action progress (0..1)
   const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
   let actionProgress = 0;
@@ -443,12 +537,15 @@ export function useGame() {
     availableActions,
     availableRecipes,
     availableExpeditions,
+    availableStations,
     actionProgress,
     actionDuration,
     startAction,
     startCraft,
     startExpedition,
     stopAction,
+    deployStation,
+    collectStation,
     resetGame,
     exportSave,
     importSave,
