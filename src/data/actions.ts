@@ -75,7 +75,7 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "small_fish", amount: 1, chance: 0.1 },
       { resourceId: "crab", amount: 1, chance: 0.1 },
       { resourceId: "shell", amount: 1 },
-      { resourceId: "large_shell", amount: 1, chance: 0.05 },
+      { resourceId: "large_shell", amount: 1, chance: 0.01 },
     ],
     xpGain: 8,
   },

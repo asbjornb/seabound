@@ -212,9 +212,12 @@ function applyCraftCompletion(
   }
   // else: XP-only recipe (e.g. Maintain Camp) — no output to process
 
-  // Morale boost from maintain_camp
+  // Morale boosts
   if (def.id === "maintain_camp") {
-    state.morale = Math.min(100, state.morale + MORALE_BOOST_PER_MAINTAIN);
+    state.morale = boostMorale(state.morale, MORALE_BOOST_PER_MAINTAIN);
+  }
+  if (def.id === "craft_shell_beads") {
+    state.morale = boostMorale(state.morale, 2);
   }
 
   const skill = state.skills[def.skillId];
@@ -318,6 +321,23 @@ function pickWeightedOutcome(
     if (roll <= 0) return outcome;
   }
   return adjusted[adjusted.length - 1];
+}
+
+/** Boost morale with diminishing returns above 100 (soft cap). */
+function boostMorale(current: number, amount: number): number {
+  if (current < 100) {
+    // Below 100: full effect, but don't overshoot past 100 without diminishing
+    const belowCap = Math.min(amount, 100 - current);
+    const aboveCap = amount - belowCap;
+    current += belowCap;
+    if (aboveCap > 0) {
+      current += Math.floor(aboveCap / 2);
+    }
+  } else {
+    // Above 100: half effect
+    current += Math.floor(amount / 2);
+  }
+  return current;
 }
 
 function rollDrops(

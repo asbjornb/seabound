@@ -136,9 +136,10 @@ export const MORALE_DECAY_INTERVAL_MS = 120000; // 1 morale per 2 minutes
 /** Morale boost from Maintain Camp recipe. */
 export const MORALE_BOOST_PER_MAINTAIN = 5;
 
-/** Duration multiplier from morale. At 100 = 0.95 (5% faster), 50 = 1.0, 0 = 1.05 (5% slower). */
+/** Duration multiplier from morale. At 100 = 0.8 (20% faster), 50 = 1.0, 0 = 1.2 (20% slower).
+ *  Morale can exceed 100 (soft cap) with diminishing returns above. */
 export function getMoraleDurationMultiplier(morale: number): number {
-  return 1 - 0.05 * (morale - 50) / 50;
+  return 1 - 0.2 * (morale - 50) / 50;
 }
 
 /** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */

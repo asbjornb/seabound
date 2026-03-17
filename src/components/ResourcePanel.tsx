@@ -34,7 +34,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
         <span className="morale-bar-mini">
           <span
             className="morale-bar-fill"
-            style={{ width: `${state.morale}%` }}
+            style={{ width: `${Math.min(100, state.morale)}%` }}
           />
         </span>
       </span>

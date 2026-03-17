@@ -60,7 +60,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
           Morale: {state.morale} <span className="morale-effect">({moraleLabel})</span>
         </span>
         <div className="morale-bar">
-          <div className="morale-bar-fill" style={{ width: `${state.morale}%` }} />
+          <div className="morale-bar-fill" style={{ width: `${Math.min(100, state.morale)}%` }} />
         </div>
       </div>
       <div className="inventory-filters">
