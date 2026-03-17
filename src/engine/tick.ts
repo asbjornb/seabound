@@ -4,7 +4,7 @@ import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, getTotalFood } from "./gameState";
+import { addResource, deductFood, getMoraleDurationMultiplier, MORALE_BOOST_PER_MAINTAIN, MORALE_DECAY_INTERVAL_MS, getTotalFood } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -32,6 +32,14 @@ export function processTick(state: GameState, now: number): TickResult {
   state.lastTickAt = now;
   state.totalPlayTimeMs += elapsedMs;
 
+  // Morale decay: 1 point per MORALE_DECAY_INTERVAL_MS
+  if (state.morale > 0) {
+    const decayPoints = Math.floor(elapsedMs / MORALE_DECAY_INTERVAL_MS);
+    if (decayPoints > 0) {
+      state.morale = Math.max(0, state.morale - decayPoints);
+    }
+  }
+
   const completions: CompletionEvent[] = [];
 
   if (!state.currentAction) {
@@ -49,8 +57,9 @@ export function processTick(state: GameState, now: number): TickResult {
     }
 
     const skillLevel = state.skills[def.skillId].level;
+    const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
     const effectiveDuration = Math.round(
-      def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id)
+      def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier
     );
 
     let remaining = timeAvailable;
@@ -70,10 +79,13 @@ export function processTick(state: GameState, now: number): TickResult {
       return { completions, elapsedMs };
     }
 
+    const craftMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
+    const effectiveCraftDuration = Math.round(def.durationMs * craftMoraleMultiplier);
+
     if (def.repeatable) {
       let remaining = timeAvailable;
-      while (remaining >= def.durationMs) {
-        remaining -= def.durationMs;
+      while (remaining >= effectiveCraftDuration) {
+        remaining -= effectiveCraftDuration;
         const event = applyCraftCompletion(state, def.id);
         if (event) completions.push(event);
 
@@ -95,7 +107,7 @@ export function processTick(state: GameState, now: number): TickResult {
         state.currentAction.startedAt = now - remaining;
       }
     } else {
-      if (timeAvailable >= def.durationMs) {
+      if (timeAvailable >= effectiveCraftDuration) {
         const event = applyCraftCompletion(state, def.id);
         if (event) completions.push(event);
         state.currentAction = null;
@@ -108,9 +120,12 @@ export function processTick(state: GameState, now: number): TickResult {
       return { completions, elapsedMs };
     }
 
+    const expMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
+    const effectiveExpDuration = Math.round(def.durationMs * expMoraleMultiplier);
+
     let remaining = timeAvailable;
-    while (remaining >= def.durationMs) {
-      remaining -= def.durationMs;
+    while (remaining >= effectiveExpDuration) {
+      remaining -= effectiveExpDuration;
       const event = applyExpeditionCompletion(state, def.id);
       if (event) completions.push(event);
 
@@ -186,7 +201,7 @@ function applyCraftCompletion(
     }
     buildingBuilt = def.buildingOutput;
     drops.push({ name: def.buildingOutput, amount: 1 });
-  } else {
+  } else if (def.output) {
     // Normal craft — add output to resources
     if (!state.discoveredResources.includes(def.output.resourceId)) {
       newResources.push(def.output.resourceId);
@@ -194,6 +209,15 @@ function applyCraftCompletion(
     }
     addResource(state, def.output.resourceId, def.output.amount);
     drops.push({ name: def.output.resourceId, amount: def.output.amount });
+  }
+  // else: XP-only recipe (e.g. Maintain Camp) — no output to process
+
+  // Morale boosts
+  if (def.id === "maintain_camp") {
+    state.morale = boostMorale(state.morale, MORALE_BOOST_PER_MAINTAIN);
+  }
+  if (def.id === "craft_shell_beads") {
+    state.morale = boostMorale(state.morale, 2);
   }
 
   const skill = state.skills[def.skillId];
@@ -297,6 +321,23 @@ function pickWeightedOutcome(
     if (roll <= 0) return outcome;
   }
   return adjusted[adjusted.length - 1];
+}
+
+/** Boost morale with diminishing returns above 100 (soft cap). */
+function boostMorale(current: number, amount: number): number {
+  if (current < 100) {
+    // Below 100: full effect, but don't overshoot past 100 without diminishing
+    const belowCap = Math.min(amount, 100 - current);
+    const aboveCap = amount - belowCap;
+    current += belowCap;
+    if (aboveCap > 0) {
+      current += Math.floor(aboveCap / 2);
+    }
+  } else {
+    // Above 100: half effect
+    current += Math.floor(amount / 2);
+  }
+  return current;
 }
 
 function rollDrops(

@@ -122,7 +122,7 @@ export interface RecipeDef {
   description: string;
   skillId: SkillId;
   inputs: { resourceId: ResourceId; amount: number }[];
-  output: { resourceId: ResourceId; amount: number };
+  output?: { resourceId: ResourceId; amount: number };
   durationMs: number;
   requiredSkillLevel?: number;
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
@@ -177,6 +177,7 @@ export interface GameState {
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;
+  morale: number; // 0-100, affects action speed
   discoveryLog: DiscoveryEntry[];
   discoveredResources: string[];
 }

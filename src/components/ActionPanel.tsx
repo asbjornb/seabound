@@ -13,6 +13,7 @@ const SKILL_ORDER: SkillId[] = [
   "foraging",
   "fishing",
   "woodworking",
+  "construction",
   "crafting",
 ];
 
@@ -52,31 +53,35 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                     </span>
                   </div>
                   <div className="action-desc">{action.description}</div>
-                  <div className="action-drops">
-                    Drops:{" "}
-                    {action.drops
-                      .map((d) => ({
-                        ...d,
-                        effectiveChance: Math.min(
-                          1,
-                          (d.chance ?? 1) +
-                            getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)
-                        ),
-                      }))
-                      .filter((d) => d.effectiveChance > 0)
-                      .map((d, i) => (
-                      <span key={i}>
-                        {i > 0 && ", "}
-                        <span>
-                          {d.amount}x{" "}
-                          {RESOURCES[d.resourceId]?.name ?? d.resourceId}
-                          {d.effectiveChance < 1
-                            ? ` (${Math.round(d.effectiveChance * 100)}%)`
-                            : ""}
+                  {action.drops.length > 0 ? (
+                    <div className="action-drops">
+                      Drops:{" "}
+                      {action.drops
+                        .map((d) => ({
+                          ...d,
+                          effectiveChance: Math.min(
+                            1,
+                            (d.chance ?? 1) +
+                              getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)
+                          ),
+                        }))
+                        .filter((d) => d.effectiveChance > 0)
+                        .map((d, i) => (
+                        <span key={i}>
+                          {i > 0 && ", "}
+                          <span>
+                            {d.amount}x{" "}
+                            {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                            {d.effectiveChance < 1
+                              ? ` (${Math.round(d.effectiveChance * 100)}%)`
+                              : ""}
+                          </span>
                         </span>
-                      </span>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="action-drops">XP only</div>
+                  )}
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}

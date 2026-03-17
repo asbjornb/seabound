@@ -16,6 +16,7 @@ import {
   addResource,
   createInitialState,
   deductFood,
+  getMoraleDurationMultiplier,
   getResource,
   getTotalFood,
   loadGame,
@@ -336,7 +337,7 @@ export function useGame() {
       return false;
     }
     // Hide one-time-craft recipes once the player owns the output
-    if (r.oneTimeCraft && getResource(state, r.output.resourceId) >= 1) {
+    if (r.oneTimeCraft && r.output && getResource(state, r.output.resourceId) >= 1) {
       return false;
     }
     return true;
@@ -346,6 +347,7 @@ export function useGame() {
   const availableExpeditions = EXPEDITIONS;
 
   // Current action progress (0..1)
+  const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
   let actionProgress = 0;
   let actionDuration = 0;
   if (state.currentAction) {
@@ -356,7 +358,7 @@ export function useGame() {
       if (def) {
         const skillLevel = state.skills[def.skillId].level;
         const effectiveDuration = Math.round(
-          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id)
+          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier
         );
         actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
@@ -367,18 +369,20 @@ export function useGame() {
         (r) => r.id === state.currentAction!.recipeId
       );
       if (def) {
-        actionDuration = def.durationMs;
+        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier);
+        actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / def.durationMs);
+        actionProgress = Math.min(1, elapsed / effectiveDuration);
       }
     } else if (state.currentAction.type === "expedition") {
       const def = EXPEDITIONS.find(
         (e) => e.id === state.currentAction!.expeditionId
       );
       if (def) {
-        actionDuration = def.durationMs;
+        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier);
+        actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / def.durationMs);
+        actionProgress = Math.min(1, elapsed / effectiveDuration);
       }
     }
   }

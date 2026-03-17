@@ -19,10 +19,9 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "craft_shell_beads",
     name: "Shell Beads",
-    description: "Chip and polish shells into decorative beads.",
+    description: "Chip and polish shells into decorative beads. Boosts morale.",
     skillId: "crafting",
     inputs: [{ resourceId: "shell", amount: 3 }],
-    output: { resourceId: "shell_bead", amount: 1 },
     durationMs: 4000,
     repeatable: true,
     xpGain: 5,
@@ -123,6 +122,24 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 10000,
     repeatable: true,
     xpGain: 15,
+  },
+
+  // ═══════════════════════════════════════
+  // Construction — Camp Maintenance
+  // ═══════════════════════════════════════
+  {
+    id: "maintain_camp",
+    name: "Maintain Camp",
+    description:
+      "Shore up shelters, re-tie lashings, and patch leaky spots around camp.",
+    skillId: "construction",
+    inputs: [
+      { resourceId: "cordage", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
+    durationMs: 30000,
+    repeatable: true,
+    xpGain: 8,
   },
 
   // ═══════════════════════════════════════
