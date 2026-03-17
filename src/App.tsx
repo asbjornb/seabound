@@ -50,10 +50,10 @@ export default function App() {
     if (hasAnyResource) tabs.push("inventory");
     if (hasFood) tabs.push("explore");
     if (craftRecipes.length > 0) tabs.push("craft");
-    if (buildingRecipes.length > 0) tabs.push("camp");
+    if (buildingRecipes.length > 0 || game.state.buildings.length > 0) tabs.push("camp");
     if (hasAnyXp) tabs.push("skills");
     return tabs;
-  }, [hasAnyResource, hasFood, craftRecipes.length, buildingRecipes.length, hasAnyXp]);
+  }, [hasAnyResource, hasFood, craftRecipes.length, buildingRecipes.length, game.state.buildings.length, hasAnyXp]);
 
   // Fall back to gather if current tab isn't visible
   const activeTab = visibleTabs.includes(tab) ? tab : "gather";
