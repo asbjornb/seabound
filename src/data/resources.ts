@@ -104,12 +104,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
   },
 
   // Phase 1b - Fire
-  coconut_husk_fiber: {
-    id: "coconut_husk_fiber",
-    name: "Coconut Husk Fiber",
-    description: "Fine dry tinder shredded from coconut husk.",
-    category: "raw",
-  },
   dry_grass: {
     id: "dry_grass",
     name: "Dry Grass",

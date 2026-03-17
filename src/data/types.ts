@@ -17,7 +17,6 @@ export type ResourceId =
   | "bamboo_knife"
   | "large_shell"
   // Phase 1b - Fire
-  | "coconut_husk_fiber"
   | "dry_grass"
   | "bow_drill_kit"
   | "bamboo_spear"

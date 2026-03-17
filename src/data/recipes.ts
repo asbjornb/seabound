@@ -117,7 +117,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "crafting",
     inputs: [
       { resourceId: "bow_drill_kit", amount: 1 },
-      { resourceId: "coconut_husk_fiber", amount: 2 },
+      { resourceId: "coconut_husk", amount: 2 },
       { resourceId: "dry_grass", amount: 2 },
       { resourceId: "driftwood_branch", amount: 3 },
     ],
