@@ -1,4 +1,5 @@
 import { getDropChanceBonus } from "../data/milestones";
+import { SKILL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { ActionDef, GameState, SkillId } from "../data/types";
 import { getResource } from "../engine/gameState";
@@ -33,7 +34,7 @@ export function ActionPanel({ actions, state, onStart }: Props) {
         return (
           <div key={skillId}>
             <div className="section-title">
-              {skillId} (Lvl {state.skills[skillId].level})
+              {SKILL_ICONS[skillId]} {skillId} (Lvl {state.skills[skillId].level})
             </div>
             {list.map((action) => {
               const missingTool = action.requiredTools?.find(
