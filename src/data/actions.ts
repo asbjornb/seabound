@@ -98,11 +98,12 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "spear_fish",
     name: "Spear Fish",
-    description: "Use your bamboo spear to catch larger fish.",
+    description: "Use your bamboo spear to reliably catch fish.",
     skillId: "fishing",
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
+      { resourceId: "large_fish", amount: 1, chance: 0 },
       { resourceId: "shell", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["bamboo_spear"],

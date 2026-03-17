@@ -133,6 +133,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A sturdy palm-frond basket. Stores small crafted items and tools.",
     category: "structure",
   },
+  large_fish: {
+    id: "large_fish",
+    name: "Large Fish",
+    description: "A sizable reef fish. Makes a hearty meal when cooked.",
+    category: "food",
+  },
   // Cooked food
   cooked_fish: {
     id: "cooked_fish",
@@ -144,6 +150,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "cooked_crab",
     name: "Cooked Crab",
     description: "Roasted crab. Tasty and filling.",
+    category: "food",
+  },
+  cooked_large_fish: {
+    id: "cooked_large_fish",
+    name: "Cooked Large Fish",
+    description: "A whole grilled fish. Very filling expedition fuel.",
     category: "food",
   },
 

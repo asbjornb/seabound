@@ -39,6 +39,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.05 },
       ],
     },
+    {
+      level: 8,
+      description: "Big game — 5% chance to spear a large fish",
+      effects: [
+        { type: "drop_chance", actionId: "spear_fish", resourceId: "large_fish", bonus: 0.05 },
+      ],
+    },
   ],
   foraging: [
     {
