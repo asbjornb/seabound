@@ -39,6 +39,17 @@
 - Navigation effects on expedition odds
 - Maritime vessel chain (raft → dugout → outrigger → sailing canoe)
 
+### Next Up (After Visual Polish)
+
+- **Farming & Traps** — New mechanic: timed background resource gain with manual collection. Player places a farm plot or trap, it passively accumulates output over time, player collects when ready.
+  - *Farming gating options (TBD)*: Either gate behind finding a wild seed (first seed drop from foraging?), or behind an expedition discovery — e.g. "remnants of an old garden" found on another island that teaches the concept. Digging stick already exists as a tool prerequisite.
+  - *Trapping gating*: Gate behind a combination of Fishing skill + Crafting skill (e.g. Fishing 5 + Crafting 5). Traps are a fishing-adjacent mechanic — basket traps, snares, stone weirs. Recipes use existing weaving/crafting materials.
+  - Both farming and traps should feel like natural mid-game progression, not early-game complexity.
+
+- **Routines** — Lightweight action sequences. Player can define a short queue of actions that run in order instead of a single action. Not full automation — just "do A, then B, then C" convenience.
+  - *Gating options (TBD)*: Either unlock when any skill first reaches level 20 (natural mid-game milestone), or gate behind lore scraps found on a new island expedition (thematic — "you find weathered instructions for an efficient workflow"). The expedition gate adds more narrative flavor; the level gate is simpler to implement.
+  - Keep routines short (3-5 steps max initially) to stay lightweight and not overwhelm idle balance.
+
 ### Design Ideas (Not Yet Planned)
 
 - **Resource obsolescence** — As players progress, early-phase resources (e.g. rough_fiber, round_stone) should become obsolete. Unlike Unnamed Space Idle's approach of making early resources infinite, we need a thematic solution. Possible approaches: auto-conversion (rough fiber → fiber when you unlock it), removal of obsolete actions/recipes from the UI once superseded, or a "mastery" mechanic where reaching a skill threshold trivializes early resources. Goal: reduce inventory clutter and action list bloat in late game without breaking the castaway theme.
