@@ -104,12 +104,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
   },
 
   // Phase 1b - Fire
-  coconut_husk_fiber: {
-    id: "coconut_husk_fiber",
-    name: "Coconut Husk Fiber",
-    description: "Fine dry tinder shredded from coconut husk.",
-    category: "raw",
-  },
   dry_grass: {
     id: "dry_grass",
     name: "Dry Grass",
@@ -140,5 +134,13 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Cooked Crab",
     description: "Roasted crab. Tasty and filling.",
     category: "food",
+  },
+
+  // Seeds
+  wild_seed: {
+    id: "wild_seed",
+    name: "Wild Seed",
+    description: "A small seed found in dry grass. The start of farming.",
+    category: "raw",
   },
 };

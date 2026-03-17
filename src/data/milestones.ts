@@ -48,6 +48,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "drop_chance", actionId: "gather_coconuts", resourceId: "coconut_husk", bonus: 0.2 },
       ],
     },
+    {
+      level: 9,
+      description: "Forager's luck — 5% chance to find a wild seed in dry grass",
+      effects: [
+        { type: "drop_chance", actionId: "collect_dry_grass", resourceId: "wild_seed", bonus: 0.05 },
+      ],
+    },
   ],
   weaving: [
     {

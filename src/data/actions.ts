@@ -51,14 +51,14 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 5,
   },
   {
-    id: "collect_dry_tinder",
-    name: "Collect Dry Tinder",
-    description: "Shred coconut husk and gather dry grass for fire-starting.",
+    id: "collect_dry_grass",
+    name: "Collect Dry Grass",
+    description: "Gather dry grass for fire-starting.",
     skillId: "foraging",
     durationMs: 4000,
     drops: [
-      { resourceId: "coconut_husk_fiber", amount: 1 },
       { resourceId: "dry_grass", amount: 1 },
+      { resourceId: "wild_seed", amount: 1, chance: 0 },
     ],
     requiredSkillLevel: 3,
     xpGain: 8,

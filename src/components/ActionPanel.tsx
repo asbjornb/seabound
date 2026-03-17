@@ -54,14 +54,24 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                   <div className="action-desc">{action.description}</div>
                   <div className="action-drops">
                     Drops:{" "}
-                    {action.drops.map((d, i) => (
+                    {action.drops
+                      .map((d) => ({
+                        ...d,
+                        effectiveChance: Math.min(
+                          1,
+                          (d.chance ?? 1) +
+                            getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)
+                        ),
+                      }))
+                      .filter((d) => d.effectiveChance > 0)
+                      .map((d, i) => (
                       <span key={i}>
                         {i > 0 && ", "}
                         <span>
                           {d.amount}x{" "}
                           {RESOURCES[d.resourceId]?.name ?? d.resourceId}
-                          {d.chance && d.chance < 1
-                            ? ` (${Math.round(Math.min(1, d.chance + getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)) * 100)}%)`
+                          {d.effectiveChance < 1
+                            ? ` (${Math.round(d.effectiveChance * 100)}%)`
                             : ""}
                         </span>
                       </span>

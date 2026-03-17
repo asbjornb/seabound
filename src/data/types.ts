@@ -17,7 +17,6 @@ export type ResourceId =
   | "bamboo_knife"
   | "large_shell"
   // Phase 1b - Fire
-  | "coconut_husk_fiber"
   | "dry_grass"
   | "bow_drill_kit"
   | "bamboo_spear"
@@ -25,7 +24,9 @@ export type ResourceId =
   | "shell_bead"
   // Food
   | "cooked_fish"
-  | "cooked_crab";
+  | "cooked_crab"
+  // Seeds
+  | "wild_seed";
 
 export type SkillId =
   | "foraging"
