@@ -130,8 +130,10 @@ export const FOOD_VALUES: { id: ResourceId; value: number }[] = [
   { id: "coconut", value: 1 },
   { id: "small_fish", value: 1 },
   { id: "crab", value: 1 },
+  { id: "large_fish", value: 2 },
   { id: "cooked_fish", value: 2 },
   { id: "cooked_crab", value: 2 },
+  { id: "cooked_large_fish", value: 4 },
 ];
 
 /** Total food value the player currently has. */

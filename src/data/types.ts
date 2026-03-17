@@ -25,8 +25,10 @@ export type ResourceId =
   // Weaving
   | "woven_basket"
   // Food
+  | "large_fish"
   | "cooked_fish"
   | "cooked_crab"
+  | "cooked_large_fish"
   // Seeds
   | "wild_seed";
 

@@ -230,6 +230,21 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 5,
   },
   {
+    id: "cook_large_fish",
+    name: "Cook Large Fish",
+    description: "Grill a large fish over the campfire. Needs extra fuel.",
+    skillId: "cooking",
+    inputs: [
+      { resourceId: "large_fish", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    output: { resourceId: "cooked_large_fish", amount: 1 },
+    requiredBuildings: ["camp_fire"],
+    durationMs: 5000,
+    repeatable: true,
+    xpGain: 10,
+  },
+  {
     id: "cook_crab",
     name: "Cook Crab",
     description: "Roast crab over the fire using driftwood as fuel.",
