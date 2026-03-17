@@ -175,4 +175,30 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "Wet riverbank clay. Can be shaped and fired into useful items.",
     category: "raw",
   },
+  shaped_clay_pot: {
+    id: "shaped_clay_pot",
+    name: "Shaped Clay Pot",
+    description: "A hand-shaped clay pot. Fragile until fired.",
+    category: "processed",
+  },
+  fired_clay_pot: {
+    id: "fired_clay_pot",
+    name: "Fired Clay Pot",
+    description: "A hardened clay pot. Stores liquids and dry goods.",
+    category: "processed",
+  },
+  sealed_clay_jar: {
+    id: "sealed_clay_jar",
+    name: "Sealed Clay Jar",
+    description:
+      "An airtight clay jar. Preserves food for long expeditions and stores seeds.",
+    category: "processed",
+  },
+  crucible: {
+    id: "crucible",
+    name: "Crucible",
+    description:
+      "A thick-walled clay vessel that withstands extreme heat. Required for smelting ore.",
+    category: "tool",
+  },
 };

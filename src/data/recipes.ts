@@ -279,4 +279,120 @@ export const RECIPES: RecipeDef[] = [
     repeatable: true,
     xpGain: 5,
   },
+
+  // ═══════════════════════════════════════
+  // PHASE 2 — Clay & Pottery
+  // ═══════════════════════════════════════
+
+  // Building: Firing Pit (Construction 12)
+  {
+    id: "build_firing_pit",
+    name: "Firing Pit",
+    description:
+      "Dig a pit and line it with stones. Reaches temperatures high enough to fire clay.",
+    skillId: "construction",
+    requiredSkillLevel: 12,
+    inputs: [
+      { resourceId: "flat_stone", amount: 6 },
+      { resourceId: "driftwood_branch", amount: 4 },
+      { resourceId: "clay", amount: 3 },
+    ],
+    output: { resourceId: "flat_stone", amount: 0 }, // placeholder
+    buildingOutput: "firing_pit",
+    durationMs: 12000,
+    xpGain: 35,
+  },
+
+  // Building: Kiln (Construction 25 + Crafting 20)
+  {
+    id: "build_kiln",
+    name: "Kiln",
+    description:
+      "Build an enclosed clay kiln over the firing pit. Much higher temperatures for advanced pottery.",
+    skillId: "construction",
+    requiredSkillLevel: 25,
+    inputs: [
+      { resourceId: "clay", amount: 10 },
+      { resourceId: "flat_stone", amount: 8 },
+      { resourceId: "driftwood_branch", amount: 6 },
+      { resourceId: "cordage", amount: 4 },
+    ],
+    output: { resourceId: "clay", amount: 0 }, // placeholder
+    buildingOutput: "kiln",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 20000,
+    xpGain: 60,
+  },
+
+  // Shape Clay Pot (Crafting 8)
+  {
+    id: "shape_clay_pot",
+    name: "Shape Clay Pot",
+    description: "Hand-shape wet clay into a pot. Must be fired to harden.",
+    skillId: "crafting",
+    requiredSkillLevel: 8,
+    inputs: [{ resourceId: "clay", amount: 3 }],
+    output: { resourceId: "shaped_clay_pot", amount: 1 },
+    durationMs: 6000,
+    repeatable: true,
+    xpGain: 15,
+  },
+
+  // Fire Clay Pot (Preservation 8, requires firing pit)
+  {
+    id: "fire_clay_pot",
+    name: "Fire Clay Pot",
+    description: "Fire a shaped pot in the firing pit to harden it.",
+    skillId: "preservation",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "shaped_clay_pot", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    output: { resourceId: "fired_clay_pot", amount: 1 },
+    requiredBuildings: ["firing_pit"],
+    durationMs: 8000,
+    repeatable: true,
+    xpGain: 20,
+  },
+
+  // Sealed Clay Jar (Preservation 15, requires firing pit)
+  {
+    id: "seal_clay_jar",
+    name: "Sealed Clay Jar",
+    description:
+      "Coat a fired pot with clay slip and re-fire to create an airtight seal. Preserves food for long voyages.",
+    skillId: "preservation",
+    requiredSkillLevel: 15,
+    inputs: [
+      { resourceId: "fired_clay_pot", amount: 1 },
+      { resourceId: "clay", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    output: { resourceId: "sealed_clay_jar", amount: 1 },
+    requiredBuildings: ["firing_pit"],
+    durationMs: 10000,
+    repeatable: true,
+    xpGain: 30,
+  },
+
+  // Crucible (Preservation 30, requires kiln)
+  {
+    id: "craft_crucible",
+    name: "Crucible",
+    description:
+      "Shape and kiln-fire a thick-walled vessel capable of withstanding smelting temperatures.",
+    skillId: "preservation",
+    requiredSkillLevel: 30,
+    inputs: [
+      { resourceId: "clay", amount: 8 },
+      { resourceId: "flat_stone", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 4 },
+    ],
+    output: { resourceId: "crucible", amount: 1 },
+    requiredBuildings: ["kiln"],
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 50,
+  },
 ];
