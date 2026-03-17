@@ -186,7 +186,7 @@ function applyCraftCompletion(
     }
     buildingBuilt = def.buildingOutput;
     drops.push({ name: def.buildingOutput, amount: 1 });
-  } else {
+  } else if (def.output) {
     // Normal craft — add output to resources
     if (!state.discoveredResources.includes(def.output.resourceId)) {
       newResources.push(def.output.resourceId);
@@ -195,6 +195,7 @@ function applyCraftCompletion(
     addResource(state, def.output.resourceId, def.output.amount);
     drops.push({ name: def.output.resourceId, amount: def.output.amount });
   }
+  // else: XP-only recipe (e.g. Maintain Camp) — no output to process
 
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;

@@ -79,6 +79,18 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 8,
   },
 
+  // Construction
+  {
+    id: "dig_drainage_trench",
+    name: "Dig Drainage Trench",
+    description:
+      "Dig channels around camp to divert rainwater. Hard labor, but good practice.",
+    skillId: "construction",
+    durationMs: 30000,
+    drops: [],
+    xpGain: 10,
+  },
+
   // ═══════════════════════════════════════
   // PHASE 1 — Bamboo Tier (requires bamboo_grove biome)
   // ═══════════════════════════════════════

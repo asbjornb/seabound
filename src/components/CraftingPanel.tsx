@@ -66,11 +66,15 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                 ))}
               </div>
             )}
-            <div className="recipe-output">
-              Produces: {recipe.output.amount}x{" "}
-              {RESOURCES[recipe.output.resourceId]?.name ??
-                recipe.output.resourceId}
-            </div>
+            {recipe.output ? (
+              <div className="recipe-output">
+                Produces: {recipe.output.amount}x{" "}
+                {RESOURCES[recipe.output.resourceId]?.name ??
+                  recipe.output.resourceId}
+              </div>
+            ) : (
+              <div className="recipe-output">XP only</div>
+            )}
             <div className="action-xp">
               +{recipe.xpGain} {recipe.skillId} XP
             </div>

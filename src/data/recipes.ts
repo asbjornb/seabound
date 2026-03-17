@@ -126,6 +126,24 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Construction — Camp Maintenance
+  // ═══════════════════════════════════════
+  {
+    id: "maintain_camp",
+    name: "Maintain Camp",
+    description:
+      "Shore up shelters, re-tie lashings, and patch leaky spots around camp.",
+    skillId: "construction",
+    inputs: [
+      { resourceId: "cordage", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
+    durationMs: 30000,
+    repeatable: true,
+    xpGain: 8,
+  },
+
+  // ═══════════════════════════════════════
   // Settlement Building Recipes
   // ═══════════════════════════════════════
   {

@@ -336,7 +336,7 @@ export function useGame() {
       return false;
     }
     // Hide one-time-craft recipes once the player owns the output
-    if (r.oneTimeCraft && getResource(state, r.output.resourceId) >= 1) {
+    if (r.oneTimeCraft && r.output && getResource(state, r.output.resourceId) >= 1) {
       return false;
     }
     return true;

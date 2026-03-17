@@ -120,7 +120,7 @@ export interface RecipeDef {
   description: string;
   skillId: SkillId;
   inputs: { resourceId: ResourceId; amount: number }[];
-  output: { resourceId: ResourceId; amount: number };
+  output?: { resourceId: ResourceId; amount: number };
   durationMs: number;
   requiredSkillLevel?: number;
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory

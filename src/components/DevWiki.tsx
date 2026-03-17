@@ -178,7 +178,7 @@ export function DevWiki() {
                 <td style={styles.tdSmall}>
                   {r.buildingOutput
                     ? `🏗 ${r.buildingOutput}`
-                    : `${r.output.amount}× ${r.output.resourceId}`}
+                    : r.output ? `${r.output.amount}× ${r.output.resourceId}` : "XP only"}
                 </td>
                 <td style={styles.tdSmall}>
                   {[
