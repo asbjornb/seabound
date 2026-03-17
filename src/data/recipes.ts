@@ -110,6 +110,17 @@ export const RECIPES: RecipeDef[] = [
   // Weaving
   // ═══════════════════════════════════════
   {
+    id: "weave_palm_mat",
+    name: "Weave Palm Mat",
+    description: "Interlace palm fronds into a flat mat. Good practice for more complex weaving.",
+    skillId: "weaving",
+    inputs: [{ resourceId: "palm_frond", amount: 3 }],
+    output: { resourceId: "palm_mat", amount: 1 },
+    durationMs: 6000,
+    repeatable: true,
+    xpGain: 8,
+  },
+  {
     id: "weave_basket",
     name: "Weave Basket",
     description: "Weave palm fronds and cordage into a storage basket. Each basket holds a few extra small items.",

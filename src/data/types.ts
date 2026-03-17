@@ -23,6 +23,7 @@ export type ResourceId =
   // Crafted
   | "shell_bead"
   // Weaving
+  | "palm_mat"
   | "woven_basket"
   // Food
   | "cooked_fish"
