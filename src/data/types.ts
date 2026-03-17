@@ -69,6 +69,7 @@ export interface ResourceDef {
   name: string;
   description: string;
   category: ResourceCategory;
+  size?: "small" | "large"; // defaults to "small" if omitted
 }
 
 export interface SkillDef {
