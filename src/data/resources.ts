@@ -127,12 +127,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     size: "large",
   },
   // Weaving
-  palm_mat: {
-    id: "palm_mat",
-    name: "Palm Mat",
-    description: "A flat mat woven from palm fronds. Useful for bedding and drying surfaces.",
-    category: "processed",
-  },
   woven_basket: {
     id: "woven_basket",
     name: "Woven Basket",
