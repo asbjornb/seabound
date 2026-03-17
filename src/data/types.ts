@@ -21,6 +21,8 @@ export type ResourceId =
   | "dry_grass"
   | "bow_drill_kit"
   | "bamboo_spear"
+  // Crafted
+  | "shell_bead"
   // Food
   | "cooked_fish"
   | "cooked_crab";

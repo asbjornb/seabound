@@ -16,6 +16,18 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 6,
   },
 
+  {
+    id: "craft_shell_beads",
+    name: "Shell Beads",
+    description: "Chip and polish shells into decorative beads.",
+    skillId: "crafting",
+    inputs: [{ resourceId: "shell", amount: 3 }],
+    output: { resourceId: "shell_bead", amount: 1 },
+    durationMs: 4000,
+    repeatable: true,
+    xpGain: 5,
+  },
+
   // ═══════════════════════════════════════
   // PHASE 1 — Bamboo Tier: First Tools
   // ═══════════════════════════════════════
