@@ -245,3 +245,24 @@ Added per-item storage caps to make storage buildings mechanically meaningful (P
 - **Default 10 cap** — Low enough to be felt quickly, high enough that you don't hit it every few seconds. Forces engagement with the building system within the first few minutes.
 
 ---
+
+## Session 6 — Early Crafting XP Improvements (2026-03-17)
+
+### What We Did
+
+Made early crafting XP less painful. Previously the only repeatable crafting recipe was Shred Coconut Husk, which required coconut husks that only drop at 40% chance.
+
+**Changes made:**
+
+1. **Foraging level 4 milestone** — "Keen eye — +20% coconut husk chance when gathering". Bumps the coconut husk drop from 40% to 60% once players reach Foraging 4, making husk shredding more viable as a crafting XP source.
+
+2. **Shell Beads recipe** (Crafting 1, repeatable) — 3 shells → 1 shell bead, 5 crafting XP. Shells are a guaranteed drop from Wade Tidal Pool, so this gives a second reliable early-game crafting XP loop with zero RNG gating.
+
+3. **New resource: shell_bead** — Processed category. Currently exists purely as a crafting XP sink. **TODO: find a downstream use for shell beads** — candidates include: ingredient for a Shell Necklace craft, trade good for expeditions, or building decoration material. Don't remove them just because they seem useless — they serve an important role as the primary early crafting XP source.
+
+### Design Decisions
+
+- **Shell Beads as XP sink** — Intentionally has no use yet. The point is giving players a repeatable crafting action from the start using guaranteed materials. A downstream use should be added later but isn't required for the XP loop to work.
+- **Foraging 4 milestone, not lower** — Players already have Foraging 2 (beach stones) and 3 (dry tinder) as milestones. Level 4 gives a reason to keep foraging coconuts and rewards players who've been grinding the grove.
+
+---

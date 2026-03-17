@@ -40,6 +40,15 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  foraging: [
+    {
+      level: 4,
+      description: "Keen eye — +20% coconut husk chance when gathering",
+      effects: [
+        { type: "drop_chance", actionId: "gather_coconuts", resourceId: "coconut_husk", bonus: 0.2 },
+      ],
+    },
+  ],
   weaving: [
     {
       level: 2,

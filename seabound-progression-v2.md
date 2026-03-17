@@ -29,7 +29,8 @@
 - Jungle interior expedition (food/water costs, basalt/clay/crop discoveries)
 - Stone tools chain (knapping: chert → flakes → blades → points)
 - More settlement buildings (Stone Hearth, Woven Basket, Smoking Rack, Workbench)
-- More authored skill milestones (currently only Fishing has hand-crafted ones)
+- Find a downstream use for shell beads (currently crafting XP sink — candidates: Shell Necklace craft, expedition trade good, building decoration)
+- More authored skill milestones (Fishing and Foraging have hand-crafted ones now)
 - Weaving and Construction skill actions
 - Navigation effects on expedition odds
 - Maritime vessel chain (raft → dugout → outrigger → sailing canoe)
