@@ -72,6 +72,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                 {RESOURCES[recipe.output.resourceId]?.name ??
                   recipe.output.resourceId}
               </div>
+            ) : recipe.moraleGain ? (
+              <div className="recipe-output">+{recipe.moraleGain} Morale</div>
             ) : (
               <div className="recipe-output">XP only</div>
             )}

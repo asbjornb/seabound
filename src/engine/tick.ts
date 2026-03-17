@@ -4,7 +4,7 @@ import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, getMoraleDurationMultiplier, MORALE_BOOST_PER_MAINTAIN, MORALE_DECAY_INTERVAL_MS, getTotalFood } from "./gameState";
+import { addResource, deductFood, getMoraleDurationMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -213,11 +213,8 @@ function applyCraftCompletion(
   // else: XP-only recipe (e.g. Maintain Camp) — no output to process
 
   // Morale boosts
-  if (def.id === "maintain_camp") {
-    state.morale = boostMorale(state.morale, MORALE_BOOST_PER_MAINTAIN);
-  }
-  if (def.id === "craft_shell_beads") {
-    state.morale = boostMorale(state.morale, 2);
+  if (def.moraleGain) {
+    state.morale = boostMorale(state.morale, def.moraleGain);
   }
 
   const skill = state.skills[def.skillId];

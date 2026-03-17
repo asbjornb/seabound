@@ -25,6 +25,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 4000,
     repeatable: true,
     xpGain: 5,
+    moraleGain: 2,
   },
 
   // ═══════════════════════════════════════
@@ -140,6 +141,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 30000,
     repeatable: true,
     xpGain: 8,
+    moraleGain: 5,
   },
 
   // ═══════════════════════════════════════
