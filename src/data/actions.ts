@@ -180,4 +180,41 @@ export const ACTIONS: ActionDef[] = [
     requiredTools: ["bamboo_spear"],
     xpGain: 12,
   },
+
+  // Fishing (drop line tier)
+  {
+    id: "drop_line_fish",
+    name: "Drop Line Fishing",
+    description:
+      "Lower a baited gorge hook into deeper water. Slower, but catches bigger fish.",
+    skillId: "fishing",
+    durationMs: 8000,
+    drops: [
+      { resourceId: "small_fish", amount: 1 },
+      { resourceId: "large_fish", amount: 1, chance: 0.25 },
+      { resourceId: "shell", amount: 1, chance: 0.2 },
+    ],
+    requiredSkillLevel: 8,
+    requiredTools: ["gorge_hook"],
+    xpGain: 18,
+  },
+
+  // Fishing (basket trap tier)
+  {
+    id: "basket_trap_fish",
+    name: "Check Basket Trap",
+    description:
+      "Haul up your submerged basket trap and collect whatever swam in.",
+    skillId: "fishing",
+    durationMs: 12000,
+    drops: [
+      { resourceId: "small_fish", amount: 2 },
+      { resourceId: "large_fish", amount: 1, chance: 0.15 },
+      { resourceId: "crab", amount: 1, chance: 0.3 },
+      { resourceId: "shell", amount: 1, chance: 0.25 },
+    ],
+    requiredSkillLevel: 10,
+    requiredTools: ["basket_trap"],
+    xpGain: 25,
+  },
 ];

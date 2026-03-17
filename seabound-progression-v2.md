@@ -26,10 +26,9 @@
 ### What's Next
 
 - Shell adze (needs large_shell drops)
-- Shell scraper recipe
 - Digging stick (fire-hardened tool, gates farming)
 - Farming system (cleared plots, planting, semi-idle set-and-claim)
-- Phase 2 fishing tiers (drop line, basket trap, stone weir)
+- Phase 2 fishing tiers: stone weir (Fishing 20 + Construction 25), net fishing (Fishing 40 + Weaving 35)
 - Jungle interior expedition (food/water costs, basalt/clay/crop discoveries)
 - Stone tools chain (knapping: chert → flakes → blades → points)
 - More settlement buildings (Stone Hearth, Smoking Rack, Workbench)
@@ -259,8 +258,8 @@ Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, 
 |---|---|---|---|
 | 1 | Wade tidal pool | None | Available from start. Low yield. |
 | 2 | Spear fish | Bamboo spear (crafted) | Better yield, larger fish possible |
-| 3 | Drop line | Fishing 8 + Gorge hook crafted | Runs passively alongside other actions |
-| 4 | Basket trap | Fishing 10 + Weaving 15 + trap crafted | **Semi-idle: set → timer → tap to collect** |
+| 3 | Drop line | Fishing 8 + Gorge hook crafted | Better large fish yield ✅ |
+| 4 | Basket trap | Fishing 10 + Weaving 15 + trap crafted | Bulk catch with crab bonus ✅ |
 | 5 | Stone tidal weir | Fishing 20 + Construction 25 | **Semi-idle: set → timer → tap to collect** |
 | 6 | Net fishing | Fishing 40 + Weaving 35 + net crafted | Bulk catch, rare fish chance |
 

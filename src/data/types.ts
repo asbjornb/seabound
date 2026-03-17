@@ -49,6 +49,9 @@ export type ResourceId =
   | "dugout"
   // Water
   | "fresh_water"
+  // Fishing Tools
+  | "gorge_hook"
+  | "basket_trap"
   // Phase 2 - Clay Tier
   | "clay"
   | "shaped_clay_pot"

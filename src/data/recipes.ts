@@ -158,6 +158,43 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Fishing Tools
+  // ═══════════════════════════════════════
+  {
+    id: "craft_gorge_hook",
+    name: "Gorge Hook",
+    description:
+      "Carve a shell into a gorge hook and tie it to cordage. A proper fishing line.",
+    skillId: "crafting",
+    inputs: [
+      { resourceId: "shell", amount: 2 },
+      { resourceId: "cordage", amount: 2 },
+    ],
+    requiredItems: ["stone_flake"],
+    output: { resourceId: "gorge_hook", amount: 1 },
+    durationMs: 6000,
+    requiredSkillLevel: 5,
+    oneTimeCraft: true,
+    xpGain: 20,
+  },
+  {
+    id: "craft_basket_trap",
+    name: "Basket Trap",
+    description:
+      "Weave bamboo splinters into a funnel-shaped fish trap. Set it and collect later.",
+    skillId: "weaving",
+    inputs: [
+      { resourceId: "bamboo_splinter", amount: 4 },
+      { resourceId: "cordage", amount: 3 },
+    ],
+    output: { resourceId: "basket_trap", amount: 1 },
+    durationMs: 10000,
+    requiredSkillLevel: 15,
+    oneTimeCraft: true,
+    xpGain: 35,
+  },
+
+  // ═══════════════════════════════════════
   // Settlement Building Recipes
   // ═══════════════════════════════════════
   {

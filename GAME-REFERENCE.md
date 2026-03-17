@@ -62,7 +62,6 @@
 |--------|-------|--------|--------|------|
 | Split Bamboo Cane | Woodworking | Bamboo Cane ×1 | Bamboo Splinter ×2 | — |
 | Bamboo Knife | Crafting | Bamboo Splinter ×1, Vine ×2 | Bamboo Knife ×1 | Crafting 2, one-time |
-| Shell Scraper | Crafting | Flat Stone ×1, Shell ×1 | Shell Scraper ×1 | one-time |
 
 ### Fiber & Cordage
 
@@ -102,7 +101,6 @@
 | Tool | How to Get | Unlocks |
 |------|-----------|---------|
 | Bamboo Knife | Craft: Bamboo Splinter + Vine ×2 | Strip Fibrous Bark action |
-| Shell Scraper | Craft: Flat Stone + Shell | Bark scraping |
 | Bow Drill Kit | Craft: Bamboo Cane + Driftwood + Rough Cordage + Flat Stone | Fire-starting (Camp Fire recipe) |
 | Bamboo Spear | Craft at Camp Fire: Bamboo Cane ×2 | Spear Fish action |
 | Digging Stick | Craft at Camp Fire: Bamboo Cane | Dig clay, till soil (future) |
@@ -137,7 +135,7 @@ Bamboo Splinter, Bamboo Strip, Rough Cordage, Dried Fiber, Cordage
 Small Fish, Crab, Cooked Fish, Cooked Crab
 
 ### Tools
-Bamboo Knife, Shell Scraper, Bow Drill Kit, Bamboo Spear, Digging Stick
+Bamboo Knife, Bow Drill Kit, Bamboo Spear, Digging Stick
 
 ---
 
