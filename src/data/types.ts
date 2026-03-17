@@ -20,8 +20,6 @@ export type ResourceId =
   | "dry_grass"
   | "bow_drill_kit"
   | "bamboo_spear"
-  // Crafted
-  | "shell_bead"
   // Weaving
   | "woven_basket"
   // Food

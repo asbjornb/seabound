@@ -53,12 +53,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     category: "raw",
   },
 
-  shell_bead: {
-    id: "shell_bead",
-    name: "Shell Bead",
-    description: "A polished shell bead. Decorative and tradeable.",
-    category: "processed",
-  },
 
   // Phase 1 - Bamboo Tier
   bamboo_cane: {
