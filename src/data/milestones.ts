@@ -95,19 +95,18 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
-  crafting: [
+  crafting: [],
+  weaving: [
+    {
+      level: 2,
+      description: "Nimble fingers — ready to weave palm fronds into useful items",
+    },
     {
       level: 5,
       description: "Rope hand — 15% chance to twist extra cordage",
       effects: [
         { type: "double_output", chance: 0.3, recipeId: "twist_cordage" },
       ],
-    },
-  ],
-  weaving: [
-    {
-      level: 2,
-      description: "Nimble fingers — ready to weave palm fronds into useful items",
     },
   ],
 };

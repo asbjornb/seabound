@@ -223,7 +223,7 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 |---|---|---|---|
 | Shred coconut husk | Crafting | Coconut husk ×1 | Rough fiber ×1 |
 | Dry fiber | Preservation | Rough fiber ×2 | Dried fiber ×2 (requires drying rack) |
-| Twist cordage | Crafting | Dried fiber ×2 | Cordage ×1 |
+| Twist cordage | Weaving | Dried fiber ×2 | Cordage ×1 |
 
 Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, and construction.
 

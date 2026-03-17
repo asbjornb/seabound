@@ -78,7 +78,7 @@ export const RECIPES: RecipeDef[] = [
     id: "twist_cordage",
     name: "Twist Cordage",
     description: "Twist dried fibers into strong cordage.",
-    skillId: "crafting",
+    skillId: "weaving",
     inputs: [{ resourceId: "dried_fiber", amount: 2 }],
     output: { resourceId: "cordage", amount: 1 },
     durationMs: 4000,
