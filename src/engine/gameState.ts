@@ -154,6 +154,30 @@ export function getMoraleDurationMultiplier(morale: number): number {
   return 1 - 0.2 * (morale - 50) / 50;
 }
 
+/** Actions and recipes sped up by owning an obsidian blade (15% faster). */
+const OBSIDIAN_BLADE_ACTIONS = new Set([
+  "harvest_bamboo",
+  "fell_large_tree",
+]);
+const OBSIDIAN_BLADE_RECIPES = new Set([
+  "split_bamboo_cane",
+  "scrape_hull",
+  "shred_coconut_husk",
+]);
+const OBSIDIAN_BLADE_MULTIPLIER = 0.85;
+
+/** Get tool-based speed multiplier for an action or recipe.
+ *  Currently only obsidian blade provides a bonus. */
+export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: string): number {
+  if (
+    (OBSIDIAN_BLADE_ACTIONS.has(actionOrRecipeId) || OBSIDIAN_BLADE_RECIPES.has(actionOrRecipeId)) &&
+    (state.resources["obsidian_blade"] ?? 0) >= 1
+  ) {
+    return OBSIDIAN_BLADE_MULTIPLIER;
+  }
+  return 1;
+}
+
 /** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */
 export const FOOD_VALUES: { id: ResourceId; value: number }[] = [
   { id: "coconut", value: 1 },

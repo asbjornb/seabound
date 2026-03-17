@@ -22,6 +22,7 @@ import {
   deductWater,
   getMoraleDurationMultiplier,
   getResource,
+  getToolSpeedMultiplier,
   getTotalFood,
   getTotalWater,
   loadGame,
@@ -502,8 +503,9 @@ export function useGame() {
       );
       if (def) {
         const skillLevel = state.skills[def.skillId].level;
+        const toolMultiplier = getToolSpeedMultiplier(state, def.id);
         const effectiveDuration = Math.round(
-          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier
+          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier * toolMultiplier
         );
         actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
@@ -514,7 +516,8 @@ export function useGame() {
         (r) => r.id === state.currentAction!.recipeId
       );
       if (def) {
-        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier);
+        const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
+        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier * craftToolMultiplier);
         actionDuration = effectiveDuration;
         const elapsed = Date.now() - state.currentAction.startedAt;
         actionProgress = Math.min(1, elapsed / effectiveDuration);

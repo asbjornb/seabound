@@ -4,7 +4,7 @@ import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getMoraleDurationMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -59,8 +59,9 @@ export function processTick(state: GameState, now: number): TickResult {
 
     const skillLevel = state.skills[def.skillId].level;
     const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
+    const toolMultiplier = getToolSpeedMultiplier(state, def.id);
     const effectiveDuration = Math.round(
-      def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier
+      def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier * toolMultiplier
     );
 
     let remaining = timeAvailable;
@@ -81,7 +82,8 @@ export function processTick(state: GameState, now: number): TickResult {
     }
 
     const craftMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
-    const effectiveCraftDuration = Math.round(def.durationMs * craftMoraleMultiplier);
+    const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
+    const effectiveCraftDuration = Math.round(def.durationMs * craftMoraleMultiplier * craftToolMultiplier);
 
     if (def.repeatable) {
       let remaining = timeAvailable;
