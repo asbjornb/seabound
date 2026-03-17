@@ -23,6 +23,11 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     description:
       "General tool-making, lashing, assembly, knapping, pottery shaping.",
   },
+  cooking: {
+    id: "cooking",
+    name: "Cooking",
+    description: "Preparing food over fire — grilling, roasting, boiling.",
+  },
   weaving: {
     id: "weaving",
     name: "Weaving",

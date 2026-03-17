@@ -30,6 +30,7 @@ export type SkillId =
   | "fishing"
   | "woodworking"
   | "crafting"
+  | "cooking"
   | "weaving"
   | "construction"
   | "farming"
