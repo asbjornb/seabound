@@ -120,35 +120,55 @@ export function addResource(state: GameState, resourceId: string, amount: number
   return actuallyAdded;
 }
 
-/** Resources that count as food for expedition costs. */
-export const FOOD_RESOURCES: ResourceId[] = [
-  "small_fish",
-  "crab",
-  "coconut",
-  "cooked_fish",
-  "cooked_crab",
+/** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */
+export const FOOD_VALUES: { id: ResourceId; value: number }[] = [
+  { id: "coconut", value: 1 },
+  { id: "small_fish", value: 1 },
+  { id: "crab", value: 1 },
+  { id: "cooked_fish", value: 2 },
+  { id: "cooked_crab", value: 2 },
 ];
 
-/** Total food items the player currently has. */
+/** Total food value the player currently has. */
 export function getTotalFood(state: GameState): number {
-  return FOOD_RESOURCES.reduce(
-    (sum, id) => sum + (state.resources[id] ?? 0),
+  return FOOD_VALUES.reduce(
+    (sum, f) => sum + (state.resources[f.id] ?? 0) * f.value,
     0
   );
 }
 
-/** Deduct `amount` food from inventory, drawing from available food resources. Returns record of what was taken, or null if insufficient. */
+/** Get the food value of a single resource item. Returns 0 if not food. */
+export function getFoodValue(resourceId: string): number {
+  return FOOD_VALUES.find((f) => f.id === resourceId)?.value ?? 0;
+}
+
+/** Deduct `amount` food value from inventory, preferring low-value food first. Returns record of what was taken, or null if insufficient. */
 export function deductFood(state: GameState, amount: number): Record<string, number> | null {
   if (getTotalFood(state) < amount) return null;
   const taken: Record<string, number> = {};
   let remaining = amount;
-  for (const id of FOOD_RESOURCES) {
+  for (const f of FOOD_VALUES) {
     if (remaining <= 0) break;
-    const have = state.resources[id] ?? 0;
-    const take = Math.min(have, remaining);
-    state.resources[id] = have - take;
-    if (take > 0) taken[id] = take;
-    remaining -= take;
+    const have = state.resources[f.id] ?? 0;
+    const canTake = Math.min(have, Math.floor(remaining / f.value));
+    if (canTake > 0) {
+      state.resources[f.id] = have - canTake;
+      taken[f.id] = canTake;
+      remaining -= canTake * f.value;
+    }
   }
-  return taken;
+  // Second pass: if there's remaining < a food's value but we have high-value food, use one
+  if (remaining > 0) {
+    for (const f of FOOD_VALUES) {
+      if (remaining <= 0) break;
+      const have = state.resources[f.id] ?? 0;
+      if (have > 0 && f.value >= remaining) {
+        state.resources[f.id] = have - 1;
+        taken[f.id] = (taken[f.id] ?? 0) + 1;
+        remaining -= f.value;
+        break;
+      }
+    }
+  }
+  return remaining <= 0 ? taken : null;
 }
