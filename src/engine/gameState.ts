@@ -78,6 +78,16 @@ export function loadGame(): GameState | null {
         (id) => (loaded.resources[id] ?? 0) > 0
       );
     }
+    // Migration: remove items/buildings that no longer exist in current data
+    for (const id of Object.keys(loaded.resources)) {
+      if (!RESOURCES[id]) {
+        delete loaded.resources[id];
+      }
+    }
+    loaded.discoveredResources = loaded.discoveredResources.filter(
+      (id) => !!RESOURCES[id]
+    );
+    loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
     return loaded;
   } catch {
     return null;
