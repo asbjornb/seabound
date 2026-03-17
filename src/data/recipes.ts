@@ -65,11 +65,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "dry_fiber",
     name: "Dry Fiber",
-    description: "Lay rough fibers out to dry in the sun.",
+    description: "Hang rough fibers on the drying rack to cure in the sun.",
     skillId: "preservation",
     inputs: [{ resourceId: "rough_fiber", amount: 2 }],
     output: { resourceId: "dried_fiber", amount: 2 },
     durationMs: 5000,
+    requiredBuildings: ["drying_rack"],
     repeatable: true,
     xpGain: 10,
   },
@@ -120,7 +121,6 @@ export const RECIPES: RecipeDef[] = [
     ],
     output: { resourceId: "woven_basket", amount: 1 },
     durationMs: 10000,
-    requiredSkillLevel: 2,
     repeatable: true,
     xpGain: 15,
   },
@@ -169,12 +169,11 @@ export const RECIPES: RecipeDef[] = [
     skillId: "crafting",
     inputs: [
       { resourceId: "bamboo_cane", amount: 4 },
-      { resourceId: "cordage", amount: 3 },
+      { resourceId: "palm_frond", amount: 4 },
     ],
     output: { resourceId: "bamboo_cane", amount: 0 }, // placeholder
     buildingOutput: "drying_rack",
     durationMs: 8000,
-    requiredSkillLevel: 5,
     xpGain: 25,
   },
 
