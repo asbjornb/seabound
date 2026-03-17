@@ -33,4 +33,20 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "More room for baskets and other bulky crafts",
     storageBonus: [{ category: "structure", amount: 10 }],
   },
+  firing_pit: {
+    id: "firing_pit",
+    name: "Firing Pit",
+    description:
+      "A stone-lined pit for firing clay at high temperatures. Enables basic pottery.",
+    unlocks: "Fired clay pots, sealed jars",
+    storageBonus: [{ category: "processed", amount: 10 }],
+  },
+  kiln: {
+    id: "kiln",
+    name: "Kiln",
+    description:
+      "A proper enclosed kiln. Reaches higher temperatures for advanced pottery and eventually smelting.",
+    unlocks: "Crucibles, bricks, advanced pottery",
+    storageBonus: [{ category: "processed", amount: 15 }],
+  },
 };

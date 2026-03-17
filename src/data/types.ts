@@ -32,7 +32,11 @@ export type ResourceId =
   // Seeds
   | "wild_seed"
   // Phase 2 - Clay Tier
-  | "clay";
+  | "clay"
+  | "shaped_clay_pot"
+  | "fired_clay_pot"
+  | "sealed_clay_jar"
+  | "crucible";
 
 export type SkillId =
   | "foraging"
@@ -52,7 +56,9 @@ export type BuildingId =
   | "camp_fire"
   | "palm_leaf_pile"
   | "drying_rack"
-  | "fenced_perimeter";
+  | "fenced_perimeter"
+  | "firing_pit"
+  | "kiln";
 
 export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
 
