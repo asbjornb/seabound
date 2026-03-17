@@ -128,6 +128,13 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A fire-hardened bamboo spear. Good for fishing.",
     category: "tool",
   },
+  // Weaving
+  woven_basket: {
+    id: "woven_basket",
+    name: "Woven Basket",
+    description: "A sturdy palm-frond basket. Stores small crafted items and tools.",
+    category: "structure",
+  },
   // Cooked food
   cooked_fish: {
     id: "cooked_fish",

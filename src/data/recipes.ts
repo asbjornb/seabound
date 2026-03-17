@@ -107,6 +107,25 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Weaving
+  // ═══════════════════════════════════════
+  {
+    id: "weave_basket",
+    name: "Weave Basket",
+    description: "Weave palm fronds and cordage into a storage basket. Each basket holds a few extra small items.",
+    skillId: "weaving",
+    inputs: [
+      { resourceId: "palm_frond", amount: 5 },
+      { resourceId: "cordage", amount: 2 },
+    ],
+    output: { resourceId: "woven_basket", amount: 1 },
+    durationMs: 10000,
+    requiredSkillLevel: 2,
+    repeatable: true,
+    xpGain: 15,
+  },
+
+  // ═══════════════════════════════════════
   // Settlement Building Recipes
   // ═══════════════════════════════════════
   {

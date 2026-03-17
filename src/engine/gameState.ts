@@ -86,6 +86,9 @@ export function getResource(state: GameState, id: string): number {
 /** Default per-item storage limit before any building bonuses. */
 export const BASE_STORAGE_LIMIT = 10;
 
+/** Categories that woven baskets can boost (non-food small items). */
+const BASKET_BONUS_CATEGORIES: Set<string> = new Set(["processed", "tool"]);
+
 /** Get the storage limit for a specific resource, accounting for building bonuses. */
 export function getStorageLimit(state: GameState, resourceId: string): number {
   const def = RESOURCES[resourceId];
@@ -101,6 +104,10 @@ export function getStorageLimit(state: GameState, resourceId: string): number {
         }
       }
     }
+  }
+  // Woven baskets: +1 storage per basket for small non-food items
+  if (BASKET_BONUS_CATEGORIES.has(def.category)) {
+    limit += state.resources["woven_basket"] ?? 0;
   }
   return limit;
 }
