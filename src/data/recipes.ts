@@ -215,6 +215,47 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Maritime — Raft
+  // ═══════════════════════════════════════
+  {
+    id: "build_raft",
+    name: "Lash Log Raft",
+    description:
+      "Lash driftwood logs and bamboo together into a raft. Enough to reach nearby islands.",
+    skillId: "construction",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "driftwood_branch", amount: 6 },
+      { resourceId: "cordage", amount: 8 },
+      { resourceId: "bamboo_cane", amount: 4 },
+    ],
+    output: { resourceId: "raft", amount: 1 },
+    durationMs: 20000,
+    oneTimeCraft: true,
+    xpGain: 50,
+  },
+
+  // ═══════════════════════════════════════
+  // Obsidian Tools
+  // ═══════════════════════════════════════
+  {
+    id: "knap_obsidian_blade",
+    name: "Obsidian Blade",
+    description:
+      "Carefully knap obsidian into a razor-sharp blade. The best cutting tool before metal.",
+    skillId: "crafting",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "obsidian", amount: 2 },
+      { resourceId: "flat_stone", amount: 1 },
+    ],
+    output: { resourceId: "obsidian_blade", amount: 1 },
+    durationMs: 8000,
+    oneTimeCraft: true,
+    xpGain: 25,
+  },
+
+  // ═══════════════════════════════════════
   // Fire-dependent recipes (require camp_fire building)
   // ═══════════════════════════════════════
   {

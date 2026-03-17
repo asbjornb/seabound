@@ -160,6 +160,32 @@ export const RESOURCES: Record<string, ResourceDef> = {
     category: "food",
   },
 
+  // Maritime
+  raft: {
+    id: "raft",
+    name: "Log Raft",
+    description:
+      "A lashed-together log raft. Seaworthy enough to reach nearby islands.",
+    category: "structure",
+    size: "large",
+  },
+
+  // Obsidian
+  obsidian: {
+    id: "obsidian",
+    name: "Obsidian",
+    description:
+      "Sharp, glassy volcanic stone. Excellent for knapping into blades.",
+    category: "raw",
+  },
+  obsidian_blade: {
+    id: "obsidian_blade",
+    name: "Obsidian Blade",
+    description:
+      "A razor-sharp knapped obsidian blade. The finest cutting tool before metal.",
+    category: "tool",
+  },
+
   // Seeds
   wild_seed: {
     id: "wild_seed",

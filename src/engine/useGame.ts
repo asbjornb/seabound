@@ -222,6 +222,10 @@ export function useGame() {
   const startExpedition = useCallback(
     (expedition: ExpeditionDef) => {
       setState((prev) => {
+        // Check vessel requirement
+        if (expedition.requiredVessel && getResource(prev, expedition.requiredVessel) < 1) {
+          return prev;
+        }
         // Check food costs
         if (expedition.foodCost && getTotalFood(prev) < expedition.foodCost) {
           return prev;
@@ -348,6 +352,8 @@ export function useGame() {
 
   // Filter expeditions by visibility rules
   const availableExpeditions = EXPEDITIONS.filter((exp) => {
+    // Must own the required vessel to see this expedition
+    if (exp.requiredVessel && getResource(state, exp.requiredVessel) < 1) return false;
     // Must have discovered required biomes to see this expedition
     if (exp.requiredBiomes) {
       for (const req of exp.requiredBiomes) {

@@ -31,6 +31,11 @@ export type ResourceId =
   | "cooked_large_fish"
   // Seeds
   | "wild_seed"
+  // Maritime
+  | "raft"
+  // Obsidian
+  | "obsidian"
+  | "obsidian_blade"
   // Phase 2 - Clay Tier
   | "clay"
   | "shaped_clay_pot"
@@ -50,7 +55,7 @@ export type SkillId =
   | "navigation"
   | "preservation";
 
-export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_interior";
+export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_interior" | "nearby_island";
 
 export type BuildingId =
   | "camp_fire"
