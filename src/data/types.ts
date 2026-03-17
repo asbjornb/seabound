@@ -63,7 +63,8 @@ export type BuildingId =
   | "drying_rack"
   | "fenced_perimeter"
   | "firing_pit"
-  | "kiln";
+  | "kiln"
+  | "fiber_loom";
 
 export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
 
@@ -107,7 +108,7 @@ export interface Drop {
 export type MilestoneEffect =
   | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
   | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster
-  | { type: "double_output"; chance: number }; // e.g. 0.05 = 5% chance to double craft output
+  | { type: "double_output"; chance: number; recipeId?: string }; // e.g. 0.05 = 5% chance to double craft output; recipeId scopes to one recipe
 
 export interface SkillMilestone {
   level: number;

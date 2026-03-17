@@ -212,7 +212,7 @@ function applyCraftCompletion(
 
     // Double output milestone check
     const skill = state.skills[def.skillId];
-    const doubleChance = getDoubleOutputChance(def.skillId, skill.level);
+    const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
     if (doubleChance > 0 && Math.random() < doubleChance) {
       outputAmount *= 2;
     }

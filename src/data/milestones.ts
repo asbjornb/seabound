@@ -72,6 +72,24 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  preservation: [
+    {
+      level: 3,
+      description: "Sun-dried mastery — 50% chance to double drying output",
+      effects: [
+        { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
+      ],
+    },
+  ],
+  crafting: [
+    {
+      level: 5,
+      description: "Rope hand — 15% chance to twist extra cordage",
+      effects: [
+        { type: "double_output", chance: 0.3, recipeId: "twist_cordage" },
+      ],
+    },
+  ],
   weaving: [
     {
       level: 2,
@@ -152,7 +170,8 @@ export function getDropChanceBonus(
  */
 export function getDoubleOutputChance(
   skillId: SkillId,
-  skillLevel: number
+  skillLevel: number,
+  recipeId?: string
 ): number {
   const milestones = AUTHORED_MILESTONES[skillId] ?? [];
   let chance = 0;
@@ -160,6 +179,8 @@ export function getDoubleOutputChance(
     if (m.level > skillLevel || !m.effects) continue;
     for (const e of m.effects) {
       if (e.type === "double_output") {
+        // If the effect specifies a recipeId, only apply to that recipe
+        if (e.recipeId && e.recipeId !== recipeId) continue;
         chance += e.chance;
       }
     }
