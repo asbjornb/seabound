@@ -25,4 +25,12 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Faster fiber drying, dried fish, cured hide",
     storageBonus: [{ category: "processed", amount: 20 }],
   },
+  fenced_perimeter: {
+    id: "fenced_perimeter",
+    name: "Fenced Perimeter",
+    description:
+      "A bamboo fence around camp. Keeps things organized and critters out.",
+    unlocks: "More room for baskets and other bulky crafts",
+    storageBonus: [{ category: "structure", amount: 10 }],
+  },
 };

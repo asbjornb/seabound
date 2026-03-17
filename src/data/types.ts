@@ -46,7 +46,8 @@ export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_inter
 export type BuildingId =
   | "camp_fire"
   | "palm_leaf_pile"
-  | "drying_rack";
+  | "drying_rack"
+  | "fenced_perimeter";
 
 export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
 
