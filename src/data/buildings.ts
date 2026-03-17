@@ -49,4 +49,12 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Crucibles, bricks, advanced pottery",
     storageBonus: [{ category: "processed", amount: 15 }],
   },
+  fiber_loom: {
+    id: "fiber_loom",
+    name: "Fiber Loom",
+    description:
+      "A simple bamboo frame for braiding fibers into cordage more efficiently.",
+    unlocks: "Braid cordage — better fiber-to-cordage ratio",
+    storageBonus: [{ category: "processed", amount: 10 }],
+  },
 };

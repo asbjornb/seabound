@@ -63,7 +63,8 @@ export type BuildingId =
   | "drying_rack"
   | "fenced_perimeter"
   | "firing_pit"
-  | "kiln";
+  | "kiln"
+  | "fiber_loom";
 
 export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
 

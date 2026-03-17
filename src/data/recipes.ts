@@ -85,6 +85,19 @@ export const RECIPES: RecipeDef[] = [
     repeatable: true,
     xpGain: 10,
   },
+  {
+    id: "braid_cordage",
+    name: "Braid Cordage",
+    description: "Braid fibers on the loom into strong, even cordage.",
+    skillId: "weaving",
+    inputs: [{ resourceId: "dried_fiber", amount: 2 }],
+    output: { resourceId: "cordage", amount: 2 },
+    durationMs: 8000,
+    requiredBuildings: ["fiber_loom"],
+    requiredSkillLevel: 5,
+    repeatable: true,
+    xpGain: 15,
+  },
 
   // ═══════════════════════════════════════
   // PHASE 1b — Fire Chain
@@ -212,6 +225,24 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 10000,
     requiredSkillLevel: 2,
     xpGain: 25,
+  },
+
+  {
+    id: "build_fiber_loom",
+    name: "Fiber Loom",
+    description:
+      "Lash together a simple bamboo frame for braiding fibers into cordage.",
+    skillId: "weaving",
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 4 },
+      { resourceId: "cordage", amount: 3 },
+      { resourceId: "palm_frond", amount: 2 },
+    ],
+    output: { resourceId: "bamboo_cane", amount: 0 }, // placeholder
+    buildingOutput: "fiber_loom",
+    requiredSkillLevel: 4,
+    durationMs: 10000,
+    xpGain: 30,
   },
 
   // ═══════════════════════════════════════
