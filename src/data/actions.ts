@@ -108,6 +108,22 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "bamboo_grove",
     xpGain: 8,
   },
+  // ═══════════════════════════════════════
+  // PHASE 2 — Clay Tier (requires jungle_interior biome)
+  // ═══════════════════════════════════════
+
+  {
+    id: "dig_clay",
+    name: "Dig Clay",
+    description: "Dig clay from the riverbank deposits in the jungle interior.",
+    skillId: "foraging",
+    durationMs: 5000,
+    drops: [{ resourceId: "clay", amount: 1 }],
+    requiredBiome: "jungle_interior",
+    requiredSkillLevel: 5,
+    xpGain: 12,
+  },
+
   // Fishing (spear tier)
   {
     id: "spear_fish",

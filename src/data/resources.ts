@@ -166,4 +166,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A small seed found in dry grass. The start of farming.",
     category: "raw",
   },
+
+  // Phase 2 - Clay Tier
+  clay: {
+    id: "clay",
+    name: "Clay",
+    description: "Wet riverbank clay. Can be shaped and fired into useful items.",
+    category: "raw",
+  },
 };

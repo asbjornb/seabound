@@ -12,6 +12,13 @@ function canAfford(exp: ExpeditionDef, state: GameState): boolean {
   return getTotalFood(state) >= exp.foodCost;
 }
 
+function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
+  const biomes = exp.outcomes
+    .filter((o) => o.biomeDiscovery)
+    .map((o) => o.biomeDiscovery!);
+  return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+}
+
 export function ExpeditionPanel({
   expeditions,
   state,
@@ -33,6 +40,7 @@ export function ExpeditionPanel({
       </div>
       {expeditions.map((exp) => {
         const affordable = canAfford(exp, state);
+        const unfound = undiscoveredBiomeCount(exp, state);
         return (
           <div
             key={exp.id}
@@ -46,6 +54,11 @@ export function ExpeditionPanel({
               </span>
             </div>
             <div className="action-desc">{exp.description}</div>
+            {unfound > 0 && (
+              <div className="action-desc" style={{ fontStyle: "italic" }}>
+                {unfound} undiscovered {unfound === 1 ? "area" : "areas"} remaining
+              </div>
+            )}
             {exp.foodCost != null && exp.foodCost > 0 && (
               <div className="action-requires">
                 Cost:{" "}

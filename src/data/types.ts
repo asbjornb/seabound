@@ -30,7 +30,9 @@ export type ResourceId =
   | "cooked_crab"
   | "cooked_large_fish"
   // Seeds
-  | "wild_seed";
+  | "wild_seed"
+  // Phase 2 - Clay Tier
+  | "clay";
 
 export type SkillId =
   | "foraging"
@@ -141,6 +143,8 @@ export interface ExpeditionDef {
   durationMs: number;
   foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
   requiredVessel?: ResourceId;
+  requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
+  hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
   outcomes: ExpeditionOutcome[];
   xpGain: number;
 }
