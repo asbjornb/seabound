@@ -4,34 +4,38 @@
 
 ## IMPLEMENTATION STATUS
 
-*Last updated: 2026-03-16*
+*Last updated: 2026-03-17*
 
 ### What's Built
 
-- **Phase 0 gameplay loop** — All beach gathering actions (coconuts, driftwood, stones, vine, palm fronds, tidal pool wading). Coconut grove and bamboo grove as discoverable biomes via scouting expeditions.
-- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, fiber/cordage chain, bamboo knife, shell scraper, bow drill kit.
-- **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened tools (spear, digging stick).
-- **Settlement buildings** — Camp Fire, Palm Leaf Pile, Drying Rack. Buildings gate recipes/actions and grant storage bonuses.
+- **Phase 0 gameplay loop** — Beach gathering actions (coconuts, driftwood, stones, palm fronds, tidal pool wading). Coconut grove and bamboo grove as discoverable biomes via scouting expeditions (coconut grove discovered first, bamboo grove requires it).
+- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, coconut husk fiber/cordage chain, bamboo knife, bow drill kit.
+- **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened spear.
+- **Settlement buildings** — Camp Fire, Palm Leaf Pile, Drying Rack, Fenced Perimeter. Buildings gate recipes/actions and grant storage bonuses.
 - **Expedition system** — Scout the Island with RNG biome discovery (coconut grove, bamboo grove). Auto-repeating with food cost (5 food per trip, drawn from any food resource). Navigation XP on completion.
 - **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers) + auto-generated unlock previews from skill-gated actions/recipes.
-- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food).
+- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food, Fenced Perimeter +10 structure).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
-- **Gradual unlocks** — Early actions gated behind biome discovery (palm fronds/vines require coconut grove) and skill levels (beach stones at Foraging 2, dry tinder at Foraging 3).
-- **9 skills** — Foraging, Fishing, Woodworking, Crafting, Weaving, Construction, Farming, Navigation, Preservation.
+- **Gradual unlocks** — Early actions gated behind biome discovery (palm fronds require coconut grove) and skill levels (beach stones at Foraging 2, dry grass at Foraging 3).
+- **10 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation, Preservation.
+- **Weaving recipes** — Weave Basket (palm fronds + cordage → woven basket).
+- **Cooking recipes** — Cook Fish, Cook Crab (require camp fire).
 - **Offline progress** — All action types progress while away.
 - **Save/load** — With migration support for old save formats.
 
 ### What's Next
 
 - Shell adze (needs large_shell drops)
+- Shell scraper recipe
+- Digging stick (fire-hardened tool, gates farming)
 - Farming system (cleared plots, planting, semi-idle set-and-claim)
 - Phase 2 fishing tiers (drop line, basket trap, stone weir)
 - Jungle interior expedition (food/water costs, basalt/clay/crop discoveries)
 - Stone tools chain (knapping: chert → flakes → blades → points)
-- More settlement buildings (Stone Hearth, Woven Basket, Smoking Rack, Workbench)
+- More settlement buildings (Stone Hearth, Smoking Rack, Workbench)
 - Find a downstream use for shell beads (currently crafting XP sink — candidates: Shell Necklace craft, expedition trade good, building decoration)
-- More authored skill milestones (Fishing and Foraging have hand-crafted ones now)
-- Weaving and Construction skill actions
+- More authored skill milestones (Fishing, Foraging, and Weaving have hand-crafted ones now)
+- More Weaving and Construction skill actions
 - Navigation effects on expedition odds
 - Maritime vessel chain (raft → dugout → outrigger → sailing canoe)
 
@@ -101,6 +105,7 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 | **Fishing** | All fishing methods — wading, spearing, lines, traps, nets |
 | **Woodworking** | Working with bamboo and wood — harvesting, shaping, splitting, felling |
 | **Crafting** | General tool-making, lashing, assembly, knapping, pottery shaping |
+| **Cooking** | Preparing food over fire — grilling, roasting, boiling |
 | **Weaving** | Mats, baskets, traps, nets, cloth, sail |
 | **Construction** | Structures, buildings, platforms, stone-work |
 | **Farming** | Plot clearing, planting, tending, harvesting, seed saving |
@@ -120,7 +125,9 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 - Reduction of bad-weather risk on long voyages
 - Chance of finding multiple things on a single expedition
 
-**Smithing** unlocks when the player acquires ore (found via water expeditions) and builds a crucible. It's a full mid-to-late game skill arc with its own progression: copper → bronze → iron.
+**Cooking** is a separate skill from Preservation. Cooking covers preparing food over fire (grilling, roasting, boiling). Preservation covers drying, smoking, fermenting, and sealing — the food-longevity skills. Both require fire access but serve different purposes.
+
+**Smithing** unlocks when the player acquires ore (found via water expeditions) and builds a crucible. It's a full mid-to-late game skill arc with its own progression: copper → bronze → iron. Not yet in the code as a skill.
 
 ---
 
@@ -154,22 +161,22 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 
 **Available actions from the start:**
 
-| Action | Skill | Drops |
-|---|---|---|
-| Gather fallen coconuts | Foraging | Coconut ×1–2, Coconut husk (chance) |
-| Collect driftwood | Foraging | Driftwood branch ×1–2 |
-| Collect beach stone | Foraging | Round stone ×1, Flat stone (chance) |
-| Collect vine | Foraging | Vine length ×2–3 |
-| Collect palm frond | Foraging | Palm frond ×2–3 |
-| Wade tidal pool | Fishing | Small fish ×0–1, Crab ×0–1, Shell ×1 |
+| Action | Skill | Drops | Gate |
+|---|---|---|---|
+| Gather fallen coconuts | Foraging | Coconut ×1, Coconut husk (40% chance) | Coconut grove biome |
+| Collect driftwood | Foraging | Driftwood branch ×1 | — |
+| Collect beach stone | Foraging | Flat stone (25% chance) | Foraging 2 |
+| Collect palm frond | Foraging | Palm frond ×2 | Coconut grove biome |
+| Collect dry grass | Foraging | Dry grass ×1, Wild seed (unlocked by milestone) | Foraging 3 |
+| Wade tidal pool | Fishing | Small fish (10%), Crab (10%), Shell ×1 | — |
 
 > Note: Driftwood drops only branches in the early game. Planks are not available until woodworking skills and tools allow splitting timber — the question of whether wreckage or other human-origin material exists is deferred.
 
 **First expedition available immediately:**
 
-> **[Expedition] Scout the island** — very short, no food/water cost, always available.
-> RNG outcome — may return: Bamboo Grove discovered, or just: beach stones, vine, nothing useful.
-> Repeat until bamboo grove found. This teaches the player that exploration is probabilistic.
+> **[Expedition] Scout the island** — short trip, costs 5 food per trip.
+> RNG outcomes — may discover: Coconut Grove (found first), then Bamboo Grove (requires coconut grove already discovered), or just: flat stones, nothing useful.
+> Repeat to discover biomes. Coconut grove must be found before bamboo grove can appear. This teaches the player that exploration is probabilistic.
 
 ---
 
@@ -181,28 +188,29 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 
 | Action | Skill | Drops |
 |---|---|---|
-| Harvest bamboo cane | Woodworking | Bamboo cane ×1–2; node section (WW 5+) |
-| Strip green bamboo | Woodworking | Bamboo strip ×3–4 |
+| Harvest bamboo cane | Woodworking | Bamboo cane ×1 |
 
 **Crafting: first tools**
 
 | Recipe | Skill Req | Inputs | Output | Triggers |
 |---|---|---|---|---|
-| Split bamboo cane | Woodworking 1 | Bamboo cane ×1 | Bamboo splinter ×2 | Unlocks: strip fibrous bark, cut vine |
-| Bamboo knife | Crafting 2 | Bamboo splinter ×1, Vine ×2 | Bamboo knife | Unlocks: faster fiber stripping, hide processing slot |
-| Shell scraper | Crafting 1 | Flat stone ×1, Shell ×1 | Shell scraper | Unlocks: bark scraping |
-| Shell adze | Crafting 8 | Large shell ×1, Branch ×1, Cordage ×1 | Shell adze | Unlocks: rough woodworking, hollowing |
+| Split bamboo cane | Woodworking 1 | Bamboo cane ×1 | Bamboo splinter ×2 | — |
+| Bamboo knife | Crafting 2 | Bamboo splinter ×1, Rough fiber ×2 | Bamboo knife | One-time craft |
+| Shell beads | Crafting | Shell ×3 | Shell bead ×1 | XP sink (repeatable) |
+
+> Shell scraper and shell adze are designed but not yet implemented.
 
 **Fiber and cordage chain:**
 
 | Action / Recipe | Skill | Inputs | Output |
 |---|---|---|---|
-| Strip fibrous bark | Foraging | Bamboo splinter (in inventory) | Rough fiber ×2–3 |
-| Roll fiber | Crafting | Rough fiber ×3 | Rough cordage ×1 |
-| Dry fiber | Preservation | Rough fiber | Dried fiber (on drying rack) |
-| Twist dried fiber | Crafting + Weaving | Dried fiber ×2 | Cordage ×1 |
+| Shred coconut husk | Crafting | Coconut husk ×1 | Rough fiber ×1 |
+| Dry fiber | Preservation | Rough fiber ×2 | Dried fiber ×2 (requires drying rack) |
+| Twist cordage | Crafting | Dried fiber ×2 | Cordage ×1 |
 
 Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, and construction.
+
+> Note: The doc previously described a "strip fibrous bark" action and a "rough cordage" intermediate step. The implemented chain is simpler: coconut husk → rough fiber → dried fiber → cordage. There is no vine resource, rough cordage, or bark stripping action.
 
 ---
 
@@ -212,24 +220,23 @@ Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, 
 
 | Step | Skill Req | Inputs | Output |
 |---|---|---|---|
-| Collect dry tinder | Foraging 2 | — | Coconut husk fiber, Dry grass |
-| Craft bow drill kit | Crafting 2 | Bamboo cane, Branch, Rough cordage, Flat stone | Bow drill kit |
-| Light fire | Crafting 2 | Bow drill kit + tinder | **Camp Fire** (settlement building) |
-
-Success rate scales with Crafting level — the tooltip says so, teaching the skill system.
+| Collect dry grass | Foraging 3 | — | Dry grass ×1 |
+| Craft bow drill kit | Crafting 2 | Bamboo cane ×1, Driftwood branch ×1, Cordage ×1, Flat stone ×1 | Bow drill kit (one-time craft) |
+| Light camp fire | Crafting 2 | Bow drill kit ×1, Coconut husk ×2, Dry grass ×2, Driftwood branch ×3 | **Camp Fire** (settlement building) |
 
 **Camp Fire unlocks (item-trigger):**
-- Cook food
-- Harden bamboo tip (fire-hardening action)
-- Smoke food (requires Smoking Rack later)
+- Cook fish / Cook crab (Cooking skill)
+- Fire-harden bamboo tip (spear)
+- Smoke food (requires Smoking Rack — not yet built)
 - New crafting recipes requiring fire access
 
 **Fire-hardened tools:**
 
 | Recipe | Inputs | Output | Triggers |
 |---|---|---|---|
-| Fire-hardened spear | Bamboo cane ×2 + fire | Bamboo spear | Spear fishing action |
-| Fire-hardened digging stick | Bamboo ×1 + fire | Digging stick | Dig clay, till soil |
+| Bamboo spear | Bamboo cane ×2 + camp fire | Bamboo spear (one-time craft) | Spear fishing action |
+
+> Digging stick is designed but not yet implemented.
 
 ---
 
@@ -267,15 +274,16 @@ Camp Fire  →  Stone Hearth  →  Cooking Hearth
 
 ### Storage Tier
 ```
-Palm Leaf Pile  →  Woven Basket  →  Raised Cache  →  Storage Hut
+Palm Leaf Pile  →  Fenced Perimeter  →  Woven Basket  →  Raised Cache  →  Storage Hut
 ```
 
 | Building | Unlock | Capacity / Notes |
 |---|---|---|
-| Palm Leaf Pile | Start | Small, degrades in rain events |
-| Woven Basket | Weaving 5 | Medium, type-sorted, weather resistant |
-| Raised Cache | Construction 10 | Larger, off-ground, rain proof |
-| Storage Hut | Construction 25 | Large, fully weatherproof |
+| Palm Leaf Pile | Construction (palm frond ×8, driftwood ×2) | +20 raw item storage |
+| Fenced Perimeter | Construction 2 (bamboo cane ×6, cordage ×4, driftwood ×3) | +10 structure storage |
+| Woven Basket | Weaving 5 *(not yet built)* | Medium, type-sorted, weather resistant |
+| Raised Cache | Construction 10 *(not yet built)* | Larger, off-ground, rain proof |
+| Storage Hut | Construction 25 *(not yet built)* | Large, fully weatherproof |
 
 ---
 
@@ -283,7 +291,7 @@ Palm Leaf Pile  →  Woven Basket  →  Raised Cache  →  Storage Hut
 
 | Building | Unlock Req | Enables |
 |---|---|---|
-| Drying Rack | Crafting 5, Woodworking 5 | Dried fiber, dried fish, cured hide |
+| Drying Rack | Crafting (bamboo cane ×4, palm frond ×4) | Dried fiber, dried fish, cured hide |
 | Smoking Rack | Crafting 8 + Hearth | Smoked fish/meat — long-duration expedition food |
 | Clay Pit | Clay deposit found via expedition | Dig clay action |
 | Firing Pit | Construction 12 | Basic pottery |
@@ -446,35 +454,41 @@ High Navigation means you find things faster and better — not that you can go 
 ```
 PHASE 0: BARE HANDS
 │
-├── Forage: coconuts, driftwood branches, beach stones, vine, palm fronds
+├── Forage: coconuts (coconut grove), driftwood branches, beach stones (Foraging 2),
+│           palm fronds (coconut grove), dry grass (Foraging 3)
 ├── Wade tidal pool
-└── [Expedition] Scout island (RNG — keep trying until bamboo grove found)
+└── [Expedition] Scout island (5 food cost — discover coconut grove first, then bamboo grove)
     │
     ▼
 PHASE 1: BAMBOO TIER
 │
-├── Harvest bamboo cane → Split → Bamboo splinter [ITEM TRIGGER: new actions]
-├── Strip fibrous bark → Roll/Twist → Cordage
-├── Bamboo knife [ITEM TRIGGER: faster stripping, hide slot]
-├── Shell scraper, Shell adze
+├── Harvest bamboo cane → Split → Bamboo splinter
+├── Shred coconut husk → Rough fiber → Dry fiber (drying rack) → Twist → Cordage
+├── Bamboo knife (bamboo splinter + rough fiber)
+├── Shell beads (shells → beads, crafting XP)
+├── Weave basket (palm fronds + cordage → woven basket)
 │
 ├── FIRE CHAIN (parallel)
-│   ├── Collect dry tinder (Foraging 2)
-│   ├── Craft bow drill kit → Light fire → Camp Fire [ITEM TRIGGER: cook, harden, smoke]
-│   ├── Fire-hardened spear [ITEM TRIGGER: spear fishing]
-│   └── Fire-hardened digging stick [ITEM TRIGGER: dig clay, till soil]
+│   ├── Collect dry grass (Foraging 3)
+│   ├── Craft bow drill kit → Light camp fire → Camp Fire [BUILDING: cook, harden]
+│   └── Bamboo spear [ITEM TRIGGER: spear fishing]
+│
+├── SETTLEMENT (parallel)
+│   ├── Palm leaf pile (+20 raw storage)
+│   ├── Drying rack (gates fiber drying)
+│   └── Fenced perimeter (+10 structure storage)
 │
 └── FISHING (parallel, ongoing)
     ├── Spear fish (spear crafted)
-    ├── Drop line (Fishing 8 + gorge hook crafted)
-    ├── Basket trap (Fishing 10 + Weaving 15) ← SEMI-IDLE: set and claim
-    └── Stone weir (Fishing 20 + Construction 25) ← SEMI-IDLE: set and claim
+    ├── Drop line (Fishing 8 + gorge hook crafted) ← NOT YET BUILT
+    ├── Basket trap (Fishing 10 + Weaving 15) ← NOT YET BUILT
+    └── Stone weir (Fishing 20 + Construction 25) ← NOT YET BUILT
     │
     ▼
-PHASE 2: SETTLEMENT
+PHASE 2: SETTLEMENT (future)
 │
 ├── Camp Fire → Stone Hearth → Cooking Hearth
-├── Storage: Palm pile → Basket → Raised cache → Hut
+├── Storage: Palm pile → Fenced perimeter → Basket → Raised cache → Hut
 ├── Drying rack → Smoking rack (preserved food for expeditions)
 ├── Workbench, Bone station, Loom frame
 │
