@@ -24,7 +24,9 @@ export type ResourceId =
   | "shell_bead"
   // Food
   | "cooked_fish"
-  | "cooked_crab";
+  | "cooked_crab"
+  // Seeds
+  | "wild_seed";
 
 export type SkillId =
   | "foraging"

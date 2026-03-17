@@ -135,4 +135,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "Roasted crab. Tasty and filling.",
     category: "food",
   },
+
+  // Seeds
+  wild_seed: {
+    id: "wild_seed",
+    name: "Wild Seed",
+    description: "A small seed found in dry grass. The start of farming.",
+    category: "raw",
+  },
 };

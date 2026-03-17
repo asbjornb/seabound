@@ -51,8 +51,8 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 5,
   },
   {
-    id: "collect_dry_tinder",
-    name: "Collect Dry Tinder",
+    id: "collect_dry_grass",
+    name: "Collect Dry Grass",
     description: "Gather dry grass for fire-starting.",
     skillId: "foraging",
     durationMs: 4000,
