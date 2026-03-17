@@ -28,7 +28,9 @@ export type ResourceId =
   | "cooked_fish"
   | "cooked_crab"
   // Seeds
-  | "wild_seed";
+  | "wild_seed"
+  // Phase 2 - Clay Tier
+  | "clay";
 
 export type SkillId =
   | "foraging"

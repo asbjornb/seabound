@@ -1,3 +1,4 @@
+import { EXPEDITIONS } from "../data/expeditions";
 import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood } from "../engine/gameState";
 
@@ -17,6 +18,15 @@ export function ExpeditionPanel({
   state,
   onStart,
 }: Props) {
+  // Count total discoverable biomes from expedition outcomes (plus beach)
+  const allBiomes = new Set(["beach"]);
+  for (const exp of EXPEDITIONS) {
+    for (const o of exp.outcomes) {
+      if (o.biomeDiscovery) allBiomes.add(o.biomeDiscovery);
+    }
+  }
+  const undiscoveredCount = allBiomes.size - state.discoveredBiomes.length;
+
   return (
     <div>
       <div className="section-title">Discovered Areas</div>
@@ -27,6 +37,11 @@ export function ExpeditionPanel({
           </span>
         ))}
       </div>
+      {undiscoveredCount > 0 && (
+        <div className="action-desc" style={{ marginTop: 4, fontStyle: "italic" }}>
+          {undiscoveredCount} undiscovered {undiscoveredCount === 1 ? "area" : "areas"} remaining…
+        </div>
+      )}
 
       <div className="section-title" style={{ marginTop: 16 }}>
         Expeditions
