@@ -6,9 +6,7 @@ Tech: TypeScript, React 19, Vite 6. Run `npm run dev` to start, `npm run build` 
 
 ## Docs
 
-- `GAME-REFERENCE.md` — Game balance reference: skills, actions, recipes, resources, buildings, biomes, progression flow
 - `seabound-progression-v2.md` — Full progression design document with implementation status and mechanic specs
-- `diary.md` — Development diary with session notes and design decisions
 
 ## Key Paths
 
