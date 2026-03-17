@@ -35,7 +35,7 @@
 
 - Digging stick (fire-hardened tool, gates farming)
 - Farming system (cleared plots, planting, semi-idle set-and-claim)
-- Phase 2 fishing tiers (drop line, basket trap, stone weir)
+- Phase 2 fishing tiers: stone weir (Fishing 20 + Construction 25), net fishing (Fishing 40 + Weaving 35)
 - More settlement buildings (Stone Hearth, Smoking Rack, Workbench)
 - More authored skill milestones
 - More Weaving and Construction skill actions
@@ -263,12 +263,21 @@ Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, 
 
 | Tier | Action | Gates | Key Feature |
 |---|---|---|---|
+<<<<<<< HEAD
+| 1 | Wade tidal pool | None | Available from start. Low yield. |
+| 2 | Spear fish | Bamboo spear (crafted) | Better yield, larger fish possible |
+| 3 | Drop line | Fishing 8 + Gorge hook crafted | Better large fish yield ✅ |
+| 4 | Basket trap | Fishing 10 + Weaving 15 + trap crafted | Bulk catch with crab bonus ✅ |
+| 5 | Stone tidal weir | Fishing 20 + Construction 25 | **Semi-idle: set → timer → tap to collect** |
+| 6 | Net fishing | Fishing 40 + Weaving 35 + net crafted | Bulk catch, rare fish chance |
+=======
 | 1 | Wade tidal pool | None | Available from start. Low yield. ✅ |
 | 2 | Spear fish | Bamboo spear (crafted) | Better yield, large fish at Fishing 8 milestone. ✅ |
 | 3 | Drop line | Fishing 8 + Gorge hook crafted | Runs passively alongside other actions. *Not yet built.* |
 | 4 | Basket trap | Fishing 10 + Weaving 15 + trap crafted | **Semi-idle: set → timer → tap to collect.** *Not yet built.* |
 | 5 | Stone tidal weir | Fishing 20 + Construction 25 | **Semi-idle: set → timer → tap to collect.** *Not yet built.* |
 | 6 | Net fishing | Fishing 40 + Weaving 35 + net crafted | Bulk catch, rare fish chance. *Not yet built.* |
+>>>>>>> origin/main
 
 Both the basket trap and stone weir are semi-idle: set them, let the timer run, tap to collect. The weir is simply larger, more permanent, and higher yield — a major construction investment that pays off in volume.
 

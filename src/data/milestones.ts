@@ -46,6 +46,20 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "drop_chance", actionId: "spear_fish", resourceId: "large_fish", bonus: 0.05 },
       ],
     },
+    {
+      level: 12,
+      description: "Patient angler — drop line 15% faster",
+      effects: [
+        { type: "duration", actionId: "drop_line_fish", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 15,
+      description: "Deep water instinct — +10% large fish from drop line",
+      effects: [
+        { type: "drop_chance", actionId: "drop_line_fish", resourceId: "large_fish", bonus: 0.1 },
+      ],
+    },
   ],
   foraging: [
     {

@@ -41,6 +41,8 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   shaped_hull: "\u{1F6F6}",
   dugout: "\u{1F6F6}",
   fresh_water: "\u{1F4A7}",
+  gorge_hook: "\u{1FA9D}",
+  basket_trap: "\u{1FAA4}",
   clay: "\u{1F9F1}",
   shaped_clay_pot: "\u{1FAD9}",
   fired_clay_pot: "\u{1FAD9}",

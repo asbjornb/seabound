@@ -266,6 +266,23 @@ export const RESOURCES: Record<string, ResourceDef> = {
     category: "raw",
   },
 
+  // Fishing Tools
+  gorge_hook: {
+    id: "gorge_hook",
+    name: "Gorge Hook",
+    description:
+      "A carved shell hook tied to cordage. Set a line and wait for a bite.",
+    category: "tool",
+  },
+  basket_trap: {
+    id: "basket_trap",
+    name: "Basket Trap",
+    description:
+      "A woven bamboo fish trap. Submerge it and collect the catch later.",
+    category: "tool",
+    size: "large",
+  },
+
   // Phase 2 - Clay Tier
   clay: {
     id: "clay",
