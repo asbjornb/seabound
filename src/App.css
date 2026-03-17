@@ -200,8 +200,23 @@ body {
   gap: 4px;
 }
 
+.morale-chip {
+  cursor: pointer;
+}
+
 .morale-chip.low-morale {
   border-color: var(--accent);
+}
+
+.morale-tooltip {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
 }
 
 .morale-chip.low-morale .amount {
