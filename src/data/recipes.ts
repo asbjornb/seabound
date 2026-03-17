@@ -168,9 +168,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "cook_fish",
     name: "Cook Fish",
-    description: "Grill fish over the campfire.",
-    skillId: "crafting",
-    inputs: [{ resourceId: "small_fish", amount: 1 }],
+    description: "Grill fish over the campfire using driftwood as fuel.",
+    skillId: "cooking",
+    inputs: [
+      { resourceId: "small_fish", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
     output: { resourceId: "cooked_fish", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 3000,
@@ -180,9 +183,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "cook_crab",
     name: "Cook Crab",
-    description: "Roast crab over the fire.",
-    skillId: "crafting",
-    inputs: [{ resourceId: "crab", amount: 1 }],
+    description: "Roast crab over the fire using driftwood as fuel.",
+    skillId: "cooking",
+    inputs: [
+      { resourceId: "crab", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
     output: { resourceId: "cooked_crab", amount: 1 },
     requiredBuildings: ["camp_fire"],
     durationMs: 3000,
