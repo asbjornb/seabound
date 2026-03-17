@@ -22,6 +22,8 @@ export type ResourceId =
   | "bamboo_spear"
   // Crafted
   | "shell_bead"
+  // Weaving
+  | "woven_basket"
   // Food
   | "cooked_fish"
   | "cooked_crab"
@@ -45,7 +47,8 @@ export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_inter
 export type BuildingId =
   | "camp_fire"
   | "palm_leaf_pile"
-  | "drying_rack";
+  | "drying_rack"
+  | "fenced_perimeter";
 
 export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
 
@@ -67,6 +70,7 @@ export interface ResourceDef {
   name: string;
   description: string;
   category: ResourceCategory;
+  size?: "small" | "large"; // defaults to "small" if omitted
 }
 
 export interface SkillDef {

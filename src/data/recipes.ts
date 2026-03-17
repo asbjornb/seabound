@@ -107,6 +107,25 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Weaving
+  // ═══════════════════════════════════════
+  {
+    id: "weave_basket",
+    name: "Weave Basket",
+    description: "Weave palm fronds and cordage into a storage basket. Each basket holds a few extra small items.",
+    skillId: "weaving",
+    inputs: [
+      { resourceId: "palm_frond", amount: 5 },
+      { resourceId: "cordage", amount: 3 },
+    ],
+    output: { resourceId: "woven_basket", amount: 1 },
+    durationMs: 10000,
+    requiredSkillLevel: 2,
+    repeatable: true,
+    xpGain: 15,
+  },
+
+  // ═══════════════════════════════════════
   // Settlement Building Recipes
   // ═══════════════════════════════════════
   {
@@ -156,6 +175,24 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "drying_rack",
     durationMs: 8000,
     requiredSkillLevel: 5,
+    xpGain: 25,
+  },
+
+  {
+    id: "build_fenced_perimeter",
+    name: "Fenced Perimeter",
+    description:
+      "Build a bamboo fence around camp. More space to store baskets and bulky crafts.",
+    skillId: "construction",
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 6 },
+      { resourceId: "cordage", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 3 },
+    ],
+    output: { resourceId: "bamboo_cane", amount: 0 }, // placeholder
+    buildingOutput: "fenced_perimeter",
+    durationMs: 10000,
+    requiredSkillLevel: 2,
     xpGain: 25,
   },
 

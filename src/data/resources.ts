@@ -19,6 +19,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Driftwood Branch",
     description: "Sun-bleached wood washed ashore.",
     category: "raw",
+    size: "large",
   },
   flat_stone: {
     id: "flat_stone",
@@ -31,6 +32,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Palm Frond",
     description: "A large palm leaf. Shade, weaving, bedding.",
     category: "raw",
+    size: "large",
   },
   small_fish: {
     id: "small_fish",
@@ -64,6 +66,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Bamboo Cane",
     description: "A full bamboo cane. Versatile building and crafting material.",
     category: "raw",
+    size: "large",
   },
   bamboo_splinter: {
     id: "bamboo_splinter",
@@ -121,6 +124,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Bamboo Spear",
     description: "A fire-hardened bamboo spear. Good for fishing.",
     category: "tool",
+    size: "large",
+  },
+  // Weaving
+  woven_basket: {
+    id: "woven_basket",
+    name: "Woven Basket",
+    description: "A sturdy palm-frond basket. Stores small crafted items and tools.",
+    category: "structure",
   },
   // Cooked food
   cooked_fish: {
