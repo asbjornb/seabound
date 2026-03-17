@@ -365,6 +365,10 @@ export function useGame() {
     if (r.oneTimeCraft && r.output && getResource(state, r.output.resourceId) >= 1) {
       return false;
     }
+    // Hide recipes whose inputs include undiscovered resources
+    for (const inp of r.inputs) {
+      if (!state.discoveredResources.includes(inp.resourceId)) return false;
+    }
     return true;
   });
 
