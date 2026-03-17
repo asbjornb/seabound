@@ -117,9 +117,9 @@ export function getStorageLimit(state: GameState, resourceId: string): number {
       }
     }
   }
-  // Woven baskets: +1 storage per basket for small non-food items (but not for baskets themselves)
+  // Woven baskets: +1 storage per basket for small non-food, non-structure items
   const size = def.size ?? "small";
-  if (size === "small" && def.category !== "food" && resourceId !== "woven_basket") {
+  if (size === "small" && def.category !== "food" && def.category !== "structure") {
     limit += state.resources["woven_basket"] ?? 0;
   }
   return limit;
