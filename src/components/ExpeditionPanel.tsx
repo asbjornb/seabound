@@ -55,7 +55,7 @@ export function ExpeditionPanel({
             </div>
             <div className="action-desc">{exp.description}</div>
             {unfound > 0 && (
-              <div className="action-desc" style={{ fontStyle: "italic" }}>
+              <div className="action-desc" style={{ fontStyle: "italic", color: "#f0c040" }}>
                 {unfound} undiscovered {unfound === 1 ? "area" : "areas"} remaining
               </div>
             )}
