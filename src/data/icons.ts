@@ -21,7 +21,6 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   dry_grass: "\u{1F33E}",
   bow_drill_kit: "\u{1F525}",
   bamboo_spear: "\u{1F531}",
-  shell_bead: "\u{1F4FF}",
   woven_basket: "\u{1F9FA}",
   large_fish: "\u{1F3A3}",
   cooked_fish: "\u{1F35B}",
