@@ -357,8 +357,9 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["camp_fire"],
     inputs: [
       { resourceId: "large_log", amount: 1 },
-      { resourceId: "dry_grass", amount: 2 },
-      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "dry_grass", amount: 4 },
+      { resourceId: "coconut_husk", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 4 },
     ],
     output: { resourceId: "charred_log", amount: 1 },
     durationMs: 15000,
