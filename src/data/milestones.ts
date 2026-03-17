@@ -86,7 +86,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       level: 5,
       description: "Rope hand — 15% chance to twist extra cordage",
       effects: [
-        { type: "double_output", chance: 0.15, recipeId: "twist_cordage" },
+        { type: "double_output", chance: 0.3, recipeId: "twist_cordage" },
       ],
     },
   ],
