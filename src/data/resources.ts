@@ -186,6 +186,84 @@ export const RESOURCES: Record<string, ResourceDef> = {
     category: "tool",
   },
 
+  // Stone Tools
+  chert: {
+    id: "chert",
+    name: "Chert",
+    description: "A hard, fine-grained stone. Perfect for knapping into sharp edges.",
+    category: "raw",
+  },
+  stone_flake: {
+    id: "stone_flake",
+    name: "Stone Flake",
+    description: "A sharp flake struck from chert. Can be refined further.",
+    category: "processed",
+  },
+  stone_blade: {
+    id: "stone_blade",
+    name: "Stone Blade",
+    description: "A carefully knapped stone blade. Sharp and versatile.",
+    category: "processed",
+  },
+  hammerstone: {
+    id: "hammerstone",
+    name: "Hammerstone",
+    description: "A heavy stone shaped for striking. Essential for knapping.",
+    category: "tool",
+  },
+  shell_adze: {
+    id: "shell_adze",
+    name: "Shell Adze",
+    description: "A large shell lashed to a handle. Excellent for scraping and shaping wood.",
+    category: "tool",
+  },
+  stone_axe: {
+    id: "stone_axe",
+    name: "Stone Axe",
+    description: "A ground stone blade hafted with cordage. Can fell large trees.",
+    category: "tool",
+  },
+
+  // Timber
+  large_log: {
+    id: "large_log",
+    name: "Large Log",
+    description: "A felled tree trunk. Heavy and unwieldy, but essential for large construction.",
+    category: "raw",
+    size: "large",
+  },
+  charred_log: {
+    id: "charred_log",
+    name: "Charred Log",
+    description: "A log with its interior burned out. Ready to be scraped into a hull.",
+    category: "raw",
+    size: "large",
+  },
+  shaped_hull: {
+    id: "shaped_hull",
+    name: "Shaped Hull",
+    description: "A scraped-out log hull. Almost a canoe — just needs assembly.",
+    category: "processed",
+    size: "large",
+  },
+
+  // Maritime - Dugout
+  dugout: {
+    id: "dugout",
+    name: "Dugout Canoe",
+    description: "A proper canoe carved from a single log. Handles near-shore waters with ease.",
+    category: "structure",
+    size: "large",
+  },
+
+  // Water
+  fresh_water: {
+    id: "fresh_water",
+    name: "Fresh Water",
+    description: "Clean water collected from a jungle stream. Essential for long voyages.",
+    category: "processed",
+  },
+
   // Seeds
   wild_seed: {
     id: "wild_seed",

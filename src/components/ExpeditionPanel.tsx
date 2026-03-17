@@ -1,7 +1,7 @@
 import { BIOME_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { BiomeId, ExpeditionDef, GameState } from "../data/types";
-import { getTotalFood } from "../engine/gameState";
+import { getTotalFood, getTotalWater } from "../engine/gameState";
 
 interface Props {
   expeditions: ExpeditionDef[];
@@ -10,8 +10,9 @@ interface Props {
 }
 
 function canAfford(exp: ExpeditionDef, state: GameState): boolean {
-  if (!exp.foodCost) return true;
-  return getTotalFood(state) >= exp.foodCost;
+  if (exp.foodCost && getTotalFood(state) < exp.foodCost) return false;
+  if (exp.waterCost && getTotalWater(state) < exp.waterCost) return false;
+  return true;
 }
 
 function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
@@ -66,19 +67,34 @@ export function ExpeditionPanel({
                 Vessel: {RESOURCES[exp.requiredVessel]?.name ?? exp.requiredVessel}
               </div>
             )}
-            {exp.foodCost != null && exp.foodCost > 0 && (
+            {(exp.foodCost || exp.waterCost) && (
               <div className="action-requires">
                 Cost:{" "}
-                <span
-                  style={{
-                    color:
-                      getTotalFood(state) < exp.foodCost
-                        ? "#e74c3c"
-                        : undefined,
-                  }}
-                >
-                  {exp.foodCost} food ({getTotalFood(state)} available)
-                </span>
+                {exp.foodCost != null && exp.foodCost > 0 && (
+                  <span
+                    style={{
+                      color:
+                        getTotalFood(state) < exp.foodCost
+                          ? "#e74c3c"
+                          : undefined,
+                    }}
+                  >
+                    {exp.foodCost} food ({getTotalFood(state)} available)
+                  </span>
+                )}
+                {exp.foodCost && exp.waterCost && ", "}
+                {exp.waterCost != null && exp.waterCost > 0 && (
+                  <span
+                    style={{
+                      color:
+                        getTotalWater(state) < exp.waterCost
+                          ? "#e74c3c"
+                          : undefined,
+                    }}
+                  >
+                    {exp.waterCost} water ({getTotalWater(state)} available)
+                  </span>
+                )}
               </div>
             )}
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>

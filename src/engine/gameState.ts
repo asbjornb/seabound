@@ -173,6 +173,49 @@ export function getFoodValue(resourceId: string): number {
   return FOOD_VALUES.find((f) => f.id === resourceId)?.value ?? 0;
 }
 
+/** Water resources and their water value. */
+export const WATER_VALUES: { id: ResourceId; value: number }[] = [
+  { id: "fresh_water", value: 1 },
+];
+
+/** Total water value the player currently has. */
+export function getTotalWater(state: GameState): number {
+  return WATER_VALUES.reduce(
+    (sum, w) => sum + (state.resources[w.id] ?? 0) * w.value,
+    0
+  );
+}
+
+/** Deduct `amount` water value from inventory. Returns record of what was taken, or null if insufficient. */
+export function deductWater(state: GameState, amount: number): Record<string, number> | null {
+  if (getTotalWater(state) < amount) return null;
+  const taken: Record<string, number> = {};
+  let remaining = amount;
+  for (const w of WATER_VALUES) {
+    if (remaining <= 0) break;
+    const have = state.resources[w.id] ?? 0;
+    const canTake = Math.min(have, Math.floor(remaining / w.value));
+    if (canTake > 0) {
+      state.resources[w.id] = have - canTake;
+      taken[w.id] = canTake;
+      remaining -= canTake * w.value;
+    }
+  }
+  if (remaining > 0) {
+    for (const w of WATER_VALUES) {
+      if (remaining <= 0) break;
+      const have = state.resources[w.id] ?? 0;
+      if (have > 0 && w.value >= remaining) {
+        state.resources[w.id] = have - 1;
+        taken[w.id] = (taken[w.id] ?? 0) + 1;
+        remaining -= w.value;
+        break;
+      }
+    }
+  }
+  return remaining <= 0 ? taken : null;
+}
+
 /** Deduct `amount` food value from inventory, preferring low-value food first. Returns record of what was taken, or null if insufficient. */
 export function deductFood(state: GameState, amount: number): Record<string, number> | null {
   if (getTotalFood(state) < amount) return null;
