@@ -132,4 +132,23 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
   },
+  {
+    id: "dugout_voyage",
+    name: "Voyage by Dugout",
+    description:
+      "Paddle your dugout canoe beyond the near-shore waters. Who knows what you'll find? Costs 5 food and 3 water per trip.",
+    skillId: "navigation",
+    durationMs: 20000,
+    foodCost: 5,
+    waterCost: 3,
+    xpGain: 50,
+    requiredVessel: "dugout",
+    outcomes: [
+      {
+        weight: 1,
+        description:
+          "You paddle beyond the reef into open water. The horizon stretches endlessly. There's a whole world out there waiting to be explored... but not yet. You return home, satisfied with your new canoe's performance.",
+      },
+    ],
+  },
 ];

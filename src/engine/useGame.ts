@@ -16,9 +16,11 @@ import {
   addResource,
   createInitialState,
   deductFood,
+  deductWater,
   getMoraleDurationMultiplier,
   getResource,
   getTotalFood,
+  getTotalWater,
   loadGame,
   saveGame,
 } from "./gameState";
@@ -47,6 +49,11 @@ function refundCurrentAction(state: GameState) {
     );
     if (exp?.foodCost && state.currentAction.foodPaid) {
       for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
+        addResource(state, resId, amount);
+      }
+    }
+    if (exp?.waterCost && state.currentAction.waterPaid) {
+      for (const [resId, amount] of Object.entries(state.currentAction.waterPaid)) {
         addResource(state, resId, amount);
       }
     }
@@ -226,8 +233,11 @@ export function useGame() {
         if (expedition.requiredVessel && getResource(prev, expedition.requiredVessel) < 1) {
           return prev;
         }
-        // Check food costs
+        // Check food and water costs
         if (expedition.foodCost && getTotalFood(prev) < expedition.foodCost) {
+          return prev;
+        }
+        if (expedition.waterCost && getTotalWater(prev) < expedition.waterCost) {
           return prev;
         }
         const next = structuredClone(prev);
@@ -239,12 +249,20 @@ export function useGame() {
           if (!paid) return prev;
           foodPaid = paid;
         }
+        // Deduct water
+        let waterPaid: Record<string, number> | undefined;
+        if (expedition.waterCost) {
+          const paid = deductWater(next, expedition.waterCost);
+          if (!paid) return prev;
+          waterPaid = paid;
+        }
         next.currentAction = {
           actionId: expedition.id,
           startedAt: Date.now(),
           type: "expedition",
           expeditionId: expedition.id,
           foodPaid,
+          waterPaid,
         };
         return next;
       });

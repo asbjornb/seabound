@@ -267,6 +267,136 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Stone Tools — Knapping Chain
+  // ═══════════════════════════════════════
+  {
+    id: "craft_hammerstone",
+    name: "Hammerstone",
+    description: "Shape a heavy stone for striking. The foundation of knapping.",
+    skillId: "crafting",
+    requiredSkillLevel: 5,
+    inputs: [{ resourceId: "flat_stone", amount: 2 }],
+    output: { resourceId: "hammerstone", amount: 1 },
+    durationMs: 5000,
+    oneTimeCraft: true,
+    xpGain: 15,
+  },
+  {
+    id: "strike_stone_flake",
+    name: "Strike Stone Flake",
+    description:
+      "Strike chert with the hammerstone to produce sharp flakes.",
+    skillId: "crafting",
+    requiredSkillLevel: 5,
+    requiredItems: ["hammerstone"],
+    inputs: [{ resourceId: "chert", amount: 1 }],
+    output: { resourceId: "stone_flake", amount: 2 },
+    durationMs: 4000,
+    repeatable: true,
+    xpGain: 12,
+  },
+  {
+    id: "knap_stone_blade",
+    name: "Knap Stone Blade",
+    description:
+      "Carefully pressure-flake stone flakes into a sharp, usable blade.",
+    skillId: "crafting",
+    requiredSkillLevel: 8,
+    requiredItems: ["hammerstone"],
+    inputs: [{ resourceId: "stone_flake", amount: 2 }],
+    output: { resourceId: "stone_blade", amount: 1 },
+    durationMs: 6000,
+    repeatable: true,
+    xpGain: 18,
+  },
+  {
+    id: "craft_shell_adze",
+    name: "Shell Adze",
+    description:
+      "Lash a large shell to a driftwood handle. Perfect for scraping and shaping wood.",
+    skillId: "crafting",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "large_shell", amount: 1 },
+      { resourceId: "cordage", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
+    output: { resourceId: "shell_adze", amount: 1 },
+    durationMs: 6000,
+    oneTimeCraft: true,
+    xpGain: 20,
+  },
+  {
+    id: "craft_stone_axe",
+    name: "Stone Axe",
+    description:
+      "Haft a stone blade with cordage to create an axe. Can fell large trees.",
+    skillId: "crafting",
+    requiredSkillLevel: 14,
+    inputs: [
+      { resourceId: "stone_blade", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "cordage", amount: 3 },
+    ],
+    output: { resourceId: "stone_axe", amount: 1 },
+    durationMs: 10000,
+    oneTimeCraft: true,
+    xpGain: 35,
+  },
+
+  // ═══════════════════════════════════════
+  // Maritime — Dugout Canoe (multi-step)
+  // ═══════════════════════════════════════
+  {
+    id: "char_log_interior",
+    name: "Char Log Interior",
+    description:
+      "Burn out the interior of a large log using controlled fire. The first step toward a dugout canoe.",
+    skillId: "woodworking",
+    requiredSkillLevel: 16,
+    requiredBuildings: ["camp_fire"],
+    inputs: [
+      { resourceId: "large_log", amount: 1 },
+      { resourceId: "dry_grass", amount: 4 },
+      { resourceId: "coconut_husk", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 4 },
+    ],
+    output: { resourceId: "charred_log", amount: 1 },
+    durationMs: 15000,
+    xpGain: 40,
+  },
+  {
+    id: "scrape_hull",
+    name: "Scrape Hull",
+    description:
+      "Use the shell adze to scrape out the charred wood, shaping the canoe hull.",
+    skillId: "woodworking",
+    requiredSkillLevel: 17,
+    requiredItems: ["shell_adze"],
+    inputs: [{ resourceId: "charred_log", amount: 1 }],
+    output: { resourceId: "shaped_hull", amount: 1 },
+    durationMs: 12000,
+    xpGain: 40,
+  },
+  {
+    id: "assemble_dugout",
+    name: "Assemble Dugout Canoe",
+    description:
+      "Fit crossbeams and seal the hull. A proper canoe for near-shore waters.",
+    skillId: "construction",
+    requiredSkillLevel: 18,
+    inputs: [
+      { resourceId: "shaped_hull", amount: 1 },
+      { resourceId: "cordage", amount: 6 },
+      { resourceId: "bamboo_cane", amount: 4 },
+    ],
+    output: { resourceId: "dugout", amount: 1 },
+    durationMs: 20000,
+    oneTimeCraft: true,
+    xpGain: 60,
+  },
+
+  // ═══════════════════════════════════════
   // Obsidian Tools
   // ═══════════════════════════════════════
   {

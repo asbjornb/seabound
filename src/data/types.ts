@@ -36,6 +36,21 @@ export type ResourceId =
   // Obsidian
   | "obsidian"
   | "obsidian_blade"
+  // Stone Tools
+  | "chert"
+  | "stone_flake"
+  | "stone_blade"
+  | "hammerstone"
+  | "shell_adze"
+  | "stone_axe"
+  // Timber
+  | "large_log"
+  | "charred_log"
+  | "shaped_hull"
+  // Maritime - Dugout
+  | "dugout"
+  // Water
+  | "fresh_water"
   // Phase 2 - Clay Tier
   | "clay"
   | "shaped_clay_pot"
@@ -156,6 +171,7 @@ export interface ExpeditionDef {
   skillId: SkillId;
   durationMs: number;
   foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
+  waterCost?: number; // total water items consumed per cycle
   requiredVessel?: ResourceId;
   requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
   hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
@@ -192,6 +208,7 @@ export interface GameState {
     recipeId?: string;
     expeditionId?: string;
     foodPaid?: Record<string, number>; // tracks food deducted for refund
+    waterPaid?: Record<string, number>; // tracks water deducted for refund
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

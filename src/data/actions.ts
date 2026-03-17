@@ -108,6 +108,47 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "bamboo_grove",
     xpGain: 8,
   },
+  // Stone Tools
+  {
+    id: "collect_chert",
+    name: "Collect Beach Chert",
+    description: "Search the rocky end of the beach for knappable chert nodules.",
+    skillId: "foraging",
+    durationMs: 4000,
+    drops: [{ resourceId: "chert", amount: 1, chance: 0.5 }],
+    requiredSkillLevel: 5,
+    xpGain: 10,
+  },
+
+  // Woodworking — Tree Felling
+  {
+    id: "fell_large_tree",
+    name: "Fell Large Tree",
+    description:
+      "Chop down a large jungle tree with the stone axe. Exhausting work.",
+    skillId: "woodworking",
+    durationMs: 15000,
+    drops: [{ resourceId: "large_log", amount: 1 }],
+    requiredSkillLevel: 15,
+    requiredBiome: "jungle_interior",
+    requiredTools: ["stone_axe"],
+    xpGain: 30,
+  },
+
+  // Water Collection
+  {
+    id: "collect_fresh_water",
+    name: "Collect Fresh Water",
+    description:
+      "Fill a clay pot with clean water from the jungle stream.",
+    skillId: "foraging",
+    durationMs: 4000,
+    drops: [{ resourceId: "fresh_water", amount: 1 }],
+    requiredBiome: "jungle_interior",
+    requiredTools: ["fired_clay_pot"],
+    xpGain: 8,
+  },
+
   // ═══════════════════════════════════════
   // PHASE 2 — Clay Tier (requires jungle_interior biome)
   // ═══════════════════════════════════════

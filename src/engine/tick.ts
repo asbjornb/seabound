@@ -4,7 +4,7 @@ import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, getMoraleDurationMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood } from "./gameState";
+import { addResource, deductFood, deductWater, getMoraleDurationMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -130,15 +130,29 @@ export function processTick(state: GameState, now: number): TickResult {
       const event = applyExpeditionCompletion(state, def.id);
       if (event) completions.push(event);
 
-      // Check if we can afford the next cycle's food cost
+      // Check if we can afford the next cycle's food and water costs
       if (def.foodCost) {
         if (getTotalFood(state) < def.foodCost) {
           state.currentAction = null;
           break;
         }
+      }
+      if (def.waterCost) {
+        if (getTotalWater(state) < def.waterCost) {
+          state.currentAction = null;
+          break;
+        }
+      }
+      if (def.foodCost) {
         const paid = deductFood(state, def.foodCost);
         if (state.currentAction && paid) {
           state.currentAction.foodPaid = paid;
+        }
+      }
+      if (def.waterCost) {
+        const paid = deductWater(state, def.waterCost);
+        if (state.currentAction && paid) {
+          state.currentAction.waterPaid = paid;
         }
       }
     }
