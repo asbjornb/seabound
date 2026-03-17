@@ -193,6 +193,87 @@ body {
   color: var(--warning);
 }
 
+/* Morale chip */
+.morale-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.morale-chip.low-morale {
+  border-color: var(--accent);
+}
+
+.morale-chip.low-morale .amount {
+  color: var(--accent);
+}
+
+.morale-bar-mini {
+  display: inline-block;
+  width: 32px;
+  height: 6px;
+  background: var(--bar-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.morale-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.low-morale .morale-bar-fill {
+  background: var(--accent);
+}
+
+/* Morale display in inventory sidebar */
+.morale-display {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.morale-display.low-morale {
+  border-color: var(--accent);
+}
+
+.morale-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.morale-effect {
+  font-weight: 400;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+
+.morale-bar {
+  height: 6px;
+  background: var(--bar-bg);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.morale-display .morale-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--success);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.morale-display.low-morale .morale-bar-fill {
+  background: var(--accent);
+}
+
 /* Current action */
 .current-action {
   padding: 10px 16px;

@@ -75,6 +75,7 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "small_fish", amount: 1, chance: 0.1 },
       { resourceId: "crab", amount: 1, chance: 0.1 },
       { resourceId: "shell", amount: 1 },
+      { resourceId: "large_shell", amount: 1, chance: 0.05 },
     ],
     xpGain: 8,
   },
@@ -84,10 +85,11 @@ export const ACTIONS: ActionDef[] = [
     id: "dig_drainage_trench",
     name: "Dig Drainage Trench",
     description:
-      "Dig channels around camp to divert rainwater. Hard labor, but good practice.",
+      "Use a large shell to dig channels around camp. Hard labor, but good practice.",
     skillId: "construction",
     durationMs: 30000,
     drops: [],
+    requiredTools: ["large_shell"],
     xpGain: 10,
   },
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RESOURCES } from "../data/resources";
 import { ResourceCategory, GameState } from "../data/types";
-import { getStorageLimit } from "../engine/gameState";
+import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 const CATEGORY_LABELS: Record<ResourceCategory, string> = {
   food: "Food",
@@ -44,8 +44,25 @@ export function InventoryPanel({ state }: { state: GameState }) {
     );
   }
 
+  const moraleEffect = getMoraleDurationMultiplier(state.morale);
+  const moralePercent = Math.round((1 - moraleEffect) * 100);
+  const moraleLabel =
+    moralePercent > 0
+      ? `+${moralePercent}% speed`
+      : moralePercent < 0
+        ? `${moralePercent}% speed`
+        : "normal";
+
   return (
     <div className="inventory-panel">
+      <div className={`morale-display${state.morale <= 25 ? " low-morale" : ""}`}>
+        <span className="morale-label">
+          Morale: {state.morale} <span className="morale-effect">({moraleLabel})</span>
+        </span>
+        <div className="morale-bar">
+          <div className="morale-bar-fill" style={{ width: `${state.morale}%` }} />
+        </div>
+      </div>
       <div className="inventory-filters">
         <button
           className={`inventory-filter${filter === "all" ? " active" : ""}`}

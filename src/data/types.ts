@@ -175,6 +175,7 @@ export interface GameState {
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;
+  morale: number; // 0-100, affects action speed
   discoveryLog: DiscoveryEntry[];
   discoveredResources: string[];
 }
