@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
 import { SKILL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
@@ -19,6 +20,8 @@ const SKILL_ORDER: SkillId[] = [
 ];
 
 export function ActionPanel({ actions, state, onStart }: Props) {
+  const [collapsed, setCollapsed] = useState<Set<SkillId>>(new Set());
+
   const grouped = new Map<SkillId, ActionDef[]>();
   for (const a of actions) {
     const list = grouped.get(a.skillId) ?? [];
@@ -26,17 +29,32 @@ export function ActionPanel({ actions, state, onStart }: Props) {
     grouped.set(a.skillId, list);
   }
 
+  const toggleSkill = (skillId: SkillId) => {
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(skillId)) next.delete(skillId);
+      else next.add(skillId);
+      return next;
+    });
+  };
+
   return (
     <div>
       {SKILL_ORDER.map((skillId) => {
         const list = grouped.get(skillId);
         if (!list) return null;
+        const isCollapsed = collapsed.has(skillId);
         return (
           <div key={skillId}>
-            <div className="section-title">
+            <div
+              className="section-title collapsible"
+              onClick={() => toggleSkill(skillId)}
+            >
+              <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
               {SKILL_ICONS[skillId]} {skillId} (Lvl {state.skills[skillId].level})
+              <span className="section-count">{list.length}</span>
             </div>
-            {list.map((action) => {
+            {!isCollapsed && list.map((action) => {
               const missingTool = action.requiredTools?.find(
                 (t) => getResource(state, t) < 1
               );
@@ -101,5 +119,6 @@ export function ActionPanel({ actions, state, onStart }: Props) {
         );
       })}
     </div>
+
   );
 }
