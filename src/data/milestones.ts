@@ -63,6 +63,15 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  cooking: [
+    {
+      level: 3,
+      description: "Seasoned cook — 5% chance to double cooking output",
+      effects: [
+        { type: "double_output", chance: 0.05 },
+      ],
+    },
+  ],
   weaving: [
     {
       level: 2,
@@ -136,6 +145,26 @@ export function getDropChanceBonus(
     }
   }
   return bonus;
+}
+
+/**
+ * Compute total double-output chance for a skill at a given level.
+ */
+export function getDoubleOutputChance(
+  skillId: SkillId,
+  skillLevel: number
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let chance = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "double_output") {
+        chance += e.chance;
+      }
+    }
+  }
+  return chance;
 }
 
 /**

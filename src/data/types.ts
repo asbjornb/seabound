@@ -95,7 +95,8 @@ export interface Drop {
 
 export type MilestoneEffect =
   | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
-  | { type: "duration"; actionId: string; multiplier: number }; // e.g. 0.9 = 10% faster
+  | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster
+  | { type: "double_output"; chance: number }; // e.g. 0.05 = 5% chance to double craft output
 
 export interface SkillMilestone {
   level: number;
