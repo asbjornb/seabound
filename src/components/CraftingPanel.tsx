@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SKILL_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { GameState, RecipeDef, SkillId } from "../data/types";
@@ -116,7 +116,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                         <span key={i}>
                           {i > 0 && ", "}
                           <span className={enough ? "has" : "missing"}>
-                            {inp.amount}x{" "}
+                            {RESOURCE_ICONS[inp.resourceId] ?? ""}{inp.amount}x{" "}
                             {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
                             {have})
                           </span>
@@ -130,14 +130,14 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredItems.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span>{RESOURCES[id]?.name ?? id}</span>
+                          <span>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
                   )}
                   {recipe.output ? (
                     <div className="recipe-output">
-                      Produces: {recipe.output.amount}x{" "}
+                      Produces: {RESOURCE_ICONS[recipe.output.resourceId] ?? ""}{recipe.output.amount}x{" "}
                       {RESOURCES[recipe.output.resourceId]?.name ??
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
