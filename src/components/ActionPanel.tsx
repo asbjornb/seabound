@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { SKILL_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { ActionDef, GameState, SkillId } from "../data/types";
 import { getResource } from "../engine/gameState";
@@ -89,7 +89,7 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                         <span key={i}>
                           {i > 0 && ", "}
                           <span>
-                            {d.amount}x{" "}
+                            {RESOURCE_ICONS[d.resourceId] ?? ""}{d.amount}x{" "}
                             {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                             {d.effectiveChance < 1
                               ? ` (${Math.round(d.effectiveChance * 100)}%)`
@@ -105,7 +105,7 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                     <div className="action-requires">
                       Requires:{" "}
                       <span>
-                        {RESOURCES[missingTool]?.name ?? missingTool}
+                        {RESOURCE_ICONS[missingTool] ?? ""}{RESOURCES[missingTool]?.name ?? missingTool}
                       </span>
                     </div>
                   )}
