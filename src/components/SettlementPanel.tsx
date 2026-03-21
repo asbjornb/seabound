@@ -2,7 +2,7 @@ import { BUILDINGS } from "../data/buildings";
 import { BUILDING_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { getEffectiveInputs, getResource } from "../engine/gameState";
 
 interface Props {
   buildRecipes: RecipeDef[];
@@ -72,7 +72,8 @@ export function SettlementPanel({
             );
           })}
           {maintenanceRecipes.map((recipe) => {
-            const canAfford = recipe.inputs.every(
+            const inputs = getEffectiveInputs(recipe, state);
+            const canAfford = inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
             const disabled = !canAfford;
@@ -91,7 +92,7 @@ export function SettlementPanel({
                 <div className="action-desc">{recipe.description}</div>
                 <div className="recipe-inputs">
                   Needs:{" "}
-                  {recipe.inputs.map((inp, i) => {
+                  {inputs.map((inp, i) => {
                     const have = getResource(state, inp.resourceId);
                     const enough = have >= inp.amount;
                     return (
@@ -126,7 +127,8 @@ export function SettlementPanel({
         <>
           <div className="section-title">Available to Build</div>
           {buildingRecipes.map((recipe) => {
-            const canAfford = recipe.inputs.every(
+            const inputs = getEffectiveInputs(recipe, state);
+            const canAfford = inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
             const disabled = !canAfford;
@@ -164,7 +166,7 @@ export function SettlementPanel({
                 )}
                 <div className="recipe-inputs">
                   Needs:{" "}
-                  {recipe.inputs.map((inp, i) => {
+                  {inputs.map((inp, i) => {
                     const have = getResource(state, inp.resourceId);
                     const enough = have >= inp.amount;
                     return (

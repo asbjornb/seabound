@@ -74,6 +74,7 @@ export const BIOME_ICONS: Record<BiomeId, string> = {
 
 export const BUILDING_ICONS: Record<BuildingId, string> = {
   camp_fire: "\u{1F525}",
+  stone_hearth: "\u{1FAA8}",
   palm_leaf_pile: "\u{1F343}",
   drying_rack: "\u{2600}\uFE0F",
   fenced_perimeter: "\u{1F3E1}",

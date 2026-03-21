@@ -227,6 +227,24 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 20,
   },
   {
+    id: "build_stone_hearth",
+    name: "Stone Hearth",
+    description:
+      "Line the fire with stones and clay mortar. Holds heat so well it no longer needs kindling.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 14,
+    inputs: [
+      { resourceId: "flat_stone", amount: 8 },
+      { resourceId: "clay", amount: 4 },
+      { resourceId: "cordage", amount: 2 },
+    ],
+    buildingOutput: "stone_hearth",
+    requiredBuildings: ["camp_fire", "firing_pit"],
+    durationMs: 12000,
+    xpGain: 30,
+  },
+  {
     id: "build_palm_leaf_pile",
     name: "Palm Leaf Pile",
     description:
@@ -499,6 +517,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "small_fish", amount: 1 },
       { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_fish", amount: 1 },
     requiredBuildings: ["camp_fire"],
@@ -516,6 +535,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "large_fish", amount: 1 },
       { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_large_fish", amount: 1 },
     requiredBuildings: ["camp_fire"],
@@ -533,6 +553,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "crab", amount: 1 },
       { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_crab", amount: 1 },
     requiredBuildings: ["camp_fire"],

@@ -17,6 +17,7 @@ import {
 import {
   addResource,
   createInitialState,
+  getEffectiveInputs,
   getResource,
   getTotalFood,
   getTotalWater,
@@ -193,8 +194,9 @@ export function useGame() {
             if (getResource(prev, itemId) < 1) return prev;
           }
         }
-        // Check resources
-        for (const input of recipe.inputs) {
+        // Check resources (using effective inputs — some may be removed by buildings)
+        const inputs = getEffectiveInputs(recipe, prev);
+        for (const input of inputs) {
           if (getResource(prev, input.resourceId) < input.amount) return prev;
         }
         const next = structuredClone(prev);

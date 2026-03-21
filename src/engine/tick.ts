@@ -7,7 +7,7 @@ import {
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
 export interface TickResult {
@@ -93,18 +93,20 @@ export function processTick(state: GameState, now: number): TickResult {
     const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
     const effectiveCraftDuration = Math.round(def.durationMs * craftMoraleMultiplier * craftToolMultiplier);
 
+    const effectiveInputs = getEffectiveInputs(def, state);
+
     if (def.repeatable) {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
         // Check and consume inputs for this cycle
-        const canAfford = def.inputs.every(
+        const canAfford = effectiveInputs.every(
           (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
         );
         if (!canAfford) {
           state.currentAction = null;
           break;
         }
-        for (const input of def.inputs) {
+        for (const input of effectiveInputs) {
           state.resources[input.resourceId] =
             (state.resources[input.resourceId] ?? 0) - input.amount;
         }
@@ -119,13 +121,13 @@ export function processTick(state: GameState, now: number): TickResult {
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
         // Consume inputs at completion
-        const canAfford = def.inputs.every(
+        const canAfford = effectiveInputs.every(
           (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
         );
         if (!canAfford) {
           state.currentAction = null;
         } else {
-          for (const input of def.inputs) {
+          for (const input of effectiveInputs) {
             state.resources[input.resourceId] =
               (state.resources[input.resourceId] ?? 0) - input.amount;
           }
@@ -176,7 +178,8 @@ export function processTick(state: GameState, now: number): TickResult {
 
 function resourceHasUse(state: GameState, resourceId: string): boolean {
   return RECIPES.some((r) => {
-    const usesResource = r.inputs.some((inp) => inp.resourceId === resourceId);
+    const effectiveInputs = getEffectiveInputs(r, state);
+    const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
     if (!usesResource) return false;
     if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) return false;
     if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;

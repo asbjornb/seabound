@@ -11,6 +11,7 @@ import { RECIPES } from "../data/recipes";
 import { STATIONS } from "../data/stations";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
+  getEffectiveInputs,
   getMoraleDurationMultiplier,
   getResource,
   getToolSpeedMultiplier,
@@ -22,7 +23,8 @@ export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
   return RECIPES.some((recipe) => {
-    const usesResource = recipe.inputs.some((input) => input.resourceId === resourceId);
+    const effectiveInputs = getEffectiveInputs(recipe, state);
+    const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
     if (!usesResource) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) return false;
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
@@ -51,7 +53,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
     if (recipe.oneTimeCraft && recipe.output && !resourceHasUse(recipe.output.resourceId, state)) return false;
     if (recipe.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) return false;
-    if (recipe.inputs.some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
+    if (getEffectiveInputs(recipe, state).some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     return true;
   });
 }
