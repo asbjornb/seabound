@@ -928,6 +928,8 @@ body {
   cursor: pointer;
   animation: toast-in 0.3s ease-out;
   font-size: 0.82rem;
+  display: flex;
+  align-items: center;
   font-weight: 600;
   user-select: none;
   -webkit-user-select: none;
@@ -936,6 +938,15 @@ body {
 .toast-exit {
   animation: toast-out 0.3s ease-in forwards;
 }
+
+.toast-close {
+  margin-left: 8px;
+  opacity: 0.6;
+  font-size: 1.1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toast-close:hover { opacity: 1; }
 
 .toast-biome { border-left: 3px solid var(--success); color: var(--success); }
 .toast-level { border-left: 3px solid var(--warning); color: var(--warning); }

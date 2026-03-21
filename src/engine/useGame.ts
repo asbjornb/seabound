@@ -99,10 +99,6 @@ function processCompletionDiscoveries(
       addDiscovery(state, "resource", `Found ${name} for the first time`);
     }
   }
-  if (c.levelUp) {
-    const skillName = c.skillId.charAt(0).toUpperCase() + c.skillId.slice(1);
-    addDiscovery(state, "level", `Reached ${skillName} level ${c.levelUp}`);
-  }
 }
 
 export function useGame() {
@@ -343,7 +339,6 @@ export function useGame() {
       }
       // Award XP
       const skill = next.skills[def.skillId];
-      const prevLevel = skill.level;
       skill.xp += def.xpGain;
       skill.level = levelFromXp(skill.xp);
       // Discovery log
@@ -351,10 +346,6 @@ export function useGame() {
         const rdef = RESOURCES[resId];
         const name = rdef?.name ?? resId.replace(/_/g, " ");
         addDiscovery(next, "resource", `Found ${name} for the first time`);
-      }
-      if (skill.level > prevLevel) {
-        const skillName = def.skillId.charAt(0).toUpperCase() + def.skillId.slice(1);
-        addDiscovery(next, "level", `Reached ${skillName} level ${skill.level}`);
       }
       // Remove the collected station
       next.stations.splice(index, 1);

@@ -61,6 +61,7 @@ export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEnt
           }}
         >
           <span className="toast-message">{toast.entry.message}</span>
+          <span className="toast-close">&times;</span>
         </div>
       ))}
     </div>
