@@ -36,7 +36,6 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
     if (action.requiredBiome && !state.discoveredBiomes.includes(action.requiredBiome)) return false;
     if (action.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
-    if (action.requiredTools?.some((toolId) => getResource(state, toolId) < 1)) return false;
     return true;
   });
 }
