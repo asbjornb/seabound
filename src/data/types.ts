@@ -241,4 +241,5 @@ export interface GameState {
   discoveryLog: DiscoveryEntry[];
   discoveredResources: string[];
   stations: PlacedStation[];
+  seenPhases: string[];
 }

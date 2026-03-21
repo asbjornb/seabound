@@ -32,6 +32,7 @@ export function createInitialState(): GameState {
     discoveryLog: [],
     discoveredResources: [],
     stations: [],
+    seenPhases: ["bare_hands"],
   };
 }
 
@@ -82,6 +83,10 @@ export function loadGame(): GameState | null {
     // Migration: ensure stations array exists
     if (!loaded.stations) {
       loaded.stations = [];
+    }
+    // Migration: ensure seenPhases exists
+    if (!loaded.seenPhases) {
+      loaded.seenPhases = ["bare_hands"];
     }
     // Migration: remove items/buildings that no longer exist in current data
     for (const id of Object.keys(loaded.resources)) {

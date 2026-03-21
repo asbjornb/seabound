@@ -371,6 +371,15 @@ export function useGame() {
     URL.revokeObjectURL(url);
   }, []);
 
+  const markPhaseSeen = useCallback((phaseId: string) => {
+    setState((prev) => {
+      if (prev.seenPhases.includes(phaseId)) return prev;
+      const next = structuredClone(prev);
+      next.seenPhases.push(phaseId);
+      return next;
+    });
+  }, []);
+
   const importSave = useCallback(
     (file: File) => {
       const reader = new FileReader();
@@ -558,6 +567,7 @@ export function useGame() {
     stopAction,
     deployStation,
     collectStation,
+    markPhaseSeen,
     resetGame,
     exportSave,
     importSave,

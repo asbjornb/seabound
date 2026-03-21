@@ -1,9 +1,11 @@
-import { useRef, useMemo, useState } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import { ActionPanel } from "./components/ActionPanel";
+import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
+import { IslandBanner } from "./components/IslandBanner";
 import { LogPanel } from "./components/LogPanel";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
@@ -14,6 +16,7 @@ import { TAB_ICONS } from "./data/icons";
 import { STATIONS } from "./data/stations";
 import { SkillId } from "./data/types";
 import { getTotalFood } from "./engine/gameState";
+import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import "./App.css";
@@ -31,6 +34,24 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
+  const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
+
+  // Phase detection
+  const currentPhase = useMemo(() => getCurrentPhase(game.state), [game.state]);
+
+  // Show chapter card when entering a new phase
+  useEffect(() => {
+    if (!game.state.seenPhases.includes(currentPhase.id)) {
+      setPendingChapter(currentPhase);
+    }
+  }, [currentPhase, game.state.seenPhases]);
+
+  const dismissChapter = () => {
+    if (pendingChapter) {
+      game.markPhaseSeen(pendingChapter.id);
+      setPendingChapter(null);
+    }
+  };
 
   // Split recipes: building recipes + camp maintenance go to Camp tab, others stay in Craft
   const campRecipeIds = new Set(["maintain_camp"]);
@@ -87,7 +108,10 @@ export default function App() {
   })();
 
   return (
-    <div className="app">
+    <div className={`app phase-${currentPhase.id}`}>
+      {pendingChapter && (
+        <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
+      )}
       {updateAvailable && (
         <div className="update-bar" onClick={() => window.location.reload()}>
           A new version is available — tap to refresh
@@ -156,6 +180,8 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      <IslandBanner phase={currentPhase.id} buildings={game.state.buildings} />
 
       <div className="app-body">
         <div className="app-main">
