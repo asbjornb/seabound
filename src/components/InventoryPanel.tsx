@@ -1,8 +1,28 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { RESOURCE_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { ACTIONS } from "../data/actions";
+import { RECIPES } from "../data/recipes";
 import { ResourceCategory, ResourceId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
+
+/** Build a map of tool → list of action/recipe names it enables */
+function buildToolEnablesMap(): Record<string, string[]> {
+  const map: Record<string, string[]> = {};
+  for (const action of ACTIONS) {
+    for (const toolId of action.requiredTools ?? []) {
+      if (!map[toolId]) map[toolId] = [];
+      map[toolId].push(action.name);
+    }
+  }
+  for (const recipe of RECIPES) {
+    for (const itemId of recipe.requiredItems ?? []) {
+      if (!map[itemId]) map[itemId] = [];
+      map[itemId].push(recipe.name);
+    }
+  }
+  return map;
+}
 
 const CATEGORY_LABELS: Record<ResourceCategory, string> = {
   food: "Food",
@@ -22,6 +42,7 @@ const CATEGORY_ORDER: ResourceCategory[] = [
 
 export function InventoryPanel({ state }: { state: GameState }) {
   const [filter, setFilter] = useState<ResourceCategory | "all">("all");
+  const toolEnables = useMemo(buildToolEnablesMap, []);
   const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
 
   // Group by category
@@ -106,6 +127,11 @@ export function InventoryPanel({ state }: { state: GameState }) {
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}
+                    {cat === "tool" && toolEnables[id] && (
+                      <div className="tool-enables">
+                        Enables: {toolEnables[id].join(", ")}
+                      </div>
+                    )}
                   </div>
                 </div>
               );

@@ -823,6 +823,11 @@ body {
   color: var(--text-dim);
   margin-top: 2px;
 }
+.tool-enables {
+  margin-top: 3px;
+  color: var(--accent);
+  font-style: italic;
+}
 
 /* ═══════════════════════════════════════
    Stations (set-wait-collect)

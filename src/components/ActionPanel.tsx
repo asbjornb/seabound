@@ -104,7 +104,7 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span>
+                      <span title={RESOURCES[missingTool]?.description}>
                         {RESOURCE_ICONS[missingTool] ?? ""}{RESOURCES[missingTool]?.name ?? missingTool}
                       </span>
                     </div>
