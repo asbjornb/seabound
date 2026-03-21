@@ -246,4 +246,5 @@ export interface GameState {
   discoveredResources: string[];
   stations: PlacedStation[];
   seenPhases: string[];
+  repetitiveActionCount: number; // consecutive completions since last manual action change
 }
