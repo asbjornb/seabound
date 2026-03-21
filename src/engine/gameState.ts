@@ -29,6 +29,7 @@ export function createInitialState(): GameState {
     lastTickAt: Date.now(),
     totalPlayTimeMs: 0,
     morale: 100,
+    moraleDecayProgressMs: 0,
     discoveryLog: [],
     discoveredResources: [],
     stations: [],
@@ -76,6 +77,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure morale exists
   if (loaded.morale == null) {
     loaded.morale = 100;
+  }
+  // Migration: ensure moraleDecayProgressMs exists
+  if (loaded.moraleDecayProgressMs == null) {
+    loaded.moraleDecayProgressMs = 0;
   }
   // Migration: ensure discoveryLog exists
   if (!loaded.discoveryLog) {
