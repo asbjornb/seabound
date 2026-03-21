@@ -20,7 +20,10 @@ export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEnt
     const newEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
       if (entry.id <= lastSeenId.current) break;
-      newEntries.push(entry);
+      // Only show toasts for location discoveries (and recipe unlocks in the future)
+      if (entry.type === "biome") {
+        newEntries.push(entry);
+      }
     }
 
     if (newEntries.length === 0) return;
