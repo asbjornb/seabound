@@ -216,6 +216,10 @@ export function useGame() {
         ) {
           return prev;
         }
+        // Check dual-skill requirements
+        if (recipe.requiredSkills?.some((req) => prev.skills[req.skillId].level < req.level)) {
+          return prev;
+        }
         // Check required items (item-trigger gate)
         if (recipe.requiredItems) {
           for (const itemId of recipe.requiredItems) {
