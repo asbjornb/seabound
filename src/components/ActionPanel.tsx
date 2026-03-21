@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
+import { BIOME_ICONS, RESOURCE_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { ActionDef, GameState, SkillId } from "../data/types";
+import { ActionDef, BiomeId, GameState } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
@@ -12,47 +12,59 @@ interface Props {
   currentActionId?: string | null;
 }
 
-const SKILL_ORDER: SkillId[] = [
-  "foraging",
-  "fishing",
-  "woodworking",
-  "construction",
-  "crafting",
+const BIOME_NAMES: Record<BiomeId, string> = {
+  beach: "Beach",
+  coconut_grove: "Coconut Grove",
+  rocky_shore: "Rocky Shore",
+  bamboo_grove: "Bamboo Grove",
+  jungle_interior: "Jungle Interior",
+  nearby_island: "Nearby Island",
+};
+
+/** Order biomes appear in the gather panel. Actions without a biome go under "beach". */
+const BIOME_ORDER: BiomeId[] = [
+  "beach",
+  "coconut_grove",
+  "rocky_shore",
+  "bamboo_grove",
+  "jungle_interior",
+  "nearby_island",
 ];
 
 export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
-  const [collapsed, setCollapsed] = useState<Set<SkillId>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<BiomeId>>(new Set());
 
-  const grouped = new Map<SkillId, ActionDef[]>();
+  const grouped = new Map<BiomeId, ActionDef[]>();
   for (const a of actions) {
-    const list = grouped.get(a.skillId) ?? [];
+    const biome: BiomeId = a.requiredBiome ?? "beach";
+    const list = grouped.get(biome) ?? [];
     list.push(a);
-    grouped.set(a.skillId, list);
+    grouped.set(biome, list);
   }
 
-  const toggleSkill = (skillId: SkillId) => {
+  const toggleBiome = (biomeId: BiomeId) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
-      if (next.has(skillId)) next.delete(skillId);
-      else next.add(skillId);
+      if (next.has(biomeId)) next.delete(biomeId);
+      else next.add(biomeId);
       return next;
     });
   };
 
   return (
     <div>
-      {SKILL_ORDER.map((skillId) => {
-        const list = grouped.get(skillId);
+      {BIOME_ORDER.map((biomeId) => {
+        const list = grouped.get(biomeId);
         if (!list) return null;
-        const isCollapsed = collapsed.has(skillId);
+        const isCollapsed = collapsed.has(biomeId);
         return (
-          <div key={skillId}>
+          <div key={biomeId}>
             <div
               className="section-title collapsible"
-              onClick={() => toggleSkill(skillId)}
+              onClick={() => toggleBiome(biomeId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              {SKILL_ICONS[skillId]} {skillId} (Lvl {state.skills[skillId].level})
+              {BIOME_ICONS[biomeId]} {BIOME_NAMES[biomeId]}
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((action) => {

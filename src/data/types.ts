@@ -71,7 +71,7 @@ export type SkillId =
   | "navigation"
   | "preservation";
 
-export type BiomeId = "beach" | "coconut_grove" | "bamboo_grove" | "jungle_interior" | "nearby_island";
+export type BiomeId = "beach" | "coconut_grove" | "rocky_shore" | "bamboo_grove" | "jungle_interior" | "nearby_island";
 
 export type BuildingId =
   | "camp_fire"

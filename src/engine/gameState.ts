@@ -1,6 +1,6 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
-import { BuildingId, GameState, ResourceId, SkillId } from "../data/types";
+import { BiomeId, BuildingId, GameState, ResourceId, SkillId } from "../data/types";
 
 const ALL_SKILLS: SkillId[] = [
   "foraging",
@@ -103,6 +103,16 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure repetitiveActionCount exists
   if (loaded.repetitiveActionCount == null) {
     loaded.repetitiveActionCount = 0;
+  }
+  // Migration: grant rocky_shore biome if player already has flat_stone or chert
+  if (!loaded.discoveredBiomes.includes("rocky_shore" as BiomeId)) {
+    if ((loaded.resources["flat_stone"] ?? 0) > 0 || (loaded.resources["chert"] ?? 0) > 0) {
+      loaded.discoveredBiomes.push("rocky_shore" as BiomeId);
+    }
+  }
+  // Migration: replace removed action IDs with merged action
+  if (loaded.currentAction && (loaded.currentAction.actionId === "collect_beach_stone" || loaded.currentAction.actionId === "collect_chert")) {
+    loaded.currentAction.actionId = "comb_rocky_shore";
   }
   if (loaded.currentAction && typeof loaded.currentAction !== "object") {
     loaded.currentAction = null;
