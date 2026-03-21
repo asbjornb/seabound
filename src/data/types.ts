@@ -133,7 +133,7 @@ export interface SkillMilestone {
   effects?: MilestoneEffect[];
 }
 
-export type ContentPanel = "gather" | "craft" | "camp";
+export type ContentPanel = "gather" | "craft" | "build";
 
 export interface ActionDef {
   id: string;

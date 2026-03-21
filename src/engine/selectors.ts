@@ -17,7 +17,7 @@ import {
   getTotalFood,
 } from "./gameState";
 
-export type GameTab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
+export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
 
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
@@ -149,16 +149,16 @@ export function selectGatherActions(actions: ActionDef[]): ActionDef[] {
   return actions.filter((action) => action.panel === "gather");
 }
 
-export function selectCampActions(actions: ActionDef[]): ActionDef[] {
-  return actions.filter((action) => action.panel === "camp");
+export function selectBuildActions(actions: ActionDef[]): ActionDef[] {
+  return actions.filter((action) => action.panel === "build");
 }
 
 export function selectCraftRecipes(recipes: RecipeDef[]): RecipeDef[] {
   return recipes.filter((recipe) => recipe.panel === "craft");
 }
 
-export function selectCampRecipes(recipes: RecipeDef[]): RecipeDef[] {
-  return recipes.filter((recipe) => recipe.panel === "camp");
+export function selectBuildRecipes(recipes: RecipeDef[]): RecipeDef[] {
+  return recipes.filter((recipe) => recipe.panel === "build");
 }
 
 export function selectHasAnyXp(state: GameState): boolean {
@@ -178,24 +178,24 @@ export function selectVisibleTabs(params: {
   hasAnyResource: boolean;
   hasAnyXp: boolean;
   craftRecipeCount: number;
-  campRecipeCount: number;
-  campActionCount: number;
+  buildRecipeCount: number;
+  buildActionCount: number;
   buildingCount: number;
   availableStationCount: number;
   deployedStationCount: number;
 }): GameTab[] {
   const tabs: GameTab[] = ["gather"];
-  if (params.hasFoodAccess) tabs.push("explore");
   if (params.craftRecipeCount > 0) tabs.push("craft");
   if (
-    params.campRecipeCount > 0 ||
-    params.campActionCount > 0 ||
+    params.buildRecipeCount > 0 ||
+    params.buildActionCount > 0 ||
     params.buildingCount > 0 ||
     params.availableStationCount > 0 ||
     params.deployedStationCount > 0
   ) {
-    tabs.push("camp");
+    tabs.push("build");
   }
+  if (params.hasFoodAccess) tabs.push("explore");
   if (params.hasAnyResource) tabs.push("inventory");
   if (params.hasAnyXp) tabs.push("skills");
   return tabs;
