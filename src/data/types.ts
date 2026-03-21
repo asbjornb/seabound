@@ -237,8 +237,6 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
-    foodPaid?: Record<string, number>; // tracks food deducted for refund
-    waterPaid?: Record<string, number>; // tracks water deducted for refund
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

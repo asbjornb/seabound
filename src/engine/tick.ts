@@ -96,11 +96,7 @@ export function processTick(state: GameState, now: number): TickResult {
     if (def.repeatable) {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
-        remaining -= effectiveCraftDuration;
-        const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
-        if (event) completions.push(event);
-
-        // Try to deduct inputs for the next cycle
+        // Check and consume inputs for this cycle
         const canAfford = def.inputs.every(
           (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
         );
@@ -112,6 +108,9 @@ export function processTick(state: GameState, now: number): TickResult {
           state.resources[input.resourceId] =
             (state.resources[input.resourceId] ?? 0) - input.amount;
         }
+        remaining -= effectiveCraftDuration;
+        const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
+        if (event) completions.push(event);
       }
 
       if (state.currentAction) {
@@ -119,9 +118,21 @@ export function processTick(state: GameState, now: number): TickResult {
       }
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
-        const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
-        if (event) completions.push(event);
-        state.currentAction = null;
+        // Consume inputs at completion
+        const canAfford = def.inputs.every(
+          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+        );
+        if (!canAfford) {
+          state.currentAction = null;
+        } else {
+          for (const input of def.inputs) {
+            state.resources[input.resourceId] =
+              (state.resources[input.resourceId] ?? 0) - input.amount;
+          }
+          const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
+          if (event) completions.push(event);
+          state.currentAction = null;
+        }
       }
     }
   } else if (action.type === "expedition") {
@@ -137,35 +148,21 @@ export function processTick(state: GameState, now: number): TickResult {
 
     let remaining = timeAvailable;
     while (remaining >= effectiveExpDuration) {
+      // Check and consume food/water for this cycle
+      if (def.foodCost && getTotalFood(state) < def.foodCost) {
+        state.currentAction = null;
+        break;
+      }
+      if (def.waterCost && getTotalWater(state) < def.waterCost) {
+        state.currentAction = null;
+        break;
+      }
+      if (def.foodCost) deductFood(state, def.foodCost);
+      if (def.waterCost) deductWater(state, def.waterCost);
+
       remaining -= effectiveExpDuration;
       const event = applyExpeditionCompletion(state, def.id, state.repetitiveActionCount);
       if (event) completions.push(event);
-
-      // Check if we can afford the next cycle's food and water costs
-      if (def.foodCost) {
-        if (getTotalFood(state) < def.foodCost) {
-          state.currentAction = null;
-          break;
-        }
-      }
-      if (def.waterCost) {
-        if (getTotalWater(state) < def.waterCost) {
-          state.currentAction = null;
-          break;
-        }
-      }
-      if (def.foodCost) {
-        const paid = deductFood(state, def.foodCost);
-        if (state.currentAction && paid) {
-          state.currentAction.foodPaid = paid;
-        }
-      }
-      if (def.waterCost) {
-        const paid = deductWater(state, def.waterCost);
-        if (state.currentAction && paid) {
-          state.currentAction.waterPaid = paid;
-        }
-      }
     }
 
     if (state.currentAction) {

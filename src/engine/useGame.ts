@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BUILDINGS } from "../data/buildings";
 import {
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
   STATIONS_BY_ID,
 } from "../data/registries";
 import { levelFromXp } from "../data/skills";
@@ -15,11 +13,10 @@ import {
   RecipeDef,
   StationDef,
 } from "../data/types";
+
 import {
   addResource,
   createInitialState,
-  deductFood,
-  deductWater,
   getResource,
   getTotalFood,
   getTotalWater,
@@ -39,7 +36,6 @@ import { CompletionEvent, processTick } from "./tick";
 const TICK_INTERVAL_MS = 100;
 const SAVE_INTERVAL_MS = 10000;
 
-/** Refund resources consumed by the current action (craft inputs / expedition food). */
 function getCurrentActionKey(state: GameState): string | null {
   if (!state.currentAction) return null;
   const { type, actionId } = state.currentAction;
@@ -50,34 +46,6 @@ function resetRepetitiveCountOnManualActionChange(state: GameState, nextActionKe
   const prevActionKey = getCurrentActionKey(state);
   if (prevActionKey !== nextActionKey) {
     state.repetitiveActionCount = 0;
-  }
-}
-
-function refundCurrentAction(state: GameState) {
-  if (!state.currentAction) return;
-  if (state.currentAction.type === "craft" && state.currentAction.recipeId) {
-    const recipe = RECIPES_BY_ID[state.currentAction.recipeId];
-    if (recipe) {
-      for (const input of recipe.inputs) {
-        addResource(state, input.resourceId, input.amount);
-      }
-    }
-  }
-  if (
-    state.currentAction.type === "expedition" &&
-    state.currentAction.expeditionId
-  ) {
-    const exp = EXPEDITIONS_BY_ID[state.currentAction.expeditionId];
-    if (exp?.foodCost && state.currentAction.foodPaid) {
-      for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
-        addResource(state, resId, amount);
-      }
-    }
-    if (exp?.waterCost && state.currentAction.waterPaid) {
-      for (const [resId, amount] of Object.entries(state.currentAction.waterPaid)) {
-        addResource(state, resId, amount);
-      }
-    }
   }
 }
 
@@ -195,7 +163,6 @@ export function useGame() {
         return prev;
       }
       const next = structuredClone(prev);
-      refundCurrentAction(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       next.currentAction = {
         actionId: action.id,
@@ -231,12 +198,7 @@ export function useGame() {
           if (getResource(prev, input.resourceId) < input.amount) return prev;
         }
         const next = structuredClone(prev);
-        refundCurrentAction(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
-        for (const input of recipe.inputs) {
-          next.resources[input.resourceId] =
-            (next.resources[input.resourceId] ?? 0) - input.amount;
-        }
         next.currentAction = {
           actionId: recipe.id,
           startedAt: Date.now(),
@@ -264,29 +226,12 @@ export function useGame() {
           return prev;
         }
         const next = structuredClone(prev);
-        refundCurrentAction(next);
         resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
-        // Deduct food
-        let foodPaid: Record<string, number> | undefined;
-        if (expedition.foodCost) {
-          const paid = deductFood(next, expedition.foodCost);
-          if (!paid) return prev;
-          foodPaid = paid;
-        }
-        // Deduct water
-        let waterPaid: Record<string, number> | undefined;
-        if (expedition.waterCost) {
-          const paid = deductWater(next, expedition.waterCost);
-          if (!paid) return prev;
-          waterPaid = paid;
-        }
         next.currentAction = {
           actionId: expedition.id,
           startedAt: Date.now(),
           type: "expedition",
           expeditionId: expedition.id,
-          foodPaid,
-          waterPaid,
         };
         return next;
       });
@@ -298,7 +243,6 @@ export function useGame() {
     setState((prev) => {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
-      refundCurrentAction(next);
       resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       return next;
