@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Tropical island beach with a dense bamboo grove visible inland, bright green bamboo stalks contrasting against dark jungle, a few crude tools leaning against bamboo. Palm tree on the left. Feeling of first discovery and resourcefulness. Sky: dark green-tinted #152a20. Bamboo: bright green #5a9a40 to #7bc67b. Water: #1a4a5a.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)

@@ -181,7 +181,7 @@ export default function App() {
         </div>
       </header>
 
-      <IslandBanner phase={currentPhase.id} buildings={game.state.buildings} />
+      <IslandBanner phase={currentPhase.id} />
 
       <div className="app-body">
         <div className="app-main">
