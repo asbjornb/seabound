@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Empty tropical beach at dawn, single leaning palm tree, scattered driftwood and coconuts on sand, gentle waves, feeling of isolation and emptiness. No structures, no tools. Muted sand tones. Sky: dark blue-grey #1a2535. Sand: #8a7a50. Water: #1a4a5a. Accent glow: warm sand #c8b090.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)
