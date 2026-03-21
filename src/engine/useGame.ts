@@ -465,6 +465,10 @@ export function useGame() {
     if (r.oneTimeCraft && r.output && !resourceHasUse(r.output.resourceId, state)) {
       return false;
     }
+    // Hide split-bamboo once splinters no longer feed any remaining recipe
+    if (r.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) {
+      return false;
+    }
     // Hide recipes whose inputs include undiscovered resources
     for (const inp of r.inputs) {
       if (!state.discoveredResources.includes(inp.resourceId)) return false;
