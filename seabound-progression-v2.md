@@ -154,7 +154,7 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 | Foraging 5 | Dig clay action (jungle interior) | ✅ |
 | Foraging 9 | Wild seed chance from dry grass (milestone) | ✅ |
 | Fishing 8 | Large fish chance from spear fishing (milestone) | ✅ |
-| Woodworking 8 | Fell large tree action | ✅ |
+| Woodworking 10 | Fell large tree action | ✅ |
 | Crafting 4 | Hammerstone recipe | ✅ |
 | Crafting 5 | Strike stone flake recipe | ✅ |
 | Crafting 7 | Knap stone blade recipe | ✅ |
@@ -428,9 +428,9 @@ Long build process — the first real construction project.
 
 | Step | Skill Req | Inputs | Notes |
 |---|---|---|---|
-| 1. Fell large tree | Woodworking 8 (action) | Stone axe (tool) | Yields large log |
-| 2. Char log interior | Woodworking 9 (recipe) | Large log ×1, Dry grass ×2 | Camp fire required. Yields charred log. |
-| 3. Scrape hull | Woodworking 10 (recipe) | Charred log ×1, Shell adze (tool) | Yields shaped hull. |
+| 1. Fell large tree | Woodworking 10 (action) | Stone axe (tool) | Yields large log. Key level gate. |
+| 2. Char log interior | — (item-gated) | Large log ×1, Dry grass ×2 | Camp fire required. Yields charred log. |
+| 3. Scrape hull | — (item-gated) | Charred log ×1, Shell adze (tool) | Yields shaped hull. |
 | 4. Assemble dugout | Construction 8 (recipe) | Shaped hull ×1, Bamboo cane ×4, Cordage ×6 | **Dugout complete** — near-shore expeditions |
 
 ### Outrigger
@@ -535,8 +535,8 @@ PHASE 2: STONE & CLAY ✅ (partially)
 │   ├── Raft (Construction 5) → Sail Nearby Island expedition
 │   │   └── May find: OBSIDIAN, wild seeds, nearby island biome
 │   │       └── Obsidian blade (Crafting 9) ← best pre-metal cutting tool
-│   ├── Fell large tree (Woodworking 8, stone axe)
-│   ├── Dugout chain: char log → scrape hull (shell adze) → assemble
+│   ├── Fell large tree (Woodworking 10, stone axe) ← KEY LEVEL GATE
+│   ├── Dugout chain: char log (item-gated) → scrape hull (shell adze, item-gated) → assemble
 │   └── Dugout voyage expedition (5 food + 3 water)
 │
 ├── FARMING — NOT YET BUILT
