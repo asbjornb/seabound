@@ -59,8 +59,15 @@ export const SKILLS: Record<SkillId, SkillDef> = {
 // XP required for each level (cumulative). Level 1 = 0 xp, level 2 = 100 xp, etc.
 export function xpForLevel(level: number): number {
   if (level <= 1) return 0;
-  // Quadratic scaling: each level requires more XP
-  return Math.floor(100 * (level - 1) * Math.pow(1.15, level - 2));
+  // Keep early game pacing mostly unchanged, then ramp up in higher tiers.
+  const baseXp = 100 * (level - 1) * Math.pow(1.15, level - 2);
+  if (level <= 10) return Math.floor(baseXp);
+
+  // Add a compounding tier bonus every 10 levels after 10.
+  // L11-19: +15%, L20-29: +30%, L30-39: +45%, etc.
+  const tier = Math.floor((level - 10) / 10) + 1;
+  const tierMultiplier = 1 + tier * 0.15;
+  return Math.floor(baseXp * tierMultiplier);
 }
 
 export function levelFromXp(xp: number): number {
