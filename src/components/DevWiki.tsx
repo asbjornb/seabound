@@ -183,8 +183,11 @@ export function DevWiki() {
                 <td style={styles.tdSmall}>
                   {[
                     r.requiredSkillLevel && r.requiredSkillLevel > 1
-                      ? `Lv${r.requiredSkillLevel}`
+                      ? `${r.skillId} Lv${r.requiredSkillLevel}`
                       : null,
+                    ...(r.requiredSkills ?? []).map(
+                      (req) => `${req.skillId} Lv${req.level}`
+                    ),
                     r.requiredItems?.length
                       ? `Items: ${r.requiredItems.join(", ")}`
                       : null,

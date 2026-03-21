@@ -45,6 +45,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
   return RECIPES.filter((recipe) => {
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
+    if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
     if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) return false;

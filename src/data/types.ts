@@ -160,6 +160,7 @@ export interface RecipeDef {
   output?: { resourceId: ResourceId; amount: number };
   durationMs: number;
   requiredSkillLevel?: number;
+  requiredSkills?: { skillId: SkillId; level: number }[]; // dual-skill gates
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
   requiredBuildings?: BuildingId[]; // must have these buildings constructed
   buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
