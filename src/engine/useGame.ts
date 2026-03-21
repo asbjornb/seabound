@@ -3,6 +3,12 @@ import { ACTIONS } from "../data/actions";
 import { BUILDINGS } from "../data/buildings";
 import { EXPEDITIONS } from "../data/expeditions";
 import { getDurationMultiplier } from "../data/milestones";
+import {
+  ACTIONS_BY_ID,
+  EXPEDITIONS_BY_ID,
+  RECIPES_BY_ID,
+  STATIONS_BY_ID,
+} from "../data/registries";
 import { levelFromXp } from "../data/skills";
 import { RECIPES } from "../data/recipes";
 import { RESOURCES } from "../data/resources";
@@ -37,7 +43,7 @@ const SAVE_INTERVAL_MS = 10000;
 function refundCurrentAction(state: GameState) {
   if (!state.currentAction) return;
   if (state.currentAction.type === "craft" && state.currentAction.recipeId) {
-    const recipe = RECIPES.find((r) => r.id === state.currentAction!.recipeId);
+    const recipe = RECIPES_BY_ID[state.currentAction.recipeId];
     if (recipe) {
       for (const input of recipe.inputs) {
         addResource(state, input.resourceId, input.amount);
@@ -48,9 +54,7 @@ function refundCurrentAction(state: GameState) {
     state.currentAction.type === "expedition" &&
     state.currentAction.expeditionId
   ) {
-    const exp = EXPEDITIONS.find(
-      (e) => e.id === state.currentAction!.expeditionId
-    );
+    const exp = EXPEDITIONS_BY_ID[state.currentAction.expeditionId];
     if (exp?.foodCost && state.currentAction.foodPaid) {
       for (const [resId, amount] of Object.entries(state.currentAction.foodPaid)) {
         addResource(state, resId, amount);
@@ -320,7 +324,7 @@ export function useGame() {
     setState((prev) => {
       if (index < 0 || index >= prev.stations.length) return prev;
       const placed = prev.stations[index];
-      const def = STATIONS.find((s) => s.id === placed.stationId);
+      const def = STATIONS_BY_ID[placed.stationId];
       if (!def) return prev;
       const readyAt = placed.deployedAt + def.durationMs;
       if (Date.now() < readyAt) return prev; // not ready yet
@@ -520,9 +524,7 @@ export function useGame() {
   let actionDuration = 0;
   if (state.currentAction) {
     if (state.currentAction.type === "gather") {
-      const def = ACTIONS.find(
-        (a) => a.id === state.currentAction!.actionId
-      );
+      const def = ACTIONS_BY_ID[state.currentAction.actionId];
       if (def) {
         const skillLevel = state.skills[def.skillId].level;
         const toolMultiplier = getToolSpeedMultiplier(state, def.id);
@@ -534,9 +536,8 @@ export function useGame() {
         actionProgress = Math.min(1, elapsed / effectiveDuration);
       }
     } else if (state.currentAction.type === "craft") {
-      const def = RECIPES.find(
-        (r) => r.id === state.currentAction!.recipeId
-      );
+      const recipeId = state.currentAction.recipeId;
+      const def = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
       if (def) {
         const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
         const effectiveDuration = Math.round(def.durationMs * moraleMultiplier * craftToolMultiplier);
@@ -545,9 +546,10 @@ export function useGame() {
         actionProgress = Math.min(1, elapsed / effectiveDuration);
       }
     } else if (state.currentAction.type === "expedition") {
-      const def = EXPEDITIONS.find(
-        (e) => e.id === state.currentAction!.expeditionId
-      );
+      const expeditionId = state.currentAction.expeditionId;
+      const def = expeditionId
+        ? EXPEDITIONS_BY_ID[expeditionId]
+        : undefined;
       if (def) {
         const effectiveDuration = Math.round(def.durationMs * moraleMultiplier);
         actionDuration = effectiveDuration;

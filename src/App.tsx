@@ -13,7 +13,12 @@ import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { TAB_ICONS } from "./data/icons";
-import { STATIONS } from "./data/stations";
+import {
+  ACTIONS_BY_ID,
+  EXPEDITIONS_BY_ID,
+  RECIPES_BY_ID,
+  STATIONS_BY_ID,
+} from "./data/registries";
 import { SkillId } from "./data/types";
 import { getTotalFood } from "./engine/gameState";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
@@ -94,15 +99,13 @@ export default function App() {
     if (!game.state.currentAction) return null;
     const { type, actionId, recipeId, expeditionId } = game.state.currentAction;
     if (type === "gather") {
-      return game.availableActions.find((a) => a.id === actionId)?.name;
+      return ACTIONS_BY_ID[actionId]?.name;
     }
     if (type === "craft") {
-      // Check both craft and building recipes
-      const allRecipes = game.availableRecipes;
-      return allRecipes.find((r) => r.id === recipeId)?.name;
+      return recipeId ? RECIPES_BY_ID[recipeId]?.name : null;
     }
     if (type === "expedition") {
-      return game.availableExpeditions.find((e) => e.id === expeditionId)?.name;
+      return expeditionId ? EXPEDITIONS_BY_ID[expeditionId]?.name : null;
     }
     return null;
   })();
@@ -215,7 +218,7 @@ export default function App() {
           {(() => {
             const now = Date.now();
             const readyStations = game.state.stations.filter((s) => {
-              const def = STATIONS.find((d) => d.id === s.stationId);
+              const def = STATIONS_BY_ID[s.stationId];
               return def && now >= s.deployedAt + def.durationMs;
             });
             return readyStations.length > 0 ? (
