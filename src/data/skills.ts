@@ -52,7 +52,7 @@ export const SKILLS: Record<SkillId, SkillDef> = {
   preservation: {
     id: "preservation",
     name: "Preservation",
-    description: "Drying, smoking, pottery firing, sealing, fermenting.",
+    description: "Drying, smoking, sealing, fermenting — extending shelf life.",
   },
 };
 

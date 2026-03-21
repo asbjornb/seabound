@@ -610,12 +610,12 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 15,
   },
 
-  // Fire Clay Pot (Preservation 8, requires firing pit)
+  // Fire Clay Pot (Crafting 8, requires firing pit)
   {
     id: "fire_clay_pot",
     name: "Fire Clay Pot",
     description: "Fire a shaped pot in the firing pit to harden it.",
-    skillId: "preservation",
+    skillId: "crafting",
     panel: "craft",
     requiredSkillLevel: 8,
     inputs: [
@@ -650,15 +650,15 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 30,
   },
 
-  // Crucible (Preservation 30, requires kiln)
+  // Crucible (Construction 15, requires kiln)
   {
     id: "craft_crucible",
     name: "Crucible",
     description:
       "Shape and kiln-fire a thick-walled vessel capable of withstanding smelting temperatures.",
-    skillId: "preservation",
+    skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 25,
+    requiredSkillLevel: 15,
     inputs: [
       { resourceId: "clay", amount: 8 },
       { resourceId: "flat_stone", amount: 4 },
