@@ -123,7 +123,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     output: { resourceId: "bow_drill_kit", amount: 1 },
     durationMs: 6000,
-    requiredSkillLevel: 2,
+    requiredSkillLevel: 3,
     oneTimeCraft: true,
     xpGain: 15,
   },
