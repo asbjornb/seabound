@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Tropical island shoreline with a wooden raft moored at the water's edge, a distant island visible on the horizon, open ocean stretching out. Camp and structures visible on shore behind. Feeling of possibility and the horizon opening up. Sky: deep ocean blue #0c1a2a. Water: teal #1a4a5a to brighter #50b0d0 near horizon. Raft: driftwood brown #6a5a30.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)

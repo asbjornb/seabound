@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Tropical island with stone tools and a clay kiln visible, stacked stones, a rudimentary workshop area, felled large tree trunk in background. More established camp feeling, industrious. Cooler color temperature. Sky: dark slate #1a1a22. Stone: grey-blue #6a7080 to #a0a8b8. Clay/kiln: warm brown #7a5a3a with subtle orange kiln glow.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)

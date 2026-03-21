@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Tropical island beach at night with a campfire burning in the center, warm orange firelight illuminating a small camp area, smoke curling upward, palm tree silhouetted against the glow. Bamboo structures barely visible in background. Feeling of warmth and safety against darkness. Sky: dark warm brown #251a10. Fire: orange #f0a050 with bright center #f5c060. Embers and sparks optional.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)
