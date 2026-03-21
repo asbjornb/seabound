@@ -9,6 +9,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Cooking, fire-hardened tools, smoking (later)",
     storageBonus: [{ category: "food", amount: 10 }],
   },
+  stone_hearth: {
+    id: "stone_hearth",
+    name: "Stone Hearth",
+    description:
+      "A ring of stones keeps the fire burning steadily. No more kindling needed for cooking.",
+    unlocks: "Removes dry grass kindling requirement from cooking recipes",
+    storageBonus: [{ category: "food", amount: 10 }],
+  },
   palm_leaf_pile: {
     id: "palm_leaf_pile",
     name: "Palm Leaf Pile",

@@ -1,6 +1,13 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
-import { BiomeId, BuildingId, GameState, ResourceId, SkillId } from "../data/types";
+import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId } from "../data/types";
+
+/** Return recipe inputs with building-removed inputs filtered out. */
+export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
+  return recipe.inputs.filter(
+    (inp) => !inp.removedByBuilding || !state.buildings.includes(inp.removedByBuilding)
+  );
+}
 
 const ALL_SKILLS: SkillId[] = [
   "foraging",

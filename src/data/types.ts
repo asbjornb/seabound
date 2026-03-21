@@ -75,6 +75,7 @@ export type BiomeId = "beach" | "coconut_grove" | "rocky_shore" | "bamboo_grove"
 
 export type BuildingId =
   | "camp_fire"
+  | "stone_hearth"
   | "palm_leaf_pile"
   | "drying_rack"
   | "fenced_perimeter"
@@ -150,13 +151,19 @@ export interface ActionDef {
   xpGain: number;
 }
 
+export interface RecipeInput {
+  resourceId: ResourceId;
+  amount: number;
+  removedByBuilding?: BuildingId; // input is skipped when player has this building
+}
+
 export interface RecipeDef {
   id: string;
   name: string;
   description: string;
   skillId: SkillId;
   panel: ContentPanel;
-  inputs: { resourceId: ResourceId; amount: number }[];
+  inputs: RecipeInput[];
   output?: { resourceId: ResourceId; amount: number };
   durationMs: number;
   requiredSkillLevel?: number;

@@ -3,7 +3,7 @@ import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { GameState, RecipeDef } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { getEffectiveInputs, getResource } from "../engine/gameState";
 
 interface Props {
   recipes: RecipeDef[];
@@ -54,7 +54,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
 
   // Count craftable for the filter badge
   const craftableCount = recipes.filter((r) =>
-    r.inputs.every((inp) => getResource(state, inp.resourceId) >= inp.amount)
+    getEffectiveInputs(r, state).every((inp) => getResource(state, inp.resourceId) >= inp.amount)
   ).length;
 
   return (
@@ -73,7 +73,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
 
         if (craftableOnly) {
           list = list.filter((r) =>
-            r.inputs.every(
+            getEffectiveInputs(r, state).every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             )
           );
@@ -92,7 +92,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((recipe) => {
-              const canAfford = recipe.inputs.every(
+              const inputs = getEffectiveInputs(recipe, state);
+              const canAfford = inputs.every(
                 (inp) => getResource(state, inp.resourceId) >= inp.amount
               );
               const disabled = !canAfford;
@@ -112,7 +113,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                   <div className="action-desc">{recipe.description}</div>
                   <div className="recipe-inputs">
                     Needs:{" "}
-                    {recipe.inputs.map((inp, i) => {
+                    {inputs.map((inp, i) => {
                       const have = getResource(state, inp.resourceId);
                       const enough = have >= inp.amount;
                       return (
