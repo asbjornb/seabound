@@ -274,6 +274,7 @@ export default function App() {
                 actions={gatherActions}
                 state={game.state}
                 onStart={game.startAction}
+                currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
               />
             )}
             {activeTab === "inventory" && (
