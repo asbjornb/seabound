@@ -35,6 +35,7 @@ export function processTick(state: GameState, now: number): TickResult {
   const completions: CompletionEvent[] = [];
 
   if (!state.currentAction) {
+    cleanupObsoleteBambooSplinters(state);
     // No action running — skip morale decay so idle players aren't punished
     return { completions, elapsedMs };
   }
@@ -164,7 +165,24 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   }
 
+  cleanupObsoleteBambooSplinters(state);
   return { completions, elapsedMs };
+}
+
+function resourceHasUse(state: GameState, resourceId: string): boolean {
+  return RECIPES.some((r) => {
+    const usesResource = r.inputs.some((inp) => inp.resourceId === resourceId);
+    if (!usesResource) return false;
+    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) return false;
+    if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;
+    return true;
+  });
+}
+
+function cleanupObsoleteBambooSplinters(state: GameState): void {
+  if ((state.resources["bamboo_splinter"] ?? 0) < 1) return;
+  if (resourceHasUse(state, "bamboo_splinter")) return;
+  delete state.resources["bamboo_splinter"];
 }
 
 function applyGatherCompletion(
