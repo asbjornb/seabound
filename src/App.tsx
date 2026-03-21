@@ -5,6 +5,7 @@ import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { LogPanel } from "./components/LogPanel";
+import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
@@ -270,6 +271,8 @@ export default function App() {
             {activeTab === "skills" && <SkillsPanel state={game.state} />}
           </main>
         </div>
+
+        <NotificationToast discoveryLog={game.state.discoveryLog} />
 
         {/* Desktop sidebar: always visible on wide screens */}
         {hasAnyResource && (
