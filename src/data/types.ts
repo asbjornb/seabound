@@ -133,11 +133,14 @@ export interface SkillMilestone {
   effects?: MilestoneEffect[];
 }
 
+export type ContentPanel = "gather" | "craft" | "camp";
+
 export interface ActionDef {
   id: string;
   name: string;
   description: string;
   skillId: SkillId;
+  panel: ContentPanel;
   durationMs: number;
   drops: Drop[];
   requiredSkillLevel?: number;
@@ -152,6 +155,7 @@ export interface RecipeDef {
   name: string;
   description: string;
   skillId: SkillId;
+  panel: ContentPanel;
   inputs: { resourceId: ResourceId; amount: number }[];
   output?: { resourceId: ResourceId; amount: number };
   durationMs: number;

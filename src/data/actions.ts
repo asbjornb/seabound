@@ -11,6 +11,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Gather Fallen Coconuts",
     description: "Pick up coconuts from beneath the palm trees in the grove.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 3000,
     drops: [
       { resourceId: "coconut", amount: 1 },
@@ -24,6 +25,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Collect Driftwood",
     description: "Gather sun-bleached branches washed up on the shore.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 3000,
     drops: [{ resourceId: "driftwood_branch", amount: 1 }],
     xpGain: 5,
@@ -33,6 +35,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Collect Beach Stone",
     description: "Search the beach for useful stones.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 3000,
     drops: [
       { resourceId: "flat_stone", amount: 1, chance: 0.25 },
@@ -45,6 +48,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Collect Palm Frond",
     description: "Gather fallen palm fronds from the coconut grove floor.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 3000,
     drops: [{ resourceId: "palm_frond", amount: 2 }],
     requiredBiome: "coconut_grove",
@@ -55,6 +59,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Collect Dry Grass",
     description: "Gather dry grass for fire-starting.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 4000,
     drops: [
       { resourceId: "dry_grass", amount: 1 },
@@ -70,6 +75,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Wade Tidal Pool",
     description: "Wade into shallow pools to catch small fish and crabs.",
     skillId: "fishing",
+    panel: "gather",
     durationMs: 4000,
     drops: [
       { resourceId: "small_fish", amount: 1, chance: 0.1 },
@@ -87,6 +93,7 @@ export const ACTIONS: ActionDef[] = [
     description:
       "Use a large shell to dig channels around camp. Hard labor, but good practice.",
     skillId: "construction",
+    panel: "camp",
     durationMs: 30000,
     drops: [],
     requiredTools: ["large_shell"],
@@ -103,6 +110,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Harvest Bamboo Cane",
     description: "Cut bamboo canes from the grove.",
     skillId: "woodworking",
+    panel: "gather",
     durationMs: 4000,
     drops: [{ resourceId: "bamboo_cane", amount: 1 }],
     requiredBiome: "bamboo_grove",
@@ -114,6 +122,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Collect Beach Chert",
     description: "Search the rocky end of the beach for knappable chert nodules.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 4000,
     drops: [{ resourceId: "chert", amount: 1, chance: 0.5 }],
     requiredSkillLevel: 5,
@@ -127,6 +136,7 @@ export const ACTIONS: ActionDef[] = [
     description:
       "Chop down a large jungle tree with the stone axe. Exhausting work.",
     skillId: "woodworking",
+    panel: "gather",
     durationMs: 15000,
     drops: [{ resourceId: "large_log", amount: 1 }],
     requiredSkillLevel: 15,
@@ -142,6 +152,7 @@ export const ACTIONS: ActionDef[] = [
     description:
       "Fill a clay pot with clean water from the jungle stream.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 4000,
     drops: [{ resourceId: "fresh_water", amount: 1 }],
     requiredBiome: "jungle_interior",
@@ -158,6 +169,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Dig Clay",
     description: "Dig clay from the riverbank deposits in the jungle interior.",
     skillId: "foraging",
+    panel: "gather",
     durationMs: 5000,
     drops: [{ resourceId: "clay", amount: 1 }],
     requiredBiome: "jungle_interior",
@@ -171,6 +183,7 @@ export const ACTIONS: ActionDef[] = [
     name: "Spear Fish",
     description: "Use your bamboo spear to reliably catch fish.",
     skillId: "fishing",
+    panel: "gather",
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
@@ -188,6 +201,7 @@ export const ACTIONS: ActionDef[] = [
     description:
       "Lower a baited gorge hook into deeper water. Slower, but catches bigger fish.",
     skillId: "fishing",
+    panel: "gather",
     durationMs: 8000,
     drops: [
       { resourceId: "small_fish", amount: 1 },

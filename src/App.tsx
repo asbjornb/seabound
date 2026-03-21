@@ -61,7 +61,7 @@ export default function App() {
     }
   };
 
-  // Split recipes: building recipes + camp maintenance go to Camp tab, others stay in Craft
+  // Split recipes by explicit panel metadata
   const craftRecipes = useMemo(
     () => selectCraftRecipes(game.availableRecipes),
     [game.availableRecipes]
@@ -71,7 +71,7 @@ export default function App() {
     [game.availableRecipes]
   );
 
-  // Split actions: construction actions go to Camp tab, others stay in Gather
+  // Split actions by explicit panel metadata
   const gatherActions = useMemo(
     () => selectGatherActions(game.availableActions),
     [game.availableActions]
