@@ -29,6 +29,7 @@ import {
 } from "./engine/selectors";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
+import { FULL_XP_ACTIONS, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
 
 export default function App() {
@@ -122,6 +123,12 @@ export default function App() {
     () => selectReadyStationCount(game.state),
     [game.state]
   );
+  const repetitiveXpMultiplier = useMemo(
+    () => getRepetitiveXpMultiplier(game.state.repetitiveActionCount),
+    [game.state.repetitiveActionCount]
+  );
+  const repetitiveXpPercent = Math.round(repetitiveXpMultiplier * 100);
+  const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= FULL_XP_ACTIONS;
 
   return (
     <div className={`app phase-${currentPhase.id}`}>
@@ -225,6 +232,13 @@ export default function App() {
                 ).toFixed(1)}
                 s
               </span>
+              <div
+                className={`repetition-status${isRepetitionPenaltyActive ? " penalty" : ""}`}
+                title="Manual action switch resets repetition to 0."
+              >
+                Repetition {game.state.repetitiveActionCount} • XP {repetitiveXpPercent}%
+                {isRepetitionPenaltyActive ? " (malus active)" : ""}
+              </div>
             </div>
           )}
 

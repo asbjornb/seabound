@@ -33,6 +33,7 @@ export function createInitialState(): GameState {
     discoveredResources: [],
     stations: [],
     seenPhases: ["bare_hands"],
+    repetitiveActionCount: 0,
   };
 }
 
@@ -93,6 +94,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure seenPhases exists
   if (!loaded.seenPhases) {
     loaded.seenPhases = ["bare_hands"];
+  }
+  // Migration: ensure repetitiveActionCount exists
+  if (loaded.repetitiveActionCount == null) {
+    loaded.repetitiveActionCount = 0;
   }
   if (loaded.currentAction && typeof loaded.currentAction !== "object") {
     loaded.currentAction = null;

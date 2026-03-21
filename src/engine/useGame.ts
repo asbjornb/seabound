@@ -40,6 +40,19 @@ const TICK_INTERVAL_MS = 100;
 const SAVE_INTERVAL_MS = 10000;
 
 /** Refund resources consumed by the current action (craft inputs / expedition food). */
+function getCurrentActionKey(state: GameState): string | null {
+  if (!state.currentAction) return null;
+  const { type, actionId } = state.currentAction;
+  return `${type}:${actionId}`;
+}
+
+function resetRepetitiveCountOnManualActionChange(state: GameState, nextActionKey: string | null): void {
+  const prevActionKey = getCurrentActionKey(state);
+  if (prevActionKey !== nextActionKey) {
+    state.repetitiveActionCount = 0;
+  }
+}
+
 function refundCurrentAction(state: GameState) {
   if (!state.currentAction) return;
   if (state.currentAction.type === "craft" && state.currentAction.recipeId) {
@@ -183,6 +196,7 @@ export function useGame() {
       }
       const next = structuredClone(prev);
       refundCurrentAction(next);
+      resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       next.currentAction = {
         actionId: action.id,
         startedAt: Date.now(),
@@ -214,6 +228,7 @@ export function useGame() {
         }
         const next = structuredClone(prev);
         refundCurrentAction(next);
+        resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         for (const input of recipe.inputs) {
           next.resources[input.resourceId] =
             (next.resources[input.resourceId] ?? 0) - input.amount;
@@ -246,6 +261,7 @@ export function useGame() {
         }
         const next = structuredClone(prev);
         refundCurrentAction(next);
+        resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
         // Deduct food
         let foodPaid: Record<string, number> | undefined;
         if (expedition.foodCost) {
@@ -279,6 +295,7 @@ export function useGame() {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
       refundCurrentAction(next);
+      resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       return next;
     });

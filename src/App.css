@@ -408,6 +408,16 @@ body {
   color: var(--text-dim);
 }
 
+.repetition-status {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.repetition-status.penalty {
+  color: var(--warning);
+}
+
 /* Tabs */
 .tabs {
   display: flex;

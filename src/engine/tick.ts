@@ -8,6 +8,7 @@ import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
 import { addResource, deductFood, deductWater, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { applyRepetitiveXp } from "./repetitiveXp";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -71,7 +72,7 @@ export function processTick(state: GameState, now: number): TickResult {
     let remaining = timeAvailable;
     while (remaining >= effectiveDuration) {
       remaining -= effectiveDuration;
-      const event = applyGatherCompletion(state, def.id);
+      const event = applyGatherCompletion(state, def.id, state.repetitiveActionCount);
       if (event) completions.push(event);
     }
 
@@ -94,7 +95,7 @@ export function processTick(state: GameState, now: number): TickResult {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
         remaining -= effectiveCraftDuration;
-        const event = applyCraftCompletion(state, def.id);
+        const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
         if (event) completions.push(event);
 
         // Try to deduct inputs for the next cycle
@@ -116,7 +117,7 @@ export function processTick(state: GameState, now: number): TickResult {
       }
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
-        const event = applyCraftCompletion(state, def.id);
+        const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
         if (event) completions.push(event);
         state.currentAction = null;
       }
@@ -135,7 +136,7 @@ export function processTick(state: GameState, now: number): TickResult {
     let remaining = timeAvailable;
     while (remaining >= effectiveExpDuration) {
       remaining -= effectiveExpDuration;
-      const event = applyExpeditionCompletion(state, def.id);
+      const event = applyExpeditionCompletion(state, def.id, state.repetitiveActionCount);
       if (event) completions.push(event);
 
       // Check if we can afford the next cycle's food and water costs
@@ -192,7 +193,8 @@ function cleanupObsoleteBambooSplinters(state: GameState): void {
 
 function applyGatherCompletion(
   state: GameState,
-  actionId: string
+  actionId: string,
+  repetitiveCount: number
 ): CompletionEvent | null {
   const def = ACTIONS_BY_ID[actionId];
   if (!def) return null;
@@ -210,13 +212,15 @@ function applyGatherCompletion(
 
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
-  skill.xp += def.xpGain;
+  const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
+  skill.xp += xpGain;
   skill.level = levelFromXp(skill.xp);
+  state.repetitiveActionCount += 1;
 
   return {
     actionName: def.name,
     drops: drops.map((d) => ({ name: d.resourceId, amount: d.amount })),
-    xpGain: def.xpGain,
+    xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     newResources: newResources.length > 0 ? newResources : undefined,
@@ -225,7 +229,8 @@ function applyGatherCompletion(
 
 function applyCraftCompletion(
   state: GameState,
-  recipeId: string
+  recipeId: string,
+  repetitiveCount: number
 ): CompletionEvent | null {
   const def = RECIPES_BY_ID[recipeId];
   if (!def) return null;
@@ -268,13 +273,15 @@ function applyCraftCompletion(
 
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
-  skill.xp += def.xpGain;
+  const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
+  skill.xp += xpGain;
   skill.level = levelFromXp(skill.xp);
+  state.repetitiveActionCount += 1;
 
   return {
     actionName: def.name,
     drops,
-    xpGain: def.xpGain,
+    xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     newResources: newResources.length > 0 ? newResources : undefined,
@@ -284,7 +291,8 @@ function applyCraftCompletion(
 
 function applyExpeditionCompletion(
   state: GameState,
-  expeditionId: string
+  expeditionId: string,
+  repetitiveCount: number
 ): CompletionEvent | null {
   const def = EXPEDITIONS_BY_ID[expeditionId];
   if (!def) return null;
@@ -317,13 +325,15 @@ function applyExpeditionCompletion(
   // XP for expeditions
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
-  skill.xp += def.xpGain;
+  const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
+  skill.xp += xpGain;
   skill.level = levelFromXp(skill.xp);
+  state.repetitiveActionCount += 1;
 
   return {
     actionName: def.name,
     drops,
-    xpGain: def.xpGain,
+    xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     biomeDiscovery: outcome.biomeDiscovery,
