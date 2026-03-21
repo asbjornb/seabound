@@ -10,7 +10,8 @@ interface Toast {
 
 export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEntry[] }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const lastSeenId = useRef<number>(-1);
+  // Initialize to the latest existing ID so we don't re-toast old entries on reload
+  const lastSeenId = useRef<number>(discoveryLog.length > 0 ? discoveryLog[0].id : -1);
 
   // Watch for new discovery log entries
   useEffect(() => {
