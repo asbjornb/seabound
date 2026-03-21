@@ -414,7 +414,6 @@ export const RECIPES: RecipeDef[] = [
       "Burn out the interior of a large log using controlled fire. The first step toward a dugout canoe.",
     skillId: "woodworking",
     panel: "craft",
-    requiredSkillLevel: 16,
     requiredBuildings: ["camp_fire"],
     inputs: [
       { resourceId: "large_log", amount: 1 },
@@ -433,7 +432,6 @@ export const RECIPES: RecipeDef[] = [
       "Use the shell adze to scrape out the charred wood, shaping the canoe hull.",
     skillId: "woodworking",
     panel: "craft",
-    requiredSkillLevel: 17,
     requiredItems: ["shell_adze"],
     inputs: [{ resourceId: "charred_log", amount: 1 }],
     output: { resourceId: "shaped_hull", amount: 1 },
