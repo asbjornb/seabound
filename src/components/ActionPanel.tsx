@@ -9,6 +9,7 @@ interface Props {
   actions: ActionDef[];
   state: GameState;
   onStart: (action: ActionDef) => void;
+  currentActionId?: string | null;
 }
 
 const SKILL_ORDER: SkillId[] = [
@@ -19,7 +20,7 @@ const SKILL_ORDER: SkillId[] = [
   "crafting",
 ];
 
-export function ActionPanel({ actions, state, onStart }: Props) {
+export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
   const [collapsed, setCollapsed] = useState<Set<SkillId>>(new Set());
 
   const grouped = new Map<SkillId, ActionDef[]>();
@@ -59,10 +60,11 @@ export function ActionPanel({ actions, state, onStart }: Props) {
                 (t) => getResource(state, t) < 1
               );
               const disabled = !!missingTool;
+              const isActive = currentActionId === action.id;
               return (
                 <div
                   key={action.id}
-                  className={`action-card ${disabled ? "disabled" : ""}`}
+                  className={`action-card ${disabled ? "disabled" : ""} ${isActive ? "active" : ""}`}
                   onClick={() => !disabled && onStart(action)}
                 >
                   <div className="action-card-header">
