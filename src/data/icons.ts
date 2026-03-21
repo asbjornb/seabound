@@ -66,6 +66,7 @@ export const SKILL_ICONS: Record<SkillId, string> = {
 export const BIOME_ICONS: Record<BiomeId, string> = {
   beach: "\u{1F3D6}\uFE0F",
   coconut_grove: "\u{1F334}",
+  rocky_shore: "\u{1FAA8}",
   bamboo_grove: "\u{1F38D}",
   jungle_interior: "\u{1F332}",
   nearby_island: "\u{1F30B}",

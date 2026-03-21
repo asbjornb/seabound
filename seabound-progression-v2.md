@@ -8,25 +8,26 @@
 
 ### What's Built
 
-- **Phase 0 gameplay loop** — Beach gathering actions (coconuts, driftwood, stones, palm fronds, tidal pool wading). Coconut grove and bamboo grove as discoverable biomes via scouting expeditions (coconut grove discovered first, bamboo grove requires it).
-- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, coconut husk fiber/cordage chain, bamboo knife, bow drill kit, bamboo spear.
+- **Phase 0 gameplay loop** — Beach gathering actions (coconuts, driftwood, palm fronds, tidal pool wading). Biomes discovered via scouting expeditions: coconut grove first, then rocky shore and bamboo grove (both require coconut grove), then jungle interior.
+- **Biome-gated gathering** — Gather panel organized by biome. Rocky shore biome gates stones, dry grass, and chert (single "Comb Rocky Shore" action). Coconut grove gates coconuts and palm fronds. Bamboo grove gates bamboo. Jungle interior gates clay and fresh water.
+- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, coconut husk fiber/cordage chain, bamboo knife, bow drill kit, bamboo spear. No skill level gates — crafting chain dependencies are the gates.
 - **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened spear.
 - **Spear fishing** — Bamboo spear enables spear fishing action (5s, Fishing XP, small fish + shell 30% chance). Fishing 8 milestone unlocks 5% chance of large fish.
-- **Shell adze** — Large shell drops from tidal pool wading. Shell adze crafted from large shell + cordage + driftwood (Crafting 8). Used in dugout hull scraping.
-- **Stone tools** — Hammerstone, stone flakes, stone blades (from chert), obsidian blades. Stone axe (Crafting 12) enables large tree felling.
+- **Shell adze** — Large shell drops from tidal pool wading. Shell adze crafted from large shell + cordage + driftwood. Used in dugout hull scraping.
+- **Stone tools** — No skill level gates. Progression driven by material/tool chain: flat stone → hammerstone → stone flake (requires chert + hammerstone) → stone blade → stone axe. Each step requires output of previous.
 - **Clay & pottery** — Jungle interior biome discovered via expedition. Dig clay action (Foraging 5). Full pottery chain: shaped clay pot → fired clay pot → sealed clay jar → crucible. Firing Pit and Kiln buildings.
-- **Maritime vessels** — Raft (Construction 5) for coastal voyages. Dugout canoe chain: fell large tree → char log interior → scrape hull (shell adze) → assemble dugout.
+- **Maritime vessels** — Raft for coastal voyages. Dugout canoe chain: fell large tree → char log interior → scrape hull (shell adze) → assemble dugout. No skill level gates on construction — material chains are the gates.
 - **Settlement buildings (7)** — Camp Fire, Palm Leaf Pile, Drying Rack, Fenced Perimeter, Firing Pit, Kiln, Fiber Loom. Buildings gate recipes/actions and grant storage bonuses.
-- **Expedition system (4 expeditions)** — Explore Beach (coconut grove, bamboo grove discovery), Explore Interior (jungle interior, clay deposits), Sail Nearby Island (requires raft; obsidian, wild seeds), Dugout Voyage (requires dugout). Auto-repeating with food/water costs. Navigation XP on completion.
+- **Expedition system (4 expeditions)** — Explore Beach (coconut grove, rocky shore, bamboo grove discovery), Explore Interior (jungle interior, clay deposits), Sail Nearby Island (requires raft; obsidian, wild seeds), Dugout Voyage (requires dugout). Auto-repeating with food/water costs. Navigation XP on completion.
 - **Morale system** — Shell Beads recipe grants +2 morale (repeatable crafting XP source with morale reward).
 - **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers, double output chances) + auto-generated unlock previews from skill-gated actions/recipes.
 - **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +20 raw, Drying Rack +20 processed, Camp Fire +10 food, Fenced Perimeter +10 structure, Firing Pit +10 processed, Kiln +15 processed, Fiber Loom +10 processed).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
-- **Gradual unlocks** — Early actions gated behind biome discovery (palm fronds require coconut grove) and skill levels (beach stones at Foraging 2, dry grass at Foraging 3).
+- **Discovery-driven progression** — Core progression gated by biome discovery and crafting chains, not skill levels. Skill levels gate optional efficiency improvements (better yields, advanced techniques). Gather panel grouped by biome to reinforce exploration as progression.
 - **10 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation, Preservation.
 - **Weaving recipes** — Weave Basket (palm fronds + cordage → woven basket).
 - **Cooking recipes** — Cook Fish, Cook Crab, Cook Large Fish (require camp fire).
-- **Fresh water** — Collect Fresh Water action (Foraging 4, jungle interior biome). Used as expedition fuel for longer voyages.
+- **Fresh water** — Collect Fresh Water action (jungle interior biome, requires fired clay pot). Used as expedition fuel for longer voyages.
 - **Cordage braiding** — Fiber Loom building enables efficient Braid Cordage recipe alongside basic Twist Cordage.
 - **Offline progress** — All action types progress while away.
 - **Save/load** — With migration support for old save formats.
@@ -64,8 +65,8 @@
 
 ### Progression Philosophy
 
-**Skills AND recipes both unlock content.**
-Skill levels are prerequisites, but crafting a new item can itself trigger new options — a bamboo knife appearing in your inventory unlocks new gathering actions, regardless of what level you are. Both axes matter.
+**Discovery and crafting drive progress. Skill levels drive efficiency.**
+The core progression — reaching new areas, crafting new tools, building new structures — is gated by *finding things* and *making things*, not by reaching arbitrary skill levels. Skill levels should gate optional improvements: better yields, faster actions, rare drop chances, automation, advanced techniques. A player who discovers chert and has a hammerstone should be able to knap a blade — they don't need "Crafting 7" to figure out how rocks break. Levels are the "get better at what you already know" axis; discovery and crafting are the "unlock new possibilities" axis.
 
 **Some tools change what's possible. Some tools just make things faster.**
 A bamboo knife unlocks hide processing — a new category. An obsidian knife is just faster and more efficient. Both feel good for different reasons. Don't force every upgrade to be a category unlock.
@@ -83,14 +84,15 @@ No survival meters. No death. But longer expeditions require food and water — 
 
 ### Unlock Triggers
 
-Two types of unlock exist:
+Three types of unlock exist, in order of preference for core progression:
 
-| Type | How it works | Example |
-|---|---|---|
-| **Skill threshold** | Reaching a level makes action/recipe available | Fishing 10 → basket trap recipe appears |
-| **Item in inventory / crafted** | Crafting or obtaining an item triggers new options | Crafting bamboo knife → strip fibrous bark unlocked |
+| Type | How it works | Example | Use for |
+|---|---|---|---|
+| **Biome / area discovery** | Exploring finds a new area, unlocking new gathering | Discover jungle interior → clay, fresh water | Core progression |
+| **Item / tool / building** | Crafting or obtaining an item triggers new options | Craft hammerstone → stone flake recipe appears | Core progression |
+| **Skill threshold** | Reaching a level makes action/recipe available | Fishing 10 → basket trap recipe appears | Optional / efficiency |
 
-Many unlocks require both: the skill level to see the recipe, and crafting the item to trigger the downstream options.
+**Guideline**: Core progression recipes (tools, buildings, vessels) should be gated by their material/tool/biome dependencies, not skill levels. Skill level gates are appropriate for: efficiency upgrades (faster/better yields), advanced techniques (trapping, farming, automation), and quality-of-life improvements (bulk processing, rare drops). When in doubt, ask: "Could a clever castaway figure this out by having the right materials?" If yes, don't level-gate it.
 
 ---
 
@@ -149,25 +151,24 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 
 ### Skill Unlock Examples
 
-| Skill Level | Unlock | Status |
-|---|---|---|
-| Foraging 5 | Dig clay action (jungle interior) | ✅ |
-| Foraging 9 | Wild seed chance from dry grass (milestone) | ✅ |
-| Fishing 8 | Large fish chance from spear fishing (milestone) | ✅ |
-| Woodworking 10 | Fell large tree action | ✅ |
-| Crafting 4 | Hammerstone recipe | ✅ |
-| Crafting 5 | Strike stone flake recipe | ✅ |
-| Crafting 7 | Knap stone blade recipe | ✅ |
-| Crafting 8 | Shell adze recipe | ✅ |
-| Crafting 9 | Obsidian blade recipe | ✅ |
-| Crafting 12 | Stone axe recipe | ✅ |
-| Weaving 15 | Basket trap recipe | *Not yet built* |
-| Weaving 35 | Fishing net recipe | *Not yet built* |
-| Weaving 50 | Sail cloth recipe | *Not yet built* |
-| Construction 25 | Stone tidal weir blueprint | *Not yet built* |
-| Preservation 15 | Sealed clay jar recipe | ✅ |
-| Preservation 18 | Fermentation pot recipe | *Not yet built* |
-| Preservation 25 | Crucible recipe | ✅ |
+Skill level gates are reserved for **optional/efficiency** unlocks, not core progression. Core tools, buildings, and vessels are gated by discovery and crafting chains instead.
+
+| Skill Level | Unlock | Type | Status |
+|---|---|---|---|
+| Foraging 5 | Dig clay action (jungle interior) | Efficiency | ✅ |
+| Foraging 9 | Wild seed chance from dry grass (milestone) | Milestone bonus | ✅ |
+| Fishing 8 | Large fish chance from spear fishing (milestone) | Milestone bonus | ✅ |
+| Crafting 6 | Gorge hook recipe | Advanced technique | ✅ |
+| Woodworking 10 | Fell large tree action | Advanced technique | ✅ |
+| Weaving 15 | Basket trap recipe | Advanced technique | *Not yet built* |
+| Weaving 35 | Fishing net recipe | Advanced technique | *Not yet built* |
+| Weaving 50 | Sail cloth recipe | Advanced technique | *Not yet built* |
+| Construction 25 | Stone tidal weir blueprint | Advanced technique | *Not yet built* |
+| Preservation 15 | Sealed clay jar recipe | Advanced technique | ✅ |
+| Preservation 18 | Fermentation pot recipe | Advanced technique | *Not yet built* |
+| Preservation 25 | Crucible recipe | Advanced technique | ✅ |
+
+**Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade.
 
 ---
 
@@ -177,24 +178,34 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 
 *Starting state. No tools. The game teaches the loop. Ends quickly.*
 
-**Available actions from the start:**
+**Available actions from the start (Beach):**
 
 | Action | Skill | Drops | Gate |
 |---|---|---|---|
-| Gather fallen coconuts | Foraging | Coconut ×1, Coconut husk (40% chance) | Coconut grove biome |
 | Collect driftwood | Foraging | Driftwood branch ×1 | — |
-| Collect beach stone | Foraging | Flat stone (25% chance) | Foraging 2 |
-| Collect palm frond | Foraging | Palm frond ×2 | Coconut grove biome |
-| Collect dry grass | Foraging | Dry grass ×1, Wild seed (unlocked by milestone) | Foraging 3 |
 | Wade tidal pool | Fishing | Small fish (10%), Crab (10%), Shell ×1 | — |
+
+**Unlocked by Coconut Grove biome:**
+
+| Action | Skill | Drops |
+|---|---|---|
+| Gather fallen coconuts | Foraging | Coconut ×1, Coconut husk (40% chance) |
+| Collect palm frond | Foraging | Palm frond ×2 |
+
+**Unlocked by Rocky Shore biome (requires coconut grove):**
+
+| Action | Skill | Drops |
+|---|---|---|
+| Comb rocky shore | Foraging | Flat stone (20%), Chert (15%) |
+| Collect dry grass | Foraging | Dry grass ×1, Wild seed (unlocked by milestone) |
 
 > Note: Driftwood drops only branches in the early game. Planks are not available until woodworking skills and tools allow splitting timber — the question of whether wreckage or other human-origin material exists is deferred.
 
 **First expedition available immediately:**
 
-> **[Expedition] Scout the island** — short trip, costs 5 food per trip.
-> RNG outcomes — may discover: Coconut Grove (found first), then Bamboo Grove (requires coconut grove already discovered), or just: flat stones, nothing useful.
-> Repeat to discover biomes. Coconut grove must be found before bamboo grove can appear. This teaches the player that exploration is probabilistic.
+> **[Expedition] Explore Along the Beach** — short trip, costs 5 food per trip.
+> RNG outcomes — may discover: Coconut Grove (found first), then Rocky Shore or Bamboo Grove (both require coconut grove), or just: flat stones, nothing useful.
+> Repeat to discover biomes. Coconut grove must be found before rocky shore or bamboo grove can appear. This teaches the player that exploration is probabilistic.
 
 ---
 
@@ -376,7 +387,7 @@ Once unlocked, players can save seeds from harvested crops. Sealed clay jars req
 
 | Material | Where Found | How |
 |---|---|---|
-| Beach chert | Home island beach | Foraging (Foraging 5) |
+| Beach chert | Rocky shore | Comb Rocky Shore action (rocky_shore biome) |
 | Basalt | Jungle interior | Expedition (food + water required) |
 | **Obsidian** | **Nearby island** | **Requires water expedition: raft or dugout** |
 
@@ -384,15 +395,15 @@ Obsidian is intentionally gated behind a water expedition. It's the reward for i
 
 ### Knapping Chain
 
-| Action | Skill Req | Input | Output | Status |
+| Action | Gate | Input | Output | Status |
 |---|---|---|---|---|
-| Craft hammerstone | Crafting 4 | Flat stone ×2 | Hammerstone | ✅ |
-| Strike stone flake | Crafting 5 | Flat stone ×1 + Hammerstone (tool) | Stone flake | ✅ |
-| Knap stone blade | Crafting 7 | Stone flake ×2, Chert ×1 | Stone blade | ✅ |
-| Knap obsidian blade | Crafting 9 | Obsidian ×1, Hammerstone (tool) | Obsidian blade | ✅ |
-| Knap scraper | Crafting 6 | Stone flake | Stone scraper | *Not yet built* |
-| Knap point | Crafting 10 | Stone blade | Spear / arrow point | *Not yet built* |
-| Pressure flake | Crafting 15 | Stone blade + bone tool | Fine obsidian edge | *Not yet built* |
+| Craft hammerstone | Materials only | Flat stone ×2 | Hammerstone | ✅ |
+| Strike stone flake | Hammerstone (tool) | Chert ×1 | Stone flake ×2 | ✅ |
+| Knap stone blade | Hammerstone (tool) | Stone flake ×2 | Stone blade | ✅ |
+| Knap obsidian blade | Obsidian (expedition) | Obsidian ×2, Flat stone ×1 | Obsidian blade | ✅ |
+| Knap scraper | *TBD* | Stone flake | Stone scraper | *Not yet built* |
+| Knap point | *TBD* | Stone blade | Spear / arrow point | *Not yet built* |
+| Pressure flake | *TBD* | Stone blade + bone tool | Fine obsidian edge | *Not yet built* |
 
 Obsidian blade is the best cutting tool before metal — improves action speed across several categories, better hide yields, better wood shaping.
 
@@ -400,7 +411,7 @@ Obsidian blade is the best cutting tool before metal — improves action speed a
 
 | Recipe | Skill Req | Inputs | Output | Status |
 |---|---|---|---|---|
-| Stone axe | Crafting 12 | Stone blade ×1, Driftwood branch ×2, Cordage ×3 | Stone axe | ✅ |
+| Stone axe | Materials only | Stone blade ×2, Driftwood branch ×2, Cordage ×3 | Stone axe | ✅ |
 | Grinding stone | Crafting 18 | Sandstone slab | Grinding stone | *Not yet built* |
 
 **The stone axe is the key phase gate.** It unlocks large timber felling → dugout construction → maritime tier.

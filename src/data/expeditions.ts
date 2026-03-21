@@ -19,7 +19,14 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         biomeDiscovery: "coconut_grove",
       },
       {
-        weight: 30,
+        weight: 20,
+        description:
+          "You round the headland and discover a rocky stretch of shoreline — flat stones and tough grass everywhere!",
+        biomeDiscovery: "rocky_shore",
+        requiredBiomes: ["coconut_grove"],
+      },
+      {
+        weight: 25,
         description:
           "You find some useful stones along a creek bed, but nothing remarkable.",
         drops: [
@@ -27,7 +34,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         ],
       },
       {
-        weight: 45,
+        weight: 35,
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },

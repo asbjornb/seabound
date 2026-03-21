@@ -31,17 +31,18 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 5,
   },
   {
-    id: "collect_beach_stone",
-    name: "Collect Beach Stone",
-    description: "Search the beach for useful stones.",
+    id: "comb_rocky_shore",
+    name: "Comb Rocky Shore",
+    description: "Search the rocky shoreline for useful stones and chert nodules.",
     skillId: "foraging",
     panel: "gather",
-    durationMs: 3000,
+    durationMs: 4000,
     drops: [
-      { resourceId: "flat_stone", amount: 1, chance: 0.25 },
+      { resourceId: "flat_stone", amount: 1, chance: 0.2 },
+      { resourceId: "chert", amount: 1, chance: 0.15 },
     ],
-    requiredSkillLevel: 2,
-    xpGain: 5,
+    requiredBiome: "rocky_shore",
+    xpGain: 8,
   },
   {
     id: "collect_palm_frond",
@@ -57,7 +58,7 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "collect_dry_grass",
     name: "Collect Dry Grass",
-    description: "Gather dry grass for fire-starting.",
+    description: "Gather tough, sun-dried grass from the rocky shoreline.",
     skillId: "foraging",
     panel: "gather",
     durationMs: 4000,
@@ -65,7 +66,7 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "dry_grass", amount: 1 },
       { resourceId: "wild_seed", amount: 1, chance: 0 },
     ],
-    requiredSkillLevel: 3,
+    requiredBiome: "rocky_shore",
     xpGain: 8,
   },
 
@@ -116,19 +117,6 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "bamboo_grove",
     xpGain: 8,
   },
-  // Stone Tools
-  {
-    id: "collect_chert",
-    name: "Collect Beach Chert",
-    description: "Search the rocky end of the beach for knappable chert nodules.",
-    skillId: "foraging",
-    panel: "gather",
-    durationMs: 4000,
-    drops: [{ resourceId: "chert", amount: 1, chance: 0.5 }],
-    requiredSkillLevel: 5,
-    xpGain: 10,
-  },
-
   // Woodworking — Tree Felling
   {
     id: "fell_large_tree",
