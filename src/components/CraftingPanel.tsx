@@ -130,7 +130,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredItems.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
+                          <span title={RESOURCES[id]?.description}>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
