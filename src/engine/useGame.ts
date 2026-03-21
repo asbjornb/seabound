@@ -1,18 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ACTIONS } from "../data/actions";
 import { BUILDINGS } from "../data/buildings";
-import { EXPEDITIONS } from "../data/expeditions";
-import { getDurationMultiplier } from "../data/milestones";
 import {
-  ACTIONS_BY_ID,
   EXPEDITIONS_BY_ID,
   RECIPES_BY_ID,
   STATIONS_BY_ID,
 } from "../data/registries";
 import { levelFromXp } from "../data/skills";
-import { RECIPES } from "../data/recipes";
 import { RESOURCES } from "../data/resources";
-import { STATIONS } from "../data/stations";
 import {
   ActionDef,
   DiscoveryType,
@@ -26,14 +20,19 @@ import {
   createInitialState,
   deductFood,
   deductWater,
-  getMoraleDurationMultiplier,
   getResource,
-  getToolSpeedMultiplier,
   getTotalFood,
   getTotalWater,
   loadGame,
   saveGame,
 } from "./gameState";
+import {
+  selectAvailableActions,
+  selectAvailableExpeditions,
+  selectAvailableRecipes,
+  selectAvailableStations,
+  selectCurrentActionTiming,
+} from "./selectors";
 import { CompletionEvent, processTick } from "./tick";
 
 const TICK_INTERVAL_MS = 100;
@@ -408,156 +407,11 @@ export function useGame() {
     []
   );
 
-  // Filter actions by skill level, biome discovery, building requirements, AND tool availability
-  const availableActions = ACTIONS.filter((a) => {
-    const skill = state.skills[a.skillId];
-    if (a.requiredSkillLevel && skill.level < a.requiredSkillLevel) return false;
-    if (a.requiredBiome && !state.discoveredBiomes.includes(a.requiredBiome))
-      return false;
-    if (a.requiredBuildings) {
-      for (const bid of a.requiredBuildings) {
-        if (!state.buildings.includes(bid)) return false;
-      }
-    }
-    // Hide actions whose required tools the player doesn't have yet
-    if (a.requiredTools) {
-      for (const toolId of a.requiredTools) {
-        if (getResource(state, toolId) < 1) return false;
-      }
-    }
-    return true;
-  });
-
-  // Check if a resource still has at least one uncompleted downstream recipe
-  function resourceHasUse(resourceId: string, gs: GameState): boolean {
-    return RECIPES.some((r) => {
-      // Does this recipe consume the resource?
-      const usesResource =
-        r.inputs.some((inp) => inp.resourceId === resourceId);
-      if (!usesResource) return false;
-      // Is this recipe already completed?
-      if (r.buildingOutput && gs.buildings.includes(r.buildingOutput)) return false;
-      if (r.oneTimeCraft && r.output && getResource(gs, r.output.resourceId) >= 1) return false;
-      return true;
-    });
-  }
-
-  // Filter recipes by skill level, item-trigger gates, AND building requirements
-  // Also hide building recipes for buildings already constructed
-  const availableRecipes = RECIPES.filter((r) => {
-    const skill = state.skills[r.skillId];
-    if (r.requiredSkillLevel && skill.level < r.requiredSkillLevel) return false;
-    if (r.requiredItems) {
-      for (const itemId of r.requiredItems) {
-        if (getResource(state, itemId) < 1) return false;
-      }
-    }
-    if (r.requiredBuildings) {
-      for (const bid of r.requiredBuildings) {
-        if (!state.buildings.includes(bid)) return false;
-      }
-    }
-    // Hide building recipes for already-built buildings
-    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
-      return false;
-    }
-    // Hide one-time-craft recipes once the player owns the output
-    if (r.oneTimeCraft && r.output && getResource(state, r.output.resourceId) >= 1) {
-      return false;
-    }
-    // Hide one-time-craft recipes whose output has no remaining downstream use
-    if (r.oneTimeCraft && r.output && !resourceHasUse(r.output.resourceId, state)) {
-      return false;
-    }
-    // Hide split-bamboo once splinters no longer feed any remaining recipe
-    if (r.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) {
-      return false;
-    }
-    // Hide recipes whose inputs include undiscovered resources
-    for (const inp of r.inputs) {
-      if (!state.discoveredResources.includes(inp.resourceId)) return false;
-    }
-    return true;
-  });
-
-  // Filter expeditions by visibility rules
-  const availableExpeditions = EXPEDITIONS.filter((exp) => {
-    // Must own the required vessel to see this expedition
-    if (exp.requiredVessel && getResource(state, exp.requiredVessel) < 1) return false;
-    // Must have discovered required biomes to see this expedition
-    if (exp.requiredBiomes) {
-      for (const req of exp.requiredBiomes) {
-        if (!state.discoveredBiomes.includes(req)) return false;
-      }
-    }
-    // Hide expedition once all its discoverable biomes have been found
-    if (exp.hideWhenAllFound) {
-      const discoverableBiomes = exp.outcomes
-        .filter((o) => o.biomeDiscovery)
-        .map((o) => o.biomeDiscovery!);
-      if (
-        discoverableBiomes.length > 0 &&
-        discoverableBiomes.every((b) => state.discoveredBiomes.includes(b))
-      ) {
-        return false;
-      }
-    }
-    return true;
-  });
-
-  // Filter stations by requirements
-  const availableStations = STATIONS.filter((s) => {
-    const skill = state.skills[s.skillId];
-    if (s.requiredSkillLevel && skill.level < s.requiredSkillLevel) return false;
-    if (s.requiredTool && getResource(state, s.requiredTool) < 1) return false;
-    if (s.requiredBuildings) {
-      for (const bid of s.requiredBuildings) {
-        if (!state.buildings.includes(bid)) return false;
-      }
-    }
-    return true;
-  });
-
-  // Current action progress (0..1)
-  const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
-  let actionProgress = 0;
-  let actionDuration = 0;
-  if (state.currentAction) {
-    if (state.currentAction.type === "gather") {
-      const def = ACTIONS_BY_ID[state.currentAction.actionId];
-      if (def) {
-        const skillLevel = state.skills[def.skillId].level;
-        const toolMultiplier = getToolSpeedMultiplier(state, def.id);
-        const effectiveDuration = Math.round(
-          def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier * toolMultiplier
-        );
-        actionDuration = effectiveDuration;
-        const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / effectiveDuration);
-      }
-    } else if (state.currentAction.type === "craft") {
-      const recipeId = state.currentAction.recipeId;
-      const def = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
-      if (def) {
-        const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
-        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier * craftToolMultiplier);
-        actionDuration = effectiveDuration;
-        const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / effectiveDuration);
-      }
-    } else if (state.currentAction.type === "expedition") {
-      const expeditionId = state.currentAction.expeditionId;
-      const def = expeditionId
-        ? EXPEDITIONS_BY_ID[expeditionId]
-        : undefined;
-      if (def) {
-        const effectiveDuration = Math.round(def.durationMs * moraleMultiplier);
-        actionDuration = effectiveDuration;
-        const elapsed = Date.now() - state.currentAction.startedAt;
-        actionProgress = Math.min(1, elapsed / effectiveDuration);
-      }
-    }
-  }
+  const availableActions = selectAvailableActions(state);
+  const availableRecipes = selectAvailableRecipes(state);
+  const availableExpeditions = selectAvailableExpeditions(state);
+  const availableStations = selectAvailableStations(state);
+  const { actionProgress, actionDuration } = selectCurrentActionTiming(state);
 
   return {
     state,
