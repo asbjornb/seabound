@@ -309,7 +309,7 @@ export const RECIPES: RecipeDef[] = [
       "Lash driftwood logs and bamboo together into a raft. Enough to reach nearby islands.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredSkillLevel: 5,
     inputs: [
       { resourceId: "driftwood_branch", amount: 6 },
       { resourceId: "cordage", amount: 8 },
@@ -392,7 +392,7 @@ export const RECIPES: RecipeDef[] = [
       "Haft a stone blade with cordage to create an axe. Can fell large trees.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 14,
+    requiredSkillLevel: 10,
     inputs: [
       { resourceId: "stone_blade", amount: 2 },
       { resourceId: "driftwood_branch", amount: 2 },
@@ -445,7 +445,7 @@ export const RECIPES: RecipeDef[] = [
       "Fit crossbeams and seal the hull. A proper canoe for near-shore waters.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 18,
+    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "shaped_hull", amount: 1 },
       { resourceId: "cordage", amount: 6 },
@@ -560,7 +560,7 @@ export const RECIPES: RecipeDef[] = [
       "Dig a pit and line it with stones. Reaches temperatures high enough to fire clay.",
     skillId: "construction",
     panel: "camp",
-    requiredSkillLevel: 12,
+    requiredSkillLevel: 6,
     inputs: [
       { resourceId: "flat_stone", amount: 6 },
       { resourceId: "driftwood_branch", amount: 4 },
@@ -580,7 +580,7 @@ export const RECIPES: RecipeDef[] = [
       "Build an enclosed clay kiln over the firing pit. Much higher temperatures for advanced pottery.",
     skillId: "construction",
     panel: "camp",
-    requiredSkillLevel: 25,
+    requiredSkillLevel: 10,
     inputs: [
       { resourceId: "clay", amount: 10 },
       { resourceId: "flat_stone", amount: 8 },
@@ -657,7 +657,7 @@ export const RECIPES: RecipeDef[] = [
       "Shape and kiln-fire a thick-walled vessel capable of withstanding smelting temperatures.",
     skillId: "preservation",
     panel: "craft",
-    requiredSkillLevel: 30,
+    requiredSkillLevel: 25,
     inputs: [
       { resourceId: "clay", amount: 8 },
       { resourceId: "flat_stone", amount: 4 },
