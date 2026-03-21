@@ -13,20 +13,23 @@ import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { TAB_ICONS } from "./data/icons";
-import {
-  ACTIONS_BY_ID,
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
-  STATIONS_BY_ID,
-} from "./data/registries";
-import { SkillId } from "./data/types";
-import { getTotalFood } from "./engine/gameState";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
+import {
+  GameTab,
+  selectCampActions,
+  selectCampRecipes,
+  selectCraftRecipes,
+  selectCurrentActionName,
+  selectHasAnyResource,
+  selectHasAnyXp,
+  selectHasFoodAccess,
+  selectGatherActions,
+  selectReadyStationCount,
+  selectVisibleTabs,
+} from "./engine/selectors";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import "./App.css";
-
-type Tab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
 
 export default function App() {
   // Dev wiki: show at ?dev
@@ -35,7 +38,7 @@ export default function App() {
   }
   const game = useGame();
   const updateAvailable = useUpdateChecker();
-  const [tab, setTab] = useState<Tab>("gather");
+  const [tab, setTab] = useState<GameTab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
@@ -59,56 +62,66 @@ export default function App() {
   };
 
   // Split recipes: building recipes + camp maintenance go to Camp tab, others stay in Craft
-  const campRecipeIds = new Set(["maintain_camp"]);
-  const craftRecipes = game.availableRecipes.filter((r) => !r.buildingOutput && !campRecipeIds.has(r.id));
-  const campRecipes = game.availableRecipes.filter((r) => !!r.buildingOutput || campRecipeIds.has(r.id));
+  const craftRecipes = useMemo(
+    () => selectCraftRecipes(game.availableRecipes),
+    [game.availableRecipes]
+  );
+  const campRecipes = useMemo(
+    () => selectCampRecipes(game.availableRecipes),
+    [game.availableRecipes]
+  );
 
   // Split actions: construction actions go to Camp tab, others stay in Gather
-  const gatherActions = game.availableActions.filter((a) => a.skillId !== "construction");
-  const campActions = game.availableActions.filter((a) => a.skillId === "construction");
+  const gatherActions = useMemo(
+    () => selectGatherActions(game.availableActions),
+    [game.availableActions]
+  );
+  const campActions = useMemo(
+    () => selectCampActions(game.availableActions),
+    [game.availableActions]
+  );
 
   // Progressive tab visibility
-  const hasAnyXp = useMemo(
-    () =>
-      (Object.keys(game.state.skills) as SkillId[]).some(
-        (id) => game.state.skills[id].xp > 0
-      ),
-    [game.state.skills]
-  );
-  const hasFood =
-    getTotalFood(game.state) >= 1 ||
-    game.state.discoveredBiomes.length > 1; // already explored
-
-  const hasAnyResource = Object.values(game.state.resources).some((v) => v > 0);
+  const hasAnyXp = useMemo(() => selectHasAnyXp(game.state), [game.state]);
+  const hasFoodAccess = useMemo(() => selectHasFoodAccess(game.state), [game.state]);
+  const hasAnyResource = useMemo(() => selectHasAnyResource(game.state), [game.state]);
 
   // On mobile, inventory is a tab; on desktop it's always visible as sidebar
   const visibleTabs = useMemo(() => {
-    const tabs: Tab[] = ["gather"];
-    if (hasFood) tabs.push("explore");
-    if (craftRecipes.length > 0) tabs.push("craft");
-    if (campRecipes.length > 0 || campActions.length > 0 || game.state.buildings.length > 0 || game.availableStations.length > 0 || game.state.stations.length > 0) tabs.push("camp");
-    if (hasAnyResource) tabs.push("inventory");
-    if (hasAnyXp) tabs.push("skills");
-    return tabs;
-  }, [hasAnyResource, hasFood, craftRecipes.length, campRecipes.length, campActions.length, game.state.buildings.length, hasAnyXp]);
+    return selectVisibleTabs({
+      hasFoodAccess,
+      hasAnyResource,
+      hasAnyXp,
+      craftRecipeCount: craftRecipes.length,
+      campRecipeCount: campRecipes.length,
+      campActionCount: campActions.length,
+      buildingCount: game.state.buildings.length,
+      availableStationCount: game.availableStations.length,
+      deployedStationCount: game.state.stations.length,
+    });
+  }, [
+    hasFoodAccess,
+    hasAnyResource,
+    hasAnyXp,
+    craftRecipes.length,
+    campRecipes.length,
+    campActions.length,
+    game.state.buildings.length,
+    game.availableStations.length,
+    game.state.stations.length,
+  ]);
 
   // Fall back to gather if current tab isn't visible
   const activeTab = visibleTabs.includes(tab) ? tab : "gather";
 
-  const currentActionName = (() => {
-    if (!game.state.currentAction) return null;
-    const { type, actionId, recipeId, expeditionId } = game.state.currentAction;
-    if (type === "gather") {
-      return ACTIONS_BY_ID[actionId]?.name;
-    }
-    if (type === "craft") {
-      return recipeId ? RECIPES_BY_ID[recipeId]?.name : null;
-    }
-    if (type === "expedition") {
-      return expeditionId ? EXPEDITIONS_BY_ID[expeditionId]?.name : null;
-    }
-    return null;
-  })();
+  const currentActionName = useMemo(
+    () => selectCurrentActionName(game.state),
+    [game.state]
+  );
+  const readyStationCount = useMemo(
+    () => selectReadyStationCount(game.state),
+    [game.state]
+  );
 
   return (
     <div className={`app phase-${currentPhase.id}`}>
@@ -215,23 +228,13 @@ export default function App() {
             </div>
           )}
 
-          {(() => {
-            const now = Date.now();
-            const readyStations = game.state.stations.filter((s) => {
-              const def = STATIONS_BY_ID[s.stationId];
-              return def && now >= s.deployedAt + def.durationMs;
-            });
-            return readyStations.length > 0 ? (
-              <div
-                className="station-ready-banner"
-                onClick={() => setTab("camp")}
-              >
-                {readyStations.length === 1
-                  ? "1 station ready to collect!"
-                  : `${readyStations.length} stations ready to collect!`}
-              </div>
-            ) : null;
-          })()}
+          {readyStationCount > 0 ? (
+            <div className="station-ready-banner" onClick={() => setTab("camp")}>
+              {readyStationCount === 1
+                ? "1 station ready to collect!"
+                : `${readyStationCount} stations ready to collect!`}
+            </div>
+          ) : null}
 
           <nav className="tabs">
             {visibleTabs.map((t) => (
