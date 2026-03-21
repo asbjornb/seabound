@@ -5,28 +5,28 @@ import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
-  campRecipes: RecipeDef[];
-  campActions: ActionDef[];
+  buildRecipes: RecipeDef[];
+  buildActions: ActionDef[];
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
   onStartAction: (action: ActionDef) => void;
 }
 
 export function SettlementPanel({
-  campRecipes,
-  campActions,
+  buildRecipes,
+  buildActions,
   state,
   onBuild,
   onStartAction,
 }: Props) {
-  const buildingRecipes = campRecipes.filter((r) => !!r.buildingOutput);
-  const maintenanceRecipes = campRecipes.filter((r) => !r.buildingOutput);
+  const buildingRecipes = buildRecipes.filter((r) => !!r.buildingOutput);
+  const maintenanceRecipes = buildRecipes.filter((r) => !r.buildingOutput);
   return (
     <div>
-      {(campActions.length > 0 || maintenanceRecipes.length > 0) && (
+      {(buildActions.length > 0 || maintenanceRecipes.length > 0) && (
         <>
-          <div className="section-title">Camp Tasks</div>
-          {campActions.map((action) => {
+          <div className="section-title">Build Tasks</div>
+          {buildActions.map((action) => {
             const missingTool = action.requiredTools?.find(
               (t) => getResource(state, t) < 1
             );
@@ -220,7 +220,7 @@ export function SettlementPanel({
         </>
       )}
 
-      {state.buildings.length === 0 && campRecipes.length === 0 && (
+      {state.buildings.length === 0 && buildRecipes.length === 0 && (
         <div className="empty-message">
           No buildings available yet. Gather materials and level up skills!
         </div>

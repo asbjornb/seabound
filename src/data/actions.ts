@@ -93,7 +93,7 @@ export const ACTIONS: ActionDef[] = [
     description:
       "Use a large shell to dig channels around camp. Hard labor, but good practice.",
     skillId: "construction",
-    panel: "camp",
+    panel: "build",
     durationMs: 30000,
     drops: [],
     requiredTools: ["large_shell"],

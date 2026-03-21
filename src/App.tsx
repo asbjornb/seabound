@@ -16,8 +16,8 @@ import { TAB_ICONS } from "./data/icons";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
-  selectCampActions,
-  selectCampRecipes,
+  selectBuildActions,
+  selectBuildRecipes,
   selectCraftRecipes,
   selectCurrentActionName,
   selectHasAnyResource,
@@ -67,8 +67,8 @@ export default function App() {
     () => selectCraftRecipes(game.availableRecipes),
     [game.availableRecipes]
   );
-  const campRecipes = useMemo(
-    () => selectCampRecipes(game.availableRecipes),
+  const buildRecipes = useMemo(
+    () => selectBuildRecipes(game.availableRecipes),
     [game.availableRecipes]
   );
 
@@ -77,8 +77,8 @@ export default function App() {
     () => selectGatherActions(game.availableActions),
     [game.availableActions]
   );
-  const campActions = useMemo(
-    () => selectCampActions(game.availableActions),
+  const buildActions = useMemo(
+    () => selectBuildActions(game.availableActions),
     [game.availableActions]
   );
 
@@ -94,8 +94,8 @@ export default function App() {
       hasAnyResource,
       hasAnyXp,
       craftRecipeCount: craftRecipes.length,
-      campRecipeCount: campRecipes.length,
-      campActionCount: campActions.length,
+      buildRecipeCount: buildRecipes.length,
+      buildActionCount: buildActions.length,
       buildingCount: game.state.buildings.length,
       availableStationCount: game.availableStations.length,
       deployedStationCount: game.state.stations.length,
@@ -105,8 +105,8 @@ export default function App() {
     hasAnyResource,
     hasAnyXp,
     craftRecipes.length,
-    campRecipes.length,
-    campActions.length,
+    buildRecipes.length,
+    buildActions.length,
     game.state.buildings.length,
     game.availableStations.length,
     game.state.stations.length,
@@ -243,7 +243,7 @@ export default function App() {
           )}
 
           {readyStationCount > 0 ? (
-            <div className="station-ready-banner" onClick={() => setTab("camp")}>
+            <div className="station-ready-banner" onClick={() => setTab("build")}>
               {readyStationCount === 1
                 ? "1 station ready to collect!"
                 : `${readyStationCount} stations ready to collect!`}
@@ -289,7 +289,7 @@ export default function App() {
                 onCraft={game.startCraft}
               />
             )}
-            {activeTab === "camp" && (
+            {activeTab === "build" && (
               <>
                 {(game.availableStations.length > 0 || game.state.stations.length > 0) && (
                   <StationsPanel
@@ -300,8 +300,8 @@ export default function App() {
                   />
                 )}
                 <SettlementPanel
-                  campRecipes={campRecipes}
-                  campActions={campActions}
+                  buildRecipes={buildRecipes}
+                  buildActions={buildActions}
                   state={game.state}
                   onBuild={game.startCraft}
                   onStartAction={game.startAction}
