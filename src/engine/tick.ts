@@ -1,6 +1,9 @@
-import { ACTIONS } from "../data/actions";
-import { EXPEDITIONS } from "../data/expeditions";
 import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from "../data/milestones";
+import {
+  ACTIONS_BY_ID,
+  EXPEDITIONS_BY_ID,
+  RECIPES_BY_ID,
+} from "../data/registries";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
@@ -52,7 +55,7 @@ export function processTick(state: GameState, now: number): TickResult {
   const timeAvailable = now - action.startedAt;
 
   if (action.type === "gather") {
-    const def = ACTIONS.find((a) => a.id === action.actionId);
+    const def = ACTIONS_BY_ID[action.actionId];
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -76,7 +79,8 @@ export function processTick(state: GameState, now: number): TickResult {
       state.currentAction.startedAt = now - remaining;
     }
   } else if (action.type === "craft") {
-    const def = RECIPES.find((r) => r.id === action.recipeId);
+    const recipeId = action.recipeId;
+    const def = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -118,7 +122,8 @@ export function processTick(state: GameState, now: number): TickResult {
       }
     }
   } else if (action.type === "expedition") {
-    const def = EXPEDITIONS.find((e) => e.id === action.expeditionId);
+    const expeditionId = action.expeditionId;
+    const def = expeditionId ? EXPEDITIONS_BY_ID[expeditionId] : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -189,7 +194,7 @@ function applyGatherCompletion(
   state: GameState,
   actionId: string
 ): CompletionEvent | null {
-  const def = ACTIONS.find((a) => a.id === actionId);
+  const def = ACTIONS_BY_ID[actionId];
   if (!def) return null;
 
   const skillLevel = state.skills[def.skillId].level;
@@ -222,7 +227,7 @@ function applyCraftCompletion(
   state: GameState,
   recipeId: string
 ): CompletionEvent | null {
-  const def = RECIPES.find((r) => r.id === recipeId);
+  const def = RECIPES_BY_ID[recipeId];
   if (!def) return null;
 
   const drops: { name: string; amount: number }[] = [];
@@ -281,7 +286,7 @@ function applyExpeditionCompletion(
   state: GameState,
   expeditionId: string
 ): CompletionEvent | null {
-  const def = EXPEDITIONS.find((e) => e.id === expeditionId);
+  const def = EXPEDITIONS_BY_ID[expeditionId];
   if (!def) return null;
 
   // Pick a random outcome weighted by weight

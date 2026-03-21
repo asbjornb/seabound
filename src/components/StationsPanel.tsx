@@ -1,5 +1,5 @@
 import { RESOURCES } from "../data/resources";
-import { STATIONS } from "../data/stations";
+import { STATIONS_BY_ID } from "../data/registries";
 import { GameState, StationDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
@@ -28,7 +28,7 @@ export function StationsPanel({
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
-    const def = STATIONS.find((s) => s.id === placed.stationId);
+    const def = STATIONS_BY_ID[placed.stationId];
     const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
     const isReady = now >= readyAt;
     const remaining = readyAt - now;
