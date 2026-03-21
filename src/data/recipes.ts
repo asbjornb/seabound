@@ -123,7 +123,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     output: { resourceId: "bow_drill_kit", amount: 1 },
     durationMs: 6000,
-    requiredSkillLevel: 2,
+    requiredSkillLevel: 3,
     oneTimeCraft: true,
     xpGain: 15,
   },
@@ -184,7 +184,7 @@ export const RECIPES: RecipeDef[] = [
     requiredItems: ["stone_flake"],
     output: { resourceId: "gorge_hook", amount: 1 },
     durationMs: 6000,
-    requiredSkillLevel: 5,
+    requiredSkillLevel: 6,
     oneTimeCraft: true,
     xpGain: 20,
   },
@@ -225,7 +225,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bow_drill_kit", amount: 0 }, // placeholder, buildingOutput takes precedence
     buildingOutput: "camp_fire",
     durationMs: 8000,
-    requiredSkillLevel: 2,
+    requiredItems: ["bow_drill_kit"],
     xpGain: 20,
   },
   {
@@ -330,7 +330,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Shape a heavy stone for striking. The foundation of knapping.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 5,
+    requiredSkillLevel: 4,
     inputs: [{ resourceId: "flat_stone", amount: 2 }],
     output: { resourceId: "hammerstone", amount: 1 },
     durationMs: 5000,
@@ -359,7 +359,7 @@ export const RECIPES: RecipeDef[] = [
       "Carefully pressure-flake stone flakes into a sharp, usable blade.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredSkillLevel: 7,
     requiredItems: ["hammerstone"],
     inputs: [{ resourceId: "stone_flake", amount: 2 }],
     output: { resourceId: "stone_blade", amount: 1 },
@@ -469,7 +469,7 @@ export const RECIPES: RecipeDef[] = [
       "Carefully knap obsidian into a razor-sharp blade. The best cutting tool before metal.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredItems: ["obsidian"],
     inputs: [
       { resourceId: "obsidian", amount: 2 },
       { resourceId: "flat_stone", amount: 1 },
@@ -596,14 +596,14 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 60,
   },
 
-  // Shape Clay Pot (Crafting 8)
+  // Shape Clay Pot (unlocks when clay is found)
   {
     id: "shape_clay_pot",
     name: "Shape Clay Pot",
     description: "Hand-shape wet clay into a pot. Must be fired to harden.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredItems: ["clay"],
     inputs: [{ resourceId: "clay", amount: 3 }],
     output: { resourceId: "shaped_clay_pot", amount: 1 },
     durationMs: 6000,
