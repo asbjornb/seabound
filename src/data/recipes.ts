@@ -225,7 +225,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "bow_drill_kit", amount: 0 }, // placeholder, buildingOutput takes precedence
     buildingOutput: "camp_fire",
     durationMs: 8000,
-    requiredSkillLevel: 2,
+    requiredItems: ["bow_drill_kit"],
     xpGain: 20,
   },
   {
