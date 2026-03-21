@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
-import { GameState, RecipeDef, SkillId } from "../data/types";
+import { GameState, RecipeDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
 interface Props {
@@ -11,17 +11,19 @@ interface Props {
   onCraft: (recipe: RecipeDef) => void;
 }
 
-const SKILL_ORDER: SkillId[] = [
-  "crafting",
-  "cooking",
-  "woodworking",
-  "weaving",
-  "construction",
-  "preservation",
+type CategoryId = "tools" | "repeatable";
+
+const CATEGORIES: { id: CategoryId; label: string }[] = [
+  { id: "tools", label: "Tools & One-Time Crafts" },
+  { id: "repeatable", label: "Repeatable" },
 ];
 
+function isOneTimeCraft(recipe: RecipeDef): boolean {
+  return !!(recipe.oneTimeCraft || recipe.buildingOutput);
+}
+
 export function CraftingPanel({ recipes, state, onCraft }: Props) {
-  const [collapsed, setCollapsed] = useState<Set<SkillId>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
 
   if (recipes.length === 0) {
@@ -32,21 +34,22 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
     );
   }
 
-  const toggleSkill = (skillId: SkillId) => {
+  const toggleCategory = (catId: CategoryId) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
-      if (next.has(skillId)) next.delete(skillId);
-      else next.add(skillId);
+      if (next.has(catId)) next.delete(catId);
+      else next.add(catId);
       return next;
     });
   };
 
-  // Group recipes by skill
-  const grouped = new Map<SkillId, RecipeDef[]>();
+  // Group recipes by category
+  const grouped = new Map<CategoryId, RecipeDef[]>();
   for (const r of recipes) {
-    const list = grouped.get(r.skillId) ?? [];
+    const catId: CategoryId = isOneTimeCraft(r) ? "tools" : "repeatable";
+    const list = grouped.get(catId) ?? [];
     list.push(r);
-    grouped.set(r.skillId, list);
+    grouped.set(catId, list);
   }
 
   // Count craftable for the filter badge
@@ -64,8 +67,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
           Craftable now{craftableOnly ? "" : ` (${craftableCount})`}
         </button>
       </div>
-      {SKILL_ORDER.map((skillId) => {
-        let list = grouped.get(skillId);
+      {CATEGORIES.map(({ id: catId, label }) => {
+        let list = grouped.get(catId);
         if (!list) return null;
 
         if (craftableOnly) {
@@ -77,15 +80,15 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
           if (list.length === 0) return null;
         }
 
-        const isCollapsed = collapsed.has(skillId);
+        const isCollapsed = collapsed.has(catId);
         return (
-          <div key={skillId}>
+          <div key={catId}>
             <div
               className="section-title collapsible"
-              onClick={() => toggleSkill(skillId)}
+              onClick={() => toggleCategory(catId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              {SKILL_ICONS[skillId]} {skillId} (Lvl {state.skills[skillId].level})
+              {label}
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((recipe) => {
@@ -158,7 +161,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     <div className="recipe-output">XP only</div>
                   )}
                   <div className="action-xp">
-                    +{recipe.xpGain} {recipe.skillId} XP
+                    {SKILL_ICONS[recipe.skillId]} +{recipe.xpGain} {recipe.skillId} XP
                   </div>
                 </div>
               );
