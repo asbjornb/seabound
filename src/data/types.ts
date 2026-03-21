@@ -242,6 +242,7 @@ export interface GameState {
   lastTickAt: number;
   totalPlayTimeMs: number;
   morale: number; // 0-100, affects action speed
+  moraleDecayProgressMs: number; // fractional progress toward next morale decay while action is active
   discoveryLog: DiscoveryEntry[];
   discoveredResources: string[];
   stations: PlacedStation[];

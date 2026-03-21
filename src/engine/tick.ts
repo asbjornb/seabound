@@ -43,12 +43,16 @@ export function processTick(state: GameState, now: number): TickResult {
     return { completions, elapsedMs };
   }
 
-  // Morale decay: 1 point per MORALE_DECAY_INTERVAL_MS (only while an action is active)
+  // Morale decay accumulator: tracks active action time across 100ms ticks and offline windows.
   if (state.morale > 0) {
-    const decayPoints = Math.floor(elapsedMs / MORALE_DECAY_INTERVAL_MS);
+    state.moraleDecayProgressMs += elapsedMs;
+    const decayPoints = Math.floor(state.moraleDecayProgressMs / MORALE_DECAY_INTERVAL_MS);
     if (decayPoints > 0) {
       state.morale = Math.max(0, state.morale - decayPoints);
+      state.moraleDecayProgressMs -= decayPoints * MORALE_DECAY_INTERVAL_MS;
     }
+  } else {
+    state.moraleDecayProgressMs = 0;
   }
 
   const action = state.currentAction;

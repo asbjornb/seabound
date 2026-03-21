@@ -86,10 +86,10 @@ export function selectCurrentActionTiming(
   state: GameState,
   now = Date.now()
 ): { actionProgress: number; actionDuration: number } {
-  const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
   if (!state.currentAction) {
     return { actionProgress: 0, actionDuration: 0 };
   }
+  const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
 
   if (state.currentAction.type === "gather") {
     const action = ACTIONS_BY_ID[state.currentAction.actionId];
