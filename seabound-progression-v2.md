@@ -64,8 +64,8 @@
 
 ### Progression Philosophy
 
-**Skills AND recipes both unlock content.**
-Skill levels are prerequisites, but crafting a new item can itself trigger new options — a bamboo knife appearing in your inventory unlocks new gathering actions, regardless of what level you are. Both axes matter.
+**Discovery and crafting drive progress. Skill levels drive efficiency.**
+The core progression — reaching new areas, crafting new tools, building new structures — is gated by *finding things* and *making things*, not by reaching arbitrary skill levels. Skill levels should gate optional improvements: better yields, faster actions, rare drop chances, automation, advanced techniques. A player who discovers chert and has a hammerstone should be able to knap a blade — they don't need "Crafting 7" to figure out how rocks break. Levels are the "get better at what you already know" axis; discovery and crafting are the "unlock new possibilities" axis.
 
 **Some tools change what's possible. Some tools just make things faster.**
 A bamboo knife unlocks hide processing — a new category. An obsidian knife is just faster and more efficient. Both feel good for different reasons. Don't force every upgrade to be a category unlock.
@@ -83,14 +83,15 @@ No survival meters. No death. But longer expeditions require food and water — 
 
 ### Unlock Triggers
 
-Two types of unlock exist:
+Three types of unlock exist, in order of preference for core progression:
 
-| Type | How it works | Example |
-|---|---|---|
-| **Skill threshold** | Reaching a level makes action/recipe available | Fishing 10 → basket trap recipe appears |
-| **Item in inventory / crafted** | Crafting or obtaining an item triggers new options | Crafting bamboo knife → strip fibrous bark unlocked |
+| Type | How it works | Example | Use for |
+|---|---|---|---|
+| **Biome / area discovery** | Exploring finds a new area, unlocking new gathering | Discover jungle interior → clay, fresh water | Core progression |
+| **Item / tool / building** | Crafting or obtaining an item triggers new options | Craft hammerstone → stone flake recipe appears | Core progression |
+| **Skill threshold** | Reaching a level makes action/recipe available | Fishing 10 → basket trap recipe appears | Optional / efficiency |
 
-Many unlocks require both: the skill level to see the recipe, and crafting the item to trigger the downstream options.
+**Guideline**: Core progression recipes (tools, buildings, vessels) should be gated by their material/tool/biome dependencies, not skill levels. Skill level gates are appropriate for: efficiency upgrades (faster/better yields), advanced techniques (trapping, farming, automation), and quality-of-life improvements (bulk processing, rare drops). When in doubt, ask: "Could a clever castaway figure this out by having the right materials?" If yes, don't level-gate it.
 
 ---
 
