@@ -424,6 +424,20 @@ export function useGame() {
     return true;
   });
 
+  // Check if a resource still has at least one uncompleted downstream recipe
+  function resourceHasUse(resourceId: string, gs: GameState): boolean {
+    return RECIPES.some((r) => {
+      // Does this recipe consume the resource?
+      const usesResource =
+        r.inputs.some((inp) => inp.resourceId === resourceId);
+      if (!usesResource) return false;
+      // Is this recipe already completed?
+      if (r.buildingOutput && gs.buildings.includes(r.buildingOutput)) return false;
+      if (r.oneTimeCraft && r.output && getResource(gs, r.output.resourceId) >= 1) return false;
+      return true;
+    });
+  }
+
   // Filter recipes by skill level, item-trigger gates, AND building requirements
   // Also hide building recipes for buildings already constructed
   const availableRecipes = RECIPES.filter((r) => {
@@ -445,6 +459,10 @@ export function useGame() {
     }
     // Hide one-time-craft recipes once the player owns the output
     if (r.oneTimeCraft && r.output && getResource(state, r.output.resourceId) >= 1) {
+      return false;
+    }
+    // Hide one-time-craft recipes whose output has no remaining downstream use
+    if (r.oneTimeCraft && r.output && !resourceHasUse(r.output.resourceId, state)) {
       return false;
     }
     // Hide recipes whose inputs include undiscovered resources
