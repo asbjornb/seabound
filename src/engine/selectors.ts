@@ -185,7 +185,6 @@ export function selectVisibleTabs(params: {
   deployedStationCount: number;
 }): GameTab[] {
   const tabs: GameTab[] = ["gather"];
-  if (params.hasFoodAccess) tabs.push("explore");
   if (params.craftRecipeCount > 0) tabs.push("craft");
   if (
     params.buildRecipeCount > 0 ||
@@ -196,6 +195,7 @@ export function selectVisibleTabs(params: {
   ) {
     tabs.push("build");
   }
+  if (params.hasFoodAccess) tabs.push("explore");
   if (params.hasAnyResource) tabs.push("inventory");
   if (params.hasAnyXp) tabs.push("skills");
   return tabs;
