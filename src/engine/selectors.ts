@@ -19,7 +19,6 @@ import {
 
 export type GameTab = "gather" | "inventory" | "craft" | "camp" | "explore" | "skills";
 
-const CAMP_RECIPE_IDS = new Set(["maintain_camp"]);
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
   return RECIPES.some((recipe) => {
@@ -147,19 +146,19 @@ export function selectCurrentActionName(state: GameState): string | null {
 }
 
 export function selectGatherActions(actions: ActionDef[]): ActionDef[] {
-  return actions.filter((action) => action.skillId !== "construction");
+  return actions.filter((action) => action.panel === "gather");
 }
 
 export function selectCampActions(actions: ActionDef[]): ActionDef[] {
-  return actions.filter((action) => action.skillId === "construction");
+  return actions.filter((action) => action.panel === "camp");
 }
 
 export function selectCraftRecipes(recipes: RecipeDef[]): RecipeDef[] {
-  return recipes.filter((recipe) => !recipe.buildingOutput && !CAMP_RECIPE_IDS.has(recipe.id));
+  return recipes.filter((recipe) => recipe.panel === "craft");
 }
 
 export function selectCampRecipes(recipes: RecipeDef[]): RecipeDef[] {
-  return recipes.filter((recipe) => !!recipe.buildingOutput || CAMP_RECIPE_IDS.has(recipe.id));
+  return recipes.filter((recipe) => recipe.panel === "camp");
 }
 
 export function selectHasAnyXp(state: GameState): boolean {
