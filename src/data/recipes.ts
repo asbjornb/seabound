@@ -359,7 +359,7 @@ export const RECIPES: RecipeDef[] = [
       "Carefully pressure-flake stone flakes into a sharp, usable blade.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredSkillLevel: 7,
     requiredItems: ["hammerstone"],
     inputs: [{ resourceId: "stone_flake", amount: 2 }],
     output: { resourceId: "stone_blade", amount: 1 },
@@ -469,7 +469,7 @@ export const RECIPES: RecipeDef[] = [
       "Carefully knap obsidian into a razor-sharp blade. The best cutting tool before metal.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredItems: ["obsidian"],
     inputs: [
       { resourceId: "obsidian", amount: 2 },
       { resourceId: "flat_stone", amount: 1 },
@@ -596,14 +596,14 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 60,
   },
 
-  // Shape Clay Pot (Crafting 8)
+  // Shape Clay Pot (unlocks when clay is found)
   {
     id: "shape_clay_pot",
     name: "Shape Clay Pot",
     description: "Hand-shape wet clay into a pot. Must be fired to harden.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
+    requiredItems: ["clay"],
     inputs: [{ resourceId: "clay", amount: 3 }],
     output: { resourceId: "shaped_clay_pot", amount: 1 },
     durationMs: 6000,
