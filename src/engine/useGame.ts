@@ -24,6 +24,7 @@ import {
   getTotalFood,
   getTotalWater,
   loadGame,
+  normalizeGameState,
   saveGame,
 } from "./gameState";
 import {
@@ -388,13 +389,9 @@ export function useGame() {
       const reader = new FileReader();
       reader.onload = () => {
         try {
-          const loaded = JSON.parse(reader.result as string) as GameState;
-          // Ensure migration fields exist
-          if (!loaded.discoveryLog) loaded.discoveryLog = [];
-          if (!loaded.discoveredResources) {
-            loaded.discoveredResources = Object.keys(loaded.resources).filter(
-              (id) => (loaded.resources[id] ?? 0) > 0
-            );
+          const loaded = normalizeGameState(JSON.parse(reader.result as string));
+          if (!loaded) {
+            return;
           }
           saveGame(loaded);
           setState(loaded);

@@ -42,63 +42,80 @@ export function saveGame(state: GameState): void {
   localStorage.setItem(SAVE_KEY, JSON.stringify(state));
 }
 
+export function normalizeGameState(raw: unknown): GameState | null {
+  if (!raw || typeof raw !== "object") return null;
+
+  const loaded = structuredClone(raw) as GameState;
+  if (!loaded.resources || typeof loaded.resources !== "object") {
+    loaded.resources = {};
+  }
+  if (!loaded.skills || typeof loaded.skills !== "object") {
+    loaded.skills = {} as GameState["skills"];
+  }
+
+  // Migration: ensure new fields exist
+  if (!loaded.discoveredBiomes) {
+    loaded.discoveredBiomes = ["beach"];
+  }
+  // Ensure all skills exist (in case save is from old version)
+  for (const id of ALL_SKILLS) {
+    if (!loaded.skills[id]) {
+      loaded.skills[id] = { xp: 0, level: 1 };
+    }
+  }
+  // Migration: ensure buildings array exists
+  if (!loaded.buildings) {
+    loaded.buildings = [];
+    // If player already has bow_drill_kit, auto-grant camp_fire building
+    // so they don't lose access to fire-dependent recipes
+    if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
+      loaded.buildings.push("camp_fire");
+    }
+  }
+  // Migration: ensure morale exists
+  if (loaded.morale == null) {
+    loaded.morale = 100;
+  }
+  // Migration: ensure discoveryLog exists
+  if (!loaded.discoveryLog) {
+    loaded.discoveryLog = [];
+  }
+  // Migration: ensure discoveredResources exists (backfill from inventory)
+  if (!loaded.discoveredResources) {
+    loaded.discoveredResources = Object.keys(loaded.resources).filter(
+      (id) => (loaded.resources[id] ?? 0) > 0
+    );
+  }
+  // Migration: ensure stations array exists
+  if (!loaded.stations) {
+    loaded.stations = [];
+  }
+  // Migration: ensure seenPhases exists
+  if (!loaded.seenPhases) {
+    loaded.seenPhases = ["bare_hands"];
+  }
+  if (loaded.currentAction && typeof loaded.currentAction !== "object") {
+    loaded.currentAction = null;
+  }
+  // Migration: remove items/buildings that no longer exist in current data
+  for (const id of Object.keys(loaded.resources)) {
+    if (!RESOURCES[id]) {
+      delete loaded.resources[id];
+    }
+  }
+  loaded.discoveredResources = loaded.discoveredResources.filter(
+    (id) => !!RESOURCES[id]
+  );
+  loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
+
+  return loaded;
+}
+
 export function loadGame(): GameState | null {
   const raw = localStorage.getItem(SAVE_KEY);
   if (!raw) return null;
   try {
-    const loaded = JSON.parse(raw) as GameState;
-    // Migration: ensure new fields exist
-    if (!loaded.discoveredBiomes) {
-      loaded.discoveredBiomes = ["beach"];
-    }
-    // Ensure all skills exist (in case save is from old version)
-    for (const id of ALL_SKILLS) {
-      if (!loaded.skills[id]) {
-        loaded.skills[id] = { xp: 0, level: 1 };
-      }
-    }
-    // Migration: ensure buildings array exists
-    if (!loaded.buildings) {
-      loaded.buildings = [];
-      // If player already has bow_drill_kit, auto-grant camp_fire building
-      // so they don't lose access to fire-dependent recipes
-      if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
-        loaded.buildings.push("camp_fire");
-      }
-    }
-    // Migration: ensure morale exists
-    if (loaded.morale == null) {
-      loaded.morale = 100;
-    }
-    // Migration: ensure discoveryLog exists
-    if (!loaded.discoveryLog) {
-      loaded.discoveryLog = [];
-    }
-    // Migration: ensure discoveredResources exists (backfill from inventory)
-    if (!loaded.discoveredResources) {
-      loaded.discoveredResources = Object.keys(loaded.resources).filter(
-        (id) => (loaded.resources[id] ?? 0) > 0
-      );
-    }
-    // Migration: ensure stations array exists
-    if (!loaded.stations) {
-      loaded.stations = [];
-    }
-    // Migration: ensure seenPhases exists
-    if (!loaded.seenPhases) {
-      loaded.seenPhases = ["bare_hands"];
-    }
-    // Migration: remove items/buildings that no longer exist in current data
-    for (const id of Object.keys(loaded.resources)) {
-      if (!RESOURCES[id]) {
-        delete loaded.resources[id];
-      }
-    }
-    loaded.discoveredResources = loaded.discoveredResources.filter(
-      (id) => !!RESOURCES[id]
-    );
-    loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
-    return loaded;
+    return normalizeGameState(JSON.parse(raw));
   } catch {
     return null;
   }
