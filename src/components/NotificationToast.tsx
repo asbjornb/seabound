@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { DiscoveryEntry } from "../data/types";
 
-const TOAST_DURATION_MS = 4000;
-const MAX_VISIBLE = 3;
+const MAX_VISIBLE = 5;
 
 interface Toast {
   entry: DiscoveryEntry;
@@ -28,33 +27,14 @@ export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEnt
 
     lastSeenId.current = discoveryLog[0].id;
 
-    // Add new toasts (limit to avoid flooding)
+    // Add new toasts
     const toAdd = newEntries.slice(0, MAX_VISIBLE).reverse();
     setToasts((prev) => {
       const next = [...prev, ...toAdd.map((e) => ({ entry: e, dismissing: false }))];
-      // Keep only the most recent toasts visible
+      // Keep only the most recent toasts if too many pile up
       return next.slice(-MAX_VISIBLE);
     });
   }, [discoveryLog]);
-
-  // Auto-dismiss timer
-  useEffect(() => {
-    if (toasts.length === 0) return;
-
-    const timer = setTimeout(() => {
-      setToasts((prev) => {
-        if (prev.length === 0) return prev;
-        // Start dismissing the oldest toast
-        const next = [...prev];
-        const idx = next.findIndex((t) => !t.dismissing);
-        if (idx === -1) return prev;
-        next[idx] = { ...next[idx], dismissing: true };
-        return next;
-      });
-    }, TOAST_DURATION_MS);
-
-    return () => clearTimeout(timer);
-  }, [toasts]);
 
   // Remove after dismiss animation
   const handleAnimationEnd = (id: number) => {
