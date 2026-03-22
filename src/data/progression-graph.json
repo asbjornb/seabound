@@ -1,0 +1,2627 @@
+{
+  "nodes": [
+    {
+      "id": "resource:coconut",
+      "type": "resource",
+      "label": "Coconut",
+      "category": "food"
+    },
+    {
+      "id": "resource:coconut_husk",
+      "type": "resource",
+      "label": "Coconut Husk",
+      "category": "raw"
+    },
+    {
+      "id": "resource:driftwood_branch",
+      "type": "resource",
+      "label": "Driftwood Branch",
+      "category": "raw"
+    },
+    {
+      "id": "resource:flat_stone",
+      "type": "resource",
+      "label": "Flat Stone",
+      "category": "raw"
+    },
+    {
+      "id": "resource:palm_frond",
+      "type": "resource",
+      "label": "Palm Frond",
+      "category": "raw"
+    },
+    {
+      "id": "resource:small_fish",
+      "type": "resource",
+      "label": "Small Fish",
+      "category": "food"
+    },
+    {
+      "id": "resource:crab",
+      "type": "resource",
+      "label": "Crab",
+      "category": "food"
+    },
+    {
+      "id": "resource:shell",
+      "type": "resource",
+      "label": "Shell",
+      "category": "raw"
+    },
+    {
+      "id": "resource:bamboo_cane",
+      "type": "resource",
+      "label": "Bamboo Cane",
+      "category": "raw"
+    },
+    {
+      "id": "resource:bamboo_splinter",
+      "type": "resource",
+      "label": "Bamboo Splinter",
+      "category": "processed"
+    },
+    {
+      "id": "resource:rough_fiber",
+      "type": "resource",
+      "label": "Rough Fiber",
+      "category": "raw"
+    },
+    {
+      "id": "resource:dried_fiber",
+      "type": "resource",
+      "label": "Dried Fiber",
+      "category": "processed"
+    },
+    {
+      "id": "resource:cordage",
+      "type": "resource",
+      "label": "Cordage",
+      "category": "processed"
+    },
+    {
+      "id": "resource:bamboo_knife",
+      "type": "resource",
+      "label": "Bamboo Knife",
+      "category": "tool"
+    },
+    {
+      "id": "resource:large_shell",
+      "type": "resource",
+      "label": "Large Shell",
+      "category": "raw"
+    },
+    {
+      "id": "resource:dry_grass",
+      "type": "resource",
+      "label": "Dry Grass",
+      "category": "raw"
+    },
+    {
+      "id": "resource:bow_drill_kit",
+      "type": "resource",
+      "label": "Bow Drill Kit",
+      "category": "tool"
+    },
+    {
+      "id": "resource:bamboo_spear",
+      "type": "resource",
+      "label": "Bamboo Spear",
+      "category": "tool"
+    },
+    {
+      "id": "resource:woven_basket",
+      "type": "resource",
+      "label": "Woven Basket",
+      "category": "structure"
+    },
+    {
+      "id": "resource:large_fish",
+      "type": "resource",
+      "label": "Large Fish",
+      "category": "food"
+    },
+    {
+      "id": "resource:cooked_fish",
+      "type": "resource",
+      "label": "Cooked Fish",
+      "category": "food"
+    },
+    {
+      "id": "resource:cooked_crab",
+      "type": "resource",
+      "label": "Cooked Crab",
+      "category": "food"
+    },
+    {
+      "id": "resource:cooked_large_fish",
+      "type": "resource",
+      "label": "Cooked Large Fish",
+      "category": "food"
+    },
+    {
+      "id": "resource:raft",
+      "type": "resource",
+      "label": "Log Raft",
+      "category": "structure"
+    },
+    {
+      "id": "resource:obsidian",
+      "type": "resource",
+      "label": "Obsidian",
+      "category": "raw"
+    },
+    {
+      "id": "resource:obsidian_blade",
+      "type": "resource",
+      "label": "Obsidian Blade",
+      "category": "tool"
+    },
+    {
+      "id": "resource:chert",
+      "type": "resource",
+      "label": "Chert",
+      "category": "raw"
+    },
+    {
+      "id": "resource:stone_flake",
+      "type": "resource",
+      "label": "Stone Flake",
+      "category": "processed"
+    },
+    {
+      "id": "resource:stone_blade",
+      "type": "resource",
+      "label": "Stone Blade",
+      "category": "processed"
+    },
+    {
+      "id": "resource:hammerstone",
+      "type": "resource",
+      "label": "Hammerstone",
+      "category": "tool"
+    },
+    {
+      "id": "resource:shell_adze",
+      "type": "resource",
+      "label": "Shell Adze",
+      "category": "tool"
+    },
+    {
+      "id": "resource:stone_axe",
+      "type": "resource",
+      "label": "Stone Axe",
+      "category": "tool"
+    },
+    {
+      "id": "resource:large_log",
+      "type": "resource",
+      "label": "Large Log",
+      "category": "raw"
+    },
+    {
+      "id": "resource:charred_log",
+      "type": "resource",
+      "label": "Charred Log",
+      "category": "raw"
+    },
+    {
+      "id": "resource:shaped_hull",
+      "type": "resource",
+      "label": "Shaped Hull",
+      "category": "processed"
+    },
+    {
+      "id": "resource:dugout",
+      "type": "resource",
+      "label": "Dugout Canoe",
+      "category": "structure"
+    },
+    {
+      "id": "resource:fresh_water",
+      "type": "resource",
+      "label": "Fresh Water",
+      "category": "processed"
+    },
+    {
+      "id": "resource:wild_seed",
+      "type": "resource",
+      "label": "Wild Seed",
+      "category": "raw"
+    },
+    {
+      "id": "resource:gorge_hook",
+      "type": "resource",
+      "label": "Gorge Hook",
+      "category": "tool"
+    },
+    {
+      "id": "resource:basket_trap",
+      "type": "resource",
+      "label": "Basket Trap",
+      "category": "tool"
+    },
+    {
+      "id": "resource:clay",
+      "type": "resource",
+      "label": "Clay",
+      "category": "raw"
+    },
+    {
+      "id": "resource:shaped_clay_pot",
+      "type": "resource",
+      "label": "Shaped Clay Pot",
+      "category": "processed"
+    },
+    {
+      "id": "resource:fired_clay_pot",
+      "type": "resource",
+      "label": "Fired Clay Pot",
+      "category": "processed"
+    },
+    {
+      "id": "resource:sealed_clay_jar",
+      "type": "resource",
+      "label": "Sealed Clay Jar",
+      "category": "processed"
+    },
+    {
+      "id": "resource:crucible",
+      "type": "resource",
+      "label": "Crucible",
+      "category": "tool"
+    },
+    {
+      "id": "biome:beach",
+      "type": "biome",
+      "label": "beach"
+    },
+    {
+      "id": "biome:coconut_grove",
+      "type": "biome",
+      "label": "coconut grove"
+    },
+    {
+      "id": "biome:rocky_shore",
+      "type": "biome",
+      "label": "rocky shore"
+    },
+    {
+      "id": "biome:bamboo_grove",
+      "type": "biome",
+      "label": "bamboo grove"
+    },
+    {
+      "id": "biome:jungle_interior",
+      "type": "biome",
+      "label": "jungle interior"
+    },
+    {
+      "id": "biome:nearby_island",
+      "type": "biome",
+      "label": "nearby island"
+    },
+    {
+      "id": "building:camp_fire",
+      "type": "building",
+      "label": "Camp Fire"
+    },
+    {
+      "id": "building:stone_hearth",
+      "type": "building",
+      "label": "Stone Hearth"
+    },
+    {
+      "id": "building:palm_leaf_pile",
+      "type": "building",
+      "label": "Palm Leaf Pile"
+    },
+    {
+      "id": "building:drying_rack",
+      "type": "building",
+      "label": "Drying Rack"
+    },
+    {
+      "id": "building:fenced_perimeter",
+      "type": "building",
+      "label": "Fenced Perimeter"
+    },
+    {
+      "id": "building:firing_pit",
+      "type": "building",
+      "label": "Firing Pit"
+    },
+    {
+      "id": "building:kiln",
+      "type": "building",
+      "label": "Kiln"
+    },
+    {
+      "id": "building:fiber_loom",
+      "type": "building",
+      "label": "Fiber Loom"
+    },
+    {
+      "id": "skill:woodworking:10",
+      "type": "skill_level",
+      "label": "Woodworking Lv10",
+      "category": "woodworking"
+    },
+    {
+      "id": "skill:foraging:5",
+      "type": "skill_level",
+      "label": "Foraging Lv5",
+      "category": "foraging"
+    },
+    {
+      "id": "skill:fishing:8",
+      "type": "skill_level",
+      "label": "Fishing Lv8",
+      "category": "fishing"
+    },
+    {
+      "id": "skill:fishing:10",
+      "type": "skill_level",
+      "label": "Fishing Lv10",
+      "category": "fishing"
+    },
+    {
+      "id": "skill:weaving:5",
+      "type": "skill_level",
+      "label": "Weaving Lv5",
+      "category": "weaving"
+    },
+    {
+      "id": "skill:weaving:6",
+      "type": "skill_level",
+      "label": "Weaving Lv6",
+      "category": "weaving"
+    },
+    {
+      "id": "skill:weaving:4",
+      "type": "skill_level",
+      "label": "Weaving Lv4",
+      "category": "weaving"
+    },
+    {
+      "id": "skill:crafting:6",
+      "type": "skill_level",
+      "label": "Crafting Lv6",
+      "category": "crafting"
+    },
+    {
+      "id": "skill:construction:14",
+      "type": "skill_level",
+      "label": "Construction Lv14",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:2",
+      "type": "skill_level",
+      "label": "Construction Lv2",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:5",
+      "type": "skill_level",
+      "label": "Construction Lv5",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:8",
+      "type": "skill_level",
+      "label": "Construction Lv8",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:10",
+      "type": "skill_level",
+      "label": "Construction Lv10",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:15",
+      "type": "skill_level",
+      "label": "Construction Lv15",
+      "category": "construction"
+    },
+    {
+      "id": "skill:cooking:4",
+      "type": "skill_level",
+      "label": "Cooking Lv4",
+      "category": "cooking"
+    },
+    {
+      "id": "skill:cooking:2",
+      "type": "skill_level",
+      "label": "Cooking Lv2",
+      "category": "cooking"
+    },
+    {
+      "id": "skill:preservation:15",
+      "type": "skill_level",
+      "label": "Preservation Lv15",
+      "category": "preservation"
+    },
+    {
+      "id": "action:gather_coconuts",
+      "type": "action",
+      "label": "Gather Fallen Coconuts",
+      "category": "foraging"
+    },
+    {
+      "id": "action:collect_driftwood",
+      "type": "action",
+      "label": "Collect Driftwood",
+      "category": "foraging"
+    },
+    {
+      "id": "action:comb_rocky_shore",
+      "type": "action",
+      "label": "Comb Rocky Shore",
+      "category": "foraging"
+    },
+    {
+      "id": "action:collect_palm_frond",
+      "type": "action",
+      "label": "Collect Palm Frond",
+      "category": "foraging"
+    },
+    {
+      "id": "action:collect_dry_grass",
+      "type": "action",
+      "label": "Collect Dry Grass",
+      "category": "foraging"
+    },
+    {
+      "id": "action:wade_tidal_pool",
+      "type": "action",
+      "label": "Wade Tidal Pool",
+      "category": "fishing"
+    },
+    {
+      "id": "action:dig_drainage_trench",
+      "type": "action",
+      "label": "Dig Drainage Trench",
+      "category": "construction"
+    },
+    {
+      "id": "action:harvest_bamboo",
+      "type": "action",
+      "label": "Harvest Bamboo Cane",
+      "category": "woodworking"
+    },
+    {
+      "id": "action:fell_large_tree",
+      "type": "action",
+      "label": "Fell Large Tree",
+      "category": "woodworking"
+    },
+    {
+      "id": "action:collect_fresh_water",
+      "type": "action",
+      "label": "Collect Fresh Water",
+      "category": "foraging"
+    },
+    {
+      "id": "action:dig_clay",
+      "type": "action",
+      "label": "Dig Clay",
+      "category": "foraging"
+    },
+    {
+      "id": "action:spear_fish",
+      "type": "action",
+      "label": "Spear Fish",
+      "category": "fishing"
+    },
+    {
+      "id": "action:drop_line_fish",
+      "type": "action",
+      "label": "Drop Line Fishing",
+      "category": "fishing"
+    },
+    {
+      "id": "recipe:shred_coconut_husk",
+      "type": "recipe",
+      "label": "Shred Coconut Husk",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_shell_beads",
+      "type": "recipe",
+      "label": "Shell Beads",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:split_bamboo_cane",
+      "type": "recipe",
+      "label": "Split Bamboo Cane",
+      "category": "woodworking"
+    },
+    {
+      "id": "recipe:craft_bamboo_knife",
+      "type": "recipe",
+      "label": "Bamboo Knife",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:dry_fiber",
+      "type": "recipe",
+      "label": "Dry Fiber",
+      "category": "preservation"
+    },
+    {
+      "id": "recipe:twist_cordage",
+      "type": "recipe",
+      "label": "Twist Cordage",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:braid_cordage",
+      "type": "recipe",
+      "label": "Braid Cordage",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:craft_bow_drill",
+      "type": "recipe",
+      "label": "Bow Drill Kit",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:weave_basket",
+      "type": "recipe",
+      "label": "Weave Basket",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:maintain_camp",
+      "type": "recipe",
+      "label": "Maintain Camp",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:craft_gorge_hook",
+      "type": "recipe",
+      "label": "Gorge Hook",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_basket_trap",
+      "type": "recipe",
+      "label": "Basket Trap",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:build_camp_fire",
+      "type": "recipe",
+      "label": "Light Camp Fire",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:build_stone_hearth",
+      "type": "recipe",
+      "label": "Stone Hearth",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:build_palm_leaf_pile",
+      "type": "recipe",
+      "label": "Palm Leaf Pile",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:build_drying_rack",
+      "type": "recipe",
+      "label": "Drying Rack",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:build_fenced_perimeter",
+      "type": "recipe",
+      "label": "Fenced Perimeter",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:build_fiber_loom",
+      "type": "recipe",
+      "label": "Fiber Loom",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:build_raft",
+      "type": "recipe",
+      "label": "Lash Log Raft",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:craft_hammerstone",
+      "type": "recipe",
+      "label": "Hammerstone",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:strike_stone_flake",
+      "type": "recipe",
+      "label": "Strike Stone Flake",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:knap_stone_blade",
+      "type": "recipe",
+      "label": "Knap Stone Blade",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_shell_adze",
+      "type": "recipe",
+      "label": "Shell Adze",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_stone_axe",
+      "type": "recipe",
+      "label": "Stone Axe",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:char_log_interior",
+      "type": "recipe",
+      "label": "Char Log Interior",
+      "category": "woodworking"
+    },
+    {
+      "id": "recipe:scrape_hull",
+      "type": "recipe",
+      "label": "Scrape Hull",
+      "category": "woodworking"
+    },
+    {
+      "id": "recipe:assemble_dugout",
+      "type": "recipe",
+      "label": "Assemble Dugout Canoe",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:knap_obsidian_blade",
+      "type": "recipe",
+      "label": "Obsidian Blade",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_bamboo_spear",
+      "type": "recipe",
+      "label": "Bamboo Spear",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:cook_fish",
+      "type": "recipe",
+      "label": "Cook Fish",
+      "category": "cooking"
+    },
+    {
+      "id": "recipe:cook_large_fish",
+      "type": "recipe",
+      "label": "Cook Large Fish",
+      "category": "cooking"
+    },
+    {
+      "id": "recipe:cook_crab",
+      "type": "recipe",
+      "label": "Cook Crab",
+      "category": "cooking"
+    },
+    {
+      "id": "recipe:build_firing_pit",
+      "type": "recipe",
+      "label": "Firing Pit",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:build_kiln",
+      "type": "recipe",
+      "label": "Kiln",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:shape_clay_pot",
+      "type": "recipe",
+      "label": "Shape Clay Pot",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:fire_clay_pot",
+      "type": "recipe",
+      "label": "Fire Clay Pot",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:seal_clay_jar",
+      "type": "recipe",
+      "label": "Sealed Clay Jar",
+      "category": "preservation"
+    },
+    {
+      "id": "recipe:craft_crucible",
+      "type": "recipe",
+      "label": "Crucible",
+      "category": "construction"
+    },
+    {
+      "id": "expedition:explore_beach",
+      "type": "expedition",
+      "label": "Explore Along the Beach",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:explore_interior",
+      "type": "expedition",
+      "label": "Explore Island Interior",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:sail_nearby_island",
+      "type": "expedition",
+      "label": "Sail to Nearby Island",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:dugout_voyage",
+      "type": "expedition",
+      "label": "Voyage by Dugout",
+      "category": "navigation"
+    },
+    {
+      "id": "station:deploy_basket_trap",
+      "type": "station",
+      "label": "Basket Trap",
+      "category": "fishing"
+    }
+  ],
+  "edges": [
+    {
+      "from": "action:gather_coconuts",
+      "to": "resource:coconut",
+      "relation": "produces"
+    },
+    {
+      "from": "action:gather_coconuts",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "action:gather_coconuts",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:coconut_grove",
+      "to": "action:gather_coconuts",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:collect_driftwood",
+      "to": "resource:driftwood_branch",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_driftwood",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "action:comb_rocky_shore",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rocky_shore",
+      "to": "resource:chert",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rocky_shore",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:rocky_shore",
+      "to": "action:comb_rocky_shore",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:collect_palm_frond",
+      "to": "resource:palm_frond",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_palm_frond",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:coconut_grove",
+      "to": "action:collect_palm_frond",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:collect_dry_grass",
+      "to": "resource:dry_grass",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_dry_grass",
+      "to": "resource:wild_seed",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_dry_grass",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:rocky_shore",
+      "to": "action:collect_dry_grass",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:wade_tidal_pool",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:wade_tidal_pool",
+      "to": "resource:crab",
+      "relation": "produces"
+    },
+    {
+      "from": "action:wade_tidal_pool",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:wade_tidal_pool",
+      "to": "resource:large_shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:wade_tidal_pool",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "action:dig_drainage_trench",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:large_shell",
+      "to": "action:dig_drainage_trench",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "action:harvest_bamboo",
+      "to": "resource:bamboo_cane",
+      "relation": "produces"
+    },
+    {
+      "from": "action:harvest_bamboo",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:bamboo_grove",
+      "to": "action:harvest_bamboo",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:fell_large_tree",
+      "to": "resource:large_log",
+      "relation": "produces"
+    },
+    {
+      "from": "action:fell_large_tree",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:woodworking:10",
+      "to": "action:fell_large_tree",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "biome:jungle_interior",
+      "to": "action:fell_large_tree",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "resource:stone_axe",
+      "to": "action:fell_large_tree",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "action:collect_fresh_water",
+      "to": "resource:fresh_water",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_fresh_water",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:jungle_interior",
+      "to": "action:collect_fresh_water",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "resource:fired_clay_pot",
+      "to": "action:collect_fresh_water",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "action:dig_clay",
+      "to": "resource:clay",
+      "relation": "produces"
+    },
+    {
+      "from": "action:dig_clay",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:foraging:5",
+      "to": "action:dig_clay",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "biome:jungle_interior",
+      "to": "action:dig_clay",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "resource:large_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:bamboo_spear",
+      "to": "action:spear_fish",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "action:drop_line_fish",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:drop_line_fish",
+      "to": "resource:large_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:drop_line_fish",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:drop_line_fish",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:fishing:8",
+      "to": "action:drop_line_fish",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:gorge_hook",
+      "to": "action:drop_line_fish",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "recipe:shred_coconut_husk",
+      "to": "resource:rough_fiber",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:coconut_husk",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:shred_coconut_husk",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:shell",
+      "to": "recipe:craft_shell_beads",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_shell_beads",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:split_bamboo_cane",
+      "to": "resource:bamboo_splinter",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:split_bamboo_cane",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:split_bamboo_cane",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:craft_bamboo_knife",
+      "to": "resource:bamboo_knife",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:bamboo_splinter",
+      "to": "recipe:craft_bamboo_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:craft_bamboo_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bamboo_knife",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:dry_fiber",
+      "to": "resource:dried_fiber",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:dry_fiber",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:dry_fiber",
+      "to": "skill:preservation",
+      "relation": "trains"
+    },
+    {
+      "from": "building:drying_rack",
+      "to": "recipe:dry_fiber",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:twist_cordage",
+      "to": "resource:cordage",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:twist_cordage",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:twist_cordage",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:braid_cordage",
+      "to": "resource:cordage",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:braid_cordage",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:braid_cordage",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:weaving:5",
+      "to": "recipe:braid_cordage",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:fiber_loom",
+      "to": "recipe:braid_cordage",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:craft_bow_drill",
+      "to": "resource:bow_drill_kit",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bow_drill",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:craft_bow_drill",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_bow_drill",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_bow_drill",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bow_drill",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:weave_basket",
+      "to": "resource:woven_basket",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:palm_frond",
+      "to": "recipe:weave_basket",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:weave_basket",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:weave_basket",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:maintain_camp",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:maintain_camp",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:maintain_camp",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:craft_gorge_hook",
+      "to": "resource:gorge_hook",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:shell",
+      "to": "recipe:craft_gorge_hook",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_gorge_hook",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_gorge_hook",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:6",
+      "to": "recipe:craft_gorge_hook",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:stone_flake",
+      "to": "recipe:craft_gorge_hook",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:craft_basket_trap",
+      "to": "resource:basket_trap",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:bamboo_splinter",
+      "to": "recipe:craft_basket_trap",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_basket_trap",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_basket_trap",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:weaving:6",
+      "to": "recipe:craft_basket_trap",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "skill:fishing:8",
+      "to": "recipe:craft_basket_trap",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:build_camp_fire",
+      "to": "building:camp_fire",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:bow_drill_kit",
+      "to": "recipe:build_camp_fire",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:coconut_husk",
+      "to": "recipe:build_camp_fire",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:build_camp_fire",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_camp_fire",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_camp_fire",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:bow_drill_kit",
+      "to": "recipe:build_camp_fire",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:build_stone_hearth",
+      "to": "building:stone_hearth",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_stone_hearth",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_stone_hearth",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_stone_hearth",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_stone_hearth",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:14",
+      "to": "recipe:build_stone_hearth",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:build_stone_hearth",
+      "relation": "requires_building"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:build_stone_hearth",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_palm_leaf_pile",
+      "to": "building:palm_leaf_pile",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:palm_frond",
+      "to": "recipe:build_palm_leaf_pile",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_palm_leaf_pile",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_palm_leaf_pile",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:build_drying_rack",
+      "to": "building:drying_rack",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_drying_rack",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:palm_frond",
+      "to": "recipe:build_drying_rack",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_drying_rack",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:build_fenced_perimeter",
+      "to": "building:fenced_perimeter",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_fenced_perimeter",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_fenced_perimeter",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_fenced_perimeter",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_fenced_perimeter",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:2",
+      "to": "recipe:build_fenced_perimeter",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:build_fiber_loom",
+      "to": "building:fiber_loom",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_fiber_loom",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_fiber_loom",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:palm_frond",
+      "to": "recipe:build_fiber_loom",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_fiber_loom",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:weaving:4",
+      "to": "recipe:build_fiber_loom",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:build_raft",
+      "to": "resource:raft",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_raft",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_raft",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_raft",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_raft",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:5",
+      "to": "recipe:build_raft",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:craft_hammerstone",
+      "to": "resource:hammerstone",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_hammerstone",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_hammerstone",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:strike_stone_flake",
+      "to": "resource:stone_flake",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:chert",
+      "to": "recipe:strike_stone_flake",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:strike_stone_flake",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:hammerstone",
+      "to": "recipe:strike_stone_flake",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:knap_stone_blade",
+      "to": "resource:stone_blade",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:stone_flake",
+      "to": "recipe:knap_stone_blade",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:knap_stone_blade",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:hammerstone",
+      "to": "recipe:knap_stone_blade",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:craft_shell_adze",
+      "to": "resource:shell_adze",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:large_shell",
+      "to": "recipe:craft_shell_adze",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_shell_adze",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:craft_shell_adze",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_shell_adze",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:craft_stone_axe",
+      "to": "resource:stone_axe",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:stone_blade",
+      "to": "recipe:craft_stone_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:craft_stone_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_stone_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_stone_axe",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:char_log_interior",
+      "to": "resource:charred_log",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "recipe:char_log_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:char_log_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:coconut_husk",
+      "to": "recipe:char_log_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:char_log_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:char_log_interior",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:char_log_interior",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:scrape_hull",
+      "to": "resource:shaped_hull",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:charred_log",
+      "to": "recipe:scrape_hull",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:scrape_hull",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:shell_adze",
+      "to": "recipe:scrape_hull",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:assemble_dugout",
+      "to": "resource:dugout",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:shaped_hull",
+      "to": "recipe:assemble_dugout",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:assemble_dugout",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:assemble_dugout",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:assemble_dugout",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:8",
+      "to": "recipe:assemble_dugout",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:knap_obsidian_blade",
+      "to": "resource:obsidian_blade",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:obsidian",
+      "to": "recipe:knap_obsidian_blade",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:knap_obsidian_blade",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:knap_obsidian_blade",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:obsidian",
+      "to": "recipe:knap_obsidian_blade",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:craft_bamboo_spear",
+      "to": "resource:bamboo_spear",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bamboo_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bamboo_spear",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:craft_bamboo_spear",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:cook_fish",
+      "to": "resource:cooked_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "recipe:cook_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cook_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:cook_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cook_fish",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:cook_fish",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:cook_large_fish",
+      "to": "resource:cooked_large_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "recipe:cook_large_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cook_large_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:cook_large_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cook_large_fish",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:cooking:4",
+      "to": "recipe:cook_large_fish",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:cook_large_fish",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:cook_crab",
+      "to": "resource:cooked_crab",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:crab",
+      "to": "recipe:cook_crab",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cook_crab",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:cook_crab",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cook_crab",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:cooking:2",
+      "to": "recipe:cook_crab",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:cook_crab",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_firing_pit",
+      "to": "building:firing_pit",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_firing_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_firing_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_firing_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_firing_pit",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:build_kiln",
+      "to": "building:kiln",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_kiln",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:10",
+      "to": "recipe:build_kiln",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:build_kiln",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:shape_clay_pot",
+      "to": "resource:shaped_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:shape_clay_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:shape_clay_pot",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:shape_clay_pot",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:fire_clay_pot",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:shaped_clay_pot",
+      "to": "recipe:fire_clay_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:fire_clay_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:fire_clay_pot",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:fire_clay_pot",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:seal_clay_jar",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:fired_clay_pot",
+      "to": "recipe:seal_clay_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:seal_clay_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:seal_clay_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:seal_clay_jar",
+      "to": "skill:preservation",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:preservation:15",
+      "to": "recipe:seal_clay_jar",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:seal_clay_jar",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:craft_crucible",
+      "to": "resource:crucible",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:craft_crucible",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_crucible",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:craft_crucible",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_crucible",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:15",
+      "to": "recipe:craft_crucible",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:craft_crucible",
+      "relation": "requires_building"
+    },
+    {
+      "from": "expedition:explore_beach",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "expedition:explore_beach",
+      "to": "biome:coconut_grove",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:explore_beach",
+      "to": "biome:rocky_shore",
+      "relation": "discovers"
+    },
+    {
+      "from": "biome:coconut_grove",
+      "to": "expedition:explore_beach",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:explore_beach",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:coconut_grove",
+      "to": "expedition:explore_interior",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "biome:bamboo_grove",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "biome:jungle_interior",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:bamboo_cane",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:dry_grass",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:large_shell",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:raft",
+      "to": "expedition:sail_nearby_island",
+      "relation": "requires_vessel"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "biome:nearby_island",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:obsidian",
+      "relation": "produces"
+    },
+    {
+      "from": "biome:nearby_island",
+      "to": "expedition:sail_nearby_island",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:obsidian",
+      "relation": "produces"
+    },
+    {
+      "from": "biome:nearby_island",
+      "to": "expedition:sail_nearby_island",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:wild_seed",
+      "relation": "produces"
+    },
+    {
+      "from": "biome:nearby_island",
+      "to": "expedition:sail_nearby_island",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:dugout",
+      "to": "expedition:dugout_voyage",
+      "relation": "requires_vessel"
+    },
+    {
+      "from": "station:deploy_basket_trap",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "station:deploy_basket_trap",
+      "to": "resource:large_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "station:deploy_basket_trap",
+      "to": "resource:crab",
+      "relation": "produces"
+    },
+    {
+      "from": "station:deploy_basket_trap",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "station:deploy_basket_trap",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:basket_trap",
+      "to": "station:deploy_basket_trap",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "skill:fishing:10",
+      "to": "station:deploy_basket_trap",
+      "relation": "requires_skill"
+    }
+  ],
+  "analysis": {
+    "criticalPathToDugout": [
+      "resource:dugout",
+      "recipe:assemble_dugout",
+      "resource:shaped_hull",
+      "resource:cordage",
+      "resource:bamboo_cane",
+      "skill:construction:8",
+      "recipe:scrape_hull",
+      "recipe:twist_cordage",
+      "recipe:braid_cordage",
+      "action:harvest_bamboo",
+      "expedition:explore_interior",
+      "resource:charred_log",
+      "resource:shell_adze",
+      "resource:dried_fiber",
+      "skill:weaving:5",
+      "building:fiber_loom",
+      "biome:bamboo_grove",
+      "biome:coconut_grove",
+      "recipe:char_log_interior",
+      "recipe:craft_shell_adze",
+      "recipe:dry_fiber",
+      "recipe:build_fiber_loom",
+      "expedition:explore_beach",
+      "resource:large_log",
+      "resource:dry_grass",
+      "resource:coconut_husk",
+      "resource:driftwood_branch",
+      "building:camp_fire",
+      "resource:large_shell",
+      "resource:rough_fiber",
+      "building:drying_rack",
+      "resource:palm_frond",
+      "skill:weaving:4",
+      "action:fell_large_tree",
+      "action:collect_dry_grass",
+      "action:gather_coconuts",
+      "action:collect_driftwood",
+      "recipe:build_camp_fire",
+      "action:wade_tidal_pool",
+      "recipe:shred_coconut_husk",
+      "recipe:build_drying_rack",
+      "action:collect_palm_frond",
+      "skill:woodworking:10",
+      "biome:jungle_interior",
+      "resource:stone_axe",
+      "biome:rocky_shore",
+      "resource:bow_drill_kit",
+      "recipe:craft_stone_axe",
+      "recipe:craft_bow_drill",
+      "resource:stone_blade",
+      "resource:flat_stone",
+      "recipe:knap_stone_blade",
+      "action:comb_rocky_shore",
+      "expedition:sail_nearby_island",
+      "resource:stone_flake",
+      "resource:hammerstone",
+      "resource:raft",
+      "biome:nearby_island",
+      "recipe:strike_stone_flake",
+      "recipe:craft_hammerstone",
+      "recipe:build_raft",
+      "resource:chert",
+      "skill:construction:5"
+    ],
+    "deadEnds": [
+      "resource:coconut",
+      "resource:wild_seed",
+      "resource:fresh_water",
+      "resource:bamboo_knife",
+      "resource:woven_basket",
+      "resource:obsidian_blade",
+      "resource:cooked_fish",
+      "resource:cooked_large_fish",
+      "resource:cooked_crab",
+      "resource:sealed_clay_jar",
+      "resource:crucible"
+    ],
+    "unreachable": [],
+    "warnings": [
+      {
+        "type": "dead_end",
+        "nodeId": "resource:coconut",
+        "message": "Coconut is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:wild_seed",
+        "message": "Wild Seed is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:fresh_water",
+        "message": "Fresh Water is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:bamboo_knife",
+        "message": "Bamboo Knife is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:woven_basket",
+        "message": "Woven Basket is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:obsidian_blade",
+        "message": "Obsidian Blade is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:cooked_fish",
+        "message": "Cooked Fish is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:cooked_large_fish",
+        "message": "Cooked Large Fish is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:cooked_crab",
+        "message": "Cooked Crab is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:sealed_clay_jar",
+        "message": "Sealed Clay Jar is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:crucible",
+        "message": "Crucible is produced but never used as input"
+      },
+      {
+        "type": "high_gate",
+        "nodeId": "skill:preservation:15",
+        "message": "Preservation Lv15 is required but only 2 action(s) train this skill"
+      }
+    ],
+    "skillGates": {
+      "woodworking": [
+        {
+          "level": 10,
+          "unlocks": [
+            "action:fell_large_tree"
+          ],
+          "trainedBy": [
+            "action:harvest_bamboo",
+            "action:fell_large_tree",
+            "recipe:split_bamboo_cane",
+            "recipe:char_log_interior",
+            "recipe:scrape_hull"
+          ]
+        }
+      ],
+      "foraging": [
+        {
+          "level": 5,
+          "unlocks": [
+            "action:dig_clay"
+          ],
+          "trainedBy": [
+            "action:gather_coconuts",
+            "action:collect_driftwood",
+            "action:comb_rocky_shore",
+            "action:collect_palm_frond",
+            "action:collect_dry_grass",
+            "action:collect_fresh_water",
+            "action:dig_clay"
+          ]
+        }
+      ],
+      "fishing": [
+        {
+          "level": 8,
+          "unlocks": [
+            "action:drop_line_fish",
+            "recipe:craft_basket_trap"
+          ],
+          "trainedBy": [
+            "action:wade_tidal_pool",
+            "action:spear_fish",
+            "action:drop_line_fish",
+            "station:deploy_basket_trap"
+          ]
+        },
+        {
+          "level": 10,
+          "unlocks": [
+            "station:deploy_basket_trap"
+          ],
+          "trainedBy": [
+            "action:wade_tidal_pool",
+            "action:spear_fish",
+            "action:drop_line_fish",
+            "station:deploy_basket_trap"
+          ]
+        }
+      ],
+      "weaving": [
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:build_fiber_loom"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:braid_cordage"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom"
+          ]
+        },
+        {
+          "level": 6,
+          "unlocks": [
+            "recipe:craft_basket_trap"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom"
+          ]
+        }
+      ],
+      "crafting": [
+        {
+          "level": 6,
+          "unlocks": [
+            "recipe:craft_gorge_hook"
+          ],
+          "trainedBy": [
+            "recipe:shred_coconut_husk",
+            "recipe:craft_shell_beads",
+            "recipe:craft_bamboo_knife",
+            "recipe:craft_bow_drill",
+            "recipe:craft_gorge_hook",
+            "recipe:build_camp_fire",
+            "recipe:build_drying_rack",
+            "recipe:craft_hammerstone",
+            "recipe:strike_stone_flake",
+            "recipe:knap_stone_blade",
+            "recipe:craft_shell_adze",
+            "recipe:craft_stone_axe",
+            "recipe:knap_obsidian_blade",
+            "recipe:craft_bamboo_spear",
+            "recipe:shape_clay_pot",
+            "recipe:fire_clay_pot"
+          ]
+        }
+      ],
+      "construction": [
+        {
+          "level": 2,
+          "unlocks": [
+            "recipe:build_fenced_perimeter"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:build_raft"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 8,
+          "unlocks": [
+            "recipe:assemble_dugout"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 10,
+          "unlocks": [
+            "recipe:build_kiln"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 14,
+          "unlocks": [
+            "recipe:build_stone_hearth"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 15,
+          "unlocks": [
+            "recipe:craft_crucible"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:craft_crucible"
+          ]
+        }
+      ],
+      "cooking": [
+        {
+          "level": 2,
+          "unlocks": [
+            "recipe:cook_crab"
+          ],
+          "trainedBy": [
+            "recipe:cook_fish",
+            "recipe:cook_large_fish",
+            "recipe:cook_crab"
+          ]
+        },
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:cook_large_fish"
+          ],
+          "trainedBy": [
+            "recipe:cook_fish",
+            "recipe:cook_large_fish",
+            "recipe:cook_crab"
+          ]
+        }
+      ],
+      "preservation": [
+        {
+          "level": 15,
+          "unlocks": [
+            "recipe:seal_clay_jar"
+          ],
+          "trainedBy": [
+            "recipe:dry_fiber",
+            "recipe:seal_clay_jar"
+          ]
+        }
+      ]
+    },
+    "biomeProgression": {
+      "tiers": [
+        {
+          "tier": 0,
+          "biomes": [
+            "beach"
+          ],
+          "gatedBy": null
+        },
+        {
+          "tier": 1,
+          "biomes": [
+            "coconut_grove"
+          ],
+          "gatedBy": "explore_beach (RNG, no prerequisites)"
+        },
+        {
+          "tier": 1,
+          "biomes": [
+            "rocky_shore"
+          ],
+          "gatedBy": "explore_beach (RNG, requires coconut_grove discovered)"
+        },
+        {
+          "tier": 2,
+          "biomes": [
+            "bamboo_grove"
+          ],
+          "gatedBy": "explore_interior (requires coconut_grove)"
+        },
+        {
+          "tier": 2,
+          "biomes": [
+            "jungle_interior"
+          ],
+          "gatedBy": "explore_interior (requires coconut_grove, low 3% chance)"
+        },
+        {
+          "tier": 3,
+          "biomes": [
+            "nearby_island"
+          ],
+          "gatedBy": "sail_nearby_island (requires raft)"
+        }
+      ]
+    }
+  }
+}

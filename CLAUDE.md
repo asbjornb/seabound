@@ -30,6 +30,39 @@ src/
   App.css         # All styles (mobile-first, tropical theme)
 ```
 
+## Progression Graph Tool
+
+A dependency graph of all game content — resources, actions, recipes, buildings, biomes, skill levels, expeditions, stations — with pre-computed analysis.
+
+### Files
+
+- `scripts/build-graph.ts` — Extracts graph from `src/data/*`, runs analysis, writes JSON
+- `src/data/progression-graph.json` — Committed artifact (always check in after data changes)
+- `src/components/DevGraph.tsx` — Interactive D3 visualization at `?dev=graph`
+
+### Usage
+
+```bash
+npx tsx scripts/build-graph.ts          # regenerate JSON
+npx tsx scripts/build-graph.ts --check  # CI: exit 1 if stale
+```
+
+### Querying the graph (for agents)
+
+Read `src/data/progression-graph.json` directly. Key paths:
+
+- `analysis.criticalPathToDugout` — all nodes in the upstream dependency tree to `resource:dugout`
+- `analysis.deadEnds` — resources produced but never consumed
+- `analysis.unreachable` — nodes not reachable from beach start (should be empty)
+- `analysis.warnings` — array of `{ type, nodeId, message }` for dead ends, unreachable, high gates, no-training skills
+- `analysis.skillGates.<skillId>` — per-skill: level gates, what they unlock, what trains them
+- `analysis.biomeProgression.tiers` — biome unlock order with gating info
+
+### Dev Wiki
+
+- `?dev` — Tables of all game content (auto-generated from data files)
+- `?dev=graph` — Interactive progression graph with filters
+
 ## Architecture Notes
 
 - **Data-driven**: Game content is config objects in `src/data/`, not hardcoded in UI. To add content, add entries there.
