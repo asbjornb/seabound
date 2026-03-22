@@ -566,7 +566,7 @@ export const RECIPES: RecipeDef[] = [
   // PHASE 2 — Clay & Pottery
   // ═══════════════════════════════════════
 
-  // Building: Firing Pit (Construction 12)
+  // Building: Firing Pit (requires clay → progression-gated)
   {
     id: "build_firing_pit",
     name: "Firing Pit",
@@ -574,7 +574,6 @@ export const RECIPES: RecipeDef[] = [
       "Dig a pit and line it with stones. Reaches temperatures high enough to fire clay.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 6,
     inputs: [
       { resourceId: "flat_stone", amount: 6 },
       { resourceId: "driftwood_branch", amount: 4 },
@@ -623,14 +622,13 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 15,
   },
 
-  // Fire Clay Pot (Crafting 8, requires firing pit)
+  // Fire Clay Pot (requires firing pit → progression-gated)
   {
     id: "fire_clay_pot",
     name: "Fire Clay Pot",
     description: "Fire a shaped pot in the firing pit to harden it.",
     skillId: "crafting",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "shaped_clay_pot", amount: 1 },
       { resourceId: "driftwood_branch", amount: 2 },
