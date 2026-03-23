@@ -605,7 +605,7 @@ export function DevGraph() {
         <div style={styles.filters}>
           <button style={filter === "all" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("all"); setSelectedNode(null); setHighlightUpstream(null); }}>All</button>
           <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("building:dugout"); }}>Focus</button>
-          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("building:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); setHiddenTypes(new Set(["skill_level", "recipe"])); }}>Dugout (minimal)</button>
+          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("building:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); setHiddenTypes(new Set(["skill_level", "resource"])); }}>Dugout (minimal)</button>
           <button style={filter === "biomes" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("biomes"); setSelectedNode(null); setHighlightUpstream(null); }}>Biomes</button>
           <button style={filter === "skill_gates" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("skill_gates"); setSelectedNode(null); setHighlightUpstream(null); }}>Skill Gates</button>
           <span style={styles.separator}>|</span>
