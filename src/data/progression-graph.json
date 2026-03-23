@@ -1251,6 +1251,11 @@
       "relation": "requires_skill"
     },
     {
+      "from": "tool:obsidian_blade",
+      "to": "recipe:craft_basket_trap",
+      "relation": "requires_tool"
+    },
+    {
       "from": "recipe:build_camp_fire",
       "to": "building:camp_fire",
       "relation": "builds"
@@ -1681,6 +1686,11 @@
       "relation": "trains"
     },
     {
+      "from": "tool:bamboo_knife",
+      "to": "recipe:craft_bamboo_spear",
+      "relation": "requires_tool"
+    },
+    {
       "from": "building:camp_fire",
       "to": "recipe:craft_bamboo_spear",
       "relation": "requires_building"
@@ -1966,6 +1976,16 @@
       "relation": "requires_building"
     },
     {
+      "from": "tool:bamboo_knife",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bamboo_knife",
+      "to": "recipe:split_bamboo_cane",
+      "relation": "speeds_up"
+    },
+    {
       "from": "tool:obsidian_blade",
       "to": "action:harvest_bamboo",
       "relation": "speeds_up"
@@ -1989,6 +2009,11 @@
       "from": "tool:obsidian_blade",
       "to": "recipe:shred_coconut_husk",
       "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bamboo_knife",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "boosts_output"
     },
     {
       "from": "expedition:explore_beach",
@@ -2376,6 +2401,7 @@
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
+      "tool:bamboo_knife",
       "resource:shell",
       "skill:crafting:6",
       "resource:stone_flake",
@@ -2384,6 +2410,7 @@
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
+      "recipe:craft_bamboo_knife",
       "recipe:strike_stone_flake",
       "recipe:split_bamboo_cane",
       "resource:stone_blade",
@@ -2448,11 +2475,13 @@
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
+      "tool:bamboo_knife",
       "tool:basket_trap",
       "skill:fishing:10",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
+      "recipe:craft_bamboo_knife",
       "recipe:craft_basket_trap",
       "resource:stone_blade",
       "skill:construction:5",
@@ -2471,7 +2500,6 @@
     ],
     "deadEnds": [
       "resource:wild_seed",
-      "tool:bamboo_knife",
       "resource:sealed_clay_jar",
       "tool:crucible"
     ],
@@ -2481,11 +2509,6 @@
         "type": "dead_end",
         "nodeId": "resource:wild_seed",
         "message": "Wild Seed is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "tool:bamboo_knife",
-        "message": "Bamboo Knife is produced but never used as input"
       },
       {
         "type": "dead_end",

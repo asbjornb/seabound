@@ -52,7 +52,8 @@ interface GraphEdge {
     | "trains"
     | "builds"
     | "crafts_tool"
-    | "speeds_up";
+    | "speeds_up"
+    | "boosts_output";
 }
 
 interface Warning {
@@ -267,6 +268,15 @@ for (const t of toolsWithSpeed) {
   }
   for (const recipeId of sb.recipeIds ?? []) {
     addEdge({ from: `tool:${t.id}`, to: `recipe:${recipeId}`, relation: "speeds_up" });
+  }
+}
+
+// Tool output bonuses → boosts_output edges
+const toolsWithOutput = Object.values(TOOLS).filter(t => t.outputBonus);
+for (const t of toolsWithOutput) {
+  const ob = t.outputBonus!;
+  for (const recipeId of ob.recipeIds) {
+    addEdge({ from: `tool:${t.id}`, to: `recipe:${recipeId}`, relation: "boosts_output" });
   }
 }
 
@@ -591,7 +601,7 @@ function computeWarnings(reachable: Set<string>): Warning[] {
   const consumedNodes = new Set<string>();
   for (const e of edges) {
     if (["produces", "crafts_tool"].includes(e.relation)) producedNodes.add(e.to);
-    if (["consumes", "requires_tool", "requires_resource", "requires_item", "requires_vessel", "speeds_up"].includes(e.relation)) {
+    if (["consumes", "requires_tool", "requires_resource", "requires_item", "requires_vessel", "speeds_up", "boosts_output"].includes(e.relation)) {
       consumedNodes.add(e.from);
     }
   }

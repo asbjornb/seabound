@@ -4,7 +4,15 @@ export const TOOLS: Record<string, ToolDef> = {
   bamboo_knife: {
     id: "bamboo_knife",
     name: "Bamboo Knife",
-    description: "A sharp bamboo blade. Unlocks new processing actions.",
+    description: "A sharp bamboo blade. Speeds up cutting tasks and yields extra fiber.",
+    speedBonus: {
+      recipeIds: ["shred_coconut_husk", "split_bamboo_cane"],
+      multiplier: 0.90,
+    },
+    outputBonus: {
+      recipeIds: ["shred_coconut_husk"],
+      chance: 0.30,
+    },
   },
   bow_drill_kit: {
     id: "bow_drill_kit",

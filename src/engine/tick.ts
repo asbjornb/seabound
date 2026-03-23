@@ -8,7 +8,7 @@ import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BUILDINGS } from "../data/buildings";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
 export interface TickResult {
@@ -280,6 +280,12 @@ function applyCraftCompletion(
     const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
     if (doubleChance > 0 && Math.random() < doubleChance) {
       outputAmount *= 2;
+    }
+
+    // Tool output bonus (+1 chance)
+    const toolBonusChance = getToolOutputBonusChance(state, def.id);
+    if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
+      outputAmount += 1;
     }
 
     addResource(state, def.output.resourceId, outputAmount);

@@ -285,6 +285,32 @@ export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: strin
   return mult;
 }
 
+/** Build lookup of tool output bonuses from tool data.
+ *  Maps recipeId → array of { toolId, chance }. */
+const toolOutputLookup = new Map<string, { toolId: ToolId; chance: number }[]>();
+for (const t of Object.values(TOOLS)) {
+  if (!t.outputBonus) continue;
+  for (const id of t.outputBonus.recipeIds) {
+    const existing = toolOutputLookup.get(id) ?? [];
+    existing.push({ toolId: t.id, chance: t.outputBonus.chance });
+    toolOutputLookup.set(id, existing);
+  }
+}
+
+/** Get tool-based output bonus chance for a recipe.
+ *  Returns the combined chance of +1 bonus output (stacks additively). */
+export function getToolOutputBonusChance(state: GameState, recipeId: string): number {
+  const tools = toolOutputLookup.get(recipeId);
+  if (!tools) return 0;
+  let chance = 0;
+  for (const t of tools) {
+    if (state.tools.includes(t.toolId)) {
+      chance += t.chance;
+    }
+  }
+  return Math.min(1, chance);
+}
+
 /** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */
 export const FOOD_VALUES: { id: ResourceId; value: number }[] = [
   { id: "coconut", value: 1 },

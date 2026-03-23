@@ -102,11 +102,17 @@ export interface ToolSpeedBonus {
   multiplier: number;    // e.g. 0.85 = 15% faster
 }
 
+export interface ToolOutputBonus {
+  recipeIds: string[];  // recipes that get bonus output
+  chance: number;       // e.g. 0.30 = 30% chance for +1 output per craft
+}
+
 export interface ToolDef {
   id: ToolId;
   name: string;
   description: string;
   speedBonus?: ToolSpeedBonus;
+  outputBonus?: ToolOutputBonus;
 }
 
 export interface ResourceDef {
