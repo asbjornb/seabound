@@ -305,6 +305,68 @@ function getFilteredData(
 }
 
 // ───────────────────────────────────────────────
+// Visual type hiding — removes nodes of hidden types
+// but bridges edges through them so connections persist
+// ───────────────────────────────────────────────
+
+function applyTypeHiding(
+  nodes: GraphNode[],
+  edges: GraphEdge[],
+  hiddenTypes: Set<string>,
+): { nodes: GraphNode[]; edges: GraphEdge[] } {
+  if (hiddenTypes.size === 0) return { nodes, edges };
+
+  const visibleNodes = nodes.filter(n => !hiddenTypes.has(n.type));
+  const visibleIds = new Set(visibleNodes.map(n => n.id));
+  const hiddenIds = new Set(nodes.filter(n => hiddenTypes.has(n.type)).map(n => n.id));
+
+  // Build local adjacency for hidden-node bridging
+  const fwd = new Map<string, { to: string; relation: string }[]>();
+  for (const e of edges) {
+    if (!fwd.has(e.from)) fwd.set(e.from, []);
+    fwd.get(e.from)!.push({ to: e.to, relation: e.relation });
+  }
+
+  // For each visible source, BFS through hidden nodes to find visible targets
+  const bridgedEdges: GraphEdge[] = [];
+  const seen = new Set<string>(); // dedup "from|to"
+
+  for (const e of edges) {
+    if (visibleIds.has(e.from) && visibleIds.has(e.to)) {
+      // Both visible — keep as-is
+      const key = `${e.from}|${e.to}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        bridgedEdges.push(e);
+      }
+    } else if (visibleIds.has(e.from) && hiddenIds.has(e.to)) {
+      // Source visible, target hidden — trace through hidden nodes
+      const queue = [e.to];
+      const visited = new Set<string>();
+      while (queue.length > 0) {
+        const curr = queue.shift()!;
+        if (visited.has(curr)) continue;
+        visited.add(curr);
+        const children = fwd.get(curr) ?? [];
+        for (const child of children) {
+          if (visibleIds.has(child.to)) {
+            const key = `${e.from}|${child.to}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              bridgedEdges.push({ from: e.from, to: child.to, relation: e.relation });
+            }
+          } else if (hiddenIds.has(child.to)) {
+            queue.push(child.to);
+          }
+        }
+      }
+    }
+  }
+
+  return { nodes: visibleNodes, edges: bridgedEdges };
+}
+
+// ───────────────────────────────────────────────
 // Component
 // ───────────────────────────────────────────────
 
@@ -317,11 +379,21 @@ export function DevGraph() {
   const [focusTarget, setFocusTarget] = useState<string | null>(null);
   const [focusDirection, setFocusDirection] = useState<FocusDirection>("upstream");
   const [focusMode, setFocusMode] = useState<FocusMode>("greedy");
+  const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set());
 
-  const { nodes: filteredNodes, edges: filteredEdges } = useMemo(
-    () => getFilteredData(filter, selectedSkill, focusTarget, focusDirection, focusMode),
-    [filter, selectedSkill, focusTarget, focusDirection, focusMode]
-  );
+  const toggleHiddenType = useCallback((type: string) => {
+    setHiddenTypes(prev => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return next;
+    });
+  }, []);
+
+  const { nodes: filteredNodes, edges: filteredEdges } = useMemo(() => {
+    const base = getFilteredData(filter, selectedSkill, focusTarget, focusDirection, focusMode);
+    return applyTypeHiding(base.nodes, base.edges, hiddenTypes);
+  }, [filter, selectedSkill, focusTarget, focusDirection, focusMode, hiddenTypes]);
 
   // Warning node IDs visible in current filter (used to dim out-of-view warnings)
   const visibleWarningIds = useMemo(() => {
@@ -581,6 +653,24 @@ export function DevGraph() {
             ))}
           </div>
         )}
+        {/* Visual type hiding toggles */}
+        <div style={styles.subFilter}>
+          <span style={{ color: "#5a7a6a", fontSize: "0.75rem", marginRight: "0.25rem" }}>Hide:</span>
+          {ALL_NODE_TYPES.map(t => (
+            <button
+              key={t}
+              style={hiddenTypes.has(t) ? styles.hideActive : styles.hideBtn}
+              onClick={() => toggleHiddenType(t)}
+              title={hiddenTypes.has(t) ? `Show ${t} nodes` : `Hide ${t} nodes (edges bridge through)`}
+            >
+              <span style={{ ...styles.dot, background: NODE_COLORS[t], opacity: hiddenTypes.has(t) ? 0.3 : 1 }} />
+              {t.replace("_", " ")}
+            </button>
+          ))}
+          {hiddenTypes.size > 0 && (
+            <button style={styles.filterBtn} onClick={() => setHiddenTypes(new Set())}>show all</button>
+          )}
+        </div>
       </div>
 
       <div style={styles.legend}>
@@ -895,5 +985,30 @@ const styles: Record<string, React.CSSProperties> = {
   biomeGate: {
     color: "#7a9a8a",
     fontSize: "0.8rem",
+  },
+  hideBtn: {
+    background: "#132626",
+    border: "1px solid #1e3a3a",
+    color: "#a0b8a8",
+    padding: "0.2rem 0.5rem",
+    borderRadius: 4,
+    cursor: "pointer",
+    fontSize: "0.75rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.3rem",
+  },
+  hideActive: {
+    background: "#1a1a10",
+    border: "1px solid #5a5a3a",
+    color: "#7a7a5a",
+    padding: "0.2rem 0.5rem",
+    borderRadius: 4,
+    cursor: "pointer",
+    fontSize: "0.75rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.3rem",
+    textDecoration: "line-through",
   },
 };
