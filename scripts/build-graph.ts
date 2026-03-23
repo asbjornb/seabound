@@ -409,9 +409,28 @@ function findMinimalUpstream(target: string): string[] {
       }
     } else {
       // Actions, recipes, expeditions, stations: ALL backward edges are mandatory
-      const parents = backwardAdj.get(curr);
-      if (parents) {
-        for (const p of parents) queue.push(p);
+      // EXCEPT: food "consumes" edges on expeditions are fungible (any one suffices)
+      const allParentEdges = edges.filter(e => e.to === curr);
+      const foodConsumeEdges = node.type === "expedition"
+        ? allParentEdges.filter(e => {
+            if (e.relation !== "consumes") return false;
+            const srcNode = nodeById.get(e.from);
+            return srcNode?.type === "resource" && srcNode.category === "food";
+          })
+        : [];
+      const nonFoodEdges = foodConsumeEdges.length > 0
+        ? allParentEdges.filter(e => !foodConsumeEdges.includes(e))
+        : allParentEdges;
+
+      // Add all non-food parents (mandatory)
+      for (const e of nonFoodEdges) queue.push(e.from);
+
+      // For food: pick the single cheapest food source
+      if (foodConsumeEdges.length > 0) {
+        const bestFood = foodConsumeEdges.reduce((a, b) =>
+          getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
+        );
+        queue.push(bestFood.from);
       }
     }
   }
