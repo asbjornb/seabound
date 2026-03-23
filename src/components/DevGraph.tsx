@@ -66,7 +66,9 @@ const NODE_RADIUS: Record<string, number> = {
 
 const ALL_NODE_TYPES: NodeType[] = ["resource", "action", "recipe", "building", "biome", "skill_level", "expedition", "station"];
 
-type FilterMode = "all" | "path_to_dugout" | "biomes" | "skill_gates" | NodeType;
+type FocusDirection = "upstream" | "downstream";
+type FocusMode = "all" | "greedy";
+type FilterMode = "all" | "focus" | "biomes" | "skill_gates" | NodeType;
 
 // ───────────────────────────────────────────────
 // Graph utilities
@@ -76,6 +78,7 @@ const allNodes: GraphNode[] = graphData.nodes as GraphNode[];
 const allEdges: GraphEdge[] = graphData.edges as GraphEdge[];
 const analysis = graphData.analysis as {
   criticalPathToDugout: string[];
+  minimalPathToDugout: string[];
   deadEnds: string[];
   unreachable: string[];
   warnings: Warning[];
@@ -96,7 +99,8 @@ function buildAdjacency() {
   return { forward, backward };
 }
 
-const { backward } = buildAdjacency();
+const { forward, backward } = buildAdjacency();
+const nodeById = new Map(allNodes.map(n => [n.id, n]));
 
 function getUpstream(nodeId: string): Set<string> {
   const visited = new Set<string>();
@@ -111,16 +115,81 @@ function getUpstream(nodeId: string): Set<string> {
   return visited;
 }
 
+function getDownstream(nodeId: string): Set<string> {
+  const visited = new Set<string>();
+  const queue = [nodeId];
+  while (queue.length > 0) {
+    const curr = queue.shift()!;
+    if (visited.has(curr)) continue;
+    visited.add(curr);
+    const children = forward.get(curr);
+    if (children) for (const c of children) queue.push(c);
+  }
+  return visited;
+}
+
+// Greedy minimal upstream: at choice points (resource/building/biome with
+// multiple producers), pick the producer with the smallest upstream subtree.
+const upstreamSizeCache = new Map<string, number>();
+function getUpstreamSize(nodeId: string): number {
+  if (upstreamSizeCache.has(nodeId)) return upstreamSizeCache.get(nodeId)!;
+  upstreamSizeCache.set(nodeId, Infinity); // cycle guard
+  const size = getUpstream(nodeId).size;
+  upstreamSizeCache.set(nodeId, size);
+  return size;
+}
+
+function getMinimalUpstream(nodeId: string): Set<string> {
+  const included = new Set<string>();
+  const queue = [nodeId];
+  while (queue.length > 0) {
+    const curr = queue.shift()!;
+    if (included.has(curr)) continue;
+    included.add(curr);
+    const node = nodeById.get(curr);
+    if (!node) continue;
+
+    if (node.type === "resource" || node.type === "building" || node.type === "biome") {
+      // Choice point: pick cheapest producer
+      const producers = allEdges.filter(e =>
+        e.to === curr && ["produces", "builds", "discovers"].includes(e.relation)
+      );
+      if (producers.length > 0) {
+        const best = producers.reduce((a, b) =>
+          getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
+        );
+        queue.push(best.from);
+      }
+    } else {
+      // Actions/recipes/etc: all backward edges are mandatory
+      const parents = backward.get(curr);
+      if (parents) for (const p of parents) queue.push(p);
+    }
+  }
+  return included;
+}
+
 // ───────────────────────────────────────────────
 // Filter logic
 // ───────────────────────────────────────────────
 
-function getFilteredData(mode: FilterMode, selectedSkill: string | null): { nodes: GraphNode[]; edges: GraphEdge[] } {
+function getFilteredData(
+  mode: FilterMode,
+  selectedSkill: string | null,
+  focusTarget: string | null,
+  focusDirection: FocusDirection,
+  focusMode: FocusMode,
+): { nodes: GraphNode[]; edges: GraphEdge[] } {
   if (mode === "all") return { nodes: allNodes, edges: allEdges };
 
-  if (mode === "path_to_dugout") {
-    const pathSet = new Set(analysis.criticalPathToDugout);
-    const nodes = allNodes.filter(n => pathSet.has(n.id));
+  if (mode === "focus" && focusTarget) {
+    let nodeSet: Set<string>;
+    if (focusDirection === "upstream") {
+      nodeSet = focusMode === "greedy" ? getMinimalUpstream(focusTarget) : getUpstream(focusTarget);
+    } else {
+      nodeSet = getDownstream(focusTarget);
+    }
+    const nodes = allNodes.filter(n => nodeSet.has(n.id));
     const nodeIds = new Set(nodes.map(n => n.id));
     const edges = allEdges.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
     return { nodes, edges };
@@ -191,10 +260,13 @@ export function DevGraph() {
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [highlightUpstream, setHighlightUpstream] = useState<Set<string> | null>(null);
+  const [focusTarget, setFocusTarget] = useState<string | null>(null);
+  const [focusDirection, setFocusDirection] = useState<FocusDirection>("upstream");
+  const [focusMode, setFocusMode] = useState<FocusMode>("greedy");
 
   const { nodes: filteredNodes, edges: filteredEdges } = useMemo(
-    () => getFilteredData(filter, selectedSkill),
-    [filter, selectedSkill]
+    () => getFilteredData(filter, selectedSkill, focusTarget, focusDirection, focusMode),
+    [filter, selectedSkill, focusTarget, focusDirection, focusMode]
   );
 
   // Warning node IDs visible in current filter (used to dim out-of-view warnings)
@@ -212,14 +284,19 @@ export function DevGraph() {
   const unreachableSet = useMemo(() => new Set(analysis.unreachable), []);
 
   const handleNodeClick = useCallback((nodeId: string) => {
-    if (selectedNode === nodeId) {
+    if (filter === "focus") {
+      // In focus mode, clicking a node re-targets the focus
+      setFocusTarget(nodeId);
+      setSelectedNode(nodeId);
+      setHighlightUpstream(null);
+    } else if (selectedNode === nodeId) {
       setSelectedNode(null);
       setHighlightUpstream(null);
     } else {
       setSelectedNode(nodeId);
       setHighlightUpstream(getUpstream(nodeId));
     }
-  }, [selectedNode]);
+  }, [selectedNode, filter]);
 
   // D3 simulation
   useEffect(() => {
@@ -401,7 +478,8 @@ export function DevGraph() {
         <h2 style={styles.title}><a href="?dev" style={{ color: "#7a9a8a", textDecoration: "none" }}>Dev Wiki</a> / Progression Graph</h2>
         <div style={styles.filters}>
           <button style={filter === "all" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("all"); setSelectedNode(null); setHighlightUpstream(null); }}>All</button>
-          <button style={filter === "path_to_dugout" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("path_to_dugout"); setSelectedNode(null); setHighlightUpstream(null); }}>Path to Dugout</button>
+          <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("resource:dugout"); }}>Focus</button>
+          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("resource:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); }}>Dugout (minimal)</button>
           <button style={filter === "biomes" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("biomes"); setSelectedNode(null); setHighlightUpstream(null); }}>Biomes</button>
           <button style={filter === "skill_gates" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("skill_gates"); setSelectedNode(null); setHighlightUpstream(null); }}>Skill Gates</button>
           <span style={styles.separator}>|</span>
@@ -416,6 +494,28 @@ export function DevGraph() {
             </button>
           ))}
         </div>
+        {filter === "focus" && (
+          <div style={styles.subFilter}>
+            <select
+              style={styles.focusSelect}
+              value={focusTarget ?? ""}
+              onChange={e => setFocusTarget(e.target.value || null)}
+            >
+              <option value="">-- select target --</option>
+              {allNodes.map(n => (
+                <option key={n.id} value={n.id}>{n.label} ({n.type})</option>
+              ))}
+            </select>
+            <span style={styles.separator}>|</span>
+            <button style={focusDirection === "upstream" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDirection("upstream")}>Upstream</button>
+            <button style={focusDirection === "downstream" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDirection("downstream")}>Downstream</button>
+            {focusDirection === "upstream" && (<>
+              <span style={styles.separator}>|</span>
+              <button style={focusMode === "greedy" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusMode("greedy")}>Greedy</button>
+              <button style={focusMode === "all" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusMode("all")}>All paths</button>
+            </>)}
+          </div>
+        )}
         {filter === "skill_gates" && (
           <div style={styles.subFilter}>
             {Object.keys(analysis.skillGates).map(s => (
@@ -453,6 +553,9 @@ export function DevGraph() {
         <div style={styles.detailPanel}>
           <h3 style={styles.detailTitle}>{selectedNodeData.label} <span style={styles.detailType}>{selectedNodeData.type}</span></h3>
           <p style={styles.detailId}>{selectedNodeData.id}</p>
+          {filter !== "focus" && (
+            <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget(selectedNode); }}>Focus on this node</button>
+          )}
           {selectedNodeEdges.length > 0 && (
             <div>
               <strong style={styles.detailLabel}>Connections:</strong>
@@ -586,6 +689,16 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     flexWrap: "wrap",
     gap: "0.25rem",
+    alignItems: "center",
+  },
+  focusSelect: {
+    background: "#132626",
+    border: "1px solid #1e3a3a",
+    color: "#a0b8a8",
+    padding: "0.3rem 0.5rem",
+    borderRadius: 4,
+    fontSize: "0.8rem",
+    maxWidth: 260,
   },
   separator: {
     color: "#3a5a4a",

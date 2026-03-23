@@ -75,6 +75,7 @@ interface ProgressionGraph {
   edges: GraphEdge[];
   analysis: {
     criticalPathToDugout: string[];
+    minimalPathToDugout: string[];
     deadEnds: string[];
     unreachable: string[];
     warnings: Warning[];
@@ -363,29 +364,59 @@ function findAllUpstream(target: string): Set<string> {
   return visited;
 }
 
-// Critical path to dugout — BFS backward, then extract shortest path
+// All upstream: BFS backward following every edge
 function findCriticalPath(target: string): string[] {
-  const visited = new Map<string, string | null>(); // node → parent
-  const queue: string[] = [target];
-  visited.set(target, null);
+  return Array.from(findAllUpstream(target));
+}
+
+// Minimal upstream: BFS backward, but at choice points (resource/building/biome
+// nodes with multiple producers) pick the single producer with the smallest
+// upstream subtree. This gives the "simplest path" to a target.
+function findMinimalUpstream(target: string): string[] {
+  // Pre-compute upstream sizes so we can compare producers
+  const nodeById = new Map(nodes.map(n => [n.id, n]));
+  const upstreamSizeCache = new Map<string, number>();
+  function getUpstreamSize(id: string): number {
+    if (upstreamSizeCache.has(id)) return upstreamSizeCache.get(id)!;
+    // Mark with Infinity to break cycles during computation
+    upstreamSizeCache.set(id, Infinity);
+    const size = findAllUpstream(id).size;
+    upstreamSizeCache.set(id, size);
+    return size;
+  }
+
+  const included = new Set<string>();
+  const queue = [target];
 
   while (queue.length > 0) {
     const curr = queue.shift()!;
-    const parents = backwardAdj.get(curr);
-    if (parents) {
-      for (const p of parents) {
-        if (!visited.has(p)) {
-          visited.set(p, curr);
-          queue.push(p);
-        }
+    if (included.has(curr)) continue;
+    included.add(curr);
+
+    const node = nodeById.get(curr);
+    if (!node) continue;
+
+    if (node.type === "resource" || node.type === "building" || node.type === "biome") {
+      // Choice point: pick the cheapest producer
+      const producers = edges.filter(e =>
+        e.to === curr && ["produces", "builds", "discovers"].includes(e.relation)
+      );
+      if (producers.length > 0) {
+        const best = producers.reduce((a, b) =>
+          getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
+        );
+        queue.push(best.from);
+      }
+    } else {
+      // Actions, recipes, expeditions, stations: ALL backward edges are mandatory
+      const parents = backwardAdj.get(curr);
+      if (parents) {
+        for (const p of parents) queue.push(p);
       }
     }
   }
 
-  // Now trace all leaf nodes (nodes with no parents = starting resources/biomes)
-  // Return the full upstream set as an ordered list
-  const upstream = findAllUpstream(target);
-  return Array.from(upstream);
+  return Array.from(included);
 }
 
 // ───────────────────────────────────────────────
@@ -645,6 +676,7 @@ function computeBiomeProgression(): { tiers: BiomeTier[] } {
 const reachable = computeReachable();
 const warnings = computeWarnings(reachable);
 const criticalPath = findCriticalPath("resource:dugout");
+const minimalPath = findMinimalUpstream("resource:dugout");
 const skillGates = computeSkillGates();
 const biomeProgression = computeBiomeProgression();
 
@@ -656,6 +688,7 @@ const graph: ProgressionGraph = {
   edges,
   analysis: {
     criticalPathToDugout: criticalPath,
+    minimalPathToDugout: minimalPath,
     deadEnds,
     unreachable: unreachableNodes.map(n => n.id),
     warnings,
