@@ -127,6 +127,13 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         drops: [{ resourceId: "wild_seed", amount: 2 }],
       },
       {
+        weight: 12,
+        description:
+          "You find taro growing wild along a stream bank and dig up cuttings.",
+        requiredBiomes: ["nearby_island"],
+        drops: [{ resourceId: "taro_corm", amount: 2 }],
+      },
+      {
         weight: 10,
         description:
           "You find useful flat stones of a different composition on the island shore.",
@@ -152,9 +159,41 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     requiredVessel: "dugout",
     outcomes: [
       {
-        weight: 1,
+        weight: 20,
         description:
-          "You paddle beyond the reef into open water. The horizon stretches endlessly. There's a whole world out there waiting to be explored... but not yet. You return home, satisfied with your new canoe's performance.",
+          "You land on a lush islet and find banana plants growing wild. You carefully dig up a shoot.",
+        drops: [{ resourceId: "banana_shoot", amount: 1 }],
+      },
+      {
+        weight: 12,
+        description:
+          "You discover a breadfruit grove on a distant island and take root cuttings.",
+        drops: [{ resourceId: "breadfruit_cutting", amount: 1 }],
+      },
+      {
+        weight: 15,
+        description:
+          "You find obsidian outcrops on a distant volcanic shore.",
+        drops: [{ resourceId: "obsidian", amount: 3 }],
+      },
+      {
+        weight: 20,
+        description:
+          "You beach on a wooded island and gather materials.",
+        drops: [
+          { resourceId: "large_log", amount: 1 },
+          { resourceId: "bamboo_cane", amount: 3 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "You watch the sunset from a pristine beach. The world feels vast and full of possibility.",
+      },
+      {
+        weight: 18,
+        description:
+          "Strong currents push you off course. You return tired but safe.",
       },
     ],
   },

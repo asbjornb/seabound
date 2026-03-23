@@ -22,8 +22,19 @@ export type ResourceId =
   | "cooked_fish"
   | "cooked_crab"
   | "cooked_large_fish"
-  // Seeds
+  // Seeds & Farming
   | "wild_seed"
+  | "root_vegetable"
+  | "cooked_root_vegetable"
+  | "taro_corm"
+  | "taro_root"
+  | "cooked_taro"
+  | "banana_shoot"
+  | "banana"
+  | "breadfruit_cutting"
+  | "breadfruit"
+  | "roasted_breadfruit"
+  | "voyage_provisions"
   // Obsidian
   | "obsidian"
   // Stone Tools
@@ -52,7 +63,8 @@ export type ToolId =
   | "obsidian_blade"
   | "gorge_hook"
   | "basket_trap"
-  | "crucible";
+  | "crucible"
+  | "digging_stick";
 
 export type SkillId =
   | "foraging"
@@ -79,7 +91,11 @@ export type BuildingId =
   | "fiber_loom"
   | "raft"
   | "dugout"
-  | "woven_basket";
+  | "woven_basket"
+  | "cleared_plot"
+  | "tended_garden"
+  | "farm_plot"
+  | "well";
 
 export interface StorageBonus {
   tag?: string; // if set, item must have this tag
@@ -190,6 +206,7 @@ export interface RecipeDef {
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
   requiredBuildings?: BuildingId[]; // must have these buildings constructed
   buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
+  replacesBuilding?: BuildingId; // if set, one instance of this building is consumed when buildingOutput is added (upgrade)
   oneTimeCraft?: boolean; // if true, recipe disappears once player owns ≥1 of the output
   repeatable?: boolean; // if true, auto-repeats until inputs run out (like gathering actions)
   xpGain: number;
@@ -236,6 +253,7 @@ export interface StationDef {
   yields: Drop[];
   xpGain: number;
   maxDeployed?: number; // max simultaneous deployments, default 1
+  maxDeployedPerBuildings?: BuildingId[]; // if set, max deployed = total count of these buildings owned
 }
 
 export interface PlacedStation {

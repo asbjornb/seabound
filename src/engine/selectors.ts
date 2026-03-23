@@ -12,6 +12,7 @@ import { RECIPES } from "../data/recipes";
 import { STATIONS } from "../data/stations";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
+  getBuildingCount,
   getEffectiveInputs,
   getMoraleDurationMultiplier,
   getResource,
@@ -62,7 +63,11 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
+      // For stackable upgrade recipes, hide if no source building left to upgrade
+      if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
     }
+    // For upgrade recipes that haven't reached max yet, still need a source building
+    if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
     if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
     if (recipe.oneTimeCraft && recipe.output && !resourceHasUse(recipe.output.resourceId, state)) return false;
@@ -94,6 +99,13 @@ export function selectAvailableStations(state: GameState): StationDef[] {
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    // For stations with maxDeployedPerBuildings, check that at least one applicable building exists
+    if (station.maxDeployedPerBuildings) {
+      const totalPlots = station.maxDeployedPerBuildings.reduce(
+        (sum, bid) => sum + getBuildingCount(state, bid), 0
+      );
+      if (totalPlots === 0) return false;
+    }
     return true;
   });
 }

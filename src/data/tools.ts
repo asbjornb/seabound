@@ -68,4 +68,9 @@ export const TOOLS: Record<string, ToolDef> = {
     description:
       "A thick-walled clay vessel that withstands extreme heat. Required for smelting ore.",
   },
+  digging_stick: {
+    id: "digging_stick",
+    name: "Digging Stick",
+    description: "A fire-hardened bamboo digging stick. Essential for farming.",
+  },
 };

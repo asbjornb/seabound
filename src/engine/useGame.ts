@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BUILDINGS } from "../data/buildings";
+import { getDropChanceBonus } from "../data/milestones";
 import {
   STATIONS_BY_ID,
 } from "../data/registries";
@@ -18,6 +19,7 @@ import {
 import {
   addResource,
   createInitialState,
+  getBuildingCount,
   getEffectiveInputs,
   getResource,
   getTotalFood,
@@ -213,6 +215,8 @@ export function useGame() {
             if (getResource(prev, itemId) < 1) return prev;
           }
         }
+        // Check upgrade source building exists
+        if (recipe.replacesBuilding && !hasBuilding(prev, recipe.replacesBuilding)) return prev;
         // Check resources (using effective inputs — some may be removed by buildings)
         const inputs = getEffectiveInputs(recipe, prev);
         for (const input of inputs) {
@@ -281,22 +285,32 @@ export function useGame() {
         }
       }
       // Check max deployed
-      const maxDeployed = station.maxDeployed ?? 1;
+      let maxDeployed = station.maxDeployed ?? 1;
+      if (station.maxDeployedPerBuildings) {
+        maxDeployed = station.maxDeployedPerBuildings.reduce(
+          (sum, bid) => sum + getBuildingCount(prev, bid), 0
+        );
+      }
       const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
       if (currentCount >= maxDeployed) return prev;
-      // Check setup inputs
-      if (station.setupInputs) {
-        for (const inp of station.setupInputs) {
-          if (getResource(prev, inp.resourceId) < inp.amount) return prev;
+      // Get effective setup inputs (may be modified by milestones)
+      const effectiveSetupInputs = station.setupInputs ? station.setupInputs.map((inp) => {
+        // Farming 7: Efficient sowing — wild seed cost reduced from 3 to 2
+        if (station.id === "plant_wild_seeds" && inp.resourceId === "wild_seed" &&
+            prev.skills.farming.level >= 7) {
+          return { ...inp, amount: 2 };
         }
+        return inp;
+      }) : [];
+      // Check setup inputs
+      for (const inp of effectiveSetupInputs) {
+        if (getResource(prev, inp.resourceId) < inp.amount) return prev;
       }
       const next = structuredClone(prev);
       // Deduct setup inputs
-      if (station.setupInputs) {
-        for (const inp of station.setupInputs) {
-          next.resources[inp.resourceId] =
-            (next.resources[inp.resourceId] ?? 0) - inp.amount;
-        }
+      for (const inp of effectiveSetupInputs) {
+        next.resources[inp.resourceId] =
+          (next.resources[inp.resourceId] ?? 0) - inp.amount;
       }
       next.stations.push({
         stationId: station.id,
@@ -315,16 +329,44 @@ export function useGame() {
       const readyAt = placed.deployedAt + def.durationMs;
       if (Date.now() < readyAt) return prev; // not ready yet
       const next = structuredClone(prev);
-      // Roll drops
+      const skillLevel = next.skills[def.skillId].level;
+      // Roll drops with milestone bonuses
       const newResources: string[] = [];
       for (const drop of def.yields) {
-        const chance = drop.chance ?? 1;
+        let chance = drop.chance ?? 1;
+        // Apply milestone drop chance bonuses (uses actionId = stationId)
+        chance = Math.min(1, chance + getDropChanceBonus(def.skillId, skillLevel, def.id, drop.resourceId));
         if (Math.random() < chance) {
           if (!next.discoveredResources.includes(drop.resourceId)) {
             newResources.push(drop.resourceId);
             next.discoveredResources.push(drop.resourceId);
           }
           addResource(next, drop.resourceId, drop.amount);
+        }
+      }
+      // Farming level 8: Seed saving — wild seed planting always returns at least 1 seed
+      if (def.id === "plant_wild_seeds" && skillLevel >= 8) {
+        const gotSeed = newResources.includes("wild_seed") ||
+          (next.resources["wild_seed"] ?? 0) > (prev.resources["wild_seed"] ?? 0);
+        if (!gotSeed) {
+          if (!next.discoveredResources.includes("wild_seed")) {
+            newResources.push("wild_seed");
+            next.discoveredResources.push("wild_seed");
+          }
+          addResource(next, "wild_seed", 1);
+        }
+      }
+      // Farming level 18: Master farmer — wild seed planting always yields 2 root vegetables
+      if (def.id === "plant_wild_seeds" && skillLevel >= 18) {
+        const currentRootVeg = next.resources["root_vegetable"] ?? 0;
+        const prevRootVeg = prev.resources["root_vegetable"] ?? 0;
+        const gained = currentRootVeg - prevRootVeg;
+        if (gained < 2) {
+          if (!next.discoveredResources.includes("root_vegetable")) {
+            newResources.push("root_vegetable");
+            next.discoveredResources.push("root_vegetable");
+          }
+          addResource(next, "root_vegetable", 2 - Math.max(0, gained));
         }
       }
       // Award XP
