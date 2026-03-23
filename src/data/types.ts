@@ -88,6 +88,7 @@ export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structur
 export interface StorageBonus {
   category: ResourceCategory;
   amount: number; // extra storage slots per item in this category
+  size?: "small" | "large"; // if set, only applies to resources of this size
 }
 
 export interface BuildingDef {
@@ -111,7 +112,7 @@ export interface ResourceDef {
   category: ResourceCategory;
   size?: "small" | "large"; // defaults to "small" if omitted
   toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
-  utility?: string; // non-crafting purpose (e.g. "storage", "farming", "smelting") — suppresses dead-end warning
+  storageBonus?: StorageBonus[]; // if set, each owned copy adds storage (like buildings)
 }
 
 export interface SkillDef {

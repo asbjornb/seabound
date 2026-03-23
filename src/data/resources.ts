@@ -126,8 +126,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Woven Basket",
     description: "A sturdy palm-frond basket. Stores small crafted items and tools.",
     category: "structure",
-    utility: "storage",
     size: "large",
+    storageBonus: [
+      { category: "raw", amount: 1, size: "small" },
+      { category: "processed", amount: 1, size: "small" },
+      { category: "tool", amount: 1, size: "small" },
+    ],
   },
   large_fish: {
     id: "large_fish",

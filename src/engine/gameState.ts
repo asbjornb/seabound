@@ -160,21 +160,29 @@ export function getStorageLimit(state: GameState, resourceId: string): number {
   const def = RESOURCES[resourceId];
   if (!def) return BASE_STORAGE_LIMIT;
 
+  const resSize = def.size ?? "small";
+
   let limit = BASE_STORAGE_LIMIT;
   for (const bid of state.buildings) {
     const bdef = BUILDINGS[bid];
     if (bdef?.storageBonus) {
       for (const bonus of bdef.storageBonus) {
-        if (bonus.category === def.category) {
+        if (bonus.category === def.category && (!bonus.size || bonus.size === resSize)) {
           limit += bonus.amount;
         }
       }
     }
   }
-  // Woven baskets: +1 storage per basket for small non-food, non-structure items
-  const size = def.size ?? "small";
-  if (size === "small" && def.category !== "food" && def.category !== "structure") {
-    limit += state.resources["woven_basket"] ?? 0;
+  // Resource-based storage bonuses (e.g. woven baskets)
+  for (const [resId, count] of Object.entries(state.resources)) {
+    const resDef = RESOURCES[resId];
+    if (resDef?.storageBonus && count > 0) {
+      for (const bonus of resDef.storageBonus) {
+        if (bonus.category === def.category && (!bonus.size || bonus.size === resSize)) {
+          limit += bonus.amount * count;
+        }
+      }
+    }
   }
   return limit;
 }
