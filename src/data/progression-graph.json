@@ -2001,6 +2001,31 @@
       "relation": "requires_building"
     },
     {
+      "from": "resource:obsidian_blade",
+      "to": "action:harvest_bamboo",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "resource:obsidian_blade",
+      "to": "action:fell_large_tree",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "resource:obsidian_blade",
+      "to": "recipe:split_bamboo_cane",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "resource:obsidian_blade",
+      "to": "recipe:scrape_hull",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "resource:obsidian_blade",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "speeds_up"
+    },
+    {
       "from": "expedition:explore_beach",
       "to": "skill:navigation",
       "relation": "trains"
@@ -2321,6 +2346,7 @@
       "expedition:explore_interior",
       "resource:charred_log",
       "resource:shell_adze",
+      "resource:obsidian_blade",
       "resource:dried_fiber",
       "skill:weaving:5",
       "building:fiber_loom",
@@ -2335,6 +2361,7 @@
       "biome:coconut_grove",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
+      "recipe:knap_obsidian_blade",
       "recipe:dry_fiber",
       "recipe:build_fiber_loom",
       "action:gather_coconuts",
@@ -2352,6 +2379,8 @@
       "resource:driftwood_branch",
       "building:camp_fire",
       "resource:large_shell",
+      "resource:obsidian",
+      "resource:flat_stone",
       "resource:rough_fiber",
       "building:drying_rack",
       "resource:palm_frond",
@@ -2367,6 +2396,8 @@
       "action:collect_dry_grass",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
+      "expedition:sail_nearby_island",
+      "action:comb_rocky_shore",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
       "action:collect_palm_frond",
@@ -2378,6 +2409,8 @@
       "resource:stone_axe",
       "biome:rocky_shore",
       "resource:bow_drill_kit",
+      "resource:raft",
+      "biome:nearby_island",
       "resource:shell",
       "skill:crafting:6",
       "resource:stone_flake",
@@ -2385,26 +2418,20 @@
       "skill:weaving:6",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
+      "recipe:build_raft",
       "recipe:strike_stone_flake",
       "recipe:split_bamboo_cane",
       "resource:stone_blade",
-      "resource:flat_stone",
+      "skill:construction:5",
       "resource:chert",
       "resource:hammerstone",
       "recipe:knap_stone_blade",
-      "action:comb_rocky_shore",
-      "expedition:sail_nearby_island",
-      "recipe:craft_hammerstone",
-      "resource:raft",
-      "biome:nearby_island",
-      "recipe:build_raft",
-      "skill:construction:5"
+      "recipe:craft_hammerstone"
     ],
     "deadEnds": [
       "resource:wild_seed",
       "resource:bamboo_knife",
       "resource:woven_basket",
-      "resource:obsidian_blade",
       "resource:sealed_clay_jar",
       "resource:crucible"
     ],
@@ -2424,11 +2451,6 @@
         "type": "dead_end",
         "nodeId": "resource:woven_basket",
         "message": "Woven Basket is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:obsidian_blade",
-        "message": "Obsidian Blade is produced but never used as input"
       },
       {
         "type": "dead_end",

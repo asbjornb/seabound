@@ -98,12 +98,19 @@ export interface BuildingDef {
   storageBonus?: StorageBonus[];
 }
 
+export interface ToolSpeedBonus {
+  actionIds?: string[];  // gathering actions sped up
+  recipeIds?: string[];  // recipes sped up
+  multiplier: number;    // e.g. 0.85 = 15% faster
+}
+
 export interface ResourceDef {
   id: ResourceId;
   name: string;
   description: string;
   category: ResourceCategory;
   size?: "small" | "large"; // defaults to "small" if omitted
+  toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
 }
 
 export interface SkillDef {

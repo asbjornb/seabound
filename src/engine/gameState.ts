@@ -203,28 +203,31 @@ export function getMoraleDurationMultiplier(morale: number): number {
   return 1 - 0.2 * (morale - 50) / 50;
 }
 
-/** Actions and recipes sped up by owning an obsidian blade (15% faster). */
-const OBSIDIAN_BLADE_ACTIONS = new Set([
-  "harvest_bamboo",
-  "fell_large_tree",
-]);
-const OBSIDIAN_BLADE_RECIPES = new Set([
-  "split_bamboo_cane",
-  "scrape_hull",
-  "shred_coconut_husk",
-]);
-const OBSIDIAN_BLADE_MULTIPLIER = 0.85;
+/** Build lookup of tool speed bonuses from resource data.
+ *  Maps actionOrRecipeId → array of { resourceId, multiplier }. */
+const toolSpeedLookup = new Map<string, { resourceId: string; multiplier: number }[]>();
+for (const r of Object.values(RESOURCES)) {
+  if (!r.toolFor) continue;
+  const ids = [...(r.toolFor.actionIds ?? []), ...(r.toolFor.recipeIds ?? [])];
+  for (const id of ids) {
+    const existing = toolSpeedLookup.get(id) ?? [];
+    existing.push({ resourceId: r.id, multiplier: r.toolFor.multiplier });
+    toolSpeedLookup.set(id, existing);
+  }
+}
 
 /** Get tool-based speed multiplier for an action or recipe.
- *  Currently only obsidian blade provides a bonus. */
+ *  Stacks multiplicatively if multiple tools apply. */
 export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: string): number {
-  if (
-    (OBSIDIAN_BLADE_ACTIONS.has(actionOrRecipeId) || OBSIDIAN_BLADE_RECIPES.has(actionOrRecipeId)) &&
-    (state.resources["obsidian_blade"] ?? 0) >= 1
-  ) {
-    return OBSIDIAN_BLADE_MULTIPLIER;
+  const tools = toolSpeedLookup.get(actionOrRecipeId);
+  if (!tools) return 1;
+  let mult = 1;
+  for (const t of tools) {
+    if ((state.resources[t.resourceId] ?? 0) >= 1) {
+      mult *= t.multiplier;
+    }
   }
-  return 1;
+  return mult;
 }
 
 /** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */

@@ -48,7 +48,8 @@ interface GraphEdge {
     | "requires_biome_discovered"
     | "discovers"
     | "trains"
-    | "builds";
+    | "builds"
+    | "speeds_up";
 }
 
 interface Warning {
@@ -108,6 +109,9 @@ function addEdge(edge: GraphEdge) {
 for (const r of Object.values(RESOURCES)) {
   addNode({ id: `resource:${r.id}`, type: "resource", label: r.name, category: r.category });
 }
+
+// Tool speed bonuses (toolFor edges added after actions/recipes are created)
+const toolForResources = Object.values(RESOURCES).filter(r => r.toolFor);
 
 // Biomes
 const ALL_BIOMES: BiomeId[] = ["beach", "coconut_grove", "rocky_shore", "bamboo_grove", "jungle_interior", "nearby_island"];
@@ -231,6 +235,17 @@ for (const r of RECIPES) {
     for (const b of r.requiredBuildings) {
       addEdge({ from: `building:${b}`, to: recipeId, relation: "requires_building" });
     }
+  }
+}
+
+// Tool speed bonuses → speeds_up edges
+for (const r of toolForResources) {
+  const tf = r.toolFor!;
+  for (const actionId of tf.actionIds ?? []) {
+    addEdge({ from: `resource:${r.id}`, to: `action:${actionId}`, relation: "speeds_up" });
+  }
+  for (const recipeId of tf.recipeIds ?? []) {
+    addEdge({ from: `resource:${r.id}`, to: `recipe:${recipeId}`, relation: "speeds_up" });
   }
 }
 
@@ -514,7 +529,7 @@ function computeWarnings(reachable: Set<string>): Warning[] {
   const consumedResources = new Set<string>();
   for (const e of edges) {
     if (e.relation === "produces" && e.to.startsWith("resource:")) producedResources.add(e.to);
-    if (["consumes", "requires_tool", "requires_item", "requires_vessel"].includes(e.relation) && e.from.startsWith("resource:")) {
+    if (["consumes", "requires_tool", "requires_item", "requires_vessel", "speeds_up"].includes(e.relation) && e.from.startsWith("resource:")) {
       consumedResources.add(e.from);
     }
   }
