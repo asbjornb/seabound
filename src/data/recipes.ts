@@ -819,9 +819,8 @@ export const RECIPES: RecipeDef[] = [
     panel: "craft",
     inputs: [
       { resourceId: "sealed_clay_jar", amount: 1 },
-      { resourceId: "cooked_fish", amount: 2 },
-      { resourceId: "coconut", amount: 3 },
     ],
+    tagInputs: [{ tag: "food", count: 5 }],
     output: { resourceId: "voyage_provisions", amount: 1 },
     requiredBuildings: ["firing_pit"],
     durationMs: 10000,

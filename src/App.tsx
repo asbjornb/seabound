@@ -3,6 +3,7 @@ import { ActionPanel } from "./components/ActionPanel";
 import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
+import { DevGraphDot } from "./components/DevGraphDot";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
@@ -39,6 +40,7 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const devPage = params.get("dev");
     if (devPage === "graph") return <DevGraph />;
+    if (devPage === "dot") return <DevGraphDot />;
     return <DevWiki />;
   }
   const game = useGame();

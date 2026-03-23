@@ -8,7 +8,7 @@ import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BUILDINGS } from "../data/buildings";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
 export interface TickResult {
@@ -104,11 +104,17 @@ export function processTick(state: GameState, now: number): TickResult {
         const canAfford = effectiveInputs.every(
           (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
         );
-        if (!canAfford) {
+        // Resolve tag-based inputs (e.g. "5 different foods")
+        const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
+        if (!canAfford || !resolvedTagInputs) {
           state.currentAction = null;
           break;
         }
         for (const input of effectiveInputs) {
+          state.resources[input.resourceId] =
+            (state.resources[input.resourceId] ?? 0) - input.amount;
+        }
+        for (const input of resolvedTagInputs) {
           state.resources[input.resourceId] =
             (state.resources[input.resourceId] ?? 0) - input.amount;
         }
@@ -126,10 +132,15 @@ export function processTick(state: GameState, now: number): TickResult {
         const canAfford = effectiveInputs.every(
           (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
         );
-        if (!canAfford) {
+        const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
+        if (!canAfford || !resolvedTagInputs) {
           state.currentAction = null;
         } else {
           for (const input of effectiveInputs) {
+            state.resources[input.resourceId] =
+              (state.resources[input.resourceId] ?? 0) - input.amount;
+          }
+          for (const input of resolvedTagInputs) {
             state.resources[input.resourceId] =
               (state.resources[input.resourceId] ?? 0) - input.amount;
           }

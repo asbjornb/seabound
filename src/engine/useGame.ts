@@ -18,6 +18,7 @@ import {
 
 import {
   addResource,
+  canAffordTagInputs,
   createInitialState,
   getBuildingCount,
   getEffectiveInputs,
@@ -222,6 +223,8 @@ export function useGame() {
         for (const input of inputs) {
           if (getResource(prev, input.resourceId) < input.amount) return prev;
         }
+        // Check tag-based inputs (e.g. "5 different foods")
+        if (recipe.tagInputs && !canAffordTagInputs(recipe.tagInputs, prev)) return prev;
         const next = structuredClone(prev);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         next.currentAction = {

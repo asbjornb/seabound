@@ -189,6 +189,12 @@ export interface RecipeInput {
   removedByBuilding?: BuildingId; // input is skipped when player has this building
 }
 
+/** A tag-based input: consume `count` distinct resources with the given tag, 1 each. */
+export interface TagInput {
+  tag: string;       // resource tag, e.g. "food"
+  count: number;     // how many distinct tagged resources are needed
+}
+
 export interface RecipeDef {
   id: string;
   name: string;
@@ -196,6 +202,7 @@ export interface RecipeDef {
   skillId: SkillId;
   panel: ContentPanel;
   inputs: RecipeInput[];
+  tagInputs?: TagInput[]; // tag-based inputs (e.g. "5 different foods")
   output?: { resourceId: ResourceId; amount: number };
   toolOutput?: ToolId; // if set, crafting grants this tool instead of a resource
   durationMs: number;
