@@ -1,8 +1,9 @@
 import { BUILDINGS } from "../data/buildings";
-import { BUILDING_ICONS } from "../data/icons";
+import { BUILDING_ICONS, getItemIcon } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource } from "../engine/gameState";
+import { getEffectiveInputs, getResource, hasItem } from "../engine/gameState";
 
 interface Props {
   buildRecipes: RecipeDef[];
@@ -28,7 +29,7 @@ export function SettlementPanel({
           <div className="section-title">Build Tasks</div>
           {buildActions.map((action) => {
             const missingTool = action.requiredTools?.find(
-              (t) => getResource(state, t) < 1
+              (t) => !hasItem(state, t)
             );
             const disabled = !!missingTool;
             return (
@@ -62,7 +63,7 @@ export function SettlementPanel({
                 )}
                 {missingTool && (
                   <div className="action-requires">
-                    Requires: {RESOURCES[missingTool]?.name ?? missingTool}
+                    Requires: {getItemIcon(missingTool)}{RESOURCES[missingTool]?.name ?? TOOLS[missingTool]?.name ?? missingTool}
                   </div>
                 )}
                 <div className="action-xp">

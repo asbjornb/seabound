@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { RESOURCE_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { GameState, ResourceId } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
@@ -16,7 +17,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
         ? `${-moralePercent}% slower`
         : "normal speed";
 
-  if (entries.length === 0) {
+  if (entries.length === 0 && state.tools.length === 0) {
     return (
       <div className="resource-panel">
         <span className="resource-chip" style={{ opacity: 0.5 }}>
@@ -46,6 +47,15 @@ export function ResourcePanel({ state }: { state: GameState }) {
           {moraleLabel} — Decays over time. Craft comfort items or Maintain Camp to restore.
         </span>
       )}
+      {state.tools.map((toolId) => (
+        <span
+          key={toolId}
+          className="resource-chip"
+          title={TOOLS[toolId]?.description}
+        >
+          {TOOL_ICONS[toolId] ?? ""} {TOOLS[toolId]?.name ?? toolId}
+        </span>
+      ))}
       {entries.map(([id, amount]) => {
         const limit = getStorageLimit(state, id);
         const atCap = amount >= limit;
@@ -56,14 +66,10 @@ export function ResourcePanel({ state }: { state: GameState }) {
             title={RESOURCES[id]?.description}
           >
             {RESOURCE_ICONS[id as ResourceId] ?? ""} {RESOURCES[id]?.name ?? id}
-            {RESOURCES[id]?.category !== "tool" && (
-              <>
-                :{" "}
-                <span className="amount">
-                  {amount}/{limit}
-                </span>
-              </>
-            )}
+            :{" "}
+            <span className="amount">
+              {amount}/{limit}
+            </span>
           </span>
         );
       })}

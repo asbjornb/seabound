@@ -16,6 +16,7 @@ import {
   getResource,
   getToolSpeedMultiplier,
   getTotalFood,
+  hasItem,
 } from "./gameState";
 
 export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
@@ -47,9 +48,10 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
-    if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
+    if (recipe.requiredItems?.some((itemId) => !hasItem(state, itemId))) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) return false;
+    if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
     if (recipe.oneTimeCraft && recipe.output && !resourceHasUse(recipe.output.resourceId, state)) return false;
     if (recipe.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) return false;
@@ -60,7 +62,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
   return EXPEDITIONS.filter((expedition) => {
-    if (expedition.requiredVessel && getResource(state, expedition.requiredVessel) < 1) return false;
+    if (expedition.requiredVessel && !state.tools.includes(expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
       const discoverableBiomes = expedition.outcomes
@@ -78,7 +80,7 @@ export function selectAvailableStations(state: GameState): StationDef[] {
   return STATIONS.filter((station) => {
     const skill = state.skills[station.skillId];
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
-    if (station.requiredTool && getResource(state, station.requiredTool) < 1) return false;
+    if (station.requiredTool && !state.tools.includes(station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     return true;
   });
@@ -172,7 +174,7 @@ export function selectHasFoodAccess(state: GameState): boolean {
 }
 
 export function selectHasAnyResource(state: GameState): boolean {
-  return Object.values(state.resources).some((amount) => amount > 0);
+  return Object.values(state.resources).some((amount) => amount > 0) || state.tools.length > 0;
 }
 
 export function selectVisibleTabs(params: {

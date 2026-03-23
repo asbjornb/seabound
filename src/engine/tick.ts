@@ -6,7 +6,7 @@ import {
 } from "../data/registries";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
-import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import { BiomeId, Drop, ExpeditionOutcome, GameState, ToolId } from "../data/types";
 import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
@@ -25,6 +25,7 @@ export interface CompletionEvent {
   expeditionMessage?: string;
   newResources?: string[]; // resource IDs seen for the first time
   buildingBuilt?: string; // building ID if a building was constructed
+  toolCrafted?: ToolId; // tool ID if a tool was unlocked
 }
 
 /**
@@ -182,6 +183,7 @@ function resourceHasUse(state: GameState, resourceId: string): boolean {
     const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
     if (!usesResource) return false;
     if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) return false;
+    if (r.oneTimeCraft && r.toolOutput && state.tools.includes(r.toolOutput)) return false;
     if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;
     return true;
   });
@@ -240,6 +242,7 @@ function applyCraftCompletion(
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
   let buildingBuilt: string | undefined;
+  let toolCrafted: ToolId | undefined;
 
   if (def.buildingOutput) {
     // Building construction — add to buildings list
@@ -248,6 +251,13 @@ function applyCraftCompletion(
     }
     buildingBuilt = def.buildingOutput;
     drops.push({ name: def.buildingOutput, amount: 1 });
+  } else if (def.toolOutput) {
+    // Tool craft — boolean unlock
+    if (!state.tools.includes(def.toolOutput)) {
+      state.tools.push(def.toolOutput);
+    }
+    toolCrafted = def.toolOutput;
+    drops.push({ name: def.toolOutput, amount: 1 });
   } else if (def.output) {
     // Normal craft — add output to resources
     if (!state.discoveredResources.includes(def.output.resourceId)) {
@@ -288,6 +298,7 @@ function applyCraftCompletion(
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     newResources: newResources.length > 0 ? newResources : undefined,
     buildingBuilt,
+    toolCrafted,
   };
 }
 

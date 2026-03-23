@@ -5,6 +5,7 @@ import {
 } from "../data/registries";
 import { levelFromXp } from "../data/skills";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import {
   ActionDef,
   DiscoveryType,
@@ -21,6 +22,7 @@ import {
   getResource,
   getTotalFood,
   getTotalWater,
+  hasItem,
   loadGame,
   normalizeGameState,
   saveGame,
@@ -77,6 +79,11 @@ function processCompletionDiscoveries(
     const bdef = BUILDINGS[c.buildingBuilt];
     const name = bdef?.name ?? c.buildingBuilt.replace(/_/g, " ");
     addDiscovery(state, "building", `Built a ${name}`);
+  }
+  if (c.toolCrafted) {
+    const tdef = TOOLS[c.toolCrafted];
+    const name = tdef?.name ?? c.toolCrafted.replace(/_/g, " ");
+    addDiscovery(state, "craft", `Crafted ${name}`);
   }
   if (c.newResources) {
     for (const resId of c.newResources) {
@@ -154,7 +161,7 @@ export function useGame() {
       }
       if (action.requiredTools) {
         for (const toolId of action.requiredTools) {
-          if (getResource(prev, toolId) < 1) return prev;
+          if (!hasItem(prev, toolId)) return prev;
         }
       }
       if (
@@ -188,10 +195,10 @@ export function useGame() {
         if (recipe.requiredSkills?.some((req) => prev.skills[req.skillId].level < req.level)) {
           return prev;
         }
-        // Check required items (item-trigger gate)
+        // Check required items (item-trigger gate — can be resources or tools)
         if (recipe.requiredItems) {
           for (const itemId of recipe.requiredItems) {
-            if (getResource(prev, itemId) < 1) return prev;
+            if (!hasItem(prev, itemId)) return prev;
           }
         }
         // Check resources (using effective inputs — some may be removed by buildings)
@@ -217,7 +224,7 @@ export function useGame() {
     (expedition: ExpeditionDef) => {
       setState((prev) => {
         // Check vessel requirement
-        if (expedition.requiredVessel && getResource(prev, expedition.requiredVessel) < 1) {
+        if (expedition.requiredVessel && !prev.tools.includes(expedition.requiredVessel)) {
           return prev;
         }
         // Check food and water costs
@@ -255,7 +262,7 @@ export function useGame() {
     setState((prev) => {
       const skill = prev.skills[station.skillId];
       if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return prev;
-      if (station.requiredTool && getResource(prev, station.requiredTool) < 1) return prev;
+      if (station.requiredTool && !prev.tools.includes(station.requiredTool)) return prev;
       if (station.requiredBuildings) {
         for (const bid of station.requiredBuildings) {
           if (!prev.buildings.includes(bid)) return prev;

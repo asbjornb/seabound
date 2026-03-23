@@ -87,12 +87,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
       "Twisted dried fiber rope. Essential for tools and construction.",
     category: "processed",
   },
-  bamboo_knife: {
-    id: "bamboo_knife",
-    name: "Bamboo Knife",
-    description: "A sharp bamboo blade. Unlocks new processing actions.",
-    category: "tool",
-  },
   large_shell: {
     id: "large_shell",
     name: "Large Shell",
@@ -107,19 +101,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "Crisp, dry grass. Perfect tinder.",
     category: "raw",
   },
-  bow_drill_kit: {
-    id: "bow_drill_kit",
-    name: "Bow Drill Kit",
-    description: "A fire-starting kit. Spin to ignite.",
-    category: "tool",
-  },
-  bamboo_spear: {
-    id: "bamboo_spear",
-    name: "Bamboo Spear",
-    description: "A fire-hardened bamboo spear. Good for fishing.",
-    category: "tool",
-    size: "large",
-  },
   // Weaving
   woven_basket: {
     id: "woven_basket",
@@ -130,7 +111,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     storageBonus: [
       { category: "raw", amount: 1, size: "small" },
       { category: "processed", amount: 1, size: "small" },
-      { category: "tool", amount: 1, size: "small" },
     ],
   },
   large_fish: {
@@ -159,16 +139,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     category: "food",
   },
 
-  // Maritime
-  raft: {
-    id: "raft",
-    name: "Log Raft",
-    description:
-      "A lashed-together log raft. Seaworthy enough to reach nearby islands.",
-    category: "structure",
-    size: "large",
-  },
-
   // Obsidian
   obsidian: {
     id: "obsidian",
@@ -177,19 +147,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
       "Sharp, glassy volcanic stone. Excellent for knapping into blades.",
     category: "raw",
   },
-  obsidian_blade: {
-    id: "obsidian_blade",
-    name: "Obsidian Blade",
-    description:
-      "A razor-sharp knapped obsidian blade. The finest cutting tool before metal.",
-    category: "tool",
-    toolFor: {
-      actionIds: ["harvest_bamboo", "fell_large_tree"],
-      recipeIds: ["split_bamboo_cane", "scrape_hull", "shred_coconut_husk"],
-      multiplier: 0.85,
-    },
-  },
-
   // Stone Tools
   chert: {
     id: "chert",
@@ -209,25 +166,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A carefully knapped stone blade. Sharp and versatile.",
     category: "processed",
   },
-  hammerstone: {
-    id: "hammerstone",
-    name: "Hammerstone",
-    description: "A heavy stone shaped for striking. Essential for knapping.",
-    category: "tool",
-  },
-  shell_adze: {
-    id: "shell_adze",
-    name: "Shell Adze",
-    description: "A large shell lashed to a handle. Excellent for scraping and shaping wood.",
-    category: "tool",
-  },
-  stone_axe: {
-    id: "stone_axe",
-    name: "Stone Axe",
-    description: "A ground stone blade hafted with cordage. Can fell large trees.",
-    category: "tool",
-  },
-
   // Timber
   large_log: {
     id: "large_log",
@@ -251,15 +189,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     size: "large",
   },
 
-  // Maritime - Dugout
-  dugout: {
-    id: "dugout",
-    name: "Dugout Canoe",
-    description: "A proper canoe carved from a single log. Handles near-shore waters with ease.",
-    category: "structure",
-    size: "large",
-  },
-
   // Water
   fresh_water: {
     id: "fresh_water",
@@ -274,23 +203,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Wild Seed",
     description: "A small seed found in dry grass. The start of farming.",
     category: "raw",
-  },
-
-  // Fishing Tools
-  gorge_hook: {
-    id: "gorge_hook",
-    name: "Gorge Hook",
-    description:
-      "A carved shell hook tied to cordage. Set a line and wait for a bite.",
-    category: "tool",
-  },
-  basket_trap: {
-    id: "basket_trap",
-    name: "Basket Trap",
-    description:
-      "A woven bamboo fish trap. Submerge it and collect the catch later.",
-    category: "tool",
-    size: "large",
   },
 
   // Phase 2 - Clay Tier
@@ -318,12 +230,5 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description:
       "An airtight clay jar. Preserves food for long expeditions and stores seeds.",
     category: "processed",
-  },
-  crucible: {
-    id: "crucible",
-    name: "Crucible",
-    description:
-      "A thick-walled clay vessel that withstands extreme heat. Required for smelting ore.",
-    category: "tool",
   },
 };

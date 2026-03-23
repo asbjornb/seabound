@@ -4,6 +4,7 @@ import { EXPEDITIONS } from "../data/expeditions";
 import { getMilestones } from "../data/milestones";
 import { RECIPES } from "../data/recipes";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { SKILLS, xpForLevel } from "../data/skills";
 import { SkillId } from "../data/types";
 
@@ -28,6 +29,7 @@ export function DevWiki() {
         {" · "}
         <strong>Contents:</strong>{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
+        <a href="#tools" style={styles.link}>Tools</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
         <a href="#actions" style={styles.link}>Actions</a> ·{" "}
         <a href="#recipes" style={styles.link}>Recipes</a> ·{" "}
@@ -59,6 +61,37 @@ export function DevWiki() {
                   </span>
                 </td>
                 <td style={styles.td}>{r.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* ── Tools ── */}
+      <section id="tools">
+        <h2 style={styles.h2}>Tools ({Object.keys(TOOLS).length})</h2>
+        <table style={styles.table}>
+          <thead>
+            <tr>
+              <th style={styles.th}>ID</th>
+              <th style={styles.th}>Name</th>
+              <th style={styles.th}>Tags</th>
+              <th style={styles.th}>Speed Bonus</th>
+              <th style={styles.th}>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.values(TOOLS).map((t) => (
+              <tr key={t.id} style={styles.tr}>
+                <td style={styles.tdCode}>{t.id}</td>
+                <td style={styles.td}>{t.name}</td>
+                <td style={styles.tdSmall}>{t.tags?.join(", ") || "—"}</td>
+                <td style={styles.tdSmall}>
+                  {t.toolFor
+                    ? `${((1 - t.toolFor.multiplier) * 100).toFixed(0)}% faster: ${[...(t.toolFor.actionIds ?? []), ...(t.toolFor.recipeIds ?? [])].join(", ")}`
+                    : "—"}
+                </td>
+                <td style={styles.td}>{t.description}</td>
               </tr>
             ))}
           </tbody>
@@ -180,6 +213,7 @@ export function DevWiki() {
                 <td style={styles.tdSmall}>
                   {r.buildingOutput
                     ? `🏗 ${r.buildingOutput}`
+                    : r.toolOutput ? `🔧 ${r.toolOutput}`
                     : r.output ? `${r.output.amount}× ${r.output.resourceId}` : "XP only"}
                 </td>
                 <td style={styles.tdSmall}>
@@ -356,8 +390,6 @@ function categoryColor(cat: string): React.CSSProperties {
       return { background: "#2d4a3e", color: "#7acea0" };
     case "processed":
       return { background: "#3d3a2a", color: "#d4c87a" };
-    case "tool":
-      return { background: "#2a3a4d", color: "#7ab4de" };
     case "food":
       return { background: "#4d2a2a", color: "#de7a7a" };
     case "structure":

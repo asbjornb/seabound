@@ -1,5 +1,5 @@
-import { BIOME_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
+import { BIOME_ICONS, getItemIcon } from "../data/icons";
+import { TOOLS } from "../data/tools";
 import { BiomeId, ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 
@@ -64,7 +64,7 @@ export function ExpeditionPanel({
             )}
             {exp.requiredVessel && (
               <div className="action-requires">
-                Vessel: {RESOURCES[exp.requiredVessel]?.name ?? exp.requiredVessel}
+                Vessel: {getItemIcon(exp.requiredVessel)}{TOOLS[exp.requiredVessel]?.name ?? exp.requiredVessel}
               </div>
             )}
             {(exp.foodCost || exp.waterCost) && (

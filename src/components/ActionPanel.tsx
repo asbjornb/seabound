@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { BIOME_ICONS, RESOURCE_ICONS } from "../data/icons";
+import { BIOME_ICONS, RESOURCE_ICONS, getItemIcon } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ActionDef, BiomeId, GameState } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { hasItem } from "../engine/gameState";
 
 interface Props {
   actions: ActionDef[];
@@ -69,7 +70,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
             </div>
             {!isCollapsed && list.map((action) => {
               const missingTool = action.requiredTools?.find(
-                (t) => getResource(state, t) < 1
+                (t) => !hasItem(state, t)
               );
               const disabled = !!missingTool;
               const isActive = currentActionId === action.id;
@@ -118,8 +119,8 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span title={RESOURCES[missingTool]?.description}>
-                        {RESOURCE_ICONS[missingTool] ?? ""}{RESOURCES[missingTool]?.name ?? missingTool}
+                      <span title={RESOURCES[missingTool]?.description ?? TOOLS[missingTool]?.description}>
+                        {getItemIcon(missingTool)}{RESOURCES[missingTool]?.name ?? TOOLS[missingTool]?.name ?? missingTool}
                       </span>
                     </div>
                   )}

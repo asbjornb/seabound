@@ -14,12 +14,9 @@ export type ResourceId =
   | "rough_fiber"
   | "dried_fiber"
   | "cordage"
-  | "bamboo_knife"
   | "large_shell"
   // Phase 1b - Fire
   | "dry_grass"
-  | "bow_drill_kit"
-  | "bamboo_spear"
   // Weaving
   | "woven_basket"
   // Food
@@ -29,34 +26,43 @@ export type ResourceId =
   | "cooked_large_fish"
   // Seeds
   | "wild_seed"
-  // Maritime
-  | "raft"
   // Obsidian
   | "obsidian"
-  | "obsidian_blade"
   // Stone Tools
   | "chert"
   | "stone_flake"
   | "stone_blade"
-  | "hammerstone"
-  | "shell_adze"
-  | "stone_axe"
   // Timber
   | "large_log"
   | "charred_log"
   | "shaped_hull"
-  // Maritime - Dugout
-  | "dugout"
   // Water
   | "fresh_water"
-  // Fishing Tools
-  | "gorge_hook"
-  | "basket_trap"
   // Phase 2 - Clay Tier
   | "clay"
   | "shaped_clay_pot"
   | "fired_clay_pot"
-  | "sealed_clay_jar"
+  | "sealed_clay_jar";
+
+export type ToolId =
+  // Phase 1 - Bamboo Tier
+  | "bamboo_knife"
+  // Phase 1b - Fire
+  | "bow_drill_kit"
+  | "bamboo_spear"
+  // Stone Tools
+  | "hammerstone"
+  | "shell_adze"
+  | "stone_axe"
+  // Obsidian
+  | "obsidian_blade"
+  // Fishing Tools
+  | "gorge_hook"
+  | "basket_trap"
+  // Maritime
+  | "raft"
+  | "dugout"
+  // Phase 2 - Clay Tier
   | "crucible";
 
 export type SkillId =
@@ -83,7 +89,7 @@ export type BuildingId =
   | "kiln"
   | "fiber_loom";
 
-export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
+export type ResourceCategory = "raw" | "processed" | "food" | "structure";
 
 export interface StorageBonus {
   category: ResourceCategory;
@@ -111,8 +117,15 @@ export interface ResourceDef {
   description: string;
   category: ResourceCategory;
   size?: "small" | "large"; // defaults to "small" if omitted
-  toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
   storageBonus?: StorageBonus[]; // if set, each owned copy adds storage (like buildings)
+}
+
+export interface ToolDef {
+  id: ToolId;
+  name: string;
+  description: string;
+  tags?: string[]; // "vessel", etc.
+  toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
 }
 
 export interface SkillDef {
@@ -154,7 +167,7 @@ export interface ActionDef {
   durationMs: number;
   drops: Drop[];
   requiredSkillLevel?: number;
-  requiredTools?: ResourceId[];
+  requiredTools?: (ResourceId | ToolId)[];
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
@@ -177,7 +190,8 @@ export interface RecipeDef {
   durationMs: number;
   requiredSkillLevel?: number;
   requiredSkills?: { skillId: SkillId; level: number }[]; // dual-skill gates
-  requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
+  requiredItems?: (ResourceId | ToolId)[]; // item-trigger: must have this item/tool
+  toolOutput?: ToolId; // if set, this recipe crafts a tool (boolean unlock) instead of a resource
   requiredBuildings?: BuildingId[]; // must have these buildings constructed
   buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
   oneTimeCraft?: boolean; // if true, recipe disappears once player owns ≥1 of the output
@@ -194,7 +208,7 @@ export interface ExpeditionDef {
   durationMs: number;
   foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
   waterCost?: number; // total water items consumed per cycle
-  requiredVessel?: ResourceId;
+  requiredVessel?: ToolId;
   requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
   hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
   outcomes: ExpeditionOutcome[];
@@ -219,7 +233,7 @@ export interface StationDef {
   description: string;
   skillId: SkillId;
   durationMs: number; // time until ready to collect
-  requiredTool?: ResourceId; // must own (not consumed)
+  requiredTool?: ToolId; // must own (not consumed)
   requiredSkillLevel?: number;
   requiredBuildings?: BuildingId[];
   setupInputs?: { resourceId: ResourceId; amount: number }[]; // consumed on deploy
@@ -244,6 +258,7 @@ export interface DiscoveryEntry {
 
 export interface GameState {
   resources: Record<string, number>;
+  tools: ToolId[]; // boolean unlocks — you have it or you don't
   skills: Record<SkillId, { xp: number; level: number }>;
   discoveredBiomes: BiomeId[];
   buildings: BuildingId[];

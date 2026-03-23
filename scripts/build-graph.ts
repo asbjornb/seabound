@@ -17,6 +17,7 @@ import { BUILDINGS } from "../src/data/buildings";
 import { EXPEDITIONS } from "../src/data/expeditions";
 import { RECIPES } from "../src/data/recipes";
 import { RESOURCES } from "../src/data/resources";
+import { TOOLS } from "../src/data/tools";
 import { SKILLS } from "../src/data/skills";
 import { STATIONS } from "../src/data/stations";
 import type { BiomeId, ResourceId, SkillId } from "../src/data/types";
@@ -27,7 +28,7 @@ import type { BiomeId, ResourceId, SkillId } from "../src/data/types";
 
 interface GraphNode {
   id: string;
-  type: "resource" | "action" | "recipe" | "building" | "biome" | "skill_level" | "expedition" | "station";
+  type: "resource" | "tool" | "action" | "recipe" | "building" | "biome" | "skill_level" | "expedition" | "station";
   label: string;
   category?: string; // resource category, skill id, etc.
   meta?: Record<string, unknown>;
@@ -111,8 +112,13 @@ for (const r of Object.values(RESOURCES)) {
   addNode({ id: `resource:${r.id}`, type: "resource", label: r.name, category: r.category });
 }
 
+// Tools
+for (const t of Object.values(TOOLS)) {
+  addNode({ id: `tool:${t.id}`, type: "tool", label: t.name, category: t.tags?.join(",") ?? "tool" });
+}
+
 // Tool speed bonuses (toolFor edges added after actions/recipes are created)
-const toolForResources = Object.values(RESOURCES).filter(r => r.toolFor);
+const toolForTools = Object.values(TOOLS).filter(t => t.toolFor);
 
 // Biomes
 const ALL_BIOMES: BiomeId[] = ["beach", "coconut_grove", "rocky_shore", "bamboo_grove", "jungle_interior", "nearby_island"];
@@ -188,7 +194,9 @@ for (const a of ACTIONS) {
   }
   if (a.requiredTools) {
     for (const t of a.requiredTools) {
-      addEdge({ from: `resource:${t}`, to: actionId, relation: "requires_tool" });
+      // Tool IDs use tool: prefix, resource IDs use resource: prefix
+      const prefix = TOOLS[t] ? "tool" : "resource";
+      addEdge({ from: `${prefix}:${t}`, to: actionId, relation: "requires_tool" });
     }
   }
   if (a.requiredBuildings) {
@@ -206,6 +214,8 @@ for (const r of RECIPES) {
   // Output
   if (r.buildingOutput) {
     addEdge({ from: recipeId, to: `building:${r.buildingOutput}`, relation: "builds" });
+  } else if (r.toolOutput) {
+    addEdge({ from: recipeId, to: `tool:${r.toolOutput}`, relation: "produces" });
   } else if (r.output && r.output.amount > 0) {
     addEdge({ from: recipeId, to: `resource:${r.output.resourceId}`, relation: "produces" });
   }
@@ -229,7 +239,8 @@ for (const r of RECIPES) {
   }
   if (r.requiredItems) {
     for (const item of r.requiredItems) {
-      addEdge({ from: `resource:${item}`, to: recipeId, relation: "requires_item" });
+      const prefix = TOOLS[item] ? "tool" : "resource";
+      addEdge({ from: `${prefix}:${item}`, to: recipeId, relation: "requires_item" });
     }
   }
   if (r.requiredBuildings) {
@@ -240,13 +251,13 @@ for (const r of RECIPES) {
 }
 
 // Tool speed bonuses → speeds_up edges
-for (const r of toolForResources) {
-  const tf = r.toolFor!;
+for (const t of toolForTools) {
+  const tf = t.toolFor!;
   for (const actionId of tf.actionIds ?? []) {
-    addEdge({ from: `resource:${r.id}`, to: `action:${actionId}`, relation: "speeds_up" });
+    addEdge({ from: `tool:${t.id}`, to: `action:${actionId}`, relation: "speeds_up" });
   }
   for (const recipeId of tf.recipeIds ?? []) {
-    addEdge({ from: `resource:${r.id}`, to: `recipe:${recipeId}`, relation: "speeds_up" });
+    addEdge({ from: `tool:${t.id}`, to: `recipe:${recipeId}`, relation: "speeds_up" });
   }
 }
 
@@ -260,7 +271,7 @@ for (const e of EXPEDITIONS) {
 
   // Required vessel
   if (e.requiredVessel) {
-    addEdge({ from: `resource:${e.requiredVessel}`, to: expId, relation: "requires_vessel" });
+    addEdge({ from: `tool:${e.requiredVessel}`, to: expId, relation: "requires_vessel" });
   }
 
   // Expeditions consume food/water generically — link all food-category resources
@@ -312,7 +323,7 @@ for (const s of STATIONS) {
   addEdge({ from: stationId, to: `skill:${s.skillId}`, relation: "trains" });
 
   if (s.requiredTool) {
-    addEdge({ from: `resource:${s.requiredTool}`, to: stationId, relation: "requires_tool" });
+    addEdge({ from: `tool:${s.requiredTool}`, to: stationId, relation: "requires_tool" });
   }
   if (s.requiredSkillLevel && s.requiredSkillLevel > 1) {
     addEdge({ from: `skill:${s.skillId}:${s.requiredSkillLevel}`, to: stationId, relation: "requires_skill" });
@@ -496,7 +507,10 @@ function computeReachable(): Set<string> {
       const skillMet = !(a.requiredSkillLevel && a.requiredSkillLevel > 1) ||
         reachable.has(`skill:${a.skillId}:${a.requiredSkillLevel}`);
       const biomeMet = !a.requiredBiome || reachable.has(`biome:${a.requiredBiome}`);
-      const toolsMet = !a.requiredTools?.length || a.requiredTools.every(t => reachable.has(`resource:${t}`));
+      const toolsMet = !a.requiredTools?.length || a.requiredTools.every(t => {
+        const prefix = TOOLS[t] ? "tool" : "resource";
+        return reachable.has(`${prefix}:${t}`);
+      });
       const buildingsMet = !a.requiredBuildings?.length || a.requiredBuildings.every(b => reachable.has(`building:${b}`));
       if (skillMet && biomeMet && toolsMet && buildingsMet) {
         reachable.add(id);
@@ -511,7 +525,10 @@ function computeReachable(): Set<string> {
         reachable.has(`skill:${r.skillId}:${r.requiredSkillLevel}`);
       const dualSkillsMet = !r.requiredSkills?.length ||
         r.requiredSkills.every(rs => reachable.has(`skill:${rs.skillId}:${rs.level}`));
-      const itemsMet = !r.requiredItems?.length || r.requiredItems.every(i => reachable.has(`resource:${i}`));
+      const itemsMet = !r.requiredItems?.length || r.requiredItems.every(i => {
+        const prefix = TOOLS[i] ? "tool" : "resource";
+        return reachable.has(`${prefix}:${i}`);
+      });
       const buildingsMet = !r.requiredBuildings?.length || r.requiredBuildings.every(b => reachable.has(`building:${b}`));
       const inputsMet = r.inputs.every(i => reachable.has(`resource:${i.resourceId}`));
       if (skillMet && dualSkillsMet && itemsMet && buildingsMet && inputsMet) {
@@ -523,7 +540,7 @@ function computeReachable(): Set<string> {
     for (const e of EXPEDITIONS) {
       const id = `expedition:${e.id}`;
       if (reachable.has(id)) continue;
-      const vesselMet = !e.requiredVessel || reachable.has(`resource:${e.requiredVessel}`);
+      const vesselMet = !e.requiredVessel || reachable.has(`tool:${e.requiredVessel}`);
       const biomesMet = !e.requiredBiomes?.length || e.requiredBiomes.every(b => reachable.has(`biome:${b}`));
       if (vesselMet && biomesMet) {
         reachable.add(id);
@@ -536,7 +553,7 @@ function computeReachable(): Set<string> {
       if (reachable.has(id)) continue;
       const skillMet = !(s.requiredSkillLevel && s.requiredSkillLevel > 1) ||
         reachable.has(`skill:${s.skillId}:${s.requiredSkillLevel}`);
-      const toolMet = !s.requiredTool || reachable.has(`resource:${s.requiredTool}`);
+      const toolMet = !s.requiredTool || reachable.has(`tool:${s.requiredTool}`);
       const buildingsMet = !s.requiredBuildings?.length || s.requiredBuildings.every(b => reachable.has(`building:${b}`));
       if (skillMet && toolMet && buildingsMet) {
         reachable.add(id);
@@ -574,21 +591,27 @@ function computeReachable(): Set<string> {
 function computeWarnings(reachable: Set<string>): Warning[] {
   const warnings: Warning[] = [];
 
-  // Dead ends: resources that are produced but never consumed by anything
-  // Resources with storageBonus or toolFor are excluded — they have real in-game utility
-  const producedResources = new Set<string>();
-  const consumedResources = new Set<string>();
+  // Dead ends: resources/tools that are produced but never consumed by anything
+  // Resources with storageBonus are excluded — they have real in-game utility
+  // Tools with toolFor are excluded — they provide speed bonuses
+  const producedNodes = new Set<string>();
+  const consumedNodes = new Set<string>();
   for (const e of edges) {
-    if (e.relation === "produces" && e.to.startsWith("resource:")) producedResources.add(e.to);
-    if (["consumes", "requires_tool", "requires_item", "requires_vessel", "speeds_up"].includes(e.relation) && e.from.startsWith("resource:")) {
-      consumedResources.add(e.from);
+    if (e.relation === "produces" && (e.to.startsWith("resource:") || e.to.startsWith("tool:"))) producedNodes.add(e.to);
+    if (["consumes", "requires_tool", "requires_item", "requires_vessel", "speeds_up"].includes(e.relation) && (e.from.startsWith("resource:") || e.from.startsWith("tool:"))) {
+      consumedNodes.add(e.from);
     }
   }
-  for (const r of producedResources) {
-    if (!consumedResources.has(r)) {
-      const resId = r.replace("resource:", "") as ResourceId;
-      const resDef = RESOURCES[resId];
-      if (resDef?.storageBonus || resDef?.toolFor) continue;
+  for (const r of producedNodes) {
+    if (!consumedNodes.has(r)) {
+      if (r.startsWith("resource:")) {
+        const resId = r.replace("resource:", "") as ResourceId;
+        const resDef = RESOURCES[resId];
+        if (resDef?.storageBonus) continue;
+      } else if (r.startsWith("tool:")) {
+        const toolDef = TOOLS[r.replace("tool:", "")];
+        if (toolDef?.toolFor) continue;
+      }
       const label = nodes.find(n => n.id === r)?.label ?? r;
       warnings.push({ type: "dead_end", nodeId: r, message: `${label} is produced but never used as input` });
     }
@@ -606,7 +629,7 @@ function computeWarnings(reachable: Set<string>): Warning[] {
   // Orphan resources: defined but neither produced nor consumed
   for (const r of Object.values(RESOURCES)) {
     const id = `resource:${r.id}`;
-    if (!producedResources.has(id) && !consumedResources.has(id)) {
+    if (!producedNodes.has(id) && !consumedNodes.has(id)) {
       warnings.push({ type: "orphan_resource", nodeId: id, message: `${r.name} is defined but has no production or consumption edges` });
     }
   }
@@ -698,8 +721,8 @@ function computeBiomeProgression(): { tiers: BiomeTier[] } {
 
 const reachable = computeReachable();
 const warnings = computeWarnings(reachable);
-const criticalPath = findCriticalPath("resource:dugout");
-const minimalPath = findMinimalUpstream("resource:dugout");
+const criticalPath = findCriticalPath("tool:dugout");
+const minimalPath = findMinimalUpstream("tool:dugout");
 const skillGates = computeSkillGates();
 const biomeProgression = computeBiomeProgression();
 

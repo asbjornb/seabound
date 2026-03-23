@@ -1,6 +1,7 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
-import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId } from "../data/types";
+import { TOOLS } from "../data/tools";
+import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -29,6 +30,7 @@ export function createInitialState(): GameState {
   }
   return {
     resources: {},
+    tools: [] as ToolId[],
     skills,
     discoveredBiomes: ["beach"],
     buildings: [] as BuildingId[],
@@ -72,12 +74,27 @@ export function normalizeGameState(raw: unknown): GameState | null {
       loaded.skills[id] = { xp: 0, level: 1 };
     }
   }
+  // Migration: ensure tools array exists (migrate from resources)
+  if (!loaded.tools) {
+    loaded.tools = [];
+    const TOOL_IDS: ToolId[] = [
+      "bamboo_knife", "bow_drill_kit", "bamboo_spear", "hammerstone",
+      "shell_adze", "stone_axe", "obsidian_blade", "gorge_hook",
+      "basket_trap", "raft", "dugout", "crucible",
+    ];
+    for (const toolId of TOOL_IDS) {
+      if ((loaded.resources[toolId] ?? 0) >= 1) {
+        loaded.tools.push(toolId);
+      }
+      delete loaded.resources[toolId];
+    }
+  }
   // Migration: ensure buildings array exists
   if (!loaded.buildings) {
     loaded.buildings = [];
     // If player already has bow_drill_kit, auto-grant camp_fire building
     // so they don't lose access to fire-dependent recipes
-    if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
+    if (loaded.tools.includes("bow_drill_kit")) {
       loaded.buildings.push("camp_fire");
     }
   }
@@ -211,17 +228,22 @@ export function getMoraleDurationMultiplier(morale: number): number {
   return 1 - 0.2 * (morale - 50) / 50;
 }
 
-/** Build lookup of tool speed bonuses from resource data.
- *  Maps actionOrRecipeId → array of { resourceId, multiplier }. */
-const toolSpeedLookup = new Map<string, { resourceId: string; multiplier: number }[]>();
-for (const r of Object.values(RESOURCES)) {
-  if (!r.toolFor) continue;
-  const ids = [...(r.toolFor.actionIds ?? []), ...(r.toolFor.recipeIds ?? [])];
+/** Build lookup of tool speed bonuses from tool data.
+ *  Maps actionOrRecipeId → array of { toolId, multiplier }. */
+const toolSpeedLookup = new Map<string, { toolId: ToolId; multiplier: number }[]>();
+for (const t of Object.values(TOOLS)) {
+  if (!t.toolFor) continue;
+  const ids = [...(t.toolFor.actionIds ?? []), ...(t.toolFor.recipeIds ?? [])];
   for (const id of ids) {
     const existing = toolSpeedLookup.get(id) ?? [];
-    existing.push({ resourceId: r.id, multiplier: r.toolFor.multiplier });
+    existing.push({ toolId: t.id, multiplier: t.toolFor.multiplier });
     toolSpeedLookup.set(id, existing);
   }
+}
+
+/** Check if player owns a tool or a resource (for requiredTools/requiredItems that may reference either). */
+export function hasItem(state: GameState, id: string): boolean {
+  return state.tools.includes(id as ToolId) || (state.resources[id] ?? 0) >= 1;
 }
 
 /** Get tool-based speed multiplier for an action or recipe.
@@ -231,7 +253,7 @@ export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: strin
   if (!tools) return 1;
   let mult = 1;
   for (const t of tools) {
-    if ((state.resources[t.resourceId] ?? 0) >= 1) {
+    if (state.tools.includes(t.toolId)) {
       mult *= t.multiplier;
     }
   }

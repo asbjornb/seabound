@@ -40,10 +40,11 @@ interface SimLink extends d3.SimulationLinkDatum<SimNode> {
 // Constants
 // ───────────────────────────────────────────────
 
-type NodeType = "resource" | "action" | "recipe" | "building" | "biome" | "skill_level" | "expedition" | "station";
+type NodeType = "resource" | "tool" | "action" | "recipe" | "building" | "biome" | "skill_level" | "expedition" | "station";
 
 const NODE_COLORS: Record<string, string> = {
   resource: "#7acea0",
+  tool: "#7ab4de",
   action: "#de9a7a",
   recipe: "#d4c87a",
   building: "#b47ade",
@@ -55,6 +56,7 @@ const NODE_COLORS: Record<string, string> = {
 
 const NODE_RADIUS: Record<string, number> = {
   resource: 6,
+  tool: 7,
   action: 8,
   recipe: 8,
   building: 10,
@@ -64,7 +66,7 @@ const NODE_RADIUS: Record<string, number> = {
   station: 8,
 };
 
-const ALL_NODE_TYPES: NodeType[] = ["resource", "action", "recipe", "building", "biome", "skill_level", "expedition", "station"];
+const ALL_NODE_TYPES: NodeType[] = ["resource", "tool", "action", "recipe", "building", "biome", "skill_level", "expedition", "station"];
 
 type FocusDirection = "upstream" | "downstream";
 type FocusMode = "all" | "greedy";
@@ -478,8 +480,8 @@ export function DevGraph() {
         <h2 style={styles.title}><a href="?dev" style={{ color: "#7a9a8a", textDecoration: "none" }}>Dev Wiki</a> / Progression Graph</h2>
         <div style={styles.filters}>
           <button style={filter === "all" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("all"); setSelectedNode(null); setHighlightUpstream(null); }}>All</button>
-          <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("resource:dugout"); }}>Focus</button>
-          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("resource:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); }}>Dugout (minimal)</button>
+          <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("tool:dugout"); }}>Focus</button>
+          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("tool:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); }}>Dugout (minimal)</button>
           <button style={filter === "biomes" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("biomes"); setSelectedNode(null); setHighlightUpstream(null); }}>Biomes</button>
           <button style={filter === "skill_gates" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("skill_gates"); setSelectedNode(null); setHighlightUpstream(null); }}>Skill Gates</button>
           <span style={styles.separator}>|</span>

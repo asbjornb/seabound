@@ -1,4 +1,4 @@
-import { BiomeId, BuildingId, ResourceId, SkillId } from "./types";
+import { BiomeId, BuildingId, ResourceId, SkillId, ToolId } from "./types";
 
 /** Emoji icons for visual flair — kept separate from game data to avoid state issues */
 
@@ -16,39 +16,49 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   rough_fiber: "\u{1F9F6}",
   dried_fiber: "\u{1F9F5}",
   cordage: "\u{1FA22}",
-  bamboo_knife: "\u{1F52A}",
   large_shell: "\u{1F41A}",
   dry_grass: "\u{1F33E}",
-  bow_drill_kit: "\u{1F525}",
-  bamboo_spear: "\u{1F531}",
   woven_basket: "\u{1F9FA}",
   large_fish: "\u{1F3A3}",
   cooked_fish: "\u{1F35B}",
   cooked_crab: "\u{1F980}",
   cooked_large_fish: "\u{1F372}",
   wild_seed: "\u{1F331}",
-  raft: "\u{26F5}",
   obsidian: "\u{1F48E}",
-  obsidian_blade: "\u{2694}\uFE0F",
   chert: "\u{1FAA8}",
   stone_flake: "\u{1FAA8}",
   stone_blade: "\u{1F5E1}\uFE0F",
-  hammerstone: "\u{1FAA8}",
-  shell_adze: "\u{1FA93}",
-  stone_axe: "\u{1FA93}",
   large_log: "\u{1FAB5}",
   charred_log: "\u{1FAB5}",
   shaped_hull: "\u{1F6F6}",
-  dugout: "\u{1F6F6}",
   fresh_water: "\u{1F4A7}",
-  gorge_hook: "\u{1FA9D}",
-  basket_trap: "\u{1FAA4}",
   clay: "\u{1F9F1}",
   shaped_clay_pot: "\u{1FAD9}",
   fired_clay_pot: "\u{1FAD9}",
   sealed_clay_jar: "\u{1F3FA}",
+};
+
+export const TOOL_ICONS: Record<ToolId, string> = {
+  bamboo_knife: "\u{1F52A}",
+  bow_drill_kit: "\u{1F525}",
+  bamboo_spear: "\u{1F531}",
+  hammerstone: "\u{1FAA8}",
+  shell_adze: "\u{1FA93}",
+  stone_axe: "\u{1FA93}",
+  obsidian_blade: "\u{2694}\uFE0F",
+  gorge_hook: "\u{1FA9D}",
+  basket_trap: "\u{1FAA4}",
+  raft: "\u{26F5}",
+  dugout: "\u{1F6F6}",
   crucible: "\u{1F525}",
 };
+
+/** Lookup icon for any resource or tool ID */
+export function getItemIcon(id: string): string {
+  return (RESOURCE_ICONS as Record<string, string>)[id]
+    ?? (TOOL_ICONS as Record<string, string>)[id]
+    ?? "";
+}
 
 export const SKILL_ICONS: Record<SkillId, string> = {
   foraging: "\u{1F33F}",

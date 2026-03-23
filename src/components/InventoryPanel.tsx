@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { RESOURCE_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ACTIONS } from "../data/actions";
 import { RECIPES } from "../data/recipes";
 import { ResourceCategory, ResourceId, GameState } from "../data/types";
@@ -28,20 +29,18 @@ const CATEGORY_LABELS: Record<ResourceCategory, string> = {
   food: "Food",
   raw: "Raw Materials",
   processed: "Processed",
-  tool: "Tools",
   structure: "Structures",
 };
 
 const CATEGORY_ORDER: ResourceCategory[] = [
   "food",
-  "tool",
   "raw",
   "processed",
   "structure",
 ];
 
 export function InventoryPanel({ state }: { state: GameState }) {
-  const [filter, setFilter] = useState<ResourceCategory | "all">("all");
+  const [filter, setFilter] = useState<ResourceCategory | "tools" | "all">("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
   const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
 
@@ -54,11 +53,13 @@ export function InventoryPanel({ state }: { state: GameState }) {
     grouped[cat].push({ id, amount });
   }
 
+  const hasTools = state.tools.length > 0;
   const presentCategories = CATEGORY_ORDER.filter((cat) => grouped[cat]);
   const visibleCategories =
-    filter === "all" ? presentCategories : presentCategories.filter((c) => c === filter);
+    filter === "all" ? presentCategories : filter === "tools" ? [] : presentCategories.filter((c) => c === filter);
+  const showTools = filter === "all" || filter === "tools";
 
-  if (entries.length === 0) {
+  if (entries.length === 0 && !hasTools) {
     return (
       <div className="inventory-panel">
         <p className="empty-message">No items yet — start gathering!</p>
@@ -92,6 +93,14 @@ export function InventoryPanel({ state }: { state: GameState }) {
         >
           All
         </button>
+        {hasTools && (
+          <button
+            className={`inventory-filter${filter === "tools" ? " active" : ""}`}
+            onClick={() => setFilter("tools")}
+          >
+            Tools
+          </button>
+        )}
         {presentCategories.map((cat) => (
           <button
             key={cat}
@@ -102,6 +111,33 @@ export function InventoryPanel({ state }: { state: GameState }) {
           </button>
         ))}
       </div>
+      {showTools && hasTools && (
+        <div className="inventory-category">
+          <h3 className="section-title">Tools</h3>
+          <div className="inventory-items">
+            {state.tools.map((toolId) => {
+              const def = TOOLS[toolId];
+              return (
+                <div key={toolId} className="inventory-item">
+                  <div className="inventory-item-header">
+                    <span className="inventory-item-name">
+                      {TOOL_ICONS[toolId] ?? ""} {def?.name ?? toolId}
+                    </span>
+                  </div>
+                  <div className="inventory-item-desc">
+                    {def?.description}
+                    {toolEnables[toolId] && (
+                      <div className="tool-enables">
+                        Enables: {toolEnables[toolId].join(", ")}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       {visibleCategories.map((cat) => (
         <div key={cat} className="inventory-category">
           <h3 className="section-title">{CATEGORY_LABELS[cat]}</h3>
@@ -119,19 +155,12 @@ export function InventoryPanel({ state }: { state: GameState }) {
                     <span className="inventory-item-name">
                       {RESOURCE_ICONS[id as ResourceId] ?? ""} {def?.name ?? id}
                     </span>
-                    {cat !== "tool" && (
-                      <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
-                        {amount}/{limit}
-                      </span>
-                    )}
+                    <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
+                      {amount}/{limit}
+                    </span>
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}
-                    {cat === "tool" && toolEnables[id] && (
-                      <div className="tool-enables">
-                        Enables: {toolEnables[id].join(", ")}
-                      </div>
-                    )}
                   </div>
                 </div>
               );

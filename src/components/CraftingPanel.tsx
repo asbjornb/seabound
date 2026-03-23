@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, SKILL_ICONS, getItemIcon } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource } from "../engine/gameState";
 
@@ -131,15 +132,24 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                   {recipe.requiredItems && (
                     <div className="action-requires">
                       Requires:{" "}
-                      {recipe.requiredItems.map((id, i) => (
-                        <span key={i}>
-                          {i > 0 && ", "}
-                          <span title={RESOURCES[id]?.description}>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
-                        </span>
-                      ))}
+                      {recipe.requiredItems.map((id, i) => {
+                        const name = RESOURCES[id]?.name ?? TOOLS[id]?.name ?? id;
+                        const desc = RESOURCES[id]?.description ?? TOOLS[id]?.description;
+                        return (
+                          <span key={i}>
+                            {i > 0 && ", "}
+                            <span title={desc}>{getItemIcon(id)}{name}</span>
+                          </span>
+                        );
+                      })}
                     </div>
                   )}
-                  {recipe.output ? (
+                  {recipe.toolOutput ? (
+                    <div className="recipe-output">
+                      Unlocks: {getItemIcon(recipe.toolOutput)}{" "}
+                      {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}
+                    </div>
+                  ) : recipe.output ? (
                     <div className="recipe-output">
                       Produces: {RESOURCE_ICONS[recipe.output.resourceId] ?? ""}{recipe.output.amount}x{" "}
                       {RESOURCES[recipe.output.resourceId]?.name ??
