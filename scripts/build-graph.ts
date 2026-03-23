@@ -368,6 +368,9 @@ for (const s of STATIONS) {
 // "backward" = from a node to what it requires (downstream → upstream)
 const forwardAdj = new Map<string, Set<string>>();
 const backwardAdj = new Map<string, Set<string>>();
+// Backward adjacency excluding optional edges (speeds_up, boosts_output) for minimal path sizing
+const backwardAdjRequired = new Map<string, Set<string>>();
+const OPTIONAL_RELATIONS = new Set(["speeds_up", "boosts_output"]);
 
 for (const e of edges) {
   // forward: from → to (e.from enables e.to, or e.from leads to e.to)
@@ -376,6 +379,40 @@ for (const e of edges) {
 
   if (!backwardAdj.has(e.to)) backwardAdj.set(e.to, new Set());
   backwardAdj.get(e.to)!.add(e.from);
+
+  if (!OPTIONAL_RELATIONS.has(e.relation)) {
+    if (!backwardAdjRequired.has(e.to)) backwardAdjRequired.set(e.to, new Set());
+    backwardAdjRequired.get(e.to)!.add(e.from);
+  }
+}
+
+// BFS backward following only required edges, skipping expedition food consumes
+// (for minimal path size comparison — must match findMinimalUpstream logic)
+function findAllUpstreamRequired(target: string): Set<string> {
+  const nodeById = new Map(nodes.map(n => [n.id, n]));
+  const visited = new Set<string>();
+  const queue = [target];
+  while (queue.length > 0) {
+    const curr = queue.shift()!;
+    if (visited.has(curr)) continue;
+    visited.add(curr);
+    const node = nodeById.get(curr);
+    // Skip food consumes edges on expeditions (they're fungible, not all required)
+    if (node?.type === "expedition") {
+      const parentEdges = edges.filter(e => e.to === curr && !OPTIONAL_RELATIONS.has(e.relation));
+      for (const e of parentEdges) {
+        if (e.relation === "consumes") {
+          const srcNode = nodeById.get(e.from);
+          if (srcNode?.type === "resource" && srcNode.category?.includes("food")) continue;
+        }
+        queue.push(e.from);
+      }
+    } else {
+      const parents = backwardAdjRequired.get(curr);
+      if (parents) for (const p of parents) queue.push(p);
+    }
+  }
+  return visited;
 }
 
 // BFS backward from a target to find all upstream dependencies
@@ -410,7 +447,7 @@ function findMinimalUpstream(target: string): string[] {
     if (upstreamSizeCache.has(id)) return upstreamSizeCache.get(id)!;
     // Mark with Infinity to break cycles during computation
     upstreamSizeCache.set(id, Infinity);
-    const size = findAllUpstream(id).size;
+    const size = findAllUpstreamRequired(id).size;
     upstreamSizeCache.set(id, size);
     return size;
   }
@@ -440,7 +477,7 @@ function findMinimalUpstream(target: string): string[] {
     } else {
       // Actions, recipes, expeditions, stations: ALL backward edges are mandatory
       // EXCEPT: food "consumes" edges on expeditions are fungible (any one suffices)
-      const allParentEdges = edges.filter(e => e.to === curr);
+      const allParentEdges = edges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
       const foodConsumeEdges = node.type === "expedition"
         ? allParentEdges.filter(e => {
             if (e.relation !== "consumes") return false;

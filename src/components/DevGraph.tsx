@@ -87,19 +87,25 @@ const analysis = graphData.analysis as {
 };
 
 // Build adjacency for upstream/downstream queries
+const OPTIONAL_RELATIONS = new Set(["speeds_up", "boosts_output"]);
 function buildAdjacency() {
   const forward = new Map<string, Set<string>>();
   const backward = new Map<string, Set<string>>();
+  const backwardRequired = new Map<string, Set<string>>();
   for (const e of allEdges) {
     if (!forward.has(e.from)) forward.set(e.from, new Set());
     forward.get(e.from)!.add(e.to);
     if (!backward.has(e.to)) backward.set(e.to, new Set());
     backward.get(e.to)!.add(e.from);
+    if (!OPTIONAL_RELATIONS.has(e.relation)) {
+      if (!backwardRequired.has(e.to)) backwardRequired.set(e.to, new Set());
+      backwardRequired.get(e.to)!.add(e.from);
+    }
   }
-  return { forward, backward };
+  return { forward, backward, backwardRequired };
 }
 
-const { forward, backward } = buildAdjacency();
+const { forward, backward, backwardRequired } = buildAdjacency();
 const nodeById = new Map(allNodes.map(n => [n.id, n]));
 
 function getUpstream(nodeId: string): Set<string> {
@@ -128,13 +134,40 @@ function getDownstream(nodeId: string): Set<string> {
   return visited;
 }
 
+// Upstream following only required edges, skipping expedition food consumes
+// (for size comparison in greedy algorithm)
+function getUpstreamRequired(nodeId: string): Set<string> {
+  const visited = new Set<string>();
+  const queue = [nodeId];
+  while (queue.length > 0) {
+    const curr = queue.shift()!;
+    if (visited.has(curr)) continue;
+    visited.add(curr);
+    const node = nodeById.get(curr);
+    if (node?.type === "expedition") {
+      const parentEdges = allEdges.filter(e => e.to === curr && !OPTIONAL_RELATIONS.has(e.relation));
+      for (const e of parentEdges) {
+        if (e.relation === "consumes") {
+          const srcNode = nodeById.get(e.from);
+          if (srcNode?.type === "resource" && srcNode.category?.includes("food")) continue;
+        }
+        queue.push(e.from);
+      }
+    } else {
+      const parents = backwardRequired.get(curr);
+      if (parents) for (const p of parents) queue.push(p);
+    }
+  }
+  return visited;
+}
+
 // Greedy minimal upstream: at choice points (resource/building/biome with
 // multiple producers), pick the producer with the smallest upstream subtree.
 const upstreamSizeCache = new Map<string, number>();
 function getUpstreamSize(nodeId: string): number {
   if (upstreamSizeCache.has(nodeId)) return upstreamSizeCache.get(nodeId)!;
   upstreamSizeCache.set(nodeId, Infinity); // cycle guard
-  const size = getUpstream(nodeId).size;
+  const size = getUpstreamRequired(nodeId).size;
   upstreamSizeCache.set(nodeId, size);
   return size;
 }
@@ -161,9 +194,9 @@ function getMinimalUpstream(nodeId: string): Set<string> {
         queue.push(best.from);
       }
     } else {
-      // Actions/recipes/etc: all backward edges are mandatory
-      const parents = backward.get(curr);
-      if (parents) for (const p of parents) queue.push(p);
+      // Actions/recipes/etc: all backward edges are mandatory (except optional ones like speeds_up)
+      const parents = allEdges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
+      for (const e of parents) queue.push(e.from);
     }
   }
   return included;
@@ -478,8 +511,8 @@ export function DevGraph() {
         <h2 style={styles.title}><a href="?dev" style={{ color: "#7a9a8a", textDecoration: "none" }}>Dev Wiki</a> / Progression Graph</h2>
         <div style={styles.filters}>
           <button style={filter === "all" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("all"); setSelectedNode(null); setHighlightUpstream(null); }}>All</button>
-          <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("resource:dugout"); }}>Focus</button>
-          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("resource:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); }}>Dugout (minimal)</button>
+          <button style={filter === "focus" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("focus"); setSelectedNode(null); setHighlightUpstream(null); if (!focusTarget) setFocusTarget("building:dugout"); }}>Focus</button>
+          <button style={styles.filterBtn} onClick={() => { setFilter("focus"); setFocusTarget("building:dugout"); setFocusDirection("upstream"); setFocusMode("greedy"); setSelectedNode(null); setHighlightUpstream(null); }}>Dugout (minimal)</button>
           <button style={filter === "biomes" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("biomes"); setSelectedNode(null); setHighlightUpstream(null); }}>Biomes</button>
           <button style={filter === "skill_gates" ? styles.filterActive : styles.filterBtn} onClick={() => { setFilter("skill_gates"); setSelectedNode(null); setHighlightUpstream(null); }}>Skill Gates</button>
           <span style={styles.separator}>|</span>
