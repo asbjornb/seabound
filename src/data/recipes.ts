@@ -68,7 +68,7 @@ export const RECIPES: RecipeDef[] = [
     id: "dry_fiber",
     name: "Dry Fiber",
     description: "Hang rough fibers on the drying rack to cure in the sun.",
-    skillId: "preservation",
+    skillId: "crafting",
     panel: "craft",
     inputs: [{ resourceId: "rough_fiber", amount: 2 }],
     output: { resourceId: "dried_fiber", amount: 1 },
@@ -634,15 +634,15 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 20,
   },
 
-  // Sealed Clay Jar (Preservation 15, requires firing pit)
+  // Sealed Clay Jar (Cooking 12, requires firing pit)
   {
     id: "seal_clay_jar",
     name: "Sealed Clay Jar",
     description:
       "Coat a fired pot with clay slip and re-fire to create an airtight seal. Preserves food for long voyages.",
-    skillId: "preservation",
+    skillId: "cooking",
     panel: "craft",
-    requiredSkillLevel: 15,
+    requiredSkillLevel: 12,
     inputs: [
       { resourceId: "fired_clay_pot", amount: 1 },
       { resourceId: "clay", amount: 2 },
@@ -809,15 +809,14 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
-  // Voyage Provisions (Preservation)
+  // Voyage Provisions (Cooking)
   // ═══════════════════════════════════════
   {
     id: "pack_voyage_provisions",
     name: "Voyage Provisions",
     description: "Pack preserved food into a sealed jar. Efficient fuel for long voyages.",
-    skillId: "preservation",
+    skillId: "cooking",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "sealed_clay_jar", amount: 1 },
       { resourceId: "cooked_fish", amount: 2 },

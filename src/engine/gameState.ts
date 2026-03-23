@@ -20,7 +20,6 @@ const ALL_SKILLS: SkillId[] = [
   "construction",
   "farming",
   "navigation",
-  "preservation",
 ];
 
 export function createInitialState(): GameState {
@@ -83,6 +82,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
     if (!loaded.skills[id]) {
       loaded.skills[id] = { xp: 0, level: 1 };
     }
+  }
+  // Migration: remove preservation skill (merged into cooking/crafting)
+  if (loaded.skills["preservation" as SkillId]) {
+    delete loaded.skills["preservation" as SkillId];
   }
   // Migration: ensure buildings array exists
   if (!loaded.buildings) {

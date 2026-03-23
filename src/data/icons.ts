@@ -72,7 +72,6 @@ export const SKILL_ICONS: Record<SkillId, string> = {
   construction: "\u{1F3D7}\uFE0F",
   farming: "\u{1F331}",
   navigation: "\u{1F9ED}",
-  preservation: "\u{1F372}",
 };
 
 export const BIOME_ICONS: Record<BiomeId, string> = {
