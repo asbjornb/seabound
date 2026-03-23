@@ -189,7 +189,7 @@ export const RECIPES: RecipeDef[] = [
     id: "craft_basket_trap",
     name: "Basket Trap",
     description:
-      "Weave bamboo splinters into a funnel-shaped fish trap. Set it and collect later.",
+      "Split bamboo razor-thin with an obsidian blade and weave it into a funnel-shaped fish trap.",
     skillId: "weaving",
     panel: "craft",
     inputs: [
@@ -200,6 +200,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 10000,
     requiredSkillLevel: 6,
     requiredSkills: [{ skillId: "fishing", level: 8 }],
+    requiredTools: ["obsidian_blade"],
     oneTimeCraft: true,
     xpGain: 35,
   },
@@ -489,11 +490,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "craft_bamboo_spear",
     name: "Bamboo Spear",
-    description: "Fire-harden a bamboo tip into a spear. Requires camp fire.",
+    description: "Whittle a bamboo tip with your knife, then fire-harden it into a spear.",
     skillId: "crafting",
     panel: "craft",
     inputs: [{ resourceId: "bamboo_cane", amount: 2 }],
     toolOutput: "bamboo_spear",
+    requiredTools: ["bamboo_knife"],
     requiredBuildings: ["camp_fire"],
     durationMs: 5000,
     oneTimeCraft: true,
