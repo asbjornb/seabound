@@ -820,8 +820,11 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 8,
     inputs: [
       { resourceId: "sealed_clay_jar", amount: 1 },
-      { resourceId: "cooked_fish", amount: 2 },
-      { resourceId: "coconut", amount: 3 },
+      { resourceId: "coconut", amount: 1 },
+      { resourceId: "cooked_fish", amount: 1 },
+      { resourceId: "cooked_crab", amount: 1 },
+      { resourceId: "cooked_root_vegetable", amount: 1 },
+      { resourceId: "banana", amount: 1 },
     ],
     output: { resourceId: "voyage_provisions", amount: 1 },
     requiredBuildings: ["firing_pit"],

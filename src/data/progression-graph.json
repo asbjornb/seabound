@@ -2465,12 +2465,27 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:coconut",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:cooked_fish",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
     },
     {
-      "from": "resource:coconut",
+      "from": "resource:cooked_crab",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
     },
