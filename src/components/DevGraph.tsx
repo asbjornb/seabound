@@ -370,6 +370,63 @@ function applyTypeHiding(
 // Component
 // ───────────────────────────────────────────────
 
+function SearchSelect({ value, options, onChange }: {
+  value: string | null;
+  options: { id: string; label: string; type: string }[];
+  onChange: (id: string | null) => void;
+}) {
+  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const filtered = useMemo(() => {
+    if (!search) return options;
+    const q = search.toLowerCase();
+    return options.filter(o => o.label.toLowerCase().includes(q) || o.id.toLowerCase().includes(q));
+  }, [search, options]);
+
+  const selectedLabel = value ? options.find(o => o.id === value) : null;
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return (
+    <div ref={wrapRef} style={{ position: "relative", display: "inline-block" }}>
+      <input
+        style={styles.focusSelect}
+        placeholder="Search nodes..."
+        value={open ? search : (selectedLabel ? `${selectedLabel.label} (${selectedLabel.type})` : search)}
+        onChange={e => { setSearch(e.target.value); setOpen(true); }}
+        onFocus={() => { setOpen(true); setSearch(""); }}
+      />
+      {open && (
+        <div style={styles.searchDropdown}>
+          {filtered.slice(0, 40).map(o => (
+            <div
+              key={o.id}
+              style={{
+                ...styles.searchOption,
+                background: o.id === value ? "#1e4a3a" : undefined,
+              }}
+              onMouseDown={() => { onChange(o.id); setSearch(""); setOpen(false); }}
+            >
+              <span style={{ ...styles.dot, background: NODE_COLORS[o.type] }} />
+              {o.label} <span style={{ color: "#5a7a6a", fontSize: "0.7rem" }}>({o.type})</span>
+            </div>
+          ))}
+          {filtered.length === 0 && <div style={{ padding: "0.4rem 0.6rem", color: "#5a7a6a", fontSize: "0.8rem" }}>No matches</div>}
+          {filtered.length > 40 && <div style={{ padding: "0.4rem 0.6rem", color: "#5a7a6a", fontSize: "0.75rem" }}>...{filtered.length - 40} more</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function DevGraph() {
   const svgRef = useRef<SVGSVGElement>(null);
   const [filter, setFilter] = useState<FilterMode>("all");
@@ -622,16 +679,11 @@ export function DevGraph() {
         </div>
         {filter === "focus" && (
           <div style={styles.subFilter}>
-            <select
-              style={styles.focusSelect}
-              value={focusTarget ?? ""}
-              onChange={e => setFocusTarget(e.target.value || null)}
-            >
-              <option value="">-- select target --</option>
-              {allNodes.map(n => (
-                <option key={n.id} value={n.id}>{n.label} ({n.type})</option>
-              ))}
-            </select>
+            <SearchSelect
+              value={focusTarget}
+              options={allNodes}
+              onChange={setFocusTarget}
+            />
             <span style={styles.separator}>|</span>
             <button style={focusDirection === "upstream" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDirection("upstream")}>Upstream</button>
             <button style={focusDirection === "downstream" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDirection("downstream")}>Downstream</button>
@@ -671,16 +723,6 @@ export function DevGraph() {
             <button style={styles.filterBtn} onClick={() => setHiddenTypes(new Set())}>show all</button>
           )}
         </div>
-      </div>
-
-      <div style={styles.legend}>
-        {ALL_NODE_TYPES.map(t => (
-          <span key={t} style={styles.legendItem}>
-            <span style={{ ...styles.dot, background: NODE_COLORS[t] }} />
-            {t.replace("_", " ")}
-          </span>
-        ))}
-        <span style={styles.legendItem}><span style={{ ...styles.dot, background: "#ff4444", border: "2px solid #ff4444" }} />warning</span>
       </div>
 
       <div style={styles.graphWrap}>
@@ -842,7 +884,30 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "0.3rem 0.5rem",
     borderRadius: 4,
     fontSize: "0.8rem",
-    maxWidth: 260,
+    width: 260,
+    outline: "none",
+  },
+  searchDropdown: {
+    position: "absolute" as const,
+    top: "100%",
+    left: 0,
+    width: 300,
+    maxHeight: 280,
+    overflowY: "auto" as const,
+    background: "#132626",
+    border: "1px solid #1e3a3a",
+    borderRadius: 4,
+    zIndex: 100,
+    marginTop: 2,
+  },
+  searchOption: {
+    padding: "0.35rem 0.6rem",
+    cursor: "pointer",
+    fontSize: "0.8rem",
+    color: "#a0b8a8",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.3rem",
   },
   separator: {
     color: "#3a5a4a",
@@ -853,20 +918,6 @@ const styles: Record<string, React.CSSProperties> = {
     width: 8,
     height: 8,
     borderRadius: "50%",
-  },
-  legend: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "0.75rem",
-    padding: "0.5rem 1rem",
-    background: "#0e2020",
-    fontSize: "0.75rem",
-    color: "#7a9a8a",
-  },
-  legendItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "0.3rem",
   },
   graphWrap: {
     width: "100%",
