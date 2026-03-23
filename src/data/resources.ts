@@ -270,7 +270,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Wild Seed",
     description: "A small seed found in dry grass. The start of farming.",
     category: "raw",
-    utility: "farming",
   },
 
   // Fishing Tools
@@ -315,14 +314,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description:
       "An airtight clay jar. Preserves food for long expeditions and stores seeds.",
     category: "processed",
-    utility: "storage",
   },
   crucible: {
     id: "crucible",
     name: "Crucible",
     description:
       "A thick-walled clay vessel that withstands extreme heat. Required for smelting ore.",
-    utility: "smelting",
     category: "tool",
   },
 };
