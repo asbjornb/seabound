@@ -178,6 +178,11 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description:
       "A razor-sharp knapped obsidian blade. The finest cutting tool before metal.",
     category: "tool",
+    toolFor: {
+      actionIds: ["harvest_bamboo", "fell_large_tree"],
+      recipeIds: ["split_bamboo_cane", "scrape_hull", "shred_coconut_husk"],
+      multiplier: 0.85,
+    },
   },
 
   // Stone Tools

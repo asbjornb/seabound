@@ -2,6 +2,7 @@ import { useRef, useMemo, useState, useEffect } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
+import { DevGraph } from "./components/DevGraph";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
@@ -33,8 +34,11 @@ import { FULL_XP_ACTIONS, getRepetitiveXpMultiplier } from "./engine/repetitiveX
 import "./App.css";
 
 export default function App() {
-  // Dev wiki: show at ?dev
+  // Dev tools: ?dev for wiki, ?dev=graph for progression graph
   if (window.location.search.includes("dev")) {
+    const params = new URLSearchParams(window.location.search);
+    const devPage = params.get("dev");
+    if (devPage === "graph") return <DevGraph />;
     return <DevWiki />;
   }
   const game = useGame();

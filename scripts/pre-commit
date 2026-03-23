@@ -1,0 +1,19 @@
+#!/bin/sh
+# Pre-commit hook: regenerate progression-graph.json if game data changed.
+#
+# Install: cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# Or:      npm run setup-hooks
+
+# Check if any src/data/*.ts files are staged
+STAGED_DATA=$(git diff --cached --name-only -- 'src/data/*.ts')
+
+if [ -n "$STAGED_DATA" ]; then
+  echo "[pre-commit] Game data changed — regenerating progression-graph.json..."
+  npx tsx scripts/build-graph.ts
+  if [ $? -ne 0 ]; then
+    echo "[pre-commit] ERROR: build-graph.ts failed. Fix the issue and try again."
+    exit 1
+  fi
+  git add src/data/progression-graph.json
+  echo "[pre-commit] progression-graph.json updated and staged."
+fi

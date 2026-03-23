@@ -24,6 +24,8 @@ export function DevWiki() {
       </p>
 
       <nav style={styles.toc}>
+        <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
+        {" · "}
         <strong>Contents:</strong>{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
