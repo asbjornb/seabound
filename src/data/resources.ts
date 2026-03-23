@@ -117,11 +117,72 @@ export const RESOURCES: Record<string, ResourceDef> = {
     tags: ["food"],
   },
 
-  // Seeds
+  // Seeds & Farming
   wild_seed: {
     id: "wild_seed",
     name: "Wild Seed",
     description: "A small seed found in dry grass. The start of farming.",
+  },
+  root_vegetable: {
+    id: "root_vegetable",
+    name: "Root Vegetable",
+    description: "A knobby tuber dug up from wild planting. Edible raw, better cooked.",
+    tags: ["food"],
+  },
+  cooked_root_vegetable: {
+    id: "cooked_root_vegetable",
+    name: "Cooked Root Vegetable",
+    description: "A fire-roasted tuber. Filling and surprisingly tasty.",
+    tags: ["food"],
+  },
+  taro_corm: {
+    id: "taro_corm",
+    name: "Taro Corm",
+    description: "A starchy root cutting ready for planting. The staple crop of island life.",
+  },
+  taro_root: {
+    id: "taro_root",
+    name: "Taro Root",
+    description: "A starchy, nutritious root. Must be cooked — raw taro is toxic.",
+  },
+  cooked_taro: {
+    id: "cooked_taro",
+    name: "Cooked Taro",
+    description: "Boiled taro — starchy, filling, and the backbone of island meals.",
+    tags: ["food"],
+  },
+  banana_shoot: {
+    id: "banana_shoot",
+    name: "Banana Shoot",
+    description: "A banana plant cutting ready to establish in rich soil.",
+  },
+  banana: {
+    id: "banana",
+    name: "Banana",
+    description: "A ripe banana. Sweet, filling, and needs no cooking.",
+    tags: ["food"],
+  },
+  breadfruit_cutting: {
+    id: "breadfruit_cutting",
+    name: "Breadfruit Cutting",
+    description: "A breadfruit tree cutting. Needs rich soil and patient tending.",
+  },
+  breadfruit: {
+    id: "breadfruit",
+    name: "Breadfruit",
+    description: "A large starchy fruit. Roast it for a hearty, filling meal.",
+  },
+  roasted_breadfruit: {
+    id: "roasted_breadfruit",
+    name: "Roasted Breadfruit",
+    description: "Thick slices of fire-roasted breadfruit. Extremely filling.",
+    tags: ["food"],
+  },
+  voyage_provisions: {
+    id: "voyage_provisions",
+    name: "Voyage Provisions",
+    description: "Sealed jars of preserved food. Enough for a long sea voyage.",
+    tags: ["food"],
   },
 
   // Obsidian

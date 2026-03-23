@@ -95,6 +95,60 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  farming: [
+    {
+      level: 3,
+      description: "Hardy seeds — +15% wild seed return chance",
+      effects: [
+        { type: "drop_chance", actionId: "plant_wild_seeds", resourceId: "wild_seed", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 5,
+      description: "Careful planting — +15% root vegetable chance",
+      effects: [
+        { type: "drop_chance", actionId: "plant_wild_seeds", resourceId: "root_vegetable", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 7,
+      description: "Efficient sowing — plant wild seeds costs 2 seeds instead of 3",
+    },
+    {
+      level: 8,
+      description: "Seed saving — wild seed planting always returns at least 1 seed",
+    },
+    {
+      level: 10,
+      description: "Green thumb — all crop stations 15% faster",
+      effects: [
+        { type: "duration", actionId: "plant_wild_seeds", multiplier: 0.85 },
+        { type: "duration", actionId: "cultivate_taro", multiplier: 0.85 },
+        { type: "duration", actionId: "grow_bananas", multiplier: 0.85 },
+        { type: "duration", actionId: "grow_breadfruit", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 12,
+      description: "Propagation — +10% chance for all crop replanting",
+      effects: [
+        { type: "drop_chance", actionId: "cultivate_taro", resourceId: "taro_corm", bonus: 0.10 },
+        { type: "drop_chance", actionId: "grow_bananas", resourceId: "banana_shoot", bonus: 0.10 },
+        { type: "drop_chance", actionId: "grow_breadfruit", resourceId: "breadfruit_cutting", bonus: 0.10 },
+      ],
+    },
+    {
+      level: 15,
+      description: "Abundant harvest — 20% chance to double crop yields",
+      effects: [
+        { type: "double_output", chance: 0.2 },
+      ],
+    },
+    {
+      level: 18,
+      description: "Master farmer — wild seed planting always yields 2 root vegetables",
+    },
+  ],
   crafting: [],
   weaving: [
     {

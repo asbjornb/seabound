@@ -256,6 +256,13 @@ function applyCraftCompletion(
     toolCrafted = def.toolOutput;
     drops.push({ name: def.toolOutput, amount: 1 });
   } else if (def.buildingOutput) {
+    // Building upgrade — remove one instance of the replaced building
+    if (def.replacesBuilding) {
+      const idx = state.buildings.indexOf(def.replacesBuilding);
+      if (idx !== -1) {
+        state.buildings.splice(idx, 1);
+      }
+    }
     // Building construction — add to buildings list
     const bdef = BUILDINGS[def.buildingOutput];
     const isStackable = bdef?.maxCount && bdef.maxCount > 1;

@@ -23,6 +23,17 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   cooked_crab: "\u{1F980}",
   cooked_large_fish: "\u{1F372}",
   wild_seed: "\u{1F331}",
+  root_vegetable: "\u{1F954}",
+  cooked_root_vegetable: "\u{1F35B}",
+  taro_corm: "\u{1F331}",
+  taro_root: "\u{1F954}",
+  cooked_taro: "\u{1F35B}",
+  banana_shoot: "\u{1F331}",
+  banana: "\u{1F34C}",
+  breadfruit_cutting: "\u{1F331}",
+  breadfruit: "\u{1F34E}",
+  roasted_breadfruit: "\u{1F35B}",
+  voyage_provisions: "\u{1F3FA}",
   obsidian: "\u{1F48E}",
   chert: "\u{1FAA8}",
   stone_flake: "\u{1FAA8}",
@@ -48,6 +59,7 @@ export const TOOL_ICONS: Record<ToolId, string> = {
   gorge_hook: "\u{1FA9D}",
   basket_trap: "\u{1FAA4}",
   crucible: "\u{1F525}",
+  digging_stick: "\u{1FAB5}",
 };
 
 export const SKILL_ICONS: Record<SkillId, string> = {
@@ -84,6 +96,10 @@ export const BUILDING_ICONS: Record<BuildingId, string> = {
   raft: "\u{26F5}",
   dugout: "\u{1F6F6}",
   woven_basket: "\u{1F9FA}",
+  cleared_plot: "\u{1F33E}",
+  tended_garden: "\u{1F33F}",
+  farm_plot: "\u{1F331}",
+  well: "\u{1F4A7}",
 };
 
 export const TAB_ICONS: Record<string, string> = {
