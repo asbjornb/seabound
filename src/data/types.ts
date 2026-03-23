@@ -111,6 +111,7 @@ export interface ResourceDef {
   category: ResourceCategory;
   size?: "small" | "large"; // defaults to "small" if omitted
   toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
+  utility?: string; // non-crafting purpose (e.g. "storage", "farming", "smelting") — suppresses dead-end warning
 }
 
 export interface SkillDef {

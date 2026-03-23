@@ -19,7 +19,7 @@ import { RECIPES } from "../src/data/recipes";
 import { RESOURCES } from "../src/data/resources";
 import { SKILLS } from "../src/data/skills";
 import { STATIONS } from "../src/data/stations";
-import type { BiomeId, SkillId } from "../src/data/types";
+import type { BiomeId, ResourceId, SkillId } from "../src/data/types";
 
 // ───────────────────────────────────────────────
 // Types
@@ -575,6 +575,7 @@ function computeWarnings(reachable: Set<string>): Warning[] {
   const warnings: Warning[] = [];
 
   // Dead ends: resources that are produced but never consumed by anything
+  // Resources with a `utility` field (storage, farming, etc.) are excluded — they have value outside crafting chains
   const producedResources = new Set<string>();
   const consumedResources = new Set<string>();
   for (const e of edges) {
@@ -585,6 +586,8 @@ function computeWarnings(reachable: Set<string>): Warning[] {
   }
   for (const r of producedResources) {
     if (!consumedResources.has(r)) {
+      const resId = r.replace("resource:", "") as ResourceId;
+      if (RESOURCES[resId]?.utility) continue;
       const label = nodes.find(n => n.id === r)?.label ?? r;
       warnings.push({ type: "dead_end", nodeId: r, message: `${label} is produced but never used as input` });
     }

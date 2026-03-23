@@ -2505,38 +2505,14 @@
       "biome:rocky_shore"
     ],
     "deadEnds": [
-      "resource:wild_seed",
-      "resource:bamboo_knife",
-      "resource:woven_basket",
-      "resource:sealed_clay_jar",
-      "resource:crucible"
+      "resource:bamboo_knife"
     ],
     "unreachable": [],
     "warnings": [
       {
         "type": "dead_end",
-        "nodeId": "resource:wild_seed",
-        "message": "Wild Seed is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
         "nodeId": "resource:bamboo_knife",
         "message": "Bamboo Knife is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:woven_basket",
-        "message": "Woven Basket is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:sealed_clay_jar",
-        "message": "Sealed Clay Jar is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:crucible",
-        "message": "Crucible is produced but never used as input"
       },
       {
         "type": "high_gate",
