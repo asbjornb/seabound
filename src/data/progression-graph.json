@@ -2006,6 +2006,41 @@
       "relation": "trains"
     },
     {
+      "from": "resource:coconut",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
       "from": "expedition:explore_beach",
       "to": "biome:coconut_grove",
       "relation": "discovers"
@@ -2029,6 +2064,41 @@
       "from": "expedition:explore_interior",
       "to": "skill:navigation",
       "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
     },
     {
       "from": "biome:coconut_grove",
@@ -2074,6 +2144,41 @@
       "from": "resource:raft",
       "to": "expedition:sail_nearby_island",
       "relation": "requires_vessel"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
     },
     {
       "from": "expedition:sail_nearby_island",
@@ -2124,6 +2229,46 @@
       "from": "resource:dugout",
       "to": "expedition:dugout_voyage",
       "relation": "requires_vessel"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
     },
     {
       "from": "station:deploy_basket_trap",
@@ -2180,11 +2325,26 @@
       "skill:weaving:5",
       "building:fiber_loom",
       "biome:bamboo_grove",
+      "resource:coconut",
+      "resource:small_fish",
+      "resource:crab",
+      "resource:large_fish",
+      "resource:cooked_fish",
+      "resource:cooked_crab",
+      "resource:cooked_large_fish",
       "biome:coconut_grove",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
       "recipe:dry_fiber",
       "recipe:build_fiber_loom",
+      "action:gather_coconuts",
+      "action:wade_tidal_pool",
+      "action:spear_fish",
+      "action:drop_line_fish",
+      "station:deploy_basket_trap",
+      "recipe:cook_fish",
+      "recipe:cook_crab",
+      "recipe:cook_large_fish",
       "expedition:explore_beach",
       "resource:large_log",
       "resource:dry_grass",
@@ -2196,47 +2356,55 @@
       "building:drying_rack",
       "resource:palm_frond",
       "skill:weaving:4",
+      "resource:bamboo_spear",
+      "skill:fishing:8",
+      "resource:gorge_hook",
+      "resource:basket_trap",
+      "skill:fishing:10",
+      "skill:cooking:2",
+      "skill:cooking:4",
       "action:fell_large_tree",
       "action:collect_dry_grass",
-      "action:gather_coconuts",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
-      "action:wade_tidal_pool",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
       "action:collect_palm_frond",
+      "recipe:craft_bamboo_spear",
+      "recipe:craft_gorge_hook",
+      "recipe:craft_basket_trap",
       "skill:woodworking:10",
       "biome:jungle_interior",
       "resource:stone_axe",
       "biome:rocky_shore",
       "resource:bow_drill_kit",
+      "resource:shell",
+      "skill:crafting:6",
+      "resource:stone_flake",
+      "resource:bamboo_splinter",
+      "skill:weaving:6",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
+      "recipe:strike_stone_flake",
+      "recipe:split_bamboo_cane",
       "resource:stone_blade",
       "resource:flat_stone",
+      "resource:chert",
+      "resource:hammerstone",
       "recipe:knap_stone_blade",
       "action:comb_rocky_shore",
       "expedition:sail_nearby_island",
-      "resource:stone_flake",
-      "resource:hammerstone",
+      "recipe:craft_hammerstone",
       "resource:raft",
       "biome:nearby_island",
-      "recipe:strike_stone_flake",
-      "recipe:craft_hammerstone",
       "recipe:build_raft",
-      "resource:chert",
       "skill:construction:5"
     ],
     "deadEnds": [
-      "resource:coconut",
       "resource:wild_seed",
-      "resource:fresh_water",
       "resource:bamboo_knife",
       "resource:woven_basket",
       "resource:obsidian_blade",
-      "resource:cooked_fish",
-      "resource:cooked_large_fish",
-      "resource:cooked_crab",
       "resource:sealed_clay_jar",
       "resource:crucible"
     ],
@@ -2244,18 +2412,8 @@
     "warnings": [
       {
         "type": "dead_end",
-        "nodeId": "resource:coconut",
-        "message": "Coconut is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
         "nodeId": "resource:wild_seed",
         "message": "Wild Seed is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:fresh_water",
-        "message": "Fresh Water is produced but never used as input"
       },
       {
         "type": "dead_end",
@@ -2271,21 +2429,6 @@
         "type": "dead_end",
         "nodeId": "resource:obsidian_blade",
         "message": "Obsidian Blade is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:cooked_fish",
-        "message": "Cooked Fish is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:cooked_large_fish",
-        "message": "Cooked Large Fish is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:cooked_crab",
-        "message": "Cooked Crab is produced but never used as input"
       },
       {
         "type": "dead_end",

@@ -247,6 +247,18 @@ for (const e of EXPEDITIONS) {
     addEdge({ from: `resource:${e.requiredVessel}`, to: expId, relation: "requires_vessel" });
   }
 
+  // Expeditions consume food/water generically — link all food-category resources
+  if (e.foodCost) {
+    for (const r of Object.values(RESOURCES)) {
+      if (r.category === "food") {
+        addEdge({ from: `resource:${r.id}`, to: expId, relation: "consumes" });
+      }
+    }
+  }
+  if (e.waterCost) {
+    addEdge({ from: `resource:fresh_water`, to: expId, relation: "consumes" });
+  }
+
   // Required biomes to see expedition
   if (e.requiredBiomes) {
     for (const b of e.requiredBiomes) {
