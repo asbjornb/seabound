@@ -49,11 +49,6 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     description:
       "Improves expedition outcomes — discovery chance, loot quality, risk reduction.",
   },
-  preservation: {
-    id: "preservation",
-    name: "Preservation",
-    description: "Drying, smoking, sealing, fermenting — extending shelf life.",
-  },
 };
 
 // XP required for each level (cumulative). Level 1 = 0 xp, level 2 = 100 xp, etc.

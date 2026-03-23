@@ -75,8 +75,7 @@ export type SkillId =
   | "weaving"
   | "construction"
   | "farming"
-  | "navigation"
-  | "preservation";
+  | "navigation";
 
 export type BiomeId = "beach" | "coconut_grove" | "rocky_shore" | "bamboo_grove" | "jungle_interior" | "nearby_island";
 

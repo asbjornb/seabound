@@ -511,6 +511,12 @@
       "category": "cooking"
     },
     {
+      "id": "skill:cooking:12",
+      "type": "skill_level",
+      "label": "Cooking Lv12",
+      "category": "cooking"
+    },
+    {
       "id": "skill:cooking:3",
       "type": "skill_level",
       "label": "Cooking Lv3",
@@ -527,18 +533,6 @@
       "type": "skill_level",
       "label": "Cooking Lv8",
       "category": "cooking"
-    },
-    {
-      "id": "skill:preservation:15",
-      "type": "skill_level",
-      "label": "Preservation Lv15",
-      "category": "preservation"
-    },
-    {
-      "id": "skill:preservation:8",
-      "type": "skill_level",
-      "label": "Preservation Lv8",
-      "category": "preservation"
     },
     {
       "id": "skill:farming:5",
@@ -664,7 +658,7 @@
       "id": "recipe:dry_fiber",
       "type": "recipe",
       "label": "Dry Fiber",
-      "category": "preservation"
+      "category": "crafting"
     },
     {
       "id": "recipe:twist_cordage",
@@ -856,7 +850,7 @@
       "id": "recipe:seal_clay_jar",
       "type": "recipe",
       "label": "Sealed Clay Jar",
-      "category": "preservation"
+      "category": "cooking"
     },
     {
       "id": "recipe:craft_digging_stick",
@@ -910,7 +904,7 @@
       "id": "recipe:pack_voyage_provisions",
       "type": "recipe",
       "label": "Voyage Provisions",
-      "category": "preservation"
+      "category": "cooking"
     },
     {
       "id": "recipe:craft_crucible",
@@ -1301,7 +1295,7 @@
     },
     {
       "from": "recipe:dry_fiber",
-      "to": "skill:preservation",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -2151,11 +2145,11 @@
     },
     {
       "from": "recipe:seal_clay_jar",
-      "to": "skill:preservation",
+      "to": "skill:cooking",
       "relation": "trains"
     },
     {
-      "from": "skill:preservation:15",
+      "from": "skill:cooking:12",
       "to": "recipe:seal_clay_jar",
       "relation": "requires_skill"
     },
@@ -2531,13 +2525,8 @@
     },
     {
       "from": "recipe:pack_voyage_provisions",
-      "to": "skill:preservation",
+      "to": "skill:cooking",
       "relation": "trains"
-    },
-    {
-      "from": "skill:preservation:8",
-      "to": "recipe:pack_voyage_provisions",
-      "relation": "requires_skill"
     },
     {
       "from": "building:firing_pit",
@@ -3307,7 +3296,6 @@
       "resource:breadfruit",
       "skill:cooking:8",
       "resource:sealed_clay_jar",
-      "skill:preservation:8",
       "building:firing_pit",
       "biome:jungle_interior",
       "resource:fired_clay_pot",
@@ -3348,7 +3336,7 @@
       "skill:construction:6",
       "skill:farming:12",
       "resource:breadfruit_cutting",
-      "skill:preservation:15",
+      "skill:cooking:12",
       "resource:shaped_clay_pot",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
@@ -3544,6 +3532,7 @@
             "recipe:shred_coconut_husk",
             "recipe:craft_shell_beads",
             "recipe:craft_bamboo_knife",
+            "recipe:dry_fiber",
             "recipe:craft_bow_drill",
             "recipe:craft_gorge_hook",
             "recipe:build_camp_fire",
@@ -3772,9 +3761,11 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
-            "recipe:roast_breadfruit"
+            "recipe:roast_breadfruit",
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -3786,9 +3777,11 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
-            "recipe:roast_breadfruit"
+            "recipe:roast_breadfruit",
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -3800,9 +3793,11 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
-            "recipe:roast_breadfruit"
+            "recipe:roast_breadfruit",
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -3814,9 +3809,11 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
-            "recipe:roast_breadfruit"
+            "recipe:roast_breadfruit",
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -3828,32 +3825,26 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
-            "recipe:roast_breadfruit"
-          ]
-        }
-      ],
-      "preservation": [
-        {
-          "level": 8,
-          "unlocks": [
-            "recipe:pack_voyage_provisions"
-          ],
-          "trainedBy": [
-            "recipe:dry_fiber",
-            "recipe:seal_clay_jar",
+            "recipe:roast_breadfruit",
             "recipe:pack_voyage_provisions"
           ]
         },
         {
-          "level": 15,
+          "level": 12,
           "unlocks": [
             "recipe:seal_clay_jar"
           ],
           "trainedBy": [
-            "recipe:dry_fiber",
+            "recipe:cook_fish",
+            "recipe:cook_large_fish",
+            "recipe:cook_crab",
             "recipe:seal_clay_jar",
+            "recipe:cook_root_vegetable",
+            "recipe:cook_taro",
+            "recipe:roast_breadfruit",
             "recipe:pack_voyage_provisions"
           ]
         }

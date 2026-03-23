@@ -86,15 +86,6 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
-  preservation: [
-    {
-      level: 3,
-      description: "Sun-dried mastery — 50% chance to double drying output",
-      effects: [
-        { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
-      ],
-    },
-  ],
   farming: [
     {
       level: 3,
@@ -149,7 +140,15 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Master farmer — wild seed planting always yields 2 root vegetables",
     },
   ],
-  crafting: [],
+  crafting: [
+    {
+      level: 3,
+      description: "Sun-dried mastery — 50% chance to double drying output",
+      effects: [
+        { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
+      ],
+    },
+  ],
   weaving: [
     {
       level: 2,
