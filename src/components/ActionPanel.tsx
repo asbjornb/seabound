@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { BIOME_ICONS, RESOURCE_ICONS } from "../data/icons";
+import { BIOME_ICONS, RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ActionDef, BiomeId, GameState } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { getResource, hasTool } from "../engine/gameState";
 
 interface Props {
   actions: ActionDef[];
@@ -68,10 +69,15 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((action) => {
+              // Check tool requirements
               const missingTool = action.requiredTools?.find(
-                (t) => getResource(state, t) < 1
+                (t) => !hasTool(state, t)
               );
-              const disabled = !!missingTool;
+              // Check resource requirements
+              const missingResource = action.requiredResources?.find(
+                (r) => getResource(state, r) < 1
+              );
+              const disabled = !!missingTool || !!missingResource;
               const isActive = currentActionId === action.id;
               return (
                 <div
@@ -118,8 +124,16 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span title={RESOURCES[missingTool]?.description}>
-                        {RESOURCE_ICONS[missingTool] ?? ""}{RESOURCES[missingTool]?.name ?? missingTool}
+                      <span title={TOOLS[missingTool]?.description}>
+                        {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                      </span>
+                    </div>
+                  )}
+                  {missingResource && !missingTool && (
+                    <div className="action-requires">
+                      Requires:{" "}
+                      <span title={RESOURCES[missingResource]?.description}>
+                        {RESOURCE_ICONS[missingResource] ?? ""}{RESOURCES[missingResource]?.name ?? missingResource}
                       </span>
                     </div>
                   )}

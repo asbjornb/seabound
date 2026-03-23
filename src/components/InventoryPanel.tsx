@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { RESOURCE_ICONS } from "../data/icons";
+import { RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ACTIONS } from "../data/actions";
 import { RECIPES } from "../data/recipes";
-import { ResourceCategory, ResourceId, GameState } from "../data/types";
+import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 /** Build a map of tool → list of action/recipe names it enables */
@@ -16,6 +17,10 @@ function buildToolEnablesMap(): Record<string, string[]> {
     }
   }
   for (const recipe of RECIPES) {
+    for (const toolId of recipe.requiredTools ?? []) {
+      if (!map[toolId]) map[toolId] = [];
+      map[toolId].push(recipe.name);
+    }
     for (const itemId of recipe.requiredItems ?? []) {
       if (!map[itemId]) map[itemId] = [];
       map[itemId].push(recipe.name);
@@ -24,41 +29,25 @@ function buildToolEnablesMap(): Record<string, string[]> {
   return map;
 }
 
-const CATEGORY_LABELS: Record<ResourceCategory, string> = {
+type FilterId = "all" | "food" | "tools" | "items";
+
+const FILTER_LABELS: Record<FilterId, string> = {
+  all: "All",
   food: "Food",
-  raw: "Raw Materials",
-  processed: "Processed",
-  tool: "Tools",
-  structure: "Structures",
+  tools: "Tools",
+  items: "Items",
 };
 
-const CATEGORY_ORDER: ResourceCategory[] = [
-  "food",
-  "tool",
-  "raw",
-  "processed",
-  "structure",
-];
-
 export function InventoryPanel({ state }: { state: GameState }) {
-  const [filter, setFilter] = useState<ResourceCategory | "all">("all");
+  const [filter, setFilter] = useState<FilterId>("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
-  const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
 
-  // Group by category
-  const grouped: Record<string, { id: string; amount: number }[]> = {};
-  for (const [id, amount] of entries) {
-    const def = RESOURCES[id];
-    const cat = def?.category ?? "raw";
-    if (!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push({ id, amount });
-  }
+  const resourceEntries = Object.entries(state.resources).filter(([, v]) => v > 0);
+  const hasTools = state.tools.length > 0;
+  const hasFood = resourceEntries.some(([id]) => RESOURCES[id]?.tags?.includes("food"));
+  const hasItems = resourceEntries.some(([id]) => !RESOURCES[id]?.tags?.includes("food"));
 
-  const presentCategories = CATEGORY_ORDER.filter((cat) => grouped[cat]);
-  const visibleCategories =
-    filter === "all" ? presentCategories : presentCategories.filter((c) => c === filter);
-
-  if (entries.length === 0) {
+  if (resourceEntries.length === 0 && !hasTools) {
     return (
       <div className="inventory-panel">
         <p className="empty-message">No items yet — start gathering!</p>
@@ -75,6 +64,23 @@ export function InventoryPanel({ state }: { state: GameState }) {
         ? `${moralePercent}% speed`
         : "normal";
 
+  // Build filter buttons from what's present
+  const presentFilters: FilterId[] = ["all"];
+  if (hasFood) presentFilters.push("food");
+  if (hasTools) presentFilters.push("tools");
+  if (hasItems) presentFilters.push("items");
+
+  // Filter resources
+  const filteredResources = resourceEntries.filter(([id]) => {
+    if (filter === "all") return true;
+    const tags = RESOURCES[id]?.tags ?? [];
+    if (filter === "food") return tags.includes("food");
+    if (filter === "items") return !tags.includes("food");
+    return false; // "tools" filter hides resources
+  });
+
+  const showTools = filter === "all" || filter === "tools";
+
   return (
     <div className="inventory-panel">
       <div className={`morale-display${state.morale <= 25 ? " low-morale" : ""}`}>
@@ -86,27 +92,55 @@ export function InventoryPanel({ state }: { state: GameState }) {
         </div>
       </div>
       <div className="inventory-filters">
-        <button
-          className={`inventory-filter${filter === "all" ? " active" : ""}`}
-          onClick={() => setFilter("all")}
-        >
-          All
-        </button>
-        {presentCategories.map((cat) => (
+        {presentFilters.map((f) => (
           <button
-            key={cat}
-            className={`inventory-filter${filter === cat ? " active" : ""}`}
-            onClick={() => setFilter(cat)}
+            key={f}
+            className={`inventory-filter${filter === f ? " active" : ""}`}
+            onClick={() => setFilter(f)}
           >
-            {CATEGORY_LABELS[cat]}
+            {FILTER_LABELS[f]}
           </button>
         ))}
       </div>
-      {visibleCategories.map((cat) => (
-        <div key={cat} className="inventory-category">
-          <h3 className="section-title">{CATEGORY_LABELS[cat]}</h3>
+
+      {/* Tools section */}
+      {showTools && hasTools && (
+        <div className="inventory-category">
+          <h3 className="section-title">Tools</h3>
           <div className="inventory-items">
-            {grouped[cat].map(({ id, amount }) => {
+            {state.tools.map((toolId) => {
+              const def = TOOLS[toolId];
+              return (
+                <div key={toolId} className="inventory-item">
+                  <div className="inventory-item-header">
+                    <span className="inventory-item-name">
+                      {TOOL_ICONS[toolId as ToolId] ?? ""} {def?.name ?? toolId}
+                    </span>
+                  </div>
+                  <div className="inventory-item-desc">
+                    {def?.description}
+                    {toolEnables[toolId] && (
+                      <div className="tool-enables">
+                        Enables: {toolEnables[toolId].join(", ")}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Resources */}
+      {filteredResources.length > 0 && (
+        <div className="inventory-category">
+          {filter !== "all" && filter !== "tools" && (
+            <h3 className="section-title">{FILTER_LABELS[filter]}</h3>
+          )}
+          {filter === "all" && <h3 className="section-title">Items</h3>}
+          <div className="inventory-items">
+            {filteredResources.map(([id, amount]) => {
               const def = RESOURCES[id];
               const limit = getStorageLimit(state, id);
               const atCap = amount >= limit;
@@ -119,15 +153,13 @@ export function InventoryPanel({ state }: { state: GameState }) {
                     <span className="inventory-item-name">
                       {RESOURCE_ICONS[id as ResourceId] ?? ""} {def?.name ?? id}
                     </span>
-                    {cat !== "tool" && (
-                      <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
-                        {amount}/{limit}
-                      </span>
-                    )}
+                    <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
+                      {amount}/{limit}
+                    </span>
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}
-                    {cat === "tool" && toolEnables[id] && (
+                    {toolEnables[id] && (
                       <div className="tool-enables">
                         Enables: {toolEnables[id].join(", ")}
                       </div>
@@ -138,7 +170,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
             })}
           </div>
         </div>
-      ))}
+      )}
     </div>
   );
 }

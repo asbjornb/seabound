@@ -1,6 +1,7 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
-import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId } from "../data/types";
+import { TOOLS } from "../data/tools";
+import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -29,6 +30,7 @@ export function createInitialState(): GameState {
   }
   return {
     resources: {},
+    tools: [],
     skills,
     discoveredBiomes: ["beach"],
     buildings: [] as BuildingId[],
@@ -50,6 +52,16 @@ const SAVE_KEY = "seabound_save";
 export function saveGame(state: GameState): void {
   localStorage.setItem(SAVE_KEY, JSON.stringify(state));
 }
+
+/** IDs that were resources in old saves but are now tools */
+const OLD_TOOL_RESOURCE_IDS: string[] = [
+  "bamboo_knife", "bow_drill_kit", "bamboo_spear", "hammerstone",
+  "shell_adze", "stone_axe", "obsidian_blade", "gorge_hook",
+  "basket_trap", "crucible",
+];
+
+/** IDs that were resources in old saves but are now buildings */
+const OLD_BUILDING_RESOURCE_IDS: string[] = ["raft", "dugout", "woven_basket"];
 
 export function normalizeGameState(raw: unknown): GameState | null {
   if (!raw || typeof raw !== "object") return null;
@@ -75,11 +87,36 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure buildings array exists
   if (!loaded.buildings) {
     loaded.buildings = [];
-    // If player already has bow_drill_kit, auto-grant camp_fire building
-    // so they don't lose access to fire-dependent recipes
+    // If player already has bow_drill_kit (old resource or new tool), auto-grant camp_fire building
     if ((loaded.resources["bow_drill_kit"] ?? 0) >= 1) {
       loaded.buildings.push("camp_fire");
     }
+  }
+  // Migration: ensure tools array exists
+  if (!loaded.tools) {
+    loaded.tools = [];
+  }
+  // Migration: move old tool resources to tools array
+  for (const toolId of OLD_TOOL_RESOURCE_IDS) {
+    if ((loaded.resources[toolId] ?? 0) >= 1 && !loaded.tools.includes(toolId as ToolId)) {
+      loaded.tools.push(toolId as ToolId);
+    }
+    delete loaded.resources[toolId];
+  }
+  // Migration: move old structure resources (raft, dugout, woven_basket) to buildings
+  for (const buildingId of OLD_BUILDING_RESOURCE_IDS) {
+    const count = loaded.resources[buildingId] ?? 0;
+    if (count >= 1) {
+      if (buildingId === "woven_basket") {
+        // Stackable: add multiple entries
+        for (let i = 0; i < count; i++) {
+          loaded.buildings.push(buildingId as BuildingId);
+        }
+      } else if (!loaded.buildings.includes(buildingId as BuildingId)) {
+        loaded.buildings.push(buildingId as BuildingId);
+      }
+    }
+    delete loaded.resources[buildingId];
   }
   // Migration: ensure morale exists
   if (loaded.morale == null) {
@@ -152,6 +189,24 @@ export function getResource(state: GameState, id: string): number {
   return state.resources[id] ?? 0;
 }
 
+export function hasTool(state: GameState, toolId: ToolId): boolean {
+  return state.tools.includes(toolId);
+}
+
+export function hasBuilding(state: GameState, buildingId: BuildingId): boolean {
+  return state.buildings.includes(buildingId);
+}
+
+export function getBuildingCount(state: GameState, buildingId: BuildingId): number {
+  return state.buildings.filter((b) => b === buildingId).length;
+}
+
+/** Check if a resource has a given tag. */
+export function resourceHasTag(resourceId: string, tag: string): boolean {
+  const def = RESOURCES[resourceId];
+  return def?.tags?.includes(tag) ?? false;
+}
+
 /** Default per-item storage limit before any building bonuses. */
 export const BASE_STORAGE_LIMIT = 10;
 
@@ -161,21 +216,21 @@ export function getStorageLimit(state: GameState, resourceId: string): number {
   if (!def) return BASE_STORAGE_LIMIT;
 
   let limit = BASE_STORAGE_LIMIT;
+  const tags = def.tags ?? [];
+
   for (const bid of state.buildings) {
     const bdef = BUILDINGS[bid];
     if (bdef?.storageBonus) {
       for (const bonus of bdef.storageBonus) {
-        if (bonus.category === def.category) {
-          limit += bonus.amount;
-        }
+        // Check tag filter: if tag is set, item must have it
+        if (bonus.tag && !tags.includes(bonus.tag)) continue;
+        // Check excludeTags filter: item must NOT have any of these
+        if (bonus.excludeTags && bonus.excludeTags.some((t) => tags.includes(t))) continue;
+        limit += bonus.amount;
       }
     }
   }
-  // Woven baskets: +1 storage per basket for small non-food, non-structure items
-  const size = def.size ?? "small";
-  if (size === "small" && def.category !== "food" && def.category !== "structure") {
-    limit += state.resources["woven_basket"] ?? 0;
-  }
+
   return limit;
 }
 
@@ -203,15 +258,15 @@ export function getMoraleDurationMultiplier(morale: number): number {
   return 1 - 0.2 * (morale - 50) / 50;
 }
 
-/** Build lookup of tool speed bonuses from resource data.
- *  Maps actionOrRecipeId → array of { resourceId, multiplier }. */
-const toolSpeedLookup = new Map<string, { resourceId: string; multiplier: number }[]>();
-for (const r of Object.values(RESOURCES)) {
-  if (!r.toolFor) continue;
-  const ids = [...(r.toolFor.actionIds ?? []), ...(r.toolFor.recipeIds ?? [])];
+/** Build lookup of tool speed bonuses from tool data.
+ *  Maps actionOrRecipeId → array of { toolId, multiplier }. */
+const toolSpeedLookup = new Map<string, { toolId: ToolId; multiplier: number }[]>();
+for (const t of Object.values(TOOLS)) {
+  if (!t.speedBonus) continue;
+  const ids = [...(t.speedBonus.actionIds ?? []), ...(t.speedBonus.recipeIds ?? [])];
   for (const id of ids) {
     const existing = toolSpeedLookup.get(id) ?? [];
-    existing.push({ resourceId: r.id, multiplier: r.toolFor.multiplier });
+    existing.push({ toolId: t.id, multiplier: t.speedBonus.multiplier });
     toolSpeedLookup.set(id, existing);
   }
 }
@@ -223,7 +278,7 @@ export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: strin
   if (!tools) return 1;
   let mult = 1;
   for (const t of tools) {
-    if ((state.resources[t.resourceId] ?? 0) >= 1) {
+    if (state.tools.includes(t.toolId)) {
       mult *= t.multiplier;
     }
   }

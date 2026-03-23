@@ -1,4 +1,5 @@
 import { ACTIONS } from "../data/actions";
+import { BUILDINGS } from "../data/buildings";
 import { EXPEDITIONS } from "../data/expeditions";
 import { getDurationMultiplier } from "../data/milestones";
 import {
@@ -16,6 +17,8 @@ import {
   getResource,
   getToolSpeedMultiplier,
   getTotalFood,
+  hasTool,
+  hasBuilding,
 } from "./gameState";
 
 export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
@@ -26,8 +29,13 @@ function resourceHasUse(resourceId: string, state: GameState): boolean {
     const effectiveInputs = getEffectiveInputs(recipe, state);
     const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
     if (!usesResource) return false;
-    if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) return false;
+    if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
+      // For stackable buildings, the recipe can still be used
+      const bdef = BUILDINGS[recipe.buildingOutput];
+      if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
+    }
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
+    if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
     return true;
   });
 }
@@ -48,9 +56,15 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
     if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
+    if (recipe.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
-    if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) return false;
+    // Hide non-stackable building recipes if building already exists
+    if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
+      const bdef = BUILDINGS[recipe.buildingOutput];
+      if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
+    }
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
+    if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
     if (recipe.oneTimeCraft && recipe.output && !resourceHasUse(recipe.output.resourceId, state)) return false;
     if (recipe.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) return false;
     if (getEffectiveInputs(recipe, state).some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
@@ -60,7 +74,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
   return EXPEDITIONS.filter((expedition) => {
-    if (expedition.requiredVessel && getResource(state, expedition.requiredVessel) < 1) return false;
+    if (expedition.requiredVessel && !hasBuilding(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
       const discoverableBiomes = expedition.outcomes
@@ -78,7 +92,7 @@ export function selectAvailableStations(state: GameState): StationDef[] {
   return STATIONS.filter((station) => {
     const skill = state.skills[station.skillId];
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
-    if (station.requiredTool && getResource(state, station.requiredTool) < 1) return false;
+    if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     return true;
   });

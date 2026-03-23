@@ -56,14 +56,12 @@ export function ResourcePanel({ state }: { state: GameState }) {
             title={RESOURCES[id]?.description}
           >
             {RESOURCE_ICONS[id as ResourceId] ?? ""} {RESOURCES[id]?.name ?? id}
-            {RESOURCES[id]?.category !== "tool" && (
-              <>
-                :{" "}
-                <span className="amount">
-                  {amount}/{limit}
-                </span>
-              </>
-            )}
+            <>
+              :{" "}
+              <span className="amount">
+                {amount}/{limit}
+              </span>
+            </>
           </span>
         );
       })}

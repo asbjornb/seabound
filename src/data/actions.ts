@@ -97,7 +97,7 @@ export const ACTIONS: ActionDef[] = [
     panel: "build",
     durationMs: 30000,
     drops: [],
-    requiredTools: ["large_shell"],
+    requiredResources: ["large_shell"],
     xpGain: 10,
   },
 
@@ -144,7 +144,7 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 4000,
     drops: [{ resourceId: "fresh_water", amount: 1 }],
     requiredBiome: "jungle_interior",
-    requiredTools: ["fired_clay_pot"],
+    requiredResources: ["fired_clay_pot"],
     xpGain: 8,
   },
 

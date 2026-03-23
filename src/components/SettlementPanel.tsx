@@ -1,8 +1,9 @@
 import { BUILDINGS } from "../data/buildings";
-import { BUILDING_ICONS } from "../data/icons";
+import { BUILDING_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
+import { TOOLS } from "../data/tools";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
 
 interface Props {
   buildRecipes: RecipeDef[];
@@ -10,6 +11,12 @@ interface Props {
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
   onStartAction: (action: ActionDef) => void;
+}
+
+function formatStorageBonus(b: { tag?: string; excludeTags?: string[]; amount: number }): string {
+  if (b.tag) return `+${b.amount} ${b.tag}`;
+  if (b.excludeTags) return `+${b.amount} (excl. ${b.excludeTags.join(", ")})`;
+  return `+${b.amount} all`;
 }
 
 export function SettlementPanel({
@@ -28,9 +35,12 @@ export function SettlementPanel({
           <div className="section-title">Build Tasks</div>
           {buildActions.map((action) => {
             const missingTool = action.requiredTools?.find(
-              (t) => getResource(state, t) < 1
+              (t) => !hasTool(state, t)
             );
-            const disabled = !!missingTool;
+            const missingResource = action.requiredResources?.find(
+              (r) => getResource(state, r) < 1
+            );
+            const disabled = !!missingTool || !!missingResource;
             return (
               <div
                 key={action.id}
@@ -62,7 +72,12 @@ export function SettlementPanel({
                 )}
                 {missingTool && (
                   <div className="action-requires">
-                    Requires: {RESOURCES[missingTool]?.name ?? missingTool}
+                    Requires: {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                  </div>
+                )}
+                {missingResource && !missingTool && (
+                  <div className="action-requires">
+                    Requires: {RESOURCES[missingResource]?.name ?? missingResource}
                   </div>
                 )}
                 <div className="action-xp">
@@ -158,7 +173,7 @@ export function SettlementPanel({
                       <div className="building-storage">
                         Storage:{" "}
                         {bdef.storageBonus
-                          .map((b) => `+${b.amount} ${b.category}`)
+                          .map(formatStorageBonus)
                           .join(", ")}
                       </div>
                     )}
@@ -196,11 +211,17 @@ export function SettlementPanel({
             Built
           </div>
           <div className="building-list">
-            {state.buildings.map((bid) => {
+            {/* Deduplicate buildings for display, showing count for stackable */}
+            {[...new Set(state.buildings)].map((bid) => {
               const bdef = BUILDINGS[bid];
+              const count = getBuildingCount(state, bid);
+              const isStackable = bdef?.maxCount && bdef.maxCount > 1;
               return (
                 <div key={bid} className="building-card built">
-                  <div className="building-name">{BUILDING_ICONS[bid as BuildingId] ?? ""} {bdef?.name ?? bid}</div>
+                  <div className="building-name">
+                    {BUILDING_ICONS[bid as BuildingId] ?? ""} {bdef?.name ?? bid}
+                    {isStackable && ` (${count})`}
+                  </div>
                   <div className="building-desc">
                     {bdef?.description ?? ""}
                   </div>
@@ -211,7 +232,11 @@ export function SettlementPanel({
                     <div className="building-storage">
                       Storage:{" "}
                       {bdef.storageBonus
-                        .map((b) => `+${b.amount} ${b.category}`)
+                        .map((b) => {
+                          const total = b.amount * count;
+                          const base = formatStorageBonus(b);
+                          return isStackable ? `${base} (${total} total)` : base;
+                        })
                         .join(", ")}
                     </div>
                   )}

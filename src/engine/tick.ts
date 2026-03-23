@@ -6,6 +6,7 @@ import {
 } from "../data/registries";
 import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
+import { BUILDINGS } from "../data/buildings";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
 import { addResource, deductFood, deductWater, getEffectiveInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
@@ -25,6 +26,7 @@ export interface CompletionEvent {
   expeditionMessage?: string;
   newResources?: string[]; // resource IDs seen for the first time
   buildingBuilt?: string; // building ID if a building was constructed
+  toolCrafted?: string; // tool ID if a tool was crafted
 }
 
 /**
@@ -181,8 +183,12 @@ function resourceHasUse(state: GameState, resourceId: string): boolean {
     const effectiveInputs = getEffectiveInputs(r, state);
     const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
     if (!usesResource) return false;
-    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) return false;
+    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
+      const bdef = BUILDINGS[r.buildingOutput];
+      if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
+    }
     if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;
+    if (r.oneTimeCraft && r.toolOutput && state.tools.includes(r.toolOutput)) return false;
     return true;
   });
 }
@@ -240,10 +246,23 @@ function applyCraftCompletion(
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
   let buildingBuilt: string | undefined;
+  let toolCrafted: string | undefined;
 
-  if (def.buildingOutput) {
+  if (def.toolOutput) {
+    // Tool craft — add to tools list
+    if (!state.tools.includes(def.toolOutput)) {
+      state.tools.push(def.toolOutput);
+    }
+    toolCrafted = def.toolOutput;
+    drops.push({ name: def.toolOutput, amount: 1 });
+  } else if (def.buildingOutput) {
     // Building construction — add to buildings list
-    if (!state.buildings.includes(def.buildingOutput)) {
+    const bdef = BUILDINGS[def.buildingOutput];
+    const isStackable = bdef?.maxCount && bdef.maxCount > 1;
+    if (isStackable) {
+      // Stackable buildings allow duplicates
+      state.buildings.push(def.buildingOutput);
+    } else if (!state.buildings.includes(def.buildingOutput)) {
       state.buildings.push(def.buildingOutput);
     }
     buildingBuilt = def.buildingOutput;
@@ -288,6 +307,7 @@ function applyCraftCompletion(
     levelUp: skill.level > prevLevel ? skill.level : undefined,
     newResources: newResources.length > 0 ? newResources : undefined,
     buildingBuilt,
+    toolCrafted,
   };
 }
 
