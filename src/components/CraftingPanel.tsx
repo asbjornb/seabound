@@ -5,7 +5,7 @@ import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { BUILDINGS } from "../data/buildings";
 import { GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getBuildingCount } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
 
 interface Props {
   recipes: RecipeDef[];
@@ -57,6 +57,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
   // Count craftable for the filter badge
   const craftableCount = recipes.filter((r) =>
     getEffectiveInputs(r, state).every((inp) => getResource(state, inp.resourceId) >= inp.amount)
+    && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
   ).length;
 
   return (
@@ -78,6 +79,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
             getEffectiveInputs(r, state).every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             )
+            && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
           );
           if (list.length === 0) return null;
         }
@@ -95,10 +97,14 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
             </div>
             {!isCollapsed && list.map((recipe) => {
               const inputs = getEffectiveInputs(recipe, state);
-              const canAfford = inputs.every(
+              const canAffordInputs = inputs.every(
                 (inp) => getResource(state, inp.resourceId) >= inp.amount
               );
-              const disabled = !canAfford;
+              const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
+              const disabled = !canAffordInputs || !canAffordTags;
+
+              // Resolve which tagged resources would be used (for display)
+              const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
 
               return (
                 <div
@@ -126,6 +132,36 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                             {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
                             {have})
                           </span>
+                        </span>
+                      );
+                    })}
+                    {recipe.tagInputs?.map((ti, i) => {
+                      // Count how many distinct tagged resources player has
+                      const available = Object.values(RESOURCES)
+                        .filter((r) => r.tags?.includes(ti.tag) && (state.resources[r.id] ?? 0) >= 1)
+                        .length;
+                      const enough = available >= ti.count;
+                      return (
+                        <span key={`tag-${i}`}>
+                          {(inputs.length > 0 || i > 0) && ", "}
+                          <span className={enough ? "has" : "missing"}>
+                            {ti.count} different {ti.tag}s ({available}/{ti.count})
+                          </span>
+                          {resolvedTags && enough && (
+                            <span className="tag-input-detail">
+                              {" "}— {resolvedTags
+                                .slice(
+                                  recipe.tagInputs!.slice(0, i).reduce((sum, t) => sum + t.count, 0),
+                                  recipe.tagInputs!.slice(0, i).reduce((sum, t) => sum + t.count, 0) + ti.count
+                                )
+                                .map((r, j) => (
+                                  <span key={j}>
+                                    {j > 0 && ", "}
+                                    {RESOURCE_ICONS[r.resourceId] ?? ""}{RESOURCES[r.resourceId]?.name ?? r.resourceId}
+                                  </span>
+                                ))}
+                            </span>
+                          )}
                         </span>
                       );
                     })}

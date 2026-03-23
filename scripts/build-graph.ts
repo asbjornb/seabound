@@ -230,6 +230,16 @@ for (const r of RECIPES) {
   for (const i of r.inputs) {
     addEdge({ from: `resource:${i.resourceId}`, to: recipeId, relation: "consumes" });
   }
+  // Tag-based inputs (e.g. "5 different foods") — link all matching tagged resources
+  if (r.tagInputs) {
+    for (const ti of r.tagInputs) {
+      for (const res of Object.values(RESOURCES)) {
+        if (res.tags?.includes(ti.tag)) {
+          addEdge({ from: `resource:${res.id}`, to: recipeId, relation: "consumes" });
+        }
+      }
+    }
+  }
 
   // Trains skill
   addEdge({ from: recipeId, to: `skill:${r.skillId}`, relation: "trains" });
@@ -386,7 +396,12 @@ for (const e of edges) {
   }
 }
 
-// BFS backward following only required edges, skipping expedition food consumes
+// Set of recipe IDs that use tag-based food inputs (fungible, like expedition food costs)
+const recipesWithFoodTagInputs = new Set<string>(
+  RECIPES.filter(r => r.tagInputs?.some(ti => ti.tag === "food")).map(r => `recipe:${r.id}`)
+);
+
+// BFS backward following only required edges, skipping fungible food consumes
 // (for minimal path size comparison — must match findMinimalUpstream logic)
 function findAllUpstreamRequired(target: string): Set<string> {
   const nodeById = new Map(nodes.map(n => [n.id, n]));
@@ -397,8 +412,8 @@ function findAllUpstreamRequired(target: string): Set<string> {
     if (visited.has(curr)) continue;
     visited.add(curr);
     const node = nodeById.get(curr);
-    // Skip food consumes edges on expeditions (they're fungible, not all required)
-    if (node?.type === "expedition") {
+    // Skip food consumes edges on expeditions and recipes with tagInputs (they're fungible)
+    if (node?.type === "expedition" || recipesWithFoodTagInputs.has(curr)) {
       const parentEdges = edges.filter(e => e.to === curr && !OPTIONAL_RELATIONS.has(e.relation));
       for (const e of parentEdges) {
         if (e.relation === "consumes") {
@@ -476,9 +491,10 @@ function findMinimalUpstream(target: string): string[] {
       }
     } else {
       // Actions, recipes, expeditions, stations: ALL backward edges are mandatory
-      // EXCEPT: food "consumes" edges on expeditions are fungible (any one suffices)
+      // EXCEPT: food "consumes" edges on expeditions & tag-input recipes are fungible
       const allParentEdges = edges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
-      const foodConsumeEdges = node.type === "expedition"
+      const hasFungibleFood = node.type === "expedition" || recipesWithFoodTagInputs.has(curr);
+      const foodConsumeEdges = hasFungibleFood
         ? allParentEdges.filter(e => {
             if (e.relation !== "consumes") return false;
             const srcNode = nodeById.get(e.from);
@@ -575,7 +591,13 @@ function computeReachable(): Set<string> {
       const itemsMet = !r.requiredItems?.length || r.requiredItems.every(i => reachable.has(`resource:${i}`));
       const buildingsMet = !r.requiredBuildings?.length || r.requiredBuildings.every(b => reachable.has(`building:${b}`));
       const inputsMet = r.inputs.every(i => reachable.has(`resource:${i.resourceId}`));
-      if (skillMet && dualSkillsMet && toolsMet && itemsMet && buildingsMet && inputsMet) {
+      const tagInputsMet = !r.tagInputs?.length || r.tagInputs.every(ti => {
+        const reachableTagged = Object.values(RESOURCES).filter(
+          res => res.tags?.includes(ti.tag) && reachable.has(`resource:${res.id}`)
+        ).length;
+        return reachableTagged >= ti.count;
+      });
+      if (skillMet && dualSkillsMet && toolsMet && itemsMet && buildingsMet && inputsMet && tagInputsMet) {
         reachable.add(id);
         changed = true;
       }

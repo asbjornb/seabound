@@ -2470,6 +2470,21 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:small_fish",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:cooked_fish",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
@@ -2480,12 +2495,37 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:cooked_large_fish",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:cooked_root_vegetable",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
     },
     {
+      "from": "resource:cooked_taro",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:banana",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:voyage_provisions",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
     },
