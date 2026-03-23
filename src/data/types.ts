@@ -14,14 +14,9 @@ export type ResourceId =
   | "rough_fiber"
   | "dried_fiber"
   | "cordage"
-  | "bamboo_knife"
   | "large_shell"
   // Phase 1b - Fire
   | "dry_grass"
-  | "bow_drill_kit"
-  | "bamboo_spear"
-  // Weaving
-  | "woven_basket"
   // Food
   | "large_fish"
   | "cooked_fish"
@@ -29,34 +24,34 @@ export type ResourceId =
   | "cooked_large_fish"
   // Seeds
   | "wild_seed"
-  // Maritime
-  | "raft"
   // Obsidian
   | "obsidian"
-  | "obsidian_blade"
   // Stone Tools
   | "chert"
   | "stone_flake"
   | "stone_blade"
-  | "hammerstone"
-  | "shell_adze"
-  | "stone_axe"
   // Timber
   | "large_log"
   | "charred_log"
   | "shaped_hull"
-  // Maritime - Dugout
-  | "dugout"
   // Water
   | "fresh_water"
-  // Fishing Tools
-  | "gorge_hook"
-  | "basket_trap"
   // Phase 2 - Clay Tier
   | "clay"
   | "shaped_clay_pot"
   | "fired_clay_pot"
-  | "sealed_clay_jar"
+  | "sealed_clay_jar";
+
+export type ToolId =
+  | "bamboo_knife"
+  | "bow_drill_kit"
+  | "bamboo_spear"
+  | "hammerstone"
+  | "shell_adze"
+  | "stone_axe"
+  | "obsidian_blade"
+  | "gorge_hook"
+  | "basket_trap"
   | "crucible";
 
 export type SkillId =
@@ -81,13 +76,15 @@ export type BuildingId =
   | "fenced_perimeter"
   | "firing_pit"
   | "kiln"
-  | "fiber_loom";
-
-export type ResourceCategory = "raw" | "processed" | "tool" | "food" | "structure";
+  | "fiber_loom"
+  | "raft"
+  | "dugout"
+  | "woven_basket";
 
 export interface StorageBonus {
-  category: ResourceCategory;
-  amount: number; // extra storage slots per item in this category
+  tag?: string; // if set, item must have this tag
+  excludeTags?: string[]; // if set, item must NOT have any of these tags
+  amount: number; // extra storage slots per item matching this filter
 }
 
 export interface BuildingDef {
@@ -96,6 +93,7 @@ export interface BuildingDef {
   description: string;
   unlocks: string; // human-readable description of what this building enables
   storageBonus?: StorageBonus[];
+  maxCount?: number; // if set, this building can be built multiple times (default 1)
 }
 
 export interface ToolSpeedBonus {
@@ -104,13 +102,18 @@ export interface ToolSpeedBonus {
   multiplier: number;    // e.g. 0.85 = 15% faster
 }
 
+export interface ToolDef {
+  id: ToolId;
+  name: string;
+  description: string;
+  speedBonus?: ToolSpeedBonus;
+}
+
 export interface ResourceDef {
   id: ResourceId;
   name: string;
   description: string;
-  category: ResourceCategory;
-  size?: "small" | "large"; // defaults to "small" if omitted
-  toolFor?: ToolSpeedBonus; // if set, owning this tool speeds up listed actions/recipes
+  tags?: string[]; // e.g. ["food"], ["large"], ["food", "large"], ["dried"]
 }
 
 export interface SkillDef {
@@ -152,7 +155,8 @@ export interface ActionDef {
   durationMs: number;
   drops: Drop[];
   requiredSkillLevel?: number;
-  requiredTools?: ResourceId[];
+  requiredTools?: ToolId[];
+  requiredResources?: ResourceId[]; // must own (not consumed) — for non-tool resource gates
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
@@ -172,9 +176,11 @@ export interface RecipeDef {
   panel: ContentPanel;
   inputs: RecipeInput[];
   output?: { resourceId: ResourceId; amount: number };
+  toolOutput?: ToolId; // if set, crafting grants this tool instead of a resource
   durationMs: number;
   requiredSkillLevel?: number;
   requiredSkills?: { skillId: SkillId; level: number }[]; // dual-skill gates
+  requiredTools?: ToolId[]; // must own tool (not consumed)
   requiredItems?: ResourceId[]; // item-trigger: must have this item in inventory
   requiredBuildings?: BuildingId[]; // must have these buildings constructed
   buildingOutput?: BuildingId; // if set, this recipe builds a building instead of producing output resource
@@ -192,7 +198,7 @@ export interface ExpeditionDef {
   durationMs: number;
   foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
   waterCost?: number; // total water items consumed per cycle
-  requiredVessel?: ResourceId;
+  requiredVessel?: BuildingId;
   requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
   hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
   outcomes: ExpeditionOutcome[];
@@ -217,7 +223,7 @@ export interface StationDef {
   description: string;
   skillId: SkillId;
   durationMs: number; // time until ready to collect
-  requiredTool?: ResourceId; // must own (not consumed)
+  requiredTool?: ToolId; // must own (not consumed)
   requiredSkillLevel?: number;
   requiredBuildings?: BuildingId[];
   setupInputs?: { resourceId: ResourceId; amount: number }[]; // consumed on deploy
@@ -231,7 +237,7 @@ export interface PlacedStation {
   deployedAt: number;
 }
 
-export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource";
+export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool";
 
 export interface DiscoveryEntry {
   id: number;
@@ -242,6 +248,7 @@ export interface DiscoveryEntry {
 
 export interface GameState {
   resources: Record<string, number>;
+  tools: ToolId[];
   skills: Record<SkillId, { xp: number; level: number }>;
   discoveredBiomes: BiomeId[];
   buildings: BuildingId[];

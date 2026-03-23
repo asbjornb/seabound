@@ -9,26 +9,24 @@
     {
       "id": "resource:coconut_husk",
       "type": "resource",
-      "label": "Coconut Husk",
-      "category": "raw"
+      "label": "Coconut Husk"
     },
     {
       "id": "resource:driftwood_branch",
       "type": "resource",
       "label": "Driftwood Branch",
-      "category": "raw"
+      "category": "large"
     },
     {
       "id": "resource:flat_stone",
       "type": "resource",
-      "label": "Flat Stone",
-      "category": "raw"
+      "label": "Flat Stone"
     },
     {
       "id": "resource:palm_frond",
       "type": "resource",
       "label": "Palm Frond",
-      "category": "raw"
+      "category": "large"
     },
     {
       "id": "resource:small_fish",
@@ -45,74 +43,45 @@
     {
       "id": "resource:shell",
       "type": "resource",
-      "label": "Shell",
-      "category": "raw"
+      "label": "Shell"
     },
     {
       "id": "resource:bamboo_cane",
       "type": "resource",
       "label": "Bamboo Cane",
-      "category": "raw"
+      "category": "large"
     },
     {
       "id": "resource:bamboo_splinter",
       "type": "resource",
-      "label": "Bamboo Splinter",
-      "category": "processed"
+      "label": "Bamboo Splinter"
     },
     {
       "id": "resource:rough_fiber",
       "type": "resource",
-      "label": "Rough Fiber",
-      "category": "raw"
+      "label": "Rough Fiber"
     },
     {
       "id": "resource:dried_fiber",
       "type": "resource",
       "label": "Dried Fiber",
-      "category": "processed"
+      "category": "dried"
     },
     {
       "id": "resource:cordage",
       "type": "resource",
       "label": "Cordage",
-      "category": "processed"
-    },
-    {
-      "id": "resource:bamboo_knife",
-      "type": "resource",
-      "label": "Bamboo Knife",
-      "category": "tool"
+      "category": "dried"
     },
     {
       "id": "resource:large_shell",
       "type": "resource",
-      "label": "Large Shell",
-      "category": "raw"
+      "label": "Large Shell"
     },
     {
       "id": "resource:dry_grass",
       "type": "resource",
-      "label": "Dry Grass",
-      "category": "raw"
-    },
-    {
-      "id": "resource:bow_drill_kit",
-      "type": "resource",
-      "label": "Bow Drill Kit",
-      "category": "tool"
-    },
-    {
-      "id": "resource:bamboo_spear",
-      "type": "resource",
-      "label": "Bamboo Spear",
-      "category": "tool"
-    },
-    {
-      "id": "resource:woven_basket",
-      "type": "resource",
-      "label": "Woven Basket",
-      "category": "structure"
+      "label": "Dry Grass"
     },
     {
       "id": "resource:large_fish",
@@ -139,136 +108,122 @@
       "category": "food"
     },
     {
-      "id": "resource:raft",
+      "id": "resource:wild_seed",
       "type": "resource",
-      "label": "Log Raft",
-      "category": "structure"
+      "label": "Wild Seed"
     },
     {
       "id": "resource:obsidian",
       "type": "resource",
-      "label": "Obsidian",
-      "category": "raw"
-    },
-    {
-      "id": "resource:obsidian_blade",
-      "type": "resource",
-      "label": "Obsidian Blade",
-      "category": "tool"
+      "label": "Obsidian"
     },
     {
       "id": "resource:chert",
       "type": "resource",
-      "label": "Chert",
-      "category": "raw"
+      "label": "Chert"
     },
     {
       "id": "resource:stone_flake",
       "type": "resource",
-      "label": "Stone Flake",
-      "category": "processed"
+      "label": "Stone Flake"
     },
     {
       "id": "resource:stone_blade",
       "type": "resource",
-      "label": "Stone Blade",
-      "category": "processed"
-    },
-    {
-      "id": "resource:hammerstone",
-      "type": "resource",
-      "label": "Hammerstone",
-      "category": "tool"
-    },
-    {
-      "id": "resource:shell_adze",
-      "type": "resource",
-      "label": "Shell Adze",
-      "category": "tool"
-    },
-    {
-      "id": "resource:stone_axe",
-      "type": "resource",
-      "label": "Stone Axe",
-      "category": "tool"
+      "label": "Stone Blade"
     },
     {
       "id": "resource:large_log",
       "type": "resource",
       "label": "Large Log",
-      "category": "raw"
+      "category": "large"
     },
     {
       "id": "resource:charred_log",
       "type": "resource",
       "label": "Charred Log",
-      "category": "raw"
+      "category": "large"
     },
     {
       "id": "resource:shaped_hull",
       "type": "resource",
       "label": "Shaped Hull",
-      "category": "processed"
-    },
-    {
-      "id": "resource:dugout",
-      "type": "resource",
-      "label": "Dugout Canoe",
-      "category": "structure"
+      "category": "large"
     },
     {
       "id": "resource:fresh_water",
       "type": "resource",
-      "label": "Fresh Water",
-      "category": "processed"
-    },
-    {
-      "id": "resource:wild_seed",
-      "type": "resource",
-      "label": "Wild Seed",
-      "category": "raw"
-    },
-    {
-      "id": "resource:gorge_hook",
-      "type": "resource",
-      "label": "Gorge Hook",
-      "category": "tool"
-    },
-    {
-      "id": "resource:basket_trap",
-      "type": "resource",
-      "label": "Basket Trap",
-      "category": "tool"
+      "label": "Fresh Water"
     },
     {
       "id": "resource:clay",
       "type": "resource",
-      "label": "Clay",
-      "category": "raw"
+      "label": "Clay"
     },
     {
       "id": "resource:shaped_clay_pot",
       "type": "resource",
-      "label": "Shaped Clay Pot",
-      "category": "processed"
+      "label": "Shaped Clay Pot"
     },
     {
       "id": "resource:fired_clay_pot",
       "type": "resource",
-      "label": "Fired Clay Pot",
-      "category": "processed"
+      "label": "Fired Clay Pot"
     },
     {
       "id": "resource:sealed_clay_jar",
       "type": "resource",
-      "label": "Sealed Clay Jar",
-      "category": "processed"
+      "label": "Sealed Clay Jar"
     },
     {
-      "id": "resource:crucible",
-      "type": "resource",
-      "label": "Crucible",
-      "category": "tool"
+      "id": "tool:bamboo_knife",
+      "type": "tool",
+      "label": "Bamboo Knife"
+    },
+    {
+      "id": "tool:bow_drill_kit",
+      "type": "tool",
+      "label": "Bow Drill Kit"
+    },
+    {
+      "id": "tool:bamboo_spear",
+      "type": "tool",
+      "label": "Bamboo Spear"
+    },
+    {
+      "id": "tool:hammerstone",
+      "type": "tool",
+      "label": "Hammerstone"
+    },
+    {
+      "id": "tool:shell_adze",
+      "type": "tool",
+      "label": "Shell Adze"
+    },
+    {
+      "id": "tool:stone_axe",
+      "type": "tool",
+      "label": "Stone Axe"
+    },
+    {
+      "id": "tool:obsidian_blade",
+      "type": "tool",
+      "label": "Obsidian Blade"
+    },
+    {
+      "id": "tool:gorge_hook",
+      "type": "tool",
+      "label": "Gorge Hook"
+    },
+    {
+      "id": "tool:basket_trap",
+      "type": "tool",
+      "label": "Basket Trap"
+    },
+    {
+      "id": "tool:crucible",
+      "type": "tool",
+      "label": "Crucible"
     },
     {
       "id": "biome:beach",
@@ -339,6 +294,21 @@
       "id": "building:fiber_loom",
       "type": "building",
       "label": "Fiber Loom"
+    },
+    {
+      "id": "building:raft",
+      "type": "building",
+      "label": "Log Raft"
+    },
+    {
+      "id": "building:dugout",
+      "type": "building",
+      "label": "Dugout Canoe"
+    },
+    {
+      "id": "building:woven_basket",
+      "type": "building",
+      "label": "Woven Basket"
     },
     {
       "id": "skill:woodworking:10",
@@ -898,7 +868,7 @@
     {
       "from": "resource:large_shell",
       "to": "action:dig_drainage_trench",
-      "relation": "requires_tool"
+      "relation": "requires_resource"
     },
     {
       "from": "action:harvest_bamboo",
@@ -936,7 +906,7 @@
       "relation": "requires_biome"
     },
     {
-      "from": "resource:stone_axe",
+      "from": "tool:stone_axe",
       "to": "action:fell_large_tree",
       "relation": "requires_tool"
     },
@@ -958,7 +928,7 @@
     {
       "from": "resource:fired_clay_pot",
       "to": "action:collect_fresh_water",
-      "relation": "requires_tool"
+      "relation": "requires_resource"
     },
     {
       "from": "action:dig_clay",
@@ -1001,7 +971,7 @@
       "relation": "trains"
     },
     {
-      "from": "resource:bamboo_spear",
+      "from": "tool:bamboo_spear",
       "to": "action:spear_fish",
       "relation": "requires_tool"
     },
@@ -1031,7 +1001,7 @@
       "relation": "requires_skill"
     },
     {
-      "from": "resource:gorge_hook",
+      "from": "tool:gorge_hook",
       "to": "action:drop_line_fish",
       "relation": "requires_tool"
     },
@@ -1077,8 +1047,8 @@
     },
     {
       "from": "recipe:craft_bamboo_knife",
-      "to": "resource:bamboo_knife",
-      "relation": "produces"
+      "to": "tool:bamboo_knife",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:bamboo_splinter",
@@ -1157,8 +1127,8 @@
     },
     {
       "from": "recipe:craft_bow_drill",
-      "to": "resource:bow_drill_kit",
-      "relation": "produces"
+      "to": "tool:bow_drill_kit",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:bamboo_cane",
@@ -1187,8 +1157,8 @@
     },
     {
       "from": "recipe:weave_basket",
-      "to": "resource:woven_basket",
-      "relation": "produces"
+      "to": "building:woven_basket",
+      "relation": "builds"
     },
     {
       "from": "resource:palm_frond",
@@ -1222,8 +1192,8 @@
     },
     {
       "from": "recipe:craft_gorge_hook",
-      "to": "resource:gorge_hook",
-      "relation": "produces"
+      "to": "tool:gorge_hook",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:shell",
@@ -1252,8 +1222,8 @@
     },
     {
       "from": "recipe:craft_basket_trap",
-      "to": "resource:basket_trap",
-      "relation": "produces"
+      "to": "tool:basket_trap",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:bamboo_splinter",
@@ -1286,11 +1256,6 @@
       "relation": "builds"
     },
     {
-      "from": "resource:bow_drill_kit",
-      "to": "recipe:build_camp_fire",
-      "relation": "consumes"
-    },
-    {
       "from": "resource:coconut_husk",
       "to": "recipe:build_camp_fire",
       "relation": "consumes"
@@ -1311,9 +1276,9 @@
       "relation": "trains"
     },
     {
-      "from": "resource:bow_drill_kit",
+      "from": "tool:bow_drill_kit",
       "to": "recipe:build_camp_fire",
-      "relation": "requires_item"
+      "relation": "requires_tool"
     },
     {
       "from": "recipe:build_stone_hearth",
@@ -1457,8 +1422,8 @@
     },
     {
       "from": "recipe:build_raft",
-      "to": "resource:raft",
-      "relation": "produces"
+      "to": "building:raft",
+      "relation": "builds"
     },
     {
       "from": "resource:driftwood_branch",
@@ -1487,8 +1452,8 @@
     },
     {
       "from": "recipe:craft_hammerstone",
-      "to": "resource:hammerstone",
-      "relation": "produces"
+      "to": "tool:hammerstone",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:flat_stone",
@@ -1516,9 +1481,9 @@
       "relation": "trains"
     },
     {
-      "from": "resource:hammerstone",
+      "from": "tool:hammerstone",
       "to": "recipe:strike_stone_flake",
-      "relation": "requires_item"
+      "relation": "requires_tool"
     },
     {
       "from": "recipe:knap_stone_blade",
@@ -1536,14 +1501,14 @@
       "relation": "trains"
     },
     {
-      "from": "resource:hammerstone",
+      "from": "tool:hammerstone",
       "to": "recipe:knap_stone_blade",
-      "relation": "requires_item"
+      "relation": "requires_tool"
     },
     {
       "from": "recipe:craft_shell_adze",
-      "to": "resource:shell_adze",
-      "relation": "produces"
+      "to": "tool:shell_adze",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:large_shell",
@@ -1567,8 +1532,8 @@
     },
     {
       "from": "recipe:craft_stone_axe",
-      "to": "resource:stone_axe",
-      "relation": "produces"
+      "to": "tool:stone_axe",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:stone_blade",
@@ -1641,14 +1606,14 @@
       "relation": "trains"
     },
     {
-      "from": "resource:shell_adze",
+      "from": "tool:shell_adze",
       "to": "recipe:scrape_hull",
-      "relation": "requires_item"
+      "relation": "requires_tool"
     },
     {
       "from": "recipe:assemble_dugout",
-      "to": "resource:dugout",
-      "relation": "produces"
+      "to": "building:dugout",
+      "relation": "builds"
     },
     {
       "from": "resource:shaped_hull",
@@ -1677,8 +1642,8 @@
     },
     {
       "from": "recipe:knap_obsidian_blade",
-      "to": "resource:obsidian_blade",
-      "relation": "produces"
+      "to": "tool:obsidian_blade",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:obsidian",
@@ -1702,8 +1667,8 @@
     },
     {
       "from": "recipe:craft_bamboo_spear",
-      "to": "resource:bamboo_spear",
-      "relation": "produces"
+      "to": "tool:bamboo_spear",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:bamboo_cane",
@@ -1967,8 +1932,8 @@
     },
     {
       "from": "recipe:craft_crucible",
-      "to": "resource:crucible",
-      "relation": "produces"
+      "to": "tool:crucible",
+      "relation": "crafts_tool"
     },
     {
       "from": "resource:clay",
@@ -2001,27 +1966,27 @@
       "relation": "requires_building"
     },
     {
-      "from": "resource:obsidian_blade",
+      "from": "tool:obsidian_blade",
       "to": "action:harvest_bamboo",
       "relation": "speeds_up"
     },
     {
-      "from": "resource:obsidian_blade",
+      "from": "tool:obsidian_blade",
       "to": "action:fell_large_tree",
       "relation": "speeds_up"
     },
     {
-      "from": "resource:obsidian_blade",
+      "from": "tool:obsidian_blade",
       "to": "recipe:split_bamboo_cane",
       "relation": "speeds_up"
     },
     {
-      "from": "resource:obsidian_blade",
+      "from": "tool:obsidian_blade",
       "to": "recipe:scrape_hull",
       "relation": "speeds_up"
     },
     {
-      "from": "resource:obsidian_blade",
+      "from": "tool:obsidian_blade",
       "to": "recipe:shred_coconut_husk",
       "relation": "speeds_up"
     },
@@ -2166,7 +2131,7 @@
       "relation": "trains"
     },
     {
-      "from": "resource:raft",
+      "from": "building:raft",
       "to": "expedition:sail_nearby_island",
       "relation": "requires_vessel"
     },
@@ -2251,7 +2216,7 @@
       "relation": "trains"
     },
     {
-      "from": "resource:dugout",
+      "from": "building:dugout",
       "to": "expedition:dugout_voyage",
       "relation": "requires_vessel"
     },
@@ -2321,7 +2286,7 @@
       "relation": "trains"
     },
     {
-      "from": "resource:basket_trap",
+      "from": "tool:basket_trap",
       "to": "station:deploy_basket_trap",
       "relation": "requires_tool"
     },
@@ -2333,7 +2298,7 @@
   ],
   "analysis": {
     "criticalPathToDugout": [
-      "resource:dugout",
+      "building:dugout",
       "recipe:assemble_dugout",
       "resource:shaped_hull",
       "resource:cordage",
@@ -2345,8 +2310,8 @@
       "action:harvest_bamboo",
       "expedition:explore_interior",
       "resource:charred_log",
-      "resource:shell_adze",
-      "resource:obsidian_blade",
+      "tool:shell_adze",
+      "tool:obsidian_blade",
       "resource:dried_fiber",
       "skill:weaving:5",
       "building:fiber_loom",
@@ -2385,10 +2350,10 @@
       "building:drying_rack",
       "resource:palm_frond",
       "skill:weaving:4",
-      "resource:bamboo_spear",
+      "tool:bamboo_spear",
       "skill:fishing:8",
-      "resource:gorge_hook",
-      "resource:basket_trap",
+      "tool:gorge_hook",
+      "tool:basket_trap",
       "skill:fishing:10",
       "skill:cooking:2",
       "skill:cooking:4",
@@ -2406,10 +2371,10 @@
       "recipe:craft_basket_trap",
       "skill:woodworking:10",
       "biome:jungle_interior",
-      "resource:stone_axe",
+      "tool:stone_axe",
       "biome:rocky_shore",
-      "resource:bow_drill_kit",
-      "resource:raft",
+      "tool:bow_drill_kit",
+      "building:raft",
       "biome:nearby_island",
       "resource:shell",
       "skill:crafting:6",
@@ -2424,12 +2389,12 @@
       "resource:stone_blade",
       "skill:construction:5",
       "resource:chert",
-      "resource:hammerstone",
+      "tool:hammerstone",
       "recipe:knap_stone_blade",
       "recipe:craft_hammerstone"
     ],
     "minimalPathToDugout": [
-      "resource:dugout",
+      "building:dugout",
       "recipe:assemble_dugout",
       "resource:shaped_hull",
       "resource:cordage",
@@ -2439,8 +2404,8 @@
       "recipe:braid_cordage",
       "expedition:explore_interior",
       "resource:charred_log",
-      "resource:shell_adze",
-      "resource:obsidian_blade",
+      "tool:shell_adze",
+      "tool:obsidian_blade",
       "resource:dried_fiber",
       "skill:weaving:5",
       "building:fiber_loom",
@@ -2479,11 +2444,11 @@
       "station:deploy_basket_trap",
       "skill:woodworking:10",
       "biome:jungle_interior",
-      "resource:stone_axe",
-      "resource:bow_drill_kit",
-      "resource:raft",
+      "tool:stone_axe",
+      "tool:bow_drill_kit",
+      "building:raft",
       "biome:nearby_island",
-      "resource:basket_trap",
+      "tool:basket_trap",
       "skill:fishing:10",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
@@ -2497,7 +2462,7 @@
       "recipe:knap_stone_blade",
       "recipe:split_bamboo_cane",
       "resource:stone_flake",
-      "resource:hammerstone",
+      "tool:hammerstone",
       "recipe:strike_stone_flake",
       "recipe:craft_hammerstone",
       "resource:chert",
@@ -2506,10 +2471,9 @@
     ],
     "deadEnds": [
       "resource:wild_seed",
-      "resource:bamboo_knife",
-      "resource:woven_basket",
+      "tool:bamboo_knife",
       "resource:sealed_clay_jar",
-      "resource:crucible"
+      "tool:crucible"
     ],
     "unreachable": [],
     "warnings": [
@@ -2520,13 +2484,8 @@
       },
       {
         "type": "dead_end",
-        "nodeId": "resource:bamboo_knife",
+        "nodeId": "tool:bamboo_knife",
         "message": "Bamboo Knife is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:woven_basket",
-        "message": "Woven Basket is produced but never used as input"
       },
       {
         "type": "dead_end",
@@ -2535,7 +2494,7 @@
       },
       {
         "type": "dead_end",
-        "nodeId": "resource:crucible",
+        "nodeId": "tool:crucible",
         "message": "Crucible is produced but never used as input"
       },
       {
