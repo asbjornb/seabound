@@ -197,10 +197,10 @@ export function DevGraph() {
     [filter, selectedSkill]
   );
 
-  // Warnings relevant to current view
-  const visibleWarnings = useMemo(() => {
+  // Warning node IDs visible in current filter (used to dim out-of-view warnings)
+  const visibleWarningIds = useMemo(() => {
     const nodeIds = new Set(filteredNodes.map(n => n.id));
-    return analysis.warnings.filter(w => nodeIds.has(w.nodeId));
+    return new Set(analysis.warnings.filter(w => nodeIds.has(w.nodeId)).map(w => w.nodeId));
   }, [filteredNodes]);
 
   const warningNodeIds = useMemo(
@@ -473,26 +473,29 @@ export function DevGraph() {
         </div>
       )}
 
-      {/* Warnings panel */}
-      {visibleWarnings.length > 0 && (
-        <div style={styles.warningsPanel}>
-          <h3 style={styles.warningsTitle}>Warnings ({visibleWarnings.length})</h3>
-          {visibleWarnings.map((w, i) => (
+      {/* Warnings panel — always visible */}
+      <div style={styles.warningsPanel}>
+        <h3 style={styles.warningsTitle}>Warnings ({analysis.warnings.length})</h3>
+        {analysis.warnings.length === 0 && <p style={{ color: "#5a7a6a", fontSize: "0.85rem" }}>No warnings — all clear.</p>}
+        {analysis.warnings.map((w, i) => {
+          const inView = visibleWarningIds.has(w.nodeId);
+          return (
             <div
               key={i}
               style={{
                 ...styles.warningItem,
                 borderLeft: `3px solid ${w.type === "unreachable" ? "#ff4444" : w.type === "dead_end" ? "#ffaa00" : "#7ab4de"}`,
                 cursor: "pointer",
+                opacity: inView ? 1 : 0.45,
               }}
               onClick={() => handleNodeClick(w.nodeId)}
             >
               <span style={styles.warningType}>{w.type}</span>
               <span>{w.message}</span>
             </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
 
       {/* Biome progression tiers */}
       {filter === "biomes" && (
