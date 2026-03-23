@@ -182,10 +182,10 @@ function getMinimalUpstream(nodeId: string): Set<string> {
     const node = nodeById.get(curr);
     if (!node) continue;
 
-    if (node.type === "resource" || node.type === "building" || node.type === "biome") {
+    if (node.type === "resource" || node.type === "building" || node.type === "biome" || node.type === "tool") {
       // Choice point: pick cheapest producer
       const producers = allEdges.filter(e =>
-        e.to === curr && ["produces", "builds", "discovers"].includes(e.relation)
+        e.to === curr && ["produces", "builds", "discovers", "crafts_tool"].includes(e.relation)
       );
       if (producers.length > 0) {
         const best = producers.reduce((a, b) =>
@@ -194,9 +194,30 @@ function getMinimalUpstream(nodeId: string): Set<string> {
         queue.push(best.from);
       }
     } else {
-      // Actions/recipes/etc: all backward edges are mandatory (except optional ones like speeds_up)
-      const parents = allEdges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
-      for (const e of parents) queue.push(e.from);
+      // Actions/recipes/stations/skill_levels: all backward edges are mandatory
+      // EXCEPT: food "consumes" edges on expeditions are fungible (pick cheapest)
+      const allParentEdges = allEdges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
+      const foodConsumeEdges = node.type === "expedition"
+        ? allParentEdges.filter(e => {
+            if (e.relation !== "consumes") return false;
+            const srcNode = nodeById.get(e.from);
+            return srcNode?.type === "resource" && srcNode.category?.includes("food");
+          })
+        : [];
+      const nonFoodEdges = foodConsumeEdges.length > 0
+        ? allParentEdges.filter(e => !foodConsumeEdges.includes(e))
+        : allParentEdges;
+
+      // Add all non-food parents (mandatory)
+      for (const e of nonFoodEdges) queue.push(e.from);
+
+      // For food: pick the single cheapest food source
+      if (foodConsumeEdges.length > 0) {
+        const bestFood = foodConsumeEdges.reduce((a, b) =>
+          getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
+        );
+        queue.push(bestFood.from);
+      }
     }
   }
   return included;
