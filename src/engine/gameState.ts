@@ -1,13 +1,58 @@
 import { BUILDINGS } from "../data/buildings";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
-import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId, ToolId } from "../data/types";
+import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId, TagInput, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
   return recipe.inputs.filter(
     (inp) => !inp.removedByBuilding || !state.buildings.includes(inp.removedByBuilding)
   );
+}
+
+/**
+ * Resolve tag-based inputs into concrete RecipeInput[].
+ * Picks `count` distinct resources the player owns (>=1) that have the given tag,
+ * preferring lower food-value items first (using FOOD_VALUES order for "food" tag,
+ * alphabetical otherwise).
+ * Returns null if the player doesn't have enough distinct tagged resources.
+ */
+export function resolveTagInputs(
+  tagInputs: TagInput[],
+  state: GameState,
+  excludeIds?: Set<string>
+): RecipeInput[] | null {
+  const result: RecipeInput[] = [];
+  for (const ti of tagInputs) {
+    // Find all resources with this tag that the player has >=1 of
+    const candidates = Object.values(RESOURCES)
+      .filter((r) => r.tags?.includes(ti.tag) && (state.resources[r.id] ?? 0) >= 1)
+      .filter((r) => !excludeIds || !excludeIds.has(r.id))
+      .map((r) => r.id);
+
+    // Sort by food value (low first) for "food" tag, otherwise alphabetical
+    if (ti.tag === "food") {
+      const foodOrder = new Map(FOOD_VALUES.map((f, i) => [f.id, i]));
+      candidates.sort((a, b) => (foodOrder.get(a) ?? 999) - (foodOrder.get(b) ?? 999));
+    } else {
+      candidates.sort();
+    }
+
+    if (candidates.length < ti.count) return null;
+
+    // Pick the first `count` candidates
+    for (let i = 0; i < ti.count; i++) {
+      result.push({ resourceId: candidates[i] as ResourceId, amount: 1 });
+    }
+  }
+  return result;
+}
+
+/**
+ * Check if tag-based inputs can be satisfied (player has enough distinct tagged resources).
+ */
+export function canAffordTagInputs(tagInputs: TagInput[], state: GameState): boolean {
+  return resolveTagInputs(tagInputs, state) !== null;
 }
 
 const ALL_SKILLS: SkillId[] = [
