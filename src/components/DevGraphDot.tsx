@@ -290,7 +290,8 @@ export function DevGraphDot() {
   }, [transform]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    e.preventDefault();
+    // touch-action: none on the container already prevents scrolling,
+    // so no e.preventDefault() needed (and it throws on passive listeners)
     if (e.touches.length === 1 && dragRef.current) {
       const t = e.touches[0];
       const dx = t.clientX - dragRef.current.startX;
