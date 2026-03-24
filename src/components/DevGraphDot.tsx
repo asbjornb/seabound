@@ -168,6 +168,8 @@ export function DevGraphDot() {
   // Pan/zoom state
   const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
   const dragRef = useRef<{ startX: number; startY: number; startTx: number; startTy: number } | null>(null);
+  const pinchRef = useRef<{ dist: number; scale: number; midX: number; midY: number } | null>(null);
+  const [fitted, setFitted] = useState(false);
 
   // Load graphviz WASM
   useEffect(() => {
@@ -209,7 +211,30 @@ export function DevGraphDot() {
   // Reset transform when filter changes
   useEffect(() => {
     setTransform({ x: 0, y: 0, scale: 1 });
+    setFitted(false);
   }, [filter, selectedSkill, focusTarget, focusDirection, focusMode, hiddenTypes]);
+
+  // Auto-fit SVG to container on first render / filter change
+  useEffect(() => {
+    if (fitted || !svgContent || !containerRef.current) return;
+    // Parse SVG dimensions from the rendered output
+    const match = svgContent.match(/<svg[^>]*\swidth="(\d+(?:\.\d+)?)(?:pt|px)?"[^>]*\sheight="(\d+(?:\.\d+)?)(?:pt|px)?"/);
+    if (!match) return;
+    // Graphviz uses pt (1pt = 1.33px)
+    const svgW = parseFloat(match[1]) * 1.33;
+    const svgH = parseFloat(match[2]) * 1.33;
+    const rect = containerRef.current.getBoundingClientRect();
+    const padding = 20;
+    const scale = Math.min(
+      (rect.width - padding * 2) / svgW,
+      (rect.height - padding * 2) / svgH,
+      2
+    );
+    const tx = (rect.width - svgW * scale) / 2;
+    const ty = (rect.height - svgH * scale) / 2;
+    setTransform({ x: tx, y: ty, scale });
+    setFitted(true);
+  }, [svgContent, fitted]);
 
   // Mouse wheel zoom
   const handleWheel = useCallback((e: React.WheelEvent) => {
@@ -242,6 +267,53 @@ export function DevGraphDot() {
 
   const handleMouseUp = useCallback(() => {
     dragRef.current = null;
+  }, []);
+
+  // Touch: single-finger pan, two-finger pinch-zoom
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      const t = e.touches[0];
+      dragRef.current = { startX: t.clientX, startY: t.clientY, startTx: transform.x, startTy: transform.y };
+      pinchRef.current = null;
+    } else if (e.touches.length === 2) {
+      dragRef.current = null;
+      const [a, b] = [e.touches[0], e.touches[1]];
+      const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      pinchRef.current = {
+        dist,
+        scale: transform.scale,
+        midX: (a.clientX + b.clientX) / 2 - rect.left,
+        midY: (a.clientY + b.clientY) / 2 - rect.top,
+      };
+    }
+  }, [transform]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    e.preventDefault();
+    if (e.touches.length === 1 && dragRef.current) {
+      const t = e.touches[0];
+      const dx = t.clientX - dragRef.current.startX;
+      const dy = t.clientY - dragRef.current.startY;
+      setTransform(prev => ({ ...prev, x: dragRef.current!.startTx + dx, y: dragRef.current!.startTy + dy }));
+    } else if (e.touches.length === 2 && pinchRef.current) {
+      const [a, b] = [e.touches[0], e.touches[1]];
+      const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+      const ratio = dist / pinchRef.current.dist;
+      const newScale = Math.min(Math.max(pinchRef.current.scale * ratio, 0.1), 5);
+      const mx = pinchRef.current.midX;
+      const my = pinchRef.current.midY;
+      setTransform(prev => ({
+        x: mx - (mx - prev.x) * (newScale / prev.scale),
+        y: my - (my - prev.y) * (newScale / prev.scale),
+        scale: newScale,
+      }));
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    dragRef.current = null;
+    pinchRef.current = null;
   }, []);
 
   return (
@@ -328,6 +400,10 @@ export function DevGraphDot() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
       >
         {loading && <div style={styles.loadingMsg}>Loading Graphviz WASM...</div>}
         {error && <div style={styles.errorMsg}>{error}</div>}
@@ -539,6 +615,7 @@ const styles: Record<string, React.CSSProperties> = {
     background: "#0a1414",
     cursor: "grab",
     position: "relative",
+    touchAction: "none",
   },
   loadingMsg: {
     display: "flex",
