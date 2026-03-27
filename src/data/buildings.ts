@@ -45,14 +45,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Firing Pit",
     description:
       "A stone-lined pit for firing clay at high temperatures. Enables basic pottery.",
-    unlocks: "Fired clay pots, sealed jars, Stone Hearth (also needs Camp Fire)",
+    unlocks: "Fired clay pots, sealed jars",
   },
   kiln: {
     id: "kiln",
     name: "Kiln",
     description:
       "A proper enclosed kiln. Reaches higher temperatures for advanced pottery and eventually smelting.",
-    unlocks: "Crucibles, bricks, advanced pottery (upgrades Firing Pit)",
+    unlocks: "Crucibles, bricks, advanced pottery",
   },
   fiber_loom: {
     id: "fiber_loom",
@@ -86,27 +86,27 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     id: "cleared_plot",
     name: "Cleared Plot",
     description: "A patch of ground cleared for planting. One crop slot.",
-    unlocks: "Plant wild seeds (also needs Digging Stick)",
+    unlocks: "Plant wild seeds",
     maxCount: 3,
   },
   tended_garden: {
     id: "tended_garden",
     name: "Tended Garden",
     description: "An irrigated, stone-bordered garden plot. Supports real crops.",
-    unlocks: "Cultivate taro and other crops (also needs Well)",
+    unlocks: "Cultivate taro and other crops",
     maxCount: 3,
   },
   farm_plot: {
     id: "farm_plot",
     name: "Farm Plot",
     description: "A proper farm plot with drainage and enriched soil. Supports all crops.",
-    unlocks: "Grow bananas, breadfruit, and advanced crops (also needs Well)",
+    unlocks: "Grow bananas, breadfruit, and advanced crops",
     maxCount: 3,
   },
   well: {
     id: "well",
     name: "Well",
     description: "A stone-lined well dug to the water table. Provides water for farming.",
-    unlocks: "Watered farming — needed alongside garden plots for taro and later crops",
+    unlocks: "Watered farming — required for taro and later crops",
   },
 };
