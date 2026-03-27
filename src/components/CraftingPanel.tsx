@@ -1,9 +1,7 @@
 import { useState } from "react";
+import { getDataPack } from "../data/dataPack";
 import { RESOURCE_ICONS, SKILL_ICONS, TOOL_ICONS } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { BUILDINGS } from "../data/buildings";
 import { GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
 
@@ -21,12 +19,14 @@ const CATEGORIES: { id: CategoryId; label: string }[] = [
 ];
 
 function isOneTimeCraft(recipe: RecipeDef): boolean {
-  return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !BUILDINGS[recipe.buildingOutput]?.maxCount));
+  const pack = getDataPack();
+  return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !pack.buildings[recipe.buildingOutput]?.maxCount));
 }
 
 export function CraftingPanel({ recipes, state, onCraft }: Props) {
   const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
+  const pack = getDataPack();
 
   if (recipes.length === 0) {
     return (
@@ -129,7 +129,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                           {i > 0 && ", "}
                           <span className={enough ? "has" : "missing"}>
                             {RESOURCE_ICONS[inp.resourceId] ?? ""}{inp.amount}x{" "}
-                            {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                            {pack.resources[inp.resourceId]?.name ?? inp.resourceId} (
                             {have})
                           </span>
                         </span>
@@ -137,7 +137,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     })}
                     {recipe.tagInputs?.map((ti, i) => {
                       // Count how many distinct tagged resources player has
-                      const available = Object.values(RESOURCES)
+                      const available = Object.values(pack.resources)
                         .filter((r) => r.tags?.includes(ti.tag) && (state.resources[r.id] ?? 0) >= 1)
                         .length;
                       const enough = available >= ti.count;
@@ -157,7 +157,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                                 .map((r, j) => (
                                   <span key={j}>
                                     {j > 0 && ", "}
-                                    {RESOURCE_ICONS[r.resourceId] ?? ""}{RESOURCES[r.resourceId]?.name ?? r.resourceId}
+                                    {RESOURCE_ICONS[r.resourceId] ?? ""}{pack.resources[r.resourceId]?.name ?? r.resourceId}
                                   </span>
                                 ))}
                             </span>
@@ -172,7 +172,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredTools.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span title={TOOLS[id]?.description}>{TOOL_ICONS[id] ?? ""}{TOOLS[id]?.name ?? id}</span>
+                          <span title={pack.tools[id]?.description}>{TOOL_ICONS[id] ?? ""}{pack.tools[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
@@ -183,7 +183,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredItems.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span title={RESOURCES[id]?.description}>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
+                          <span title={pack.resources[id]?.description}>{RESOURCE_ICONS[id] ?? ""}{pack.resources[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
@@ -191,19 +191,19 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                   {recipe.toolOutput ? (
                     <div className="recipe-output">
                       Produces: {TOOL_ICONS[recipe.toolOutput] ?? ""}{" "}
-                      {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}
+                      {pack.tools[recipe.toolOutput]?.name ?? recipe.toolOutput}
                     </div>
                   ) : recipe.buildingOutput ? (
                     <div className="recipe-output">
-                      Builds: {BUILDINGS[recipe.buildingOutput]?.name ?? recipe.buildingOutput}
-                      {BUILDINGS[recipe.buildingOutput]?.maxCount && BUILDINGS[recipe.buildingOutput]!.maxCount! > 1
-                        ? ` (${getBuildingCount(state, recipe.buildingOutput)}/${BUILDINGS[recipe.buildingOutput]!.maxCount})`
+                      Builds: {pack.buildings[recipe.buildingOutput]?.name ?? recipe.buildingOutput}
+                      {pack.buildings[recipe.buildingOutput]?.maxCount && pack.buildings[recipe.buildingOutput]!.maxCount! > 1
+                        ? ` (${getBuildingCount(state, recipe.buildingOutput)}/${pack.buildings[recipe.buildingOutput]!.maxCount})`
                         : ""}
                     </div>
                   ) : recipe.output ? (
                     <div className="recipe-output">
                       Produces: {RESOURCE_ICONS[recipe.output.resourceId] ?? ""}{recipe.output.amount}x{" "}
-                      {RESOURCES[recipe.output.resourceId]?.name ??
+                      {pack.resources[recipe.output.resourceId]?.name ??
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
                       {(() => {

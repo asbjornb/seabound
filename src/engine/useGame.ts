@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BUILDINGS } from "../data/buildings";
+import { getDataPack, getPackLookups } from "../data/dataPack";
 import { getDropChanceBonus } from "../data/milestones";
-import {
-  STATIONS_BY_ID,
-} from "../data/registries";
-import { levelFromXp } from "../data/skills";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
 import {
   ActionDef,
   DiscoveryType,
@@ -76,12 +70,13 @@ function processCompletionDiscoveries(
   state: GameState,
   c: CompletionEvent
 ): void {
+  const pack = getDataPack();
   if (c.biomeDiscovery) {
     const name = c.biomeDiscovery.replace(/_/g, " ");
     addDiscovery(state, "biome", `Discovered the ${name}`);
   }
   if (c.buildingBuilt) {
-    const bdef = BUILDINGS[c.buildingBuilt];
+    const bdef = pack.buildings[c.buildingBuilt];
     const name = bdef?.name ?? c.buildingBuilt.replace(/_/g, " ");
     addDiscovery(state, "building", `Built a ${name}`);
     if (c.buildingBuilt === "dugout" && !state.buildings.includes("raft")) {
@@ -89,13 +84,13 @@ function processCompletionDiscoveries(
     }
   }
   if (c.toolCrafted) {
-    const tdef = TOOLS[c.toolCrafted];
+    const tdef = pack.tools[c.toolCrafted];
     const name = tdef?.name ?? c.toolCrafted.replace(/_/g, " ");
     addDiscovery(state, "tool", `Crafted ${name}`);
   }
   if (c.newResources) {
     for (const resId of c.newResources) {
-      const rdef = RESOURCES[resId];
+      const rdef = pack.resources[resId];
       const name = rdef?.name ?? resId.replace(/_/g, " ");
       addDiscovery(state, "resource", `Found ${name} for the first time`);
     }
@@ -331,7 +326,9 @@ export function useGame() {
     setState((prev) => {
       if (index < 0 || index >= prev.stations.length) return prev;
       const placed = prev.stations[index];
-      const def = STATIONS_BY_ID[placed.stationId];
+      const lookups = getPackLookups();
+      const pack = getDataPack();
+      const def = lookups.stationsByID[placed.stationId];
       if (!def) return prev;
       const readyAt = placed.deployedAt + def.durationMs;
       if (Date.now() < readyAt) return prev; // not ready yet
@@ -379,10 +376,10 @@ export function useGame() {
       // Award XP
       const skill = next.skills[def.skillId];
       skill.xp += def.xpGain;
-      skill.level = levelFromXp(skill.xp);
+      skill.level = pack.levelFromXp(skill.xp);
       // Discovery log
       for (const resId of newResources) {
-        const rdef = RESOURCES[resId];
+        const rdef = pack.resources[resId];
         const name = rdef?.name ?? resId.replace(/_/g, " ");
         addDiscovery(next, "resource", `Found ${name} for the first time`);
       }

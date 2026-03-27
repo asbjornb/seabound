@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { getDataPack } from "../data/dataPack";
 import { RESOURCE_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
-import { GameState, ResourceId } from "../data/types";
+import { GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 export function ResourcePanel({ state }: { state: GameState }) {
   const [showMoraleTip, setShowMoraleTip] = useState(false);
+  const pack = getDataPack();
   const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
   const moraleEffect = getMoraleDurationMultiplier(state.morale);
   const moralePercent = Math.round((1 - moraleEffect) * 100);
@@ -53,9 +54,9 @@ export function ResourcePanel({ state }: { state: GameState }) {
           <span
             key={id}
             className={`resource-chip${atCap ? " at-cap" : ""}`}
-            title={RESOURCES[id]?.description}
+            title={pack.resources[id]?.description}
           >
-            {RESOURCE_ICONS[id as ResourceId] ?? ""} {RESOURCES[id]?.name ?? id}
+            {RESOURCE_ICONS[id] ?? ""} {pack.resources[id]?.name ?? id}
             <>
               :{" "}
               <span className="amount">

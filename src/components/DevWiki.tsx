@@ -1,12 +1,5 @@
-import { ACTIONS } from "../data/actions";
-import { BUILDINGS } from "../data/buildings";
-import { EXPEDITIONS } from "../data/expeditions";
+import { getDataPack } from "../data/dataPack";
 import { getMilestones } from "../data/milestones";
-import { RECIPES } from "../data/recipes";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { SKILLS, xpForLevel } from "../data/skills";
-import { SkillId } from "../data/types";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -14,7 +7,16 @@ import { SkillId } from "../data/types";
  * Auto-generated from the same data files the game uses, so always up-to-date.
  */
 export function DevWiki() {
-  const skillIds = Object.keys(SKILLS) as SkillId[];
+  const pack = getDataPack();
+  const RESOURCES = pack.resources;
+  const TOOLS = pack.tools;
+  const SKILLS = pack.skills;
+  const ACTIONS = pack.actions;
+  const RECIPES = pack.recipes;
+  const BUILDINGS = pack.buildings;
+  const EXPEDITIONS = pack.expeditions;
+  const xpForLevel = pack.xpForLevel;
+  const skillIds = Object.keys(SKILLS);
 
   return (
     <div style={styles.page}>

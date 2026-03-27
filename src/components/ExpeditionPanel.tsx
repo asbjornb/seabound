@@ -1,6 +1,6 @@
+import { getDataPack } from "../data/dataPack";
 import { BIOME_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
-import { BiomeId, ExpeditionDef, GameState } from "../data/types";
+import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 
 interface Props {
@@ -27,13 +27,14 @@ export function ExpeditionPanel({
   state,
   onStart,
 }: Props) {
+  const pack = getDataPack();
   return (
     <div>
       <div className="section-title">Discovered Areas</div>
       <div className="biome-list">
         {state.discoveredBiomes.map((b) => (
           <span key={b} className="resource-chip">
-            {BIOME_ICONS[b as BiomeId] ?? ""} {b.replace(/_/g, " ")}
+            {BIOME_ICONS[b] ?? ""} {b.replace(/_/g, " ")}
           </span>
         ))}
       </div>
@@ -64,7 +65,7 @@ export function ExpeditionPanel({
             )}
             {exp.requiredVessel && (
               <div className="action-requires">
-                Vessel: {RESOURCES[exp.requiredVessel]?.name ?? exp.requiredVessel}
+                Vessel: {pack.buildings[exp.requiredVessel]?.name ?? exp.requiredVessel}
               </div>
             )}
             {(exp.foodCost || exp.waterCost) && (

@@ -1,9 +1,8 @@
 import { useState } from "react";
+import { getDataPack } from "../data/dataPack";
 import { getDropChanceBonus } from "../data/milestones";
 import { BIOME_ICONS, RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { ActionDef, BiomeId, GameState } from "../data/types";
+import { ActionDef, GameState } from "../data/types";
 import { getResource, hasTool } from "../engine/gameState";
 
 interface Props {
@@ -13,7 +12,7 @@ interface Props {
   currentActionId?: string | null;
 }
 
-const BIOME_NAMES: Record<BiomeId, string> = {
+const BIOME_NAMES: Record<string, string> = {
   beach: "Beach",
   coconut_grove: "Coconut Grove",
   rocky_shore: "Rocky Shore",
@@ -23,7 +22,7 @@ const BIOME_NAMES: Record<BiomeId, string> = {
 };
 
 /** Order biomes appear in the gather panel. Actions without a biome go under "beach". */
-const BIOME_ORDER: BiomeId[] = [
+const BIOME_ORDER: string[] = [
   "beach",
   "coconut_grove",
   "rocky_shore",
@@ -33,17 +32,18 @@ const BIOME_ORDER: BiomeId[] = [
 ];
 
 export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
-  const [collapsed, setCollapsed] = useState<Set<BiomeId>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const pack = getDataPack();
 
-  const grouped = new Map<BiomeId, ActionDef[]>();
+  const grouped = new Map<string, ActionDef[]>();
   for (const a of actions) {
-    const biome: BiomeId = a.requiredBiome ?? "beach";
+    const biome = a.requiredBiome ?? "beach";
     const list = grouped.get(biome) ?? [];
     list.push(a);
     grouped.set(biome, list);
   }
 
-  const toggleBiome = (biomeId: BiomeId) => {
+  const toggleBiome = (biomeId: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(biomeId)) next.delete(biomeId);
@@ -110,7 +110,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                           {i > 0 && ", "}
                           <span>
                             {RESOURCE_ICONS[d.resourceId] ?? ""}{d.amount}x{" "}
-                            {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                            {pack.resources[d.resourceId]?.name ?? d.resourceId}
                             {d.effectiveChance < 1
                               ? ` (${Math.round(d.effectiveChance * 100)}%)`
                               : ""}
@@ -124,16 +124,16 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   {missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span title={TOOLS[missingTool]?.description}>
-                        {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                      <span title={pack.tools[missingTool]?.description}>
+                        {TOOL_ICONS[missingTool] ?? ""}{pack.tools[missingTool]?.name ?? missingTool}
                       </span>
                     </div>
                   )}
                   {missingResource && !missingTool && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span title={RESOURCES[missingResource]?.description}>
-                        {RESOURCE_ICONS[missingResource] ?? ""}{RESOURCES[missingResource]?.name ?? missingResource}
+                      <span title={pack.resources[missingResource]?.description}>
+                        {RESOURCE_ICONS[missingResource] ?? ""}{pack.resources[missingResource]?.name ?? missingResource}
                       </span>
                     </div>
                   )}

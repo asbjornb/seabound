@@ -1,8 +1,6 @@
-import { BUILDINGS } from "../data/buildings";
+import { getDataPack } from "../data/dataPack";
 import { BUILDING_ICONS, TOOL_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
+import { ActionDef, GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
 
 interface Props {
@@ -26,6 +24,7 @@ export function SettlementPanel({
   onBuild,
   onStartAction,
 }: Props) {
+  const pack = getDataPack();
   const buildingRecipes = buildRecipes.filter((r) => !!r.buildingOutput);
   const maintenanceRecipes = buildRecipes.filter((r) => !r.buildingOutput);
   return (
@@ -60,7 +59,7 @@ export function SettlementPanel({
                     {action.drops.map((d, i) => (
                       <span key={i}>
                         {i > 0 && ", "}
-                        {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {d.amount}x {pack.resources[d.resourceId]?.name ?? d.resourceId}
                         {d.chance != null && d.chance < 1
                           ? ` (${Math.round(d.chance * 100)}%)`
                           : ""}
@@ -72,12 +71,12 @@ export function SettlementPanel({
                 )}
                 {missingTool && (
                   <div className="action-requires">
-                    Requires: {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                    Requires: {TOOL_ICONS[missingTool] ?? ""}{pack.tools[missingTool]?.name ?? missingTool}
                   </div>
                 )}
                 {missingResource && !missingTool && (
                   <div className="action-requires">
-                    Requires: {RESOURCES[missingResource]?.name ?? missingResource}
+                    Requires: {pack.resources[missingResource]?.name ?? missingResource}
                   </div>
                 )}
                 <div className="action-xp">
@@ -115,7 +114,7 @@ export function SettlementPanel({
                         {i > 0 && ", "}
                         <span className={enough ? "has" : "missing"}>
                           {inp.amount}x{" "}
-                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                          {pack.resources[inp.resourceId]?.name ?? inp.resourceId} (
                           {have})
                         </span>
                       </span>
@@ -125,7 +124,7 @@ export function SettlementPanel({
                 {recipe.output && (
                   <div className="recipe-output">
                     Makes: {recipe.output.amount}x{" "}
-                    {RESOURCES[recipe.output.resourceId]?.name ??
+                    {pack.resources[recipe.output.resourceId]?.name ??
                       recipe.output.resourceId}
                   </div>
                 )}
@@ -148,7 +147,7 @@ export function SettlementPanel({
             );
             const disabled = !canAfford;
             const bdef = recipe.buildingOutput
-              ? BUILDINGS[recipe.buildingOutput]
+              ? pack.buildings[recipe.buildingOutput]
               : undefined;
 
             return (
@@ -189,7 +188,7 @@ export function SettlementPanel({
                         {i > 0 && ", "}
                         <span className={enough ? "has" : "missing"}>
                           {inp.amount}x{" "}
-                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                          {pack.resources[inp.resourceId]?.name ?? inp.resourceId} (
                           {have})
                         </span>
                       </span>
@@ -213,13 +212,13 @@ export function SettlementPanel({
           <div className="building-list">
             {/* Deduplicate buildings for display, showing count for stackable */}
             {[...new Set(state.buildings)].map((bid) => {
-              const bdef = BUILDINGS[bid];
+              const bdef = pack.buildings[bid];
               const count = getBuildingCount(state, bid);
               const isStackable = bdef?.maxCount && bdef.maxCount > 1;
               return (
                 <div key={bid} className="building-card built">
                   <div className="building-name">
-                    {BUILDING_ICONS[bid as BuildingId] ?? ""} {bdef?.name ?? bid}
+                    {BUILDING_ICONS[bid] ?? ""} {bdef?.name ?? bid}
                     {isStackable && ` (${count})`}
                   </div>
                   <div className="building-desc">

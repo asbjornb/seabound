@@ -1,5 +1,4 @@
-import { RESOURCES } from "../data/resources";
-import { STATIONS_BY_ID } from "../data/registries";
+import { getDataPack, getPackLookups } from "../data/dataPack";
 import { GameState, StationDef } from "../data/types";
 import { getResource } from "../engine/gameState";
 
@@ -25,10 +24,12 @@ export function StationsPanel({
   onCollect,
 }: Props) {
   const now = Date.now();
+  const pack = getDataPack();
+  const lookups = getPackLookups();
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
-    const def = STATIONS_BY_ID[placed.stationId];
+    const def = lookups.stationsByID[placed.stationId];
     const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
     const isReady = now >= readyAt;
     const remaining = readyAt - now;
@@ -81,7 +82,7 @@ export function StationsPanel({
                       <span key={i}>
                         {i > 0 && ", "}
                         {d.amount}x{" "}
-                        {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {pack.resources[d.resourceId]?.name ?? d.resourceId}
                         {d.chance != null && d.chance < 1
                           ? ` (${Math.round(d.chance * 100)}%)`
                           : ""}
@@ -142,7 +143,7 @@ export function StationsPanel({
                           {i > 0 && ", "}
                           <span className={enough ? "has" : "missing"}>
                             {inp.amount}x{" "}
-                            {RESOURCES[inp.resourceId]?.name ?? inp.resourceId}{" "}
+                            {pack.resources[inp.resourceId]?.name ?? inp.resourceId}{" "}
                             ({have})
                           </span>
                         </span>
@@ -158,7 +159,7 @@ export function StationsPanel({
                       <span key={i}>
                         {i > 0 && ", "}
                         {d.amount}x{" "}
-                        {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {pack.resources[d.resourceId]?.name ?? d.resourceId}
                         {d.chance != null && d.chance < 1
                           ? ` (${Math.round(d.chance * 100)}%)`
                           : ""}

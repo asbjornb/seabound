@@ -1,100 +1,10 @@
-export type ResourceId =
-  // Phase 0 - Bare Hands
-  | "coconut"
-  | "coconut_husk"
-  | "driftwood_branch"
-  | "flat_stone"
-  | "palm_frond"
-  | "small_fish"
-  | "crab"
-  | "shell"
-  // Phase 1 - Bamboo Tier
-  | "bamboo_cane"
-  | "bamboo_splinter"
-  | "rough_fiber"
-  | "dried_fiber"
-  | "cordage"
-  | "large_shell"
-  // Phase 1b - Fire
-  | "dry_grass"
-  // Food
-  | "large_fish"
-  | "cooked_fish"
-  | "cooked_crab"
-  | "cooked_large_fish"
-  // Seeds & Farming
-  | "wild_seed"
-  | "root_vegetable"
-  | "cooked_root_vegetable"
-  | "taro_corm"
-  | "taro_root"
-  | "cooked_taro"
-  | "banana_shoot"
-  | "banana"
-  | "breadfruit_cutting"
-  | "breadfruit"
-  | "roasted_breadfruit"
-  | "voyage_provisions"
-  // Obsidian
-  | "obsidian"
-  // Stone Tools
-  | "chert"
-  | "stone_flake"
-  | "stone_blade"
-  // Timber
-  | "large_log"
-  | "charred_log"
-  | "shaped_hull"
-  // Water
-  | "fresh_water"
-  // Phase 2 - Clay Tier
-  | "clay"
-  | "shaped_clay_pot"
-  | "fired_clay_pot"
-  | "sealed_clay_jar";
-
-export type ToolId =
-  | "bamboo_knife"
-  | "bow_drill_kit"
-  | "bamboo_spear"
-  | "hammerstone"
-  | "shell_adze"
-  | "stone_axe"
-  | "obsidian_blade"
-  | "gorge_hook"
-  | "basket_trap"
-  | "crucible"
-  | "digging_stick";
-
-export type SkillId =
-  | "foraging"
-  | "fishing"
-  | "woodworking"
-  | "crafting"
-  | "cooking"
-  | "weaving"
-  | "construction"
-  | "farming"
-  | "navigation";
-
-export type BiomeId = "beach" | "coconut_grove" | "rocky_shore" | "bamboo_grove" | "jungle_interior" | "nearby_island";
-
-export type BuildingId =
-  | "camp_fire"
-  | "stone_hearth"
-  | "palm_leaf_pile"
-  | "drying_rack"
-  | "fenced_perimeter"
-  | "firing_pit"
-  | "kiln"
-  | "fiber_loom"
-  | "raft"
-  | "dugout"
-  | "woven_basket"
-  | "cleared_plot"
-  | "tended_garden"
-  | "farm_plot"
-  | "well";
+// ID types are strings to support modded data packs with custom content.
+// The default data pack defines the built-in IDs in the respective data files.
+export type ResourceId = string;
+export type ToolId = string;
+export type SkillId = string;
+export type BiomeId = string;
+export type BuildingId = string;
 
 export interface StorageBonus {
   tag?: string; // if set, item must have this tag

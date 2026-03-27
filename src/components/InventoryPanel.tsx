@@ -1,22 +1,20 @@
 import { useMemo, useState } from "react";
+import { getDataPack } from "../data/dataPack";
 import { RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { ACTIONS } from "../data/actions";
-import { RECIPES } from "../data/recipes";
-import { ResourceId, ToolId, GameState } from "../data/types";
+import { GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 
 /** Build a map of tool → list of action/recipe names it enables */
 function buildToolEnablesMap(): Record<string, string[]> {
+  const pack = getDataPack();
   const map: Record<string, string[]> = {};
-  for (const action of ACTIONS) {
+  for (const action of pack.actions) {
     for (const toolId of action.requiredTools ?? []) {
       if (!map[toolId]) map[toolId] = [];
       map[toolId].push(action.name);
     }
   }
-  for (const recipe of RECIPES) {
+  for (const recipe of pack.recipes) {
     for (const toolId of recipe.requiredTools ?? []) {
       if (!map[toolId]) map[toolId] = [];
       map[toolId].push(recipe.name);
@@ -41,11 +39,12 @@ const FILTER_LABELS: Record<FilterId, string> = {
 export function InventoryPanel({ state }: { state: GameState }) {
   const [filter, setFilter] = useState<FilterId>("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
+  const pack = getDataPack();
 
   const resourceEntries = Object.entries(state.resources).filter(([, v]) => v > 0);
   const hasTools = state.tools.length > 0;
-  const hasFood = resourceEntries.some(([id]) => RESOURCES[id]?.tags?.includes("food"));
-  const hasItems = resourceEntries.some(([id]) => !RESOURCES[id]?.tags?.includes("food"));
+  const hasFood = resourceEntries.some(([id]) => pack.resources[id]?.tags?.includes("food"));
+  const hasItems = resourceEntries.some(([id]) => !pack.resources[id]?.tags?.includes("food"));
 
   if (resourceEntries.length === 0 && !hasTools) {
     return (
@@ -73,7 +72,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
   // Filter resources
   const filteredResources = resourceEntries.filter(([id]) => {
     if (filter === "all") return true;
-    const tags = RESOURCES[id]?.tags ?? [];
+    const tags = pack.resources[id]?.tags ?? [];
     if (filter === "food") return tags.includes("food");
     if (filter === "items") return !tags.includes("food");
     return false; // "tools" filter hides resources
@@ -109,12 +108,12 @@ export function InventoryPanel({ state }: { state: GameState }) {
           <h3 className="section-title">Tools</h3>
           <div className="inventory-items">
             {state.tools.map((toolId) => {
-              const def = TOOLS[toolId];
+              const def = pack.tools[toolId];
               return (
                 <div key={toolId} className="inventory-item">
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
-                      {TOOL_ICONS[toolId as ToolId] ?? ""} {def?.name ?? toolId}
+                      {TOOL_ICONS[toolId] ?? ""} {def?.name ?? toolId}
                     </span>
                   </div>
                   <div className="inventory-item-desc">
@@ -141,7 +140,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
           {filter === "all" && <h3 className="section-title">Items</h3>}
           <div className="inventory-items">
             {filteredResources.map(([id, amount]) => {
-              const def = RESOURCES[id];
+              const def = pack.resources[id];
               const limit = getStorageLimit(state, id);
               const atCap = amount >= limit;
               return (
@@ -151,7 +150,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
-                      {RESOURCE_ICONS[id as ResourceId] ?? ""} {def?.name ?? id}
+                      {RESOURCE_ICONS[id] ?? ""} {def?.name ?? id}
                     </span>
                     <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
                       {amount}/{limit}

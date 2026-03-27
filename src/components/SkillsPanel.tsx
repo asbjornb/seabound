@@ -1,11 +1,12 @@
+import { getDataPack } from "../data/dataPack";
 import { getMilestones } from "../data/milestones";
 import { SKILL_ICONS } from "../data/icons";
-import { SKILLS, xpForLevel } from "../data/skills";
-import { GameState, SkillId } from "../data/types";
+import { GameState } from "../data/types";
 
 export function SkillsPanel({ state }: { state: GameState }) {
-  const skillIds = (Object.keys(SKILLS) as SkillId[]).filter(
-    (id) => state.skills[id].xp > 0
+  const pack = getDataPack();
+  const skillIds = Object.keys(pack.skills).filter(
+    (id) => state.skills[id]?.xp > 0
   );
 
   if (skillIds.length === 0) {
@@ -22,8 +23,8 @@ export function SkillsPanel({ state }: { state: GameState }) {
     <div>
       {skillIds.map((id) => {
         const skill = state.skills[id];
-        const currentLevelXp = xpForLevel(skill.level);
-        const nextLevelXp = xpForLevel(skill.level + 1);
+        const currentLevelXp = pack.xpForLevel(skill.level);
+        const nextLevelXp = pack.xpForLevel(skill.level + 1);
         const xpIntoLevel = skill.xp - currentLevelXp;
         const xpNeeded = nextLevelXp - currentLevelXp;
         const progress = xpNeeded > 0 ? xpIntoLevel / xpNeeded : 1;
@@ -38,7 +39,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
         return (
           <div key={id} className="skill-card">
             <div className="skill-header">
-              <span className="skill-name">{SKILL_ICONS[id]} {SKILLS[id].name}</span>
+              <span className="skill-name">{SKILL_ICONS[id]} {pack.skills[id].name}</span>
               <span className="skill-level">Lvl {skill.level}</span>
             </div>
             <div className="xp-bar">

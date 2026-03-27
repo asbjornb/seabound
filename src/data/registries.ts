@@ -1,19 +1,18 @@
-import { ACTIONS } from "./actions";
-import { EXPEDITIONS } from "./expeditions";
-import { RECIPES } from "./recipes";
-import { STATIONS } from "./stations";
+/**
+ * Re-exports pack lookup tables for backwards compatibility.
+ * New code should import from dataPack.ts directly.
+ */
+import { getPackLookups } from "./dataPack";
 
-function createRegistry<T extends { id: string }>(
-  items: readonly T[]
-): Record<string, T> {
-  const registry: Record<string, T> = {};
-  for (const item of items) {
-    registry[item.id] = item;
-  }
-  return registry;
+export function getActionsByID() {
+  return getPackLookups().actionsByID;
 }
-
-export const ACTIONS_BY_ID = createRegistry(ACTIONS);
-export const RECIPES_BY_ID = createRegistry(RECIPES);
-export const EXPEDITIONS_BY_ID = createRegistry(EXPEDITIONS);
-export const STATIONS_BY_ID = createRegistry(STATIONS);
+export function getRecipesByID() {
+  return getPackLookups().recipesByID;
+}
+export function getExpeditionsByID() {
+  return getPackLookups().expeditionsByID;
+}
+export function getStationsByID() {
+  return getPackLookups().stationsByID;
+}

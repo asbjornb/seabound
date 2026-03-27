@@ -1,15 +1,5 @@
-import { ACTIONS } from "../data/actions";
-import { BUILDINGS } from "../data/buildings";
-import { EXPEDITIONS } from "../data/expeditions";
+import { getDataPack, getPackLookups } from "../data/dataPack";
 import { getDurationMultiplier } from "../data/milestones";
-import {
-  ACTIONS_BY_ID,
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
-  STATIONS_BY_ID,
-} from "../data/registries";
-import { RECIPES } from "../data/recipes";
-import { STATIONS } from "../data/stations";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
   getBuildingCount,
@@ -27,13 +17,14 @@ export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "
 
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
-  return RECIPES.some((recipe) => {
+  const pack = getDataPack();
+  return pack.recipes.some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
     const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
     if (!usesResource) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       // For stackable buildings, the recipe can still be used
-      const bdef = BUILDINGS[recipe.buildingOutput];
+      const bdef = pack.buildings[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
     }
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
@@ -43,7 +34,8 @@ function resourceHasUse(resourceId: string, state: GameState): boolean {
 }
 
 export function selectAvailableActions(state: GameState): ActionDef[] {
-  return ACTIONS.filter((action) => {
+  const pack = getDataPack();
+  return pack.actions.filter((action) => {
     const skill = state.skills[action.skillId];
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
     if (action.requiredBiome && !state.discoveredBiomes.includes(action.requiredBiome)) return false;
@@ -53,7 +45,8 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
 }
 
 export function selectAvailableRecipes(state: GameState): RecipeDef[] {
-  return RECIPES.filter((recipe) => {
+  const pack = getDataPack();
+  return pack.recipes.filter((recipe) => {
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
@@ -64,7 +57,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.buildingOutput === "raft" && hasBuilding(state, "dugout")) return false;
     // Hide non-stackable building recipes if building already exists
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
-      const bdef = BUILDINGS[recipe.buildingOutput];
+      const bdef = pack.buildings[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
       // For stackable upgrade recipes, hide if no source building left to upgrade
       if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
@@ -81,7 +74,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
 }
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
-  return EXPEDITIONS.filter((expedition) => {
+  const pack = getDataPack();
+  return pack.expeditions.filter((expedition) => {
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
@@ -97,7 +91,8 @@ export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
 }
 
 export function selectAvailableStations(state: GameState): StationDef[] {
-  return STATIONS.filter((station) => {
+  const pack = getDataPack();
+  return pack.stations.filter((station) => {
     const skill = state.skills[station.skillId];
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
@@ -122,8 +117,10 @@ export function selectCurrentActionTiming(
     return { actionProgress: 0, actionDuration: 0 };
   }
 
+  const lookups = getPackLookups();
+
   if (state.currentAction.type === "gather") {
-    const action = ACTIONS_BY_ID[state.currentAction.actionId];
+    const action = lookups.actionsByID[state.currentAction.actionId];
     if (!action) return { actionProgress: 0, actionDuration: 0 };
     const skillLevel = state.skills[action.skillId].level;
     const toolMultiplier = getToolSpeedMultiplier(state, action.id);
@@ -141,7 +138,7 @@ export function selectCurrentActionTiming(
 
   if (state.currentAction.type === "craft") {
     const recipeId = state.currentAction.recipeId;
-    const recipe = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    const recipe = recipeId ? lookups.recipesByID[recipeId] : undefined;
     if (!recipe) return { actionProgress: 0, actionDuration: 0 };
     const toolMultiplier = getToolSpeedMultiplier(state, recipe.id);
     const effectiveDuration = Math.round(recipe.durationMs * moraleMultiplier * toolMultiplier);
@@ -152,7 +149,7 @@ export function selectCurrentActionTiming(
   }
 
   const expeditionId = state.currentAction.expeditionId;
-  const expedition = expeditionId ? EXPEDITIONS_BY_ID[expeditionId] : undefined;
+  const expedition = expeditionId ? lookups.expeditionsByID[expeditionId] : undefined;
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
   const effectiveDuration = Math.round(expedition.durationMs * moraleMultiplier);
   return {
@@ -163,16 +160,17 @@ export function selectCurrentActionTiming(
 
 export function selectCurrentActionName(state: GameState): string | null {
   if (!state.currentAction) return null;
+  const lookups = getPackLookups();
   if (state.currentAction.type === "gather") {
-    return ACTIONS_BY_ID[state.currentAction.actionId]?.name ?? null;
+    return lookups.actionsByID[state.currentAction.actionId]?.name ?? null;
   }
   if (state.currentAction.type === "craft") {
     return state.currentAction.recipeId
-      ? RECIPES_BY_ID[state.currentAction.recipeId]?.name ?? null
+      ? lookups.recipesByID[state.currentAction.recipeId]?.name ?? null
       : null;
   }
   return state.currentAction.expeditionId
-    ? EXPEDITIONS_BY_ID[state.currentAction.expeditionId]?.name ?? null
+    ? lookups.expeditionsByID[state.currentAction.expeditionId]?.name ?? null
     : null;
 }
 
@@ -233,8 +231,9 @@ export function selectVisibleTabs(params: {
 }
 
 export function selectReadyStationCount(state: GameState, now = Date.now()): number {
+  const lookups = getPackLookups();
   return state.stations.filter((station) => {
-    const def = STATIONS_BY_ID[station.stationId];
+    const def = lookups.stationsByID[station.stationId];
     return def ? now >= station.deployedAt + def.durationMs : false;
   }).length;
 }

@@ -1,13 +1,14 @@
-import { ACTIONS } from "./actions";
-import { RECIPES } from "./recipes";
-import { SkillId, SkillMilestone } from "./types";
+import { getDataPack } from "./dataPack";
+import { SkillMilestone } from "./types";
 
 /**
  * Hand-authored milestones per skill.
  * These define effects (drop bonuses, duration reductions) and descriptions
  * the player can preview in the Skills panel.
+ *
+ * Exported so the default DataPack can include them.
  */
-const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
+export const AUTHORED_MILESTONES: Partial<Record<string, SkillMilestone[]>> = {
   fishing: [
     {
       level: 2,
@@ -167,11 +168,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
 /**
  * Auto-generate "Unlock …" milestones from actions and recipes
  * that have a requiredSkillLevel, so the player can see what's coming.
+ * Reads from the active data pack.
  */
-function generateUnlockMilestones(): Partial<Record<SkillId, SkillMilestone[]>> {
-  const result: Partial<Record<SkillId, SkillMilestone[]>> = {};
+function generateUnlockMilestones(): Partial<Record<string, SkillMilestone[]>> {
+  const pack = getDataPack();
+  const result: Partial<Record<string, SkillMilestone[]>> = {};
 
-  for (const action of ACTIONS) {
+  for (const action of pack.actions) {
     if (action.requiredSkillLevel && action.requiredSkillLevel > 1) {
       const list = result[action.skillId] ?? [];
       list.push({
@@ -182,7 +185,7 @@ function generateUnlockMilestones(): Partial<Record<SkillId, SkillMilestone[]>> 
     }
   }
 
-  for (const recipe of RECIPES) {
+  for (const recipe of pack.recipes) {
     if (recipe.requiredSkillLevel && recipe.requiredSkillLevel > 1) {
       const list = result[recipe.skillId] ?? [];
       list.push({
@@ -198,8 +201,9 @@ function generateUnlockMilestones(): Partial<Record<SkillId, SkillMilestone[]>> 
 }
 
 /** Merged milestones: authored effects + auto-detected unlocks, sorted by level. */
-export function getMilestones(skillId: SkillId): SkillMilestone[] {
-  const authored = AUTHORED_MILESTONES[skillId] ?? [];
+export function getMilestones(skillId: string): SkillMilestone[] {
+  const pack = getDataPack();
+  const authored = pack.milestones[skillId] ?? [];
   const unlocks = generateUnlockMilestones()[skillId] ?? [];
   return [...authored, ...unlocks].sort((a, b) => a.level - b.level);
 }
@@ -209,12 +213,13 @@ export function getMilestones(skillId: SkillId): SkillMilestone[] {
  * from all milestones the player has reached.
  */
 export function getDropChanceBonus(
-  skillId: SkillId,
+  skillId: string,
   skillLevel: number,
   actionId: string,
   resourceId: string
 ): number {
-  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const pack = getDataPack();
+  const milestones = pack.milestones[skillId] ?? [];
   let bonus = 0;
   for (const m of milestones) {
     if (m.level > skillLevel || !m.effects) continue;
@@ -235,11 +240,12 @@ export function getDropChanceBonus(
  * Compute total double-output chance for a skill at a given level.
  */
 export function getDoubleOutputChance(
-  skillId: SkillId,
+  skillId: string,
   skillLevel: number,
   recipeId?: string
 ): number {
-  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const pack = getDataPack();
+  const milestones = pack.milestones[skillId] ?? [];
   let chance = 0;
   for (const m of milestones) {
     if (m.level > skillLevel || !m.effects) continue;
@@ -259,11 +265,12 @@ export function getDoubleOutputChance(
  * from all milestones the player has reached.
  */
 export function getDurationMultiplier(
-  skillId: SkillId,
+  skillId: string,
   skillLevel: number,
   actionId: string
 ): number {
-  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const pack = getDataPack();
+  const milestones = pack.milestones[skillId] ?? [];
   let multiplier = 1;
   for (const m of milestones) {
     if (m.level > skillLevel || !m.effects) continue;

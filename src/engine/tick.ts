@@ -1,13 +1,6 @@
 import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from "../data/milestones";
-import {
-  ACTIONS_BY_ID,
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
-} from "../data/registries";
-import { RECIPES } from "../data/recipes";
-import { levelFromXp } from "../data/skills";
-import { BUILDINGS } from "../data/buildings";
-import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import { getDataPack, getPackLookups } from "../data/dataPack";
+import { Drop, ExpeditionOutcome, GameState } from "../data/types";
 import { addResource, deductFood, deductWater, getEffectiveInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
@@ -22,7 +15,7 @@ export interface CompletionEvent {
   xpGain: number;
   skillId: string;
   levelUp?: number;
-  biomeDiscovery?: BiomeId;
+  biomeDiscovery?: string;
   expeditionMessage?: string;
   newResources?: string[]; // resource IDs seen for the first time
   buildingBuilt?: string; // building ID if a building was constructed
@@ -58,9 +51,10 @@ export function processTick(state: GameState, now: number): TickResult {
 
   const action = state.currentAction;
   const timeAvailable = now - action.startedAt;
+  const lookups = getPackLookups();
 
   if (action.type === "gather") {
-    const def = ACTIONS_BY_ID[action.actionId];
+    const def = lookups.actionsByID[action.actionId];
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -85,7 +79,7 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   } else if (action.type === "craft") {
     const recipeId = action.recipeId;
-    const def = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    const def = recipeId ? lookups.recipesByID[recipeId] : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -152,7 +146,7 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   } else if (action.type === "expedition") {
     const expeditionId = action.expeditionId;
-    const def = expeditionId ? EXPEDITIONS_BY_ID[expeditionId] : undefined;
+    const def = expeditionId ? lookups.expeditionsByID[expeditionId] : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -190,12 +184,13 @@ export function processTick(state: GameState, now: number): TickResult {
 }
 
 function resourceHasUse(state: GameState, resourceId: string): boolean {
-  return RECIPES.some((r) => {
+  const pack = getDataPack();
+  return pack.recipes.some((r) => {
     const effectiveInputs = getEffectiveInputs(r, state);
     const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
     if (!usesResource) return false;
     if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
-      const bdef = BUILDINGS[r.buildingOutput];
+      const bdef = pack.buildings[r.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
     }
     if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;
@@ -215,7 +210,9 @@ function applyGatherCompletion(
   actionId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = ACTIONS_BY_ID[actionId];
+  const lookups = getPackLookups();
+  const pack = getDataPack();
+  const def = lookups.actionsByID[actionId];
   if (!def) return null;
 
   const skillLevel = state.skills[def.skillId].level;
@@ -233,7 +230,7 @@ function applyGatherCompletion(
   const prevLevel = skill.level;
   const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
   skill.xp += xpGain;
-  skill.level = levelFromXp(skill.xp);
+  skill.level = pack.levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
 
   return {
@@ -251,7 +248,9 @@ function applyCraftCompletion(
   recipeId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = RECIPES_BY_ID[recipeId];
+  const lookups = getPackLookups();
+  const pack = getDataPack();
+  const def = lookups.recipesByID[recipeId];
   if (!def) return null;
 
   const drops: { name: string; amount: number }[] = [];
@@ -275,7 +274,7 @@ function applyCraftCompletion(
       }
     }
     // Building construction — add to buildings list
-    const bdef = BUILDINGS[def.buildingOutput];
+    const bdef = pack.buildings[def.buildingOutput];
     const isStackable = bdef?.maxCount && bdef.maxCount > 1;
     if (isStackable) {
       // Stackable buildings allow duplicates
@@ -320,7 +319,7 @@ function applyCraftCompletion(
   const prevLevel = skill.level;
   const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
   skill.xp += xpGain;
-  skill.level = levelFromXp(skill.xp);
+  skill.level = pack.levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
 
   return {
@@ -340,7 +339,9 @@ function applyExpeditionCompletion(
   expeditionId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = EXPEDITIONS_BY_ID[expeditionId];
+  const lookups = getPackLookups();
+  const pack = getDataPack();
+  const def = lookups.expeditionsByID[expeditionId];
   if (!def) return null;
 
   // Pick a random outcome weighted by weight
@@ -373,7 +374,7 @@ function applyExpeditionCompletion(
   const prevLevel = skill.level;
   const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
   skill.xp += xpGain;
-  skill.level = levelFromXp(skill.xp);
+  skill.level = pack.levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
 
   return {
@@ -454,7 +455,7 @@ function rollDrops(
     if (skillId && skillLevel && actionId) {
       chance = Math.min(
         1,
-        chance + getDropChanceBonus(skillId as any, skillLevel, actionId, drop.resourceId)
+        chance + getDropChanceBonus(skillId, skillLevel, actionId, drop.resourceId)
       );
     }
     if (Math.random() < chance) {
