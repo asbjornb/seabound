@@ -159,6 +159,12 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     requiredVessel: "dugout",
     outcomes: [
       {
+        weight: 10,
+        description:
+          "You paddle past a volcanic island and discover a cove rich with obsidian outcrops!",
+        biomeDiscovery: "nearby_island",
+      },
+      {
         weight: 20,
         description:
           "You land on a lush islet and find banana plants growing wild. You carefully dig up a shoot.",

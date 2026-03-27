@@ -27,6 +27,7 @@ import {
   getTotalWater,
   hasTool,
   hasBuilding,
+  hasVessel,
   loadGame,
   normalizeGameState,
   saveGame,
@@ -83,6 +84,9 @@ function processCompletionDiscoveries(
     const bdef = BUILDINGS[c.buildingBuilt];
     const name = bdef?.name ?? c.buildingBuilt.replace(/_/g, " ");
     addDiscovery(state, "building", `Built a ${name}`);
+    if (c.buildingBuilt === "dugout" && !state.buildings.includes("raft")) {
+      addDiscovery(state, "building", "A raft? Where you're going, you don't need rafts.");
+    }
   }
   if (c.toolCrafted) {
     const tdef = TOOLS[c.toolCrafted];
@@ -242,8 +246,8 @@ export function useGame() {
   const startExpedition = useCallback(
     (expedition: ExpeditionDef) => {
       setState((prev) => {
-        // Check vessel requirement (now a building)
-        if (expedition.requiredVessel && !hasBuilding(prev, expedition.requiredVessel)) {
+        // Check vessel requirement — higher-tier vessels satisfy lower-tier ones
+        if (expedition.requiredVessel && !hasVessel(prev, expedition.requiredVessel)) {
           return prev;
         }
         // Check food and water costs

@@ -20,6 +20,7 @@ import {
   getTotalFood,
   hasTool,
   hasBuilding,
+  hasVessel,
 } from "./gameState";
 
 export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
@@ -59,6 +60,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
     if (recipe.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    // Hide raft recipe if player already has a dugout (strictly better vessel)
+    if (recipe.buildingOutput === "raft" && hasBuilding(state, "dugout")) return false;
     // Hide non-stackable building recipes if building already exists
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
@@ -79,7 +82,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
   return EXPEDITIONS.filter((expedition) => {
-    if (expedition.requiredVessel && !hasBuilding(state, expedition.requiredVessel)) return false;
+    if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
       const discoverableBiomes = expedition.outcomes

@@ -245,6 +245,15 @@ export function hasBuilding(state: GameState, buildingId: BuildingId): boolean {
   return state.buildings.includes(buildingId);
 }
 
+/** Vessel tier ordering — higher-tier vessels satisfy lower-tier requirements. */
+const VESSEL_TIERS: BuildingId[] = ["raft", "dugout"];
+
+export function hasVessel(state: GameState, vesselId: BuildingId): boolean {
+  const requiredTier = VESSEL_TIERS.indexOf(vesselId);
+  if (requiredTier === -1) return hasBuilding(state, vesselId);
+  return VESSEL_TIERS.slice(requiredTier).some((v) => state.buildings.includes(v));
+}
+
 export function getBuildingCount(state: GameState, buildingId: BuildingId): number {
   return state.buildings.filter((b) => b === buildingId).length;
 }
