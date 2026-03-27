@@ -1215,3 +1215,129 @@ body {
 .phase-chapter-fire .chapter-name { color: #f0a050; text-shadow: 0 0 24px rgba(240, 160, 80, 0.5); }
 .phase-chapter-stone .chapter-name { color: #a0a8b8; text-shadow: 0 0 24px rgba(160, 168, 184, 0.4); }
 .phase-chapter-maritime .chapter-name { color: #50b0d0; text-shadow: 0 0 24px rgba(80, 176, 208, 0.5); }
+
+/* ═══════════════════════════════════════
+   Feedback Banner
+   ═══════════════════════════════════════ */
+
+.feedback-banner {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 16px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.feedback-blurb {
+  margin: 0;
+  max-width: 520px;
+}
+
+.feedback-expand-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-expand-btn:hover {
+  filter: brightness(1.1);
+}
+
+.feedback-form {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback-textarea {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.feedback-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.feedback-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.feedback-form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.feedback-submit-btn {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.feedback-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.feedback-cancel-btn {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.feedback-cancel-btn:hover {
+  color: var(--text);
+}
+
+.feedback-alt-links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.feedback-alt-links a {
+  color: var(--text-dim);
+  text-decoration: underline;
+}
+
+.feedback-alt-links a:hover {
+  color: var(--accent);
+}
+
+.feedback-sep {
+  color: var(--text-dim);
+  opacity: 0.5;
+}
