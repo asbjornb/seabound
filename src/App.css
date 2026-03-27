@@ -514,8 +514,9 @@ body {
   color: var(--text-dim);
 }
 
-.action-drops span {
+.action-drops .drop-row {
   color: var(--success);
+  margin-left: 0.5em;
 }
 
 .action-requires span {

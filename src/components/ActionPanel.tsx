@@ -94,7 +94,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   <div className="action-desc">{action.description}</div>
                   {action.drops.length > 0 ? (
                     <div className="action-drops">
-                      Drops:{" "}
+                      Drops:
                       {action.drops
                         .map((d) => ({
                           ...d,
@@ -105,17 +105,13 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                           ),
                         }))
                         .filter((d) => d.effectiveChance > 0)
+                        .sort((a, b) => b.effectiveChance - a.effectiveChance)
                         .map((d, i) => (
-                        <span key={i}>
-                          {i > 0 && ", "}
-                          <span>
+                        <div key={i} className="drop-row">
                             {RESOURCE_ICONS[d.resourceId] ?? ""}{d.amount}x{" "}
                             {RESOURCES[d.resourceId]?.name ?? d.resourceId}
-                            {d.effectiveChance < 1
-                              ? ` (${Math.round(d.effectiveChance * 100)}%)`
-                              : ""}
-                          </span>
-                        </span>
+                            {" "}({Math.round(d.effectiveChance * 100)}%)
+                        </div>
                       ))}
                     </div>
                   ) : (
