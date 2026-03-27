@@ -177,6 +177,11 @@ export function useGame() {
           if (getResource(prev, resId) < 1) return prev;
         }
       }
+      if (action.requiredBuildings) {
+        for (const buildingId of action.requiredBuildings) {
+          if (!hasBuilding(prev, buildingId)) return prev;
+        }
+      }
       if (
         action.requiredBiome &&
         !prev.discoveredBiomes.includes(action.requiredBiome)
@@ -220,6 +225,8 @@ export function useGame() {
             if (getResource(prev, itemId) < 1) return prev;
           }
         }
+        // Check required buildings
+        if (recipe.requiredBuildings?.some((bid) => !hasBuilding(prev, bid))) return prev;
         // Check upgrade source building exists
         if (recipe.replacesBuilding && !hasBuilding(prev, recipe.replacesBuilding)) return prev;
         // Check resources (using effective inputs — some may be removed by buildings)
