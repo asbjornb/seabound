@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const FORMSUBMIT_URL =
-  "https://formsubmit.co/ajax/asbjoernbrandt+seabound@gmail.com";
+  "https://formsubmit.co/ajax/8813e5ef638f2fe7669b9383c00db8dc";
 
 export function FeedbackBanner() {
   const [text, setText] = useState("");
