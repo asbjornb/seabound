@@ -49,17 +49,14 @@ export const RECIPES: RecipeDef[] = [
     id: "craft_bamboo_knife",
     name: "Bamboo Knife",
     description:
-      "Wrap a bamboo splinter with rough fiber into a cutting blade.",
+      "Split and sharpen a bamboo splinter into a cutting blade. The natural fracture makes the edge.",
     skillId: "crafting",
     panel: "craft",
-    inputs: [
-      { resourceId: "bamboo_splinter", amount: 1 },
-      { resourceId: "rough_fiber", amount: 2 },
-    ],
+    inputs: [{ resourceId: "bamboo_splinter", amount: 1 }],
     toolOutput: "bamboo_knife",
-    durationMs: 4000,
+    durationMs: 3000,
     oneTimeCraft: true,
-    xpGain: 12,
+    xpGain: 8,
   },
   // ═══════════════════════════════════════
   // Fiber & Cordage Chain
