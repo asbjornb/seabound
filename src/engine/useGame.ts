@@ -57,6 +57,26 @@ function resetRepetitiveCountOnManualActionChange(state: GameState, nextActionKe
   }
 }
 
+/** Save partial progress for the current action before switching away. */
+function saveCurrentActionProgress(state: GameState): void {
+  if (!state.currentAction) return;
+  const key = getCurrentActionKey(state);
+  if (!key) return;
+  const elapsed = Date.now() - state.currentAction.startedAt;
+  if (elapsed > 0) {
+    state.savedActionProgress[key] = elapsed;
+  }
+}
+
+/** Restore saved progress for an action by adjusting startedAt backwards. */
+function restoreActionProgress(state: GameState, actionKey: string): void {
+  const saved = state.savedActionProgress[actionKey];
+  if (saved && saved > 0 && state.currentAction) {
+    state.currentAction.startedAt = Date.now() - saved;
+    delete state.savedActionProgress[actionKey];
+  }
+}
+
 let nextDiscoveryId = 0;
 
 function addDiscovery(
@@ -184,12 +204,15 @@ export function useGame() {
         return prev;
       }
       const next = structuredClone(prev);
+      saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
+      const actionKey = `gather:${action.id}`;
       next.currentAction = {
         actionId: action.id,
         startedAt: Date.now(),
         type: "gather",
       };
+      restoreActionProgress(next, actionKey);
       return next;
     });
   }, []);
@@ -230,13 +253,16 @@ export function useGame() {
         // Check tag-based inputs (e.g. "5 different foods")
         if (recipe.tagInputs && !canAffordTagInputs(recipe.tagInputs, prev)) return prev;
         const next = structuredClone(prev);
+        saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
+        const actionKey = `craft:${recipe.id}`;
         next.currentAction = {
           actionId: recipe.id,
           startedAt: Date.now(),
           type: "craft",
           recipeId: recipe.id,
         };
+        restoreActionProgress(next, actionKey);
         return next;
       });
     },
@@ -258,13 +284,16 @@ export function useGame() {
           return prev;
         }
         const next = structuredClone(prev);
+        saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
+        const actionKey = `expedition:${expedition.id}`;
         next.currentAction = {
           actionId: expedition.id,
           startedAt: Date.now(),
           type: "expedition",
           expeditionId: expedition.id,
         };
+        restoreActionProgress(next, actionKey);
         return next;
       });
     },
@@ -275,6 +304,7 @@ export function useGame() {
     setState((prev) => {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
+      saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       return next;
