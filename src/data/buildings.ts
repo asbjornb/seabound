@@ -59,7 +59,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Fiber Loom",
     description:
       "A simple bamboo frame for braiding fibers into cordage more efficiently.",
-    unlocks: "Braid cordage — better fiber-to-cordage ratio",
+    unlocks: "Braid cordage (also needs Weaving 5) — better fiber-to-cordage ratio",
   },
   raft: {
     id: "raft",
