@@ -56,15 +56,14 @@ export function SettlementPanel({
                 <div className="action-desc">{action.description}</div>
                 {action.drops.length > 0 ? (
                   <div className="action-drops">
-                    Drops:{" "}
-                    {action.drops.map((d, i) => (
-                      <span key={i}>
-                        {i > 0 && ", "}
+                    Drops:
+                    {[...action.drops]
+                      .sort((a, b) => (b.chance ?? 1) - (a.chance ?? 1))
+                      .map((d, i) => (
+                      <div key={i} className="drop-row">
                         {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}
-                        {d.chance != null && d.chance < 1
-                          ? ` (${Math.round(d.chance * 100)}%)`
-                          : ""}
-                      </span>
+                        {" "}({Math.round((d.chance ?? 1) * 100)}%)
+                      </div>
                     ))}
                   </div>
                 ) : (
