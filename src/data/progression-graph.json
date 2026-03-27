@@ -3005,6 +3005,11 @@
     },
     {
       "from": "expedition:dugout_voyage",
+      "to": "biome:nearby_island",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:dugout_voyage",
       "to": "resource:banana_shoot",
       "relation": "produces"
     },

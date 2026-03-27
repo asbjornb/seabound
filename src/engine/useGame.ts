@@ -27,6 +27,7 @@ import {
   getTotalWater,
   hasTool,
   hasBuilding,
+  hasVessel,
   loadGame,
   normalizeGameState,
   saveGame,
@@ -242,8 +243,8 @@ export function useGame() {
   const startExpedition = useCallback(
     (expedition: ExpeditionDef) => {
       setState((prev) => {
-        // Check vessel requirement (now a building)
-        if (expedition.requiredVessel && !hasBuilding(prev, expedition.requiredVessel)) {
+        // Check vessel requirement — higher-tier vessels satisfy lower-tier ones
+        if (expedition.requiredVessel && !hasVessel(prev, expedition.requiredVessel)) {
           return prev;
         }
         // Check food and water costs
