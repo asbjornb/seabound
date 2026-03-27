@@ -1274,11 +1274,6 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:rough_fiber",
-      "to": "recipe:craft_bamboo_knife",
-      "relation": "consumes"
-    },
-    {
       "from": "recipe:craft_bamboo_knife",
       "to": "skill:crafting",
       "relation": "trains"
