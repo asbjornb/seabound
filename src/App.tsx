@@ -50,6 +50,9 @@ export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
+  const [hideFlavorText, setHideFlavorText] = useState(
+    () => localStorage.getItem("seabound_hideFlavorText") === "true"
+  );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
 
   // Phase detection
@@ -138,7 +141,7 @@ export default function App() {
   const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= FULL_XP_ACTIONS;
 
   return (
-    <div className={`app phase-${currentPhase.id}`}>
+    <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {pendingChapter && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
@@ -182,6 +185,18 @@ export default function App() {
                 >
                   Load from file
                 </button>
+                <label className="settings-menu-item toggle">
+                  <span>Hide flavor text</span>
+                  <input
+                    type="checkbox"
+                    checked={hideFlavorText}
+                    onChange={(e) => {
+                      const v = e.target.checked;
+                      setHideFlavorText(v);
+                      localStorage.setItem("seabound_hideFlavorText", String(v));
+                    }}
+                  />
+                </label>
                 <button
                   className="settings-menu-item danger"
                   onClick={() => {

@@ -204,6 +204,24 @@ body {
   background: rgba(248, 113, 113, 0.1);
 }
 
+.settings-menu-item.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.settings-menu-item.toggle input {
+  accent-color: var(--accent);
+}
+
+/* Hide flavor text mode */
+.hide-flavor-text .action-desc,
+.hide-flavor-text .inventory-item-desc,
+.hide-flavor-text .building-desc {
+  display: none;
+}
+
 /* App body layout */
 .app-body {
   display: flex;
