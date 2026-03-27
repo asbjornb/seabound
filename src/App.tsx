@@ -334,6 +334,20 @@ export default function App() {
           </aside>
         )}
       </div>
+
+      <footer className="feedback-banner">
+        <p>
+          This is a very early version. Find anything unintuitive, historically
+          infeasible or unrealistic, a bug, something you hate or some other
+          feedback or suggestion, don't hesitate —{" "}
+          <a
+            href="mailto:asbjoernbrandt+seabound@gmail.com?subject=SeaBound%20Feedback"
+            className="feedback-link"
+          >
+            share it here
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

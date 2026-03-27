@@ -1215,3 +1215,33 @@ body {
 .phase-chapter-fire .chapter-name { color: #f0a050; text-shadow: 0 0 24px rgba(240, 160, 80, 0.5); }
 .phase-chapter-stone .chapter-name { color: #a0a8b8; text-shadow: 0 0 24px rgba(160, 168, 184, 0.4); }
 .phase-chapter-maritime .chapter-name { color: #50b0d0; text-shadow: 0 0 24px rgba(80, 176, 208, 0.5); }
+
+/* ═══════════════════════════════════════
+   Feedback Banner
+   ═══════════════════════════════════════ */
+
+.feedback-banner {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.feedback-banner p {
+  margin: 0;
+  max-width: 600px;
+  margin-inline: auto;
+}
+
+.feedback-link {
+  color: var(--accent);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.feedback-link:hover {
+  color: var(--text);
+}
