@@ -25,7 +25,7 @@ import {
   hasVessel,
 } from "./gameState";
 
-export type AccordionSection = "gather" | "craft" | "build" | "explore";
+export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
 
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
@@ -212,17 +212,19 @@ export function selectHasAnyResource(state: GameState): boolean {
   return Object.values(state.resources).some((amount) => amount > 0);
 }
 
-export function selectVisibleSections(params: {
+export function selectVisibleTabs(params: {
   hasFoodAccess: boolean;
+  hasAnyResource: boolean;
+  hasAnyXp: boolean;
   craftRecipeCount: number;
   buildRecipeCount: number;
   buildActionCount: number;
   buildingCount: number;
   availableStationCount: number;
   deployedStationCount: number;
-}): AccordionSection[] {
-  const sections: AccordionSection[] = ["gather"];
-  if (params.craftRecipeCount > 0) sections.push("craft");
+}): GameTab[] {
+  const tabs: GameTab[] = ["gather"];
+  if (params.craftRecipeCount > 0) tabs.push("craft");
   if (
     params.buildRecipeCount > 0 ||
     params.buildActionCount > 0 ||
@@ -230,10 +232,12 @@ export function selectVisibleSections(params: {
     params.availableStationCount > 0 ||
     params.deployedStationCount > 0
   ) {
-    sections.push("build");
+    tabs.push("build");
   }
-  if (params.hasFoodAccess) sections.push("explore");
-  return sections;
+  if (params.hasFoodAccess) tabs.push("explore");
+  if (params.hasAnyResource) tabs.push("inventory");
+  if (params.hasAnyXp) tabs.push("skills");
+  return tabs;
 }
 
 export interface ActionStatusInfo {
