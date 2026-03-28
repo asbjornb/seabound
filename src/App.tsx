@@ -263,7 +263,7 @@ export default function App() {
                 <div className="current-action-buttons">
                   {actionStatus?.outputs && (
                     <button
-                      className={`stop-when-full-btn${game.state.currentAction?.stopWhenFull ? " active" : ""}`}
+                      className={`stop-when-full-btn${game.state.stopWhenFull ? " active" : ""}`}
                       onClick={game.toggleStopWhenFull}
                       title="Stop automatically when output storage is full"
                     >

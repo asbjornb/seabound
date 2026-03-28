@@ -242,8 +242,8 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
-    stopWhenFull?: boolean;
   } | null;
+  stopWhenFull?: boolean;
   lastTickAt: number;
   totalPlayTimeMs: number;
   morale: number; // 0-100, affects action speed
