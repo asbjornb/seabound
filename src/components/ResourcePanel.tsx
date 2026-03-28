@@ -34,6 +34,11 @@ export function ResourcePanel({ state }: { state: GameState }) {
       >
         Morale:{" "}
         <span className="amount">{state.morale}</span>
+        {moralePercent !== 0 && (
+          <span className={`morale-speed-badge${moralePercent < 0 ? " negative" : ""}`}>
+            {moralePercent > 0 ? `+${moralePercent}%` : `${moralePercent}%`}
+          </span>
+        )}
         <span className="morale-bar-mini">
           <span
             className="morale-bar-fill"
