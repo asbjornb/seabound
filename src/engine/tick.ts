@@ -29,7 +29,7 @@ export interface CompletionEvent {
   toolCrafted?: string; // tool ID if a tool was crafted
 }
 
-/** Check if any output resource for the current action is at storage capacity. */
+/** Check if all output resources for the current action are at storage capacity. */
 function isOutputFull(state: GameState): boolean {
   const action = state.currentAction;
   if (!action) return false;
@@ -37,7 +37,7 @@ function isOutputFull(state: GameState): boolean {
   if (action.type === "gather") {
     const def = getActionById(action.actionId);
     if (!def) return false;
-    return def.drops.some((d) => {
+    return def.drops.every((d) => {
       const current = state.resources[d.resourceId] ?? 0;
       return current >= getStorageLimit(state, d.resourceId);
     });
