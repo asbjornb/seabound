@@ -27,6 +27,7 @@ import {
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
+  selectActionStatusInfo,
   selectReadyStationCount,
   selectVisibleTabs,
 } from "./engine/selectors";
@@ -133,6 +134,10 @@ export default function App() {
     () => selectReadyStationCount(game.state),
     [game.state]
   );
+  const actionStatus = useMemo(
+    () => selectActionStatusInfo(game.state),
+    [game.state]
+  );
   const repetitiveXpMultiplier = useMemo(
     () => getRepetitiveXpMultiplier(game.state.repetitiveActionCount),
     [game.state.repetitiveActionCount]
@@ -237,9 +242,20 @@ export default function App() {
             <div className="current-action">
               <div className="current-action-info">
                 <span className="current-action-name">{currentActionName}</span>
-                <button className="stop-btn" onClick={game.stopAction}>
-                  Stop
-                </button>
+                <div className="current-action-buttons">
+                  {actionStatus?.outputs && (
+                    <button
+                      className={`stop-when-full-btn${game.state.currentAction?.stopWhenFull ? " active" : ""}`}
+                      onClick={game.toggleStopWhenFull}
+                      title="Stop automatically when output storage is full"
+                    >
+                      Stop if full
+                    </button>
+                  )}
+                  <button className="stop-btn" onClick={game.stopAction}>
+                    Stop
+                  </button>
+                </div>
               </div>
               <div className="progress-bar">
                 <div
@@ -254,6 +270,28 @@ export default function App() {
                 ).toFixed(1)}
                 s
               </span>
+              {actionStatus && (
+                <div className="action-status-row">
+                  {actionStatus.inputs && actionStatus.inputs.map((inp) => (
+                    <span key={inp.name} className="action-status-tag">
+                      {inp.name} {inp.have}
+                    </span>
+                  ))}
+                  {actionStatus.craftsRemaining !== undefined && (
+                    <span className={`action-status-tag${actionStatus.craftsRemaining <= 1 ? " warning" : ""}`}>
+                      {actionStatus.craftsRemaining}x left
+                    </span>
+                  )}
+                  {actionStatus.outputs && actionStatus.outputs.map((out) => (
+                    <span
+                      key={out.name}
+                      className={`action-status-tag${out.amount >= out.limit ? " full" : ""}`}
+                    >
+                      {out.name} {out.amount}/{out.limit}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div
                 className={`repetition-status${isRepetitionPenaltyActive ? " penalty" : ""}`}
                 title="Manual action switch resets repetition to 0."

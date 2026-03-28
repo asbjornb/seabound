@@ -281,6 +281,15 @@ export function useGame() {
     });
   }, []);
 
+  const toggleStopWhenFull = useCallback(() => {
+    setState((prev) => {
+      if (!prev.currentAction) return prev;
+      const next = structuredClone(prev);
+      next.currentAction!.stopWhenFull = !prev.currentAction.stopWhenFull;
+      return next;
+    });
+  }, []);
+
   const deployStation = useCallback((station: StationDef) => {
     setState((prev) => {
       const skill = prev.skills[station.skillId];
@@ -457,6 +466,7 @@ export function useGame() {
     startCraft,
     startExpedition,
     stopAction,
+    toggleStopWhenFull,
     deployStation,
     collectStation,
     markPhaseSeen,

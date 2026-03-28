@@ -400,6 +400,27 @@ body {
   font-weight: 600;
 }
 
+.current-action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.stop-when-full-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.stop-when-full-btn.active {
+  background: var(--bar-fill);
+  border-color: var(--bar-fill);
+  color: white;
+}
+
 .stop-btn {
   background: var(--accent-dim);
   border: none;
@@ -435,6 +456,29 @@ body {
 .progress-time {
   font-size: 0.7rem;
   color: var(--text-dim);
+}
+
+.action-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.action-status-tag {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: var(--bar-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.action-status-tag.warning {
+  color: var(--warning);
+}
+
+.action-status-tag.full {
+  color: var(--warning);
 }
 
 .repetition-status {
