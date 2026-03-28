@@ -155,8 +155,17 @@ export function processTick(state: GameState, now: number): TickResult {
         }
       }
 
+      // Stop if player can't afford the next cycle
       if (state.currentAction) {
-        state.currentAction.startedAt = now - remaining;
+        const canAffordNext = effectiveInputs.every(
+          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+        );
+        const resolvedNext = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
+        if (!canAffordNext || !resolvedNext) {
+          state.currentAction = null;
+        } else {
+          state.currentAction.startedAt = now - remaining;
+        }
       }
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
@@ -212,8 +221,14 @@ export function processTick(state: GameState, now: number): TickResult {
       if (event) completions.push(event);
     }
 
+    // Stop if player can't afford the next expedition cycle
     if (state.currentAction) {
-      state.currentAction.startedAt = now - remaining;
+      if ((def.foodCost && getTotalFood(state) < def.foodCost) ||
+          (def.waterCost && getTotalWater(state) < def.waterCost)) {
+        state.currentAction = null;
+      } else {
+        state.currentAction.startedAt = now - remaining;
+      }
     }
   }
 
