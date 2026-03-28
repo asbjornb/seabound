@@ -16,16 +16,24 @@ src/
     types.ts      # All TypeScript interfaces & enums (ResourceId, SkillId, etc.)
     actions.ts    # Gathering actions
     recipes.ts    # Crafting/building recipes
-    resources.ts  # Resource definitions
+    resources.ts  # Resource definitions (includes foodValue/waterValue)
     skills.ts     # Skill definitions + XP formula
-    buildings.ts  # Settlement buildings
+    buildings.ts  # Settlement buildings (includes vesselTier)
+    biomes.ts     # Biome definitions (name, order, startingBiome)
+    phases.ts     # Game phase definitions (conditions that trigger each phase)
     expeditions.ts # Expeditions + RNG outcomes
-    milestones.ts # Skill level milestone effects
+    milestones.ts # Skill level milestone effects (including station effects)
+    stations.ts   # Passive set-wait-collect stations
+    registry.ts   # Central data registry — all engine/UI reads from here
+    modding.ts    # Mod export, import, validation, storage (IndexedDB)
+    registries.ts # Deprecated — proxy shim over registry.ts
   engine/         # Game logic
-    gameState.ts  # State shape, save/load, migrations
+    gameState.ts  # State shape, save/load, migrations, per-mod save keys
     useGame.ts    # Game controller hook (start actions, crafting, expeditions)
     tick.ts       # Frame update loop, progress, completions
+    phases.ts     # Phase detection (reads from data registry)
   components/     # React UI panels (ActionPanel, CraftingPanel, SettlementPanel, etc.)
+    ModPanel.tsx  # Mod management UI (import/export/activate/delete)
   App.tsx         # Main app: tabs, layout, settings
   App.css         # All styles (mobile-first, tropical theme)
 ```
@@ -66,5 +74,32 @@ Read `src/data/progression-graph.json` directly. Key paths:
 ## Architecture Notes
 
 - **Data-driven**: Game content is config objects in `src/data/`, not hardcoded in UI. To add content, add entries there.
-- **State**: `useGame()` hook provides all game state and actions to components. State saved as JSON in localStorage with auto-migration.
+- **Registry pattern**: All engine and component code reads game data through `src/data/registry.ts` (via `getResources()`, `getActionById()`, etc.), never by importing data files directly. This enables the mod system to swap data at runtime.
+- **State**: `useGame()` hook provides all game state and actions to components. State saved as JSON in localStorage with auto-migration. Saves are namespaced by mod ID.
+- **ID types**: `ResourceId`, `SkillId`, `BiomeId`, etc. are `string` aliases (not literal unions), so mods can introduce arbitrary new IDs.
 - **Strict TS**: No unused locals/params, no implicit any. Build must pass `tsc` cleanly.
+
+## Mod System
+
+The game is fully moddable. All game content flows through a `GameDataPack` in the registry.
+
+- **Export**: Settings → Mods → "Export current data pack" downloads all data as JSON
+- **Import**: Upload a modified JSON pack; validation checks all cross-references
+- **Storage**: Mod packs stored in IndexedDB; each mod gets its own localStorage save
+- **Switching**: Activate/deactivate mods from the Mods panel; page reloads on switch
+
+### Creating a mod
+
+1. Export the base game data pack (JSON)
+2. Edit it — change the `id` field, add/modify resources, recipes, actions, skills, etc.
+3. Import the modified pack; validation errors/warnings shown inline
+4. Activate the mod to play with it
+
+### What's moddable
+
+Everything in the data pack: resources (with food/water values), tools, skills, buildings (with vessel tiers, storage bonuses), biomes, phases (with trigger conditions), actions, recipes (with hideWhen rules), expeditions, stations, milestones.
+
+### Not yet moddable
+
+- **Icons/images**: served statically from `/icons/`. New mod IDs won't have icons.
+- **Progression graph**: `build-graph.ts` reads static files; doesn't run against loaded mods yet.
