@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { getDropChanceBonus } from "../data/milestones";
+import { getDropChanceBonus, getDurationMultiplier } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { ActionDef, BiomeId, GameState } from "../data/types";
-import { getResource, hasTool } from "../engine/gameState";
+import { getResource, getMoraleDurationMultiplier, getToolSpeedMultiplier, hasTool } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -70,15 +70,26 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
             </div>
             {!isCollapsed && list.map((action) => {
               // Check tool requirements
-              const missingTool = action.requiredTools?.find(
+              const missingTools = action.requiredTools?.filter(
                 (t) => !hasTool(state, t)
-              );
+              ) ?? [];
               // Check resource requirements
-              const missingResource = action.requiredResources?.find(
+              const missingResources = action.requiredResources?.filter(
                 (r) => getResource(state, r) < 1
-              );
-              const disabled = !!missingTool || !!missingResource;
+              ) ?? [];
+              const disabled = missingTools.length > 0 || missingResources.length > 0;
               const isActive = currentActionId === action.id;
+
+              // Calculate effective duration with morale + tool + milestone bonuses
+              const skillLevel = state.skills[action.skillId].level;
+              const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
+              const toolMultiplier = getToolSpeedMultiplier(state, action.id);
+              const milestoneMultiplier = getDurationMultiplier(action.skillId, skillLevel, action.id);
+              const effectiveDuration = Math.round(
+                action.durationMs * milestoneMultiplier * moraleMultiplier * toolMultiplier
+              );
+              const hasSpeedBonus = effectiveDuration < action.durationMs;
+
               return (
                 <div
                   key={action.id}
@@ -87,8 +98,9 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                 >
                   <div className="action-card-header">
                     <span className="action-name">{action.name}</span>
-                    <span className="action-time">
-                      {(action.durationMs / 1000).toFixed(1)}s
+                    <span className={`action-time${hasSpeedBonus ? " boosted" : ""}`}>
+                      {(effectiveDuration / 1000).toFixed(1)}s
+                      {hasSpeedBonus && <span className="base-time"> ({(action.durationMs / 1000).toFixed(1)}s)</span>}
                     </span>
                   </div>
                   <div className="action-desc">{action.description}</div>
@@ -117,20 +129,26 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   ) : (
                     <div className="action-drops">XP only</div>
                   )}
-                  {missingTool && (
+                  {(missingTools.length > 0 || missingResources.length > 0) && (
                     <div className="action-requires">
                       Requires:{" "}
-                      <span title={TOOLS[missingTool]?.description}>
-                        <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
-                      </span>
-                    </div>
-                  )}
-                  {missingResource && !missingTool && (
-                    <div className="action-requires">
-                      Requires:{" "}
-                      <span title={RESOURCES[missingResource]?.description}>
-                        <GameIcon id={missingResource} size={16} />{RESOURCES[missingResource]?.name ?? missingResource}
-                      </span>
+                      {missingTools.map((t, i) => (
+                        <span key={`tool-${i}`}>
+                          {i > 0 && ", "}
+                          <span title={TOOLS[t]?.description}>
+                            <GameIcon id={t} size={16} />{TOOLS[t]?.name ?? t}
+                          </span>
+                        </span>
+                      ))}
+                      {missingTools.length > 0 && missingResources.length > 0 && ", "}
+                      {missingResources.map((r, i) => (
+                        <span key={`res-${i}`}>
+                          {i > 0 && ", "}
+                          <span title={RESOURCES[r]?.description}>
+                            <GameIcon id={r} size={16} />{RESOURCES[r]?.name ?? r}
+                          </span>
+                        </span>
+                      ))}
                     </div>
                   )}
                   <div className="action-xp">

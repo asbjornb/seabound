@@ -4,8 +4,18 @@ import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { BUILDINGS } from "../data/buildings";
 import { GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getBuildingCount, getMoraleDurationMultiplier, getToolSpeedMultiplier, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
+
+/** Calculate effective morale gain accounting for soft cap above 100. */
+function effectiveMoraleGain(currentMorale: number, amount: number): number {
+  if (currentMorale < 100) {
+    const belowCap = Math.min(amount, 100 - currentMorale);
+    const aboveCap = amount - belowCap;
+    return belowCap + (aboveCap > 0 ? Math.floor(aboveCap / 2) : 0);
+  }
+  return Math.floor(amount / 2);
+}
 
 interface Props {
   recipes: RecipeDef[];
@@ -106,6 +116,12 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               // Resolve which tagged resources would be used (for display)
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
 
+              // Calculate effective duration with morale + tool bonuses
+              const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
+              const toolMultiplier = getToolSpeedMultiplier(state, recipe.id);
+              const effectiveDuration = Math.round(recipe.durationMs * moraleMultiplier * toolMultiplier);
+              const hasSpeedBonus = effectiveDuration < recipe.durationMs;
+
               return (
                 <div
                   key={recipe.id}
@@ -114,8 +130,9 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                 >
                   <div className="action-card-header">
                     <span className="action-name">{recipe.name}</span>
-                    <span className="action-time">
-                      {(recipe.durationMs / 1000).toFixed(1)}s
+                    <span className={`action-time${hasSpeedBonus ? " boosted" : ""}`}>
+                      {(effectiveDuration / 1000).toFixed(1)}s
+                      {hasSpeedBonus && <span className="base-time"> ({(recipe.durationMs / 1000).toFixed(1)}s)</span>}
                     </span>
                   </div>
                   <div className="action-desc">{recipe.description}</div>
@@ -218,7 +235,15 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       })()}
                     </div>
                   ) : recipe.moraleGain ? (
-                    <div className="recipe-output">+{recipe.moraleGain} Morale</div>
+                    <div className="recipe-output">
+                      +{recipe.moraleGain} Morale
+                      {(() => {
+                        const effective = effectiveMoraleGain(state.morale, recipe.moraleGain);
+                        return effective < recipe.moraleGain
+                          ? <span className="soft-cap-note"> (actually +{effective}, soft-capped above 100)</span>
+                          : null;
+                      })()}
+                    </div>
                   ) : (
                     <div className="recipe-output">XP only</div>
                   )}

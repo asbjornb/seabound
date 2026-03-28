@@ -1,6 +1,6 @@
 import { RESOURCES } from "../data/resources";
 import { ExpeditionDef, GameState } from "../data/types";
-import { getTotalFood, getTotalWater } from "../engine/gameState";
+import { getMoraleDurationMultiplier, getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -87,6 +87,9 @@ export function ExpeditionPanel({
       {expeditions.map((exp) => {
         const affordable = canAfford(exp, state);
         const unfound = undiscoveredBiomeCount(exp, state);
+        const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
+        const effectiveDuration = Math.round(exp.durationMs * moraleMultiplier);
+        const hasSpeedBonus = effectiveDuration < exp.durationMs;
         return (
           <div
             key={exp.id}
@@ -95,8 +98,9 @@ export function ExpeditionPanel({
           >
             <div className="action-card-header">
               <span className="action-name">{exp.name}</span>
-              <span className="action-time">
-                {(exp.durationMs / 1000).toFixed(1)}s
+              <span className={`action-time${hasSpeedBonus ? " boosted" : ""}`}>
+                {(effectiveDuration / 1000).toFixed(1)}s
+                {hasSpeedBonus && <span className="base-time"> ({(exp.durationMs / 1000).toFixed(1)}s)</span>}
               </span>
             </div>
             <div className="action-desc">{exp.description}</div>

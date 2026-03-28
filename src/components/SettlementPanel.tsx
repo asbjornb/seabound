@@ -34,13 +34,13 @@ export function SettlementPanel({
         <>
           <div className="section-title">Build Tasks</div>
           {buildActions.map((action) => {
-            const missingTool = action.requiredTools?.find(
+            const missingTools = action.requiredTools?.filter(
               (t) => !hasTool(state, t)
-            );
-            const missingResource = action.requiredResources?.find(
+            ) ?? [];
+            const missingResources = action.requiredResources?.filter(
               (r) => getResource(state, r) < 1
-            );
-            const disabled = !!missingTool || !!missingResource;
+            ) ?? [];
+            const disabled = missingTools.length > 0 || missingResources.length > 0;
             return (
               <div
                 key={action.id}
@@ -69,14 +69,22 @@ export function SettlementPanel({
                 ) : (
                   <div className="action-drops">XP only</div>
                 )}
-                {missingTool && (
+                {(missingTools.length > 0 || missingResources.length > 0) && (
                   <div className="action-requires">
-                    Requires: <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
-                  </div>
-                )}
-                {missingResource && !missingTool && (
-                  <div className="action-requires">
-                    Requires: {RESOURCES[missingResource]?.name ?? missingResource}
+                    Requires:{" "}
+                    {missingTools.map((t, i) => (
+                      <span key={`tool-${i}`}>
+                        {i > 0 && ", "}
+                        <GameIcon id={t} size={16} />{TOOLS[t]?.name ?? t}
+                      </span>
+                    ))}
+                    {missingTools.length > 0 && missingResources.length > 0 && ", "}
+                    {missingResources.map((r, i) => (
+                      <span key={`res-${i}`}>
+                        {i > 0 && ", "}
+                        {RESOURCES[r]?.name ?? r}
+                      </span>
+                    ))}
                   </div>
                 )}
                 <div className="action-xp">

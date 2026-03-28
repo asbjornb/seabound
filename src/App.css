@@ -698,6 +698,22 @@ body {
   color: var(--text-dim);
 }
 
+.action-time.boosted {
+  color: var(--success);
+}
+
+.action-time .base-time {
+  color: var(--text-dim);
+  text-decoration: line-through;
+  font-size: 0.65rem;
+}
+
+.soft-cap-note {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
 .action-desc {
   font-size: 0.78rem;
   color: var(--text-dim);
