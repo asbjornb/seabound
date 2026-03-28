@@ -1,23 +1,107 @@
 /**
  * Mod system: export, import, validate, and manage game data packs.
+ * Supports icon bundling — mod packs are exported as .zip files containing
+ * data.json + icons/*.png. Icons are stored in IndexedDB and served to
+ * GameIcon via object URLs.
  */
 
+import JSZip from "jszip";
 import type { GameDataPack } from "./registry";
 import { createBaseGamePack, getDataPack, setDataPack } from "./registry";
+
+// ═══════════════════════════════════════
+// Icon URL cache (active mod)
+// ═══════════════════════════════════════
+
+/** Map of iconId → object URL for the currently active mod's icons. */
+let _modIconUrls: Map<string, string> = new Map();
+
+/** Get an object URL for a mod-provided icon, or null if none. */
+export function getModIconUrl(iconId: string): string | null {
+  return _modIconUrls.get(iconId) ?? null;
+}
+
+/** Revoke all current mod icon object URLs and clear the cache. */
+function clearModIconUrls(): void {
+  for (const url of _modIconUrls.values()) {
+    URL.revokeObjectURL(url);
+  }
+  _modIconUrls = new Map();
+}
+
+/** Load all icons for a mod from IndexedDB into the URL cache. */
+async function loadModIconUrls(modId: string): Promise<void> {
+  clearModIconUrls();
+  if (modId === "base") return;
+  const icons = await loadAllModIcons(modId);
+  for (const { iconId, blob } of icons) {
+    _modIconUrls.set(iconId, URL.createObjectURL(blob));
+  }
+}
 
 // ═══════════════════════════════════════
 // Export
 // ═══════════════════════════════════════
 
-/** Export the current data pack as a downloadable JSON file. */
-export function exportModPack(): void {
+/** Collect all icon IDs referenced by a data pack. */
+function collectIconIds(pack: GameDataPack): string[] {
+  const ids = new Set<string>();
+
+  // Resources
+  for (const id of Object.keys(pack.resources)) ids.add(id);
+  // Tools
+  for (const id of Object.keys(pack.tools)) ids.add(id);
+  // Skills (icon convention: skill_{id})
+  for (const id of Object.keys(pack.skills)) ids.add(`skill_${id}`);
+  // Buildings
+  for (const id of Object.keys(pack.buildings)) ids.add(id);
+  // Biomes (icon convention: biome_{id})
+  for (const id of Object.keys(pack.biomes)) ids.add(`biome_${id}`);
+
+  return Array.from(ids);
+}
+
+/** Export the current data pack as a downloadable .zip with icons. */
+export async function exportModPack(): Promise<void> {
   const pack = getDataPack();
-  const json = JSON.stringify(pack, null, 2);
-  const blob = new Blob([json], { type: "application/json" });
+  const zip = new JSZip();
+
+  // Add data.json
+  zip.file("data.json", JSON.stringify(pack, null, 2));
+
+  // Collect all icon IDs and bundle any we can find
+  const iconIds = collectIconIds(pack);
+  const iconsFolder = zip.folder("icons")!;
+
+  // For each icon, check mod icon store first, then try static /icons/
+  const modIcons = pack.id !== "base" ? await loadAllModIcons(pack.id) : [];
+  const modIconMap = new Map(modIcons.map((i) => [i.iconId, i.blob]));
+
+  const fetchPromises = iconIds.map(async (iconId) => {
+    // Check mod-stored icon first
+    const modBlob = modIconMap.get(iconId);
+    if (modBlob) {
+      iconsFolder.file(`${iconId}.png`, modBlob);
+      return;
+    }
+    // Try fetching from static /icons/
+    try {
+      const resp = await fetch(`/icons/${iconId}.png`);
+      if (resp.ok) {
+        const blob = await resp.blob();
+        iconsFolder.file(`${iconId}.png`, blob);
+      }
+    } catch {
+      // Icon not available — skip silently
+    }
+  });
+  await Promise.all(fetchPromises);
+
+  const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `seabound-mod-${pack.id}.json`;
+  a.download = `seabound-mod-${pack.id}.zip`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -154,19 +238,79 @@ export function validateModPack(pack: unknown): ValidationResult {
 // Import
 // ═══════════════════════════════════════
 
-/** Import a mod pack from a JSON file. Returns validation result. */
-export function importModPack(json: string): ValidationResult & { pack?: GameDataPack } {
+export interface ImportResult extends ValidationResult {
+  pack?: GameDataPack;
+  iconCount: number;
+}
+
+/** Import a mod pack from a JSON string (legacy). Returns validation result. */
+export function importModPackFromJson(json: string): ImportResult {
   let parsed: unknown;
   try {
     parsed = JSON.parse(json);
   } catch {
-    return { valid: false, errors: ["Invalid JSON"], warnings: [] };
+    return { valid: false, errors: ["Invalid JSON"], warnings: [], iconCount: 0 };
   }
 
   const result = validateModPack(parsed);
-  if (!result.valid) return result;
+  if (!result.valid) return { ...result, iconCount: 0 };
 
-  return { ...result, pack: parsed as GameDataPack };
+  return { ...result, pack: parsed as GameDataPack, iconCount: 0 };
+}
+
+/** Import a mod pack from a .zip file. Extracts data.json and icons/. */
+export async function importModPackFromZip(file: File): Promise<ImportResult> {
+  let zip: JSZip;
+  try {
+    zip = await JSZip.loadAsync(file);
+  } catch {
+    return { valid: false, errors: ["Invalid zip file"], warnings: [], iconCount: 0 };
+  }
+
+  // Find data.json
+  const dataFile = zip.file("data.json");
+  if (!dataFile) {
+    return { valid: false, errors: ["Zip missing data.json"], warnings: [], iconCount: 0 };
+  }
+
+  const json = await dataFile.async("string");
+  const result = importModPackFromJson(json);
+  if (!result.valid || !result.pack) return result;
+
+  // Extract icons
+  const icons: { iconId: string; blob: Blob }[] = [];
+  const iconFiles = zip.folder("icons");
+  if (iconFiles) {
+    const promises: Promise<void>[] = [];
+    iconFiles.forEach((relativePath, entry) => {
+      if (entry.dir) return;
+      if (!relativePath.endsWith(".png")) return;
+      const iconId = relativePath.replace(/\.png$/, "");
+      promises.push(
+        entry.async("blob").then((blob) => {
+          icons.push({ iconId, blob });
+        })
+      );
+    });
+    await Promise.all(promises);
+  }
+
+  // Save icons to IndexedDB
+  if (icons.length > 0) {
+    await saveModIcons(result.pack.id, icons);
+  }
+
+  return { ...result, iconCount: icons.length };
+}
+
+/** Import a mod pack from a File (auto-detects .json vs .zip). */
+export async function importModPack(file: File): Promise<ImportResult> {
+  if (file.name.endsWith(".zip") || file.type === "application/zip") {
+    return importModPackFromZip(file);
+  }
+  // Legacy JSON import
+  const text = await file.text();
+  return importModPackFromJson(text);
 }
 
 // ═══════════════════════════════════════
@@ -175,14 +319,18 @@ export function importModPack(json: string): ValidationResult & { pack?: GameDat
 
 const MOD_DB_NAME = "seabound_mods";
 const MOD_STORE_NAME = "packs";
+const ICON_STORE_NAME = "icons";
 
 function openModDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(MOD_DB_NAME, 1);
+    const request = indexedDB.open(MOD_DB_NAME, 2);
     request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains(MOD_STORE_NAME)) {
         db.createObjectStore(MOD_STORE_NAME, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains(ICON_STORE_NAME)) {
+        db.createObjectStore(ICON_STORE_NAME, { keyPath: "key" });
       }
     };
     request.onsuccess = () => resolve(request.result);
@@ -212,8 +360,9 @@ export async function loadModPack(id: string): Promise<GameDataPack | null> {
   });
 }
 
-/** Delete a mod pack from IndexedDB. */
+/** Delete a mod pack and its icons from IndexedDB. */
 export async function deleteModPack(id: string): Promise<void> {
+  await deleteModIcons(id);
   const db = await openModDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(MOD_STORE_NAME, "readwrite");
@@ -238,6 +387,75 @@ export async function listModPacks(): Promise<{ id: string; name: string; versio
 }
 
 // ═══════════════════════════════════════
+// Icon storage (IndexedDB)
+// ═══════════════════════════════════════
+
+interface StoredIcon {
+  key: string;    // "modId/iconId"
+  modId: string;
+  iconId: string;
+  blob: Blob;
+}
+
+/** Save icons for a mod. */
+async function saveModIcons(modId: string, icons: { iconId: string; blob: Blob }[]): Promise<void> {
+  const db = await openModDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ICON_STORE_NAME, "readwrite");
+    const store = tx.objectStore(ICON_STORE_NAME);
+    for (const { iconId, blob } of icons) {
+      const entry: StoredIcon = {
+        key: `${modId}/${iconId}`,
+        modId,
+        iconId,
+        blob,
+      };
+      store.put(entry);
+    }
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+/** Load all icons for a mod from IndexedDB. */
+async function loadAllModIcons(modId: string): Promise<{ iconId: string; blob: Blob }[]> {
+  const db = await openModDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ICON_STORE_NAME, "readonly");
+    const store = tx.objectStore(ICON_STORE_NAME);
+    const request = store.getAll();
+    request.onsuccess = () => {
+      const all = request.result as StoredIcon[];
+      const filtered = all
+        .filter((entry) => entry.modId === modId)
+        .map((entry) => ({ iconId: entry.iconId, blob: entry.blob }));
+      resolve(filtered);
+    };
+    request.onerror = () => reject(request.error);
+  });
+}
+
+/** Delete all icons for a mod. */
+async function deleteModIcons(modId: string): Promise<void> {
+  const db = await openModDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ICON_STORE_NAME, "readwrite");
+    const store = tx.objectStore(ICON_STORE_NAME);
+    const request = store.getAll();
+    request.onsuccess = () => {
+      const all = request.result as StoredIcon[];
+      for (const entry of all) {
+        if (entry.modId === modId) {
+          store.delete(entry.key);
+        }
+      }
+      tx.oncomplete = () => resolve();
+    };
+    request.onerror = () => reject(request.error);
+  });
+}
+
+// ═══════════════════════════════════════
 // Mod switching
 // ═══════════════════════════════════════
 
@@ -245,11 +463,13 @@ export async function listModPacks(): Promise<{ id: string; name: string; versio
 export async function switchToMod(modId: string): Promise<void> {
   if (modId === "base") {
     setDataPack(createBaseGamePack());
+    await loadModIconUrls("base");
     return;
   }
   const pack = await loadModPack(modId);
   if (!pack) throw new Error(`Mod '${modId}' not found`);
   setDataPack(pack);
+  await loadModIconUrls(modId);
 }
 
 /** Get the active mod ID. */

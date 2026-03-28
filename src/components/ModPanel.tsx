@@ -4,10 +4,10 @@ import {
   exportModPack,
   getActiveModId,
   importModPack,
+  ImportResult,
   listModPacks,
   saveModPack,
   switchToMod,
-  ValidationResult,
 } from "../data/modding";
 
 interface Props {
@@ -24,8 +24,9 @@ interface ModInfo {
 export function ModPanel({ onClose, onModSwitch }: Props) {
   const [mods, setMods] = useState<ModInfo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [validation, setValidation] = useState<ValidationResult | null>(null);
+  const [validation, setValidation] = useState<ImportResult | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const activeModId = getActiveModId();
 
@@ -47,14 +48,16 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
     async (file: File) => {
       setImportStatus(null);
       setValidation(null);
-      const text = await file.text();
-      const result = importModPack(text);
+      const result = await importModPack(file);
       setValidation(result);
 
       if (result.valid && result.pack) {
         try {
           await saveModPack(result.pack);
-          setImportStatus(`Imported "${result.pack.name}" (${result.pack.id})`);
+          const iconMsg = result.iconCount > 0
+            ? ` with ${result.iconCount} icon(s)`
+            : "";
+          setImportStatus(`Imported "${result.pack.name}" (${result.pack.id})${iconMsg}`);
           refreshMods();
         } catch (e) {
           setImportStatus(`Failed to save: ${e}`);
@@ -63,6 +66,16 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
     },
     [refreshMods]
   );
+
+  const handleExport = useCallback(async () => {
+    setExporting(true);
+    try {
+      await exportModPack();
+    } catch (e) {
+      setImportStatus(`Export failed: ${e}`);
+    }
+    setExporting(false);
+  }, []);
 
   const handleSwitch = useCallback(
     async (modId: string) => {
@@ -109,8 +122,8 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
           <div className="mod-section">
             <div className="mod-section-title">Actions</div>
             <div className="mod-actions">
-              <button className="mod-btn" onClick={() => exportModPack()}>
-                Export current data pack
+              <button className="mod-btn" onClick={handleExport} disabled={exporting}>
+                {exporting ? "Exporting..." : "Export current data pack"}
               </button>
               <button
                 className="mod-btn"
@@ -130,7 +143,7 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".json"
+              accept=".json,.zip"
               style={{ display: "none" }}
               onChange={(e) => {
                 const file = e.target.files?.[0];
@@ -207,10 +220,11 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
             <div className="mod-section-title">How to create a mod</div>
             <div className="mod-guide">
               <ol>
-                <li>Click "Export current data pack" to download the base game data as JSON.</li>
-                <li>Edit the JSON file — add resources, recipes, actions, skills, etc.</li>
+                <li>Click "Export current data pack" to download a .zip with data + icons.</li>
+                <li>Edit data.json — add resources, recipes, actions, skills, etc.</li>
                 <li>Change the "id" field to a unique name for your mod.</li>
-                <li>Click "Import mod pack" to load it. Validation errors will be shown.</li>
+                <li>Add or replace PNGs in the icons/ folder for custom artwork.</li>
+                <li>Click "Import mod pack" to load the .zip (or a plain .json without icons).</li>
                 <li>Click "Activate" to play with the mod. Each mod gets its own save.</li>
               </ol>
             </div>
