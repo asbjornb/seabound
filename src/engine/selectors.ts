@@ -52,17 +52,6 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
     if (action.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     if (action.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (action.requiredResources?.some((resId) => getResource(state, resId) < 1)) return false;
-    if (action.hideWhen) {
-      const allMet = action.hideWhen.every((cond) => {
-        switch (cond.type) {
-          case "drops_no_use":
-            return action.drops.every((drop) => !resourceHasUse(drop.resourceId, state));
-          default:
-            return false;
-        }
-      });
-      if (allMet) return false;
-    }
     return true;
   });
 }

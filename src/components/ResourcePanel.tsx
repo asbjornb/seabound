@@ -11,6 +11,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
   const entries = Object.entries(state.resources).filter(([id, v]) => {
     if (v <= 0) return false;
     const def = RESOURCES[id];
+    // Always show food/water resources — they're consumed by expeditions, not just recipes
     if (def?.foodValue || def?.waterValue) return true;
     if (!resourceHasUse(id, state)) return false;
     return true;

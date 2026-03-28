@@ -45,7 +45,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
   const resourceEntries = Object.entries(state.resources).filter(([id, v]) => {
     if (v <= 0) return false;
     const def = RESOURCES[id];
-    // Always show food/water resources — they're consumed by survival, not just recipes
+    // Always show food/water resources — they're consumed by expeditions, not just recipes
     if (def?.foodValue || def?.waterValue) return true;
     // Hide resources with no remaining use in any recipe
     if (!resourceHasUse(id, state)) return false;

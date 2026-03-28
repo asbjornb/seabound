@@ -43,7 +43,6 @@ export const ACTIONS: ActionDef[] = [
     ],
     requiredBiome: "rocky_shore",
     xpGain: 8,
-    hideWhen: [{ type: "drops_no_use" }],
   },
   {
     id: "collect_palm_frond",

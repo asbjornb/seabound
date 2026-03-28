@@ -4,12 +4,12 @@ import {
   getBuildings,
   getExpeditionById,
   getRecipeById,
-  getRecipes,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
 import { addResource, deductFood, deductWater, getEffectiveInputs, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
+import { resourceHasUse } from "./selectors";
 
 export interface TickResult {
   completions: CompletionEvent[];
@@ -236,27 +236,11 @@ export function processTick(state: GameState, now: number): TickResult {
   return { completions, elapsedMs };
 }
 
-function resourceHasUse(state: GameState, resourceId: string): boolean {
-  const BUILDINGS = getBuildings();
-  return getRecipes().some((r) => {
-    const effectiveInputs = getEffectiveInputs(r, state);
-    const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
-    if (!usesResource) return false;
-    if (r.buildingOutput && state.buildings.includes(r.buildingOutput)) {
-      const bdef = BUILDINGS[r.buildingOutput];
-      if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
-    }
-    if (r.oneTimeCraft && r.output && (state.resources[r.output.resourceId] ?? 0) >= 1) return false;
-    if (r.oneTimeCraft && r.toolOutput && state.tools.includes(r.toolOutput)) return false;
-    return true;
-  });
-}
-
 /** Clean up resources that have no remaining use in any recipe. */
 function cleanupObsoleteResources(state: GameState): void {
   // Check bamboo_splinter specifically (backward compat)
   if ((state.resources["bamboo_splinter"] ?? 0) < 1) return;
-  if (resourceHasUse(state, "bamboo_splinter")) return;
+  if (resourceHasUse("bamboo_splinter", state)) return;
   delete state.resources["bamboo_splinter"];
 }
 
@@ -269,7 +253,8 @@ function applyGatherCompletion(
   if (!def) return null;
 
   const skillLevel = state.skills[def.skillId].level;
-  const drops = rollDrops(def.drops, def.skillId, skillLevel, def.id);
+  const usefulDrops = def.drops.filter((d) => resourceHasUse(d.resourceId, state));
+  const drops = rollDrops(usefulDrops, def.skillId, skillLevel, def.id);
   const newResources: string[] = [];
   for (const drop of drops) {
     if (!state.discoveredResources.includes(drop.resourceId)) {

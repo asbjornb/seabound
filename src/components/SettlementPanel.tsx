@@ -1,6 +1,7 @@
 import { getBuildings, getResources, getTools } from "../data/registry";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
+import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -55,10 +56,11 @@ export function SettlementPanel({
                   </span>
                 </div>
                 <div className="action-desc">{action.description}</div>
-                {action.drops.length > 0 ? (
+                {action.drops.filter((d) => resourceHasUse(d.resourceId, state)).length > 0 ? (
                   <div className="action-drops">
                     Drops:
                     {[...action.drops]
+                      .filter((d) => resourceHasUse(d.resourceId, state))
                       .sort((a, b) => (b.chance ?? 1) - (a.chance ?? 1))
                       .map((d, i) => (
                       <div key={i} className="drop-row">

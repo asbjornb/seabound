@@ -3,6 +3,7 @@ import { getDropChanceBonus } from "../data/milestones";
 import { getBiomeOrder, getBiomes, getResources, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
 import { getResource, hasTool } from "../engine/gameState";
+import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -78,10 +79,11 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                     </span>
                   </div>
                   <div className="action-desc">{action.description}</div>
-                  {action.drops.length > 0 ? (
+                  {action.drops.filter((d) => resourceHasUse(d.resourceId, state)).length > 0 ? (
                     <div className="action-drops">
                       Drops:
                       {action.drops
+                        .filter((d) => resourceHasUse(d.resourceId, state))
                         .map((d) => ({
                           ...d,
                           effectiveChance: Math.min(
