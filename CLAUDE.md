@@ -83,17 +83,18 @@ Read `src/data/progression-graph.json` directly. Key paths:
 
 The game is fully moddable. All game content flows through a `GameDataPack` in the registry.
 
-- **Export**: Settings → Mods → "Export current data pack" downloads all data as JSON
-- **Import**: Upload a modified JSON pack; validation checks all cross-references
-- **Storage**: Mod packs stored in IndexedDB; each mod gets its own localStorage save
-- **Switching**: Activate/deactivate mods from the Mods panel; page reloads on switch
+- **Export**: Settings → Mods → "Export current data pack" downloads a .zip with data.json + icons/
+- **Import**: Upload a .zip (data + icons) or legacy .json; validation checks all cross-references
+- **Storage**: Mod packs stored in IndexedDB; icons stored separately in IndexedDB; each mod gets its own localStorage save
+- **Switching**: Activate/deactivate mods from the Mods panel; mod icons loaded into memory as object URLs on switch
 
 ### Creating a mod
 
-1. Export the base game data pack (JSON)
-2. Edit it — change the `id` field, add/modify resources, recipes, actions, skills, etc.
-3. Import the modified pack; validation errors/warnings shown inline
-4. Activate the mod to play with it
+1. Export the base game data pack (.zip with data.json + icons/)
+2. Edit data.json — change the `id` field, add/modify resources, recipes, actions, skills, etc.
+3. Add or replace PNGs in the icons/ folder for custom artwork
+4. Import the modified .zip (or plain .json without icons); validation errors/warnings shown inline
+5. Activate the mod to play with it
 
 ### What's moddable
 
@@ -101,5 +102,4 @@ Everything in the data pack: resources (with food/water values), tools, skills, 
 
 ### Not yet moddable
 
-- **Icons/images**: served statically from `/icons/`. New mod IDs won't have icons.
 - **Progression graph**: `build-graph.ts` reads static files; doesn't run against loaded mods yet.
