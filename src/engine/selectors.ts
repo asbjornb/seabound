@@ -50,6 +50,8 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
     if (action.requiredBiome && !state.discoveredBiomes.includes(action.requiredBiome)) return false;
     if (action.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    if (action.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
+    if (action.requiredResources?.some((resId) => getResource(state, resId) < 1)) return false;
     return true;
   });
 }
@@ -66,10 +68,12 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.buildingOutput === "raft" && hasBuilding(state, "dugout")) return false;
     // Hide twist cordage once braid cordage is unlocked (strictly better)
     if (recipe.id === "twist_cordage" && state.buildings.includes("fiber_loom")) return false;
-    // Hide non-stackable building recipes if building already exists
+    // Hide building recipes if building already exists (or at max count for stackable)
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
+      // Stackable: hide if at max count
+      if (getBuildingCount(state, recipe.buildingOutput) >= bdef.maxCount) return false;
       // For stackable upgrade recipes, hide if no source building left to upgrade
       if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
     }

@@ -310,8 +310,11 @@ function applyCraftCompletion(
     const bdef = BUILDINGS[def.buildingOutput];
     const isStackable = bdef?.maxCount && bdef.maxCount > 1;
     if (isStackable) {
-      // Stackable buildings allow duplicates
-      state.buildings.push(def.buildingOutput);
+      // Stackable buildings allow duplicates, up to maxCount
+      const currentCount = state.buildings.filter((b) => b === def.buildingOutput).length;
+      if (currentCount < bdef.maxCount!) {
+        state.buildings.push(def.buildingOutput);
+      }
     } else if (!state.buildings.includes(def.buildingOutput)) {
       state.buildings.push(def.buildingOutput);
     }
