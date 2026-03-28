@@ -169,8 +169,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     })}
                   </div>
                   {recipe.requiredTools && recipe.requiredTools.length > 0 && (
-                    <div className="action-requires">
-                      Requires:{" "}
+                    <div className="action-requires met">
+                      Uses:{" "}
                       {recipe.requiredTools.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
@@ -180,8 +180,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     </div>
                   )}
                   {recipe.requiredItems && recipe.requiredItems.length > 0 && (
-                    <div className="action-requires">
-                      Requires:{" "}
+                    <div className="action-requires met">
+                      Uses:{" "}
                       {recipe.requiredItems.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
