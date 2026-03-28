@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { BIOME_ICONS, RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { ActionDef, BiomeId, GameState } from "../data/types";
 import { getResource, hasTool } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 interface Props {
   actions: ActionDef[];
@@ -65,7 +65,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               onClick={() => toggleBiome(biomeId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              {BIOME_ICONS[biomeId]} {BIOME_NAMES[biomeId]}
+              <GameIcon id={`biome_${biomeId}`} /> {BIOME_NAMES[biomeId]}
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((action) => {
@@ -108,7 +108,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                         .sort((a, b) => b.effectiveChance - a.effectiveChance)
                         .map((d, i) => (
                         <div key={i} className="drop-row">
-                            {RESOURCE_ICONS[d.resourceId] ?? ""}{d.amount}x{" "}
+                            <GameIcon id={d.resourceId} size={16} />{d.amount}x{" "}
                             {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                             {" "}({Math.round(d.effectiveChance * 100)}%)
                         </div>
@@ -121,7 +121,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                     <div className="action-requires">
                       Requires:{" "}
                       <span title={TOOLS[missingTool]?.description}>
-                        {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                        <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
                       </span>
                     </div>
                   )}
@@ -129,7 +129,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                     <div className="action-requires">
                       Requires:{" "}
                       <span title={RESOURCES[missingResource]?.description}>
-                        {RESOURCE_ICONS[missingResource] ?? ""}{RESOURCES[missingResource]?.name ?? missingResource}
+                        <GameIcon id={missingResource} size={16} />{RESOURCES[missingResource]?.name ?? missingResource}
                       </span>
                     </div>
                   )}

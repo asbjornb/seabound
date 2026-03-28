@@ -1,9 +1,9 @@
 import { BUILDINGS } from "../data/buildings";
-import { BUILDING_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 interface Props {
   buildRecipes: RecipeDef[];
@@ -71,7 +71,7 @@ export function SettlementPanel({
                 )}
                 {missingTool && (
                   <div className="action-requires">
-                    Requires: {TOOL_ICONS[missingTool] ?? ""}{TOOLS[missingTool]?.name ?? missingTool}
+                    Requires: <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
                   </div>
                 )}
                 {missingResource && !missingTool && (
@@ -218,7 +218,7 @@ export function SettlementPanel({
               return (
                 <div key={bid} className="building-card built">
                   <div className="building-name">
-                    {BUILDING_ICONS[bid as BuildingId] ?? ""} {bdef?.name ?? bid}
+                    <GameIcon id={bid as BuildingId} /> {bdef?.name ?? bid}
                     {isStackable && ` (${count})`}
                   </div>
                   <div className="building-desc">

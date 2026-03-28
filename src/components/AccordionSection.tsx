@@ -2,7 +2,7 @@ import { forwardRef, ReactNode } from "react";
 
 interface Props {
   name: string;
-  icon: string;
+  icon: ReactNode;
   expanded: boolean;
   onToggle: () => void;
   summary?: string;

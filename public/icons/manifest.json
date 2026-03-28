@@ -1,0 +1,267 @@
+[
+  {
+    "id": "biome_rocky_shore",
+    "filename": "images/biome_rocky_shore.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Cool grey-blue (#a0a8b8). Sharp edges, flaked surfaces.. Dark volcanic rocks with tide pools between them. Wet, glistening. Small crabs and shells visible.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "biome",
+    "object": "Volcanic rock tide pools",
+    "description": "Dark volcanic rocks with tide pools between them. Wet, glistening. Small crabs and shells visible.",
+    "theme": "stone",
+    "size": 64,
+    "tags": [
+      "biome",
+      "phase0"
+    ]
+  },
+  {
+    "id": "biome_bamboo_grove",
+    "filename": "images/biome_bamboo_grove.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. Tall green bamboo stalks, dense and vertical. Filtered green light. Peaceful, productive feeling.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "biome",
+    "object": "Dense bamboo forest",
+    "description": "Tall green bamboo stalks, dense and vertical. Filtered green light. Peaceful, productive feeling.",
+    "theme": "bamboo",
+    "size": 64,
+    "tags": [
+      "biome",
+      "phase1"
+    ]
+  },
+  {
+    "id": "biome_jungle_interior",
+    "filename": "images/biome_jungle_interior.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. Thick jungle canopy with vines, broad leaves, and filtered golden light. Mysterious, deeper island. Darker greens.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "biome",
+    "object": "Dense tropical jungle",
+    "description": "Thick jungle canopy with vines, broad leaves, and filtered golden light. Mysterious, deeper island. Darker greens.",
+    "theme": "bamboo",
+    "size": 64,
+    "tags": [
+      "biome",
+      "phase2"
+    ]
+  },
+  {
+    "id": "biome_nearby_island",
+    "filename": "images/biome_nearby_island.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Ocean blue-cyan (#50b0d0). Weathered wood, salt-bleached.. A small volcanic island seen across blue water. Dark peak with green slopes. Clouds around summit. Horizon adventure feel.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "biome",
+    "object": "Distant volcanic island",
+    "description": "A small volcanic island seen across blue water. Dark peak with green slopes. Clouds around summit. Horizon adventure feel.",
+    "theme": "maritime",
+    "size": 64,
+    "tags": [
+      "biome",
+      "maritime"
+    ]
+  },
+  {
+    "id": "tab_gather",
+    "filename": "images/tab_gather.png",
+    "prompt": "(from explorer)",
+    "model": "explorer",
+    "category": "ui_tab",
+    "object": "Open hand reaching",
+    "description": "An open hand reaching down to pick something up. Active, purposeful. Warm skin tone against transparent bg.",
+    "theme": "bare_hands",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "tab_craft",
+    "filename": "images/tab_craft.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. A hammerstone striking downward with motion lines. Impact moment. Dynamic, productive.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Hammer striking",
+    "description": "A hammerstone striking downward with motion lines. Impact moment. Dynamic, productive.",
+    "theme": "bamboo",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "tab_build",
+    "filename": "images/tab_build.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. A simple shelter frame silhouette — two sticks leaning together with a crossbar. Iconic, minimal, recognizable.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Shelter / tent frame",
+    "description": "A simple shelter frame silhouette — two sticks leaning together with a crossbar. Iconic, minimal, recognizable.",
+    "theme": "bamboo",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "tab_explore",
+    "filename": "images/tab_explore.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Ocean blue-cyan (#50b0d0). Weathered wood, salt-bleached.. A stylized compass with N/S/E/W points. Polynesian-inspired design. Navigation and discovery.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Compass rose",
+    "description": "A stylized compass with N/S/E/W points. Polynesian-inspired design. Navigation and discovery.",
+    "theme": "maritime",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "tab_inventory",
+    "filename": "images/tab_inventory.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A small woven pouch or bag tied with cordage. Slightly open showing items inside. Matches island craft aesthetic.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Woven pouch / satchel",
+    "description": "A small woven pouch or bag tied with cordage. Slightly open showing items inside. Matches island craft aesthetic.",
+    "theme": "bare_hands",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "tab_skills",
+    "filename": "images/tab_skills.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Warm amber/orange (#f0a050). Charred edges, smoke wisps.. A glowing star or ascending sparkle pattern. Warm amber glow matching accent color. Achievement, growth.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Rising star / level-up",
+    "description": "A glowing star or ascending sparkle pattern. Warm amber glow matching accent color. Achievement, growth.",
+    "theme": "fire",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "ui_settings_gear",
+    "filename": "images/ui_settings_gear.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_misc",
+    "object": "Gear / cog icon",
+    "description": "A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.",
+    "theme": "bare_hands",
+    "size": 48,
+    "tags": [
+      "ui",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "ui_journal_log",
+    "filename": "images/ui_journal_log.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A small scroll or folded bark-cloth sheet with scratched markings. Island journal/log book.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_misc",
+    "object": "Bark-cloth journal",
+    "description": "A small scroll or folded bark-cloth sheet with scratched markings. Island journal/log book.",
+    "theme": "bare_hands",
+    "size": 48,
+    "tags": [
+      "ui",
+      "always_visible"
+    ]
+  },
+  {
+    "id": "ui_morale_heart",
+    "filename": "images/ui_morale_heart.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A heart shape made from small shells or shell beads. Warm, decorative. Matches the morale/comfort theme.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_misc",
+    "object": "Shell-bead heart",
+    "description": "A heart shape made from small shells or shell beads. Warm, decorative. Matches the morale/comfort theme.",
+    "theme": "bare_hands",
+    "size": 32,
+    "tags": [
+      "ui",
+      "status"
+    ]
+  },
+  {
+    "id": "ui_toast_biome",
+    "filename": "images/ui_toast_biome.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A bare footprint in sand — discovery, exploration. Used for biome discovery notifications.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_notification",
+    "object": "Footprint in sand",
+    "description": "A bare footprint in sand — discovery, exploration. Used for biome discovery notifications.",
+    "theme": "bare_hands",
+    "size": 32,
+    "tags": [
+      "ui",
+      "notification",
+      "discovery"
+    ]
+  },
+  {
+    "id": "ui_toast_level",
+    "filename": "images/ui_toast_level.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Warm amber/orange (#f0a050). Charred edges, smoke wisps.. An upward-pointing arrow or chevron with sparkle. Skill level gain notification.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_notification",
+    "object": "Upward arrow / level up",
+    "description": "An upward-pointing arrow or chevron with sparkle. Skill level gain notification.",
+    "theme": "fire",
+    "size": 32,
+    "tags": [
+      "ui",
+      "notification",
+      "level"
+    ]
+  },
+  {
+    "id": "ui_toast_craft",
+    "filename": "images/ui_toast_craft.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. A small burst or sparkle pattern — something new was made. Crafting completion notification.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_notification",
+    "object": "Sparkle / creation burst",
+    "description": "A small burst or sparkle pattern — something new was made. Crafting completion notification.",
+    "theme": "bamboo",
+    "size": 32,
+    "tags": [
+      "ui",
+      "notification",
+      "craft"
+    ]
+  },
+  {
+    "id": "ui_toast_building",
+    "filename": "images/ui_toast_building.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Green-tinted (#7bc67b). Fresh-cut, fibrous textures.. A small palm-frond flag or banner on a stick. Building completion notification.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_notification",
+    "object": "Raised flag / banner",
+    "description": "A small palm-frond flag or banner on a stick. Building completion notification.",
+    "theme": "bamboo",
+    "size": 32,
+    "tags": [
+      "ui",
+      "notification",
+      "building"
+    ]
+  }
+]

@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import { RESOURCE_ICONS, TOOL_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { ACTIONS } from "../data/actions";
 import { RECIPES } from "../data/recipes";
 import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 /** Build a map of tool → list of action/recipe names it enables */
 function buildToolEnablesMap(): Record<string, string[]> {
@@ -114,7 +114,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 <div key={toolId} className="inventory-item">
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
-                      {TOOL_ICONS[toolId as ToolId] ?? ""} {def?.name ?? toolId}
+                      <GameIcon id={toolId as ToolId} /> {def?.name ?? toolId}
                     </span>
                   </div>
                   <div className="inventory-item-desc">
@@ -151,7 +151,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
-                      {RESOURCE_ICONS[id as ResourceId] ?? ""} {def?.name ?? id}
+                      <GameIcon id={id as ResourceId} /> {def?.name ?? id}
                     </span>
                     <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
                       {amount}/{limit}

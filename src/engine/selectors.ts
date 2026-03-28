@@ -9,6 +9,7 @@ import {
   STATIONS_BY_ID,
 } from "../data/registries";
 import { RECIPES } from "../data/recipes";
+import { RESOURCES } from "../data/resources";
 import { STATIONS } from "../data/stations";
 import { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
@@ -16,6 +17,7 @@ import {
   getEffectiveInputs,
   getMoraleDurationMultiplier,
   getResource,
+  getStorageLimit,
   getToolSpeedMultiplier,
   getTotalFood,
   hasTool,
@@ -226,6 +228,66 @@ export function selectVisibleSections(params: {
   }
   if (params.hasFoodAccess) sections.push("explore");
   return sections;
+}
+
+export interface ActionStatusInfo {
+  /** For craft recipes: how many times the recipe can be repeated with current inputs */
+  craftsRemaining?: number;
+  /** Input resources with their current amounts (for craft recipes) */
+  inputs?: { name: string; have: number; need: number }[];
+  /** Output resources with current amount / storage limit */
+  outputs?: { name: string; amount: number; limit: number }[];
+}
+
+export function selectActionStatusInfo(state: GameState): ActionStatusInfo | null {
+  if (!state.currentAction) return null;
+
+  if (state.currentAction.type === "gather") {
+    const action = ACTIONS_BY_ID[state.currentAction.actionId];
+    if (!action) return null;
+    const outputs = action.drops
+      .filter((d) => d.chance === undefined || d.chance >= 0.5)
+      .map((d) => ({
+        name: RESOURCES[d.resourceId]?.name ?? d.resourceId,
+        amount: getResource(state, d.resourceId),
+        limit: getStorageLimit(state, d.resourceId),
+      }));
+    return outputs.length > 0 ? { outputs } : null;
+  }
+
+  if (state.currentAction.type === "craft") {
+    const recipeId = state.currentAction.recipeId;
+    const recipe = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    if (!recipe) return null;
+
+    const effectiveInputs = getEffectiveInputs(recipe, state);
+    const inputs = effectiveInputs.map((inp) => ({
+      name: RESOURCES[inp.resourceId]?.name ?? inp.resourceId,
+      have: getResource(state, inp.resourceId),
+      need: inp.amount,
+    }));
+
+    const craftsRemaining = effectiveInputs.length > 0
+      ? Math.min(...effectiveInputs.map((inp) => Math.floor(getResource(state, inp.resourceId) / inp.amount)))
+      : undefined;
+
+    const outputs: ActionStatusInfo["outputs"] = [];
+    if (recipe.output) {
+      outputs.push({
+        name: RESOURCES[recipe.output.resourceId]?.name ?? recipe.output.resourceId,
+        amount: getResource(state, recipe.output.resourceId),
+        limit: getStorageLimit(state, recipe.output.resourceId),
+      });
+    }
+
+    return {
+      craftsRemaining,
+      inputs: inputs.length > 0 ? inputs : undefined,
+      outputs: outputs.length > 0 ? outputs : undefined,
+    };
+  }
+
+  return null;
 }
 
 export function selectReadyStationCount(state: GameState, now = Date.now()): number {

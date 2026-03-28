@@ -1,7 +1,7 @@
-import { BIOME_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { BiomeId, ExpeditionDef, GameState } from "../data/types";
+import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 interface Props {
   expeditions: ExpeditionDef[];
@@ -22,6 +22,49 @@ function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
   return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
 }
 
+/** Compute aggregated drop table from active outcomes, weighted by probability. */
+function getEffectiveDrops(
+  exp: ExpeditionDef,
+  state: GameState,
+): { resourceId: string; amount: number; chance: number }[] {
+  // Filter outcomes the same way pickWeightedOutcome does
+  const adjusted = exp.outcomes.map((o) => {
+    if (o.biomeDiscovery && state.discoveredBiomes.includes(o.biomeDiscovery))
+      return { ...o, weight: 0 };
+    if (o.requiredBiomes) {
+      for (const req of o.requiredBiomes) {
+        if (!state.discoveredBiomes.includes(req)) return { ...o, weight: 0 };
+      }
+    }
+    return o;
+  });
+
+  const totalWeight = adjusted.reduce((sum, o) => sum + o.weight, 0);
+  if (totalWeight === 0) return [];
+
+  // Aggregate: for each resource, sum probability * amount across outcomes
+  const agg = new Map<string, { totalChance: number; amounts: number[] }>();
+  for (const o of adjusted) {
+    if (o.weight === 0 || !o.drops) continue;
+    const outcomeProb = o.weight / totalWeight;
+    for (const d of o.drops) {
+      const dropChance = outcomeProb * (d.chance ?? 1);
+      const entry = agg.get(d.resourceId) ?? { totalChance: 0, amounts: [] };
+      entry.totalChance += dropChance;
+      entry.amounts.push(d.amount);
+      agg.set(d.resourceId, entry);
+    }
+  }
+
+  return Array.from(agg.entries())
+    .map(([resourceId, { totalChance, amounts }]) => ({
+      resourceId,
+      amount: Math.max(...amounts),
+      chance: totalChance,
+    }))
+    .sort((a, b) => b.chance - a.chance);
+}
+
 export function ExpeditionPanel({
   expeditions,
   state,
@@ -33,7 +76,7 @@ export function ExpeditionPanel({
       <div className="biome-list">
         {state.discoveredBiomes.map((b) => (
           <span key={b} className="resource-chip">
-            {BIOME_ICONS[b as BiomeId] ?? ""} {b.replace(/_/g, " ")}
+            <GameIcon id={`biome_${b}`} size={16} /> {b.replace(/_/g, " ")}
           </span>
         ))}
       </div>
@@ -98,6 +141,22 @@ export function ExpeditionPanel({
               </div>
             )}
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>
+            {(() => {
+              const drops = getEffectiveDrops(exp, state);
+              if (drops.length === 0) return null;
+              return (
+                <div className="action-drops">
+                  Loot table:
+                  {drops.map((d, i) => (
+                    <div key={i} className="drop-row">
+                      <GameIcon id={d.resourceId} size={16} />
+                      {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}{" "}
+                      ({Math.round(d.chance * 100)}%)
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
           </div>
         );
       })}

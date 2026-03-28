@@ -17,7 +17,7 @@ import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
-import { TAB_ICONS } from "./data/icons";
+import { GameIcon } from "./components/GameIcon";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   AccordionSection as AccordionSectionId,
@@ -29,6 +29,7 @@ import {
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
+  selectActionStatusInfo,
   selectReadyStationCount,
   selectVisibleSections,
 } from "./engine/selectors";
@@ -140,6 +141,10 @@ export default function App() {
     () => selectReadyStationCount(game.state),
     [game.state]
   );
+  const actionStatus = useMemo(
+    () => selectActionStatusInfo(game.state),
+    [game.state]
+  );
   const repetitiveXpMultiplier = useMemo(
     () => getRepetitiveXpMultiplier(game.state.repetitiveActionCount),
     [game.state.repetitiveActionCount]
@@ -244,9 +249,20 @@ export default function App() {
             <div className="current-action">
               <div className="current-action-info">
                 <span className="current-action-name">{currentActionName}</span>
-                <button className="stop-btn" onClick={game.stopAction}>
-                  Stop
-                </button>
+                <div className="current-action-buttons">
+                  {actionStatus?.outputs && (
+                    <button
+                      className={`stop-when-full-btn${game.state.currentAction?.stopWhenFull ? " active" : ""}`}
+                      onClick={game.toggleStopWhenFull}
+                      title="Stop automatically when output storage is full"
+                    >
+                      Stop if full
+                    </button>
+                  )}
+                  <button className="stop-btn" onClick={game.stopAction}>
+                    Stop
+                  </button>
+                </div>
               </div>
               <div className="progress-bar">
                 <div
@@ -261,6 +277,28 @@ export default function App() {
                 ).toFixed(1)}
                 s
               </span>
+              {actionStatus && (
+                <div className="action-status-row">
+                  {actionStatus.inputs && actionStatus.inputs.map((inp) => (
+                    <span key={inp.name} className="action-status-tag">
+                      {inp.name} {inp.have}
+                    </span>
+                  ))}
+                  {actionStatus.craftsRemaining !== undefined && (
+                    <span className={`action-status-tag${actionStatus.craftsRemaining <= 1 ? " warning" : ""}`}>
+                      {actionStatus.craftsRemaining}x left
+                    </span>
+                  )}
+                  {actionStatus.outputs && actionStatus.outputs.map((out) => (
+                    <span
+                      key={out.name}
+                      className={`action-status-tag${out.amount >= out.limit ? " full" : ""}`}
+                    >
+                      {out.name} {out.amount}/{out.limit}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div
                 className={`repetition-status${isRepetitionPenaltyActive ? " penalty" : ""}`}
                 title="Manual action switch resets repetition to 0."
@@ -286,12 +324,12 @@ export default function App() {
             <div className="modal-triggers">
               {hasAnyXp && (
                 <button className="modal-trigger-btn" onClick={() => setSkillsOpen(true)}>
-                  {TAB_ICONS.skills} Skills
+                  <GameIcon id="tab_skills" size={18} /> Skills
                 </button>
               )}
               {hasAnyResource && (
                 <button className="modal-trigger-btn mobile-only-btn" onClick={() => setInventoryOpen(true)}>
-                  {TAB_ICONS.inventory} Inventory
+                  <GameIcon id="tab_inventory" size={18} /> Inventory
                 </button>
               )}
             </div>
@@ -307,7 +345,7 @@ export default function App() {
             {visibleSections.includes("gather") && (
               <AccordionSection
                 name="Gather"
-                icon={TAB_ICONS.gather}
+                icon={<GameIcon id="tab_gather" size={18} />}
                 expanded={expandedSections.has("gather")}
                 onToggle={() => toggleSection("gather")}
                 summary={!expandedSections.has("gather") && currentActionName && game.state.currentAction?.type === "gather" ? currentActionName : undefined}
@@ -323,7 +361,7 @@ export default function App() {
             {visibleSections.includes("craft") && (
               <AccordionSection
                 name="Craft"
-                icon={TAB_ICONS.craft}
+                icon={<GameIcon id="tab_craft" size={18} />}
                 expanded={expandedSections.has("craft")}
                 onToggle={() => toggleSection("craft")}
                 summary={!expandedSections.has("craft") ? `${craftRecipes.length} recipe${craftRecipes.length !== 1 ? "s" : ""}` : undefined}
@@ -338,7 +376,7 @@ export default function App() {
             {visibleSections.includes("build") && (
               <AccordionSection
                 name="Build"
-                icon={TAB_ICONS.build}
+                icon={<GameIcon id="tab_build" size={18} />}
                 expanded={expandedSections.has("build")}
                 onToggle={() => toggleSection("build")}
                 summary={!expandedSections.has("build") && readyStationCount > 0 ? `${readyStationCount} station${readyStationCount !== 1 ? "s" : ""} ready!` : undefined}
@@ -364,7 +402,7 @@ export default function App() {
             {visibleSections.includes("explore") && (
               <AccordionSection
                 name="Explore"
-                icon={TAB_ICONS.explore}
+                icon={<GameIcon id="tab_explore" size={18} />}
                 expanded={expandedSections.has("explore")}
                 onToggle={() => toggleSection("explore")}
                 summary={!expandedSections.has("explore") ? `${game.availableExpeditions.length} expedition${game.availableExpeditions.length !== 1 ? "s" : ""}` : undefined}
@@ -390,12 +428,12 @@ export default function App() {
       </div>
 
       {skillsOpen && (
-        <ModalOverlay onClose={() => setSkillsOpen(false)} title="Skills" icon={TAB_ICONS.skills}>
+        <ModalOverlay onClose={() => setSkillsOpen(false)} title="Skills" icon={<GameIcon id="tab_skills" size={18} />}>
           <SkillsPanel state={game.state} />
         </ModalOverlay>
       )}
       {inventoryOpen && (
-        <ModalOverlay onClose={() => setInventoryOpen(false)} title="Inventory" icon={TAB_ICONS.inventory} className="mobile-only-modal">
+        <ModalOverlay onClose={() => setInventoryOpen(false)} title="Inventory" icon={<GameIcon id="tab_inventory" size={18} />} className="mobile-only-modal">
           <InventoryPanel state={game.state} />
         </ModalOverlay>
       )}
