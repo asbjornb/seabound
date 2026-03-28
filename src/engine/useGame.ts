@@ -227,6 +227,11 @@ export function useGame() {
         }
         // Check required buildings
         if (recipe.requiredBuildings?.some((bid) => !hasBuilding(prev, bid))) return prev;
+        // Check stackable building max count
+        if (recipe.buildingOutput) {
+          const bdef = BUILDINGS[recipe.buildingOutput];
+          if (bdef?.maxCount && getBuildingCount(prev, recipe.buildingOutput) >= bdef.maxCount) return prev;
+        }
         // Check upgrade source building exists
         if (recipe.replacesBuilding && !hasBuilding(prev, recipe.replacesBuilding)) return prev;
         // Check resources (using effective inputs — some may be removed by buildings)
