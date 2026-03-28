@@ -128,7 +128,11 @@ export interface ActionDef {
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
+  hideWhen?: ActionHideCondition[];
 }
+
+export type ActionHideCondition =
+  | { type: "drops_no_use" }; // hide when none of the drop resources have any remaining use
 
 export interface RecipeInput {
   resourceId: ResourceId;
