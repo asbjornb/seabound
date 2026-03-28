@@ -610,6 +610,10 @@ body {
   color: var(--warning);
 }
 
+.action-requires.met span {
+  color: var(--text-dim);
+}
+
 .action-xp {
   font-size: 0.72rem;
   color: var(--bar-xp);
@@ -626,7 +630,7 @@ body {
 }
 
 .recipe-inputs .missing {
-  color: var(--accent);
+  color: var(--warning);
 }
 
 .recipe-output {

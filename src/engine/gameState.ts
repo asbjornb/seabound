@@ -239,6 +239,12 @@ export function normalizeGameState(raw: unknown): GameState | null {
   loaded.discoveredResources = loaded.discoveredResources.filter(
     (id) => !!RESOURCES[id]
   );
+  // Migration: ensure all owned resources are in discoveredResources
+  for (const id of Object.keys(loaded.resources)) {
+    if ((loaded.resources[id] ?? 0) > 0 && !loaded.discoveredResources.includes(id)) {
+      loaded.discoveredResources.push(id);
+    }
+  }
   loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
 
   return loaded;
