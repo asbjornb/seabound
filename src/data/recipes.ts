@@ -428,7 +428,9 @@ export const RECIPES: RecipeDef[] = [
     ],
     output: { resourceId: "charred_log", amount: 1 },
     durationMs: 15000,
+    oneTimeCraft: true,
     xpGain: 40,
+    hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
   {
     id: "scrape_hull",
@@ -441,7 +443,9 @@ export const RECIPES: RecipeDef[] = [
     inputs: [{ resourceId: "charred_log", amount: 1 }],
     output: { resourceId: "shaped_hull", amount: 1 },
     durationMs: 12000,
+    oneTimeCraft: true,
     xpGain: 40,
+    hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
   {
     id: "assemble_dugout",

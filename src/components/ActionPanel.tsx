@@ -65,6 +65,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               );
               const disabled = !!missingTool || !!missingResource;
               const isActive = currentActionId === action.id;
+              const isNew = !state.completedActions.includes(action.id);
               return (
                 <div
                   key={action.id}
@@ -72,7 +73,10 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                   onClick={() => !disabled && onStart(action)}
                 >
                   <div className="action-card-header">
-                    <span className="action-name">{action.name}</span>
+                    <span className="action-name">
+                      {action.name}
+                      {isNew && <span className="new-badge">NEW</span>}
+                    </span>
                     <span className="action-time">
                       {(action.durationMs / 1000).toFixed(1)}s
                     </span>

@@ -98,6 +98,8 @@ export function createInitialState(): GameState {
     seenPhases: startingPhases.length > 0 ? startingPhases : ["bare_hands"],
     repetitiveActionCount: 0,
     savedActionProgress: {},
+    completedActions: [],
+    completedRecipes: [],
   };
 }
 
@@ -216,6 +218,13 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure savedActionProgress exists
   if (!loaded.savedActionProgress) {
     loaded.savedActionProgress = {};
+  }
+  // Migration: ensure completedActions/completedRecipes exist
+  if (!loaded.completedActions) {
+    loaded.completedActions = [];
+  }
+  if (!loaded.completedRecipes) {
+    loaded.completedRecipes = [];
   }
   // Migration: grant rocky_shore biome if player already has flat_stone or chert
   if (!loaded.discoveredBiomes.includes("rocky_shore")) {
