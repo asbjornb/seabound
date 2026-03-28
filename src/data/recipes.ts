@@ -359,6 +359,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 4000,
     repeatable: true,
     xpGain: 12,
+    hideWhen: [{ type: "output_no_use" }],
   },
   {
     id: "knap_stone_blade",
@@ -373,6 +374,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 6000,
     repeatable: true,
     xpGain: 18,
+    hideWhen: [{ type: "output_no_use" }],
   },
   {
     id: "craft_shell_adze",

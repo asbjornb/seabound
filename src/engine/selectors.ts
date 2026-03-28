@@ -28,7 +28,7 @@ import {
 export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "skills";
 
 
-function resourceHasUse(resourceId: string, state: GameState): boolean {
+export function resourceHasUse(resourceId: string, state: GameState): boolean {
   const BUILDINGS = getBuildings();
   return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);

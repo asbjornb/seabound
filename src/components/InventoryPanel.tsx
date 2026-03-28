@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { getResources, getTools, getActions, getRecipes } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
+import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
 /** Build a map of tool → list of action/recipe names it enables */
@@ -41,7 +42,15 @@ export function InventoryPanel({ state }: { state: GameState }) {
   const [filter, setFilter] = useState<FilterId>("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
 
-  const resourceEntries = Object.entries(state.resources).filter(([, v]) => v > 0);
+  const resourceEntries = Object.entries(state.resources).filter(([id, v]) => {
+    if (v <= 0) return false;
+    const def = RESOURCES[id];
+    // Always show food/water resources — they're consumed by expeditions, not just recipes
+    if (def?.foodValue || def?.waterValue) return true;
+    // Hide resources with no remaining use in any recipe
+    if (!resourceHasUse(id, state)) return false;
+    return true;
+  });
   const hasTools = state.tools.length > 0;
   const hasFood = resourceEntries.some(([id]) => RESOURCES[id]?.tags?.includes("food"));
   const hasItems = resourceEntries.some(([id]) => !RESOURCES[id]?.tags?.includes("food"));

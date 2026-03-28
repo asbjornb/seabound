@@ -2,12 +2,20 @@ import { useState } from "react";
 import { getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
+import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
 export function ResourcePanel({ state }: { state: GameState }) {
   const RESOURCES = getResources();
   const [showMoraleTip, setShowMoraleTip] = useState(false);
-  const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
+  const entries = Object.entries(state.resources).filter(([id, v]) => {
+    if (v <= 0) return false;
+    const def = RESOURCES[id];
+    // Always show food/water resources — they're consumed by expeditions, not just recipes
+    if (def?.foodValue || def?.waterValue) return true;
+    if (!resourceHasUse(id, state)) return false;
+    return true;
+  });
   const moraleEffect = getMoraleDurationMultiplier(state.morale);
   const moralePercent = Math.round((1 - moraleEffect) * 100);
   const moraleLabel =
