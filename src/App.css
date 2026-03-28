@@ -375,6 +375,9 @@ body {
   padding: 10px 16px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .current-action-info {
