@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { getDoubleOutputChance } from "../data/milestones";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { BUILDINGS } from "../data/buildings";
+import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -21,10 +19,14 @@ const CATEGORIES: { id: CategoryId; label: string }[] = [
 ];
 
 function isOneTimeCraft(recipe: RecipeDef): boolean {
+  const BUILDINGS = getBuildings();
   return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !BUILDINGS[recipe.buildingOutput]?.maxCount));
 }
 
 export function CraftingPanel({ recipes, state, onCraft }: Props) {
+  const RESOURCES = getResources();
+  const TOOLS = getTools();
+  const BUILDINGS = getBuildings();
   const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
 

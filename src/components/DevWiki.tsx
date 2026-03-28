@@ -1,11 +1,5 @@
-import { ACTIONS } from "../data/actions";
-import { BUILDINGS } from "../data/buildings";
-import { EXPEDITIONS } from "../data/expeditions";
-import { getMilestones } from "../data/milestones";
-import { RECIPES } from "../data/recipes";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { SKILLS, xpForLevel } from "../data/skills";
+import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill } from "../data/registry";
+import { xpForLevel } from "../data/skills";
 import { SkillId } from "../data/types";
 
 /**
@@ -14,6 +8,13 @@ import { SkillId } from "../data/types";
  * Auto-generated from the same data files the game uses, so always up-to-date.
  */
 export function DevWiki() {
+  const RESOURCES = getResources();
+  const TOOLS = getTools();
+  const SKILLS = getSkills();
+  const BUILDINGS = getBuildings();
+  const ACTIONS = getActions();
+  const RECIPES = getRecipes();
+  const EXPEDITIONS = getExpeditions();
   const skillIds = Object.keys(SKILLS) as SkillId[];
 
   return (
@@ -349,7 +350,7 @@ export function DevWiki() {
       <section id="milestones">
         <h2 style={styles.h2}>Skill Milestones</h2>
         {skillIds.map((id) => {
-          const ms = getMilestones(id);
+          const ms = getMilestonesForSkill(id);
           if (ms.length === 0) return null;
           return (
             <div key={id} style={styles.card}>

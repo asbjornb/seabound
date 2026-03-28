@@ -1,6 +1,4 @@
-import { BUILDINGS } from "../data/buildings";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
+import { getBuildings, getResources, getTools } from "../data/registry";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -26,6 +24,9 @@ export function SettlementPanel({
   onBuild,
   onStartAction,
 }: Props) {
+  const BUILDINGS = getBuildings();
+  const RESOURCES = getResources();
+  const TOOLS = getTools();
   const buildingRecipes = buildRecipes.filter((r) => !!r.buildingOutput);
   const maintenanceRecipes = buildRecipes.filter((r) => !r.buildingOutput);
   return (

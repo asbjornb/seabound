@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
@@ -10,12 +10,14 @@ import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { IslandBanner } from "./components/IslandBanner";
 import { LogPanel } from "./components/LogPanel";
+import { ModPanel } from "./components/ModPanel";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { TAB_ICONS } from "./data/icons";
+import { getActiveModId } from "./data/modding";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -49,12 +51,19 @@ export default function App() {
   const updateAvailable = useUpdateChecker();
   const [tab, setTab] = useState<GameTab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [modPanelOpen, setModPanelOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
   const [hideFlavorText, setHideFlavorText] = useState(
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
+  const activeModId = getActiveModId();
+
+  const handleModSwitch = useCallback(() => {
+    // After mod switch, reload the game state for the new mod
+    window.location.reload();
+  }, []);
 
   // Phase detection
   const currentPhase = useMemo(() => getCurrentPhase(game.state), [game.state]);
@@ -202,6 +211,15 @@ export default function App() {
                     }}
                   />
                 </label>
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    setModPanelOpen(true);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Mods{activeModId !== "base" ? ` (${activeModId})` : ""}
+                </button>
                 <button
                   className="settings-menu-item danger"
                   onClick={() => {
@@ -389,6 +407,13 @@ export default function App() {
           </aside>
         )}
       </div>
+
+      {modPanelOpen && (
+        <ModPanel
+          onClose={() => setModPanelOpen(false)}
+          onModSwitch={handleModSwitch}
+        />
+      )}
 
       <FeedbackBanner />
     </div>

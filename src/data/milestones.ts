@@ -1,6 +1,6 @@
 import { ACTIONS } from "./actions";
 import { RECIPES } from "./recipes";
-import { SkillId, SkillMilestone } from "./types";
+import type { SkillId, SkillMilestone } from "./types";
 
 /**
  * Hand-authored milestones per skill.
@@ -104,10 +104,16 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     {
       level: 7,
       description: "Efficient sowing — plant wild seeds costs 2 seeds instead of 3",
+      effects: [
+        { type: "station_input_reduce", stationId: "plant_wild_seeds", resourceId: "wild_seed", newAmount: 2 },
+      ],
     },
     {
       level: 8,
       description: "Seed saving — wild seed planting always returns at least 1 seed",
+      effects: [
+        { type: "station_guaranteed_drop", stationId: "plant_wild_seeds", resourceId: "wild_seed", minAmount: 1 },
+      ],
     },
     {
       level: 10,
@@ -138,6 +144,9 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     {
       level: 18,
       description: "Master farmer — wild seed planting always yields 2 root vegetables",
+      effects: [
+        { type: "station_guaranteed_drop", stationId: "plant_wild_seeds", resourceId: "root_vegetable", minAmount: 2 },
+      ],
     },
   ],
   crafting: [
@@ -277,4 +286,58 @@ export function getDurationMultiplier(
     }
   }
   return multiplier;
+}
+
+/**
+ * Get reduced station setup input amount from milestones.
+ * Returns the original amount if no milestone applies.
+ */
+export function getStationInputAmount(
+  skillId: SkillId,
+  skillLevel: number,
+  stationId: string,
+  resourceId: string,
+  originalAmount: number
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let amount = originalAmount;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (
+        e.type === "station_input_reduce" &&
+        e.stationId === stationId &&
+        e.resourceId === resourceId
+      ) {
+        amount = Math.min(amount, e.newAmount);
+      }
+    }
+  }
+  return amount;
+}
+
+/**
+ * Get guaranteed minimum drops for a station from milestones.
+ * Returns a map of resourceId → minAmount.
+ */
+export function getStationGuaranteedDrops(
+  skillId: SkillId,
+  skillLevel: number,
+  stationId: string
+): Map<string, number> {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const result = new Map<string, number>();
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (
+        e.type === "station_guaranteed_drop" &&
+        e.stationId === stationId
+      ) {
+        const current = result.get(e.resourceId) ?? 0;
+        result.set(e.resourceId, Math.max(current, e.minAmount));
+      }
+    }
+  }
+  return result;
 }

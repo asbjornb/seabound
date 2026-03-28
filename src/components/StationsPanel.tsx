@@ -1,6 +1,5 @@
-import { RESOURCES } from "../data/resources";
-import { STATIONS_BY_ID } from "../data/registries";
-import { GameState, StationDef } from "../data/types";
+import { getResources, getStationById } from "../data/registry";
+import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
 
 interface Props {
@@ -25,10 +24,11 @@ export function StationsPanel({
   onCollect,
 }: Props) {
   const now = Date.now();
+  const RESOURCES = getResources();
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
-    const def = STATIONS_BY_ID[placed.stationId];
+    const def = getStationById(placed.stationId);
     const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
     const isReady = now >= readyAt;
     const remaining = readyAt - now;

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BUILDINGS } from "../data/buildings";
-import { getDropChanceBonus } from "../data/milestones";
+import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } from "../data/milestones";
 import {
-  STATIONS_BY_ID,
-} from "../data/registries";
+  getBuildings,
+  getResources,
+  getStationById,
+  getTools,
+} from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import {
+import type {
   ActionDef,
   DiscoveryType,
   ExpeditionDef,
@@ -96,6 +96,10 @@ function processCompletionDiscoveries(
   state: GameState,
   c: CompletionEvent
 ): void {
+  const BUILDINGS = getBuildings();
+  const TOOLS = getTools();
+  const RESOURCES = getResources();
+
   if (c.biomeDiscovery) {
     const name = c.biomeDiscovery.replace(/_/g, " ");
     addDiscovery(state, "biome", `Discovered the ${name}`);
@@ -104,6 +108,7 @@ function processCompletionDiscoveries(
     const bdef = BUILDINGS[c.buildingBuilt];
     const name = bdef?.name ?? c.buildingBuilt.replace(/_/g, " ");
     addDiscovery(state, "building", `Built a ${name}`);
+    // Easter egg: building a dugout without ever building a raft
     if (c.buildingBuilt === "dugout" && !state.buildings.includes("raft")) {
       addDiscovery(state, "building", "A raft? Where you're going, you don't need rafts.");
     }
@@ -225,6 +230,7 @@ export function useGame() {
   const startCraft = useCallback(
     (recipe: RecipeDef) => {
       setState((prev) => {
+        const BUILDINGS = getBuildings();
         const skill = prev.skills[recipe.skillId];
         if (
           recipe.requiredSkillLevel &&
@@ -352,13 +358,10 @@ export function useGame() {
       const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
       if (currentCount >= maxDeployed) return prev;
       // Get effective setup inputs (may be modified by milestones)
+      const skillLevel = prev.skills[station.skillId].level;
       const effectiveSetupInputs = station.setupInputs ? station.setupInputs.map((inp) => {
-        // Farming 7: Efficient sowing — wild seed cost reduced from 3 to 2
-        if (station.id === "plant_wild_seeds" && inp.resourceId === "wild_seed" &&
-            prev.skills.farming.level >= 7) {
-          return { ...inp, amount: 2 };
-        }
-        return inp;
+        const newAmount = getStationInputAmount(station.skillId, skillLevel, station.id, inp.resourceId, inp.amount);
+        return { ...inp, amount: newAmount };
       }) : [];
       // Check setup inputs
       for (const inp of effectiveSetupInputs) {
@@ -382,7 +385,7 @@ export function useGame() {
     setState((prev) => {
       if (index < 0 || index >= prev.stations.length) return prev;
       const placed = prev.stations[index];
-      const def = STATIONS_BY_ID[placed.stationId];
+      const def = getStationById(placed.stationId);
       if (!def) return prev;
       const readyAt = placed.deployedAt + def.durationMs;
       if (Date.now() < readyAt) return prev; // not ready yet
@@ -390,6 +393,7 @@ export function useGame() {
       const skillLevel = next.skills[def.skillId].level;
       // Roll drops with milestone bonuses
       const newResources: string[] = [];
+      const droppedAmounts = new Map<string, number>();
       for (const drop of def.yields) {
         let chance = drop.chance ?? 1;
         // Apply milestone drop chance bonuses (uses actionId = stationId)
@@ -400,31 +404,19 @@ export function useGame() {
             next.discoveredResources.push(drop.resourceId);
           }
           addResource(next, drop.resourceId, drop.amount);
+          droppedAmounts.set(drop.resourceId, (droppedAmounts.get(drop.resourceId) ?? 0) + drop.amount);
         }
       }
-      // Farming level 8: Seed saving — wild seed planting always returns at least 1 seed
-      if (def.id === "plant_wild_seeds" && skillLevel >= 8) {
-        const gotSeed = newResources.includes("wild_seed") ||
-          (next.resources["wild_seed"] ?? 0) > (prev.resources["wild_seed"] ?? 0);
-        if (!gotSeed) {
-          if (!next.discoveredResources.includes("wild_seed")) {
-            newResources.push("wild_seed");
-            next.discoveredResources.push("wild_seed");
+      // Apply guaranteed drops from milestones
+      const guaranteedDrops = getStationGuaranteedDrops(def.skillId, skillLevel, def.id);
+      for (const [resourceId, minAmount] of guaranteedDrops) {
+        const got = droppedAmounts.get(resourceId) ?? 0;
+        if (got < minAmount) {
+          if (!next.discoveredResources.includes(resourceId)) {
+            newResources.push(resourceId);
+            next.discoveredResources.push(resourceId);
           }
-          addResource(next, "wild_seed", 1);
-        }
-      }
-      // Farming level 18: Master farmer — wild seed planting always yields 2 root vegetables
-      if (def.id === "plant_wild_seeds" && skillLevel >= 18) {
-        const currentRootVeg = next.resources["root_vegetable"] ?? 0;
-        const prevRootVeg = prev.resources["root_vegetable"] ?? 0;
-        const gained = currentRootVeg - prevRootVeg;
-        if (gained < 2) {
-          if (!next.discoveredResources.includes("root_vegetable")) {
-            newResources.push("root_vegetable");
-            next.discoveredResources.push("root_vegetable");
-          }
-          addResource(next, "root_vegetable", 2 - Math.max(0, gained));
+          addResource(next, resourceId, minAmount - got);
         }
       }
       // Award XP
@@ -432,6 +424,7 @@ export function useGame() {
       skill.xp += def.xpGain;
       skill.level = levelFromXp(skill.xp);
       // Discovery log
+      const RESOURCES = getResources();
       for (const resId of newResources) {
         const rdef = RESOURCES[resId];
         const name = rdef?.name ?? resId.replace(/_/g, " ");

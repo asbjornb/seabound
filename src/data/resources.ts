@@ -7,6 +7,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Coconut",
     description: "A fallen coconut. Food and water source.",
     tags: ["food"],
+    foodValue: 1,
   },
   coconut_husk: {
     id: "coconut_husk",
@@ -35,12 +36,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Small Fish",
     description: "A small tidal pool fish. Edible when cooked.",
     tags: ["food"],
+    foodValue: 1,
   },
   crab: {
     id: "crab",
     name: "Crab",
     description: "A small shore crab. Can be cooked.",
     tags: ["food"],
+    foodValue: 1,
   },
   shell: {
     id: "shell",
@@ -97,24 +100,28 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Large Fish",
     description: "A sizable reef fish. Makes a hearty meal when cooked.",
     tags: ["food"],
+    foodValue: 2,
   },
   cooked_fish: {
     id: "cooked_fish",
     name: "Cooked Fish",
     description: "Grilled fish. Nutritious expedition fuel.",
     tags: ["food"],
+    foodValue: 2,
   },
   cooked_crab: {
     id: "cooked_crab",
     name: "Cooked Crab",
     description: "Roasted crab. Tasty and filling.",
     tags: ["food"],
+    foodValue: 2,
   },
   cooked_large_fish: {
     id: "cooked_large_fish",
     name: "Cooked Large Fish",
     description: "A whole grilled fish. Very filling expedition fuel.",
     tags: ["food"],
+    foodValue: 4,
   },
 
   // Seeds & Farming
@@ -128,12 +135,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Root Vegetable",
     description: "A knobby tuber dug up from wild planting. Edible raw, better cooked.",
     tags: ["food"],
+    foodValue: 1,
   },
   cooked_root_vegetable: {
     id: "cooked_root_vegetable",
     name: "Cooked Root Vegetable",
     description: "A fire-roasted tuber. Filling and surprisingly tasty.",
     tags: ["food"],
+    foodValue: 2,
   },
   taro_corm: {
     id: "taro_corm",
@@ -150,6 +159,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Cooked Taro",
     description: "Boiled taro — starchy, filling, and the backbone of island meals.",
     tags: ["food"],
+    foodValue: 3,
   },
   banana_shoot: {
     id: "banana_shoot",
@@ -161,6 +171,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Banana",
     description: "A ripe banana. Sweet, filling, and needs no cooking.",
     tags: ["food"],
+    foodValue: 2,
   },
   breadfruit_cutting: {
     id: "breadfruit_cutting",
@@ -177,12 +188,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Roasted Breadfruit",
     description: "Thick slices of fire-roasted breadfruit. Extremely filling.",
     tags: ["food"],
+    foodValue: 4,
   },
   voyage_provisions: {
     id: "voyage_provisions",
     name: "Voyage Provisions",
     description: "Sealed jars of preserved food. Enough for a long sea voyage.",
     tags: ["food"],
+    foodValue: 8,
   },
 
   // Obsidian
@@ -235,6 +248,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "fresh_water",
     name: "Fresh Water",
     description: "Clean water collected from a jungle stream. Essential for long voyages.",
+    waterValue: 1,
   },
 
   // Phase 2 - Clay Tier

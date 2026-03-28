@@ -1,4 +1,4 @@
-import { RecipeDef } from "./types";
+import type { RecipeDef } from "./types";
 
 export const RECIPES: RecipeDef[] = [
   // ═══════════════════════════════════════
@@ -44,6 +44,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 3000,
     repeatable: true,
     xpGain: 8,
+    hideWhen: [{ type: "output_no_use" }],
   },
   {
     id: "craft_bamboo_knife",
@@ -85,6 +86,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 4000,
     repeatable: true,
     xpGain: 10,
+    hideWhen: [{ type: "has_building", buildingId: "fiber_loom" }],
   },
   {
     id: "braid_cordage",
@@ -326,6 +328,7 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 20000,
     oneTimeCraft: true,
     xpGain: 50,
+    hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
 
   // ═══════════════════════════════════════
