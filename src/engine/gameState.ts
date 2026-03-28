@@ -88,6 +88,7 @@ export function createInitialState(): GameState {
     stations: [],
     seenPhases: ["bare_hands"],
     repetitiveActionCount: 0,
+    savedActionProgress: {},
   };
 }
 
@@ -195,6 +196,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure repetitiveActionCount exists
   if (loaded.repetitiveActionCount == null) {
     loaded.repetitiveActionCount = 0;
+  }
+  // Migration: ensure savedActionProgress exists
+  if (!loaded.savedActionProgress) {
+    loaded.savedActionProgress = {};
   }
   // Migration: grant rocky_shore biome if player already has flat_stone or chert
   if (!loaded.discoveredBiomes.includes("rocky_shore" as BiomeId)) {

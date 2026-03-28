@@ -299,4 +299,5 @@ export interface GameState {
   stations: PlacedStation[];
   seenPhases: string[];
   repetitiveActionCount: number; // consecutive completions since last manual action change
+  savedActionProgress: Record<string, number>; // saved elapsed ms per action key, preserved across switches
 }
