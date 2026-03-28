@@ -1,3 +1,11 @@
+/* Inline game icons */
+.game-icon {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  margin-right: 2px;
+}
+
 :root {
   --bg: #0c1a1a;
   --bg-card: #132626;

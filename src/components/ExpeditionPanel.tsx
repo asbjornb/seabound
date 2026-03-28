@@ -1,7 +1,7 @@
-import { BIOME_ICONS } from "../data/icons";
 import { RESOURCES } from "../data/resources";
-import { BiomeId, ExpeditionDef, GameState } from "../data/types";
+import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 interface Props {
   expeditions: ExpeditionDef[];
@@ -33,7 +33,7 @@ export function ExpeditionPanel({
       <div className="biome-list">
         {state.discoveredBiomes.map((b) => (
           <span key={b} className="resource-chip">
-            {BIOME_ICONS[b as BiomeId] ?? ""} {b.replace(/_/g, " ")}
+            <GameIcon id={`biome_${b}`} size={16} /> {b.replace(/_/g, " ")}
           </span>
         ))}
       </div>

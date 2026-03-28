@@ -1,7 +1,7 @@
 import { getMilestones } from "../data/milestones";
-import { SKILL_ICONS } from "../data/icons";
 import { SKILLS, xpForLevel } from "../data/skills";
 import { GameState, SkillId } from "../data/types";
+import { GameIcon } from "./GameIcon";
 
 export function SkillsPanel({ state }: { state: GameState }) {
   const skillIds = (Object.keys(SKILLS) as SkillId[]).filter(
@@ -38,7 +38,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
         return (
           <div key={id} className="skill-card">
             <div className="skill-header">
-              <span className="skill-name">{SKILL_ICONS[id]} {SKILLS[id].name}</span>
+              <span className="skill-name"><GameIcon id={`skill_${id}`} /> {SKILLS[id].name}</span>
               <span className="skill-level">Lvl {skill.level}</span>
             </div>
             <div className="xp-bar">
