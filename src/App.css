@@ -630,7 +630,7 @@ body {
 }
 
 .recipe-inputs .missing {
-  color: var(--accent);
+  color: var(--warning);
 }
 
 .recipe-output {

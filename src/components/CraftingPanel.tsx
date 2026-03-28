@@ -179,17 +179,22 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       ))}
                     </div>
                   )}
-                  {recipe.requiredItems && recipe.requiredItems.length > 0 && (
-                    <div className="action-requires met">
-                      Uses:{" "}
-                      {recipe.requiredItems.map((id, i) => (
-                        <span key={i}>
-                          {i > 0 && ", "}
-                          <span title={RESOURCES[id]?.description}><GameIcon id={id} size={16} />{RESOURCES[id]?.name ?? id}</span>
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {(() => {
+                    // Filter out requiredItems that are already listed as inputs (they're just discovery gates)
+                    const inputIds = new Set(recipe.inputs.map((inp) => inp.resourceId));
+                    const nonInputItems = recipe.requiredItems?.filter((id) => !inputIds.has(id)) ?? [];
+                    return nonInputItems.length > 0 ? (
+                      <div className="action-requires met">
+                        Uses:{" "}
+                        {nonInputItems.map((id, i) => (
+                          <span key={i}>
+                            {i > 0 && ", "}
+                            <span title={RESOURCES[id]?.description}><GameIcon id={id} size={16} />{RESOURCES[id]?.name ?? id}</span>
+                          </span>
+                        ))}
+                      </div>
+                    ) : null;
+                  })()}
                   {recipe.toolOutput ? (
                     <div className="recipe-output">
                       Produces: <GameIcon id={recipe.toolOutput} size={16} />{" "}
