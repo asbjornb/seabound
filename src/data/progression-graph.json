@@ -421,15 +421,15 @@
       "category": "fishing"
     },
     {
+      "id": "skill:crafting:6",
+      "type": "skill_level",
+      "label": "Crafting Lv6",
+      "category": "crafting"
+    },
+    {
       "id": "skill:weaving:5",
       "type": "skill_level",
       "label": "Weaving Lv5",
-      "category": "weaving"
-    },
-    {
-      "id": "skill:weaving:6",
-      "type": "skill_level",
-      "label": "Weaving Lv6",
       "category": "weaving"
     },
     {
@@ -437,12 +437,6 @@
       "type": "skill_level",
       "label": "Weaving Lv4",
       "category": "weaving"
-    },
-    {
-      "id": "skill:crafting:6",
-      "type": "skill_level",
-      "label": "Crafting Lv6",
-      "category": "crafting"
     },
     {
       "id": "skill:construction:14",
@@ -1329,11 +1323,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:weaving:5",
-      "to": "recipe:braid_cordage",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:fiber_loom",
       "to": "recipe:braid_cordage",
       "relation": "requires_building"
@@ -1454,7 +1443,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:weaving:6",
+      "from": "skill:weaving:5",
       "to": "recipe:craft_basket_trap",
       "relation": "requires_skill"
     },
@@ -3227,7 +3216,6 @@
       "tool:shell_adze",
       "tool:obsidian_blade",
       "resource:dried_fiber",
-      "skill:weaving:5",
       "building:fiber_loom",
       "biome:bamboo_grove",
       "resource:coconut",
@@ -3329,7 +3317,7 @@
       "skill:crafting:6",
       "resource:stone_flake",
       "resource:bamboo_splinter",
-      "skill:weaving:6",
+      "skill:weaving:5",
       "skill:farming:5",
       "resource:taro_corm",
       "resource:clay",
@@ -3367,7 +3355,6 @@
       "resource:charred_log",
       "tool:shell_adze",
       "resource:dried_fiber",
-      "skill:weaving:5",
       "building:fiber_loom",
       "biome:coconut_grove",
       "resource:coconut",
@@ -3481,47 +3468,6 @@
           ]
         }
       ],
-      "weaving": [
-        {
-          "level": 4,
-          "unlocks": [
-            "recipe:build_fiber_loom"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
-          ]
-        },
-        {
-          "level": 5,
-          "unlocks": [
-            "recipe:braid_cordage"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
-          ]
-        },
-        {
-          "level": 6,
-          "unlocks": [
-            "recipe:craft_basket_trap"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
-          ]
-        }
-      ],
       "crafting": [
         {
           "level": 6,
@@ -3547,6 +3493,34 @@
             "recipe:shape_clay_pot",
             "recipe:fire_clay_pot",
             "recipe:craft_digging_stick"
+          ]
+        }
+      ],
+      "weaving": [
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:build_fiber_loom"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:craft_basket_trap"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom"
           ]
         }
       ],
