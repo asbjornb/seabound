@@ -1,8 +1,5 @@
 import { useMemo, useState } from "react";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { ACTIONS } from "../data/actions";
-import { RECIPES } from "../data/recipes";
+import { getResources, getTools, getActions, getRecipes } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -10,13 +7,13 @@ import { GameIcon } from "./GameIcon";
 /** Build a map of tool → list of action/recipe names it enables */
 function buildToolEnablesMap(): Record<string, string[]> {
   const map: Record<string, string[]> = {};
-  for (const action of ACTIONS) {
+  for (const action of getActions()) {
     for (const toolId of action.requiredTools ?? []) {
       if (!map[toolId]) map[toolId] = [];
       map[toolId].push(action.name);
     }
   }
-  for (const recipe of RECIPES) {
+  for (const recipe of getRecipes()) {
     for (const toolId of recipe.requiredTools ?? []) {
       if (!map[toolId]) map[toolId] = [];
       map[toolId].push(recipe.name);
@@ -39,6 +36,8 @@ const FILTER_LABELS: Record<FilterId, string> = {
 };
 
 export function InventoryPanel({ state }: { state: GameState }) {
+  const RESOURCES = getResources();
+  const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
 

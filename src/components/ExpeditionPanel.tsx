@@ -1,4 +1,4 @@
-import { RESOURCES } from "../data/resources";
+import { getResources } from "../data/registry";
 import { ExpeditionDef, GameState } from "../data/types";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -70,6 +70,7 @@ export function ExpeditionPanel({
   state,
   onStart,
 }: Props) {
+  const RESOURCES = getResources();
   return (
     <div>
       <div className="section-title">Discovered Areas</div>

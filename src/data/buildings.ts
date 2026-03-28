@@ -67,12 +67,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A lashed-together log raft. Seaworthy enough to reach nearby islands.",
     unlocks: "Sail to Nearby Island expedition",
+    vesselTier: 1,
   },
   dugout: {
     id: "dugout",
     name: "Dugout Canoe",
     description: "A proper canoe carved from a single log. Handles near-shore waters with ease.",
     unlocks: "Voyage by Dugout expedition",
+    vesselTier: 2,
   },
   woven_basket: {
     id: "woven_basket",

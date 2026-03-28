@@ -1,7 +1,14 @@
-import { BUILDINGS } from "../data/buildings";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { BiomeId, BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, SkillId, TagInput, ToolId } from "../data/types";
+import {
+  getBiomes,
+  getBuildings,
+  getPhases,
+  getResources,
+  getSkills,
+  getTools,
+  getFoodValues,
+  getWaterValues,
+} from "../data/registry";
+import type { BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, TagInput, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -13,7 +20,7 @@ export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeI
 /**
  * Resolve tag-based inputs into concrete RecipeInput[].
  * Picks `count` distinct resources the player owns (>=1) that have the given tag,
- * preferring lower food-value items first (using FOOD_VALUES order for "food" tag,
+ * preferring lower food-value items first (using foodValue for "food" tag,
  * alphabetical otherwise).
  * Returns null if the player doesn't have enough distinct tagged resources.
  */
@@ -22,6 +29,7 @@ export function resolveTagInputs(
   state: GameState,
   excludeIds?: Set<string>
 ): RecipeInput[] | null {
+  const RESOURCES = getResources();
   const result: RecipeInput[] = [];
   for (const ti of tagInputs) {
     // Find all resources with this tag that the player has >=1 of
@@ -32,7 +40,7 @@ export function resolveTagInputs(
 
     // Sort by food value (low first) for "food" tag, otherwise alphabetical
     if (ti.tag === "food") {
-      const foodOrder = new Map(FOOD_VALUES.map((f, i) => [f.id, i]));
+      const foodOrder = new Map(getFoodValues().map((f, i) => [f.id, i]));
       candidates.sort((a, b) => (foodOrder.get(a) ?? 999) - (foodOrder.get(b) ?? 999));
     } else {
       candidates.sort();
@@ -55,28 +63,29 @@ export function canAffordTagInputs(tagInputs: TagInput[], state: GameState): boo
   return resolveTagInputs(tagInputs, state) !== null;
 }
 
-const ALL_SKILLS: SkillId[] = [
-  "foraging",
-  "fishing",
-  "woodworking",
-  "crafting",
-  "cooking",
-  "weaving",
-  "construction",
-  "farming",
-  "navigation",
-];
-
 export function createInitialState(): GameState {
+  const SKILLS = getSkills();
   const skills = {} as GameState["skills"];
-  for (const id of ALL_SKILLS) {
+  for (const id of Object.keys(SKILLS)) {
     skills[id] = { xp: 0, level: 1 };
   }
+
+  // Find starting biomes from data
+  const biomes = getBiomes();
+  const startingBiomes = Object.values(biomes)
+    .filter((b) => b.startingBiome)
+    .map((b) => b.id);
+
+  // Find default phase
+  const phases = getPhases();
+  const defaultPhase = phases.find((p) => p.conditions.length === 0);
+  const startingPhases = defaultPhase ? [defaultPhase.id] : [];
+
   return {
     resources: {},
     tools: [],
     skills,
-    discoveredBiomes: ["beach"],
+    discoveredBiomes: startingBiomes.length > 0 ? startingBiomes : ["beach"],
     buildings: [] as BuildingId[],
     currentAction: null,
     lastTickAt: Date.now(),
@@ -86,7 +95,7 @@ export function createInitialState(): GameState {
     discoveryLog: [],
     discoveredResources: [],
     stations: [],
-    seenPhases: ["bare_hands"],
+    seenPhases: startingPhases.length > 0 ? startingPhases : ["bare_hands"],
     repetitiveActionCount: 0,
     savedActionProgress: {},
   };
@@ -94,8 +103,12 @@ export function createInitialState(): GameState {
 
 const SAVE_KEY = "seabound_save";
 
+export function getSaveKey(modId?: string): string {
+  return modId && modId !== "base" ? `seabound_save_mod_${modId}` : SAVE_KEY;
+}
+
 export function saveGame(state: GameState): void {
-  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  localStorage.setItem(getSaveKey(state.modId), JSON.stringify(state));
 }
 
 /** IDs that were resources in old saves but are now tools */
@@ -111,6 +124,9 @@ const OLD_BUILDING_RESOURCE_IDS: string[] = ["raft", "dugout", "woven_basket"];
 export function normalizeGameState(raw: unknown): GameState | null {
   if (!raw || typeof raw !== "object") return null;
 
+  const RESOURCES = getResources();
+  const BUILDINGS = getBuildings();
+  const SKILLS = getSkills();
   const loaded = structuredClone(raw) as GameState;
   if (!loaded.resources || typeof loaded.resources !== "object") {
     loaded.resources = {};
@@ -124,14 +140,14 @@ export function normalizeGameState(raw: unknown): GameState | null {
     loaded.discoveredBiomes = ["beach"];
   }
   // Ensure all skills exist (in case save is from old version)
-  for (const id of ALL_SKILLS) {
+  for (const id of Object.keys(SKILLS)) {
     if (!loaded.skills[id]) {
       loaded.skills[id] = { xp: 0, level: 1 };
     }
   }
   // Migration: remove preservation skill (merged into cooking/crafting)
-  if (loaded.skills["preservation" as SkillId]) {
-    delete loaded.skills["preservation" as SkillId];
+  if (loaded.skills["preservation"]) {
+    delete loaded.skills["preservation"];
   }
   // Migration: ensure buildings array exists
   if (!loaded.buildings) {
@@ -202,9 +218,9 @@ export function normalizeGameState(raw: unknown): GameState | null {
     loaded.savedActionProgress = {};
   }
   // Migration: grant rocky_shore biome if player already has flat_stone or chert
-  if (!loaded.discoveredBiomes.includes("rocky_shore" as BiomeId)) {
+  if (!loaded.discoveredBiomes.includes("rocky_shore")) {
     if ((loaded.resources["flat_stone"] ?? 0) > 0 || (loaded.resources["chert"] ?? 0) > 0) {
-      loaded.discoveredBiomes.push("rocky_shore" as BiomeId);
+      loaded.discoveredBiomes.push("rocky_shore");
     }
   }
   // Migration: replace removed action IDs with merged action
@@ -228,8 +244,8 @@ export function normalizeGameState(raw: unknown): GameState | null {
   return loaded;
 }
 
-export function loadGame(): GameState | null {
-  const raw = localStorage.getItem(SAVE_KEY);
+export function loadGame(modId?: string): GameState | null {
+  const raw = localStorage.getItem(getSaveKey(modId));
   if (!raw) return null;
   try {
     return normalizeGameState(JSON.parse(raw));
@@ -250,13 +266,17 @@ export function hasBuilding(state: GameState, buildingId: BuildingId): boolean {
   return state.buildings.includes(buildingId);
 }
 
-/** Vessel tier ordering — higher-tier vessels satisfy lower-tier requirements. */
-const VESSEL_TIERS: BuildingId[] = ["raft", "dugout"];
-
+/** Vessel tier check — higher-tier vessels satisfy lower-tier requirements. Uses data-driven vesselTier. */
 export function hasVessel(state: GameState, vesselId: BuildingId): boolean {
-  const requiredTier = VESSEL_TIERS.indexOf(vesselId);
-  if (requiredTier === -1) return hasBuilding(state, vesselId);
-  return VESSEL_TIERS.slice(requiredTier).some((v) => state.buildings.includes(v));
+  const BUILDINGS = getBuildings();
+  const requiredDef = BUILDINGS[vesselId];
+  if (!requiredDef?.vesselTier) return hasBuilding(state, vesselId);
+
+  const requiredTier = requiredDef.vesselTier;
+  return state.buildings.some((bid) => {
+    const bdef = BUILDINGS[bid];
+    return bdef?.vesselTier != null && bdef.vesselTier >= requiredTier;
+  });
 }
 
 export function getBuildingCount(state: GameState, buildingId: BuildingId): number {
@@ -265,6 +285,7 @@ export function getBuildingCount(state: GameState, buildingId: BuildingId): numb
 
 /** Check if a resource has a given tag. */
 export function resourceHasTag(resourceId: string, tag: string): boolean {
+  const RESOURCES = getResources();
   const def = RESOURCES[resourceId];
   return def?.tags?.includes(tag) ?? false;
 }
@@ -274,6 +295,8 @@ export const BASE_STORAGE_LIMIT = 10;
 
 /** Get the storage limit for a specific resource, accounting for building bonuses. */
 export function getStorageLimit(state: GameState, resourceId: string): number {
+  const RESOURCES = getResources();
+  const BUILDINGS = getBuildings();
   const def = RESOURCES[resourceId];
   if (!def) return BASE_STORAGE_LIMIT;
 
@@ -330,79 +353,40 @@ export function getEffectiveMoraleGain(currentMorale: number, amount: number): n
   return Math.floor(amount / 2);
 }
 
-/** Build lookup of tool speed bonuses from tool data.
- *  Maps actionOrRecipeId → array of { toolId, multiplier }. */
-const toolSpeedLookup = new Map<string, { toolId: ToolId; multiplier: number }[]>();
-for (const t of Object.values(TOOLS)) {
-  if (!t.speedBonus) continue;
-  const ids = [...(t.speedBonus.actionIds ?? []), ...(t.speedBonus.recipeIds ?? [])];
-  for (const id of ids) {
-    const existing = toolSpeedLookup.get(id) ?? [];
-    existing.push({ toolId: t.id, multiplier: t.speedBonus.multiplier });
-    toolSpeedLookup.set(id, existing);
-  }
-}
-
 /** Get tool-based speed multiplier for an action or recipe.
  *  Stacks multiplicatively if multiple tools apply. */
 export function getToolSpeedMultiplier(state: GameState, actionOrRecipeId: string): number {
-  const tools = toolSpeedLookup.get(actionOrRecipeId);
-  if (!tools) return 1;
+  const TOOLS = getTools();
   let mult = 1;
-  for (const t of tools) {
-    if (state.tools.includes(t.toolId)) {
-      mult *= t.multiplier;
+  for (const t of Object.values(TOOLS)) {
+    if (!t.speedBonus) continue;
+    const ids = [...(t.speedBonus.actionIds ?? []), ...(t.speedBonus.recipeIds ?? [])];
+    if (!ids.includes(actionOrRecipeId)) continue;
+    if (state.tools.includes(t.id)) {
+      mult *= t.speedBonus.multiplier;
     }
   }
   return mult;
 }
 
-/** Build lookup of tool output bonuses from tool data.
- *  Maps recipeId → array of { toolId, chance }. */
-const toolOutputLookup = new Map<string, { toolId: ToolId; chance: number }[]>();
-for (const t of Object.values(TOOLS)) {
-  if (!t.outputBonus) continue;
-  for (const id of t.outputBonus.recipeIds) {
-    const existing = toolOutputLookup.get(id) ?? [];
-    existing.push({ toolId: t.id, chance: t.outputBonus.chance });
-    toolOutputLookup.set(id, existing);
-  }
-}
-
 /** Get tool-based output bonus chance for a recipe.
  *  Returns the combined chance of +1 bonus output (stacks additively). */
 export function getToolOutputBonusChance(state: GameState, recipeId: string): number {
-  const tools = toolOutputLookup.get(recipeId);
-  if (!tools) return 0;
+  const TOOLS = getTools();
   let chance = 0;
-  for (const t of tools) {
-    if (state.tools.includes(t.toolId)) {
-      chance += t.chance;
+  for (const t of Object.values(TOOLS)) {
+    if (!t.outputBonus) continue;
+    if (!t.outputBonus.recipeIds.includes(recipeId)) continue;
+    if (state.tools.includes(t.id)) {
+      chance += t.outputBonus.chance;
     }
   }
   return Math.min(1, chance);
 }
 
-/** Food resources and their food value. Ordered low-value first so deductFood prefers cheap food. */
-export const FOOD_VALUES: { id: ResourceId; value: number }[] = [
-  { id: "coconut", value: 1 },
-  { id: "small_fish", value: 1 },
-  { id: "crab", value: 1 },
-  { id: "root_vegetable", value: 1 },
-  { id: "large_fish", value: 2 },
-  { id: "cooked_fish", value: 2 },
-  { id: "cooked_crab", value: 2 },
-  { id: "cooked_root_vegetable", value: 2 },
-  { id: "banana", value: 2 },
-  { id: "cooked_taro", value: 3 },
-  { id: "cooked_large_fish", value: 4 },
-  { id: "roasted_breadfruit", value: 4 },
-  { id: "voyage_provisions", value: 8 },
-];
-
-/** Total food value the player currently has. */
+/** Total food value the player currently has (data-driven from registry). */
 export function getTotalFood(state: GameState): number {
-  return FOOD_VALUES.reduce(
+  return getFoodValues().reduce(
     (sum, f) => sum + (state.resources[f.id] ?? 0) * f.value,
     0
   );
@@ -410,17 +394,13 @@ export function getTotalFood(state: GameState): number {
 
 /** Get the food value of a single resource item. Returns 0 if not food. */
 export function getFoodValue(resourceId: string): number {
-  return FOOD_VALUES.find((f) => f.id === resourceId)?.value ?? 0;
+  const RESOURCES = getResources();
+  return RESOURCES[resourceId]?.foodValue ?? 0;
 }
 
-/** Water resources and their water value. */
-export const WATER_VALUES: { id: ResourceId; value: number }[] = [
-  { id: "fresh_water", value: 1 },
-];
-
-/** Total water value the player currently has. */
+/** Total water value the player currently has (data-driven from registry). */
 export function getTotalWater(state: GameState): number {
-  return WATER_VALUES.reduce(
+  return getWaterValues().reduce(
     (sum, w) => sum + (state.resources[w.id] ?? 0) * w.value,
     0
   );
@@ -429,9 +409,10 @@ export function getTotalWater(state: GameState): number {
 /** Deduct `amount` water value from inventory. Returns record of what was taken, or null if insufficient. */
 export function deductWater(state: GameState, amount: number): Record<string, number> | null {
   if (getTotalWater(state) < amount) return null;
+  const waterValues = getWaterValues();
   const taken: Record<string, number> = {};
   let remaining = amount;
-  for (const w of WATER_VALUES) {
+  for (const w of waterValues) {
     if (remaining <= 0) break;
     const have = state.resources[w.id] ?? 0;
     const canTake = Math.min(have, Math.floor(remaining / w.value));
@@ -442,7 +423,7 @@ export function deductWater(state: GameState, amount: number): Record<string, nu
     }
   }
   if (remaining > 0) {
-    for (const w of WATER_VALUES) {
+    for (const w of waterValues) {
       if (remaining <= 0) break;
       const have = state.resources[w.id] ?? 0;
       if (have > 0 && w.value >= remaining) {
@@ -459,9 +440,10 @@ export function deductWater(state: GameState, amount: number): Record<string, nu
 /** Deduct `amount` food value from inventory, preferring low-value food first. Returns record of what was taken, or null if insufficient. */
 export function deductFood(state: GameState, amount: number): Record<string, number> | null {
   if (getTotalFood(state) < amount) return null;
+  const foodValues = getFoodValues();
   const taken: Record<string, number> = {};
   let remaining = amount;
-  for (const f of FOOD_VALUES) {
+  for (const f of foodValues) {
     if (remaining <= 0) break;
     const have = state.resources[f.id] ?? 0;
     const canTake = Math.min(have, Math.floor(remaining / f.value));
@@ -473,7 +455,7 @@ export function deductFood(state: GameState, amount: number): Record<string, num
   }
   // Second pass: if there's remaining < a food's value but we have high-value food, use one
   if (remaining > 0) {
-    for (const f of FOOD_VALUES) {
+    for (const f of foodValues) {
       if (remaining <= 0) break;
       const have = state.resources[f.id] ?? 0;
       if (have > 0 && f.value >= remaining) {

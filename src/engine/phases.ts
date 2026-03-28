@@ -1,39 +1,47 @@
-import { GameState } from "../data/types";
+import { getPhases } from "../data/registry";
+import type { GameState, PhaseDef } from "../data/types";
 
-export type GamePhase = "bare_hands" | "bamboo" | "fire" | "stone" | "maritime";
+export type GamePhase = string;
 
 export interface PhaseInfo {
-  id: GamePhase;
+  id: string;
   index: number;
   name: string;
   tagline: string;
 }
 
-export const PHASES: PhaseInfo[] = [
-  { id: "bare_hands", index: 0, name: "Bare Hands", tagline: "Washed ashore. Everything starts here." },
-  { id: "bamboo", index: 1, name: "Bamboo", tagline: "The grove provides. Tools take shape." },
-  { id: "fire", index: 2, name: "Fire", tagline: "The night no longer owns you." },
-  { id: "stone", index: 3, name: "Stone & Clay", tagline: "The island yields its deeper secrets." },
-  { id: "maritime", index: 4, name: "Maritime", tagline: "The horizon opens." },
-];
-
-/** Determine the highest phase the player has reached. */
+/** Determine the highest phase the player has reached (data-driven). */
 export function getCurrentPhase(state: GameState): PhaseInfo {
-  const has = (id: string) => (state.resources[id] ?? 0) >= 1;
-  const hasBuilding = (id: string) => state.buildings.includes(id as never);
-  const hasBiome = (id: string) => state.discoveredBiomes.includes(id as never);
+  const phases = getPhases();
+  const sorted = [...phases].sort((a, b) => a.order - b.order);
 
-  // Maritime: has raft or dugout
-  if (has("raft") || has("dugout")) return PHASES[4];
+  let best: PhaseDef = sorted[0];
 
-  // Stone: has stone tools or clay items
-  if (has("hammerstone") || has("stone_flake") || has("stone_blade") || has("stone_axe") || has("clay") || has("shaped_clay_pot")) return PHASES[3];
+  for (const phase of sorted) {
+    if (phase.conditions.length === 0) continue; // default phase
+    const matches = phase.conditions.some((cond) => {
+      switch (cond.type) {
+        case "has_resource":
+          return (state.resources[cond.id] ?? 0) >= 1;
+        case "has_building":
+          return state.buildings.includes(cond.id);
+        case "has_biome":
+          return state.discoveredBiomes.includes(cond.id);
+        case "has_tool":
+          return state.tools.includes(cond.id);
+        default:
+          return false;
+      }
+    });
+    if (matches && phase.order > best.order) {
+      best = phase;
+    }
+  }
 
-  // Fire: has camp fire building
-  if (hasBuilding("camp_fire")) return PHASES[2];
-
-  // Bamboo: discovered bamboo grove or has bamboo items
-  if (hasBiome("bamboo_grove") || has("bamboo_cane") || has("bamboo_knife")) return PHASES[1];
-
-  return PHASES[0];
+  return {
+    id: best.id,
+    index: best.order,
+    name: best.name,
+    tagline: best.tagline,
+  };
 }

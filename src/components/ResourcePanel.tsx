@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { RESOURCES } from "../data/resources";
+import { getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 export function ResourcePanel({ state }: { state: GameState }) {
+  const RESOURCES = getResources();
   const [showMoraleTip, setShowMoraleTip] = useState(false);
   const entries = Object.entries(state.resources).filter(([, v]) => v > 0);
   const moraleEffect = getMoraleDurationMultiplier(state.morale);

@@ -1,17 +1,17 @@
-import { ACTIONS } from "../data/actions";
-import { BUILDINGS } from "../data/buildings";
-import { EXPEDITIONS } from "../data/expeditions";
 import { getDurationMultiplier } from "../data/milestones";
 import {
-  ACTIONS_BY_ID,
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
-  STATIONS_BY_ID,
-} from "../data/registries";
-import { RECIPES } from "../data/recipes";
-import { RESOURCES } from "../data/resources";
-import { STATIONS } from "../data/stations";
-import { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
+  getActions,
+  getActionById,
+  getBuildings,
+  getExpeditionById,
+  getExpeditions,
+  getRecipeById,
+  getRecipes,
+  getResources,
+  getStationById,
+  getStations,
+} from "../data/registry";
+import type { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
   getBuildingCount,
   getEffectiveInputs,
@@ -29,12 +29,12 @@ export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "
 
 
 function resourceHasUse(resourceId: string, state: GameState): boolean {
-  return RECIPES.some((recipe) => {
+  const BUILDINGS = getBuildings();
+  return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
     const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
     if (!usesResource) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
-      // For stackable buildings, the recipe can still be used
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
     }
@@ -45,7 +45,7 @@ function resourceHasUse(resourceId: string, state: GameState): boolean {
 }
 
 export function selectAvailableActions(state: GameState): ActionDef[] {
-  return ACTIONS.filter((action) => {
+  return getActions().filter((action) => {
     const skill = state.skills[action.skillId];
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
     if (action.requiredBiome && !state.discoveredBiomes.includes(action.requiredBiome)) return false;
@@ -57,17 +57,30 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
 }
 
 export function selectAvailableRecipes(state: GameState): RecipeDef[] {
-  return RECIPES.filter((recipe) => {
+  const BUILDINGS = getBuildings();
+  return getRecipes().filter((recipe) => {
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
     if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
     if (recipe.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
-    // Hide raft recipe if player already has a dugout (strictly better vessel)
-    if (recipe.buildingOutput === "raft" && hasBuilding(state, "dugout")) return false;
-    // Hide twist cordage once braid cordage is unlocked (strictly better)
-    if (recipe.id === "twist_cordage" && state.buildings.includes("fiber_loom")) return false;
+    // Data-driven hide rules
+    if (recipe.hideWhen) {
+      const allMet = recipe.hideWhen.every((cond) => {
+        switch (cond.type) {
+          case "has_building":
+            return hasBuilding(state, cond.buildingId);
+          case "has_tool":
+            return state.tools.includes(cond.toolId);
+          case "output_no_use":
+            return recipe.output ? !resourceHasUse(recipe.output.resourceId, state) : false;
+          default:
+            return false;
+        }
+      });
+      if (allMet) return false;
+    }
     // Hide building recipes if building already exists (or at max count for stackable)
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
@@ -82,14 +95,13 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
     if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
     if (recipe.oneTimeCraft && recipe.output && !resourceHasUse(recipe.output.resourceId, state)) return false;
-    if (recipe.id === "split_bamboo_cane" && !resourceHasUse("bamboo_splinter", state)) return false;
     if (getEffectiveInputs(recipe, state).some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     return true;
   });
 }
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
-  return EXPEDITIONS.filter((expedition) => {
+  return getExpeditions().filter((expedition) => {
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
@@ -105,7 +117,7 @@ export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
 }
 
 export function selectAvailableStations(state: GameState): StationDef[] {
-  return STATIONS.filter((station) => {
+  return getStations().filter((station) => {
     const skill = state.skills[station.skillId];
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
@@ -131,7 +143,7 @@ export function selectCurrentActionTiming(
   }
 
   if (state.currentAction.type === "gather") {
-    const action = ACTIONS_BY_ID[state.currentAction.actionId];
+    const action = getActionById(state.currentAction.actionId);
     if (!action) return { actionProgress: 0, actionDuration: 0 };
     const skillLevel = state.skills[action.skillId].level;
     const toolMultiplier = getToolSpeedMultiplier(state, action.id);
@@ -149,7 +161,7 @@ export function selectCurrentActionTiming(
 
   if (state.currentAction.type === "craft") {
     const recipeId = state.currentAction.recipeId;
-    const recipe = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    const recipe = recipeId ? getRecipeById(recipeId) : undefined;
     if (!recipe) return { actionProgress: 0, actionDuration: 0 };
     const toolMultiplier = getToolSpeedMultiplier(state, recipe.id);
     const effectiveDuration = Math.round(recipe.durationMs * moraleMultiplier * toolMultiplier);
@@ -160,7 +172,7 @@ export function selectCurrentActionTiming(
   }
 
   const expeditionId = state.currentAction.expeditionId;
-  const expedition = expeditionId ? EXPEDITIONS_BY_ID[expeditionId] : undefined;
+  const expedition = expeditionId ? getExpeditionById(expeditionId) : undefined;
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
   const effectiveDuration = Math.round(expedition.durationMs * moraleMultiplier);
   return {
@@ -172,15 +184,15 @@ export function selectCurrentActionTiming(
 export function selectCurrentActionName(state: GameState): string | null {
   if (!state.currentAction) return null;
   if (state.currentAction.type === "gather") {
-    return ACTIONS_BY_ID[state.currentAction.actionId]?.name ?? null;
+    return getActionById(state.currentAction.actionId)?.name ?? null;
   }
   if (state.currentAction.type === "craft") {
     return state.currentAction.recipeId
-      ? RECIPES_BY_ID[state.currentAction.recipeId]?.name ?? null
+      ? getRecipeById(state.currentAction.recipeId)?.name ?? null
       : null;
   }
   return state.currentAction.expeditionId
-    ? EXPEDITIONS_BY_ID[state.currentAction.expeditionId]?.name ?? null
+    ? getExpeditionById(state.currentAction.expeditionId)?.name ?? null
     : null;
 }
 
@@ -252,8 +264,10 @@ export interface ActionStatusInfo {
 export function selectActionStatusInfo(state: GameState): ActionStatusInfo | null {
   if (!state.currentAction) return null;
 
+  const RESOURCES = getResources();
+
   if (state.currentAction.type === "gather") {
-    const action = ACTIONS_BY_ID[state.currentAction.actionId];
+    const action = getActionById(state.currentAction.actionId);
     if (!action) return null;
     const outputs = action.drops
       .filter((d) => d.chance === undefined || d.chance >= 0.5)
@@ -267,7 +281,7 @@ export function selectActionStatusInfo(state: GameState): ActionStatusInfo | nul
 
   if (state.currentAction.type === "craft") {
     const recipeId = state.currentAction.recipeId;
-    const recipe = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    const recipe = recipeId ? getRecipeById(recipeId) : undefined;
     if (!recipe) return null;
 
     const effectiveInputs = getEffectiveInputs(recipe, state);
@@ -302,7 +316,7 @@ export function selectActionStatusInfo(state: GameState): ActionStatusInfo | nul
 
 export function selectReadyStationCount(state: GameState, now = Date.now()): number {
   return state.stations.filter((station) => {
-    const def = STATIONS_BY_ID[station.stationId];
+    const def = getStationById(station.stationId);
     return def ? now >= station.deployedAt + def.durationMs : false;
   }).length;
 }

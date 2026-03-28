@@ -1,9 +1,10 @@
-import { getMilestones } from "../data/milestones";
-import { SKILLS, xpForLevel } from "../data/skills";
+import { getSkills, getMilestonesForSkill } from "../data/registry";
+import { xpForLevel } from "../data/skills";
 import { GameState, SkillId } from "../data/types";
 import { GameIcon } from "./GameIcon";
 
 export function SkillsPanel({ state }: { state: GameState }) {
+  const SKILLS = getSkills();
   const skillIds = (Object.keys(SKILLS) as SkillId[]).filter(
     (id) => state.skills[id].xp > 0
   );
@@ -28,7 +29,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
         const xpNeeded = nextLevelXp - currentLevelXp;
         const progress = xpNeeded > 0 ? xpIntoLevel / xpNeeded : 1;
 
-        const milestones = getMilestones(id);
+        const milestones = getMilestonesForSkill(id);
         const achieved = milestones.filter((m) => m.level <= skill.level);
         const upcoming = milestones.filter((m) => m.level > skill.level);
         // Show up to 3 upcoming milestones

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { RESOURCES } from "../data/resources";
-import { TOOLS } from "../data/tools";
-import { ActionDef, BiomeId, GameState } from "../data/types";
+import { getBiomeOrder, getBiomes, getResources, getTools } from "../data/registry";
+import type { ActionDef, GameState } from "../data/types";
 import { getResource, hasTool } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
@@ -13,37 +12,23 @@ interface Props {
   currentActionId?: string | null;
 }
 
-const BIOME_NAMES: Record<BiomeId, string> = {
-  beach: "Beach",
-  coconut_grove: "Coconut Grove",
-  rocky_shore: "Rocky Shore",
-  bamboo_grove: "Bamboo Grove",
-  jungle_interior: "Jungle Interior",
-  nearby_island: "Nearby Island",
-};
-
-/** Order biomes appear in the gather panel. Actions without a biome go under "beach". */
-const BIOME_ORDER: BiomeId[] = [
-  "beach",
-  "coconut_grove",
-  "rocky_shore",
-  "bamboo_grove",
-  "jungle_interior",
-  "nearby_island",
-];
-
 export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
-  const [collapsed, setCollapsed] = useState<Set<BiomeId>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
-  const grouped = new Map<BiomeId, ActionDef[]>();
+  const BIOMES = getBiomes();
+  const BIOME_ORDER = getBiomeOrder();
+  const RESOURCES = getResources();
+  const TOOLS = getTools();
+
+  const grouped = new Map<string, ActionDef[]>();
   for (const a of actions) {
-    const biome: BiomeId = a.requiredBiome ?? "beach";
+    const biome: string = a.requiredBiome ?? BIOME_ORDER[0] ?? "beach";
     const list = grouped.get(biome) ?? [];
     list.push(a);
     grouped.set(biome, list);
   }
 
-  const toggleBiome = (biomeId: BiomeId) => {
+  const toggleBiome = (biomeId: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(biomeId)) next.delete(biomeId);
@@ -58,6 +43,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
         const list = grouped.get(biomeId);
         if (!list) return null;
         const isCollapsed = collapsed.has(biomeId);
+        const biomeName = BIOMES[biomeId]?.name ?? biomeId.replace(/_/g, " ");
         return (
           <div key={biomeId}>
             <div
@@ -65,7 +51,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               onClick={() => toggleBiome(biomeId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              <GameIcon id={`biome_${biomeId}`} /> {BIOME_NAMES[biomeId]}
+              <GameIcon id={`biome_${biomeId}`} /> {biomeName}
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((action) => {

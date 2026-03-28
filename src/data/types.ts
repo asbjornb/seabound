@@ -1,100 +1,15 @@
-export type ResourceId =
-  // Phase 0 - Bare Hands
-  | "coconut"
-  | "coconut_husk"
-  | "driftwood_branch"
-  | "flat_stone"
-  | "palm_frond"
-  | "small_fish"
-  | "crab"
-  | "shell"
-  // Phase 1 - Bamboo Tier
-  | "bamboo_cane"
-  | "bamboo_splinter"
-  | "rough_fiber"
-  | "dried_fiber"
-  | "cordage"
-  | "large_shell"
-  // Phase 1b - Fire
-  | "dry_grass"
-  // Food
-  | "large_fish"
-  | "cooked_fish"
-  | "cooked_crab"
-  | "cooked_large_fish"
-  // Seeds & Farming
-  | "wild_seed"
-  | "root_vegetable"
-  | "cooked_root_vegetable"
-  | "taro_corm"
-  | "taro_root"
-  | "cooked_taro"
-  | "banana_shoot"
-  | "banana"
-  | "breadfruit_cutting"
-  | "breadfruit"
-  | "roasted_breadfruit"
-  | "voyage_provisions"
-  // Obsidian
-  | "obsidian"
-  // Stone Tools
-  | "chert"
-  | "stone_flake"
-  | "stone_blade"
-  // Timber
-  | "large_log"
-  | "charred_log"
-  | "shaped_hull"
-  // Water
-  | "fresh_water"
-  // Phase 2 - Clay Tier
-  | "clay"
-  | "shaped_clay_pot"
-  | "fired_clay_pot"
-  | "sealed_clay_jar";
+// ═══════════════════════════════════════
+// ID types — string aliases for moddability
+// ═══════════════════════════════════════
+// These were previously string literal unions. Now plain strings so mods
+// can introduce arbitrary new IDs. The base-game data files still use the
+// same IDs, and runtime validation catches bad references.
 
-export type ToolId =
-  | "bamboo_knife"
-  | "bow_drill_kit"
-  | "bamboo_spear"
-  | "hammerstone"
-  | "shell_adze"
-  | "stone_axe"
-  | "obsidian_blade"
-  | "gorge_hook"
-  | "basket_trap"
-  | "crucible"
-  | "digging_stick";
-
-export type SkillId =
-  | "foraging"
-  | "fishing"
-  | "woodworking"
-  | "crafting"
-  | "cooking"
-  | "weaving"
-  | "construction"
-  | "farming"
-  | "navigation";
-
-export type BiomeId = "beach" | "coconut_grove" | "rocky_shore" | "bamboo_grove" | "jungle_interior" | "nearby_island";
-
-export type BuildingId =
-  | "camp_fire"
-  | "stone_hearth"
-  | "palm_leaf_pile"
-  | "drying_rack"
-  | "fenced_perimeter"
-  | "firing_pit"
-  | "kiln"
-  | "fiber_loom"
-  | "raft"
-  | "dugout"
-  | "woven_basket"
-  | "cleared_plot"
-  | "tended_garden"
-  | "farm_plot"
-  | "well";
+export type ResourceId = string;
+export type ToolId = string;
+export type SkillId = string;
+export type BiomeId = string;
+export type BuildingId = string;
 
 export interface StorageBonus {
   tag?: string; // if set, item must have this tag
@@ -109,6 +24,7 @@ export interface BuildingDef {
   unlocks: string; // human-readable description of what this building enables
   storageBonus?: StorageBonus[];
   maxCount?: number; // if set, this building can be built multiple times (default 1)
+  vesselTier?: number; // if set, this building is a vessel; higher tiers satisfy lower-tier requirements
 }
 
 export interface ToolSpeedBonus {
@@ -135,12 +51,22 @@ export interface ResourceDef {
   name: string;
   description: string;
   tags?: string[]; // e.g. ["food"], ["large"], ["food", "large"], ["dried"]
+  foodValue?: number; // if set, this resource counts as food with this value
+  waterValue?: number; // if set, this resource counts as water with this value
 }
 
 export interface SkillDef {
   id: SkillId;
   name: string;
   description: string;
+}
+
+export interface BiomeDef {
+  id: BiomeId;
+  name: string;
+  description?: string;
+  order: number; // display order in gather panel
+  startingBiome?: boolean; // if true, player starts with this biome discovered
 }
 
 export interface Drop {
@@ -156,13 +82,34 @@ export interface Drop {
 export type MilestoneEffect =
   | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
   | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster
-  | { type: "double_output"; chance: number; recipeId?: string }; // e.g. 0.05 = 5% chance to double craft output; recipeId scopes to one recipe
+  | { type: "double_output"; chance: number; recipeId?: string } // e.g. 0.05 = 5% chance to double craft output; recipeId scopes to one recipe
+  | { type: "station_input_reduce"; stationId: string; resourceId: ResourceId; newAmount: number } // reduce setup input cost
+  | { type: "station_guaranteed_drop"; stationId: string; resourceId: ResourceId; minAmount: number }; // guarantee minimum drop
 
 export interface SkillMilestone {
   level: number;
   description: string;
   hidden?: boolean; // if true, show generic hint until player reaches this level
   effects?: MilestoneEffect[];
+}
+
+// ═══════════════════════════════════════
+// Game Phases (data-driven)
+// ═══════════════════════════════════════
+
+export type PhaseConditionType = "has_resource" | "has_building" | "has_biome" | "has_tool";
+
+export interface PhaseCondition {
+  type: PhaseConditionType;
+  id: string; // resourceId, buildingId, biomeId, or toolId
+}
+
+export interface PhaseDef {
+  id: string;
+  name: string;
+  tagline: string;
+  order: number; // higher = later phase; getCurrentPhase returns highest matching
+  conditions: PhaseCondition[]; // ANY of these triggers the phase (OR logic)
 }
 
 export type ContentPanel = "gather" | "craft" | "build";
@@ -217,7 +164,14 @@ export interface RecipeDef {
   repeatable?: boolean; // if true, auto-repeats until inputs run out (like gathering actions)
   xpGain: number;
   moraleGain?: number; // if set, completing this recipe boosts morale
+  /** Hide this recipe when ALL conditions are met. Used for progression replacements. */
+  hideWhen?: RecipeHideCondition[];
 }
+
+export type RecipeHideCondition =
+  | { type: "has_building"; buildingId: BuildingId }
+  | { type: "has_tool"; toolId: ToolId }
+  | { type: "output_no_use" }; // hide when the output resource has no remaining use
 
 export interface ExpeditionDef {
   id: string;
@@ -300,4 +254,5 @@ export interface GameState {
   seenPhases: string[];
   repetitiveActionCount: number; // consecutive completions since last manual action change
   savedActionProgress: Record<string, number>; // saved elapsed ms per action key, preserved across switches
+  modId?: string; // if set, this save belongs to a specific mod
 }

@@ -1,13 +1,13 @@
 import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from "../data/milestones";
 import {
-  ACTIONS_BY_ID,
-  EXPEDITIONS_BY_ID,
-  RECIPES_BY_ID,
-} from "../data/registries";
-import { RECIPES } from "../data/recipes";
+  getActionById,
+  getBuildings,
+  getExpeditionById,
+  getRecipeById,
+  getRecipes,
+} from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import { BUILDINGS } from "../data/buildings";
-import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
 import { addResource, deductFood, deductWater, getEffectiveInputs, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
@@ -35,7 +35,7 @@ function isOutputFull(state: GameState): boolean {
   if (!action) return false;
 
   if (action.type === "gather") {
-    const def = ACTIONS_BY_ID[action.actionId];
+    const def = getActionById(action.actionId);
     if (!def) return false;
     return def.drops.some((d) => {
       const current = state.resources[d.resourceId] ?? 0;
@@ -44,7 +44,7 @@ function isOutputFull(state: GameState): boolean {
   }
 
   if (action.type === "craft") {
-    const def = action.recipeId ? RECIPES_BY_ID[action.recipeId] : undefined;
+    const def = action.recipeId ? getRecipeById(action.recipeId) : undefined;
     if (!def?.output) return false;
     const current = state.resources[def.output.resourceId] ?? 0;
     return current >= getStorageLimit(state, def.output.resourceId);
@@ -65,7 +65,7 @@ export function processTick(state: GameState, now: number): TickResult {
   const completions: CompletionEvent[] = [];
 
   if (!state.currentAction) {
-    cleanupObsoleteBambooSplinters(state);
+    cleanupObsoleteResources(state);
     // No action running — skip morale decay so idle players aren't punished
     return { completions, elapsedMs };
   }
@@ -84,7 +84,7 @@ export function processTick(state: GameState, now: number): TickResult {
   const timeAvailable = now - action.startedAt;
 
   if (action.type === "gather") {
-    const def = ACTIONS_BY_ID[action.actionId];
+    const def = getActionById(action.actionId);
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -113,7 +113,7 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   } else if (action.type === "craft") {
     const recipeId = action.recipeId;
-    const def = recipeId ? RECIPES_BY_ID[recipeId] : undefined;
+    const def = recipeId ? getRecipeById(recipeId) : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -184,7 +184,7 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   } else if (action.type === "expedition") {
     const expeditionId = action.expeditionId;
-    const def = expeditionId ? EXPEDITIONS_BY_ID[expeditionId] : undefined;
+    const def = expeditionId ? getExpeditionById(expeditionId) : undefined;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs };
@@ -217,12 +217,13 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   }
 
-  cleanupObsoleteBambooSplinters(state);
+  cleanupObsoleteResources(state);
   return { completions, elapsedMs };
 }
 
 function resourceHasUse(state: GameState, resourceId: string): boolean {
-  return RECIPES.some((r) => {
+  const BUILDINGS = getBuildings();
+  return getRecipes().some((r) => {
     const effectiveInputs = getEffectiveInputs(r, state);
     const usesResource = effectiveInputs.some((inp) => inp.resourceId === resourceId);
     if (!usesResource) return false;
@@ -236,7 +237,9 @@ function resourceHasUse(state: GameState, resourceId: string): boolean {
   });
 }
 
-function cleanupObsoleteBambooSplinters(state: GameState): void {
+/** Clean up resources that have no remaining use in any recipe. */
+function cleanupObsoleteResources(state: GameState): void {
+  // Check bamboo_splinter specifically (backward compat)
   if ((state.resources["bamboo_splinter"] ?? 0) < 1) return;
   if (resourceHasUse(state, "bamboo_splinter")) return;
   delete state.resources["bamboo_splinter"];
@@ -247,7 +250,7 @@ function applyGatherCompletion(
   actionId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = ACTIONS_BY_ID[actionId];
+  const def = getActionById(actionId);
   if (!def) return null;
 
   const skillLevel = state.skills[def.skillId].level;
@@ -283,9 +286,10 @@ function applyCraftCompletion(
   recipeId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = RECIPES_BY_ID[recipeId];
+  const def = getRecipeById(recipeId);
   if (!def) return null;
 
+  const BUILDINGS = getBuildings();
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
   let buildingBuilt: string | undefined;
@@ -375,7 +379,7 @@ function applyExpeditionCompletion(
   expeditionId: string,
   repetitiveCount: number
 ): CompletionEvent | null {
-  const def = EXPEDITIONS_BY_ID[expeditionId];
+  const def = getExpeditionById(expeditionId);
   if (!def) return null;
 
   // Pick a random outcome weighted by weight
@@ -489,7 +493,7 @@ function rollDrops(
     if (skillId && skillLevel && actionId) {
       chance = Math.min(
         1,
-        chance + getDropChanceBonus(skillId as any, skillLevel, actionId, drop.resourceId)
+        chance + getDropChanceBonus(skillId, skillLevel, actionId, drop.resourceId)
       );
     }
     if (Math.random() < chance) {
