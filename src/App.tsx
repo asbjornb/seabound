@@ -15,7 +15,7 @@ import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
-import { TAB_ICONS } from "./data/icons";
+import { GameIcon } from "./components/GameIcon";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -279,7 +279,7 @@ export default function App() {
                 className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
                 onClick={() => setTab(t)}
               >
-                {TAB_ICONS[t] ?? ""}{" "}{t.charAt(0).toUpperCase() + t.slice(1)}
+                <GameIcon id={`tab_${t}`} size={18} />{" "}{t.charAt(0).toUpperCase() + t.slice(1)}
               </button>
             ))}
           </nav>

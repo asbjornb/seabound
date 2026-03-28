@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { RESOURCE_ICONS, SKILL_ICONS, TOOL_ICONS } from "../data/icons";
 import { getDoubleOutputChance } from "../data/milestones";
 import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { BUILDINGS } from "../data/buildings";
 import { GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
+import { GameIcon } from "./GameIcon";
 
 interface Props {
   recipes: RecipeDef[];
@@ -128,7 +128,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                         <span key={i}>
                           {i > 0 && ", "}
                           <span className={enough ? "has" : "missing"}>
-                            {RESOURCE_ICONS[inp.resourceId] ?? ""}{inp.amount}x{" "}
+                            <GameIcon id={inp.resourceId} size={16} />{inp.amount}x{" "}
                             {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
                             {have})
                           </span>
@@ -157,7 +157,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                                 .map((r, j) => (
                                   <span key={j}>
                                     {j > 0 && ", "}
-                                    {RESOURCE_ICONS[r.resourceId] ?? ""}{RESOURCES[r.resourceId]?.name ?? r.resourceId}
+                                    <GameIcon id={r.resourceId} size={16} />{RESOURCES[r.resourceId]?.name ?? r.resourceId}
                                   </span>
                                 ))}
                             </span>
@@ -172,7 +172,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredTools.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span title={TOOLS[id]?.description}>{TOOL_ICONS[id] ?? ""}{TOOLS[id]?.name ?? id}</span>
+                          <span title={TOOLS[id]?.description}><GameIcon id={id} size={16} />{TOOLS[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
@@ -183,14 +183,14 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       {recipe.requiredItems.map((id, i) => (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span title={RESOURCES[id]?.description}>{RESOURCE_ICONS[id] ?? ""}{RESOURCES[id]?.name ?? id}</span>
+                          <span title={RESOURCES[id]?.description}><GameIcon id={id} size={16} />{RESOURCES[id]?.name ?? id}</span>
                         </span>
                       ))}
                     </div>
                   )}
                   {recipe.toolOutput ? (
                     <div className="recipe-output">
-                      Produces: {TOOL_ICONS[recipe.toolOutput] ?? ""}{" "}
+                      Produces: <GameIcon id={recipe.toolOutput} size={16} />{" "}
                       {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}
                     </div>
                   ) : recipe.buildingOutput ? (
@@ -202,7 +202,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     </div>
                   ) : recipe.output ? (
                     <div className="recipe-output">
-                      Produces: {RESOURCE_ICONS[recipe.output.resourceId] ?? ""}{recipe.output.amount}x{" "}
+                      Produces: <GameIcon id={recipe.output.resourceId} size={16} />{recipe.output.amount}x{" "}
                       {RESOURCES[recipe.output.resourceId]?.name ??
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
@@ -223,7 +223,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     <div className="recipe-output">XP only</div>
                   )}
                   <div className="action-xp">
-                    {SKILL_ICONS[recipe.skillId]} +{recipe.xpGain} {recipe.skillId} XP
+                    <GameIcon id={`skill_${recipe.skillId}`} size={16} /> +{recipe.xpGain} {recipe.skillId} XP
                   </div>
                 </div>
               );
