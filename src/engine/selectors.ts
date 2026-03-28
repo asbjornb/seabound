@@ -64,6 +64,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     // Hide raft recipe if player already has a dugout (strictly better vessel)
     if (recipe.buildingOutput === "raft" && hasBuilding(state, "dugout")) return false;
+    // Hide twist cordage once braid cordage is unlocked (strictly better)
+    if (recipe.id === "twist_cordage" && state.buildings.includes("fiber_loom")) return false;
     // Hide non-stackable building recipes if building already exists
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
