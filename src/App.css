@@ -611,7 +611,7 @@ body {
 }
 
 .action-requires.met span {
-  color: var(--text-dim);
+  color: var(--success);
 }
 
 .action-xp {
