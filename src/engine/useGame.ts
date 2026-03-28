@@ -331,9 +331,8 @@ export function useGame() {
 
   const toggleStopWhenFull = useCallback(() => {
     setState((prev) => {
-      if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
-      next.currentAction!.stopWhenFull = !prev.currentAction.stopWhenFull;
+      next.stopWhenFull = !prev.stopWhenFull;
       return next;
     });
   }, []);
