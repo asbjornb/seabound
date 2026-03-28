@@ -1,7 +1,7 @@
 import { RESOURCES } from "../data/resources";
 import { STATIONS_BY_ID } from "../data/registries";
 import { GameState, StationDef } from "../data/types";
-import { getResource } from "../engine/gameState";
+import { getBuildingCount, getResource } from "../engine/gameState";
 
 interface Props {
   availableStations: StationDef[];
@@ -102,7 +102,12 @@ export function StationsPanel({
         <>
           <div className="section-title">Deploy</div>
           {availableStations.map((station) => {
-            const maxDeployed = station.maxDeployed ?? 1;
+            let maxDeployed = station.maxDeployed ?? 1;
+            if (station.maxDeployedPerBuildings) {
+              maxDeployed = station.maxDeployedPerBuildings.reduce(
+                (sum, bid) => sum + getBuildingCount(state, bid), 0
+              );
+            }
             const currentCount = state.stations.filter(
               (s) => s.stationId === station.id
             ).length;
