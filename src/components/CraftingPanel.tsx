@@ -108,6 +108,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               // Resolve which tagged resources would be used (for display)
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
 
+              const isNew = !state.completedRecipes.includes(recipe.id);
               return (
                 <div
                   key={recipe.id}
@@ -115,7 +116,10 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                   onClick={() => !disabled && onCraft(recipe)}
                 >
                   <div className="action-card-header">
-                    <span className="action-name">{recipe.name}</span>
+                    <span className="action-name">
+                      {recipe.name}
+                      {isNew && <span className="new-badge">NEW</span>}
+                    </span>
                     <span className="action-time">
                       {(recipe.durationMs / 1000).toFixed(1)}s
                     </span>

@@ -582,6 +582,21 @@ body {
 .action-name {
   font-weight: 600;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.new-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 0 4px;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .action-time {

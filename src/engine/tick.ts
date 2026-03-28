@@ -279,6 +279,11 @@ function applyGatherCompletion(
     addResource(state, drop.resourceId, drop.amount);
   }
 
+  // Track first completion
+  if (!state.completedActions.includes(def.id)) {
+    state.completedActions.push(def.id);
+  }
+
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
   const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount);
@@ -364,6 +369,11 @@ function applyCraftCompletion(
     drops.push({ name: def.output.resourceId, amount: outputAmount });
   }
   // else: XP-only recipe (e.g. Maintain Camp) — no output to process
+
+  // Track first completion
+  if (!state.completedRecipes.includes(def.id)) {
+    state.completedRecipes.push(def.id);
+  }
 
   // Morale boosts
   if (def.moraleGain) {

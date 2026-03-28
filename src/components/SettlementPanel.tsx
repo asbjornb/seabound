@@ -42,6 +42,7 @@ export function SettlementPanel({
               (r) => getResource(state, r) < 1
             );
             const disabled = !!missingTool || !!missingResource;
+            const isNew = !state.completedActions.includes(action.id);
             return (
               <div
                 key={action.id}
@@ -49,7 +50,10 @@ export function SettlementPanel({
                 onClick={() => !disabled && onStartAction(action)}
               >
                 <div className="action-card-header">
-                  <span className="action-name">{action.name}</span>
+                  <span className="action-name">
+                    {action.name}
+                    {isNew && <span className="new-badge">NEW</span>}
+                  </span>
                   <span className="action-time">
                     {(action.durationMs / 1000).toFixed(1)}s
                   </span>
@@ -92,6 +96,7 @@ export function SettlementPanel({
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
             const disabled = !canAfford;
+            const isNew = !state.completedRecipes.includes(recipe.id);
             return (
               <div
                 key={recipe.id}
@@ -99,7 +104,10 @@ export function SettlementPanel({
                 onClick={() => !disabled && onBuild(recipe)}
               >
                 <div className="action-card-header">
-                  <span className="action-name">{recipe.name}</span>
+                  <span className="action-name">
+                    {recipe.name}
+                    {isNew && <span className="new-badge">NEW</span>}
+                  </span>
                   <span className="action-time">
                     {(recipe.durationMs / 1000).toFixed(1)}s
                   </span>
@@ -151,6 +159,7 @@ export function SettlementPanel({
               ? BUILDINGS[recipe.buildingOutput]
               : undefined;
 
+            const isNew = !state.completedRecipes.includes(recipe.id);
             return (
               <div
                 key={recipe.id}
@@ -158,7 +167,10 @@ export function SettlementPanel({
                 onClick={() => !disabled && onBuild(recipe)}
               >
                 <div className="action-card-header">
-                  <span className="action-name">{recipe.name}</span>
+                  <span className="action-name">
+                    {recipe.name}
+                    {isNew && <span className="new-badge">NEW</span>}
+                  </span>
                   <span className="action-time">
                     {(recipe.durationMs / 1000).toFixed(1)}s
                   </span>

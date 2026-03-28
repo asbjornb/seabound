@@ -254,5 +254,7 @@ export interface GameState {
   seenPhases: string[];
   repetitiveActionCount: number; // consecutive completions since last manual action change
   savedActionProgress: Record<string, number>; // saved elapsed ms per action key, preserved across switches
+  completedActions: string[]; // action IDs the player has completed at least once
+  completedRecipes: string[]; // recipe IDs the player has completed at least once
   modId?: string; // if set, this save belongs to a specific mod
 }
