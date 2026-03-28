@@ -59,10 +59,10 @@ export function InventoryPanel({ state }: { state: GameState }) {
   const moralePercent = Math.round((1 - moraleEffect) * 100);
   const moraleLabel =
     moralePercent > 0
-      ? `+${moralePercent}% speed`
+      ? `${moralePercent}% faster`
       : moralePercent < 0
-        ? `${moralePercent}% speed`
-        : "normal";
+        ? `${-moralePercent}% slower`
+        : "normal speed";
 
   // Build filter buttons from what's present
   const presentFilters: FilterId[] = ["all"];

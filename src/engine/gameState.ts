@@ -315,6 +315,16 @@ export function getMoraleDurationMultiplier(morale: number): number {
   return 1 - 0.2 * (morale - 50) / 50;
 }
 
+/** Calculate effective morale gain after soft cap (half effect above 100). */
+export function getEffectiveMoraleGain(currentMorale: number, amount: number): number {
+  if (currentMorale < 100) {
+    const belowCap = Math.min(amount, 100 - currentMorale);
+    const aboveCap = amount - belowCap;
+    return belowCap + (aboveCap > 0 ? Math.floor(aboveCap / 2) : 0);
+  }
+  return Math.floor(amount / 2);
+}
+
 /** Build lookup of tool speed bonuses from tool data.
  *  Maps actionOrRecipeId → array of { toolId, multiplier }. */
 const toolSpeedLookup = new Map<string, { toolId: ToolId; multiplier: number }[]>();

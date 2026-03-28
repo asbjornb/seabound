@@ -4,7 +4,7 @@ import { RESOURCES } from "../data/resources";
 import { TOOLS } from "../data/tools";
 import { BUILDINGS } from "../data/buildings";
 import { GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getBuildingCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -218,7 +218,15 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                       })()}
                     </div>
                   ) : recipe.moraleGain ? (
-                    <div className="recipe-output">+{recipe.moraleGain} Morale</div>
+                    <div className="recipe-output">
+                      +{recipe.moraleGain} Morale
+                      {(() => {
+                        const effective = getEffectiveMoraleGain(state.morale, recipe.moraleGain);
+                        return effective < recipe.moraleGain
+                          ? ` (${effective === 0 ? "no effect" : `+${effective} actual`} — soft cap above 100)`
+                          : null;
+                      })()}
+                    </div>
                   ) : (
                     <div className="recipe-output">XP only</div>
                   )}

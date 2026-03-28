@@ -312,6 +312,20 @@ body {
   color: var(--accent);
 }
 
+.morale-speed-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--success);
+  background: rgba(76, 175, 80, 0.12);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.morale-speed-badge.negative {
+  color: var(--accent);
+  background: rgba(255, 107, 107, 0.12);
+}
+
 .morale-bar-mini {
   display: inline-block;
   width: 32px;
