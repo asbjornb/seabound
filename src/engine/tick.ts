@@ -37,7 +37,9 @@ function isOutputFull(state: GameState): boolean {
   if (action.type === "gather") {
     const def = getActionById(action.actionId);
     if (!def) return false;
-    return def.drops.every((d) => {
+    const guaranteed = def.drops.filter((d) => !d.chance || d.chance >= 1);
+    if (guaranteed.length === 0) return false;
+    return guaranteed.every((d) => {
       const current = state.resources[d.resourceId] ?? 0;
       return current >= getStorageLimit(state, d.resourceId);
     });
