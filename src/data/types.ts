@@ -288,6 +288,7 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
+    stopWhenFull?: boolean;
   } | null;
   lastTickAt: number;
   totalPlayTimeMs: number;

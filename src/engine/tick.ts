@@ -8,7 +8,7 @@ import { RECIPES } from "../data/recipes";
 import { levelFromXp } from "../data/skills";
 import { BUILDINGS } from "../data/buildings";
 import { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp } from "./repetitiveXp";
 
 export interface TickResult {
@@ -27,6 +27,30 @@ export interface CompletionEvent {
   newResources?: string[]; // resource IDs seen for the first time
   buildingBuilt?: string; // building ID if a building was constructed
   toolCrafted?: string; // tool ID if a tool was crafted
+}
+
+/** Check if any output resource for the current action is at storage capacity. */
+function isOutputFull(state: GameState): boolean {
+  const action = state.currentAction;
+  if (!action) return false;
+
+  if (action.type === "gather") {
+    const def = ACTIONS_BY_ID[action.actionId];
+    if (!def) return false;
+    return def.drops.some((d) => {
+      const current = state.resources[d.resourceId] ?? 0;
+      return current >= getStorageLimit(state, d.resourceId);
+    });
+  }
+
+  if (action.type === "craft") {
+    const def = action.recipeId ? RECIPES_BY_ID[action.recipeId] : undefined;
+    if (!def?.output) return false;
+    const current = state.resources[def.output.resourceId] ?? 0;
+    return current >= getStorageLimit(state, def.output.resourceId);
+  }
+
+  return false;
 }
 
 /**
@@ -78,6 +102,10 @@ export function processTick(state: GameState, now: number): TickResult {
       remaining -= effectiveDuration;
       const event = applyGatherCompletion(state, def.id, state.repetitiveActionCount);
       if (event) completions.push(event);
+      if (action.stopWhenFull && isOutputFull(state)) {
+        state.currentAction = null;
+        break;
+      }
     }
 
     if (state.currentAction) {
@@ -121,6 +149,10 @@ export function processTick(state: GameState, now: number): TickResult {
         remaining -= effectiveCraftDuration;
         const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount);
         if (event) completions.push(event);
+        if (action.stopWhenFull && isOutputFull(state)) {
+          state.currentAction = null;
+          break;
+        }
       }
 
       if (state.currentAction) {
