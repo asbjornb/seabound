@@ -1,4 +1,5 @@
-import { useRef, useMemo, useState, useEffect } from "react";
+import { useRef, useMemo, useState, useEffect, useCallback } from "react";
+import { AccordionSection } from "./components/AccordionSection";
 import { ActionPanel } from "./components/ActionPanel";
 import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
@@ -10,6 +11,7 @@ import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { IslandBanner } from "./components/IslandBanner";
 import { LogPanel } from "./components/LogPanel";
+import { ModalOverlay } from "./components/ModalOverlay";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
@@ -18,7 +20,7 @@ import { StationsPanel } from "./components/StationsPanel";
 import { TAB_ICONS } from "./data/icons";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
-  GameTab,
+  AccordionSection as AccordionSectionId,
   selectBuildActions,
   selectBuildRecipes,
   selectCraftRecipes,
@@ -28,7 +30,7 @@ import {
   selectHasFoodAccess,
   selectGatherActions,
   selectReadyStationCount,
-  selectVisibleTabs,
+  selectVisibleSections,
 } from "./engine/selectors";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
@@ -46,10 +48,23 @@ export default function App() {
   }
   const game = useGame();
   const updateAvailable = useUpdateChecker();
-  const [tab, setTab] = useState<GameTab>("gather");
+  const [expandedSections, setExpandedSections] = useState<Set<AccordionSectionId>>(
+    () => new Set(["gather"])
+  );
+  const [skillsOpen, setSkillsOpen] = useState(false);
+  const [inventoryOpen, setInventoryOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
+  const buildRef = useRef<HTMLElement>(null);
+
+  const toggleSection = useCallback((s: AccordionSectionId) => {
+    setExpandedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s); else next.add(s);
+      return next;
+    });
+  }, []);
   const [hideFlavorText, setHideFlavorText] = useState(
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
@@ -97,12 +112,9 @@ export default function App() {
   const hasFoodAccess = useMemo(() => selectHasFoodAccess(game.state), [game.state]);
   const hasAnyResource = useMemo(() => selectHasAnyResource(game.state), [game.state]);
 
-  // On mobile, inventory is a tab; on desktop it's always visible as sidebar
-  const visibleTabs = useMemo(() => {
-    return selectVisibleTabs({
+  const visibleSections = useMemo(() => {
+    return selectVisibleSections({
       hasFoodAccess,
-      hasAnyResource,
-      hasAnyXp,
       craftRecipeCount: craftRecipes.length,
       buildRecipeCount: buildRecipes.length,
       buildActionCount: buildActions.length,
@@ -112,8 +124,6 @@ export default function App() {
     });
   }, [
     hasFoodAccess,
-    hasAnyResource,
-    hasAnyXp,
     craftRecipes.length,
     buildRecipes.length,
     buildActions.length,
@@ -121,9 +131,6 @@ export default function App() {
     game.availableStations.length,
     game.state.stations.length,
   ]);
-
-  // Fall back to gather if current tab isn't visible
-  const activeTab = visibleTabs.includes(tab) ? tab : "gather";
 
   const currentActionName = useMemo(
     () => selectCurrentActionName(game.state),
@@ -265,24 +272,30 @@ export default function App() {
           )}
 
           {readyStationCount > 0 ? (
-            <div className="station-ready-banner" onClick={() => setTab("build")}>
+            <div className="station-ready-banner" onClick={() => {
+              setExpandedSections((prev) => new Set(prev).add("build"));
+              buildRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}>
               {readyStationCount === 1
                 ? "1 station ready to collect!"
                 : `${readyStationCount} stations ready to collect!`}
             </div>
           ) : null}
 
-          <nav className="tabs">
-            {visibleTabs.map((t) => (
-              <button
-                key={t}
-                className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
-                onClick={() => setTab(t)}
-              >
-                {TAB_ICONS[t] ?? ""}{" "}{t.charAt(0).toUpperCase() + t.slice(1)}
-              </button>
-            ))}
-          </nav>
+          {(hasAnyXp || hasAnyResource) && (
+            <div className="modal-triggers">
+              {hasAnyXp && (
+                <button className="modal-trigger-btn" onClick={() => setSkillsOpen(true)}>
+                  {TAB_ICONS.skills} Skills
+                </button>
+              )}
+              {hasAnyResource && (
+                <button className="modal-trigger-btn mobile-only-btn" onClick={() => setInventoryOpen(true)}>
+                  {TAB_ICONS.inventory} Inventory
+                </button>
+              )}
+            </div>
+          )}
 
           {showLog && (
             <div className="log-drawer">
@@ -290,29 +303,47 @@ export default function App() {
             </div>
           )}
 
-          <main className="panel">
-            {activeTab === "gather" && (
-              <ActionPanel
-                actions={gatherActions}
-                state={game.state}
-                onStart={game.startAction}
-                currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
-              />
+          <main className="accordion-panels">
+            {visibleSections.includes("gather") && (
+              <AccordionSection
+                name="Gather"
+                icon={TAB_ICONS.gather}
+                expanded={expandedSections.has("gather")}
+                onToggle={() => toggleSection("gather")}
+                summary={!expandedSections.has("gather") && currentActionName && game.state.currentAction?.type === "gather" ? currentActionName : undefined}
+              >
+                <ActionPanel
+                  actions={gatherActions}
+                  state={game.state}
+                  onStart={game.startAction}
+                  currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
+                />
+              </AccordionSection>
             )}
-            {activeTab === "inventory" && (
-              <div className="mobile-only-panel">
-                <InventoryPanel state={game.state} />
-              </div>
+            {visibleSections.includes("craft") && (
+              <AccordionSection
+                name="Craft"
+                icon={TAB_ICONS.craft}
+                expanded={expandedSections.has("craft")}
+                onToggle={() => toggleSection("craft")}
+                summary={!expandedSections.has("craft") ? `${craftRecipes.length} recipe${craftRecipes.length !== 1 ? "s" : ""}` : undefined}
+              >
+                <CraftingPanel
+                  recipes={craftRecipes}
+                  state={game.state}
+                  onCraft={game.startCraft}
+                />
+              </AccordionSection>
             )}
-            {activeTab === "craft" && (
-              <CraftingPanel
-                recipes={craftRecipes}
-                state={game.state}
-                onCraft={game.startCraft}
-              />
-            )}
-            {activeTab === "build" && (
-              <>
+            {visibleSections.includes("build") && (
+              <AccordionSection
+                name="Build"
+                icon={TAB_ICONS.build}
+                expanded={expandedSections.has("build")}
+                onToggle={() => toggleSection("build")}
+                summary={!expandedSections.has("build") && readyStationCount > 0 ? `${readyStationCount} station${readyStationCount !== 1 ? "s" : ""} ready!` : undefined}
+                ref={buildRef}
+              >
                 {(game.availableStations.length > 0 || game.state.stations.length > 0) && (
                   <StationsPanel
                     availableStations={game.availableStations}
@@ -328,16 +359,23 @@ export default function App() {
                   onBuild={game.startCraft}
                   onStartAction={game.startAction}
                 />
-              </>
+              </AccordionSection>
             )}
-            {activeTab === "explore" && (
-              <ExpeditionPanel
-                expeditions={game.availableExpeditions}
-                state={game.state}
-                onStart={game.startExpedition}
-              />
+            {visibleSections.includes("explore") && (
+              <AccordionSection
+                name="Explore"
+                icon={TAB_ICONS.explore}
+                expanded={expandedSections.has("explore")}
+                onToggle={() => toggleSection("explore")}
+                summary={!expandedSections.has("explore") ? `${game.availableExpeditions.length} expedition${game.availableExpeditions.length !== 1 ? "s" : ""}` : undefined}
+              >
+                <ExpeditionPanel
+                  expeditions={game.availableExpeditions}
+                  state={game.state}
+                  onStart={game.startExpedition}
+                />
+              </AccordionSection>
             )}
-            {activeTab === "skills" && <SkillsPanel state={game.state} />}
           </main>
         </div>
 
@@ -350,6 +388,17 @@ export default function App() {
           </aside>
         )}
       </div>
+
+      {skillsOpen && (
+        <ModalOverlay onClose={() => setSkillsOpen(false)} title="Skills" icon={TAB_ICONS.skills}>
+          <SkillsPanel state={game.state} />
+        </ModalOverlay>
+      )}
+      {inventoryOpen && (
+        <ModalOverlay onClose={() => setInventoryOpen(false)} title="Inventory" icon={TAB_ICONS.inventory} className="mobile-only-modal">
+          <InventoryPanel state={game.state} />
+        </ModalOverlay>
+      )}
 
       <FeedbackBanner />
     </div>
