@@ -323,7 +323,7 @@ export default function App() {
           {(hasAnyXp || hasAnyResource) && (
             <div className="modal-triggers">
               {hasAnyXp && (
-                <button className="modal-trigger-btn" onClick={() => setSkillsOpen(true)}>
+                <button className="modal-trigger-btn mobile-only-btn" onClick={() => setSkillsOpen(true)}>
                   <GameIcon id="tab_skills" size={18} /> Skills
                 </button>
               )}
@@ -420,15 +420,16 @@ export default function App() {
         <NotificationToast discoveryLog={game.state.discoveryLog} />
 
         {/* Desktop sidebar: always visible on wide screens */}
-        {hasAnyResource && (
+        {(hasAnyResource || hasAnyXp) && (
           <aside className="inventory-sidebar">
-            <InventoryPanel state={game.state} />
+            {hasAnyXp && <SkillsPanel state={game.state} />}
+            {hasAnyResource && <InventoryPanel state={game.state} />}
           </aside>
         )}
       </div>
 
       {skillsOpen && (
-        <ModalOverlay onClose={() => setSkillsOpen(false)} title="Skills" icon={<GameIcon id="tab_skills" size={18} />}>
+        <ModalOverlay onClose={() => setSkillsOpen(false)} title="Skills" icon={<GameIcon id="tab_skills" size={18} />} className="mobile-only-modal">
           <SkillsPanel state={game.state} />
         </ModalOverlay>
       )}
