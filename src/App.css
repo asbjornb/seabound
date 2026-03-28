@@ -429,6 +429,29 @@ body {
   color: var(--text-dim);
 }
 
+.action-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.action-status-tag {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: var(--bar-bg);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.action-status-tag.warning {
+  color: var(--warning);
+}
+
+.action-status-tag.full {
+  color: var(--warning);
+}
+
 .repetition-status {
   margin-top: 4px;
   font-size: 0.72rem;

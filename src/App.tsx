@@ -27,6 +27,7 @@ import {
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
+  selectActionStatusInfo,
   selectReadyStationCount,
   selectVisibleTabs,
 } from "./engine/selectors";
@@ -131,6 +132,10 @@ export default function App() {
   );
   const readyStationCount = useMemo(
     () => selectReadyStationCount(game.state),
+    [game.state]
+  );
+  const actionStatus = useMemo(
+    () => selectActionStatusInfo(game.state),
     [game.state]
   );
   const repetitiveXpMultiplier = useMemo(
@@ -254,6 +259,28 @@ export default function App() {
                 ).toFixed(1)}
                 s
               </span>
+              {actionStatus && (
+                <div className="action-status-row">
+                  {actionStatus.inputs && actionStatus.inputs.map((inp) => (
+                    <span key={inp.name} className="action-status-tag">
+                      {inp.name} {inp.have}
+                    </span>
+                  ))}
+                  {actionStatus.craftsRemaining !== undefined && (
+                    <span className={`action-status-tag${actionStatus.craftsRemaining <= 1 ? " warning" : ""}`}>
+                      {actionStatus.craftsRemaining}x left
+                    </span>
+                  )}
+                  {actionStatus.outputs && actionStatus.outputs.map((out) => (
+                    <span
+                      key={out.name}
+                      className={`action-status-tag${out.amount >= out.limit ? " full" : ""}`}
+                    >
+                      {out.name} {out.amount}/{out.limit}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div
                 className={`repetition-status${isRepetitionPenaltyActive ? " penalty" : ""}`}
                 title="Manual action switch resets repetition to 0."
