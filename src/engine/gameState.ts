@@ -298,6 +298,22 @@ export function getBuildingCount(state: GameState, buildingId: BuildingId): numb
   return state.buildings.filter((b) => b === buildingId).length;
 }
 
+/** Get effective maxCount for a stackable building, including bonuses from other buildings. */
+export function getEffectiveMaxCount(state: GameState, buildingId: BuildingId): number {
+  const BUILDINGS = getBuildings();
+  const bdef = BUILDINGS[buildingId];
+  const base = bdef?.maxCount ?? 1;
+  let bonus = 0;
+  for (const b of Object.values(BUILDINGS)) {
+    if (b.maxCountBonuses && state.buildings.includes(b.id)) {
+      for (const mcb of b.maxCountBonuses) {
+        if (mcb.buildingId === buildingId) bonus += mcb.amount;
+      }
+    }
+  }
+  return base + bonus;
+}
+
 /** Check if a resource has a given tag. */
 export function resourceHasTag(resourceId: string, tag: string): boolean {
   const RESOURCES = getResources();

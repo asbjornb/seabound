@@ -22,6 +22,7 @@ import {
   createInitialState,
   getBuildingCount,
   getEffectiveInputs,
+  getEffectiveMaxCount,
   getResource,
   getStorageLimit,
   getTotalFood,
@@ -264,7 +265,7 @@ export function useGame() {
         // Check stackable building max count
         if (recipe.buildingOutput) {
           const bdef = BUILDINGS[recipe.buildingOutput];
-          if (bdef?.maxCount && getBuildingCount(prev, recipe.buildingOutput) >= bdef.maxCount) return prev;
+          if (bdef?.maxCount && getBuildingCount(prev, recipe.buildingOutput) >= getEffectiveMaxCount(prev, recipe.buildingOutput)) return prev;
         }
         // Check upgrade source building exists
         if (recipe.replacesBuilding && !hasBuilding(prev, recipe.replacesBuilding)) return prev;

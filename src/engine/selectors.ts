@@ -15,6 +15,7 @@ import type { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from 
 import {
   getBuildingCount,
   getEffectiveInputs,
+  getEffectiveMaxCount,
   getMoraleDurationMultiplier,
   getResource,
   getStorageLimit,
@@ -91,8 +92,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
-      // Stackable: hide if at max count
-      if (getBuildingCount(state, recipe.buildingOutput) >= bdef.maxCount) return false;
+      // Stackable: hide if at effective max count (includes bonuses from other buildings)
+      if (getBuildingCount(state, recipe.buildingOutput) >= getEffectiveMaxCount(state, recipe.buildingOutput)) return false;
       // For stackable upgrade recipes, hide if no source building left to upgrade
       if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
     }
