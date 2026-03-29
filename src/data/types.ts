@@ -258,5 +258,6 @@ export interface GameState {
   savedActionProgress: Record<string, number>; // saved elapsed ms per action key, preserved across switches
   completedActions: string[]; // action IDs the player has completed at least once
   completedRecipes: string[]; // recipe IDs the player has completed at least once
+  expeditionPity: Record<string, number>; // consecutive no-biome-discovery attempts per expedition
   modId?: string; // if set, this save belongs to a specific mod
 }

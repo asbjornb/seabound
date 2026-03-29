@@ -401,12 +401,22 @@ function applyExpeditionCompletion(
   const def = getExpeditionById(expeditionId);
   if (!def) return null;
 
-  // Pick a random outcome weighted by weight
-  const outcome = pickWeightedOutcome(def.outcomes, state);
+  // Pick a random outcome weighted by weight (with pity for biome discoveries)
+  const pityCount = state.expeditionPity[expeditionId] ?? 0;
+  const outcome = pickWeightedOutcome(def.outcomes, state, pityCount);
 
-  // Apply biome discovery
+  // Apply biome discovery and update pity counter
   if (outcome.biomeDiscovery && !state.discoveredBiomes.includes(outcome.biomeDiscovery)) {
     state.discoveredBiomes.push(outcome.biomeDiscovery);
+    state.expeditionPity[expeditionId] = 0;
+  } else {
+    // Check if there are any undiscovered biomes left on this expedition
+    const hasUndiscoveredBiome = def.outcomes.some(
+      (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery)
+    );
+    if (hasUndiscoveredBiome) {
+      state.expeditionPity[expeditionId] = pityCount + 1;
+    }
   }
 
   // Apply drops
@@ -448,10 +458,12 @@ function applyExpeditionCompletion(
 
 function pickWeightedOutcome(
   outcomes: ExpeditionOutcome[],
-  state: GameState
+  state: GameState,
+  pityCount: number = 0
 ): ExpeditionOutcome {
   // Filter out biome discoveries the player already has,
-  // and outcomes whose required biomes haven't been discovered yet
+  // and outcomes whose required biomes haven't been discovered yet.
+  // Boost undiscovered biome weights by +1 per consecutive failed attempt (pity).
   const adjusted = outcomes.map((o) => {
     if (o.biomeDiscovery && state.discoveredBiomes.includes(o.biomeDiscovery)) {
       return { ...o, weight: 0 };
@@ -462,6 +474,10 @@ function pickWeightedOutcome(
           return { ...o, weight: 0 };
         }
       }
+    }
+    // Pity: boost undiscovered biome outcome weights (+0.3 per failed attempt)
+    if (o.biomeDiscovery && pityCount > 0) {
+      return { ...o, weight: o.weight + pityCount * 0.3 };
     }
     return o;
   });
