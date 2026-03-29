@@ -1,6 +1,6 @@
 import { getBuildings, getResources, getTools } from "../data/registry";
 import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getBuildingCount, hasTool } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getBuildingCount, hasTool, getEffectiveMoraleGain } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -132,13 +132,23 @@ export function SettlementPanel({
                     );
                   })}
                 </div>
-                {recipe.output && (
+                {recipe.output ? (
                   <div className="recipe-output">
                     Makes: {recipe.output.amount}x{" "}
                     {RESOURCES[recipe.output.resourceId]?.name ??
                       recipe.output.resourceId}
                   </div>
-                )}
+                ) : recipe.moraleGain ? (
+                  <div className="recipe-output">
+                    +{recipe.moraleGain} Morale
+                    {(() => {
+                      const effective = getEffectiveMoraleGain(state.morale, recipe.moraleGain);
+                      return effective < recipe.moraleGain
+                        ? ` (${effective === 0 ? "no effect" : `+${effective} actual`} — soft cap above 100)`
+                        : null;
+                    })()}
+                  </div>
+                ) : null}
                 <div className="action-xp">
                   +{recipe.xpGain} {recipe.skillId} XP
                 </div>
