@@ -21,4 +21,7 @@ function versionPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), versionPlugin()],
+  test: {
+    environment: "node",
+  },
 });
