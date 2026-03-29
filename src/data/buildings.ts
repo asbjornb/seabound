@@ -110,7 +110,6 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Pandanus Grove",
     description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
     unlocks: "Harvest pandanus leaves without replanting",
-    maxCount: 3,
   },
   well: {
     id: "well",
