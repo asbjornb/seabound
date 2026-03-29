@@ -100,6 +100,7 @@ export function createInitialState(): GameState {
     savedActionProgress: {},
     completedActions: [],
     completedRecipes: [],
+    expeditionPity: {},
   };
 }
 
@@ -225,6 +226,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   }
   if (!loaded.completedRecipes) {
     loaded.completedRecipes = [];
+  }
+  // Migration: ensure expeditionPity exists
+  if (!loaded.expeditionPity) {
+    loaded.expeditionPity = {};
   }
   // Migration: grant rocky_shore biome if player already has flat_stone or chert
   if (!loaded.discoveredBiomes.includes("rocky_shore")) {
