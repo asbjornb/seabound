@@ -23,6 +23,7 @@ import {
   getBuildingCount,
   getEffectiveInputs,
   getResource,
+  getStorageLimit,
   getTotalFood,
   getTotalWater,
   hasTool,
@@ -217,10 +218,14 @@ export function useGame() {
       saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       const actionKey = `gather:${action.id}`;
+      const fullAtStart = action.drops
+        .filter((d) => (next.resources[d.resourceId] ?? 0) >= getStorageLimit(next, d.resourceId))
+        .map((d) => d.resourceId);
       next.currentAction = {
         actionId: action.id,
         startedAt: Date.now(),
         type: "gather",
+        ...(fullAtStart.length > 0 && { fullAtStart }),
       };
       restoreActionProgress(next, actionKey);
       return next;
@@ -274,11 +279,15 @@ export function useGame() {
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         const actionKey = `craft:${recipe.id}`;
+        const fullAtStart = recipe.output &&
+          (next.resources[recipe.output.resourceId] ?? 0) >= getStorageLimit(next, recipe.output.resourceId)
+          ? [recipe.output.resourceId] : [];
         next.currentAction = {
           actionId: recipe.id,
           startedAt: Date.now(),
           type: "craft",
           recipeId: recipe.id,
+          ...(fullAtStart.length > 0 && { fullAtStart }),
         };
         restoreActionProgress(next, actionKey);
         return next;
