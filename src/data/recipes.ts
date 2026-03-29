@@ -325,6 +325,65 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 5000,
     xpGain: 15,
   },
+
+  // Comfort tier
+  {
+    id: "build_sleeping_mat",
+    name: "Sleeping Mat",
+    description:
+      "Layer palm fronds and dry grass into a simple sleeping mat. Better than bare sand.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 4,
+    inputs: [
+      { resourceId: "palm_frond", amount: 6 },
+      { resourceId: "dry_grass", amount: 4 },
+    ],
+    buildingOutput: "sleeping_mat",
+    oneTimeCraft: true,
+    durationMs: 6000,
+    xpGain: 12,
+  },
+  {
+    id: "build_hammock",
+    name: "Hammock",
+    description:
+      "String a woven fiber hammock between two palms. A proper place to rest.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "cordage", amount: 6 },
+      { resourceId: "dried_fiber", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    buildingOutput: "hammock",
+    replacesBuilding: "sleeping_mat",
+    oneTimeCraft: true,
+    durationMs: 12000,
+    xpGain: 30,
+  },
+  {
+    id: "build_thatched_hut",
+    name: "Thatched Hut",
+    description:
+      "Build a sturdy bamboo-framed hut with a palm-thatch roof. Real shelter at last.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 11,
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 8 },
+      { resourceId: "palm_frond", amount: 10 },
+      { resourceId: "cordage", amount: 6 },
+      { resourceId: "clay", amount: 4 },
+    ],
+    buildingOutput: "thatched_hut",
+    replacesBuilding: "hammock",
+    oneTimeCraft: true,
+    durationMs: 20000,
+    xpGain: 50,
+  },
+
   {
     id: "build_drying_rack",
     name: "Drying Rack",
@@ -525,7 +584,6 @@ export const RECIPES: RecipeDef[] = [
       "Fit crossbeams and seal the hull. A proper canoe for near-shore waters.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "shaped_hull", amount: 1 },
       { resourceId: "cordage", amount: 6 },

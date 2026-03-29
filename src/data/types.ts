@@ -26,6 +26,7 @@ export interface BuildingDef {
   maxCount?: number; // if set, this building can be built multiple times (default 1)
   maxCountBonuses?: { buildingId: BuildingId; amount: number }[]; // increases maxCount of other stackable buildings
   vesselTier?: number; // if set, this building is a vessel; higher tiers satisfy lower-tier requirements
+  comfortDecayReduction?: number; // 0-1, fraction by which morale decay is slowed (e.g. 0.2 = 20% slower decay)
 }
 
 export interface ToolSpeedBonus {

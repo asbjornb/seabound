@@ -373,6 +373,21 @@ export function addResource(state: GameState, resourceId: string, amount: number
 /** Morale decay rate: 1 point per this many ms of play time. */
 export const MORALE_DECAY_INTERVAL_MS = 120000; // 1 morale per 2 minutes
 
+/** Get the effective morale decay interval, accounting for comfort buildings.
+ *  Returns the base interval divided by (1 - best comfort reduction). */
+export function getEffectiveDecayInterval(state: GameState): number {
+  const BUILDINGS = getBuildings();
+  let bestReduction = 0;
+  for (const bid of state.buildings) {
+    const bdef = BUILDINGS[bid];
+    if (bdef?.comfortDecayReduction && bdef.comfortDecayReduction > bestReduction) {
+      bestReduction = bdef.comfortDecayReduction;
+    }
+  }
+  if (bestReduction <= 0) return MORALE_DECAY_INTERVAL_MS;
+  return Math.round(MORALE_DECAY_INTERVAL_MS / (1 - bestReduction));
+}
+
 /** Duration multiplier from morale. At 100 = 0.8 (20% faster), 50 = 1.0, 0 = 1.2 (20% slower).
  *  Morale can exceed 100 (soft cap) with diminishing returns above. */
 export function getMoraleDurationMultiplier(morale: number): number {

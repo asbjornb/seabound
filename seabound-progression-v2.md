@@ -314,6 +314,24 @@ Palm Leaf Pile  →  Fenced Perimeter  →  Woven Basket  →  Raised Cache  →
 
 ---
 
+### Comfort Tier
+
+Upgrade chain of settlement buildings that slow morale decay during active play. Each tier replaces the previous (non-stacking).
+
+```
+Sleeping Mat  →  Hammock  →  Thatched Hut
+```
+
+| Building | Unlock | Effect | Status |
+|---|---|---|---|
+| Sleeping Mat | Construction 4 (palm frond ×6, dry grass ×4) | Slows morale decay by 20% | ✅ |
+| Hammock | Construction 8 (cordage ×6, dried fiber ×4, driftwood ×2). Replaces sleeping mat. | Slows morale decay by 35% | ✅ |
+| Thatched Hut | Construction 11 (bamboo cane ×8, palm frond ×10, cordage ×6, clay ×4). Replaces hammock. | Slows morale decay by 50% | ✅ |
+
+Morale decays at 1 point per 2 minutes of active play. Comfort buildings stretch that interval (e.g. thatched hut → 1 point per 4 minutes). Players still use Shell Beads and Maintain Camp for active morale boosts; comfort is the passive mitigation layer.
+
+---
+
 ### Processing Stations
 
 | Building | Unlock Req | Enables | Status |
@@ -433,7 +451,7 @@ Long build process — the first real construction project.
 | 1. Fell large tree | Woodworking 10 (action) | Stone axe (tool) | Yields large log. Key level gate. |
 | 2. Char log interior | — (item-gated) | Large log ×1, Dry grass ×4, Coconut husk ×4, Driftwood ×4 | Camp fire required. Yields charred log. |
 | 3. Scrape hull | — (item-gated) | Charred log ×1, Shell adze (tool) | Yields shaped hull. |
-| 4. Assemble dugout | Construction 8 (recipe) | Shaped hull ×1, Bamboo cane ×4, Cordage ×6 | **Dugout complete** — near-shore expeditions |
+| 4. Assemble dugout | Construction (recipe, no level gate — gated by tree felling chain) | Shaped hull ×1, Bamboo cane ×4, Cordage ×6 | **Dugout complete** — near-shore expeditions |
 
 ### Outrigger
 
