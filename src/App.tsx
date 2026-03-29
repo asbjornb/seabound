@@ -35,7 +35,7 @@ import {
 } from "./engine/selectors";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
-import { FULL_XP_ACTIONS, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
+import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
 
 export default function App() {
@@ -147,12 +147,16 @@ export default function App() {
     () => selectActionStatusInfo(game.state),
     [game.state]
   );
+  const fullXpThreshold = useMemo(
+    () => getFullXpThreshold(game.state),
+    [game.state]
+  );
   const repetitiveXpMultiplier = useMemo(
-    () => getRepetitiveXpMultiplier(game.state.repetitiveActionCount),
-    [game.state.repetitiveActionCount]
+    () => getRepetitiveXpMultiplier(game.state.repetitiveActionCount, fullXpThreshold),
+    [game.state.repetitiveActionCount, fullXpThreshold]
   );
   const repetitiveXpPercent = Math.round(repetitiveXpMultiplier * 100);
-  const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= FULL_XP_ACTIONS;
+  const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= fullXpThreshold;
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
