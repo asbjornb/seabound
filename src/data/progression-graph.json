@@ -539,9 +539,9 @@
       "category": "construction"
     },
     {
-      "id": "skill:construction:10",
+      "id": "skill:construction:13",
       "type": "skill_level",
-      "label": "Construction Lv10",
+      "label": "Construction Lv13",
       "category": "construction"
     },
     {
@@ -560,6 +560,12 @@
       "id": "skill:construction:7",
       "type": "skill_level",
       "label": "Construction Lv7",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:10",
+      "type": "skill_level",
+      "label": "Construction Lv10",
       "category": "construction"
     },
     {
@@ -2397,7 +2403,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:10",
+      "from": "skill:construction:13",
       "to": "recipe:build_kiln",
       "relation": "requires_skill"
     },
@@ -4228,7 +4234,6 @@
         {
           "level": 10,
           "unlocks": [
-            "recipe:build_kiln",
             "recipe:upgrade_farm_plot"
           ],
           "trainedBy": [
@@ -4282,6 +4287,32 @@
           "level": 12,
           "unlocks": [
             "recipe:build_pandanus_grove"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_sleeping_mat",
+            "recipe:build_hammock",
+            "recipe:build_thatched_hut",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:build_cleared_plot",
+            "recipe:build_well",
+            "recipe:upgrade_tended_garden",
+            "recipe:upgrade_farm_plot",
+            "recipe:build_pandanus_grove",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 13,
+          "unlocks": [
+            "recipe:build_kiln"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
