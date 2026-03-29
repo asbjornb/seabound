@@ -39,6 +39,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A bamboo fence around camp. Keeps things organized and critters out.",
     unlocks: "More room for baskets and other bulky crafts",
+    storageBonus: [{ excludeTags: ["food", "large"], amount: 5 }],
   },
   firing_pit: {
     id: "firing_pit",
@@ -46,6 +47,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A stone-lined pit for firing clay at high temperatures. Enables basic pottery.",
     unlocks: "Fired clay pots, sealed jars",
+    storageBonus: [{ tag: "food", amount: 5 }],
   },
   kiln: {
     id: "kiln",

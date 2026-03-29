@@ -505,12 +505,6 @@
       "category": "cooking"
     },
     {
-      "id": "skill:cooking:12",
-      "type": "skill_level",
-      "label": "Cooking Lv12",
-      "category": "cooking"
-    },
-    {
       "id": "skill:cooking:3",
       "type": "skill_level",
       "label": "Cooking Lv3",
@@ -2133,11 +2127,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:cooking:12",
-      "to": "recipe:seal_clay_jar",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:firing_pit",
       "to": "recipe:seal_clay_jar",
       "relation": "requires_building"
@@ -3324,7 +3313,6 @@
       "skill:construction:6",
       "skill:farming:12",
       "resource:breadfruit_cutting",
-      "skill:cooking:12",
       "resource:shaped_clay_pot",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
@@ -3794,22 +3782,6 @@
           "level": 8,
           "unlocks": [
             "recipe:roast_breadfruit"
-          ],
-          "trainedBy": [
-            "recipe:cook_fish",
-            "recipe:cook_large_fish",
-            "recipe:cook_crab",
-            "recipe:seal_clay_jar",
-            "recipe:cook_root_vegetable",
-            "recipe:cook_taro",
-            "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
-          ]
-        },
-        {
-          "level": 12,
-          "unlocks": [
-            "recipe:seal_clay_jar"
           ],
           "trainedBy": [
             "recipe:cook_fish",

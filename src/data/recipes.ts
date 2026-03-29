@@ -647,7 +647,6 @@ export const RECIPES: RecipeDef[] = [
       "Coat a fired pot with clay slip and re-fire to create an airtight seal. Preserves food for long voyages.",
     skillId: "cooking",
     panel: "craft",
-    requiredSkillLevel: 12,
     inputs: [
       { resourceId: "fired_clay_pot", amount: 1 },
       { resourceId: "clay", amount: 2 },

@@ -23,7 +23,7 @@
 - **Expedition system (4 expeditions)** — Explore Beach (coconut grove, rocky shore discovery), Explore Interior (bamboo grove, jungle interior discovery), Sail Nearby Island (requires raft; nearby island biome, obsidian, wild seeds, taro corms), Dugout Voyage (requires dugout; banana shoots, breadfruit cuttings, obsidian, logs). Auto-repeating with food/water costs. Navigation XP on completion.
 - **Morale system** — Shell Beads recipe grants +2 morale (repeatable crafting XP source with morale reward).
 - **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers, double output chances) + auto-generated unlock previews from skill-gated actions/recipes.
-- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +10 all, Drying Rack +10 dried, Camp Fire +10 food, Stone Hearth +10 food, Woven Basket +1 non-food/non-large per basket up to 20).
+- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +10 all, Drying Rack +10 dried, Camp Fire +10 food, Stone Hearth +10 food, Fenced Perimeter +5 non-food/non-large, Firing Pit +5 food, Woven Basket +1 non-food/non-large per basket up to 20).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
 - **Discovery-driven progression** — Core progression gated by biome discovery and crafting chains, not skill levels. Skill levels gate optional efficiency improvements (better yields, advanced techniques). Gather panel grouped by biome to reinforce exploration as progression.
 - **10 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation, Preservation.
@@ -163,11 +163,10 @@ Skill level gates are reserved for **optional/efficiency** unlocks, not core pro
 | Weaving 35 | Fishing net recipe | Advanced technique | *Not yet built* |
 | Weaving 50 | Sail cloth recipe | Advanced technique | *Not yet built* |
 | Construction 25 | Stone tidal weir blueprint | Advanced technique | *Not yet built* |
-| Cooking 12 | Sealed clay jar recipe | Advanced technique | ✅ |
 | Preservation 18 | Fermentation pot recipe | Advanced technique | *Not yet built* |
 | Construction 15 | Crucible recipe | Advanced technique | ✅ |
 
-**Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade.
+**Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade, Sealed Clay Jar.
 
 ---
 
@@ -307,7 +306,7 @@ Palm Leaf Pile  →  Fenced Perimeter  →  Woven Basket  →  Raised Cache  →
 | Building | Unlock | Capacity / Notes |
 |---|---|---|
 | Palm Leaf Pile | Construction (palm frond ×8, driftwood ×2) | +10 all item storage | ✅ |
-| Fenced Perimeter | Construction 2 (bamboo cane ×6, cordage ×4, driftwood ×3) | Organization (no storage bonus) | ✅ |
+| Fenced Perimeter | Construction 2 (bamboo cane ×6, cordage ×4, driftwood ×3) | +5 non-food/non-large storage | ✅ |
 | Woven Basket | Weaving (palm frond ×5, cordage ×3). Repeatable, up to 20. | +1 non-food/non-large storage per basket | ✅ |
 | Raised Cache | Construction 10 | Larger, off-ground, rain proof | *Not yet built* |
 | Storage Hut | Construction 25 | Large, fully weatherproof | *Not yet built* |
@@ -320,7 +319,7 @@ Palm Leaf Pile  →  Fenced Perimeter  →  Woven Basket  →  Raised Cache  →
 |---|---|---|---|
 | Drying Rack | Crafting (bamboo cane ×4, palm frond ×4) | Dried fiber. +10 dried storage. | ✅ Built |
 | Fiber Loom | Weaving 4 (bamboo cane ×4, cordage ×3, palm frond ×2) | Efficient cordage braiding (Braid Cordage: 2 dried fiber → 2 cordage). | ✅ Built |
-| Firing Pit | Construction (flat stone ×6, driftwood ×4, clay ×3) | Basic pottery (shape/fire clay). | ✅ Built |
+| Firing Pit | Construction (flat stone ×6, driftwood ×4, clay ×3) | Basic pottery (shape/fire clay). +5 food storage. | ✅ Built |
 | Kiln | Construction 10 (clay ×10, flat stone ×8, driftwood ×6, cordage ×4). Requires firing pit. | Advanced pottery, crucible. | ✅ Built |
 | Smoking Rack | Crafting 8 + Hearth | Smoked fish/meat — long-duration expedition food | *Not yet built* |
 | Workbench | Crafting 15 | Crafting speed bonus, additional recipes | *Not yet built* |
@@ -533,7 +532,7 @@ PHASE 2: STONE & CLAY ✅
 │   └── Dig clay (Foraging 5), Collect fresh water (requires fired clay pot)
 │
 ├── POTTERY ✅
-│   ├── Shape clay pot → Fire clay pot (firing pit) → Seal clay jar (Cooking 12, firing pit)
+│   ├── Shape clay pot → Fire clay pot (firing pit) → Seal clay jar (firing pit, materials only)
 │   ├── Firing Pit [BUILDING: materials only]
 │   ├── Kiln [BUILDING: Construction 10, requires firing pit]
 │   └── Crucible (Construction 15 + Kiln) ← gates future SMITHING
