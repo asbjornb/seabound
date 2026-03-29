@@ -7,7 +7,7 @@ import {
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, MORALE_DECAY_INTERVAL_MS, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -75,12 +75,14 @@ export function processTick(state: GameState, now: number): TickResult {
     return { completions, elapsedMs };
   }
 
-  // Morale decay: 1 point per MORALE_DECAY_INTERVAL_MS (only while an action is active)
+  // Morale decay: 1 point per effective interval (only while an action is active)
+  // Comfort buildings slow the decay rate
   if (state.morale > 0) {
+    const decayInterval = getEffectiveDecayInterval(state);
     state.moraleDecayProgressMs += elapsedMs;
-    if (state.moraleDecayProgressMs >= MORALE_DECAY_INTERVAL_MS) {
-      const decayPoints = Math.floor(state.moraleDecayProgressMs / MORALE_DECAY_INTERVAL_MS);
-      state.moraleDecayProgressMs %= MORALE_DECAY_INTERVAL_MS;
+    if (state.moraleDecayProgressMs >= decayInterval) {
+      const decayPoints = Math.floor(state.moraleDecayProgressMs / decayInterval);
+      state.moraleDecayProgressMs %= decayInterval;
       state.morale = Math.max(0, state.morale - decayPoints);
     }
   }

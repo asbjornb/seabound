@@ -112,6 +112,30 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
     unlocks: "Harvest pandanus leaves without replanting",
   },
+  sleeping_mat: {
+    id: "sleeping_mat",
+    name: "Sleeping Mat",
+    description:
+      "A layered bed of palm fronds and dry grass. Beats sleeping on sand.",
+    unlocks: "Comfort — slows morale decay by 20%",
+    comfortDecayReduction: 0.2,
+  },
+  hammock: {
+    id: "hammock",
+    name: "Hammock",
+    description:
+      "A woven fiber hammock strung between trees. Proper rest at last.",
+    unlocks: "Comfort — slows morale decay by 35%",
+    comfortDecayReduction: 0.35,
+  },
+  thatched_hut: {
+    id: "thatched_hut",
+    name: "Thatched Hut",
+    description:
+      "A sturdy shelter with bamboo frame and palm-thatch roof. Shade, warmth, and real comfort.",
+    unlocks: "Comfort — slows morale decay by 50%",
+    comfortDecayReduction: 0.5,
+  },
   well: {
     id: "well",
     name: "Well",
