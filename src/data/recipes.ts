@@ -334,7 +334,7 @@ export const RECIPES: RecipeDef[] = [
       "Layer palm fronds and dry grass into a simple sleeping mat. Better than bare sand.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 2,
+    requiredSkillLevel: 4,
     inputs: [
       { resourceId: "palm_frond", amount: 6 },
       { resourceId: "dry_grass", amount: 4 },
@@ -351,7 +351,7 @@ export const RECIPES: RecipeDef[] = [
       "String a woven fiber hammock between two palms. A proper place to rest.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 6,
+    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "cordage", amount: 6 },
       { resourceId: "dried_fiber", amount: 4 },
@@ -370,7 +370,7 @@ export const RECIPES: RecipeDef[] = [
       "Build a sturdy bamboo-framed hut with a palm-thatch roof. Real shelter at last.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 12,
+    requiredSkillLevel: 11,
     inputs: [
       { resourceId: "bamboo_cane", amount: 8 },
       { resourceId: "palm_frond", amount: 10 },
@@ -584,7 +584,6 @@ export const RECIPES: RecipeDef[] = [
       "Fit crossbeams and seal the hull. A proper canoe for near-shore waters.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "shaped_hull", amount: 1 },
       { resourceId: "cordage", amount: 6 },
