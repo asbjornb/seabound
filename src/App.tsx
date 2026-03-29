@@ -325,7 +325,7 @@ export default function App() {
           )}
 
           {readyStationCount > 0 ? (
-            <div className="station-ready-banner" onClick={() => setTab("build")}>
+            <div className="station-ready-banner" onClick={() => setTab("deploy")}>
               {readyStationCount === 1
                 ? "1 station ready to collect!"
                 : `${readyStationCount} stations ready to collect!`}
@@ -371,24 +371,22 @@ export default function App() {
                 onCraft={game.startCraft}
               />
             )}
+            {activeTab === "deploy" && (
+              <StationsPanel
+                availableStations={game.availableStations}
+                state={game.state}
+                onDeploy={game.deployStation}
+                onCollect={game.collectStation}
+              />
+            )}
             {activeTab === "build" && (
-              <>
-                {(game.availableStations.length > 0 || game.state.stations.length > 0) && (
-                  <StationsPanel
-                    availableStations={game.availableStations}
-                    state={game.state}
-                    onDeploy={game.deployStation}
-                    onCollect={game.collectStation}
-                  />
-                )}
-                <SettlementPanel
-                  buildRecipes={buildRecipes}
-                  buildActions={buildActions}
-                  state={game.state}
-                  onBuild={game.startCraft}
-                  onStartAction={game.startAction}
-                />
-              </>
+              <SettlementPanel
+                buildRecipes={buildRecipes}
+                buildActions={buildActions}
+                state={game.state}
+                onBuild={game.startCraft}
+                onStartAction={game.startAction}
+              />
             )}
             {activeTab === "explore" && (
               <ExpeditionPanel

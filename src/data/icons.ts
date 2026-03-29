@@ -105,6 +105,7 @@ export const TAB_ICONS: Record<string, string> = {
   gather: "\u{1F91A}",
   explore: "\u{1F9ED}",
   craft: "\u{1F528}",
+  deploy: "\u{23F3}",
   build: "\u{26FA}",
   inventory: "\u{1F392}",
   skills: "\u{2B50}",
