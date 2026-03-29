@@ -22,6 +22,17 @@ describe("resourceHasUse", () => {
     expect(resourceHasUse("driftwood_branch", state)).toBe(true);
   });
 
+  it("considers station setup input resources useful", () => {
+    // Bug regression: wild_seed, taro_corm, banana_shoot, breadfruit_cutting
+    // are consumed by station setupInputs, not recipes. resourceHasUse must
+    // check stations too, otherwise these drops get filtered out of actions.
+    const state = makeState();
+    expect(resourceHasUse("wild_seed", state)).toBe(true);
+    expect(resourceHasUse("taro_corm", state)).toBe(true);
+    expect(resourceHasUse("banana_shoot", state)).toBe(true);
+    expect(resourceHasUse("breadfruit_cutting", state)).toBe(true);
+  });
+
   it("returns false for resources with no use and no food/water value", () => {
     const state = makeState();
     // A made-up resource that doesn't exist shouldn't have use

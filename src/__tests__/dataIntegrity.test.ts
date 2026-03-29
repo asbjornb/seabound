@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getActions, getRecipes, getResources, getExpeditions, getStations } from "../data/registry";
+import { resourceHasUse } from "../engine/selectors";
+import { makeState } from "./testHelpers";
 
 describe("data integrity", () => {
   it("every food/water resource appears in at least one drop table", () => {
@@ -95,6 +97,41 @@ describe("data integrity", () => {
           RESOURCES[recipe.output.resourceId],
           `Recipe "${recipe.id}" outputs unknown resource "${recipe.output.resourceId}"`
         ).toBeDefined();
+      }
+    }
+  });
+
+  it("every station setupInput resource is considered useful by resourceHasUse", () => {
+    // Bug regression: resourceHasUse only checked recipes, so station-only
+    // resources (seeds, corms, shoots, cuttings) were filtered out of drops.
+    const state = makeState();
+    for (const station of getStations()) {
+      if (!station.setupInputs) continue;
+      for (const input of station.setupInputs) {
+        expect(
+          resourceHasUse(input.resourceId, state),
+          `Station "${station.id}" setup input "${input.resourceId}" is not considered useful by resourceHasUse`
+        ).toBe(true);
+      }
+    }
+  });
+
+  it("every action drop resource is either useful or has zero base chance", () => {
+    // Ensures the usefulDrops filter in tick.ts won't silently remove drops
+    // that players are supposed to get (e.g. via milestone bonus chances).
+    const state = makeState();
+    for (const action of getActions()) {
+      for (const drop of action.drops) {
+        const isUseful = resourceHasUse(drop.resourceId, state);
+        if (!isUseful) {
+          // If not useful, it should have chance: 0 (only granted via milestones)
+          // or be explicitly expected to be filtered out
+          expect(
+            drop.chance === 0,
+            `Action "${action.id}" drops "${drop.resourceId}" which resourceHasUse considers useless, ` +
+            `but it has chance=${drop.chance} (not 0). This drop will be silently removed.`
+          ).toBe(true);
+        }
       }
     }
   });

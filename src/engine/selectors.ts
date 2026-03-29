@@ -33,6 +33,8 @@ export function resourceHasUse(resourceId: string, state: GameState): boolean {
   const def = RESOURCES[resourceId];
   // Food/water resources are always useful — consumed by expeditions and survival
   if (def?.foodValue || def?.waterValue) return true;
+  // Resources consumed by station setup are always useful
+  if (getStations().some((station) => station.setupInputs?.some((inp) => inp.resourceId === resourceId))) return true;
   const BUILDINGS = getBuildings();
   return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
