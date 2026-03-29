@@ -475,9 +475,9 @@ function pickWeightedOutcome(
         }
       }
     }
-    // Pity: boost undiscovered biome outcome weights (+0.5 per failed attempt)
+    // Pity: boost undiscovered biome outcome weights (+0.3 per failed attempt)
     if (o.biomeDiscovery && pityCount > 0) {
-      return { ...o, weight: o.weight + pityCount * 0.5 };
+      return { ...o, weight: o.weight + pityCount * 0.3 };
     }
     return o;
   });
