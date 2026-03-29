@@ -103,6 +103,75 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Pandanus Fiber Processing
+  // ═══════════════════════════════════════
+  {
+    id: "dry_pandanus_leaf",
+    name: "Dry Pandanus Leaf",
+    description: "Hang pandanus leaves on the drying rack to cure in the sun.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [{ resourceId: "pandanus_leaves", amount: 1 }],
+    output: { resourceId: "dried_pandanus_leaf", amount: 1 },
+    durationMs: 5000,
+    requiredBuildings: ["drying_rack"],
+    repeatable: true,
+    xpGain: 10,
+  },
+  {
+    id: "cut_pandanus_strips",
+    name: "Cut Pandanus Strips",
+    description: "Slice a dried pandanus leaf into thin, flexible strips.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [{ resourceId: "dried_pandanus_leaf", amount: 1 }],
+    output: { resourceId: "pandanus_strip", amount: 2 },
+    durationMs: 4000,
+    requiredTools: ["bamboo_knife"],
+    repeatable: true,
+    xpGain: 8,
+  },
+  {
+    id: "weave_pandanus_cordage",
+    name: "Pandanus Cordage",
+    description: "Braid pandanus strips into cordage. Reliable and strong.",
+    skillId: "weaving",
+    panel: "craft",
+    inputs: [{ resourceId: "pandanus_strip", amount: 3 }],
+    output: { resourceId: "cordage", amount: 1 },
+    durationMs: 5000,
+    repeatable: true,
+    xpGain: 12,
+  },
+  {
+    id: "twist_rope",
+    name: "Twist Rope",
+    description: "Twist pandanus strips into strong rope for boats and heavy construction.",
+    skillId: "weaving",
+    panel: "craft",
+    requiredSkillLevel: 6,
+    inputs: [{ resourceId: "pandanus_strip", amount: 8 }],
+    output: { resourceId: "rope", amount: 1 },
+    durationMs: 10000,
+    repeatable: true,
+    xpGain: 20,
+  },
+  {
+    id: "sew_sail",
+    name: "Sew Sail",
+    description: "Stitch pandanus strips into a broad sail. The wind awaits.",
+    skillId: "weaving",
+    panel: "craft",
+    requiredSkillLevel: 10,
+    inputs: [{ resourceId: "pandanus_strip", amount: 50 }],
+    output: { resourceId: "sail", amount: 1 },
+    requiredBuildings: ["fiber_loom"],
+    durationMs: 30000,
+    repeatable: true,
+    xpGain: 60,
+  },
+
+  // ═══════════════════════════════════════
   // PHASE 1b — Fire Chain
   // ═══════════════════════════════════════
   {
@@ -753,6 +822,31 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "farm_plot",
     replacesBuilding: "tended_garden",
     durationMs: 18000,
+    repeatable: true,
+    xpGain: 50,
+  },
+
+  // ═══════════════════════════════════════
+  // Pandanus Grove (Phase 2 upgrade — replaces farm plot need)
+  // ═══════════════════════════════════════
+  {
+    id: "build_pandanus_grove",
+    name: "Pandanus Grove",
+    description: "Establish a self-sustaining pandanus grove. No replanting needed — just harvest.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 12,
+    inputs: [
+      { resourceId: "pandanus_cutting", amount: 2 },
+      { resourceId: "flat_stone", amount: 4 },
+      { resourceId: "clay", amount: 4 },
+      { resourceId: "bamboo_cane", amount: 6 },
+      { resourceId: "cordage", amount: 4 },
+    ],
+    requiredTools: ["digging_stick"],
+    requiredBuildings: ["well", "farm_plot"],
+    buildingOutput: "pandanus_grove",
+    durationMs: 20000,
     repeatable: true,
     xpGain: 50,
   },

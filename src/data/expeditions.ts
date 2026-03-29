@@ -177,6 +177,12 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         drops: [{ resourceId: "breadfruit_cutting", amount: 1 }],
       },
       {
+        weight: 10,
+        description:
+          "You find pandanus plants growing wild along the shore of a far island. You take a cutting.",
+        drops: [{ resourceId: "pandanus_cutting", amount: 1 }],
+      },
+      {
         weight: 15,
         description:
           "You find obsidian outcrops on a distant volcanic shore.",

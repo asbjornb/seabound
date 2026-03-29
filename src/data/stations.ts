@@ -77,6 +77,24 @@ export const STATIONS: StationDef[] = [
     maxDeployedPerBuildings: ["farm_plot"],
   },
   {
+    id: "grow_pandanus",
+    name: "Grow Pandanus",
+    description:
+      "Plant a pandanus cutting in rich soil. A perennial crop — it regrows after each harvest.",
+    skillId: "farming",
+    durationMs: 480000, // 8 minutes
+    requiredTool: "digging_stick",
+    requiredSkillLevel: 8,
+    requiredBuildings: ["well"],
+    setupInputs: [{ resourceId: "pandanus_cutting", amount: 1 }],
+    yields: [
+      { resourceId: "pandanus_leaves", amount: 5 },
+      { resourceId: "pandanus_cutting", amount: 1 }, // perennial — always returns cutting
+    ],
+    xpGain: 35,
+    maxDeployedPerBuildings: ["farm_plot"],
+  },
+  {
     id: "grow_breadfruit",
     name: "Grow Breadfruit",
     description:
@@ -93,5 +111,23 @@ export const STATIONS: StationDef[] = [
     ],
     xpGain: 45,
     maxDeployedPerBuildings: ["farm_plot"],
+  },
+
+  // ═══════════════════════════════════════
+  // Pandanus Grove (Phase 2 — auto-regrow)
+  // ═══════════════════════════════════════
+  {
+    id: "harvest_pandanus_grove",
+    name: "Harvest Pandanus Grove",
+    description:
+      "Harvest leaves from an established pandanus grove. The plants regrow on their own.",
+    skillId: "farming",
+    durationMs: 360000, // 6 minutes (faster than farm plot)
+    requiredSkillLevel: 12,
+    yields: [
+      { resourceId: "pandanus_leaves", amount: 7 }, // higher output than farm
+    ],
+    xpGain: 40,
+    maxDeployedPerBuildings: ["pandanus_grove"],
   },
 ];
