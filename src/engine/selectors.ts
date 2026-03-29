@@ -29,6 +29,10 @@ export type GameTab = "gather" | "inventory" | "craft" | "build" | "explore" | "
 
 
 export function resourceHasUse(resourceId: string, state: GameState): boolean {
+  const RESOURCES = getResources();
+  const def = RESOURCES[resourceId];
+  // Food/water resources are always useful — consumed by expeditions and survival
+  if (def?.foodValue || def?.waterValue) return true;
   const BUILDINGS = getBuildings();
   return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
