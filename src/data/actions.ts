@@ -27,7 +27,10 @@ export const ACTIONS: ActionDef[] = [
     skillId: "foraging",
     panel: "gather",
     durationMs: 3000,
-    drops: [{ resourceId: "driftwood_branch", amount: 1 }],
+    drops: [
+      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, chance: 0 },
+    ],
     xpGain: 5,
   },
   {

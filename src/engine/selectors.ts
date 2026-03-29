@@ -171,7 +171,9 @@ export function selectCurrentActionTiming(
     const recipe = recipeId ? getRecipeById(recipeId) : undefined;
     if (!recipe) return { actionProgress: 0, actionDuration: 0 };
     const toolMultiplier = getToolSpeedMultiplier(state, recipe.id);
-    const effectiveDuration = Math.round(recipe.durationMs * moraleMultiplier * toolMultiplier);
+    const craftSkillLevel = state.skills[recipe.skillId]?.level ?? 1;
+    const craftMilestoneMultiplier = getDurationMultiplier(recipe.skillId, craftSkillLevel, recipe.id);
+    const effectiveDuration = Math.round(recipe.durationMs * craftMilestoneMultiplier * moraleMultiplier * toolMultiplier);
     return {
       actionDuration: effectiveDuration,
       actionProgress: Math.min(1, (now - state.currentAction.startedAt) / effectiveDuration),
@@ -181,7 +183,9 @@ export function selectCurrentActionTiming(
   const expeditionId = state.currentAction.expeditionId;
   const expedition = expeditionId ? getExpeditionById(expeditionId) : undefined;
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
-  const effectiveDuration = Math.round(expedition.durationMs * moraleMultiplier);
+  const expSkillLevel = state.skills[expedition.skillId]?.level ?? 1;
+  const expMilestoneMultiplier = getDurationMultiplier(expedition.skillId, expSkillLevel, expedition.id);
+  const effectiveDuration = Math.round(expedition.durationMs * expMilestoneMultiplier * moraleMultiplier);
   return {
     actionDuration: effectiveDuration,
     actionProgress: Math.min(1, (now - state.currentAction.startedAt) / effectiveDuration),

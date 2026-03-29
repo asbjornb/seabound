@@ -63,10 +63,31 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   ],
   foraging: [
     {
+      level: 2,
+      description: "Quick hands — gather coconuts 10% faster",
+      effects: [
+        { type: "duration", actionId: "gather_coconuts", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 3,
+      description: "Beachcomber — +5% flat stone chance from rocky shore",
+      effects: [
+        { type: "drop_chance", actionId: "comb_rocky_shore", resourceId: "flat_stone", bonus: 0.05 },
+      ],
+    },
+    {
       level: 4,
       description: "Keen eye — +20% coconut husk chance when gathering",
       effects: [
         { type: "drop_chance", actionId: "gather_coconuts", resourceId: "coconut_husk", bonus: 0.2 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Keen collector — 15% chance to find extra driftwood",
+      effects: [
+        { type: "drop_chance", actionId: "collect_driftwood", resourceId: "driftwood_branch", bonus: 0.15 },
       ],
     },
     {
@@ -85,6 +106,34 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "double_output", chance: 0.05 },
       ],
     },
+    {
+      level: 6,
+      description: "Even heat — cook fish 15% faster",
+      effects: [
+        { type: "duration", actionId: "cook_fish", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 9,
+      description: "Hearty portions — 10% chance to double cooked root vegetable",
+      effects: [
+        { type: "double_output", chance: 0.1, recipeId: "cook_root_vegetable" },
+      ],
+    },
+    {
+      level: 10,
+      description: "Seasoned chef — all cooking 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 14,
+      description: "Efficient preservation — pack voyage provisions 20% faster",
+      effects: [
+        { type: "duration", actionId: "pack_voyage_provisions", multiplier: 0.8 },
+      ],
+    },
   ],
   farming: [
     {
@@ -92,6 +141,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Hardy seeds — +15% wild seed return chance",
       effects: [
         { type: "drop_chance", actionId: "plant_wild_seeds", resourceId: "wild_seed", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 4,
+      description: "Quick planter — plant wild seeds 10% faster",
+      effects: [
+        { type: "duration", actionId: "plant_wild_seeds", multiplier: 0.9 },
       ],
     },
     {
@@ -159,6 +215,20 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
       ],
     },
+    {
+      level: 8,
+      description: "Pottery hands — shape clay pot 15% faster",
+      effects: [
+        { type: "duration", actionId: "shape_clay_pot", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Seasoned crafter — all crafting recipes 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
   ],
   weaving: [
     {
@@ -173,6 +243,54 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Rope hand — another 15% chance to twist extra cordage",
       effects: [
         { type: "double_output", chance: 0.15, recipeId: "twist_cordage" },
+      ],
+    },
+    {
+      level: 12,
+      description: "Textile mastery — all weaving recipes 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+  ],
+  navigation: [
+    {
+      level: 3,
+      description: "Star reader — better chance to discover new biomes",
+      effects: [
+        { type: "expedition_biome_bonus", bonus: 0.5 },
+      ],
+    },
+    {
+      level: 5,
+      description: "Wayfinder's eye — expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 7,
+      description: "Seasoned navigator — +15% expedition drop amounts",
+      effects: [
+        { type: "expedition_drop_bonus", bonus: 0.15 },
+      ],
+    },
+  ],
+  woodworking: [
+    {
+      level: 2,
+      description: "Steady hands — harvest bamboo 10% faster",
+      effects: [
+        { type: "duration", actionId: "harvest_bamboo", multiplier: 0.9 },
+      ],
+    },
+  ],
+  construction: [
+    {
+      level: 9,
+      description: "Efficient builder — all construction 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
   ],
@@ -282,7 +400,7 @@ export function getDurationMultiplier(
   for (const m of milestones) {
     if (m.level > skillLevel || !m.effects) continue;
     for (const e of m.effects) {
-      if (e.type === "duration" && e.actionId === actionId) {
+      if (e.type === "duration" && (e.actionId === actionId || e.actionId === "*")) {
         multiplier *= e.multiplier;
       }
     }
@@ -342,4 +460,46 @@ export function getStationGuaranteedDrops(
     }
   }
   return result;
+}
+
+/**
+ * Get total expedition biome discovery weight bonus from milestones.
+ * Added as flat weight to undiscovered biome outcomes.
+ */
+export function getExpeditionBiomeBonus(
+  skillId: SkillId,
+  skillLevel: number
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let bonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "expedition_biome_bonus") {
+        bonus += e.bonus;
+      }
+    }
+  }
+  return bonus;
+}
+
+/**
+ * Get total expedition drop amount bonus from milestones.
+ * E.g. 0.15 means +15% to all expedition drop amounts.
+ */
+export function getExpeditionDropBonus(
+  skillId: SkillId,
+  skillLevel: number
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let bonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "expedition_drop_bonus") {
+        bonus += e.bonus;
+      }
+    }
+  }
+  return bonus;
 }

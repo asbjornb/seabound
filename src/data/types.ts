@@ -82,10 +82,12 @@ export interface Drop {
 
 export type MilestoneEffect =
   | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
-  | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster
+  | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster; actionId "*" = all actions in this skill
   | { type: "double_output"; chance: number; recipeId?: string } // e.g. 0.05 = 5% chance to double craft output; recipeId scopes to one recipe
   | { type: "station_input_reduce"; stationId: string; resourceId: ResourceId; newAmount: number } // reduce setup input cost
-  | { type: "station_guaranteed_drop"; stationId: string; resourceId: ResourceId; minAmount: number }; // guarantee minimum drop
+  | { type: "station_guaranteed_drop"; stationId: string; resourceId: ResourceId; minAmount: number } // guarantee minimum drop
+  | { type: "expedition_biome_bonus"; bonus: number } // flat weight bonus added to undiscovered biome outcomes
+  | { type: "expedition_drop_bonus"; bonus: number }; // e.g. 0.15 = +15% expedition drop amounts (rounded)
 
 export interface SkillMilestone {
   level: number;

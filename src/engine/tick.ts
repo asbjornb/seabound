@@ -1,4 +1,4 @@
-import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier } from "../data/milestones";
+import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus } from "../data/milestones";
 import {
   getActionById,
   getBuildings,
@@ -127,7 +127,9 @@ export function processTick(state: GameState, now: number): TickResult {
 
     const craftMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
     const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
-    const effectiveCraftDuration = Math.round(def.durationMs * craftMoraleMultiplier * craftToolMultiplier);
+    const craftSkillLevel = state.skills[def.skillId]?.level ?? 1;
+    const craftMilestoneMultiplier = getDurationMultiplier(def.skillId, craftSkillLevel, def.id);
+    const effectiveCraftDuration = Math.round(def.durationMs * craftMilestoneMultiplier * craftMoraleMultiplier * craftToolMultiplier);
 
     const effectiveInputs = getEffectiveInputs(def, state);
 
@@ -206,7 +208,9 @@ export function processTick(state: GameState, now: number): TickResult {
     }
 
     const expMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
-    const effectiveExpDuration = Math.round(def.durationMs * expMoraleMultiplier);
+    const expSkillLevel = state.skills[def.skillId]?.level ?? 1;
+    const expMilestoneMultiplier = getDurationMultiplier(def.skillId, expSkillLevel, def.id);
+    const effectiveExpDuration = Math.round(def.durationMs * expMilestoneMultiplier * expMoraleMultiplier);
 
     let remaining = timeAvailable;
     while (remaining >= effectiveExpDuration) {
@@ -403,7 +407,9 @@ function applyExpeditionCompletion(
 
   // Pick a random outcome weighted by weight (with pity for biome discoveries)
   const pityCount = state.expeditionPity[expeditionId] ?? 0;
-  const outcome = pickWeightedOutcome(def.outcomes, state, pityCount);
+  const navLevel = state.skills[def.skillId]?.level ?? 1;
+  const biomeBonus = getExpeditionBiomeBonus(def.skillId, navLevel);
+  const outcome = pickWeightedOutcome(def.outcomes, state, pityCount, biomeBonus);
 
   // Apply biome discovery and update pity counter
   if (outcome.biomeDiscovery && !state.discoveredBiomes.includes(outcome.biomeDiscovery)) {
@@ -419,19 +425,23 @@ function applyExpeditionCompletion(
     }
   }
 
-  // Apply drops
+  // Apply drops (with expedition drop bonus from milestones)
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
+  const dropBonus = getExpeditionDropBonus(def.skillId, navLevel);
   if (outcome.drops) {
     for (const drop of outcome.drops) {
       const rolled = rollDrops([drop]);
       for (const r of rolled) {
+        const boostedAmount = dropBonus > 0
+          ? Math.round(r.amount * (1 + dropBonus))
+          : r.amount;
         if (!state.discoveredResources.includes(r.resourceId)) {
           newResources.push(r.resourceId);
           state.discoveredResources.push(r.resourceId);
         }
-        addResource(state, r.resourceId, r.amount);
-        drops.push({ name: r.resourceId, amount: r.amount });
+        addResource(state, r.resourceId, boostedAmount);
+        drops.push({ name: r.resourceId, amount: boostedAmount });
       }
     }
   }
@@ -459,11 +469,12 @@ function applyExpeditionCompletion(
 function pickWeightedOutcome(
   outcomes: ExpeditionOutcome[],
   state: GameState,
-  pityCount: number = 0
+  pityCount: number = 0,
+  biomeBonus: number = 0
 ): ExpeditionOutcome {
   // Filter out biome discoveries the player already has,
   // and outcomes whose required biomes haven't been discovered yet.
-  // Boost undiscovered biome weights by +1 per consecutive failed attempt (pity).
+  // Boost undiscovered biome weights by pity + milestone bonus.
   const adjusted = outcomes.map((o) => {
     if (o.biomeDiscovery && state.discoveredBiomes.includes(o.biomeDiscovery)) {
       return { ...o, weight: 0 };
@@ -475,9 +486,9 @@ function pickWeightedOutcome(
         }
       }
     }
-    // Pity: boost undiscovered biome outcome weights (+0.3 per failed attempt)
-    if (o.biomeDiscovery && pityCount > 0) {
-      return { ...o, weight: o.weight + pityCount * 0.3 };
+    // Pity + milestone: boost undiscovered biome outcome weights
+    if (o.biomeDiscovery) {
+      return { ...o, weight: o.weight + pityCount * 0.3 + biomeBonus };
     }
     return o;
   });
