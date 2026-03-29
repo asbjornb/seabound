@@ -38,7 +38,7 @@ function isOutputFull(state: GameState): boolean {
     const def = getActionById(action.actionId);
     if (!def) return false;
     const fullAtStart = action.fullAtStart ?? [];
-    const relevant = def.drops.filter((d) => !fullAtStart.includes(d.resourceId));
+    const relevant = def.drops.filter((d) => (!d.chance || d.chance >= 1) && !fullAtStart.includes(d.resourceId));
     if (relevant.length === 0) return false;
     return relevant.every((d) => {
       const current = state.resources[d.resourceId] ?? 0;
