@@ -38,7 +38,8 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Fenced Perimeter",
     description:
       "A bamboo fence around camp. Keeps things organized and critters out.",
-    unlocks: "More room for baskets and other bulky crafts",
+    unlocks: "+5 max woven baskets",
+    maxCountBonuses: [{ buildingId: "woven_basket", amount: 5 }],
   },
   firing_pit: {
     id: "firing_pit",
