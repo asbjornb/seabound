@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach, type SpyInstance } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
 import type { GameState } from "../data/types";
 import { getActionById, getRecipeById, getExpeditionById } from "../data/registry";
 import { processTick } from "../engine/tick";
@@ -20,7 +20,7 @@ import { makeState } from "./testHelpers";
  */
 describe("Critical Path: Beach → Dugout", () => {
   let state: GameState;
-  let mockRandom: SpyInstance;
+  let mockRandom: MockInstance;
 
   beforeEach(() => {
     state = makeState();
