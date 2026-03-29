@@ -106,6 +106,12 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Grow bananas, breadfruit, and advanced crops",
     maxCount: 3,
   },
+  pandanus_grove: {
+    id: "pandanus_grove",
+    name: "Pandanus Grove",
+    description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
+    unlocks: "Harvest pandanus leaves without replanting",
+  },
   well: {
     id: "well",
     name: "Well",

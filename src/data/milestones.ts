@@ -123,6 +123,8 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "duration", actionId: "cultivate_taro", multiplier: 0.85 },
         { type: "duration", actionId: "grow_bananas", multiplier: 0.85 },
         { type: "duration", actionId: "grow_breadfruit", multiplier: 0.85 },
+        { type: "duration", actionId: "grow_pandanus", multiplier: 0.85 },
+        { type: "duration", actionId: "harvest_pandanus_grove", multiplier: 0.85 },
       ],
     },
     {
