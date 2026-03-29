@@ -1098,6 +1098,11 @@
     },
     {
       "from": "action:collect_driftwood",
+      "to": "resource:driftwood_branch",
+      "relation": "produces"
+    },
+    {
+      "from": "action:collect_driftwood",
       "to": "skill:foraging",
       "relation": "trains"
     },
