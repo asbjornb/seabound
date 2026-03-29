@@ -242,6 +242,7 @@ export interface GameState {
     type: "gather" | "craft" | "expedition";
     recipeId?: string;
     expeditionId?: string;
+    fullAtStart?: string[]; // resource IDs already at cap when action began
   } | null;
   stopWhenFull?: boolean;
   lastTickAt: number;

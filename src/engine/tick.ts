@@ -37,9 +37,10 @@ function isOutputFull(state: GameState): boolean {
   if (action.type === "gather") {
     const def = getActionById(action.actionId);
     if (!def) return false;
-    const guaranteed = def.drops.filter((d) => !d.chance || d.chance >= 1);
-    if (guaranteed.length === 0) return false;
-    return guaranteed.every((d) => {
+    const fullAtStart = action.fullAtStart ?? [];
+    const relevant = def.drops.filter((d) => !fullAtStart.includes(d.resourceId));
+    if (relevant.length === 0) return false;
+    return relevant.every((d) => {
       const current = state.resources[d.resourceId] ?? 0;
       return current >= getStorageLimit(state, d.resourceId);
     });
@@ -48,6 +49,8 @@ function isOutputFull(state: GameState): boolean {
   if (action.type === "craft") {
     const def = action.recipeId ? getRecipeById(action.recipeId) : undefined;
     if (!def?.output) return false;
+    const fullAtStart = action.fullAtStart ?? [];
+    if (fullAtStart.includes(def.output.resourceId)) return false;
     const current = state.resources[def.output.resourceId] ?? 0;
     return current >= getStorageLimit(state, def.output.resourceId);
   }
