@@ -264,7 +264,8 @@ export function useGame() {
         // Check required buildings
         if (recipe.requiredBuildings?.some((bid) => !hasBuilding(prev, bid))) return prev;
         // Check stackable building max count (group-aware for upgrade chains)
-        if (recipe.buildingOutput) {
+        // Skip for upgrade recipes — they replace 1-for-1 so the total doesn't increase
+        if (recipe.buildingOutput && !recipe.replacesBuilding) {
           const bdef = BUILDINGS[recipe.buildingOutput];
           if (bdef?.maxCount && getGroupBuildingCount(prev, recipe.buildingOutput) >= getEffectiveMaxCount(prev, recipe.buildingOutput)) return prev;
         }
