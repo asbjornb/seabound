@@ -66,7 +66,26 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
 
 export function selectAvailableRecipes(state: GameState): RecipeDef[] {
   const BUILDINGS = getBuildings();
-  return getRecipes().filter((recipe) => {
+  const allRecipes = getRecipes();
+
+  // Build upgrade chain: maps each building to what it was upgraded into
+  // e.g. sleeping_mat -> hammock -> thatched_hut
+  const upgradedTo = new Map<string, string>();
+  for (const r of allRecipes) {
+    if (r.replacesBuilding && r.buildingOutput) {
+      upgradedTo.set(r.replacesBuilding, r.buildingOutput);
+    }
+  }
+
+  // Check if a building exists in state OR any upgrade in its chain does
+  function hasBuildingOrUpgrade(buildingId: string): boolean {
+    if (state.buildings.includes(buildingId)) return true;
+    const next = upgradedTo.get(buildingId);
+    if (next) return hasBuildingOrUpgrade(next);
+    return false;
+  }
+
+  return allRecipes.filter((recipe) => {
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
@@ -89,8 +108,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
       });
       if (allMet) return false;
     }
-    // Hide building recipes if building already exists (or at max count for stackable)
-    if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
+    // Hide building recipes if building already exists OR has been upgraded
+    if (recipe.buildingOutput && hasBuildingOrUpgrade(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
       // Stackable: hide if at effective max count (includes bonuses from other buildings)

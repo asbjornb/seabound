@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { selectAvailableActions, selectAvailableRecipes, selectAvailableExpeditions } from "../engine/selectors";
+import type { GameState } from "../data/types";
 import { makeState } from "./testHelpers";
 
 describe("selectAvailableActions", () => {
@@ -74,6 +75,62 @@ describe("selectAvailableRecipes", () => {
     const recipes = selectAvailableRecipes(state);
     // craft_bamboo_knife is oneTimeCraft; should be hidden if tool is owned
     expect(recipes.some((r) => r.id === "craft_bamboo_knife")).toBe(false);
+  });
+});
+
+describe("building upgrade chains hide base recipes", () => {
+  function stateWithConstructionLevel(level: number, extra: Partial<GameState> = {}) {
+    const base = makeState(extra);
+    base.skills.construction = { level, xp: 0 };
+    return base;
+  }
+
+  // Sleeping mat → Hammock → Thatched hut chain
+  it("hides sleeping mat recipe when hammock is built", () => {
+    const state = stateWithConstructionLevel(10, {
+      buildings: ["hammock"],
+      discoveredResources: ["palm_frond", "dry_grass"],
+    });
+    const recipes = selectAvailableRecipes(state);
+    expect(recipes.some((r) => r.id === "build_sleeping_mat")).toBe(false);
+  });
+
+  it("hides sleeping mat recipe when thatched hut is built (two levels up)", () => {
+    const state = stateWithConstructionLevel(15, {
+      buildings: ["thatched_hut"],
+      discoveredResources: ["palm_frond", "dry_grass"],
+    });
+    const recipes = selectAvailableRecipes(state);
+    expect(recipes.some((r) => r.id === "build_sleeping_mat")).toBe(false);
+  });
+
+  it("hides hammock recipe when thatched hut is built", () => {
+    const state = stateWithConstructionLevel(15, {
+      buildings: ["thatched_hut"],
+      discoveredResources: ["cordage", "dried_fiber", "driftwood_branch"],
+    });
+    const recipes = selectAvailableRecipes(state);
+    expect(recipes.some((r) => r.id === "build_hammock")).toBe(false);
+  });
+
+  // Dugout → Outrigger canoe chain
+  it("hides dugout recipe when outrigger canoe is built", () => {
+    const state = stateWithConstructionLevel(10, {
+      buildings: ["outrigger_canoe"],
+      discoveredResources: ["shaped_hull", "cordage", "bamboo_cane"],
+    });
+    const recipes = selectAvailableRecipes(state);
+    expect(recipes.some((r) => r.id === "build_dugout")).toBe(false);
+  });
+
+  // Verify base recipe still shows when no shelter is built yet
+  it("still shows sleeping mat recipe when no shelter is built yet", () => {
+    const state = stateWithConstructionLevel(10, {
+      buildings: [],
+      discoveredResources: ["palm_frond", "dry_grass"],
+    });
+    const recipes = selectAvailableRecipes(state);
+    expect(recipes.some((r) => r.id === "build_sleeping_mat")).toBe(true);
   });
 });
 
