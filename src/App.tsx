@@ -13,6 +13,7 @@ import { LogPanel } from "./components/LogPanel";
 import { ModPanel } from "./components/ModPanel";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
+import { SearchPanel } from "./components/SearchPanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
@@ -55,6 +56,8 @@ export default function App() {
   const [modPanelOpen, setModPanelOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [hideFlavorText, setHideFlavorText] = useState(
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
@@ -173,6 +176,12 @@ export default function App() {
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
+          <button
+            className="search-toggle-btn"
+            onClick={() => { setSearchOpen(true); setSearchQuery(""); }}
+          >
+            Search
+          </button>
           <button
             className={`log-toggle-btn${showLog ? " active" : ""}`}
             onClick={() => setShowLog((v) => !v)}
@@ -416,6 +425,23 @@ export default function App() {
         <ModPanel
           onClose={() => setModPanelOpen(false)}
           onModSwitch={handleModSwitch}
+        />
+      )}
+
+      {searchOpen && (
+        <SearchPanel
+          query={searchQuery}
+          onChangeQuery={setSearchQuery}
+          onClose={() => setSearchOpen(false)}
+          actions={game.availableActions}
+          recipes={game.availableRecipes}
+          stations={game.availableStations}
+          expeditions={game.availableExpeditions}
+          onStartAction={game.startAction}
+          onStartCraft={game.startCraft}
+          onDeployStation={game.deployStation}
+          onStartExpedition={game.startExpedition}
+          onJumpToTab={(t) => setTab(t as GameTab)}
         />
       )}
 
