@@ -46,6 +46,12 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   shaped_clay_pot: "\u{1FAD9}",
   fired_clay_pot: "\u{1FAD9}",
   sealed_clay_jar: "\u{1F3FA}",
+  pandanus_cutting: "\u{1F331}",
+  pandanus_leaves: "\u{1F33F}",
+  dried_pandanus_leaf: "\u{1F343}",
+  pandanus_strip: "\u{1F9F5}",
+  rope: "\u{1FA22}",
+  sail: "\u{26F5}",
 };
 
 export const TOOL_ICONS: Record<ToolId, string> = {
@@ -99,6 +105,11 @@ export const BUILDING_ICONS: Record<BuildingId, string> = {
   tended_garden: "\u{1F33F}",
   farm_plot: "\u{1F331}",
   well: "\u{1F4A7}",
+  pandanus_grove: "\u{1F334}",
+  sleeping_mat: "\u{1F6CF}\uFE0F",
+  hammock: "\u{1F6CF}\uFE0F",
+  thatched_hut: "\u{26FA}",
+  outrigger_canoe: "\u{26F5}",
 };
 
 export const TAB_ICONS: Record<string, string> = {
