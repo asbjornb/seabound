@@ -2198,11 +2198,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:8",
-      "to": "recipe:assemble_dugout",
-      "relation": "requires_skill"
-    },
-    {
       "from": "recipe:knap_obsidian_blade",
       "to": "tool:obsidian_blade",
       "relation": "crafts_tool"
@@ -3670,7 +3665,6 @@
       "resource:shaped_hull",
       "resource:cordage",
       "resource:bamboo_cane",
-      "skill:construction:8",
       "recipe:scrape_hull",
       "recipe:twist_cordage",
       "recipe:braid_cordage",
@@ -3823,7 +3817,6 @@
       "resource:shaped_hull",
       "resource:cordage",
       "resource:bamboo_cane",
-      "skill:construction:8",
       "recipe:scrape_hull",
       "recipe:weave_pandanus_cordage",
       "expedition:explore_interior",
@@ -4215,8 +4208,7 @@
         {
           "level": 8,
           "unlocks": [
-            "recipe:build_hammock",
-            "recipe:assemble_dugout"
+            "recipe:build_hammock"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
