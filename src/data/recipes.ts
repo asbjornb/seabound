@@ -596,6 +596,29 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Maritime — Outrigger Canoe (upgrade from dugout)
+  // ═══════════════════════════════════════
+  {
+    id: "build_outrigger",
+    name: "Fit Outrigger & Sail",
+    description:
+      "Lash a bamboo outrigger float to the dugout and rig a woven sail. Ready for open ocean.",
+    skillId: "construction",
+    panel: "craft",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "sail", amount: 1 },
+      { resourceId: "rope", amount: 3 },
+      { resourceId: "bamboo_cane", amount: 6 },
+    ],
+    buildingOutput: "outrigger_canoe",
+    replacesBuilding: "dugout",
+    durationMs: 25000,
+    oneTimeCraft: true,
+    xpGain: 80,
+  },
+
+  // ═══════════════════════════════════════
   // Obsidian Tools
   // ═══════════════════════════════════════
   {

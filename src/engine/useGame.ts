@@ -304,11 +304,16 @@ export function useGame() {
         if (expedition.requiredVessel && !hasVessel(prev, expedition.requiredVessel)) {
           return prev;
         }
-        // Check food and water costs
+        // Check food, water, and resource input costs
         if (expedition.foodCost && getTotalFood(prev) < expedition.foodCost) {
           return prev;
         }
         if (expedition.waterCost && getTotalWater(prev) < expedition.waterCost) {
+          return prev;
+        }
+        if (expedition.inputs?.some(
+          (inp) => (prev.resources[inp.resourceId] ?? 0) < inp.amount
+        )) {
           return prev;
         }
         const next = structuredClone(prev);

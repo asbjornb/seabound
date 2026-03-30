@@ -188,8 +188,10 @@ export interface ExpeditionDef {
   requiredVessel?: BuildingId;
   requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
   hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
+  inputs?: { resourceId: ResourceId; amount: number }[]; // consumed each cycle (e.g. voyage provisions)
   outcomes: ExpeditionOutcome[];
   xpGain: number;
+  victory?: boolean; // if true, completing this expedition wins the game
 }
 
 export interface ExpeditionOutcome {
@@ -262,5 +264,6 @@ export interface GameState {
   completedActions: string[]; // action IDs the player has completed at least once
   completedRecipes: string[]; // recipe IDs the player has completed at least once
   expeditionPity: Record<string, number>; // consecutive no-biome-discovery attempts per expedition
+  victory?: boolean; // true when the player has won (completed a victory expedition)
   modId?: string; // if set, this save belongs to a specific mod
 }

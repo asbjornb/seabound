@@ -142,4 +142,12 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "A stone-lined well dug to the water table. Provides water for farming.",
     unlocks: "Watered farming — required for taro and later crops",
   },
+  outrigger_canoe: {
+    id: "outrigger_canoe",
+    name: "Outrigger Canoe",
+    description:
+      "A dugout canoe fitted with a bamboo outrigger and woven sail. Built to cross open ocean.",
+    unlocks: "Oceanic Voyage expedition — the way home",
+    vesselTier: 3,
+  },
 };

@@ -209,4 +209,24 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
   },
+  {
+    id: "oceanic_voyage",
+    name: "Oceanic Voyage",
+    description:
+      "Set sail across the open ocean. There is no turning back.",
+    skillId: "navigation",
+    durationMs: 30000,
+    waterCost: 10,
+    xpGain: 100,
+    inputs: [{ resourceId: "voyage_provisions", amount: 10 }],
+    requiredVessel: "outrigger_canoe",
+    victory: true,
+    outcomes: [
+      {
+        weight: 100,
+        description:
+          "The sail catches the trade winds and the outrigger cuts through the swells. Days blur into nights. On the third morning, a dark line of land rises from the horizon — not your island, but a new shore. Smoke drifts from a village above the beach. You've made it. You're no longer a castaway.",
+      },
+    ],
+  },
 ];

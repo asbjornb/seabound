@@ -16,6 +16,7 @@ import { ResourcePanel } from "./components/ResourcePanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
+import { VictoryScreen } from "./components/VictoryScreen";
 import { TAB_ICONS } from "./data/icons";
 import { getActiveModId } from "./data/modding";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
@@ -160,7 +161,8 @@ export default function App() {
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
-      {pendingChapter && (
+      {game.state.victory && <VictoryScreen state={game.state} />}
+      {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
       {updateAvailable && (
