@@ -789,6 +789,22 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 20,
   },
 
+  // Fill Water Pot (requires well)
+  {
+    id: "fill_water_pot",
+    name: "Fill Water Pot",
+    description:
+      "Draw fresh water from the well into a clay pot. Essential for long voyages.",
+    skillId: "cooking",
+    panel: "craft",
+    inputs: [{ resourceId: "fired_clay_pot", amount: 1 }],
+    output: { resourceId: "fresh_water", amount: 1 },
+    requiredBuildings: ["well"],
+    durationMs: 4000,
+    repeatable: true,
+    xpGain: 5,
+  },
+
   // Sealed Clay Jar (Cooking 12, requires firing pit)
   {
     id: "seal_clay_jar",

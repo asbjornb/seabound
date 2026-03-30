@@ -136,20 +136,7 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 30,
   },
 
-  // Water Collection
-  {
-    id: "collect_fresh_water",
-    name: "Collect Fresh Water",
-    description:
-      "Fill a clay pot with clean water from the jungle stream.",
-    skillId: "foraging",
-    panel: "gather",
-    durationMs: 4000,
-    drops: [{ resourceId: "fresh_water", amount: 1 }],
-    requiredBiome: "jungle_interior",
-    requiredResources: ["fired_clay_pot"],
-    xpGain: 8,
-  },
+  // Water collection moved to recipe "fill_water_pot" (requires well building)
 
   // ═══════════════════════════════════════
   // PHASE 2 — Clay Tier (requires jungle_interior biome)

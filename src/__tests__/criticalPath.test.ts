@@ -374,9 +374,23 @@ describe("Critical Path: Beach → Dugout", () => {
     craft("fire_clay_pot");
     expect(state.resources.fired_clay_pot).toBeGreaterThan(0);
 
-    // Collect fresh water (requires jungle_interior + fired_clay_pot in inventory)
-    assertActionAvailable("collect_fresh_water");
-    gather("collect_fresh_water");
+    // Craft digging stick (requires camp_fire + bamboo_cane + driftwood_branch)
+    grant({ bamboo_cane: 2, driftwood_branch: 2 });
+    assertRecipeAvailable("craft_digging_stick");
+    craft("craft_digging_stick");
+    expect(state.tools).toContain("digging_stick");
+
+    // Build well (construction 6, flat_stone + clay + cordage, digging_stick)
+    setSkill("construction", 6);
+    grant({ flat_stone: 6, clay: 4, cordage: 3 });
+    assertRecipeAvailable("build_well");
+    craft("build_well");
+    expect(state.buildings).toContain("well");
+
+    // Fill water pot at the well (consumes fired_clay_pot → fresh_water)
+    grant({ fired_clay_pot: 1 });
+    assertRecipeAvailable("fill_water_pot");
+    craft("fill_water_pot");
     expect(state.resources.fresh_water).toBeGreaterThan(0);
 
     // ═══ PHASE 11: Dugout Canoe ═══
