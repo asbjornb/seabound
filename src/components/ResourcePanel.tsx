@@ -40,6 +40,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
       <span
         className={`resource-chip morale-chip${state.morale <= 25 ? " low-morale" : ""}`}
         onClick={() => setShowMoraleTip((v) => !v)}
+        title={`${moraleLabel} — click for details`}
       >
         Morale:{" "}
         <span className="amount">{state.morale}</span>
