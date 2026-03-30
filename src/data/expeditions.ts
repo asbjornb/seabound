@@ -148,7 +148,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
   },
   {
     id: "dugout_voyage",
-    name: "Voyage by Dugout",
+    name: "Sail to Far Island",
     description:
       "Paddle your dugout canoe beyond the near-shore waters. Who knows what you'll find? Costs 5 food and 3 water per trip.",
     skillId: "navigation",
