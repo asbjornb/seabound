@@ -91,6 +91,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "A patch of ground cleared for planting. One crop slot.",
     unlocks: "Plant wild seeds",
     maxCount: 3,
+    maxCountGroup: "farmland",
   },
   tended_garden: {
     id: "tended_garden",
@@ -98,6 +99,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "An irrigated, stone-bordered garden plot. Supports real crops.",
     unlocks: "Cultivate taro and other crops",
     maxCount: 3,
+    maxCountGroup: "farmland",
   },
   farm_plot: {
     id: "farm_plot",
@@ -105,6 +107,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "A proper farm plot with drainage and enriched soil. Supports all crops.",
     unlocks: "Grow bananas, breadfruit, and advanced crops",
     maxCount: 3,
+    maxCountGroup: "farmland",
   },
   pandanus_grove: {
     id: "pandanus_grove",

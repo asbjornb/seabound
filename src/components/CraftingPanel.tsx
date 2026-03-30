@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
+import { getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -208,7 +208,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     <div className="recipe-output">
                       Builds: {BUILDINGS[recipe.buildingOutput]?.name ?? recipe.buildingOutput}
                       {BUILDINGS[recipe.buildingOutput]?.maxCount && BUILDINGS[recipe.buildingOutput]!.maxCount! > 1
-                        ? ` (${getBuildingCount(state, recipe.buildingOutput)}/${getEffectiveMaxCount(state, recipe.buildingOutput)})`
+                        ? ` (${getGroupBuildingCount(state, recipe.buildingOutput)}/${getEffectiveMaxCount(state, recipe.buildingOutput)})`
                         : ""}
                     </div>
                   ) : recipe.output ? (

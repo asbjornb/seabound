@@ -21,6 +21,7 @@ import {
   canAffordTagInputs,
   createInitialState,
   getBuildingCount,
+  getGroupBuildingCount,
   getEffectiveInputs,
   getEffectiveMaxCount,
   getResource,
@@ -262,10 +263,11 @@ export function useGame() {
         }
         // Check required buildings
         if (recipe.requiredBuildings?.some((bid) => !hasBuilding(prev, bid))) return prev;
-        // Check stackable building max count
-        if (recipe.buildingOutput) {
+        // Check stackable building max count (group-aware for upgrade chains)
+        // Skip for upgrade recipes — they replace 1-for-1 so the total doesn't increase
+        if (recipe.buildingOutput && !recipe.replacesBuilding) {
           const bdef = BUILDINGS[recipe.buildingOutput];
-          if (bdef?.maxCount && getBuildingCount(prev, recipe.buildingOutput) >= getEffectiveMaxCount(prev, recipe.buildingOutput)) return prev;
+          if (bdef?.maxCount && getGroupBuildingCount(prev, recipe.buildingOutput) >= getEffectiveMaxCount(prev, recipe.buildingOutput)) return prev;
         }
         // Check upgrade source building exists
         if (recipe.replacesBuilding && !hasBuilding(prev, recipe.replacesBuilding)) return prev;

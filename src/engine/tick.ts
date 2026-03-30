@@ -7,7 +7,7 @@ import {
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -354,8 +354,8 @@ function applyCraftCompletion(
     const bdef = BUILDINGS[def.buildingOutput];
     const isStackable = bdef?.maxCount && bdef.maxCount > 1;
     if (isStackable) {
-      // Stackable buildings allow duplicates, up to effective maxCount
-      const currentCount = state.buildings.filter((b) => b === def.buildingOutput).length;
+      // Stackable buildings allow duplicates, up to effective maxCount (group-aware)
+      const currentCount = getGroupBuildingCount(state, def.buildingOutput);
       if (currentCount < getEffectiveMaxCount(state, def.buildingOutput)) {
         state.buildings.push(def.buildingOutput);
       }

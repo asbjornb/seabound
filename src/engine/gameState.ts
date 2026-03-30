@@ -303,6 +303,16 @@ export function getBuildingCount(state: GameState, buildingId: BuildingId): numb
   return state.buildings.filter((b) => b === buildingId).length;
 }
 
+/** Get the total count of all buildings sharing a maxCountGroup with the given building.
+ *  If the building has no group, returns the count of just that building. */
+export function getGroupBuildingCount(state: GameState, buildingId: BuildingId): number {
+  const BUILDINGS = getBuildings();
+  const bdef = BUILDINGS[buildingId];
+  if (!bdef?.maxCountGroup) return getBuildingCount(state, buildingId);
+  const group = bdef.maxCountGroup;
+  return state.buildings.filter((b) => BUILDINGS[b]?.maxCountGroup === group).length;
+}
+
 /** Get effective maxCount for a stackable building, including bonuses from other buildings. */
 export function getEffectiveMaxCount(state: GameState, buildingId: BuildingId): number {
   const BUILDINGS = getBuildings();
