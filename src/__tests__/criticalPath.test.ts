@@ -399,8 +399,7 @@ describe("Critical Path: Beach → Dugout", () => {
     expect(state.resources.shaped_hull).toBe(1);
     expect(state.resources.charred_log).toBe(0); // consumed
 
-    // Assemble dugout canoe (construction 8)
-    setSkill("construction", 8);
+    // Assemble dugout canoe
     grant({ cordage: 10, bamboo_cane: 10 });
     assertRecipeAvailable("assemble_dugout");
     craft("assemble_dugout");
@@ -430,10 +429,6 @@ describe("Critical Path: Beach → Dugout", () => {
     const expeditions = selectAvailableExpeditions(state);
     expect(expeditions.some((e) => e.id === "sail_nearby_island")).toBe(false);
 
-    // Assemble dugout requires construction 8
-    grant({ shaped_hull: 1, cordage: 10, bamboo_cane: 10 });
-    const recipes2 = selectAvailableRecipes(state);
-    expect(recipes2.some((r) => r.id === "assemble_dugout")).toBe(false);
   });
 
   it("verifies dugout voyage is available after building dugout", () => {

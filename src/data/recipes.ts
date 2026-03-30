@@ -712,7 +712,7 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 35,
   },
 
-  // Building: Kiln (Construction 25 + Crafting 20)
+  // Building: Kiln (Construction 13)
   {
     id: "build_kiln",
     name: "Kiln",
@@ -720,7 +720,7 @@ export const RECIPES: RecipeDef[] = [
       "Build an enclosed clay kiln over the firing pit. Much higher temperatures for advanced pottery.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 10,
+    requiredSkillLevel: 13,
     inputs: [
       { resourceId: "clay", amount: 10 },
       { resourceId: "flat_stone", amount: 8 },
