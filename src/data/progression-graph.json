@@ -699,12 +699,6 @@
       "category": "woodworking"
     },
     {
-      "id": "action:collect_fresh_water",
-      "type": "action",
-      "label": "Collect Fresh Water",
-      "category": "foraging"
-    },
-    {
       "id": "action:dig_clay",
       "type": "action",
       "label": "Dig Clay",
@@ -991,6 +985,12 @@
       "type": "recipe",
       "label": "Fire Clay Pot",
       "category": "crafting"
+    },
+    {
+      "id": "recipe:fill_water_pot",
+      "type": "recipe",
+      "label": "Fill Water Pot",
+      "category": "cooking"
     },
     {
       "id": "recipe:seal_clay_jar",
@@ -1302,26 +1302,6 @@
       "from": "tool:stone_axe",
       "to": "action:fell_large_tree",
       "relation": "requires_tool"
-    },
-    {
-      "from": "action:collect_fresh_water",
-      "to": "resource:fresh_water",
-      "relation": "produces"
-    },
-    {
-      "from": "action:collect_fresh_water",
-      "to": "skill:foraging",
-      "relation": "trains"
-    },
-    {
-      "from": "biome:jungle_interior",
-      "to": "action:collect_fresh_water",
-      "relation": "requires_biome"
-    },
-    {
-      "from": "resource:fired_clay_pot",
-      "to": "action:collect_fresh_water",
-      "relation": "requires_resource"
     },
     {
       "from": "action:dig_clay",
@@ -2504,6 +2484,26 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:fill_water_pot",
+      "to": "resource:fresh_water",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:fired_clay_pot",
+      "to": "recipe:fill_water_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:fill_water_pot",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "building:well",
+      "to": "recipe:fill_water_pot",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:seal_clay_jar",
       "to": "resource:sealed_clay_jar",
       "relation": "produces"
@@ -3425,7 +3425,37 @@
     },
     {
       "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
       "to": "resource:banana_shoot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
       "relation": "produces"
     },
     {
@@ -3435,12 +3465,57 @@
     },
     {
       "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
       "to": "resource:pandanus_cutting",
       "relation": "produces"
     },
     {
       "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
       "to": "resource:obsidian",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
       "relation": "produces"
     },
     {
@@ -3451,6 +3526,46 @@
     {
       "from": "expedition:dugout_voyage",
       "to": "resource:bamboo_cane",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:fired_clay_pot",
       "relation": "produces"
     },
     {
@@ -3472,6 +3587,106 @@
       "from": "resource:voyage_provisions",
       "to": "expedition:oceanic_voyage",
       "relation": "consumes"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:oceanic_voyage",
+      "to": "resource:sealed_clay_jar",
+      "relation": "produces"
     },
     {
       "from": "station:deploy_basket_trap",
@@ -3754,7 +3969,7 @@
       "station:grow_bananas",
       "recipe:roast_breadfruit",
       "expedition:explore_beach",
-      "action:collect_fresh_water",
+      "recipe:fill_water_pot",
       "resource:large_log",
       "resource:dry_grass",
       "resource:coconut_husk",
@@ -3786,7 +4001,6 @@
       "resource:banana_shoot",
       "resource:breadfruit",
       "skill:cooking:8",
-      "biome:jungle_interior",
       "resource:fired_clay_pot",
       "action:fell_large_tree",
       "action:collect_dry_grass",
@@ -3807,7 +4021,9 @@
       "recipe:build_well",
       "station:grow_breadfruit",
       "recipe:fire_clay_pot",
+      "expedition:oceanic_voyage",
       "skill:woodworking:10",
+      "biome:jungle_interior",
       "tool:stone_axe",
       "biome:rocky_shore",
       "tool:bow_drill_kit",
@@ -3827,6 +4043,8 @@
       "resource:breadfruit_cutting",
       "resource:shaped_clay_pot",
       "building:firing_pit",
+      "building:outrigger_canoe",
+      "resource:voyage_provisions",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
@@ -3837,6 +4055,8 @@
       "action:dig_clay",
       "recipe:shape_clay_pot",
       "recipe:build_firing_pit",
+      "recipe:build_outrigger",
+      "recipe:pack_voyage_provisions",
       "resource:stone_blade",
       "skill:construction:5",
       "skill:farming:8",
@@ -3844,8 +4064,18 @@
       "resource:chert",
       "tool:hammerstone",
       "skill:foraging:5",
+      "resource:sail",
+      "resource:rope",
+      "skill:construction:8",
+      "resource:sealed_clay_jar",
       "recipe:knap_stone_blade",
-      "recipe:craft_hammerstone"
+      "recipe:craft_hammerstone",
+      "recipe:sew_sail",
+      "recipe:twist_rope",
+      "recipe:seal_clay_jar",
+      "skill:weaving:10",
+      "skill:weaving:6",
+      "skill:cooking:12"
     ],
     "minimalPathToDugout": [
       "building:dugout",
@@ -3885,25 +4115,43 @@
       "resource:pandanus_leaves",
       "building:drying_rack",
       "resource:bamboo_splinter",
-      "action:collect_fresh_water",
+      "recipe:fill_water_pot",
       "recipe:craft_bow_drill",
       "station:harvest_pandanus_grove",
       "recipe:build_drying_rack",
       "recipe:split_bamboo_cane",
-      "biome:jungle_interior",
       "resource:fired_clay_pot",
+      "building:well",
       "resource:flat_stone",
       "skill:farming:12",
       "resource:palm_frond",
-      "recipe:fire_clay_pot",
+      "expedition:oceanic_voyage",
+      "recipe:build_well",
       "action:collect_palm_frond",
-      "resource:shaped_clay_pot",
-      "building:firing_pit",
-      "recipe:shape_clay_pot",
-      "recipe:build_firing_pit",
+      "building:outrigger_canoe",
+      "resource:voyage_provisions",
       "resource:clay",
+      "skill:construction:6",
+      "tool:digging_stick",
+      "recipe:build_outrigger",
+      "recipe:pack_voyage_provisions",
       "action:dig_clay",
-      "skill:foraging:5"
+      "recipe:craft_digging_stick",
+      "resource:sail",
+      "resource:rope",
+      "skill:construction:8",
+      "resource:sealed_clay_jar",
+      "building:firing_pit",
+      "skill:foraging:5",
+      "biome:jungle_interior",
+      "recipe:sew_sail",
+      "recipe:twist_rope",
+      "recipe:build_firing_pit",
+      "skill:weaving:10",
+      "building:fiber_loom",
+      "skill:weaving:6",
+      "recipe:build_fiber_loom",
+      "skill:weaving:4"
     ],
     "deadEnds": [
       "tool:crucible"
@@ -3944,7 +4192,6 @@
             "action:comb_rocky_shore",
             "action:collect_palm_frond",
             "action:collect_dry_grass",
-            "action:collect_fresh_water",
             "action:dig_clay"
           ]
         }
@@ -4436,6 +4683,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
@@ -4452,6 +4700,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
@@ -4468,6 +4717,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
@@ -4484,6 +4734,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
@@ -4500,6 +4751,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
@@ -4516,6 +4768,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
