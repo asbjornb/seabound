@@ -14,6 +14,7 @@ import {
 import type { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
 import {
   getBuildingCount,
+  getGroupBuildingCount,
   getEffectiveInputs,
   getEffectiveMaxCount,
   getMoraleDurationMultiplier,
@@ -93,9 +94,16 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
       // Stackable: hide if at effective max count (includes bonuses from other buildings)
-      if (getBuildingCount(state, recipe.buildingOutput) >= getEffectiveMaxCount(state, recipe.buildingOutput)) return false;
+      // Use group-aware count so upgrade chains share a single cap
+      if (getGroupBuildingCount(state, recipe.buildingOutput) >= getEffectiveMaxCount(state, recipe.buildingOutput)) return false;
       // For stackable upgrade recipes, hide if no source building left to upgrade
       if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
+    }
+    // For non-upgrade building recipes with a shared group, hide if group is at max
+    // (covers the case where you have 0 of this specific building but group is full)
+    if (recipe.buildingOutput && !recipe.replacesBuilding) {
+      const bdef = BUILDINGS[recipe.buildingOutput];
+      if (bdef?.maxCountGroup && getGroupBuildingCount(state, recipe.buildingOutput) >= getEffectiveMaxCount(state, recipe.buildingOutput)) return false;
     }
     // For upgrade recipes that haven't reached max yet, still need a source building
     if (recipe.replacesBuilding && !state.buildings.includes(recipe.replacesBuilding)) return false;
