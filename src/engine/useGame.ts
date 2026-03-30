@@ -446,8 +446,15 @@ export function useGame() {
         const name = rdef?.name ?? resId.replace(/_/g, " ");
         addDiscovery(next, "resource", `Found ${name} for the first time`);
       }
-      // Remove the collected station
+      // Remove the collected station and auto-redeploy if no setup inputs needed
       next.stations.splice(index, 1);
+      if (!def.setupInputs || def.setupInputs.length === 0) {
+        // Auto-reset: re-deploy the station immediately (no resources consumed)
+        next.stations.push({
+          stationId: def.id,
+          deployedAt: Date.now(),
+        });
+      }
       return next;
     });
   }, []);
