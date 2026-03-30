@@ -449,6 +449,11 @@
       "label": "Well"
     },
     {
+      "id": "building:outrigger_canoe",
+      "type": "building",
+      "label": "Outrigger Canoe"
+    },
+    {
       "id": "skill:woodworking:10",
       "type": "skill_level",
       "label": "Woodworking Lv10",
@@ -929,6 +934,12 @@
       "category": "construction"
     },
     {
+      "id": "recipe:build_outrigger",
+      "type": "recipe",
+      "label": "Fit Outrigger & Sail",
+      "category": "construction"
+    },
+    {
       "id": "recipe:knap_obsidian_blade",
       "type": "recipe",
       "label": "Obsidian Blade",
@@ -1076,6 +1087,12 @@
       "id": "expedition:dugout_voyage",
       "type": "expedition",
       "label": "Voyage by Dugout",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:oceanic_voyage",
+      "type": "expedition",
+      "label": "Oceanic Voyage",
       "category": "navigation"
     },
     {
@@ -2196,6 +2213,36 @@
       "from": "recipe:assemble_dugout",
       "to": "skill:construction",
       "relation": "trains"
+    },
+    {
+      "from": "recipe:build_outrigger",
+      "to": "building:outrigger_canoe",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:sail",
+      "to": "recipe:build_outrigger",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rope",
+      "to": "recipe:build_outrigger",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_outrigger",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_outrigger",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:8",
+      "to": "recipe:build_outrigger",
+      "relation": "requires_skill"
     },
     {
       "from": "recipe:knap_obsidian_blade",
@@ -3433,6 +3480,86 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:oceanic_voyage",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "building:outrigger_canoe",
+      "to": "expedition:oceanic_voyage",
+      "relation": "requires_vessel"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:voyage_provisions",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:oceanic_voyage",
+      "relation": "consumes"
+    },
+    {
       "from": "station:deploy_basket_trap",
       "to": "resource:small_fish",
       "relation": "produces"
@@ -3870,22 +3997,10 @@
       "skill:foraging:5"
     ],
     "deadEnds": [
-      "resource:rope",
-      "resource:sail",
       "tool:crucible"
     ],
     "unreachable": [],
     "warnings": [
-      {
-        "type": "dead_end",
-        "nodeId": "resource:rope",
-        "message": "Rope is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:sail",
-        "message": "Sail is produced but never used as input"
-      },
       {
         "type": "dead_end",
         "nodeId": "tool:crucible",
@@ -4065,6 +4180,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4091,6 +4207,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4117,6 +4234,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4143,6 +4261,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4169,6 +4288,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4195,6 +4315,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4208,7 +4329,8 @@
         {
           "level": 8,
           "unlocks": [
-            "recipe:build_hammock"
+            "recipe:build_hammock",
+            "recipe:build_outrigger"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
@@ -4221,6 +4343,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4247,6 +4370,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4273,6 +4397,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4299,6 +4424,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4325,6 +4451,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4351,6 +4478,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",
@@ -4377,6 +4505,7 @@
             "recipe:build_fenced_perimeter",
             "recipe:build_raft",
             "recipe:assemble_dugout",
+            "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
             "recipe:build_cleared_plot",

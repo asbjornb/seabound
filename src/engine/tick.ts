@@ -27,6 +27,7 @@ export interface CompletionEvent {
   newResources?: string[]; // resource IDs seen for the first time
   buildingBuilt?: string; // building ID if a building was constructed
   toolCrafted?: string; // tool ID if a tool was crafted
+  victory?: boolean; // true if this completion wins the game
 }
 
 /** Check if any output resource for the current action is at storage capacity. */
@@ -456,6 +457,12 @@ function applyExpeditionCompletion(
   skill.level = levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
 
+  // Victory expeditions win the game
+  if (def.victory) {
+    state.victory = true;
+    state.currentAction = null;
+  }
+
   return {
     actionName: def.name,
     drops,
@@ -465,6 +472,7 @@ function applyExpeditionCompletion(
     biomeDiscovery: outcome.biomeDiscovery,
     expeditionMessage: outcome.description,
     newResources: newResources.length > 0 ? newResources : undefined,
+    victory: def.victory,
   };
 }
 

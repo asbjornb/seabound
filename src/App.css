@@ -1365,6 +1365,98 @@ body {
 .phase-chapter-fire .chapter-name { color: #f0a050; text-shadow: 0 0 24px rgba(240, 160, 80, 0.5); }
 .phase-chapter-stone .chapter-name { color: #a0a8b8; text-shadow: 0 0 24px rgba(160, 168, 184, 0.4); }
 .phase-chapter-maritime .chapter-name { color: #50b0d0; text-shadow: 0 0 24px rgba(80, 176, 208, 0.5); }
+.phase-chapter-escape .chapter-name { color: #f0d060; text-shadow: 0 0 24px rgba(240, 208, 96, 0.6); }
+
+/* ═══════════════════════════════════════
+   Victory Screen
+   ═══════════════════════════════════════ */
+
+.victory-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  transition: background 1.2s ease, backdrop-filter 1.2s ease;
+}
+
+.victory-overlay.visible {
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.victory-card {
+  text-align: center;
+  padding: 40px 36px;
+  max-width: 360px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+}
+
+.victory-overlay.visible .victory-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.victory-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f0d060;
+  text-shadow: 0 0 32px rgba(240, 208, 96, 0.6);
+  letter-spacing: 0.06em;
+}
+
+.victory-divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f0d060, transparent);
+  margin: 16px auto;
+}
+
+.victory-message {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 28px;
+}
+
+.victory-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.victory-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.victory-stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f0d060;
+}
+
+.victory-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.victory-thanks {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+  opacity: 0.7;
+}
 
 /* ═══════════════════════════════════════
    Feedback Banner

@@ -52,4 +52,13 @@ export const PHASES: PhaseDef[] = [
       { type: "has_building", id: "dugout" },
     ],
   },
+  {
+    id: "escape",
+    name: "Escape",
+    tagline: "The open ocean awaits.",
+    order: 5,
+    conditions: [
+      { type: "has_building", id: "outrigger_canoe" },
+    ],
+  },
 ];
