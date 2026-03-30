@@ -325,7 +325,7 @@ export default function App() {
           )}
 
           {readyStationCount > 0 ? (
-            <div className="station-ready-banner" onClick={() => setTab("deploy")}>
+            <div className="station-ready-banner" onClick={() => setTab("tend")}>
               {readyStationCount === 1
                 ? "1 station ready to collect!"
                 : `${readyStationCount} stations ready to collect!`}
@@ -371,7 +371,7 @@ export default function App() {
                 onCraft={game.startCraft}
               />
             )}
-            {activeTab === "deploy" && (
+            {activeTab === "tend" && (
               <StationsPanel
                 availableStations={game.availableStations}
                 state={game.state}

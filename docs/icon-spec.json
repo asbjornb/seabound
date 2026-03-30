@@ -1108,6 +1108,18 @@
       "tags": ["ui", "tab", "always_visible"]
     },
     {
+      "id": "tab_tend",
+      "object": "Seedling sprouting from tilled soil",
+      "description": "A small green seedling with two leaves pushing up from a mound of dark earth. A subtle woven basket trap outline in the background. Represents passive stations: farm plots, traps, orchards — things you set and tend.",
+      "use": "Bottom tab bar, visible when stations unlocked",
+      "theme": "bamboo",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "always_visible"]
+    },
+    {
       "id": "tab_build",
       "object": "Shelter / tent frame",
       "description": "A simple shelter frame silhouette — two sticks leaning together with a crossbar. Iconic, minimal, recognizable.",
