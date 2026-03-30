@@ -93,6 +93,7 @@ Over time your camp grows into a small settlement with workshops, farms, and spe
 
 ## Design Goals
 
+- **Single playthrough** — no prestige, rebirth, or reset loops; one continuous run from castaway to thriving settlement (challenge modes may come later, but no repeating reset cycle)
 - Focus on satisfying progression
 - No artificial waiting or pay-to-skip mechanics
 - Deep crafting and resource chains
