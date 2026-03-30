@@ -218,7 +218,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     durationMs: 30000,
     waterCost: 10,
     xpGain: 100,
-    inputs: [{ resourceId: "voyage_provisions", amount: 2 }],
+    inputs: [{ resourceId: "voyage_provisions", amount: 10 }],
     requiredVessel: "outrigger_canoe",
     victory: true,
     outcomes: [
