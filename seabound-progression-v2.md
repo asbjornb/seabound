@@ -26,7 +26,7 @@
 - **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +10 all, Drying Rack +10 dried, Camp Fire +10 food, Stone Hearth +10 food, Woven Basket +1 non-food/non-large per basket up to 20).
 - **Action switching** — Starting a new action cancels the current one with full resource refund.
 - **Discovery-driven progression** — Core progression gated by biome discovery and crafting chains, not skill levels. Skill levels gate optional efficiency improvements (better yields, advanced techniques). Gather panel grouped by biome to reinforce exploration as progression.
-- **10 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation, Preservation.
+- **9 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation.
 - **Weaving recipes** — Weave Basket (palm fronds ×5 + cordage ×3 → woven basket building, repeatable).
 - **Cooking recipes** — Cook Fish, Cook Crab (Cooking 2), Cook Large Fish (Cooking 4), Cook Root Vegetable (Cooking 3), Cook Taro (Cooking 5), Roast Breadfruit (Cooking 8). All require camp fire. Stone Hearth removes dry grass kindling from cooking recipes.
 - **Voyage Provisions** — Pack 5 food + sealed clay jar into voyage provisions. Efficient expedition fuel.
@@ -77,7 +77,7 @@ Fish traps, crop plots, and smoking racks are semi-idle: the player sets them, a
 Biomes are discovered through expeditions that have RNG outcomes. You might find the bamboo grove on your first short scout or your fifth. This is intentional — like hunting for a jungle biome in Minecraft. Navigation skill improves your odds and outcomes but is never a hard gate. Item and vessel gates (raft, dugout, food, water) are the real gates.
 
 **Food and water are expedition fuel.**
-No survival meters. No death. But longer expeditions require food and water — making fishing, farming, and preservation permanently relevant rather than just early-game scaffolding.
+No survival meters. No death. But longer expeditions require food and water — making fishing and farming permanently relevant rather than just early-game scaffolding.
 
 ---
 
@@ -126,9 +126,9 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 | **Construction** | Structures, buildings, platforms, stone-work |
 | **Farming** | Plot clearing, planting, tending, harvesting, seed saving |
 | **Navigation** | Improves expedition outcomes — discovery chance, loot quality, risk reduction |
-| **Preservation** | Drying, smoking, pottery firing, sealing, fermenting |
-
 > **Smithing** is designed for late game (smelting, casting, forging metal tools) but not yet added as a skill. Will unlock when metal content exists.
+>
+> **Preservation** was considered as a skill (drying, smoking, fermenting, sealing) but removed — its recipes are covered by Cooking and Crafting instead. May return if it gets enough distinct content to justify a standalone skill.
 
 ### Notes on Specific Skills
 
@@ -141,8 +141,6 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 - Quality tier of loot table rolls
 - Reduction of bad-weather risk on long voyages
 - Chance of finding multiple things on a single expedition
-
-**Cooking** is a separate skill from Preservation. Cooking covers preparing food over fire (grilling, roasting, boiling). Preservation covers drying, smoking, fermenting, and sealing — the food-longevity skills. Both require fire access but serve different purposes.
 
 **Smithing** unlocks when the player acquires ore (found via water expeditions) and builds a crucible. It's a full mid-to-late game skill arc with its own progression: copper → bronze → iron. Not yet in the code as a skill.
 
@@ -164,7 +162,6 @@ Skill level gates are reserved for **optional/efficiency** unlocks, not core pro
 | Weaving 50 | Sail cloth recipe | Advanced technique | *Not yet built* |
 | Construction 25 | Stone tidal weir blueprint | Advanced technique | *Not yet built* |
 | Cooking 12 | Sealed clay jar recipe | Advanced technique | ✅ |
-| Preservation 18 | Fermentation pot recipe | Advanced technique | *Not yet built* |
 | Construction 15 | Crucible recipe | Advanced technique | ✅ |
 
 **Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade.
@@ -374,7 +371,7 @@ Wild crops are found via expeditions, not always foraging. When a crop is found 
 
 ### Seed Saving (Farming 20)
 
-Once unlocked, players can save seeds from harvested crops. Sealed clay jars required for storage (Preservation 15). Replanting saved seeds yields slightly better results — compounds over generations, simulating slow domestication.
+Once unlocked, players can save seeds from harvested crops. Sealed clay jars required for storage. Replanting saved seeds yields slightly better results — compounds over generations, simulating slow domestication.
 
 ### Crop Roster
 
