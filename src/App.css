@@ -297,15 +297,56 @@ body {
   border-color: var(--accent);
 }
 
-.morale-tooltip {
-  display: inline-block;
+.morale-tooltip-expanded {
+  width: 100%;
+  cursor: pointer;
+}
+
+.morale-explainer {
   font-size: 0.78rem;
   color: var(--text-dim);
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 8px;
-  cursor: pointer;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.morale-explainer-header {
+  color: var(--text);
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+}
+
+.morale-explainer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.morale-explainer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  opacity: 0.7;
+}
+
+.morale-explainer-note {
+  color: var(--success);
+}
+
+.morale-explainer-active {
+  color: var(--success);
+}
+
+.morale-explainer-hint {
+  font-size: 0.65rem;
+  text-align: center;
+  opacity: 0.4;
+  margin-top: 2px;
 }
 
 .morale-chip.low-morale .amount {
