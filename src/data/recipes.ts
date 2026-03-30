@@ -584,6 +584,7 @@ export const RECIPES: RecipeDef[] = [
       "Fit crossbeams and seal the hull. A proper canoe for near-shore waters.",
     skillId: "construction",
     panel: "craft",
+    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "shaped_hull", amount: 1 },
       { resourceId: "cordage", amount: 6 },
