@@ -1,4 +1,4 @@
-import { getResources, getStationById } from "../data/registry";
+import { getBuildings, getResources, getStationById } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
 
@@ -25,6 +25,7 @@ export function StationsPanel({
 }: Props) {
   const now = Date.now();
   const RESOURCES = getResources();
+  const BUILDINGS = getBuildings();
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
@@ -113,6 +114,9 @@ export function StationsPanel({
             ).length;
             const atMax = currentCount >= maxDeployed;
 
+            // Hide single-deploy stations (no building slots) when already deployed
+            if (atMax && !station.maxDeployedPerBuildings) return null;
+
             const canAffordInputs =
               !station.setupInputs ||
               station.setupInputs.every(
@@ -136,6 +140,21 @@ export function StationsPanel({
                   </span>
                 </div>
                 <div className="action-desc">{station.description}</div>
+                {station.maxDeployedPerBuildings && (
+                  <div className="station-building-info">
+                    Uses:{" "}
+                    {station.maxDeployedPerBuildings.map((bid, i) => {
+                      const count = getBuildingCount(state, bid);
+                      return (
+                        <span key={bid}>
+                          {i > 0 && ", "}
+                          {BUILDINGS[bid]?.name ?? bid}
+                          {count > 0 && ` (${count})`}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
                 {station.setupInputs && (
                   <div className="recipe-inputs">
                     Needs:{" "}
