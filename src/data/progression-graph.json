@@ -170,8 +170,7 @@
     {
       "id": "resource:voyage_provisions",
       "type": "resource",
-      "label": "Voyage Provisions",
-      "category": "food"
+      "label": "Voyage Provisions"
     },
     {
       "id": "resource:pandanus_cutting",
@@ -2955,11 +2954,6 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:voyage_provisions",
-      "to": "recipe:pack_voyage_provisions",
-      "relation": "consumes"
-    },
-    {
       "from": "recipe:pack_voyage_provisions",
       "to": "skill:cooking",
       "relation": "trains"
@@ -3110,11 +3104,6 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:voyage_provisions",
-      "to": "expedition:explore_beach",
-      "relation": "consumes"
-    },
-    {
       "from": "expedition:explore_beach",
       "to": "biome:coconut_grove",
       "relation": "discovers"
@@ -3196,11 +3185,6 @@
     },
     {
       "from": "resource:roasted_breadfruit",
-      "to": "expedition:explore_interior",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:voyage_provisions",
       "to": "expedition:explore_interior",
       "relation": "consumes"
     },
@@ -3306,11 +3290,6 @@
     },
     {
       "from": "resource:roasted_breadfruit",
-      "to": "expedition:sail_nearby_island",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:voyage_provisions",
       "to": "expedition:sail_nearby_island",
       "relation": "consumes"
     },
@@ -3435,11 +3414,6 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:voyage_provisions",
-      "to": "expedition:dugout_voyage",
-      "relation": "consumes"
-    },
-    {
       "from": "resource:fresh_water",
       "to": "expedition:dugout_voyage",
       "relation": "consumes"
@@ -3490,72 +3464,12 @@
       "relation": "requires_vessel"
     },
     {
-      "from": "resource:coconut",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:small_fish",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:crab",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:large_fish",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_fish",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_crab",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_large_fish",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:root_vegetable",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_root_vegetable",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_taro",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:banana",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:roasted_breadfruit",
+      "from": "resource:fresh_water",
       "to": "expedition:oceanic_voyage",
       "relation": "consumes"
     },
     {
       "from": "resource:voyage_provisions",
-      "to": "expedition:oceanic_voyage",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:fresh_water",
       "to": "expedition:oceanic_voyage",
       "relation": "consumes"
     },
@@ -3818,7 +3732,6 @@
       "resource:cooked_taro",
       "resource:banana",
       "resource:roasted_breadfruit",
-      "resource:voyage_provisions",
       "biome:coconut_grove",
       "resource:fresh_water",
       "recipe:char_log_interior",
@@ -3840,7 +3753,6 @@
       "recipe:cook_taro",
       "station:grow_bananas",
       "recipe:roast_breadfruit",
-      "recipe:pack_voyage_provisions",
       "expedition:explore_beach",
       "action:collect_fresh_water",
       "resource:large_log",
@@ -3874,8 +3786,6 @@
       "resource:banana_shoot",
       "resource:breadfruit",
       "skill:cooking:8",
-      "resource:sealed_clay_jar",
-      "building:firing_pit",
       "biome:jungle_interior",
       "resource:fired_clay_pot",
       "action:fell_large_tree",
@@ -3896,8 +3806,6 @@
       "station:cultivate_taro",
       "recipe:build_well",
       "station:grow_breadfruit",
-      "recipe:seal_clay_jar",
-      "recipe:build_firing_pit",
       "recipe:fire_clay_pot",
       "skill:woodworking:10",
       "tool:stone_axe",
@@ -3917,8 +3825,8 @@
       "skill:construction:6",
       "skill:farming:12",
       "resource:breadfruit_cutting",
-      "skill:cooking:12",
       "resource:shaped_clay_pot",
+      "building:firing_pit",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
@@ -3928,6 +3836,7 @@
       "recipe:strike_stone_flake",
       "action:dig_clay",
       "recipe:shape_clay_pot",
+      "recipe:build_firing_pit",
       "resource:stone_blade",
       "skill:construction:5",
       "skill:farming:8",

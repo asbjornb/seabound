@@ -193,9 +193,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
   voyage_provisions: {
     id: "voyage_provisions",
     name: "Voyage Provisions",
-    description: "Sealed jars of preserved food. Enough for a long sea voyage.",
-    tags: ["food"],
-    foodValue: 8,
+    description: "Sealed jars of preserved food. Required for long ocean voyages.",
   },
 
   // Pandanus Fiber Chain

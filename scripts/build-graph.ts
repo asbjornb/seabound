@@ -314,6 +314,12 @@ for (const e of EXPEDITIONS) {
   if (e.waterCost) {
     addEdge({ from: `resource:fresh_water`, to: expId, relation: "consumes" });
   }
+  // Specific resource inputs
+  if (e.inputs) {
+    for (const inp of e.inputs) {
+      addEdge({ from: `resource:${inp.resourceId}`, to: expId, relation: "consumes" });
+    }
+  }
 
   // Required biomes to see expedition
   if (e.requiredBiomes) {

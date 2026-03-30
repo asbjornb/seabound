@@ -12,6 +12,7 @@ interface Props {
 function canAfford(exp: ExpeditionDef, state: GameState): boolean {
   if (exp.foodCost && getTotalFood(state) < exp.foodCost) return false;
   if (exp.waterCost && getTotalWater(state) < exp.waterCost) return false;
+  if (exp.inputs?.some((inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount)) return false;
   return true;
 }
 
@@ -139,6 +140,23 @@ export function ExpeditionPanel({
                     {exp.waterCost} water ({getTotalWater(state)} available)
                   </span>
                 )}
+              </div>
+            )}
+            {exp.inputs && exp.inputs.length > 0 && (
+              <div className="action-requires">
+                Requires:{" "}
+                {exp.inputs.map((inp, i) => {
+                  const have = state.resources[inp.resourceId] ?? 0;
+                  const name = RESOURCES[inp.resourceId]?.name ?? inp.resourceId;
+                  return (
+                    <span key={inp.resourceId}>
+                      {i > 0 && ", "}
+                      <span style={{ color: have < inp.amount ? "#e74c3c" : undefined }}>
+                        {inp.amount}x {name} ({have} available)
+                      </span>
+                    </span>
+                  );
+                })}
               </div>
             )}
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>

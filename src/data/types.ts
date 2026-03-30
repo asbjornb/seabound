@@ -188,6 +188,7 @@ export interface ExpeditionDef {
   requiredVessel?: BuildingId;
   requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
   hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
+  inputs?: { resourceId: ResourceId; amount: number }[]; // consumed each cycle (e.g. voyage provisions)
   outcomes: ExpeditionOutcome[];
   xpGain: number;
   victory?: boolean; // if true, completing this expedition wins the game

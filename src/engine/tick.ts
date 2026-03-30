@@ -226,8 +226,24 @@ export function processTick(state: GameState, now: number): TickResult {
         state.currentAction = null;
         break;
       }
+      // Check resource inputs
+      if (def.inputs) {
+        const canAffordInputs = def.inputs.every(
+          (inp) => (state.resources[inp.resourceId] ?? 0) >= inp.amount
+        );
+        if (!canAffordInputs) {
+          state.currentAction = null;
+          break;
+        }
+      }
       if (def.foodCost) deductFood(state, def.foodCost);
       if (def.waterCost) deductWater(state, def.waterCost);
+      // Deduct resource inputs
+      if (def.inputs) {
+        for (const inp of def.inputs) {
+          state.resources[inp.resourceId] = (state.resources[inp.resourceId] ?? 0) - inp.amount;
+        }
+      }
 
       remaining -= effectiveExpDuration;
       const event = applyExpeditionCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
@@ -236,8 +252,12 @@ export function processTick(state: GameState, now: number): TickResult {
 
     // Stop if player can't afford the next expedition cycle
     if (state.currentAction) {
-      if ((def.foodCost && getTotalFood(state) < def.foodCost) ||
-          (def.waterCost && getTotalWater(state) < def.waterCost)) {
+      const cantAffordFood = def.foodCost && getTotalFood(state) < def.foodCost;
+      const cantAffordWater = def.waterCost && getTotalWater(state) < def.waterCost;
+      const cantAffordInputs = def.inputs?.some(
+        (inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount
+      );
+      if (cantAffordFood || cantAffordWater || cantAffordInputs) {
         state.currentAction = null;
       } else {
         state.currentAction.startedAt = now - remaining;
