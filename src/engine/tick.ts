@@ -1,4 +1,4 @@
-import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus } from "../data/milestones";
+import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus, getOutputChanceBonus } from "../data/milestones";
 import {
   getActionById,
   getBuildings,
@@ -370,23 +370,33 @@ function applyCraftCompletion(
       newResources.push(def.output.resourceId);
       state.discoveredResources.push(def.output.resourceId);
     }
-    let outputAmount = def.output.amount;
 
-    // Double output milestone check
+    // Output chance check (e.g. pottery breakage)
+    const baseChance = def.outputChance ?? 1;
     const skill = state.skills[def.skillId];
-    const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
-    if (doubleChance > 0 && Math.random() < doubleChance) {
-      outputAmount *= 2;
-    }
+    const chanceBonus = getOutputChanceBonus(def.skillId, skill.level, def.id);
+    const finalChance = Math.min(baseChance + chanceBonus, 1);
+    if (finalChance < 1 && Math.random() >= finalChance) {
+      // Output failed (e.g. pot cracked in the fire) — inputs consumed, no output
+      drops.push({ name: def.output.resourceId, amount: 0 });
+    } else {
+      let outputAmount = def.output.amount;
 
-    // Tool output bonus (+1 chance)
-    const toolBonusChance = getToolOutputBonusChance(state, def.id);
-    if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
-      outputAmount += 1;
-    }
+      // Double output milestone check
+      const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
+      if (doubleChance > 0 && Math.random() < doubleChance) {
+        outputAmount *= 2;
+      }
 
-    addResource(state, def.output.resourceId, outputAmount);
-    drops.push({ name: def.output.resourceId, amount: outputAmount });
+      // Tool output bonus (+1 chance)
+      const toolBonusChance = getToolOutputBonusChance(state, def.id);
+      if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
+        outputAmount += 1;
+      }
+
+      addResource(state, def.output.resourceId, outputAmount);
+      drops.push({ name: def.output.resourceId, amount: outputAmount });
+    }
   }
   // else: XP-only recipe (e.g. Maintain Camp) — no output to process
 

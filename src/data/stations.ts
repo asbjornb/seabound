@@ -120,12 +120,12 @@ export const STATIONS: StationDef[] = [
     description:
       "Submerge pandanus leaves in the soaking pit. Water breaks down the fibers over time — no active work needed.",
     skillId: "weaving",
-    durationMs: 240000, // 4 minutes
-    setupInputs: [{ resourceId: "pandanus_leaves", amount: 5 }],
+    durationMs: 300000, // 5 minutes
+    setupInputs: [{ resourceId: "pandanus_leaves", amount: 10 }],
     yields: [
-      { resourceId: "retted_pandanus", amount: 5 },
+      { resourceId: "retted_pandanus", amount: 10 },
     ],
-    xpGain: 30,
+    xpGain: 40,
     maxDeployedPerBuildings: ["soaking_pit"],
   },
 

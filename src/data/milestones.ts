@@ -266,6 +266,14 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 9,
+      description: "Clay wedging — kneading removes air pockets, pots no longer crack in the fire",
+      effects: [
+        { type: "output_chance_bonus", recipeId: "fire_clay_pot", bonus: 0.15 },
+        { type: "output_chance_bonus", recipeId: "kiln_fire_pot", bonus: 0.15 },
+      ],
+    },
+    {
       level: 10,
       description: "Seasoned crafter — all crafting recipes 10% faster",
       effects: [
@@ -456,6 +464,28 @@ export function getDoubleOutputChance(
     }
   }
   return chance;
+}
+
+/**
+ * Compute total output chance bonus for a specific recipe.
+ * Added to the recipe's base outputChance (default 1.0).
+ */
+export function getOutputChanceBonus(
+  skillId: SkillId,
+  skillLevel: number,
+  recipeId: string
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let bonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "output_chance_bonus" && e.recipeId === recipeId) {
+        bonus += e.bonus;
+      }
+    }
+  }
+  return bonus;
 }
 
 /**

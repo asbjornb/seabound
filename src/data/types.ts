@@ -86,6 +86,7 @@ export type MilestoneEffect =
   | { type: "drop_chance"; actionId: string; resourceId: ResourceId; bonus: number }
   | { type: "duration"; actionId: string; multiplier: number } // e.g. 0.9 = 10% faster; actionId "*" = all actions in this skill
   | { type: "double_output"; chance: number; recipeId?: string } // e.g. 0.05 = 5% chance to double craft output; recipeId scopes to one recipe
+  | { type: "output_chance_bonus"; recipeId: string; bonus: number } // increase outputChance (e.g. 0.15 raises 0.85 to 1.0)
   | { type: "station_input_reduce"; stationId: string; resourceId: ResourceId; newAmount: number } // reduce setup input cost
   | { type: "station_guaranteed_drop"; stationId: string; resourceId: ResourceId; minAmount: number } // guarantee minimum drop
   | { type: "expedition_biome_bonus"; bonus: number } // flat weight bonus added to undiscovered biome outcomes
@@ -158,6 +159,7 @@ export interface RecipeDef {
   inputs: RecipeInput[];
   tagInputs?: TagInput[]; // tag-based inputs (e.g. "5 different foods")
   output?: { resourceId: ResourceId; amount: number };
+  outputChance?: number; // 0-1, chance the output is produced (inputs always consumed). Defaults to 1.
   toolOutput?: ToolId; // if set, crafting grants this tool instead of a resource
   durationMs: number;
   requiredSkillLevel?: number;

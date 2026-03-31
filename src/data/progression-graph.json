@@ -2546,7 +2546,7 @@
       "relation": "requires_skill"
     },
     {
-      "from": "building:kiln",
+      "from": "building:firing_pit",
       "to": "recipe:build_pottery_wheel",
       "relation": "requires_building"
     },

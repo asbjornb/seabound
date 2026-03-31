@@ -784,7 +784,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cordage", amount: 3 },
     ],
     buildingOutput: "pottery_wheel",
-    requiredBuildings: ["kiln"],
+    requiredBuildings: ["firing_pit"],
     durationMs: 15000,
     xpGain: 50,
   },
@@ -841,7 +841,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "fire_clay_pot",
     name: "Fire Clay Pot",
-    description: "Fire a shaped pot in the firing pit to harden it.",
+    description: "Fire a shaped pot in the firing pit. About 1 in 7 crack from uneven heat.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
@@ -849,6 +849,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "driftwood_branch", amount: 2 },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
+    outputChance: 0.85,
     requiredBuildings: ["firing_pit"],
     durationMs: 8000,
     repeatable: true,
@@ -858,7 +859,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "kiln_fire_pot",
     name: "Kiln-Fire Pot",
-    description: "Fire pots in the enclosed kiln. Even heat means faster, more reliable results.",
+    description: "Fire pots in the enclosed kiln. Even heat means fewer cracks.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
@@ -866,6 +867,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "driftwood_branch", amount: 1 },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
+    outputChance: 0.85,
     requiredBuildings: ["kiln"],
     durationMs: 5000,
     repeatable: true,

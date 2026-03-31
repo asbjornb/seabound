@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getDoubleOutputChance } from "../data/milestones";
+import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
@@ -218,6 +218,18 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
                       {(() => {
+                        const baseChance = recipe.outputChance ?? 1;
+                        if (baseChance < 1) {
+                          const bonus = getOutputChanceBonus(
+                            recipe.skillId,
+                            state.skills[recipe.skillId].level,
+                            recipe.id
+                          );
+                          const finalChance = Math.min(baseChance + bonus, 1);
+                          if (finalChance < 1) {
+                            return ` — ${Math.round(finalChance * 100)}% success`;
+                          }
+                        }
                         const doubleChance = getDoubleOutputChance(
                           recipe.skillId,
                           state.skills[recipe.skillId].level,
