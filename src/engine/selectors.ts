@@ -23,7 +23,6 @@ import {
   getToolSpeedMultiplier,
   getTotalFood,
   hasTool,
-  hasBuilding,
   hasVessel,
 } from "./gameState";
 
