@@ -217,7 +217,7 @@ The DSL describes every icon slot in the game. Format:
   dugout_voyage       : "dugout canoe on open ocean, sunrise horizon"          [md] {phase:maritime}
 ```
 
-### Phases / Chapter Banners (5 banners + 5 icons)
+### Phases / Chapter Banners (6 banners + 5 icons)
 
 ```
 @category phases
@@ -235,6 +235,7 @@ The DSL describes every icon slot in the game. Format:
   fire_banner         : "campfire at night, sparks rising, dark jungle behind" [banner]
   stone_banner        : "stone workshop scene, clay pots drying, axes on rack" [banner]
   maritime_banner     : "dugout canoe at shore, open ocean horizon at sunset"  [banner]
+  voyage_banner       : "outrigger canoe with sail, sunrise on open ocean"     [banner]
 ```
 
 ### Notification & Discovery Types (6 icons)
@@ -291,7 +292,7 @@ The DSL describes every icon slot in the game. Format:
 | Tabs | 6 |
 | Expeditions | 4 |
 | Phases (icons) | 5 |
-| Phases (banners) | 5 |
+| Phases (banners) | 6 |
 | Notifications | 6 |
 | UI Chrome | 8 |
 | Stations | 5 |
@@ -329,7 +330,26 @@ comment         = "#" TEXT
 | `sm` | 20–24px | Inline resource counts, inventory rows, toast icons |
 | `md` | 32–48px | Card headers, tab bar, skill panels, building cards |
 | `lg` | 64px+ | Biome feature art, expedition cards |
-| `banner` | 300x120+ | Chapter card full-width illustration |
+| `banner` | 1536x256 | Chapter card full-width illustration (see [Banner Generation](#banner-generation)) |
+
+### Banner Generation
+
+Chapter banners are generated using **black-forest-labs/flux-2-pro** on [Replicate](https://replicate.com).
+
+| Setting | Value |
+|---|---|
+| Model | `black-forest-labs/flux-2-pro` |
+| Width | 1536 |
+| Height | 256 |
+| Output format | webp |
+
+Each phase has a prompt file at `images/phase-{order}-{id}/prompt.txt`. The prompt follows a consistent template:
+
+1. **Line 1** — Shared style prefix: `Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background`
+2. **Scene description** — Phase-specific scene with hex color values for sky, key elements, and accents
+3. **Edge notes** — Bottom fades to near-black (#0c1a1a), top fades to the phase sky color (used as `--phase-sky` in CSS)
+
+Save the output as `banner.webp` in the same directory, then import it in `src/components/IslandBanner.tsx`.
 
 ### Integration with `icons.ts`
 
