@@ -901,6 +901,28 @@ buildings:
     size: 64
     tags: [phase1, building, storage, weaving]
 
+  - id: log_rack
+    object: "A-frame log rack"
+    description: "A sturdy A-frame rack made from driftwood and bamboo, with logs and branches leaning against it. Keeps lumber dry and organized."
+    use: "Settlement panel, building card"
+    theme: bamboo
+    category: building_storage
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [phase1, building, storage, construction]
+
+  - id: clay_storage_jar
+    object: "Sealed clay storage jar"
+    description: "A round clay jar with a fitted lid, sealed with clay slip. Slightly taller than a fired clay pot. Keeps food fresh."
+    use: "Settlement panel, building card"
+    theme: clay
+    category: building_storage
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [phase2, building, storage, clay]
+
   - id: fenced_perimeter
     object: "Bamboo fence section"
     description: "A section of bamboo stake fence tied with cordage. Sturdy, territorial. Shows protection and permanence."
