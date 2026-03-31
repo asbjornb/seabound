@@ -38,8 +38,9 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Fenced Perimeter",
     description:
       "A bamboo fence around camp. Keeps things organized and critters out.",
-    unlocks: "+5 max woven baskets",
+    unlocks: "+5 max woven baskets, +5 storage for large items",
     maxCountBonuses: [{ buildingId: "woven_basket", amount: 5 }],
+    storageBonus: [{ tag: "large", amount: 5 }],
   },
   firing_pit: {
     id: "firing_pit",
@@ -115,13 +116,30 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
     unlocks: "Harvest pandanus leaves without replanting",
   },
+  log_rack: {
+    id: "log_rack",
+    name: "Log Rack",
+    description:
+      "A sturdy A-frame rack for leaning logs and lumber against. Keeps them dry and off the ground.",
+    unlocks: "+10 storage for large items",
+    storageBonus: [{ tag: "large", amount: 10 }],
+  },
+  clay_storage_jar: {
+    id: "clay_storage_jar",
+    name: "Clay Storage Jar",
+    description:
+      "A sealed clay jar for keeping provisions fresh. Critters can't get in.",
+    unlocks: "+1 food storage per jar",
+    storageBonus: [{ tag: "food", amount: 1 }],
+    maxCount: 5,
+  },
   charcoal_kiln: {
     id: "charcoal_kiln",
     name: "Charcoal Kiln",
     description:
       "A clay-sealed mound for slow-burning logs into charcoal. An ancient fuel upgrade.",
     unlocks: "Charcoal station — bulk fuel from large logs; charcoal replaces driftwood in fire recipes",
-    storageBonus: [{ amount: 20 }],
+    storageBonus: [{ tag: "charcoal", amount: 20 }],
   },
   soaking_pit: {
     id: "soaking_pit",
@@ -159,8 +177,9 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Thatched Hut",
     description:
       "A sturdy shelter with bamboo frame and palm-thatch roof. Shade, warmth, and real comfort.",
-    unlocks: "Comfort — slows morale decay by 50%",
+    unlocks: "Comfort — slows morale decay by 50%, +5 food storage",
     comfortDecayReduction: 0.5,
+    storageBonus: [{ tag: "food", amount: 5 }],
   },
   well: {
     id: "well",
