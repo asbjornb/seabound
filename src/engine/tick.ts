@@ -39,7 +39,11 @@ function isOutputFull(state: GameState): boolean {
     const def = getActionById(action.actionId);
     if (!def) return false;
     const fullAtStart = action.fullAtStart ?? [];
-    const relevant = def.drops.filter((d) => (!d.chance || d.chance >= 1) && !fullAtStart.includes(d.resourceId));
+    const guaranteed = def.drops.filter((d) => (!d.chance || d.chance >= 1) && !fullAtStart.includes(d.resourceId));
+    // If there are guaranteed drops, check those; otherwise check all probabilistic drops
+    const relevant = guaranteed.length > 0
+      ? guaranteed
+      : def.drops.filter((d) => !fullAtStart.includes(d.resourceId));
     if (relevant.length === 0) return false;
     return relevant.every((d) => isAtStorageCap(state, d.resourceId));
   }
