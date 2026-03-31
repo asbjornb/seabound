@@ -381,6 +381,26 @@ function applyCraftCompletion(
       if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
         outputAmount += 1;
       }
+    } else {
+      // noDoubleOutput recipes get an instant free recraft instead of doubling,
+      // but only if the player can afford the inputs again (e.g. has another pot)
+      const skill = state.skills[def.skillId];
+      const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
+      const toolBonusChance = getToolOutputBonusChance(state, def.id);
+      const totalChance = Math.min(1, doubleChance + toolBonusChance);
+      if (totalChance > 0 && Math.random() < totalChance) {
+        const effectiveInputs = getEffectiveInputs(def, state);
+        const canAfford = effectiveInputs.every(
+          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+        );
+        if (canAfford) {
+          for (const input of effectiveInputs) {
+            state.resources[input.resourceId] =
+              (state.resources[input.resourceId] ?? 0) - input.amount;
+          }
+          outputAmount += def.output.amount;
+        }
+      }
     }
 
     addResource(state, def.output.resourceId, outputAmount);
