@@ -106,6 +106,19 @@
       "tags": ["phase1b", "fire", "crafted"]
     },
     {
+      "id": "charcoal",
+      "object": "Chunk of charcoal",
+      "description": "A dense, black lump of charcoal with subtle wood grain texture. Matte black surface with faint orange-red glow at cracks, as if still warm inside.",
+      "use": "Inventory, fuel for cooking and firing",
+      "theme": "fire",
+      "category": "fuel",
+      "chain": "wood_heavy",
+      "chainRole": "derived",
+      "chainNote": "Product of slow-burning large logs — same dark tones as charred_log but smaller, chunkier",
+      "size": 64,
+      "tags": ["phase2", "fire", "crafted"]
+    },
+    {
       "id": "shaped_hull",
       "object": "Carved canoe hull",
       "description": "Smooth hollowed-out log shaped into a boat hull. Tool marks visible. Same wood tone as large_log but refined.",
@@ -875,6 +888,19 @@
       "chainNote": "Evolution of firing pit — enclosed clay structure, more controlled fire",
       "size": 64,
       "tags": ["phase2", "building", "fire", "clay"]
+    },
+    {
+      "id": "charcoal_kiln",
+      "object": "Clay-sealed charcoal mound",
+      "description": "A low dome-shaped mound of clay-sealed earth with small vent holes. Thin wisps of smoke escaping from vents. Darker, earthier than the pottery kiln — more industrial.",
+      "use": "Settlement panel, building card",
+      "theme": "fire",
+      "category": "building_fire",
+      "chain": "kiln_buildings",
+      "chainRole": "derived",
+      "chainNote": "Separate from pottery kiln — lower, wider mound shape for slow-burning logs into charcoal",
+      "size": 64,
+      "tags": ["phase2", "building", "fire"]
     },
     {
       "id": "palm_leaf_pile",
