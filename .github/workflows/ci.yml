@@ -17,4 +17,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run check-icons
+      - run: npm run check-graph
       - run: npm test

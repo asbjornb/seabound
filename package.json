@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "build-graph": "npx tsx scripts/build-graph.ts",
     "check-graph": "npx tsx scripts/build-graph.ts --check",
+    "check-icons": "npx tsx scripts/check-icons.ts --check",
     "test": "vitest run",
     "test:watch": "vitest",
     "setup-hooks": "cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo 'Pre-commit hook installed.'"
