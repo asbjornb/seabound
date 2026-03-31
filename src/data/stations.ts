@@ -36,7 +36,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "wild_seed", amount: 1, chance: 0.35 },
       { resourceId: "root_vegetable", amount: 1, chance: 0.25 },
     ],
-    xpGain: 15,
+    xpGain: 20,
     maxDeployedPerBuildings: ["cleared_plot", "tended_garden", "farm_plot"],
   },
   {
@@ -55,7 +55,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "taro_corm", amount: 1, chance: 0.6 },
       { resourceId: "taro_corm", amount: 1, chance: 0.15 },
     ],
-    xpGain: 25,
+    xpGain: 35,
     maxDeployedPerBuildings: ["tended_garden", "farm_plot"],
   },
   {
@@ -73,7 +73,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "banana", amount: 4 },
       { resourceId: "banana_shoot", amount: 1, chance: 0.7 },
     ],
-    xpGain: 35,
+    xpGain: 45,
     maxDeployedPerBuildings: ["farm_plot"],
   },
   {
@@ -91,7 +91,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "pandanus_leaves", amount: 5 },
       { resourceId: "pandanus_cutting", amount: 1 }, // perennial — always returns cutting
     ],
-    xpGain: 35,
+    xpGain: 45,
     maxDeployedPerBuildings: ["farm_plot"],
   },
   {
@@ -109,7 +109,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "breadfruit", amount: 5 },
       { resourceId: "breadfruit_cutting", amount: 1, chance: 0.5 },
     ],
-    xpGain: 45,
+    xpGain: 55,
     maxDeployedPerBuildings: ["farm_plot"],
   },
 
@@ -127,7 +127,7 @@ export const STATIONS: StationDef[] = [
     yields: [
       { resourceId: "pandanus_leaves", amount: 7 }, // higher output than farm
     ],
-    xpGain: 40,
+    xpGain: 50,
     maxDeployedPerBuildings: ["pandanus_grove"],
   },
 ];
