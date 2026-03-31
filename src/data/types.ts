@@ -133,6 +133,8 @@ export interface ActionDef {
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
+  /** If true, action disappears once the player owns ≥1 of any drop resource. */
+  oneTimeAction?: boolean;
 }
 
 export interface RecipeInput {
