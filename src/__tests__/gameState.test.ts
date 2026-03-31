@@ -8,6 +8,8 @@ import {
   getEffectiveMoraleGain,
   addResource,
   getStorageLimit,
+  getStorageGroupTotal,
+  isAtStorageCap,
   BASE_STORAGE_LIMIT,
 } from "../engine/gameState";
 import { makeState } from "./testHelpers";
@@ -189,5 +191,49 @@ describe("getStorageLimit", () => {
     expect(foodLimit).toBe(BASE_STORAGE_LIMIT);
     expect(largeLimit).toBe(BASE_STORAGE_LIMIT);
     expect(normalLimit).toBe(BASE_STORAGE_LIMIT + 1);
+  });
+});
+
+describe("storageCapGroup (shared caps)", () => {
+  it("fired_clay_pot and fresh_water share a combined cap", () => {
+    const state = makeState();
+    const limit = getStorageLimit(state, "fired_clay_pot");
+
+    // Fill half the cap with fired_clay_pot
+    addResource(state, "fired_clay_pot", Math.floor(limit / 2));
+    expect(state.resources["fired_clay_pot"]).toBe(Math.floor(limit / 2));
+
+    // Fill the rest with fresh_water
+    const remaining = limit - Math.floor(limit / 2);
+    addResource(state, "fresh_water", remaining);
+    expect(state.resources["fresh_water"]).toBe(remaining);
+
+    // Group total should be at the limit
+    expect(getStorageGroupTotal(state, "clay_pot")).toBe(limit);
+
+    // Adding more of either should be blocked
+    expect(addResource(state, "fired_clay_pot", 1)).toBe(0);
+    expect(addResource(state, "fresh_water", 1)).toBe(0);
+  });
+
+  it("isAtStorageCap checks group total", () => {
+    const state = makeState();
+    const limit = getStorageLimit(state, "fired_clay_pot");
+
+    state.resources["fired_clay_pot"] = limit;
+    expect(isAtStorageCap(state, "fired_clay_pot")).toBe(true);
+    expect(isAtStorageCap(state, "fresh_water")).toBe(true); // shares the cap
+
+    state.resources["fired_clay_pot"] = 0;
+    expect(isAtStorageCap(state, "fresh_water")).toBe(false);
+  });
+
+  it("non-grouped resources are unaffected", () => {
+    const state = makeState();
+    // coconut has no storageCapGroup — should work normally
+    const limit = getStorageLimit(state, "coconut");
+    addResource(state, "coconut", limit);
+    expect(state.resources["coconut"]).toBe(limit);
+    expect(addResource(state, "coconut", 1)).toBe(0);
   });
 });

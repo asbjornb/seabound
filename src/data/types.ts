@@ -56,6 +56,8 @@ export interface ResourceDef {
   tags?: string[]; // e.g. ["food"], ["large"], ["food", "large"], ["dried"]
   foodValue?: number; // if set, this resource counts as food with this value
   waterValue?: number; // if set, this resource counts as water with this value
+  storageCapGroup?: string; // if set, resources with the same group share a combined storage cap
+  noSinkChance?: boolean; // if true, expedition drops of this resource ignore chance < 1
 }
 
 export interface SkillDef {

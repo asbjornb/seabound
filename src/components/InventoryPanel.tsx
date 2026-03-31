@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { getResources, getTools, getActions, getRecipes } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
-import { getMoraleDurationMultiplier, getStorageLimit } from "../engine/gameState";
+import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -151,7 +151,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
             {filteredResources.map(([id, amount]) => {
               const def = RESOURCES[id];
               const limit = getStorageLimit(state, id);
-              const atCap = amount >= limit;
+              const atCap = isAtStorageCap(state, id);
               return (
                 <div
                   key={id}

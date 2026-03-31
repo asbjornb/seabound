@@ -4,10 +4,11 @@ import {
   getBuildings,
   getExpeditionById,
   getRecipeById,
+  getResources,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -41,10 +42,7 @@ function isOutputFull(state: GameState): boolean {
     const fullAtStart = action.fullAtStart ?? [];
     const relevant = def.drops.filter((d) => (!d.chance || d.chance >= 1) && !fullAtStart.includes(d.resourceId));
     if (relevant.length === 0) return false;
-    return relevant.every((d) => {
-      const current = state.resources[d.resourceId] ?? 0;
-      return current >= getStorageLimit(state, d.resourceId);
-    });
+    return relevant.every((d) => isAtStorageCap(state, d.resourceId));
   }
 
   if (action.type === "craft") {
@@ -52,8 +50,7 @@ function isOutputFull(state: GameState): boolean {
     if (!def?.output) return false;
     const fullAtStart = action.fullAtStart ?? [];
     if (fullAtStart.includes(def.output.resourceId)) return false;
-    const current = state.resources[def.output.resourceId] ?? 0;
-    return current >= getStorageLimit(state, def.output.resourceId);
+    return isAtStorageCap(state, def.output.resourceId);
   }
 
   return false;
@@ -453,8 +450,14 @@ function applyExpeditionCompletion(
   const newResources: string[] = [];
   const dropBonus = getExpeditionDropBonus(def.skillId, navLevel);
   if (outcome.drops) {
+    const RESOURCES = getResources();
     for (const drop of outcome.drops) {
-      const rolled = rollDrops([drop]);
+      // Resources with noSinkChance skip the chance roll (always drop)
+      const resDef = RESOURCES[drop.resourceId];
+      const effectiveDrop = resDef?.noSinkChance && drop.chance !== undefined
+        ? { ...drop, chance: 1 }
+        : drop;
+      const rolled = rollDrops([effectiveDrop]);
       for (const r of rolled) {
         const boostedAmount = dropBonus > 0
           ? Math.round(r.amount * (1 + dropBonus))

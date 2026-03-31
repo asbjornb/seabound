@@ -281,6 +281,8 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Fresh Water",
     description: "Clean water collected from a jungle stream. Essential for long voyages.",
     waterValue: 1,
+    storageCapGroup: "clay_pot",
+    noSinkChance: true,
   },
 
   // Phase 2 - Clay Tier
@@ -298,6 +300,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "fired_clay_pot",
     name: "Fired Clay Pot",
     description: "A hardened clay pot. Stores liquids and dry goods.",
+    storageCapGroup: "clay_pot",
   },
   sealed_clay_jar: {
     id: "sealed_clay_jar",
