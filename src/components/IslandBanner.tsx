@@ -5,6 +5,7 @@ import bambooBanner from "../../images/phase-1-bamboo/banner.webp";
 import fireBanner from "../../images/phase-2-fire/banner.webp";
 import stoneBanner from "../../images/phase-3-stone-clay/banner.webp";
 import maritimeBanner from "../../images/phase-4-maritime/banner.webp";
+import voyageBanner from "../../images/phase-5-voyage/banner.webp";
 
 interface Props {
   phase: string;
@@ -17,6 +18,7 @@ const BASE_PHASE_BANNERS: Record<string, string> = {
   fire: fireBanner,
   stone: stoneBanner,
   maritime: maritimeBanner,
+  voyage: voyageBanner,
 };
 
 export function IslandBanner({ phase }: Props) {
