@@ -3,9 +3,10 @@ import { GameState } from "../data/types";
 
 interface Props {
   state: GameState;
+  onContinue: () => void;
 }
 
-export function VictoryScreen({ state }: Props) {
+export function VictoryScreen({ state, onContinue }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -48,6 +49,9 @@ export function VictoryScreen({ state }: Props) {
         <div className="victory-thanks">
           Thanks for playing SeaBound.
         </div>
+        <button className="victory-continue" onClick={onContinue}>
+          Continue Playing
+        </button>
       </div>
     </div>
   );

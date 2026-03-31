@@ -62,6 +62,7 @@ export default function App() {
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
+  const [victoryDismissed, setVictoryDismissed] = useState(false);
   const activeModId = getActiveModId();
 
   const handleModSwitch = useCallback(() => {
@@ -164,7 +165,9 @@ export default function App() {
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
-      {game.state.victory && <VictoryScreen state={game.state} />}
+      {game.state.victory && !victoryDismissed && (
+        <VictoryScreen state={game.state} onContinue={() => setVictoryDismissed(true)} />
+      )}
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
