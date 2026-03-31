@@ -963,6 +963,18 @@
       "tags": ["phase2", "building", "storage", "clay"]
     },
     {
+      "id": "storage_shelf",
+      "object": "Bamboo storage shelf with clay pots",
+      "description": "A simple bamboo shelf rack with several fired clay pots and jars arranged on it. Organized, tidy. Keeps supplies off the ground and sorted.",
+      "use": "Settlement panel, building card",
+      "theme": "bamboo",
+      "category": "building_storage",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase2", "building", "storage", "construction", "clay"]
+    },
+    {
       "id": "fenced_perimeter",
       "object": "Bamboo fence section",
       "description": "A section of bamboo stake fence tied with cordage. Sturdy, territorial. Shows protection and permanence.",
