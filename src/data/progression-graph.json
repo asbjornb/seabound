@@ -236,7 +236,8 @@
     {
       "id": "resource:charcoal",
       "type": "resource",
-      "label": "Charcoal"
+      "label": "Charcoal",
+      "category": "fuel"
     },
     {
       "id": "resource:large_log",
@@ -440,6 +441,16 @@
       "id": "building:pandanus_grove",
       "type": "building",
       "label": "Pandanus Grove"
+    },
+    {
+      "id": "building:log_rack",
+      "type": "building",
+      "label": "Log Rack"
+    },
+    {
+      "id": "building:clay_storage_jar",
+      "type": "building",
+      "label": "Clay Storage Jar"
     },
     {
       "id": "building:charcoal_kiln",
@@ -902,6 +913,12 @@
       "category": "construction"
     },
     {
+      "id": "recipe:build_log_rack",
+      "type": "recipe",
+      "label": "Log Rack",
+      "category": "construction"
+    },
+    {
       "id": "recipe:build_fiber_loom",
       "type": "recipe",
       "label": "Fiber Loom",
@@ -1049,6 +1066,12 @@
       "id": "recipe:kiln_fire_pot",
       "type": "recipe",
       "label": "Kiln-Fire Pot",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:build_clay_storage_jar",
+      "type": "recipe",
+      "label": "Clay Storage Jar",
       "category": "crafting"
     },
     {
@@ -2036,6 +2059,36 @@
       "relation": "requires_skill"
     },
     {
+      "from": "recipe:build_log_rack",
+      "to": "building:log_rack",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_log_rack",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_log_rack",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_log_rack",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_log_rack",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "building:fenced_perimeter",
+      "to": "recipe:build_log_rack",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:build_fiber_loom",
       "to": "building:fiber_loom",
       "relation": "builds"
@@ -2758,6 +2811,31 @@
     {
       "from": "building:kiln",
       "to": "recipe:kiln_fire_pot",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_clay_storage_jar",
+      "to": "building:clay_storage_jar",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:fired_clay_pot",
+      "to": "recipe:build_clay_storage_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_clay_storage_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_clay_storage_jar",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:build_clay_storage_jar",
       "relation": "requires_building"
     },
     {
@@ -4673,6 +4751,7 @@
             "recipe:wheel_shape_clay_pot",
             "recipe:fire_clay_pot",
             "recipe:kiln_fire_pot",
+            "recipe:build_clay_storage_jar",
             "recipe:craft_digging_stick"
           ]
         },
@@ -4704,6 +4783,7 @@
             "recipe:wheel_shape_clay_pot",
             "recipe:fire_clay_pot",
             "recipe:kiln_fire_pot",
+            "recipe:build_clay_storage_jar",
             "recipe:craft_digging_stick"
           ]
         }
@@ -4723,6 +4803,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4752,6 +4833,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4781,6 +4863,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4810,6 +4893,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4839,6 +4923,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4868,6 +4953,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4898,6 +4984,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4927,6 +5014,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4956,6 +5044,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -4985,6 +5074,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -5014,6 +5104,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -5043,6 +5134,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -5072,6 +5164,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",
@@ -5101,6 +5194,7 @@
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
             "recipe:build_fenced_perimeter",
+            "recipe:build_log_rack",
             "recipe:build_raft",
             "recipe:assemble_dugout",
             "recipe:build_outrigger",

@@ -430,6 +430,24 @@ export const RECIPES: RecipeDef[] = [
   },
 
   {
+    id: "build_log_rack",
+    name: "Log Rack",
+    description:
+      "Build an A-frame rack for stacking logs and lumber off the ground.",
+    skillId: "construction",
+    panel: "build",
+    inputs: [
+      { resourceId: "driftwood_branch", amount: 4 },
+      { resourceId: "cordage", amount: 4 },
+      { resourceId: "bamboo_cane", amount: 2 },
+    ],
+    buildingOutput: "log_rack",
+    requiredBuildings: ["fenced_perimeter"],
+    durationMs: 10000,
+    xpGain: 25,
+  },
+
+  {
     id: "build_fiber_loom",
     name: "Fiber Loom",
     description:
@@ -893,6 +911,24 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 5000,
     repeatable: true,
     xpGain: 20,
+  },
+
+  {
+    id: "build_clay_storage_jar",
+    name: "Clay Storage Jar",
+    description:
+      "Seal a fired pot with a clay lid. Keeps provisions fresh and critters out.",
+    skillId: "crafting",
+    panel: "build",
+    inputs: [
+      { resourceId: "fired_clay_pot", amount: 1 },
+      { resourceId: "clay", amount: 1 },
+    ],
+    buildingOutput: "clay_storage_jar",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 6000,
+    repeatable: true,
+    xpGain: 15,
   },
 
   // Fill Water Pot (requires well)

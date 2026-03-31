@@ -270,6 +270,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "charcoal",
     name: "Charcoal",
     description: "Dense black fuel that burns hot and long. Made from slow-burning large logs.",
+    tags: ["fuel"],
   },
 
   // Timber
