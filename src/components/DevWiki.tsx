@@ -1,6 +1,6 @@
-import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill } from "../data/registry";
+import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
 import { xpForLevel } from "../data/skills";
-import { SkillId } from "../data/types";
+import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -349,36 +349,48 @@ export function DevWiki() {
       {/* ── Milestones ── */}
       <section id="milestones">
         <h2 style={styles.h2}>Skill Milestones</h2>
+        <p style={styles.desc}>
+          Authored milestones grant bonuses at specific skill levels.
+          Implicit unlocks are actions, recipes, and stations gated by skill level requirements.
+        </p>
         {skillIds.map((id) => {
-          const ms = getMilestonesForSkill(id);
-          if (ms.length === 0) return null;
+          const authored = getMilestonesForSkill(id);
+          const implicit = getImplicitUnlocks(id);
+          const all = mergeAndSort(authored, implicit);
+          if (all.length === 0) return null;
           return (
             <div key={id} style={styles.card}>
-              <h3 style={styles.h3}>{SKILLS[id].name}</h3>
+              <h3 style={styles.h3}>
+                {SKILLS[id].name}
+                <span style={styles.dim}> — {all.length} milestones</span>
+              </h3>
               <table style={styles.table}>
                 <thead>
                   <tr>
-                    <th style={styles.th}>Level</th>
+                    <th style={styles.th}>Lv</th>
+                    <th style={styles.th}>Source</th>
                     <th style={styles.th}>Description</th>
-                    <th style={styles.th}>Hidden?</th>
                     <th style={styles.th}>Effects</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ms.map((m, i) => (
+                  {all.map((m, i) => (
                     <tr key={i} style={styles.tr}>
                       <td style={styles.td}>{m.level}</td>
-                      <td style={styles.td}>{m.description}</td>
-                      <td style={styles.td}>{m.hidden ? "yes" : "no"}</td>
+                      <td style={styles.td}>
+                        <span style={{
+                          ...styles.tag,
+                          ...(m.source === "authored"
+                            ? { background: "#2d4a3e", color: "#7acea0" }
+                            : { background: "#3d3a2a", color: "#d4c87a" }),
+                        }}>
+                          {m.source}
+                        </span>
+                      </td>
+                      <td style={styles.td}>{m.description}{m.hidden ? " (hidden)" : ""}</td>
                       <td style={styles.tdSmall}>
                         {m.effects
-                          ?.map((e) => {
-                            if (e.type === "drop_chance")
-                              return `+${(e.bonus * 100).toFixed(0)}% ${e.resourceId} on ${e.actionId}`;
-                            if (e.type === "duration")
-                              return `${((1 - e.multiplier) * 100).toFixed(0)}% faster ${e.actionId}`;
-                            return JSON.stringify(e);
-                          })
+                          ?.map(formatEffect)
                           .join(", ") || "—"}
                       </td>
                     </tr>
@@ -396,6 +408,86 @@ export function DevWiki() {
       </footer>
     </div>
   );
+}
+
+type AnnotatedMilestone = SkillMilestone & { source: "authored" | "unlock" };
+
+/** Collect implicit unlocks: actions, recipes, and stations gated by a skill level. */
+function getImplicitUnlocks(skillId: SkillId): AnnotatedMilestone[] {
+  const result: AnnotatedMilestone[] = [];
+  const ACTIONS = getActions();
+  const RECIPES = getRecipes();
+  const STATIONS = getStations();
+
+  for (const a of ACTIONS) {
+    if (a.skillId === skillId && a.requiredSkillLevel && a.requiredSkillLevel > 1) {
+      result.push({ level: a.requiredSkillLevel, description: `Unlock action: ${a.name}`, source: "unlock" });
+    }
+  }
+
+  for (const r of RECIPES) {
+    if (r.skillId === skillId && r.requiredSkillLevel && r.requiredSkillLevel > 1) {
+      result.push({ level: r.requiredSkillLevel, description: `Unlock recipe: ${r.name}`, source: "unlock" });
+    }
+    // Dual-skill gates: show as unlock for the secondary skill too
+    for (const req of r.requiredSkills ?? []) {
+      if (req.skillId === skillId && req.level > 1) {
+        result.push({ level: req.level, description: `Unlock recipe: ${r.name} (cross-skill gate)`, source: "unlock" });
+      }
+    }
+  }
+
+  for (const s of STATIONS) {
+    if (s.skillId === skillId && s.requiredSkillLevel && s.requiredSkillLevel > 1) {
+      result.push({ level: s.requiredSkillLevel, description: `Unlock station: ${s.name}`, source: "unlock" });
+    }
+  }
+
+  return result;
+}
+
+/** Merge authored milestones (from getMilestonesForSkill) with implicit unlocks, deduplicated. */
+function mergeAndSort(authored: SkillMilestone[], implicit: AnnotatedMilestone[]): AnnotatedMilestone[] {
+  // Tag authored milestones; filter out auto-generated unlocks from getMilestonesForSkill
+  // (we rebuild them ourselves with better detail)
+  const authoredOnly: AnnotatedMilestone[] = authored
+    .filter((m) => !m.description.startsWith("Unlock "))
+    .map((m) => ({ ...m, source: "authored" as const }));
+
+  // Deduplicate implicit by level+description
+  const seen = new Set<string>();
+  const deduped: AnnotatedMilestone[] = [];
+  for (const m of implicit) {
+    const key = `${m.level}:${m.description}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduped.push(m);
+    }
+  }
+
+  return [...authoredOnly, ...deduped].sort((a, b) => a.level - b.level);
+}
+
+/** Human-readable formatting for all milestone effect types. */
+function formatEffect(e: MilestoneEffect): string {
+  switch (e.type) {
+    case "drop_chance":
+      return `+${(e.bonus * 100).toFixed(0)}% ${e.resourceId} on ${e.actionId}`;
+    case "duration":
+      return `${((1 - e.multiplier) * 100).toFixed(0)}% faster ${e.actionId === "*" ? "(all)" : e.actionId}`;
+    case "double_output":
+      return `${(e.chance * 100).toFixed(0)}% double output${e.recipeId ? ` (${e.recipeId})` : ""}`;
+    case "output_chance_bonus":
+      return `+${(e.bonus * 100).toFixed(0)}% success on ${e.recipeId}`;
+    case "station_input_reduce":
+      return `${e.stationId}: ${e.resourceId} cost → ${e.newAmount}`;
+    case "station_guaranteed_drop":
+      return `${e.stationId}: min ${e.minAmount}× ${e.resourceId}`;
+    case "expedition_biome_bonus":
+      return `+${(e.bonus * 100).toFixed(0)}% biome discovery weight`;
+    case "expedition_drop_bonus":
+      return `+${(e.bonus * 100).toFixed(0)}% expedition drops`;
+  }
 }
 
 function tagColor(tag: string): React.CSSProperties {
