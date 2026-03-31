@@ -621,9 +621,9 @@
       "category": "cooking"
     },
     {
-      "id": "skill:farming:5",
+      "id": "skill:farming:3",
       "type": "skill_level",
-      "label": "Farming Lv5",
+      "label": "Farming Lv3",
       "category": "farming"
     },
     {
@@ -633,15 +633,15 @@
       "category": "farming"
     },
     {
-      "id": "skill:farming:8",
-      "type": "skill_level",
-      "label": "Farming Lv8",
-      "category": "farming"
-    },
-    {
       "id": "skill:farming:12",
       "type": "skill_level",
       "label": "Farming Lv12",
+      "category": "farming"
+    },
+    {
+      "id": "skill:farming:7",
+      "type": "skill_level",
+      "label": "Farming Lv7",
       "category": "farming"
     },
     {
@@ -3774,7 +3774,7 @@
       "relation": "requires_tool"
     },
     {
-      "from": "skill:farming:5",
+      "from": "skill:farming:3",
       "to": "station:cultivate_taro",
       "relation": "requires_skill"
     },
@@ -3844,16 +3844,6 @@
       "relation": "requires_tool"
     },
     {
-      "from": "skill:farming:8",
-      "to": "station:grow_pandanus",
-      "relation": "requires_skill"
-    },
-    {
-      "from": "building:well",
-      "to": "station:grow_pandanus",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:pandanus_cutting",
       "to": "station:grow_pandanus",
       "relation": "consumes"
@@ -3904,7 +3894,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:farming:8",
+      "from": "skill:farming:7",
       "to": "station:harvest_pandanus_grove",
       "relation": "requires_skill"
     }
@@ -4030,7 +4020,7 @@
       "skill:crafting:6",
       "resource:stone_flake",
       "skill:weaving:5",
-      "skill:farming:5",
+      "skill:farming:3",
       "resource:taro_corm",
       "resource:clay",
       "skill:construction:6",
@@ -4054,8 +4044,8 @@
       "recipe:pack_voyage_provisions",
       "resource:stone_blade",
       "skill:construction:5",
-      "skill:farming:8",
       "resource:pandanus_cutting",
+      "skill:farming:7",
       "resource:chert",
       "tool:hammerstone",
       "skill:foraging:5",
@@ -4119,7 +4109,7 @@
       "recipe:split_bamboo_cane",
       "resource:stone_blade",
       "resource:flat_stone",
-      "skill:farming:8",
+      "skill:farming:7",
       "resource:palm_frond",
       "recipe:knap_stone_blade",
       "action:collect_palm_frond",
@@ -4757,7 +4747,7 @@
       ],
       "farming": [
         {
-          "level": 5,
+          "level": 3,
           "unlocks": [
             "station:cultivate_taro"
           ],
@@ -4771,9 +4761,8 @@
           ]
         },
         {
-          "level": 8,
+          "level": 7,
           "unlocks": [
-            "station:grow_pandanus",
             "station:harvest_pandanus_grove"
           ],
           "trainedBy": [
