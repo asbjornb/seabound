@@ -475,8 +475,8 @@ Long build process — the first real construction project.
 |---|---|---|---|---|
 | **Explore beach** | None | 5 food | Discover coconut grove, rocky shore (requires coconut grove), or find flat stones. | ✅ |
 | **Explore interior** | None (requires coconut grove) | 8 food | Discover bamboo grove, jungle interior (clay deposits), find materials/shells. | ✅ |
-| **Sail nearby island** | Raft or Dugout | 10 food | Discover nearby island biome, find obsidian, wild seeds, taro corms, flat stones. | ✅ |
-| **Dugout voyage** | Dugout | 5 food, 3 water | Find banana shoots, breadfruit cuttings, obsidian, large logs, materials. | ✅ |
+| **Sail nearby island** | Raft or Dugout | 3 food | Discover nearby island biome, find obsidian, wild seeds, taro corms, flat stones. | ✅ |
+| **Dugout voyage** | Dugout | 10 food, 3 water | Find banana shoots, breadfruit cuttings, obsidian, large logs, materials. | ✅ |
 | **Island reef** | Dugout | Food ×2, Water ×1 | New fish species, coral, sea urchin. | *Not yet built* |
 | **Island chain** | Sailing canoe | Food ×10 preserved, Water ×4 | Rare hardwoods, metal ore, new biomes. | *Not yet built* |
 | **Distant archipelago** | Sailing canoe | Food ×20 preserved, Water ×8 | Rarest loot, unique building unlocks, affix items. | *Not yet built* |

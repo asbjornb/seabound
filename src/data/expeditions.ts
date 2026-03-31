@@ -92,10 +92,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "sail_nearby_island",
     name: "Sail to Nearby Island",
     description:
-      "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 10 food per trip.",
+      "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 3 food per trip.",
     skillId: "navigation",
     durationMs: 16000,
-    foodCost: 10,
+    foodCost: 3,
     xpGain: 35,
     requiredVessel: "raft",
     outcomes: [
@@ -150,10 +150,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "dugout_voyage",
     name: "Sail to Far Island",
     description:
-      "Paddle your dugout canoe beyond the near-shore waters. Who knows what you'll find? Costs 5 food and 3 water per trip.",
+      "Paddle your dugout canoe beyond the near-shore waters. Who knows what you'll find? Costs 10 food and 3 water per trip.",
     skillId: "navigation",
     durationMs: 20000,
-    foodCost: 5,
+    foodCost: 10,
     waterCost: 3,
     xpGain: 50,
     requiredVessel: "dugout",
