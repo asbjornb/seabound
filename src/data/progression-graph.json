@@ -3904,7 +3904,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:farming:12",
+      "from": "skill:farming:8",
       "to": "station:harvest_pandanus_grove",
       "relation": "requires_skill"
     }
@@ -4119,7 +4119,7 @@
       "recipe:split_bamboo_cane",
       "resource:stone_blade",
       "resource:flat_stone",
-      "skill:farming:12",
+      "skill:farming:8",
       "resource:palm_frond",
       "recipe:knap_stone_blade",
       "action:collect_palm_frond",
@@ -4773,7 +4773,8 @@
         {
           "level": 8,
           "unlocks": [
-            "station:grow_pandanus"
+            "station:grow_pandanus",
+            "station:harvest_pandanus_grove"
           ],
           "trainedBy": [
             "station:plant_wild_seeds",
@@ -4801,8 +4802,7 @@
         {
           "level": 12,
           "unlocks": [
-            "station:grow_breadfruit",
-            "station:harvest_pandanus_grove"
+            "station:grow_breadfruit"
           ],
           "trainedBy": [
             "station:plant_wild_seeds",

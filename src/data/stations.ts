@@ -123,7 +123,7 @@ export const STATIONS: StationDef[] = [
       "Harvest leaves from an established pandanus grove. The plants regrow on their own.",
     skillId: "farming",
     durationMs: 360000, // 6 minutes (faster than farm plot)
-    requiredSkillLevel: 12,
+    requiredSkillLevel: 8,
     yields: [
       { resourceId: "pandanus_leaves", amount: 7 }, // higher output than farm
     ],
