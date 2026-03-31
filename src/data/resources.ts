@@ -282,7 +282,6 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "Clean water collected from a jungle stream. Essential for long voyages.",
     waterValue: 1,
     storageCapGroup: "clay_pot",
-    noSinkChance: true,
   },
 
   // Phase 2 - Clay Tier

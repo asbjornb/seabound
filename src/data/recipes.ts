@@ -802,6 +802,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["well"],
     durationMs: 4000,
     repeatable: true,
+    noDoubleOutput: true,
     xpGain: 5,
   },
 

@@ -4,7 +4,6 @@ import {
   getBuildings,
   getExpeditionById,
   getRecipeById,
-  getResources,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
@@ -369,17 +368,19 @@ function applyCraftCompletion(
     }
     let outputAmount = def.output.amount;
 
-    // Double output milestone check
-    const skill = state.skills[def.skillId];
-    const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
-    if (doubleChance > 0 && Math.random() < doubleChance) {
-      outputAmount *= 2;
-    }
+    if (!def.noDoubleOutput) {
+      // Double output milestone check
+      const skill = state.skills[def.skillId];
+      const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
+      if (doubleChance > 0 && Math.random() < doubleChance) {
+        outputAmount *= 2;
+      }
 
-    // Tool output bonus (+1 chance)
-    const toolBonusChance = getToolOutputBonusChance(state, def.id);
-    if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
-      outputAmount += 1;
+      // Tool output bonus (+1 chance)
+      const toolBonusChance = getToolOutputBonusChance(state, def.id);
+      if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
+        outputAmount += 1;
+      }
     }
 
     addResource(state, def.output.resourceId, outputAmount);
@@ -450,14 +451,8 @@ function applyExpeditionCompletion(
   const newResources: string[] = [];
   const dropBonus = getExpeditionDropBonus(def.skillId, navLevel);
   if (outcome.drops) {
-    const RESOURCES = getResources();
     for (const drop of outcome.drops) {
-      // Resources with noSinkChance skip the chance roll (always drop)
-      const resDef = RESOURCES[drop.resourceId];
-      const effectiveDrop = resDef?.noSinkChance && drop.chance !== undefined
-        ? { ...drop, chance: 1 }
-        : drop;
-      const rolled = rollDrops([effectiveDrop]);
+      const rolled = rollDrops([drop]);
       for (const r of rolled) {
         const boostedAmount = dropBonus > 0
           ? Math.round(r.amount * (1 + dropBonus))
