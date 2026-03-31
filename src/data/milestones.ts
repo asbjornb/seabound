@@ -364,6 +364,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
+    {
+      level: 12,
+      description: "Seasoned feller — fell trees 15% faster",
+      effects: [
+        { type: "duration", actionId: "fell_large_tree", multiplier: 0.85 },
+      ],
+    },
   ],
   construction: [
     {

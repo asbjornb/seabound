@@ -115,6 +115,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
     unlocks: "Harvest pandanus leaves without replanting",
   },
+  charcoal_kiln: {
+    id: "charcoal_kiln",
+    name: "Charcoal Kiln",
+    description:
+      "A clay-sealed mound for slow-burning logs into charcoal. An ancient fuel upgrade.",
+    unlocks: "Charcoal station — bulk fuel from large logs; charcoal replaces driftwood in fire recipes",
+    storageBonus: [{ amount: 20 }],
+  },
   soaking_pit: {
     id: "soaking_pit",
     name: "Soaking Pit",

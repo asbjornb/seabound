@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
+import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -100,7 +100,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
             {!isCollapsed && list.map((recipe) => {
               const inputs = getEffectiveInputs(recipe, state);
               const canAffordInputs = inputs.every(
-                (inp) => getResource(state, inp.resourceId) >= inp.amount
+                (inp) => canAffordInput(inp, state)
               );
               const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
               const disabled = !canAffordInputs || !canAffordTags;
@@ -130,13 +130,21 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     {inputs.map((inp, i) => {
                       const have = getResource(state, inp.resourceId);
                       const enough = have >= inp.amount;
+                      const altId = inp.alternateResourceId;
+                      const altHave = altId ? getResource(state, altId) : 0;
+                      const altEnough = altId ? altHave >= inp.amount : false;
                       return (
                         <span key={i}>
                           {i > 0 && ", "}
-                          <span className={enough ? "has" : "missing"}>
+                          <span className={enough || altEnough ? "has" : "missing"}>
                             <GameIcon id={inp.resourceId} size={16} />{inp.amount}x{" "}
                             {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
                             {have})
+                            {altId && (
+                              <>
+                                {" "}or <GameIcon id={altId} size={16} />{RESOURCES[altId]?.name ?? altId} ({altHave})
+                              </>
+                            )}
                           </span>
                         </span>
                       );

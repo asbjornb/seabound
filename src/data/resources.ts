@@ -265,6 +265,13 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A carefully knapped stone blade. Sharp and versatile.",
   },
 
+  // Fuel
+  charcoal: {
+    id: "charcoal",
+    name: "Charcoal",
+    description: "Dense black fuel that burns hot and long. Made from slow-burning large logs.",
+  },
+
   // Timber
   large_log: {
     id: "large_log",

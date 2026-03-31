@@ -7,7 +7,7 @@ import {
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -141,7 +141,7 @@ export function processTick(state: GameState, now: number): TickResult {
       while (remaining >= effectiveCraftDuration) {
         // Check and consume inputs for this cycle
         const canAfford = effectiveInputs.every(
-          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+          (input) => canAffordInput(input, state)
         );
         // Resolve tag-based inputs (e.g. "5 different foods")
         const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
@@ -149,7 +149,8 @@ export function processTick(state: GameState, now: number): TickResult {
           state.currentAction = null;
           break;
         }
-        for (const input of effectiveInputs) {
+        const resolvedInputs = resolveAlternateInputs(effectiveInputs, state);
+        for (const input of resolvedInputs) {
           state.resources[input.resourceId] =
             (state.resources[input.resourceId] ?? 0) - input.amount;
         }
@@ -169,7 +170,7 @@ export function processTick(state: GameState, now: number): TickResult {
       // Stop if player can't afford the next cycle
       if (state.currentAction) {
         const canAffordNext = effectiveInputs.every(
-          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+          (input) => canAffordInput(input, state)
         );
         const resolvedNext = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
         if (!canAffordNext || !resolvedNext) {
@@ -182,13 +183,14 @@ export function processTick(state: GameState, now: number): TickResult {
       if (timeAvailable >= effectiveCraftDuration) {
         // Consume inputs at completion
         const canAfford = effectiveInputs.every(
-          (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+          (input) => canAffordInput(input, state)
         );
         const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
         if (!canAfford || !resolvedTagInputs) {
           state.currentAction = null;
         } else {
-          for (const input of effectiveInputs) {
+          const resolvedInputs = resolveAlternateInputs(effectiveInputs, state);
+          for (const input of resolvedInputs) {
             state.resources[input.resourceId] =
               (state.resources[input.resourceId] ?? 0) - input.amount;
           }

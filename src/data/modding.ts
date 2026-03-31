@@ -191,6 +191,7 @@ export function validateModPack(pack: unknown): ValidationResult {
     for (const inp of recipe.inputs ?? []) {
       checkResourceRef(inp.resourceId, ctx);
       if (inp.removedByBuilding) checkBuildingRef(inp.removedByBuilding, ctx);
+      if (inp.alternateResourceId) checkResourceRef(inp.alternateResourceId, ctx);
     }
     if (recipe.output) checkResourceRef(recipe.output.resourceId, ctx);
     if (recipe.toolOutput) checkToolRef(recipe.toolOutput, ctx);

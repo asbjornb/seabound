@@ -678,7 +678,7 @@ export const RECIPES: RecipeDef[] = [
     panel: "craft",
     inputs: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_fish", amount: 1 },
@@ -696,7 +696,7 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 4,
     inputs: [
       { resourceId: "large_fish", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2, alternateResourceId: "charcoal" },
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_large_fish", amount: 1 },
@@ -714,7 +714,7 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 2,
     inputs: [
       { resourceId: "crab", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_crab", amount: 1 },
@@ -788,6 +788,27 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 50,
   },
 
+  // Building: Charcoal Kiln (Construction 16, requires kiln + stone_hearth)
+  {
+    id: "build_charcoal_kiln",
+    name: "Charcoal Kiln",
+    description:
+      "Build a clay-sealed mound for slow-burning logs into charcoal. An ancient fuel upgrade.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 16,
+    inputs: [
+      { resourceId: "clay", amount: 8 },
+      { resourceId: "flat_stone", amount: 6 },
+      { resourceId: "large_log", amount: 2 },
+      { resourceId: "cordage", amount: 4 },
+    ],
+    buildingOutput: "charcoal_kiln",
+    requiredBuildings: ["kiln", "stone_hearth"],
+    durationMs: 20000,
+    xpGain: 60,
+  },
+
   // Building: Soaking Pit (Weaving 7)
   {
     id: "build_soaking_pit",
@@ -845,7 +866,8 @@ export const RECIPES: RecipeDef[] = [
     panel: "craft",
     inputs: [
       { resourceId: "shaped_clay_pot", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2, alternateResourceId: "charcoal" },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
     outputChance: 0.85,
@@ -863,7 +885,7 @@ export const RECIPES: RecipeDef[] = [
     panel: "craft",
     inputs: [
       { resourceId: "shaped_clay_pot", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
     outputChance: 0.85,
@@ -901,7 +923,8 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "fired_clay_pot", amount: 1 },
       { resourceId: "clay", amount: 2 },
-      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2, alternateResourceId: "charcoal" },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "sealed_clay_jar", amount: 1 },
     requiredBuildings: ["firing_pit"],
@@ -1045,7 +1068,7 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 3,
     inputs: [
       { resourceId: "root_vegetable", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_root_vegetable", amount: 1 },
@@ -1063,7 +1086,8 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 5,
     inputs: [
       { resourceId: "taro_root", amount: 2 },
-      { resourceId: "driftwood_branch", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_taro", amount: 2 },
     requiredBuildings: ["camp_fire"],
@@ -1080,7 +1104,8 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 8,
     inputs: [
       { resourceId: "breadfruit", amount: 1 },
-      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 2, alternateResourceId: "charcoal" },
+      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "roasted_breadfruit", amount: 2 },
     requiredBuildings: ["camp_fire"],
@@ -1121,7 +1146,7 @@ export const RECIPES: RecipeDef[] = [
     inputs: [
       { resourceId: "clay", amount: 8 },
       { resourceId: "flat_stone", amount: 4 },
-      { resourceId: "driftwood_branch", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 4, alternateResourceId: "charcoal" },
     ],
     toolOutput: "crucible",
     requiredBuildings: ["kiln"],

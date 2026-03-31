@@ -143,6 +143,7 @@ export interface RecipeInput {
   resourceId: ResourceId;
   amount: number;
   removedByBuilding?: BuildingId; // input is skipped when player has this building
+  alternateResourceId?: ResourceId; // if set, this resource can be used instead of resourceId
 }
 
 /** A tag-based input: consume `count` distinct resources with the given tag, 1 each. */
