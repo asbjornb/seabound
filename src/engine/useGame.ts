@@ -18,6 +18,7 @@ import type {
 
 import {
   addResource,
+  isAtStorageCap,
   canAffordTagInputs,
   createInitialState,
   getBuildingCount,
@@ -25,7 +26,6 @@ import {
   getEffectiveInputs,
   getEffectiveMaxCount,
   getResource,
-  getStorageLimit,
   getTotalFood,
   getTotalWater,
   hasTool,
@@ -222,7 +222,7 @@ export function useGame() {
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       const actionKey = `gather:${action.id}`;
       const fullAtStart = action.drops
-        .filter((d) => (next.resources[d.resourceId] ?? 0) >= getStorageLimit(next, d.resourceId))
+        .filter((d) => isAtStorageCap(next, d.resourceId))
         .map((d) => d.resourceId);
       next.currentAction = {
         actionId: action.id,
@@ -283,8 +283,7 @@ export function useGame() {
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         const actionKey = `craft:${recipe.id}`;
-        const fullAtStart = recipe.output &&
-          (next.resources[recipe.output.resourceId] ?? 0) >= getStorageLimit(next, recipe.output.resourceId)
+        const fullAtStart = recipe.output && isAtStorageCap(next, recipe.output.resourceId)
           ? [recipe.output.resourceId] : [];
         next.currentAction = {
           actionId: recipe.id,

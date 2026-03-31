@@ -1394,9 +1394,45 @@
       "chainRole": "standalone",
       "size": 256,
       "tags": ["ui", "victory", "endgame", "splash"]
+    },
+    {
+      "id": "retted_pandanus",
+      "object": "Water-soaked pandanus fiber bundle",
+      "description": "A bundle of pandanus fibers darkened and softened from water soaking. Darker golden-brown than dried pandanus, visibly wet and limp. A few water droplets clinging to the fibers.",
+      "use": "Inventory, recipe input for splitting into strips",
+      "theme": "fire",
+      "category": "fiber",
+      "chain": "pandanus",
+      "chainRole": "derived",
+      "size": 64,
+      "tags": ["phase2", "fiber", "pandanus", "intermediate"]
+    },
+    {
+      "id": "soaking_pit",
+      "object": "Clay-lined water pit",
+      "description": "A shallow rectangular pit lined with smooth clay, filled with murky water. Bundles of pandanus fiber visible submerged inside. Flat stones around the rim. Earthy tones with blue-green water.",
+      "use": "Settlement panel, building card",
+      "theme": "fire",
+      "category": "building_craft",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase2", "building", "craft", "pandanus"]
+    },
+    {
+      "id": "pottery_wheel",
+      "object": "Hand-spun stone pottery wheel",
+      "description": "A thick flat stone disc mounted on a short bamboo axle, with a shaped clay pot forming on top. The stone is grey-blue, the clay pot warm amber. Motion blur or slight radial lines suggesting spinning.",
+      "use": "Settlement panel, building card",
+      "theme": "fire",
+      "category": "building_craft",
+      "chain": "kiln_buildings",
+      "chainRole": "derived",
+      "size": 64,
+      "tags": ["phase2", "building", "craft", "pottery"]
     }
   ],
   "states": {},
   "createdAt": "2026-03-27T00:00:00Z",
-  "updatedAt": "2026-03-30T00:00:00Z"
+  "updatedAt": "2026-03-31T00:00:00Z"
 }

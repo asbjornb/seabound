@@ -56,6 +56,7 @@ export interface ResourceDef {
   tags?: string[]; // e.g. ["food"], ["large"], ["food", "large"], ["dried"]
   foodValue?: number; // if set, this resource counts as food with this value
   waterValue?: number; // if set, this resource counts as water with this value
+  storageCapGroup?: string; // if set, resources with the same group share a combined storage cap
 }
 
 export interface SkillDef {
@@ -173,6 +174,7 @@ export interface RecipeDef {
   repeatable?: boolean; // if true, auto-repeats until inputs run out (like gathering actions)
   xpGain: number;
   moraleGain?: number; // if set, completing this recipe boosts morale
+  noDoubleOutput?: boolean; // if true, skip milestone/tool double-output rolls (e.g. 1 pot → 1 water, not 2)
   /** Hide this recipe when ALL conditions are met. Used for progression replacements. */
   hideWhen?: RecipeHideCondition[];
 }

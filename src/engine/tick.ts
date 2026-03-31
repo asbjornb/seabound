@@ -7,7 +7,7 @@ import {
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
-import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, getStorageLimit, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -41,10 +41,7 @@ function isOutputFull(state: GameState): boolean {
     const fullAtStart = action.fullAtStart ?? [];
     const relevant = def.drops.filter((d) => (!d.chance || d.chance >= 1) && !fullAtStart.includes(d.resourceId));
     if (relevant.length === 0) return false;
-    return relevant.every((d) => {
-      const current = state.resources[d.resourceId] ?? 0;
-      return current >= getStorageLimit(state, d.resourceId);
-    });
+    return relevant.every((d) => isAtStorageCap(state, d.resourceId));
   }
 
   if (action.type === "craft") {
@@ -52,8 +49,7 @@ function isOutputFull(state: GameState): boolean {
     if (!def?.output) return false;
     const fullAtStart = action.fullAtStart ?? [];
     if (fullAtStart.includes(def.output.resourceId)) return false;
-    const current = state.resources[def.output.resourceId] ?? 0;
-    return current >= getStorageLimit(state, def.output.resourceId);
+    return isAtStorageCap(state, def.output.resourceId);
   }
 
   return false;
@@ -382,16 +378,37 @@ function applyCraftCompletion(
     } else {
       let outputAmount = def.output.amount;
 
-      // Double output milestone check
-      const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
-      if (doubleChance > 0 && Math.random() < doubleChance) {
-        outputAmount *= 2;
-      }
+      if (!def.noDoubleOutput) {
+        // Double output milestone check
+        const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
+        if (doubleChance > 0 && Math.random() < doubleChance) {
+          outputAmount *= 2;
+        }
 
-      // Tool output bonus (+1 chance)
-      const toolBonusChance = getToolOutputBonusChance(state, def.id);
-      if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
-        outputAmount += 1;
+        // Tool output bonus (+1 chance)
+        const toolBonusChance = getToolOutputBonusChance(state, def.id);
+        if (toolBonusChance > 0 && Math.random() < toolBonusChance) {
+          outputAmount += 1;
+        }
+      } else {
+        // noDoubleOutput recipes get an instant free recraft instead of doubling,
+        // but only if the player can afford the inputs again (e.g. has another pot)
+        const doubleChance = getDoubleOutputChance(def.skillId, skill.level, def.id);
+        const toolBonusChance = getToolOutputBonusChance(state, def.id);
+        const totalChance = Math.min(1, doubleChance + toolBonusChance);
+        if (totalChance > 0 && Math.random() < totalChance) {
+          const effectiveInputs = getEffectiveInputs(def, state);
+          const canAfford = effectiveInputs.every(
+            (input) => (state.resources[input.resourceId] ?? 0) >= input.amount
+          );
+          if (canAfford) {
+            for (const input of effectiveInputs) {
+              state.resources[input.resourceId] =
+                (state.resources[input.resourceId] ?? 0) - input.amount;
+            }
+            outputAmount += def.output.amount;
+          }
+        }
       }
 
       addResource(state, def.output.resourceId, outputAmount);

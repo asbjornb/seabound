@@ -365,16 +365,45 @@ export function getStorageLimit(state: GameState, resourceId: string): number {
   return limit;
 }
 
+/** Get total count of all resources sharing the same storageCapGroup. */
+export function getStorageGroupTotal(state: GameState, groupId: string): number {
+  const RESOURCES = getResources();
+  let total = 0;
+  for (const [rid, def] of Object.entries(RESOURCES)) {
+    if (def.storageCapGroup === groupId) {
+      total += state.resources[rid] ?? 0;
+    }
+  }
+  return total;
+}
+
+/** Check if a resource is at its storage cap, accounting for group caps. */
+export function isAtStorageCap(state: GameState, resourceId: string): boolean {
+  const RESOURCES = getResources();
+  const def = RESOURCES[resourceId];
+  const limit = getStorageLimit(state, resourceId);
+  const groupId = def?.storageCapGroup;
+  const used = groupId ? getStorageGroupTotal(state, groupId) : (state.resources[resourceId] ?? 0);
+  return used >= limit;
+}
+
 /** Add resource, clamping to the storage limit. Returns the amount actually added.
- *  If current amount already exceeds the limit (e.g. old save), no more is added but nothing is removed. */
+ *  If current amount already exceeds the limit (e.g. old save), no more is added but nothing is removed.
+ *  Resources with a storageCapGroup share their cap with all resources in the group. */
 export function addResource(state: GameState, resourceId: string, amount: number): number {
+  const RESOURCES = getResources();
+  const def = RESOURCES[resourceId];
   const current = state.resources[resourceId] ?? 0;
   const limit = getStorageLimit(state, resourceId);
-  if (current >= limit) {
-    // Already at or over cap — don't add, but don't reduce either
+
+  // For grouped resources, available space is based on the group total
+  const groupId = def?.storageCapGroup;
+  const used = groupId ? getStorageGroupTotal(state, groupId) : current;
+
+  if (used >= limit) {
     return 0;
   }
-  const space = limit - current;
+  const space = limit - used;
   const actuallyAdded = Math.min(amount, space);
   state.resources[resourceId] = current + actuallyAdded;
   return actuallyAdded;
