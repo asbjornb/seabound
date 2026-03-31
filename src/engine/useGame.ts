@@ -514,6 +514,21 @@ export function useGame() {
     []
   );
 
+  const importSaveFromJson = useCallback(
+    (json: string): boolean => {
+      try {
+        const loaded = normalizeGameState(JSON.parse(json));
+        if (!loaded) return false;
+        saveGame(loaded);
+        setState(loaded);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    []
+  );
+
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
@@ -542,5 +557,6 @@ export function useGame() {
     resetGame,
     exportSave,
     importSave,
+    importSaveFromJson,
   };
 }

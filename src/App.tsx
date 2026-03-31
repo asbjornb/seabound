@@ -64,6 +64,31 @@ export default function App() {
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
   const [victoryDismissed, setVictoryDismissed] = useState(false);
   const activeModId = getActiveModId();
+  const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
+  const isOldDomain = window.location.hostname.endsWith(".pages.dev");
+
+  // Handle incoming migration from old domain
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.startsWith("#migrate=")) return;
+    try {
+      const encoded = hash.slice("#migrate=".length);
+      const json = decodeURIComponent(atob(encoded));
+      const loaded = game.importSaveFromJson(json);
+      if (loaded) {
+        window.history.replaceState(null, "", window.location.pathname);
+        alert("Save migrated successfully! Welcome to seabound.dev");
+      }
+    } catch {
+      // invalid migration data — ignore
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleMigrate = useCallback(() => {
+    const data = JSON.stringify(game.state);
+    const encoded = btoa(encodeURIComponent(data));
+    window.open(`https://seabound.dev/#migrate=${encoded}`, "_blank");
+  }, [game.state]);
 
   const handleModSwitch = useCallback(() => {
     // After mod switch, reload the game state for the new mod
@@ -174,6 +199,13 @@ export default function App() {
       {updateAvailable && (
         <div className="update-bar" onClick={() => window.location.reload()}>
           A new version is available — tap to refresh
+        </div>
+      )}
+      {isOldDomain && !migrateBannerDismissed && (
+        <div className="migrate-bar">
+          <span>We've moved to <strong>seabound.dev</strong>!</span>
+          <button className="migrate-btn" onClick={handleMigrate}>Move my save</button>
+          <button className="migrate-dismiss" onClick={() => setMigrateBannerDismissed(true)}>✕</button>
         </div>
       )}
       <header className="header">
