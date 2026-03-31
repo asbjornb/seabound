@@ -175,23 +175,26 @@
     {
       "id": "resource:pandanus_cutting",
       "type": "resource",
-      "label": "Pandanus Cutting"
+      "label": "Pandanus Cutting",
+      "category": "pandanus"
     },
     {
       "id": "resource:pandanus_leaves",
       "type": "resource",
-      "label": "Pandanus Leaves"
+      "label": "Pandanus Leaves",
+      "category": "pandanus"
     },
     {
       "id": "resource:dried_pandanus_leaf",
       "type": "resource",
       "label": "Dried Pandanus Leaf",
-      "category": "dried"
+      "category": "dried,pandanus"
     },
     {
       "id": "resource:pandanus_strip",
       "type": "resource",
-      "label": "Pandanus Strip"
+      "label": "Pandanus Strip",
+      "category": "pandanus"
     },
     {
       "id": "resource:rope",
@@ -207,7 +210,8 @@
     {
       "id": "resource:retted_pandanus",
       "type": "resource",
-      "label": "Retted Pandanus"
+      "label": "Retted Pandanus",
+      "category": "pandanus"
     },
     {
       "id": "resource:obsidian",
@@ -495,12 +499,6 @@
       "id": "skill:weaving:6",
       "type": "skill_level",
       "label": "Weaving Lv6",
-      "category": "weaving"
-    },
-    {
-      "id": "skill:weaving:10",
-      "type": "skill_level",
-      "label": "Weaving Lv10",
       "category": "weaving"
     },
     {
@@ -1649,11 +1647,6 @@
       "from": "recipe:sew_sail",
       "to": "skill:weaving",
       "relation": "trains"
-    },
-    {
-      "from": "skill:weaving:10",
-      "to": "recipe:sew_sail",
-      "relation": "requires_skill"
     },
     {
       "from": "building:fiber_loom",
@@ -4280,7 +4273,6 @@
       "skill:farming:7",
       "building:farm_plot",
       "skill:crafting:11",
-      "skill:weaving:10",
       "skill:weaving:6",
       "skill:cooking:12",
       "recipe:upgrade_farm_plot",
@@ -4478,24 +4470,6 @@
           "level": 6,
           "unlocks": [
             "recipe:twist_rope"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "station:soak_pandanus"
-          ]
-        },
-        {
-          "level": 10,
-          "unlocks": [
-            "recipe:sew_sail"
           ],
           "trainedBy": [
             "recipe:twist_cordage",

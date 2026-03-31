@@ -174,7 +174,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Stitch pandanus strips into a broad sail. The wind awaits.",
     skillId: "weaving",
     panel: "craft",
-    requiredSkillLevel: 10,
     inputs: [{ resourceId: "pandanus_strip", amount: 50 }],
     output: { resourceId: "sail", amount: 1 },
     requiredBuildings: ["fiber_loom"],

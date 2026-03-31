@@ -201,22 +201,25 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "pandanus_cutting",
     name: "Pandanus Cutting",
     description: "A pandanus plant cutting from a far island. Ready to plant in rich soil.",
+    tags: ["pandanus"],
   },
   pandanus_leaves: {
     id: "pandanus_leaves",
     name: "Pandanus Leaves",
     description: "Long, tough leaves from a pandanus plant. Need drying before use.",
+    tags: ["pandanus"],
   },
   dried_pandanus_leaf: {
     id: "dried_pandanus_leaf",
     name: "Dried Pandanus Leaf",
     description: "A sun-dried pandanus leaf. Ready to be cut into strips.",
-    tags: ["dried"],
+    tags: ["dried", "pandanus"],
   },
   pandanus_strip: {
     id: "pandanus_strip",
     name: "Pandanus Strip",
     description: "A thin, flexible strip of dried pandanus. Versatile crafting fiber.",
+    tags: ["pandanus"],
   },
   rope: {
     id: "rope",
@@ -234,6 +237,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "retted_pandanus",
     name: "Retted Pandanus",
     description: "Water-soaked pandanus fiber. Softened and easy to split into many fine strips.",
+    tags: ["pandanus"],
   },
 
   // Obsidian
