@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DiscoveryEntry } from "../data/types";
 
 const MAX_VISIBLE = 5;
@@ -8,10 +8,16 @@ interface Toast {
   dismissing: boolean;
 }
 
-export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEntry[] }) {
+export function NotificationToast({
+  discoveryLog,
+  lastSeenDiscoveryId,
+  onSeen,
+}: {
+  discoveryLog: DiscoveryEntry[];
+  lastSeenDiscoveryId: number;
+  onSeen: (id: number) => void;
+}) {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  // Initialize to the latest existing ID so we don't re-toast old entries on reload
-  const lastSeenId = useRef<number>(discoveryLog.length > 0 ? discoveryLog[0].id : -1);
 
   // Watch for new discovery log entries
   useEffect(() => {
@@ -20,16 +26,23 @@ export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEnt
     // discoveryLog is newest-first (unshift), so index 0 is newest
     const newEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
-      if (entry.id <= lastSeenId.current) break;
+      if (entry.id <= lastSeenDiscoveryId) break;
       // Only show toasts for location discoveries (and recipe unlocks in the future)
       if (entry.type === "biome") {
         newEntries.push(entry);
       }
     }
 
-    if (newEntries.length === 0) return;
+    if (newEntries.length === 0) {
+      // Still mark latest as seen even if no biome toasts, so we don't re-scan next time
+      if (discoveryLog[0].id > lastSeenDiscoveryId) {
+        onSeen(discoveryLog[0].id);
+      }
+      return;
+    }
 
-    lastSeenId.current = discoveryLog[0].id;
+    // Mark all current entries as seen
+    onSeen(discoveryLog[0].id);
 
     // Add new toasts
     const toAdd = newEntries.slice(0, MAX_VISIBLE).reverse();
@@ -38,7 +51,7 @@ export function NotificationToast({ discoveryLog }: { discoveryLog: DiscoveryEnt
       // Keep only the most recent toasts if too many pile up
       return next.slice(-MAX_VISIBLE);
     });
-  }, [discoveryLog]);
+  }, [discoveryLog, lastSeenDiscoveryId, onSeen]);
 
   // Remove after dismiss animation
   const handleAnimationEnd = (id: number) => {

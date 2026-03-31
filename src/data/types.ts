@@ -271,6 +271,7 @@ export interface GameState {
   completedActions: string[]; // action IDs the player has completed at least once
   completedRecipes: string[]; // recipe IDs the player has completed at least once
   expeditionPity: Record<string, number>; // consecutive no-biome-discovery attempts per expedition
+  lastSeenDiscoveryId: number; // highest discovery ID the player has seen (for toast dedup)
   victory?: boolean; // true when the player has won (completed a victory expedition)
   modId?: string; // if set, this save belongs to a specific mod
 }

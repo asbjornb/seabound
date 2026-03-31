@@ -8,7 +8,7 @@ import {
   getFoodValues,
   getWaterValues,
 } from "../data/registry";
-import type { BuildingId, GameState, RecipeDef, RecipeInput, ResourceId, TagInput, ToolId } from "../data/types";
+import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, TagInput, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -101,6 +101,7 @@ export function createInitialState(): GameState {
     completedActions: [],
     completedRecipes: [],
     expeditionPity: {},
+    lastSeenDiscoveryId: -1,
   };
 }
 
@@ -230,6 +231,12 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure expeditionPity exists
   if (!loaded.expeditionPity) {
     loaded.expeditionPity = {};
+  }
+  // Migration: ensure lastSeenDiscoveryId exists (default to latest so old saves don't re-toast)
+  if (loaded.lastSeenDiscoveryId == null) {
+    loaded.lastSeenDiscoveryId = loaded.discoveryLog.length > 0
+      ? Math.max(...loaded.discoveryLog.map((e: DiscoveryEntry) => e.id))
+      : -1;
   }
   // Migration: grant rocky_shore biome if player already has flat_stone or chert
   if (!loaded.discoveredBiomes.includes("rocky_shore")) {
