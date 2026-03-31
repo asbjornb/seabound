@@ -121,6 +121,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A clay-lined pit filled with water for retting pandanus fiber. Softens leaves with no active work.",
     unlocks: "Soak pandanus leaves (passive station) — more strips per leaf",
+    storageBonus: [{ tag: "pandanus", amount: 5 }],
   },
   pottery_wheel: {
     id: "pottery_wheel",
