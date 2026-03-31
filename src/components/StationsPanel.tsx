@@ -1,9 +1,10 @@
-import { getBuildings, getResources, getStationById } from "../data/registry";
+import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
 
 interface Props {
   availableStations: StationDef[];
+  lockedStations: StationDef[];
   state: GameState;
   onDeploy: (station: StationDef) => void;
   onCollect: (index: number) => void;
@@ -19,6 +20,7 @@ function formatTime(ms: number): string {
 
 export function StationsPanel({
   availableStations,
+  lockedStations,
   state,
   onDeploy,
   onCollect,
@@ -26,6 +28,7 @@ export function StationsPanel({
   const now = Date.now();
   const RESOURCES = getResources();
   const BUILDINGS = getBuildings();
+  const SKILLS = getSkills();
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
@@ -201,7 +204,43 @@ export function StationsPanel({
         </>
       )}
 
-      {availableStations.length === 0 && activeStations.length === 0 && (
+      {/* Locked stations — player has the seed/cutting but not the skill level */}
+      {lockedStations.length > 0 && (
+        <>
+          <div className="section-title">Locked</div>
+          {lockedStations.map((station) => {
+            const skillName = SKILLS[station.skillId]?.name ?? station.skillId;
+            return (
+              <div key={station.id} className="action-card disabled locked-station">
+                <div className="action-card-header">
+                  <span className="action-name">{station.name}</span>
+                  <span className="action-time locked-level">
+                    {skillName} Lv {station.requiredSkillLevel}
+                  </span>
+                </div>
+                <div className="action-desc">{station.description}</div>
+                <div className="action-drops">
+                  Yields:{" "}
+                  {station.yields
+                    .filter((d) => (d.chance ?? 1) > 0)
+                    .map((d, i) => (
+                      <span key={i}>
+                        {i > 0 && ", "}
+                        {d.amount}x{" "}
+                        {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {d.chance != null && d.chance < 1
+                          ? ` (${Math.round(d.chance * 100)}%)`
+                          : ""}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+
+      {availableStations.length === 0 && lockedStations.length === 0 && activeStations.length === 0 && (
         <div className="empty-message">
           No stations available yet. Craft traps and tools to unlock passive gathering!
         </div>

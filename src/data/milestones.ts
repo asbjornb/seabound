@@ -159,7 +159,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   ],
   farming: [
     {
-      level: 3,
+      level: 2,
       description: "Hardy seeds — +15% wild seed return chance",
       effects: [
         { type: "drop_chance", actionId: "plant_wild_seeds", resourceId: "wild_seed", bonus: 0.15 },
@@ -201,7 +201,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
-      level: 10,
+      level: 9,
       description: "Green thumb — all crop stations 15% faster",
       effects: [
         { type: "duration", actionId: "plant_wild_seeds", multiplier: 0.85 },
@@ -213,7 +213,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
-      level: 12,
+      level: 11,
       description: "Propagation — +10% chance for all crop replanting",
       effects: [
         { type: "drop_chance", actionId: "cultivate_taro", resourceId: "taro_corm", bonus: 0.10 },
@@ -222,7 +222,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
-      level: 15,
+      level: 13,
       description: "Abundant harvest — 20% chance to double crop yields",
       effects: [
         { type: "double_output", chance: 0.2 },

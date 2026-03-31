@@ -40,6 +40,7 @@ import {
   selectAvailableExpeditions,
   selectAvailableRecipes,
   selectAvailableStations,
+  selectLockedStations,
   selectCurrentActionTiming,
 } from "./selectors";
 import { CompletionEvent, processTick } from "./tick";
@@ -510,6 +511,7 @@ export function useGame() {
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
   const availableStations = selectAvailableStations(state);
+  const lockedStations = selectLockedStations(state);
   const { actionProgress, actionDuration } = selectCurrentActionTiming(state);
 
   return {
@@ -518,6 +520,7 @@ export function useGame() {
     availableRecipes,
     availableExpeditions,
     availableStations,
+    lockedStations,
     actionProgress,
     actionDuration,
     startAction,

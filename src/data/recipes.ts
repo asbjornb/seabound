@@ -933,6 +933,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "construction",
     panel: "build",
     requiredSkillLevel: 12,
+    requiredSkills: [{ skillId: "farming", level: 7 }],
     inputs: [
       { resourceId: "pandanus_cutting", amount: 2 },
       { resourceId: "flat_stone", amount: 4 },

@@ -168,6 +168,32 @@ export function selectAvailableStations(state: GameState): StationDef[] {
   });
 }
 
+/** Stations the player can't deploy yet (skill too low) but has the setup inputs for.
+ *  Shown as locked previews so the player knows what level to aim for. */
+export function selectLockedStations(state: GameState): StationDef[] {
+  const available = selectAvailableStations(state);
+  const availableIds = new Set(available.map((s) => s.id));
+  return getStations().filter((station) => {
+    if (availableIds.has(station.id)) return false;
+    // Only show if locked specifically by skill level
+    const skill = state.skills[station.skillId];
+    if (!station.requiredSkillLevel || skill.level >= station.requiredSkillLevel) return false;
+    // Must have the setup inputs (the seed/cutting) to tease
+    if (!station.setupInputs || station.setupInputs.length === 0) return false;
+    if (!station.setupInputs.some((inp) => getResource(state, inp.resourceId) > 0)) return false;
+    // Must meet all other requirements (tool, buildings, building slots)
+    if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
+    if (station.requiredBuildings?.some((bid) => !state.buildings.includes(bid))) return false;
+    if (station.maxDeployedPerBuildings) {
+      const totalPlots = station.maxDeployedPerBuildings.reduce(
+        (sum, bid) => sum + getBuildingCount(state, bid), 0
+      );
+      if (totalPlots === 0) return false;
+    }
+    return true;
+  });
+}
+
 export function selectCurrentActionTiming(
   state: GameState,
   now = Date.now()

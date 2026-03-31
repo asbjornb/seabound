@@ -385,6 +385,7 @@ export default function App() {
             {activeTab === "tend" && (
               <StationsPanel
                 availableStations={game.availableStations}
+                lockedStations={game.lockedStations}
                 state={game.state}
                 onDeploy={game.deployStation}
                 onCollect={game.collectStation}
