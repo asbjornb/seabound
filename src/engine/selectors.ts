@@ -107,7 +107,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
       const allMet = recipe.hideWhen.every((cond) => {
         switch (cond.type) {
           case "has_building":
-            return hasBuilding(state, cond.buildingId);
+            return hasBuildingOrUpgrade(cond.buildingId);
           case "has_tool":
             return state.tools.includes(cond.toolId);
           case "output_no_use":
