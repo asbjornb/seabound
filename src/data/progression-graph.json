@@ -237,7 +237,7 @@
       "id": "resource:charcoal",
       "type": "resource",
       "label": "Charcoal",
-      "category": "fuel"
+      "category": "charcoal"
     },
     {
       "id": "resource:large_log",

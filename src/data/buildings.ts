@@ -139,7 +139,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A clay-sealed mound for slow-burning logs into charcoal. An ancient fuel upgrade.",
     unlocks: "Charcoal station — bulk fuel from large logs; charcoal replaces driftwood in fire recipes",
-    storageBonus: [{ tag: "fuel", amount: 20 }],
+    storageBonus: [{ tag: "charcoal", amount: 20 }],
   },
   soaking_pit: {
     id: "soaking_pit",
