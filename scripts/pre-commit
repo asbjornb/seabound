@@ -16,4 +16,11 @@ if [ -n "$STAGED_DATA" ]; then
   fi
   git add src/data/progression-graph.json
   echo "[pre-commit] progression-graph.json updated and staged."
+
+  echo "[pre-commit] Checking icon references against icon-spec.json..."
+  npx tsx scripts/check-icons.ts --check
+  if [ $? -ne 0 ]; then
+    echo "[pre-commit] ERROR: Missing icon spec entries. Add them to docs/icon-spec.json."
+    exit 1
+  fi
 fi
