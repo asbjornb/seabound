@@ -134,6 +134,7 @@ export const ACTIONS: ActionDef[] = [
     requiredBiome: "jungle_interior",
     requiredTools: ["stone_axe"],
     xpGain: 30,
+    hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
 
   // Water collection moved to recipe "fill_water_pot" (requires well building)

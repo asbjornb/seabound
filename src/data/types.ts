@@ -133,6 +133,8 @@ export interface ActionDef {
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
+  /** Hide this action when ALL conditions are met. */
+  hideWhen?: RecipeHideCondition[];
 }
 
 export interface RecipeInput {
