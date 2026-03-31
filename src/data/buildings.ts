@@ -133,6 +133,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     storageBonus: [{ tag: "food", amount: 1 }],
     maxCount: 5,
   },
+  storage_shelf: {
+    id: "storage_shelf",
+    name: "Storage Shelf",
+    description:
+      "A bamboo shelf lined with clay pots and jars. Keeps supplies tidy and off the ground.",
+    unlocks: "Extra storage for small non-food items",
+    storageBonus: [{ excludeTags: ["food", "large"], amount: 5 }],
+  },
   charcoal_kiln: {
     id: "charcoal_kiln",
     name: "Charcoal Kiln",

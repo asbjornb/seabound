@@ -827,6 +827,26 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 60,
   },
 
+  // Building: Storage Shelf (Construction 17)
+  {
+    id: "build_storage_shelf",
+    name: "Storage Shelf",
+    description:
+      "Assemble a bamboo rack and line it with fired pots. A proper place for everything.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 17,
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 6 },
+      { resourceId: "fired_clay_pot", amount: 3 },
+      { resourceId: "cordage", amount: 4 },
+    ],
+    buildingOutput: "storage_shelf",
+    requiredBuildings: ["thatched_hut"],
+    durationMs: 18000,
+    xpGain: 55,
+  },
+
   // Building: Soaking Pit (Weaving 7)
   {
     id: "build_soaking_pit",
