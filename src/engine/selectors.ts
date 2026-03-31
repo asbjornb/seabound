@@ -30,7 +30,7 @@ import {
 export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills";
 
 
-export function resourceHasUse(resourceId: string, state: GameState): boolean {
+export function resourceHasUse(resourceId: string, state: GameState, _visited?: Set<string>): boolean {
   const RESOURCES = getResources();
   const def = RESOURCES[resourceId];
   // Food/water resources are always useful — consumed by expeditions and survival
@@ -48,6 +48,15 @@ export function resourceHasUse(resourceId: string, state: GameState): boolean {
     }
     if (recipe.oneTimeCraft && recipe.output && getResource(state, recipe.output.resourceId) >= 1) return false;
     if (recipe.oneTimeCraft && recipe.toolOutput && state.tools.includes(recipe.toolOutput)) return false;
+    // Transitive check: if this recipe's output is also marked output_no_use and that
+    // output itself has no remaining use, this recipe doesn't count as a use either
+    if (recipe.output && !recipe.buildingOutput && !recipe.toolOutput &&
+        recipe.hideWhen?.some((cond) => cond.type === "output_no_use")) {
+      const visited = _visited ?? new Set<string>();
+      if (visited.has(recipe.output.resourceId)) return false;
+      visited.add(recipe.output.resourceId);
+      if (!resourceHasUse(recipe.output.resourceId, state, visited)) return false;
+    }
     return true;
   });
 }
