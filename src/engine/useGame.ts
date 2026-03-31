@@ -477,6 +477,13 @@ export function useGame() {
     URL.revokeObjectURL(url);
   }, []);
 
+  const markDiscoverySeen = useCallback((id: number) => {
+    setState((prev) => {
+      if (id <= prev.lastSeenDiscoveryId) return prev;
+      return { ...prev, lastSeenDiscoveryId: id };
+    });
+  }, []);
+
   const markPhaseSeen = useCallback((phaseId: string) => {
     setState((prev) => {
       if (prev.seenPhases.includes(phaseId)) return prev;
@@ -529,6 +536,7 @@ export function useGame() {
     toggleStopWhenFull,
     deployStation,
     collectStation,
+    markDiscoverySeen,
     markPhaseSeen,
     resetGame,
     exportSave,

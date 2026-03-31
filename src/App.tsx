@@ -411,7 +411,11 @@ export default function App() {
           </main>
         </div>
 
-        <NotificationToast discoveryLog={game.state.discoveryLog} />
+        <NotificationToast
+          discoveryLog={game.state.discoveryLog}
+          lastSeenDiscoveryId={game.state.lastSeenDiscoveryId}
+          onSeen={game.markDiscoverySeen}
+        />
 
         {/* Desktop sidebar: always visible on wide screens */}
         {(hasAnyResource || hasAnyXp) && (
