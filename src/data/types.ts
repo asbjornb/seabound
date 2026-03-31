@@ -133,8 +133,8 @@ export interface ActionDef {
   requiredBiome?: BiomeId;
   requiredBuildings?: BuildingId[];
   xpGain: number;
-  /** Hide this action when ALL conditions are met. */
-  hideWhen?: RecipeHideCondition[];
+  /** If true, action disappears once the player owns ≥1 of any drop resource. */
+  oneTimeAction?: boolean;
 }
 
 export interface RecipeInput {
