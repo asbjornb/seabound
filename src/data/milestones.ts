@@ -245,6 +245,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 5,
+      description: "Efficient strips — 25% chance to cut extra pandanus strips",
+      effects: [
+        { type: "double_output", chance: 0.25, recipeId: "cut_pandanus_strips" },
+      ],
+    },
+    {
       level: 7,
       description: "Efficient craftsman — all crafting 10% faster",
       effects: [
@@ -263,6 +270,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Seasoned crafter — all crafting recipes 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 12,
+      description: "Batch firing — 20% chance to double fired clay pot output",
+      effects: [
+        { type: "double_output", chance: 0.2, recipeId: "fire_clay_pot" },
       ],
     },
   ],
@@ -287,6 +301,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Deft weaver — all weaving 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Rope walk — twist rope 20% faster",
+      effects: [
+        { type: "duration", actionId: "twist_rope", multiplier: 0.8 },
       ],
     },
     {

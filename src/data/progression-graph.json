@@ -205,6 +205,11 @@
       "category": "large"
     },
     {
+      "id": "resource:retted_pandanus",
+      "type": "resource",
+      "label": "Retted Pandanus"
+    },
+    {
       "id": "resource:obsidian",
       "type": "resource",
       "label": "Obsidian"
@@ -428,6 +433,16 @@
       "label": "Pandanus Grove"
     },
     {
+      "id": "building:soaking_pit",
+      "type": "building",
+      "label": "Soaking Pit"
+    },
+    {
+      "id": "building:pottery_wheel",
+      "type": "building",
+      "label": "Pottery Wheel"
+    },
+    {
       "id": "building:sleeping_mat",
       "type": "building",
       "label": "Sleeping Mat"
@@ -504,6 +519,12 @@
       "id": "skill:crafting:6",
       "type": "skill_level",
       "label": "Crafting Lv6",
+      "category": "crafting"
+    },
+    {
+      "id": "skill:crafting:11",
+      "type": "skill_level",
+      "label": "Crafting Lv11",
       "category": "crafting"
     },
     {
@@ -771,6 +792,12 @@
       "category": "crafting"
     },
     {
+      "id": "recipe:split_retted_pandanus",
+      "type": "recipe",
+      "label": "Split Retted Fiber",
+      "category": "weaving"
+    },
+    {
       "id": "recipe:weave_pandanus_cordage",
       "type": "recipe",
       "label": "Pandanus Cordage",
@@ -975,15 +1002,39 @@
       "category": "construction"
     },
     {
+      "id": "recipe:build_pottery_wheel",
+      "type": "recipe",
+      "label": "Pottery Wheel",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:build_soaking_pit",
+      "type": "recipe",
+      "label": "Soaking Pit",
+      "category": "construction"
+    },
+    {
       "id": "recipe:shape_clay_pot",
       "type": "recipe",
       "label": "Shape Clay Pot",
       "category": "crafting"
     },
     {
+      "id": "recipe:wheel_shape_clay_pot",
+      "type": "recipe",
+      "label": "Wheel-Throw Pot",
+      "category": "crafting"
+    },
+    {
       "id": "recipe:fire_clay_pot",
       "type": "recipe",
       "label": "Fire Clay Pot",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:kiln_fire_pot",
+      "type": "recipe",
+      "label": "Kiln-Fire Pot",
       "category": "crafting"
     },
     {
@@ -1129,6 +1180,12 @@
       "type": "station",
       "label": "Grow Breadfruit",
       "category": "farming"
+    },
+    {
+      "id": "station:soak_pandanus",
+      "type": "station",
+      "label": "Soak Pandanus",
+      "category": "weaving"
     },
     {
       "id": "station:harvest_pandanus_grove",
@@ -1527,6 +1584,21 @@
       "from": "tool:bamboo_knife",
       "to": "recipe:cut_pandanus_strips",
       "relation": "requires_tool"
+    },
+    {
+      "from": "recipe:split_retted_pandanus",
+      "to": "resource:pandanus_strip",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:retted_pandanus",
+      "to": "recipe:split_retted_pandanus",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:split_retted_pandanus",
+      "to": "skill:weaving",
+      "relation": "trains"
     },
     {
       "from": "recipe:weave_pandanus_cordage",
@@ -2439,6 +2511,76 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:build_pottery_wheel",
+      "to": "building:pottery_wheel",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_pottery_wheel",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:11",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_soaking_pit",
+      "to": "building:soaking_pit",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_soaking_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_soaking_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_soaking_pit",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_soaking_pit",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:build_soaking_pit",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:shape_clay_pot",
       "to": "resource:shaped_clay_pot",
       "relation": "produces"
@@ -2457,6 +2599,26 @@
       "from": "resource:clay",
       "to": "recipe:shape_clay_pot",
       "relation": "requires_item"
+    },
+    {
+      "from": "recipe:wheel_shape_clay_pot",
+      "to": "resource:shaped_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:wheel_shape_clay_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:wheel_shape_clay_pot",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:pottery_wheel",
+      "to": "recipe:wheel_shape_clay_pot",
+      "relation": "requires_building"
     },
     {
       "from": "recipe:fire_clay_pot",
@@ -2481,6 +2643,31 @@
     {
       "from": "building:firing_pit",
       "to": "recipe:fire_clay_pot",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:kiln_fire_pot",
+      "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:shaped_clay_pot",
+      "to": "recipe:kiln_fire_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:kiln_fire_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:kiln_fire_pot",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:kiln_fire_pot",
       "relation": "requires_building"
     },
     {
@@ -3889,6 +4076,21 @@
       "relation": "consumes"
     },
     {
+      "from": "station:soak_pandanus",
+      "to": "resource:retted_pandanus",
+      "relation": "produces"
+    },
+    {
+      "from": "station:soak_pandanus",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:pandanus_leaves",
+      "to": "station:soak_pandanus",
+      "relation": "consumes"
+    },
+    {
       "from": "station:harvest_pandanus_grove",
       "to": "resource:pandanus_leaves",
       "relation": "produces"
@@ -3940,6 +4142,7 @@
       "recipe:dry_fiber",
       "recipe:build_fiber_loom",
       "recipe:cut_pandanus_strips",
+      "recipe:split_retted_pandanus",
       "action:gather_coconuts",
       "action:wade_tidal_pool",
       "action:spear_fish",
@@ -3969,6 +4172,7 @@
       "skill:weaving:4",
       "resource:dried_pandanus_leaf",
       "tool:bamboo_knife",
+      "resource:retted_pandanus",
       "tool:bamboo_spear",
       "skill:fishing:8",
       "tool:gorge_hook",
@@ -3998,6 +4202,7 @@
       "action:collect_palm_frond",
       "recipe:dry_pandanus_leaf",
       "recipe:craft_bamboo_knife",
+      "station:soak_pandanus",
       "recipe:craft_bamboo_spear",
       "recipe:craft_gorge_hook",
       "recipe:craft_basket_trap",
@@ -4006,6 +4211,7 @@
       "recipe:build_well",
       "station:grow_breadfruit",
       "recipe:fire_clay_pot",
+      "recipe:kiln_fire_pot",
       "expedition:oceanic_voyage",
       "skill:woodworking:10",
       "biome:jungle_interior",
@@ -4028,6 +4234,7 @@
       "resource:breadfruit_cutting",
       "resource:shaped_clay_pot",
       "building:firing_pit",
+      "building:kiln",
       "building:outrigger_canoe",
       "resource:voyage_provisions",
       "recipe:craft_stone_axe",
@@ -4039,7 +4246,9 @@
       "recipe:strike_stone_flake",
       "action:dig_clay",
       "recipe:shape_clay_pot",
+      "recipe:wheel_shape_clay_pot",
       "recipe:build_firing_pit",
+      "recipe:build_kiln",
       "recipe:build_outrigger",
       "recipe:pack_voyage_provisions",
       "resource:stone_blade",
@@ -4048,15 +4257,19 @@
       "resource:chert",
       "tool:hammerstone",
       "skill:foraging:5",
+      "building:pottery_wheel",
+      "skill:construction:13",
       "resource:sail",
       "resource:rope",
       "skill:construction:8",
       "resource:sealed_clay_jar",
       "recipe:knap_stone_blade",
       "recipe:craft_hammerstone",
+      "recipe:build_pottery_wheel",
       "recipe:sew_sail",
       "recipe:twist_rope",
       "recipe:seal_clay_jar",
+      "skill:crafting:11",
       "skill:weaving:10",
       "skill:weaving:6",
       "skill:cooking:12"
@@ -4077,7 +4290,7 @@
       "resource:coconut",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
-      "recipe:cut_pandanus_strips",
+      "recipe:split_retted_pandanus",
       "expedition:explore_beach",
       "action:gather_coconuts",
       "resource:large_log",
@@ -4086,31 +4299,23 @@
       "resource:driftwood_branch",
       "building:camp_fire",
       "resource:large_shell",
-      "resource:dried_pandanus_leaf",
-      "tool:bamboo_knife",
+      "resource:retted_pandanus",
       "action:fell_large_tree",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
       "action:wade_tidal_pool",
-      "recipe:dry_pandanus_leaf",
-      "recipe:craft_bamboo_knife",
+      "station:soak_pandanus",
       "skill:woodworking:10",
       "biome:jungle_interior",
       "tool:stone_axe",
       "tool:bow_drill_kit",
       "resource:pandanus_leaves",
-      "building:drying_rack",
-      "resource:bamboo_splinter",
       "recipe:craft_stone_axe",
       "recipe:craft_bow_drill",
       "station:harvest_pandanus_grove",
-      "recipe:build_drying_rack",
-      "recipe:split_bamboo_cane",
       "resource:stone_blade",
       "resource:flat_stone",
-      "resource:palm_frond",
       "recipe:knap_stone_blade",
-      "action:collect_palm_frond",
       "resource:stone_flake",
       "tool:hammerstone",
       "recipe:strike_stone_flake",
@@ -4198,12 +4403,14 @@
           "trainedBy": [
             "recipe:twist_cordage",
             "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
             "recipe:weave_pandanus_cordage",
             "recipe:twist_rope",
             "recipe:sew_sail",
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
           ]
         },
         {
@@ -4214,12 +4421,14 @@
           "trainedBy": [
             "recipe:twist_cordage",
             "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
             "recipe:weave_pandanus_cordage",
             "recipe:twist_rope",
             "recipe:sew_sail",
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
           ]
         },
         {
@@ -4230,12 +4439,14 @@
           "trainedBy": [
             "recipe:twist_cordage",
             "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
             "recipe:weave_pandanus_cordage",
             "recipe:twist_rope",
             "recipe:sew_sail",
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
           ]
         },
         {
@@ -4246,12 +4457,14 @@
           "trainedBy": [
             "recipe:twist_cordage",
             "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
             "recipe:weave_pandanus_cordage",
             "recipe:twist_rope",
             "recipe:sew_sail",
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom"
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
           ]
         }
       ],
@@ -4279,8 +4492,42 @@
             "recipe:craft_stone_axe",
             "recipe:knap_obsidian_blade",
             "recipe:craft_bamboo_spear",
+            "recipe:build_pottery_wheel",
             "recipe:shape_clay_pot",
+            "recipe:wheel_shape_clay_pot",
             "recipe:fire_clay_pot",
+            "recipe:kiln_fire_pot",
+            "recipe:craft_digging_stick"
+          ]
+        },
+        {
+          "level": 11,
+          "unlocks": [
+            "recipe:build_pottery_wheel"
+          ],
+          "trainedBy": [
+            "recipe:shred_coconut_husk",
+            "recipe:craft_shell_beads",
+            "recipe:craft_bamboo_knife",
+            "recipe:dry_fiber",
+            "recipe:dry_pandanus_leaf",
+            "recipe:cut_pandanus_strips",
+            "recipe:craft_bow_drill",
+            "recipe:craft_gorge_hook",
+            "recipe:build_camp_fire",
+            "recipe:build_drying_rack",
+            "recipe:craft_hammerstone",
+            "recipe:strike_stone_flake",
+            "recipe:knap_stone_blade",
+            "recipe:craft_shell_adze",
+            "recipe:craft_stone_axe",
+            "recipe:knap_obsidian_blade",
+            "recipe:craft_bamboo_spear",
+            "recipe:build_pottery_wheel",
+            "recipe:shape_clay_pot",
+            "recipe:wheel_shape_clay_pot",
+            "recipe:fire_clay_pot",
+            "recipe:kiln_fire_pot",
             "recipe:craft_digging_stick"
           ]
         }
@@ -4305,6 +4552,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4332,6 +4580,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4359,6 +4608,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4386,6 +4636,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4413,6 +4664,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4440,6 +4692,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4468,6 +4721,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4495,6 +4749,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4522,6 +4777,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4549,6 +4805,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4576,6 +4833,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4603,6 +4861,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
@@ -4630,6 +4889,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
             "recipe:upgrade_tended_garden",
