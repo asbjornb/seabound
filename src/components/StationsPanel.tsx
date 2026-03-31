@@ -115,12 +115,8 @@ export function StationsPanel({
             const currentCount = state.stations.filter(
               (s) => s.stationId === station.id
             ).length;
-            const atMax = currentCount >= maxDeployed;
-
-            // Hide single-deploy stations (no building slots) when already deployed
-            if (atMax && !station.maxDeployedPerBuildings) return null;
-            // Hide no-input stations (auto-restart) when all slots are filled
-            if (atMax && (!station.setupInputs || station.setupInputs.length === 0)) return null;
+            // Hide stations when all slots are filled
+            if (currentCount >= maxDeployed) return null;
 
             const canAffordInputs =
               !station.setupInputs ||
@@ -128,7 +124,7 @@ export function StationsPanel({
                 (inp) => getResource(state, inp.resourceId) >= inp.amount
               );
 
-            const disabled = atMax || !canAffordInputs;
+            const disabled = !canAffordInputs;
 
             return (
               <div
@@ -197,9 +193,6 @@ export function StationsPanel({
                 <div className="action-xp">
                   +{station.xpGain} {station.skillId} XP
                 </div>
-                {atMax && (
-                  <div className="station-at-max">Already deployed</div>
-                )}
               </div>
             );
           })}
