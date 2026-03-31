@@ -234,6 +234,11 @@
       "label": "Stone Blade"
     },
     {
+      "id": "resource:charcoal",
+      "type": "resource",
+      "label": "Charcoal"
+    },
+    {
       "id": "resource:large_log",
       "type": "resource",
       "label": "Large Log",
@@ -437,6 +442,11 @@
       "label": "Pandanus Grove"
     },
     {
+      "id": "building:charcoal_kiln",
+      "type": "building",
+      "label": "Charcoal Kiln"
+    },
+    {
       "id": "building:soaking_pit",
       "type": "building",
       "label": "Soaking Pit"
@@ -565,6 +575,12 @@
       "id": "skill:construction:13",
       "type": "skill_level",
       "label": "Construction Lv13",
+      "category": "construction"
+    },
+    {
+      "id": "skill:construction:16",
+      "type": "skill_level",
+      "label": "Construction Lv16",
       "category": "construction"
     },
     {
@@ -1000,6 +1016,12 @@
       "category": "crafting"
     },
     {
+      "id": "recipe:build_charcoal_kiln",
+      "type": "recipe",
+      "label": "Charcoal Kiln",
+      "category": "construction"
+    },
+    {
       "id": "recipe:build_soaking_pit",
       "type": "recipe",
       "label": "Soaking Pit",
@@ -1172,6 +1194,12 @@
       "type": "station",
       "label": "Grow Breadfruit",
       "category": "farming"
+    },
+    {
+      "id": "station:burn_charcoal",
+      "type": "station",
+      "label": "Burn Charcoal",
+      "category": "cooking"
     },
     {
       "id": "station:soak_pandanus",
@@ -2348,6 +2376,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:charcoal",
+      "to": "recipe:cook_fish",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:dry_grass",
       "to": "recipe:cook_fish",
       "relation": "consumes"
@@ -2374,6 +2407,11 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:cook_large_fish",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
       "to": "recipe:cook_large_fish",
       "relation": "consumes"
     },
@@ -2409,6 +2447,11 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:cook_crab",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
       "to": "recipe:cook_crab",
       "relation": "consumes"
     },
@@ -2538,6 +2581,51 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:build_charcoal_kiln",
+      "to": "building:charcoal_kiln",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_charcoal_kiln",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:construction:16",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "requires_building"
+    },
+    {
+      "from": "building:stone_hearth",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:build_soaking_pit",
       "to": "building:soaking_pit",
       "relation": "builds"
@@ -2623,6 +2711,16 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:charcoal",
+      "to": "recipe:fire_clay_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:fire_clay_pot",
+      "relation": "consumes"
+    },
+    {
       "from": "recipe:fire_clay_pot",
       "to": "skill:crafting",
       "relation": "trains"
@@ -2644,6 +2742,11 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:kiln_fire_pot",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
       "to": "recipe:kiln_fire_pot",
       "relation": "consumes"
     },
@@ -2694,6 +2797,16 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:seal_clay_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:seal_clay_jar",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
       "to": "recipe:seal_clay_jar",
       "relation": "consumes"
     },
@@ -2978,6 +3091,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:charcoal",
+      "to": "recipe:cook_root_vegetable",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:dry_grass",
       "to": "recipe:cook_root_vegetable",
       "relation": "consumes"
@@ -3013,6 +3131,16 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:charcoal",
+      "to": "recipe:cook_taro",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:cook_taro",
+      "relation": "consumes"
+    },
+    {
       "from": "recipe:cook_taro",
       "to": "skill:cooking",
       "relation": "trains"
@@ -3039,6 +3167,16 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:roast_breadfruit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:roast_breadfruit",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
       "to": "recipe:roast_breadfruit",
       "relation": "consumes"
     },
@@ -3154,6 +3292,11 @@
     },
     {
       "from": "resource:driftwood_branch",
+      "to": "recipe:craft_crucible",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
       "to": "recipe:craft_crucible",
       "relation": "consumes"
     },
@@ -4058,6 +4201,26 @@
       "relation": "consumes"
     },
     {
+      "from": "station:burn_charcoal",
+      "to": "resource:charcoal",
+      "relation": "produces"
+    },
+    {
+      "from": "station:burn_charcoal",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "building:charcoal_kiln",
+      "to": "station:burn_charcoal",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "station:burn_charcoal",
+      "relation": "consumes"
+    },
+    {
       "from": "station:soak_pandanus",
       "to": "resource:retted_pandanus",
       "relation": "produces"
@@ -4165,6 +4328,7 @@
       "tool:gorge_hook",
       "tool:basket_trap",
       "skill:fishing:10",
+      "resource:charcoal",
       "skill:cooking:2",
       "skill:cooking:4",
       "tool:digging_stick",
@@ -4193,6 +4357,7 @@
       "recipe:craft_bamboo_spear",
       "recipe:craft_gorge_hook",
       "recipe:craft_basket_trap",
+      "station:burn_charcoal",
       "recipe:craft_digging_stick",
       "station:cultivate_taro",
       "recipe:build_well",
@@ -4213,6 +4378,7 @@
       "skill:crafting:6",
       "resource:stone_flake",
       "skill:weaving:5",
+      "building:charcoal_kiln",
       "skill:farming:3",
       "resource:taro_corm",
       "resource:clay",
@@ -4231,6 +4397,7 @@
       "station:harvest_pandanus_grove",
       "recipe:split_bamboo_cane",
       "recipe:strike_stone_flake",
+      "recipe:build_charcoal_kiln",
       "action:dig_clay",
       "recipe:shape_clay_pot",
       "recipe:wheel_shape_clay_pot",
@@ -4244,6 +4411,8 @@
       "building:pandanus_grove",
       "resource:chert",
       "tool:hammerstone",
+      "skill:construction:16",
+      "building:stone_hearth",
       "skill:foraging:5",
       "building:pottery_wheel",
       "skill:construction:13",
@@ -4254,6 +4423,7 @@
       "recipe:knap_stone_blade",
       "recipe:build_pandanus_grove",
       "recipe:craft_hammerstone",
+      "recipe:build_stone_hearth",
       "recipe:build_pottery_wheel",
       "recipe:sew_sail",
       "recipe:twist_rope",
@@ -4261,6 +4431,7 @@
       "skill:construction:12",
       "skill:farming:7",
       "building:farm_plot",
+      "skill:construction:14",
       "skill:crafting:11",
       "skill:weaving:6",
       "recipe:upgrade_farm_plot",
@@ -4557,6 +4728,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4585,6 +4757,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4613,6 +4786,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4641,6 +4815,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4669,6 +4844,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4697,6 +4873,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4726,6 +4903,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4754,6 +4932,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4782,6 +4961,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4810,6 +4990,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4838,6 +5019,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4866,6 +5048,7 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4894,6 +5077,36 @@
             "recipe:build_outrigger",
             "recipe:build_firing_pit",
             "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
+            "recipe:build_soaking_pit",
+            "recipe:build_cleared_plot",
+            "recipe:build_well",
+            "recipe:upgrade_tended_garden",
+            "recipe:upgrade_farm_plot",
+            "recipe:build_pandanus_grove",
+            "recipe:craft_crucible"
+          ]
+        },
+        {
+          "level": 16,
+          "unlocks": [
+            "recipe:build_charcoal_kiln"
+          ],
+          "trainedBy": [
+            "action:dig_drainage_trench",
+            "recipe:maintain_camp",
+            "recipe:build_stone_hearth",
+            "recipe:build_palm_leaf_pile",
+            "recipe:build_sleeping_mat",
+            "recipe:build_hammock",
+            "recipe:build_thatched_hut",
+            "recipe:build_fenced_perimeter",
+            "recipe:build_raft",
+            "recipe:assemble_dugout",
+            "recipe:build_outrigger",
+            "recipe:build_firing_pit",
+            "recipe:build_kiln",
+            "recipe:build_charcoal_kiln",
             "recipe:build_soaking_pit",
             "recipe:build_cleared_plot",
             "recipe:build_well",
@@ -4919,7 +5132,8 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
+            "recipe:pack_voyage_provisions",
+            "station:burn_charcoal"
           ]
         },
         {
@@ -4936,7 +5150,8 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
+            "recipe:pack_voyage_provisions",
+            "station:burn_charcoal"
           ]
         },
         {
@@ -4953,7 +5168,8 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
+            "recipe:pack_voyage_provisions",
+            "station:burn_charcoal"
           ]
         },
         {
@@ -4970,7 +5186,8 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
+            "recipe:pack_voyage_provisions",
+            "station:burn_charcoal"
           ]
         },
         {
@@ -4987,7 +5204,8 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions"
+            "recipe:pack_voyage_provisions",
+            "station:burn_charcoal"
           ]
         }
       ],

@@ -229,6 +229,9 @@ for (const r of RECIPES) {
   // Inputs consumed
   for (const i of r.inputs) {
     addEdge({ from: `resource:${i.resourceId}`, to: recipeId, relation: "consumes" });
+    if (i.alternateResourceId) {
+      addEdge({ from: `resource:${i.alternateResourceId}`, to: recipeId, relation: "consumes" });
+    }
   }
   // Tag-based inputs (e.g. "5 different foods") — link all matching tagged resources
   if (r.tagInputs) {
@@ -596,7 +599,7 @@ function computeReachable(): Set<string> {
       const toolsMet = !r.requiredTools?.length || r.requiredTools.every(t => reachable.has(`tool:${t}`));
       const itemsMet = !r.requiredItems?.length || r.requiredItems.every(i => reachable.has(`resource:${i}`));
       const buildingsMet = !r.requiredBuildings?.length || r.requiredBuildings.every(b => reachable.has(`building:${b}`));
-      const inputsMet = r.inputs.every(i => reachable.has(`resource:${i.resourceId}`));
+      const inputsMet = r.inputs.every(i => reachable.has(`resource:${i.resourceId}`) || (i.alternateResourceId && reachable.has(`resource:${i.alternateResourceId}`)));
       const tagInputsMet = !r.tagInputs?.length || r.tagInputs.every(ti => {
         const reachableTagged = Object.values(RESOURCES).filter(
           res => res.tags?.includes(ti.tag) && reachable.has(`resource:${res.id}`)

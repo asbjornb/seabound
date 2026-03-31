@@ -17,6 +17,24 @@ export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeI
   );
 }
 
+/** Resolve alternate resources: if player can't afford primary, use alternate. */
+export function resolveAlternateInputs(inputs: RecipeInput[], state: GameState): RecipeInput[] {
+  return inputs.map(inp => {
+    if (inp.alternateResourceId && (state.resources[inp.resourceId] ?? 0) < inp.amount
+        && (state.resources[inp.alternateResourceId] ?? 0) >= inp.amount) {
+      return { ...inp, resourceId: inp.alternateResourceId };
+    }
+    return inp;
+  });
+}
+
+/** Check if player can afford an input, considering alternates. */
+export function canAffordInput(inp: RecipeInput, state: GameState): boolean {
+  if ((state.resources[inp.resourceId] ?? 0) >= inp.amount) return true;
+  if (inp.alternateResourceId && (state.resources[inp.alternateResourceId] ?? 0) >= inp.amount) return true;
+  return false;
+}
+
 /**
  * Resolve tag-based inputs into concrete RecipeInput[].
  * Picks `count` distinct resources the player owns (>=1) that have the given tag,

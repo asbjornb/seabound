@@ -112,6 +112,24 @@ export const STATIONS: StationDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Charcoal Kiln
+  // ═══════════════════════════════════════
+  {
+    id: "burn_charcoal",
+    name: "Burn Charcoal",
+    description:
+      "Seal large logs in the kiln and slow-burn them into charcoal. An ancient technique — the first industrial fuel.",
+    skillId: "cooking",
+    durationMs: 600000, // 10 minutes
+    requiredBuildings: ["charcoal_kiln"],
+    setupInputs: [{ resourceId: "large_log", amount: 3 }],
+    yields: [
+      { resourceId: "charcoal", amount: 15 },
+    ],
+    xpGain: 50,
+  },
+
+  // ═══════════════════════════════════════
   // Soaking Pit (Pandanus Retting)
   // ═══════════════════════════════════════
   {

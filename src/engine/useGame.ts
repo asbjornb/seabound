@@ -18,6 +18,7 @@ import type {
 
 import {
   addResource,
+  canAffordInput,
   isAtStorageCap,
   canAffordTagInputs,
   createInitialState,
@@ -275,7 +276,7 @@ export function useGame() {
         // Check resources (using effective inputs — some may be removed by buildings)
         const inputs = getEffectiveInputs(recipe, prev);
         for (const input of inputs) {
-          if (getResource(prev, input.resourceId) < input.amount) return prev;
+          if (!canAffordInput(input, prev)) return prev;
         }
         // Check tag-based inputs (e.g. "5 different foods")
         if (recipe.tagInputs && !canAffordTagInputs(recipe.tagInputs, prev)) return prev;
