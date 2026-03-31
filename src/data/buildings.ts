@@ -115,6 +115,20 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description: "An established grove of pandanus plants. Auto-regrows — just tap to harvest.",
     unlocks: "Harvest pandanus leaves without replanting",
   },
+  soaking_pit: {
+    id: "soaking_pit",
+    name: "Soaking Pit",
+    description:
+      "A clay-lined pit filled with water for retting pandanus fiber. Softens leaves with no active work.",
+    unlocks: "Soak pandanus leaves (passive station) — more strips per leaf",
+  },
+  pottery_wheel: {
+    id: "pottery_wheel",
+    name: "Pottery Wheel",
+    description:
+      "A hand-spun stone wheel for shaping clay. Pots take half the time to form.",
+    unlocks: "Wheel-throw pots — halves shaping time",
+  },
   sleeping_mat: {
     id: "sleeping_mat",
     name: "Sleeping Mat",

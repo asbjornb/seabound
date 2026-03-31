@@ -112,6 +112,24 @@ export const STATIONS: StationDef[] = [
   },
 
   // ═══════════════════════════════════════
+  // Soaking Pit (Pandanus Retting)
+  // ═══════════════════════════════════════
+  {
+    id: "soak_pandanus",
+    name: "Soak Pandanus",
+    description:
+      "Submerge pandanus leaves in the soaking pit. Water breaks down the fibers over time — no active work needed.",
+    skillId: "weaving",
+    durationMs: 300000, // 5 minutes
+    setupInputs: [{ resourceId: "pandanus_leaves", amount: 10 }],
+    yields: [
+      { resourceId: "retted_pandanus", amount: 10 },
+    ],
+    xpGain: 40,
+    maxDeployedPerBuildings: ["soaking_pit"],
+  },
+
+  // ═══════════════════════════════════════
   // Pandanus Grove (Phase 2 — auto-regrow)
   // ═══════════════════════════════════════
   {

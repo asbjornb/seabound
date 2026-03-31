@@ -230,6 +230,12 @@ export const RESOURCES: Record<string, ResourceDef> = {
     tags: ["large"],
   },
 
+  retted_pandanus: {
+    id: "retted_pandanus",
+    name: "Retted Pandanus",
+    description: "Water-soaked pandanus fiber. Softened and easy to split into many fine strips.",
+  },
+
   // Obsidian
   obsidian: {
     id: "obsidian",

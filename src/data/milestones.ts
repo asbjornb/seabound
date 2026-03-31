@@ -245,6 +245,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 5,
+      description: "Efficient strips — 25% chance to cut extra pandanus strips",
+      effects: [
+        { type: "double_output", chance: 0.25, recipeId: "cut_pandanus_strips" },
+      ],
+    },
+    {
       level: 7,
       description: "Efficient craftsman — all crafting 10% faster",
       effects: [
@@ -259,10 +266,25 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 9,
+      description: "Clay wedging — kneading removes air pockets, pots no longer crack in the fire",
+      effects: [
+        { type: "output_chance_bonus", recipeId: "fire_clay_pot", bonus: 0.15 },
+        { type: "output_chance_bonus", recipeId: "kiln_fire_pot", bonus: 0.15 },
+      ],
+    },
+    {
       level: 10,
       description: "Seasoned crafter — all crafting recipes 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 12,
+      description: "Batch firing — 20% chance to double fired clay pot output",
+      effects: [
+        { type: "double_output", chance: 0.2, recipeId: "fire_clay_pot" },
       ],
     },
   ],
@@ -287,6 +309,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Deft weaver — all weaving 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Rope walk — twist rope 20% faster",
+      effects: [
+        { type: "duration", actionId: "twist_rope", multiplier: 0.8 },
       ],
     },
     {
@@ -435,6 +464,28 @@ export function getDoubleOutputChance(
     }
   }
   return chance;
+}
+
+/**
+ * Compute total output chance bonus for a specific recipe.
+ * Added to the recipe's base outputChance (default 1.0).
+ */
+export function getOutputChanceBonus(
+  skillId: SkillId,
+  skillLevel: number,
+  recipeId: string
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let bonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "output_chance_bonus" && e.recipeId === recipeId) {
+        bonus += e.bonus;
+      }
+    }
+  }
+  return bonus;
 }
 
 /**

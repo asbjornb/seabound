@@ -132,6 +132,18 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 8,
   },
   {
+    id: "split_retted_pandanus",
+    name: "Split Retted Fiber",
+    description: "Pull apart water-softened pandanus into fine, pliable strips. Better yield than cutting dried leaves.",
+    skillId: "weaving",
+    panel: "craft",
+    inputs: [{ resourceId: "retted_pandanus", amount: 1 }],
+    output: { resourceId: "pandanus_strip", amount: 3 },
+    durationMs: 3000,
+    repeatable: true,
+    xpGain: 10,
+  },
+  {
     id: "weave_pandanus_cordage",
     name: "Pandanus Cordage",
     description: "Braid pandanus strips into cordage. Reliable and strong.",
@@ -756,6 +768,46 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 60,
   },
 
+  // Building: Pottery Wheel (Crafting 11, requires kiln)
+  {
+    id: "build_pottery_wheel",
+    name: "Pottery Wheel",
+    description:
+      "Carve a heavy stone disc and mount it on a bamboo axle. Spin clay into shape in half the time.",
+    skillId: "crafting",
+    panel: "build",
+    requiredSkillLevel: 11,
+    inputs: [
+      { resourceId: "flat_stone", amount: 8 },
+      { resourceId: "clay", amount: 6 },
+      { resourceId: "bamboo_cane", amount: 4 },
+      { resourceId: "cordage", amount: 3 },
+    ],
+    buildingOutput: "pottery_wheel",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 15000,
+    xpGain: 50,
+  },
+
+  // Building: Soaking Pit (Weaving 7)
+  {
+    id: "build_soaking_pit",
+    name: "Soaking Pit",
+    description:
+      "Dig and line a pit with clay for retting pandanus fiber. A technique as old as rope itself.",
+    skillId: "construction",
+    panel: "build",
+    inputs: [
+      { resourceId: "clay", amount: 5 },
+      { resourceId: "flat_stone", amount: 4 },
+      { resourceId: "driftwood_branch", amount: 3 },
+    ],
+    buildingOutput: "soaking_pit",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 10000,
+    xpGain: 40,
+  },
+
   // Shape Clay Pot (unlocks when clay is found)
   {
     id: "shape_clay_pot",
@@ -769,13 +821,27 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 6000,
     repeatable: true,
     xpGain: 15,
+    hideWhen: [{ type: "has_building", buildingId: "pottery_wheel" }],
+  },
+  {
+    id: "wheel_shape_clay_pot",
+    name: "Wheel-Throw Pot",
+    description: "Spin clay on the wheel into an even, thin-walled pot. Much faster than hand-shaping.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [{ resourceId: "clay", amount: 3 }],
+    output: { resourceId: "shaped_clay_pot", amount: 1 },
+    requiredBuildings: ["pottery_wheel"],
+    durationMs: 3000,
+    repeatable: true,
+    xpGain: 15,
   },
 
   // Fire Clay Pot (requires firing pit → progression-gated)
   {
     id: "fire_clay_pot",
     name: "Fire Clay Pot",
-    description: "Fire a shaped pot in the firing pit to harden it.",
+    description: "Fire a shaped pot in the firing pit. About 1 in 7 crack from uneven heat.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
@@ -783,8 +849,27 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "driftwood_branch", amount: 2 },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
+    outputChance: 0.85,
     requiredBuildings: ["firing_pit"],
     durationMs: 8000,
+    repeatable: true,
+    xpGain: 20,
+    hideWhen: [{ type: "has_building", buildingId: "kiln" }],
+  },
+  {
+    id: "kiln_fire_pot",
+    name: "Kiln-Fire Pot",
+    description: "Fire pots in the enclosed kiln. Even heat means fewer cracks.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [
+      { resourceId: "shaped_clay_pot", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
+    ],
+    output: { resourceId: "fired_clay_pot", amount: 1 },
+    outputChance: 0.85,
+    requiredBuildings: ["kiln"],
+    durationMs: 5000,
     repeatable: true,
     xpGain: 20,
   },
