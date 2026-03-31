@@ -356,8 +356,16 @@ export default function App() {
           </nav>
 
           {showLog && (
-            <div className="log-drawer">
-              <LogPanel entries={game.state.discoveryLog} />
+            <div className="log-overlay" onClick={() => setShowLog(false)}>
+              <div className="log-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="log-modal-header">
+                  <span className="log-modal-title">Journal</span>
+                  <button className="log-modal-close" onClick={() => setShowLog(false)}>✕</button>
+                </div>
+                <div className="log-modal-body">
+                  <LogPanel entries={game.state.discoveryLog} />
+                </div>
+              </div>
             </div>
           )}
 
