@@ -143,6 +143,6 @@ export const STATIONS: StationDef[] = [
       { resourceId: "pandanus_leaves", amount: 7 }, // higher output than farm
     ],
     xpGain: 50,
-    maxDeployedPerBuildings: ["pandanus_grove"],
+    requiredBuildings: ["pandanus_grove"],
   },
 ];

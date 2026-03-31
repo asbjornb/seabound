@@ -119,6 +119,8 @@ export function StationsPanel({
 
             // Hide single-deploy stations (no building slots) when already deployed
             if (atMax && !station.maxDeployedPerBuildings) return null;
+            // Hide no-input stations (auto-restart) when all slots are filled
+            if (atMax && (!station.setupInputs || station.setupInputs.length === 0)) return null;
 
             const canAffordInputs =
               !station.setupInputs ||
