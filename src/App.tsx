@@ -350,7 +350,7 @@ export default function App() {
                 className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
                 onClick={() => setTab(t)}
               >
-                <GameIcon id={`tab_${t}`} size={24} />{" "}{t.charAt(0).toUpperCase() + t.slice(1)}
+                <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
               </button>
             ))}
           </nav>
