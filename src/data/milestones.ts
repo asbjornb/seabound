@@ -12,6 +12,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     {
       level: 2,
       description: "+2% fish and crab chance from tidal pools",
+
       effects: [
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.02 },
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
@@ -37,6 +38,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Sharp eyes — +5% fish chance from tidal pools",
       effects: [
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.05 },
+      ],
+    },
+    {
+      level: 7,
+      description: "Practiced angler — all fishing 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
@@ -91,6 +99,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 8,
+      description: "Seasoned forager — all foraging 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
       level: 9,
       description: "Forager's luck — 5% chance to find a wild seed in dry grass",
       effects: [
@@ -111,6 +126,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Even heat — cook fish 15% faster",
       effects: [
         { type: "duration", actionId: "cook_fish", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 7,
+      description: "Quick cook — all cooking 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
@@ -155,6 +177,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Careful planting — +15% root vegetable chance",
       effects: [
         { type: "drop_chance", actionId: "plant_wild_seeds", resourceId: "root_vegetable", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Practiced farmer — all farming 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
@@ -216,6 +245,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 7,
+      description: "Efficient craftsman — all crafting 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
       level: 8,
       description: "Pottery hands — shape clay pot 15% faster",
       effects: [
@@ -234,6 +270,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     {
       level: 2,
       description: "Nimble fingers — 15% chance to twist extra cordage",
+
       effects: [
         { type: "double_output", chance: 0.15, recipeId: "twist_cordage" },
       ],
@@ -243,6 +280,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Rope hand — another 15% chance to twist extra cordage",
       effects: [
         { type: "double_output", chance: 0.15, recipeId: "twist_cordage" },
+      ],
+    },
+    {
+      level: 8,
+      description: "Deft weaver — all weaving 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
@@ -282,6 +326,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Steady hands — harvest bamboo 10% faster",
       effects: [
         { type: "duration", actionId: "harvest_bamboo", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Practiced woodworker — all woodworking 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
   ],
