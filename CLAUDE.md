@@ -105,3 +105,39 @@ Everything in the data pack: resources (with food/water values), tools, skills, 
 ### Not yet moddable
 
 - **Progression graph**: `build-graph.ts` reads static files; doesn't run against loaded mods yet.
+
+## Icon Pipeline
+
+Icons live in `public/icons/` as 256×256 RGBA PNGs with transparent backgrounds. They are loaded by convention — `GameIcon` renders `/icons/${id}.png` where `id` matches the resource/building/skill/biome/UI element ID.
+
+### Processing new icons
+
+New icons typically arrive as zip files (from image generation tools) containing `images/*.png` at 1024×1024 with solid-color backgrounds. To process them:
+
+1. **Extract** the zip to a temp directory
+2. **Remove backgrounds** using `rembg` (AI-based background removal)
+3. **Crop** to the bounding box of non-transparent content
+4. **Resize** to fit within 80% of 256×256 (leaving ~10% margin on each side), maintaining aspect ratio
+5. **Center** on a transparent 256×256 canvas
+6. **Save** to `public/icons/<id>.png`
+
+```bash
+pip install "rembg[cpu]" Pillow
+```
+
+```python
+from PIL import Image
+from rembg import remove
+
+img = remove(Image.open("source.png").convert("RGBA"))
+bbox = img.getbbox()
+cropped = img.crop(bbox)
+content_size = int(256 * 0.80)  # 204px — leaves 10% margin each side
+scale = min(content_size / cropped.width, content_size / cropped.height)
+resized = cropped.resize((int(cropped.width * scale), int(cropped.height * scale)), Image.LANCZOS)
+canvas = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+canvas.paste(resized, ((256 - resized.width) // 2, (256 - resized.height) // 2), resized)
+canvas.save("public/icons/<id>.png")
+```
+
+No code changes are needed to wire up new icons — just ensure the filename matches the ID used in `src/data/` (resources, buildings, skills, etc.).
