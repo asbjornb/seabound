@@ -23,6 +23,7 @@ export function VictoryScreen({ state }: Props) {
   return (
     <div className={`victory-overlay${visible ? " visible" : ""}`}>
       <div className="victory-card">
+        <img src="/icons/ui_victory.png" alt="" className="victory-image" width={200} height={200} />
         <div className="victory-title">The Seas Are Yours</div>
         <div className="victory-divider" />
         <div className="victory-message">
