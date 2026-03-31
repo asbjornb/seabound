@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getBuildings, getRecipes, getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
-import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
+import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -63,7 +63,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
       )}
       {entries.map(([id, amount]) => {
         const limit = getStorageLimit(state, id);
-        const atCap = amount >= limit;
+        const atCap = isAtStorageCap(state, id);
         return (
           <span
             key={id}
