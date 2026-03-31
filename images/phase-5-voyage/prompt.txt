@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+An outrigger canoe with a simple sail sits at the water's edge, ready for departure. The ocean stretches wide under a star-filled sky with a golden sunrise breaking on the horizon. The island settlement glows faintly behind on shore — campfire smoke, familiar structures — but the eye is drawn forward to the vast open sea and scattered distant islands catching the first light. Feeling of triumph, adventure, and hopeful departure. Sky: deep indigo #0a0f2a lightening to gold #c89830 at the horizon line. Water: dark teal #0c2a3a to warm gold-teal #3a8a7a near the horizon glow. Canoe: warm wood #7a5a30 with a pale sail #d0c8a0.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)

@@ -1375,7 +1375,7 @@
       "id": "outrigger_canoe",
       "object": "Outrigger canoe with sail",
       "description": "A carved dugout canoe with a bamboo outrigger float on one side, connected by cross-beams. A small triangular pandanus sail is raised. Ocean blue-cyan tones, salt-weathered wood. The culmination of all maritime skills.",
-      "use": "Settlement panel, vessel tier 3, triggers escape phase",
+      "use": "Settlement panel, vessel tier 3, triggers voyage phase",
       "theme": "maritime",
       "category": "building_vessel",
       "chain": "vessel",

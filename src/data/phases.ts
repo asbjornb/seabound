@@ -53,9 +53,9 @@ export const PHASES: PhaseDef[] = [
     ],
   },
   {
-    id: "escape",
-    name: "Escape",
-    tagline: "The open ocean awaits.",
+    id: "voyage",
+    name: "Voyage",
+    tagline: "The ocean calls. Adventure begins.",
     order: 5,
     conditions: [
       { type: "has_building", id: "outrigger_canoe" },
