@@ -178,7 +178,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "sail", amount: 1 },
     requiredBuildings: ["fiber_loom"],
     durationMs: 30000,
-    repeatable: true,
+    oneTimeCraft: true,
     xpGain: 60,
   },
 
