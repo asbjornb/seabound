@@ -4,6 +4,7 @@ import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
 import { FeedbackBanner } from "./components/FeedbackBanner";
+import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
@@ -514,6 +515,7 @@ export default function App() {
       )}
 
       <FeedbackBanner />
+      <FeedbackQuestion />
     </div>
   );
 }

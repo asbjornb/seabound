@@ -1744,6 +1744,113 @@ body {
   opacity: 0.5;
 }
 
+/* ── Feedback Question Modal ── */
+
+.fq-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+  padding: 16px;
+}
+
+.fq-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.fq-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.fq-close:hover {
+  color: var(--text);
+}
+
+.fq-question {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  padding-right: 20px;
+}
+
+.fq-textarea {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+}
+
+.fq-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.fq-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.fq-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.fq-submit {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fq-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.fq-skip {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.fq-skip:hover {
+  color: var(--text);
+}
+
 /* ═══════════════════════════════════════
    Mod Panel
    ═══════════════════════════════════════ */
