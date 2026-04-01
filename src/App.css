@@ -2148,100 +2148,66 @@ body {
   margin-top: 8px;
 }
 
-.routine-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: var(--card-shadow);
-  transition: border-color 0.15s;
-}
-
-.routine-card.active {
-  border-color: var(--accent);
-  box-shadow: 0 0 8px var(--phase-glow);
-}
-
-.routine-card-header {
+.routine-steps-flow {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 8px;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
-.routine-card-name {
+.routine-step-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.routine-step-inline.current {
+  color: var(--accent);
   font-weight: 600;
-  color: var(--text);
-  font-size: 1rem;
 }
 
-.routine-card-buttons {
+.routine-step-label {
+  white-space: nowrap;
+}
+
+.routine-step-count {
+  font-size: 0.72rem;
+  opacity: 0.7;
+}
+
+.routine-arrow {
+  margin: 0 2px;
+  opacity: 0.5;
+}
+
+.routine-loop {
+  font-size: 0.9rem;
+  color: var(--accent-dim);
+  margin-left: 2px;
+}
+
+.routine-card-actions {
   display: flex;
   gap: 4px;
+  margin-top: 8px;
 }
 
-.routine-card-buttons button {
-  padding: 4px 10px;
-  font-size: 0.8rem;
+.routine-card-actions button {
+  padding: 3px 10px;
+  font-size: 0.75rem;
   border-radius: 4px;
   border: 1px solid var(--border);
   background: var(--bg-hover);
-  color: var(--text);
+  color: var(--text-dim);
   cursor: pointer;
-}
-
-.routine-run-btn {
-  background: var(--accent) !important;
-  color: var(--bg) !important;
-  font-weight: 600;
-  border-color: var(--accent) !important;
 }
 
 .routine-delete-btn:hover {
   border-color: #e55 !important;
   color: #e55 !important;
-}
-
-.routine-steps-detail {
-  display: flex;
-  flex-direction: column;
-}
-
-.routine-step-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 10px;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.routine-step-card.current {
-  border-color: var(--accent);
-  background: rgba(240, 160, 80, 0.10);
-}
-
-.routine-step-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.routine-step-card-left {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.routine-step-card-name {
-  font-weight: 600;
-  font-size: 0.88rem;
-  color: var(--text);
-}
-
-.routine-step-card-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .routine-step-num {
@@ -2250,25 +2216,6 @@ body {
   font-size: 0.75rem;
   min-width: 14px;
   text-align: center;
-}
-
-.routine-step-count {
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
-.routine-step-time {
-  color: var(--text-dim);
-  font-size: 0.78rem;
-}
-
-.routine-step-arrow-down {
-  text-align: center;
-  color: var(--text-dim);
-  font-size: 0.7rem;
-  line-height: 1;
-  padding: 2px 0;
 }
 
 .routine-create-btn {

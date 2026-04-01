@@ -272,65 +272,46 @@ export function RoutinesPanel({
       {state.routines.map((routine) => {
         const isActive = activeRoutineId === routine.id;
         const currentStep = isActive ? state.activeRoutine!.currentStep : -1;
+        const stepNames = routine.steps.map((step) => {
+          const action = step.actionType === "gather" ? getActionById(step.actionId) : null;
+          const recipe = step.actionType === "craft" ? getRecipeById(step.actionId) : null;
+          return action?.name ?? recipe?.name ?? step.actionId;
+        });
         return (
-          <div key={routine.id} className={`routine-card${isActive ? " active" : ""}`}>
-            <div className="routine-card-header">
-              <span className="routine-card-name">{routine.name}</span>
-              <div className="routine-card-buttons">
-                {isActive ? (
-                  <button className="stop-btn" onClick={onStopRoutine}>
-                    Stop
-                  </button>
-                ) : (
-                  <button className="routine-run-btn" onClick={() => onStartRoutine(routine.id)}>
-                    Run
-                  </button>
-                )}
-                <button className="routine-edit-btn" onClick={() => handleEdit(routine)}>
-                  Edit
-                </button>
-                <button
-                  className="routine-delete-btn"
-                  onClick={() => {
-                    if (confirm(`Delete "${routine.name}"?`)) {
-                      onDeleteRoutine(routine.id);
-                    }
-                  }}
-                >
-                  Del
-                </button>
-              </div>
+          <div
+            key={routine.id}
+            className={`action-card${isActive ? " active" : ""}`}
+            onClick={() => isActive ? onStopRoutine() : onStartRoutine(routine.id)}
+          >
+            <div className="action-card-header">
+              <span className="action-name">{routine.name}</span>
+              <span className="action-time">{routine.steps.length} steps</span>
             </div>
-            <div className="routine-steps-detail">
-              {routine.steps.map((step, idx) => {
-                const isCurrent = isActive && idx === currentStep;
-                const action = step.actionType === "gather" ? getActionById(step.actionId) : null;
-                const recipe = step.actionType === "craft" ? getRecipeById(step.actionId) : null;
-                const stepName = action?.name ?? recipe?.name ?? step.actionId;
-                const iconId = getStepIcon(step);
-                const duration = action?.durationMs ?? recipe?.durationMs ?? 0;
-                return (
-                  <div key={idx} className={`routine-step-card${isCurrent ? " current" : ""}`}>
-                    <div className="routine-step-card-header">
-                      <span className="routine-step-card-left">
-                        <span className="routine-step-num">{idx + 1}</span>
-                        <GameIcon id={iconId} size={20} />
-                        <span className="routine-step-card-name">{stepName}</span>
-                      </span>
-                      <span className="routine-step-card-right">
-                        {step.count > 0 && <span className="routine-step-count">{step.count}x</span>}
-                        {duration > 0 && <span className="routine-step-time">{(duration / 1000).toFixed(1)}s</span>}
-                      </span>
-                    </div>
-                    {idx < routine.steps.length - 1 && (
-                      <div className="routine-step-arrow-down">&#9660;</div>
-                    )}
-                    {idx === routine.steps.length - 1 && isActive && (
-                      <div className="routine-step-arrow-down">&#8635;</div>
-                    )}
-                  </div>
-                );
-              })}
+            <div className="routine-steps-flow">
+              {routine.steps.map((step, idx) => (
+                <span key={idx} className={`routine-step-inline${isActive && idx === currentStep ? " current" : ""}`}>
+                  <GameIcon id={getStepIcon(step)} size={16} />
+                  <span className="routine-step-label">{stepNames[idx]}</span>
+                  {step.count > 0 && <span className="routine-step-count">{step.count}x</span>}
+                  {idx < routine.steps.length - 1 && <span className="routine-arrow">{"\u2192"}</span>}
+                </span>
+              ))}
+              {isActive && <span className="routine-loop">{"\u21bb"}</span>}
+            </div>
+            <div className="routine-card-actions" onClick={(e) => e.stopPropagation()}>
+              <button className="routine-edit-btn" onClick={() => handleEdit(routine)}>
+                Edit
+              </button>
+              <button
+                className="routine-delete-btn"
+                onClick={() => {
+                  if (confirm(`Delete "${routine.name}"?`)) {
+                    onDeleteRoutine(routine.id);
+                  }
+                }}
+              >
+                Del
+              </button>
             </div>
           </div>
         );
