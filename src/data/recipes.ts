@@ -161,7 +161,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Twist pandanus strips into strong rope for boats and heavy construction.",
     skillId: "weaving",
     panel: "craft",
-    requiredSkillLevel: 6,
     inputs: [{ resourceId: "pandanus_strip", amount: 8 }],
     output: { resourceId: "rope", amount: 1 },
     durationMs: 10000,

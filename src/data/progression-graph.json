@@ -504,10 +504,16 @@
       "category": "fishing"
     },
     {
-      "id": "skill:weaving:6",
+      "id": "skill:crafting:6",
       "type": "skill_level",
-      "label": "Weaving Lv6",
-      "category": "weaving"
+      "label": "Crafting Lv6",
+      "category": "crafting"
+    },
+    {
+      "id": "skill:crafting:11",
+      "type": "skill_level",
+      "label": "Crafting Lv11",
+      "category": "crafting"
     },
     {
       "id": "skill:weaving:5",
@@ -520,18 +526,6 @@
       "type": "skill_level",
       "label": "Weaving Lv4",
       "category": "weaving"
-    },
-    {
-      "id": "skill:crafting:6",
-      "type": "skill_level",
-      "label": "Crafting Lv6",
-      "category": "crafting"
-    },
-    {
-      "id": "skill:crafting:11",
-      "type": "skill_level",
-      "label": "Crafting Lv11",
-      "category": "crafting"
     },
     {
       "id": "skill:construction:14",
@@ -1655,11 +1649,6 @@
       "from": "recipe:twist_rope",
       "to": "skill:weaving",
       "relation": "trains"
-    },
-    {
-      "from": "skill:weaving:6",
-      "to": "recipe:twist_rope",
-      "relation": "requires_skill"
     },
     {
       "from": "recipe:sew_sail",
@@ -4509,7 +4498,6 @@
       "building:farm_plot",
       "skill:construction:14",
       "skill:crafting:11",
-      "skill:weaving:6",
       "recipe:upgrade_farm_plot",
       "skill:construction:10",
       "building:tended_garden",
@@ -4619,62 +4607,6 @@
           ]
         }
       ],
-      "weaving": [
-        {
-          "level": 4,
-          "unlocks": [
-            "recipe:build_fiber_loom"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "station:soak_pandanus"
-          ]
-        },
-        {
-          "level": 5,
-          "unlocks": [
-            "recipe:craft_basket_trap"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "station:soak_pandanus"
-          ]
-        },
-        {
-          "level": 6,
-          "unlocks": [
-            "recipe:twist_rope"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "station:soak_pandanus"
-          ]
-        }
-      ],
       "crafting": [
         {
           "level": 6,
@@ -4738,6 +4670,44 @@
             "recipe:kiln_fire_pot",
             "recipe:build_clay_storage_jar",
             "recipe:craft_digging_stick"
+          ]
+        }
+      ],
+      "weaving": [
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:build_fiber_loom"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
+            "recipe:weave_pandanus_cordage",
+            "recipe:twist_rope",
+            "recipe:sew_sail",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:craft_basket_trap"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
+            "recipe:weave_pandanus_cordage",
+            "recipe:twist_rope",
+            "recipe:sew_sail",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom",
+            "station:soak_pandanus"
           ]
         }
       ],
