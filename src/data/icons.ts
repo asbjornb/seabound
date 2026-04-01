@@ -112,6 +112,7 @@ export const BUILDING_ICONS: Record<BuildingId, string> = {
   hammock: "\u{1F6CF}\uFE0F",
   thatched_hut: "\u{26FA}",
   outrigger_canoe: "\u{26F5}",
+  stone_tidal_weir: "\u{1F30A}",
 };
 
 export const TAB_ICONS: Record<string, string> = {

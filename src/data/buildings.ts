@@ -203,4 +203,11 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Oceanic Voyage expedition — the way home",
     vesselTier: 3,
   },
+  stone_tidal_weir: {
+    id: "stone_tidal_weir",
+    name: "Stone Tidal Weir",
+    description:
+      "A crescent of stacked stones in the shallows. Fish wash in at high tide and can't escape.",
+    unlocks: "Harvest tidal weir station — bulk passive fishing",
+  },
 };
