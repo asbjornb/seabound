@@ -4,6 +4,7 @@ import { ChapterCard } from "./components/ChapterCard";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
 import { FeedbackBanner } from "./components/FeedbackBanner";
+import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
@@ -514,6 +515,14 @@ export default function App() {
       )}
 
       <FeedbackBanner />
+      <FeedbackQuestion
+        hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
+        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
+        phaseName={currentPhase.name}
+        discoveredBiomes={game.state.discoveredBiomes}
+        totalPlayTimeMs={game.state.totalPlayTimeMs}
+        activeTab={activeTab}
+      />
     </div>
   );
 }
