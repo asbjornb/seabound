@@ -1,5 +1,7 @@
 import { ACTIONS } from "./actions";
+import { BIOMES } from "./biomes";
 import { RECIPES } from "./recipes";
+import { TOOLS } from "./tools";
 import type { SkillId, SkillMilestone } from "./types";
 
 /**
@@ -393,9 +395,19 @@ function generateUnlockMilestones(): Partial<Record<SkillId, SkillMilestone[]>> 
   for (const action of ACTIONS) {
     if (action.requiredSkillLevel && action.requiredSkillLevel > 1) {
       const list = result[action.skillId] ?? [];
+      const reqs: string[] = [];
+      if (action.requiredTools) {
+        for (const toolId of action.requiredTools) {
+          reqs.push(TOOLS[toolId]?.name ?? toolId);
+        }
+      }
+      if (action.requiredBiome) {
+        reqs.push(BIOMES[action.requiredBiome]?.name ?? action.requiredBiome);
+      }
+      const suffix = reqs.length > 0 ? ` (requires ${reqs.join(", ")})` : "";
       list.push({
         level: action.requiredSkillLevel,
-        description: `Unlock action: ${action.name}`,
+        description: `Unlock action: ${action.name}${suffix}`,
       });
       result[action.skillId] = list;
     }

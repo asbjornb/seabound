@@ -280,6 +280,8 @@ export function useGame() {
         }
         // Check tag-based inputs (e.g. "5 different foods")
         if (recipe.tagInputs && !canAffordTagInputs(recipe.tagInputs, prev)) return prev;
+        // Prevent crafting when output storage is full (including shared storage cap groups)
+        if (recipe.output && isAtStorageCap(prev, recipe.output.resourceId)) return prev;
         const next = structuredClone(prev);
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);

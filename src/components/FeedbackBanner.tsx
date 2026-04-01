@@ -73,7 +73,7 @@ export function FeedbackBanner() {
                 : status === "sent"
                   ? "Sent — thank you!"
                   : status === "error"
-                    ? "Failed — try again"
+                    ? "Failed — try email or GitHub below"
                     : "Send"}
             </button>
             <button
@@ -83,6 +83,11 @@ export function FeedbackBanner() {
               Cancel
             </button>
           </div>
+          {status === "error" && (
+            <div className="feedback-error-hint">
+              The form service may be temporarily unavailable. Please try one of the options below instead!
+            </div>
+          )}
         </div>
       )}
 

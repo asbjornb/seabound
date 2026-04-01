@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
+import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -103,7 +103,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                 (inp) => canAffordInput(inp, state)
               );
               const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
-              const disabled = !canAffordInputs || !canAffordTags;
+              const outputFull = !!recipe.output && isAtStorageCap(state, recipe.output.resourceId);
+              const disabled = !canAffordInputs || !canAffordTags || outputFull;
 
               // Resolve which tagged resources would be used (for display)
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
@@ -220,11 +221,12 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                         : ""}
                     </div>
                   ) : recipe.output ? (
-                    <div className="recipe-output">
+                    <div className={`recipe-output${outputFull ? " at-cap" : ""}`}>
                       Produces: <GameIcon id={recipe.output.resourceId} size={16} />{recipe.output.amount}x{" "}
                       {RESOURCES[recipe.output.resourceId]?.name ??
                         recipe.output.resourceId}{" "}
                       ({getResource(state, recipe.output.resourceId)})
+                      {outputFull && " — storage full"}
                       {(() => {
                         const baseChance = recipe.outputChance ?? 1;
                         if (baseChance < 1) {
