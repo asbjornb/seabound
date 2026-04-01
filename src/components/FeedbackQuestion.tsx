@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
@@ -7,7 +8,7 @@ const STORAGE_KEY = "seabound_feedbackQ";
 const COOLDOWN_MS = 5 * 24 * 60 * 60 * 1000; // 5 days
 const PAUSE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days after 3 dismissals
 const MAX_DISMISSALS = 3;
-const IDLE_TRIGGER_MS = 15_000; // show after 15s of no interaction
+const SHOW_DELAY_MS = 15_000; // 15s after page load
 
 // Early questions — best for players still learning the game
 const EARLY_QUESTIONS = [
@@ -89,41 +90,25 @@ export function FeedbackQuestion({
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const triggeredRef = useRef(false);
-  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  // Trigger after idle period — reset timer on any interaction
+  // Simple 15s timer after mount — raft gate already ensures engagement
   useEffect(() => {
-    if (!hasPlayedEnough || hasModalOpen) return;
+    if (!hasPlayedEnough || hasModalOpen || triggeredRef.current) return;
 
     const state = loadState();
     const now = Date.now();
     if (state.pausedUntil > now) return;
     if (now - state.lastAsked < COOLDOWN_MS) return;
 
-    const scheduleShow = () => {
+    const timer = setTimeout(() => {
       if (triggeredRef.current) return;
-      clearTimeout(idleTimerRef.current);
-      idleTimerRef.current = setTimeout(() => {
-        if (triggeredRef.current) return;
-        triggeredRef.current = true;
-        const s = loadState();
-        setQuestion(pickQuestion(s.answeredCount));
-        setMode("modal");
-      }, IDLE_TRIGGER_MS);
-    };
+      triggeredRef.current = true;
+      const s = loadState();
+      setQuestion(pickQuestion(s.answeredCount));
+      setMode("modal");
+    }, SHOW_DELAY_MS);
 
-    // Start the first idle timer immediately
-    scheduleShow();
-
-    const onActivity = () => scheduleShow();
-
-    window.addEventListener("pointerdown", onActivity);
-    window.addEventListener("keydown", onActivity);
-    return () => {
-      clearTimeout(idleTimerRef.current);
-      window.removeEventListener("pointerdown", onActivity);
-      window.removeEventListener("keydown", onActivity);
-    };
+    return () => clearTimeout(timer);
   }, [hasPlayedEnough, hasModalOpen]);
 
   const dismiss = () => {
@@ -188,46 +173,49 @@ export function FeedbackQuestion({
 
   if (mode === "hidden") return null;
 
+  // Portal to document.body so position:fixed works reliably on mobile
   if (mode === "minimized") {
-    return (
+    return createPortal(
       <button className="fq-pill" onClick={() => setMode("modal")}>
         Answer a quick question?
-      </button>
+      </button>,
+      document.body,
     );
   }
 
-  return (
+  return createPortal(
     <div className="fq-overlay" onClick={minimize}>
       <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
-      <button className="fq-close" onClick={dismiss}>✕</button>
-      <p className="fq-intro">Quick question to help improve SeaBound:</p>
-      <p className="fq-question">{question}</p>
-      <textarea
-        className="fq-textarea"
-        rows={2}
-        placeholder="Your thoughts (anonymous)..."
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-        disabled={status === "sending" || status === "sent"}
-      />
-      <div className="fq-actions">
-        <button
-          className="fq-submit"
-          onClick={submit}
-          disabled={!answer.trim() || status === "sending" || status === "sent"}
-        >
-          {status === "sending"
-            ? "Sending..."
-            : status === "sent"
-              ? "Thanks!"
-              : status === "error"
-                ? "Failed — retry"
-                : "Send"}
-        </button>
-        <button className="fq-check" onClick={minimize}>Let me check</button>
-        <button className="fq-skip" onClick={dismiss}>Skip</button>
+        <button className="fq-close" onClick={dismiss}>✕</button>
+        <p className="fq-intro">Quick question to help improve SeaBound:</p>
+        <p className="fq-question">{question}</p>
+        <textarea
+          className="fq-textarea"
+          rows={2}
+          placeholder="Your thoughts (anonymous)..."
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          disabled={status === "sending" || status === "sent"}
+        />
+        <div className="fq-actions">
+          <button
+            className="fq-submit"
+            onClick={submit}
+            disabled={!answer.trim() || status === "sending" || status === "sent"}
+          >
+            {status === "sending"
+              ? "Sending..."
+              : status === "sent"
+                ? "Thanks!"
+                : status === "error"
+                  ? "Failed — retry"
+                  : "Send"}
+          </button>
+          <button className="fq-check" onClick={minimize}>Let me check</button>
+          <button className="fq-skip" onClick={dismiss}>Skip</button>
+        </div>
       </div>
-      </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
