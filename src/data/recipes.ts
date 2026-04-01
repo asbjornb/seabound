@@ -161,7 +161,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Twist pandanus strips into strong rope for boats and heavy construction.",
     skillId: "weaving",
     panel: "craft",
-    requiredSkillLevel: 6,
     inputs: [{ resourceId: "pandanus_strip", amount: 8 }],
     output: { resourceId: "rope", amount: 1 },
     durationMs: 10000,
@@ -475,7 +474,6 @@ export const RECIPES: RecipeDef[] = [
       "Lash driftwood logs and bamboo together into a raft. Enough to reach nearby islands.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 5,
     inputs: [
       { resourceId: "driftwood_branch", amount: 6 },
       { resourceId: "cordage", amount: 8 },
@@ -634,7 +632,6 @@ export const RECIPES: RecipeDef[] = [
       "Lash a bamboo outrigger float to the dugout and rig a woven sail. Ready for open ocean.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "sail", amount: 1 },
       { resourceId: "rope", amount: 3 },

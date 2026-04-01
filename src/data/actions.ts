@@ -130,7 +130,6 @@ export const ACTIONS: ActionDef[] = [
     panel: "gather",
     durationMs: 15000,
     drops: [{ resourceId: "large_log", amount: 1 }],
-    requiredSkillLevel: 10,
     requiredBiome: "jungle_interior",
     requiredTools: ["stone_axe"],
     xpGain: 30,
@@ -151,7 +150,6 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 5000,
     drops: [{ resourceId: "clay", amount: 1 }],
     requiredBiome: "jungle_interior",
-    requiredSkillLevel: 5,
     xpGain: 12,
   },
 

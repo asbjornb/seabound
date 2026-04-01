@@ -9,7 +9,6 @@ export const STATIONS: StationDef[] = [
     skillId: "fishing",
     durationMs: 120000, // 2 minutes
     requiredTool: "basket_trap",
-    requiredSkillLevel: 10,
     yields: [
       { resourceId: "small_fish", amount: 2 },
       { resourceId: "large_fish", amount: 1, chance: 0.2 },
