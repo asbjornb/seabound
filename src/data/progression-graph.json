@@ -570,12 +570,6 @@
       "category": "construction"
     },
     {
-      "id": "skill:construction:5",
-      "type": "skill_level",
-      "label": "Construction Lv5",
-      "category": "construction"
-    },
-    {
       "id": "skill:construction:13",
       "type": "skill_level",
       "label": "Construction Lv13",
@@ -2142,11 +2136,6 @@
       "from": "recipe:build_raft",
       "to": "skill:construction",
       "relation": "trains"
-    },
-    {
-      "from": "skill:construction:5",
-      "to": "recipe:build_raft",
-      "relation": "requires_skill"
     },
     {
       "from": "recipe:craft_hammerstone",
@@ -4512,7 +4501,6 @@
       "recipe:build_outrigger",
       "recipe:pack_voyage_provisions",
       "resource:stone_blade",
-      "skill:construction:5",
       "resource:pandanus_cutting",
       "building:pandanus_grove",
       "resource:chert",
@@ -4855,37 +4843,6 @@
           "level": 4,
           "unlocks": [
             "recipe:build_sleeping_mat"
-          ],
-          "trainedBy": [
-            "action:dig_drainage_trench",
-            "recipe:maintain_camp",
-            "recipe:build_stone_hearth",
-            "recipe:build_palm_leaf_pile",
-            "recipe:build_sleeping_mat",
-            "recipe:build_hammock",
-            "recipe:build_thatched_hut",
-            "recipe:build_fenced_perimeter",
-            "recipe:build_log_rack",
-            "recipe:build_raft",
-            "recipe:assemble_dugout",
-            "recipe:build_outrigger",
-            "recipe:build_firing_pit",
-            "recipe:build_kiln",
-            "recipe:build_charcoal_kiln",
-            "recipe:build_storage_shelf",
-            "recipe:build_soaking_pit",
-            "recipe:build_cleared_plot",
-            "recipe:build_well",
-            "recipe:upgrade_tended_garden",
-            "recipe:upgrade_farm_plot",
-            "recipe:build_pandanus_grove",
-            "recipe:craft_crucible"
-          ]
-        },
-        {
-          "level": 5,
-          "unlocks": [
-            "recipe:build_raft"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",

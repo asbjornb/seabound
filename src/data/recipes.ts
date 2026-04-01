@@ -475,7 +475,6 @@ export const RECIPES: RecipeDef[] = [
       "Lash driftwood logs and bamboo together into a raft. Enough to reach nearby islands.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 5,
     inputs: [
       { resourceId: "driftwood_branch", amount: 6 },
       { resourceId: "cordage", amount: 8 },
