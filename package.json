@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "simulate": "npx tsx scripts/simulate.ts",
     "build-graph": "npx tsx scripts/build-graph.ts",
     "check-graph": "npx tsx scripts/build-graph.ts --check",
     "check-icons": "npx tsx scripts/check-icons.ts --check",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
+    "@types/node": "^25.5.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
