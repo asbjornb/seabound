@@ -1230,6 +1230,18 @@
       "tags": ["ui", "tab", "always_visible"]
     },
     {
+      "id": "tab_routines",
+      "object": "Looping arrows / repeating cycle",
+      "description": "Two curved arrows forming a circular loop, suggesting repetition and automation. Warm amber tones with subtle bamboo texture. Conveys queued, repeating work — the player's daily routine.",
+      "use": "Bottom tab bar, visible when routines unlocked (any skill reaches level 15)",
+      "theme": "fire",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "routines"]
+    },
+    {
       "id": "ui_settings_gear",
       "object": "Gear / cog icon",
       "description": "A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.",
@@ -1508,5 +1520,5 @@
   ],
   "states": {},
   "createdAt": "2026-03-27T00:00:00Z",
-  "updatedAt": "2026-03-31T00:00:00Z"
+  "updatedAt": "2026-04-01T00:00:00Z"
 }
