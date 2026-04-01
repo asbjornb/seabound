@@ -515,7 +515,7 @@ export default function App() {
       )}
 
       <FeedbackBanner />
-      <FeedbackQuestion />
+      <FeedbackQuestion hasPlayedEnough={game.state.completedRecipes.includes("build_raft")} />
     </div>
   );
 }

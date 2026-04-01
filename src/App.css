@@ -1783,6 +1783,13 @@ body {
   color: var(--text);
 }
 
+.fq-intro {
+  margin: 0 0 6px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
 .fq-question {
   margin: 0 0 12px;
   font-size: 0.95rem;
