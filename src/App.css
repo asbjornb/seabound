@@ -2202,57 +2202,73 @@ body {
   color: #e55 !important;
 }
 
-.routine-steps-list {
+.routine-steps-detail {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
 }
 
-.routine-step-inline {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.routine-step-inline.current .routine-step-badge {
-  border-color: var(--accent);
-  background: rgba(240, 160, 80, 0.12);
-}
-
-.routine-step-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
+.routine-step-card {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 8px;
-  font-size: 0.82rem;
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.routine-step-card.current {
+  border-color: var(--accent);
+  background: rgba(240, 160, 80, 0.10);
+}
+
+.routine-step-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.routine-step-card-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.routine-step-card-name {
+  font-weight: 600;
+  font-size: 0.88rem;
   color: var(--text);
+}
+
+.routine-step-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .routine-step-num {
   font-weight: 700;
   color: var(--accent);
   font-size: 0.75rem;
-  min-width: 12px;
+  min-width: 14px;
+  text-align: center;
 }
 
 .routine-step-count {
   color: var(--text-dim);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
-.routine-arrow {
+.routine-step-time {
   color: var(--text-dim);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
 }
 
-.routine-loop-indicator {
-  color: var(--accent-dim);
-  font-size: 1.1rem;
-  margin-left: 2px;
+.routine-step-arrow-down {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 2px 0;
 }
 
 .routine-create-btn {

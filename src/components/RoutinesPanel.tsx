@@ -23,19 +23,19 @@ function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
 
-function StepDisplay({ step, index }: { step: RoutineStep; index: number }) {
-  const name =
-    step.actionType === "gather"
-      ? getActionById(step.actionId)?.name
-      : getRecipeById(step.actionId)?.name;
-  return (
-    <span className="routine-step-badge">
-      <span className="routine-step-num">{index + 1}</span>
-      {step.count > 0 && <span className="routine-step-count">{step.count}x</span>}
-      <GameIcon id={step.actionType === "gather" ? `biome_beach` : `tab_craft`} size={14} />
-      {name ?? step.actionId}
-    </span>
-  );
+function getStepIcon(step: RoutineStep): string {
+  if (step.actionType === "gather") {
+    const action = getActionById(step.actionId);
+    if (action && action.drops.length > 0) return action.drops[0].resourceId;
+    return "biome_beach";
+  }
+  const recipe = getRecipeById(step.actionId);
+  if (recipe) {
+    if (recipe.output) return recipe.output.resourceId;
+    if (recipe.toolOutput) return recipe.toolOutput;
+    if (recipe.buildingOutput) return recipe.buildingOutput;
+  }
+  return "tab_craft";
 }
 
 function RoutineEditor({
@@ -301,19 +301,36 @@ export function RoutinesPanel({
                 </button>
               </div>
             </div>
-            <div className="routine-steps-list">
-              {routine.steps.map((step, idx) => (
-                <span
-                  key={idx}
-                  className={`routine-step-inline${isActive && idx === currentStep ? " current" : ""}`}
-                >
-                  <StepDisplay step={step} index={idx} />
-                  {idx < routine.steps.length - 1 && <span className="routine-arrow">&rarr;</span>}
-                </span>
-              ))}
-              {isActive && (
-                <span className="routine-loop-indicator">&circlearrowright;</span>
-              )}
+            <div className="routine-steps-detail">
+              {routine.steps.map((step, idx) => {
+                const isCurrent = isActive && idx === currentStep;
+                const action = step.actionType === "gather" ? getActionById(step.actionId) : null;
+                const recipe = step.actionType === "craft" ? getRecipeById(step.actionId) : null;
+                const stepName = action?.name ?? recipe?.name ?? step.actionId;
+                const iconId = getStepIcon(step);
+                const duration = action?.durationMs ?? recipe?.durationMs ?? 0;
+                return (
+                  <div key={idx} className={`routine-step-card${isCurrent ? " current" : ""}`}>
+                    <div className="routine-step-card-header">
+                      <span className="routine-step-card-left">
+                        <span className="routine-step-num">{idx + 1}</span>
+                        <GameIcon id={iconId} size={20} />
+                        <span className="routine-step-card-name">{stepName}</span>
+                      </span>
+                      <span className="routine-step-card-right">
+                        {step.count > 0 && <span className="routine-step-count">{step.count}x</span>}
+                        {duration > 0 && <span className="routine-step-time">{(duration / 1000).toFixed(1)}s</span>}
+                      </span>
+                    </div>
+                    {idx < routine.steps.length - 1 && (
+                      <div className="routine-step-arrow-down">&#9660;</div>
+                    )}
+                    {idx === routine.steps.length - 1 && isActive && (
+                      <div className="routine-step-arrow-down">&#8635;</div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
