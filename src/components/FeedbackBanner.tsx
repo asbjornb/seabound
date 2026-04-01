@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const FORMSUBMIT_URL =
-  "https://formsubmit.co/ajax/8813e5ef638f2fe7669b9383c00db8dc";
+const WEB3FORMS_URL = "https://api.web3forms.com/submit";
+const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
 
 export function FeedbackBanner() {
   const [text, setText] = useState("");
@@ -14,17 +14,18 @@ export function FeedbackBanner() {
     if (!text.trim()) return;
     setStatus("sending");
     try {
-      const res = await fetch(FORMSUBMIT_URL, {
+      const res = await fetch(WEB3FORMS_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: "SeaBound Feedback",
           message: text.trim(),
-          _subject: "SeaBound Feedback",
-          _next: "https://seabound.dev/",
-          _url: window.location.href,
+          from_name: "SeaBound Feedback Form",
+          page_url: window.location.href,
         }),
       });
       if (res.ok) {
