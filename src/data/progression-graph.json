@@ -498,12 +498,6 @@
       "label": "Outrigger Canoe"
     },
     {
-      "id": "skill:fishing:8",
-      "type": "skill_level",
-      "label": "Fishing Lv8",
-      "category": "fishing"
-    },
-    {
       "id": "skill:crafting:6",
       "type": "skill_level",
       "label": "Crafting Lv6",
@@ -526,6 +520,12 @@
       "type": "skill_level",
       "label": "Weaving Lv4",
       "category": "weaving"
+    },
+    {
+      "id": "skill:fishing:8",
+      "type": "skill_level",
+      "label": "Fishing Lv8",
+      "category": "fishing"
     },
     {
       "id": "skill:construction:14",
@@ -1444,11 +1444,6 @@
       "from": "action:drop_line_fish",
       "to": "skill:fishing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:fishing:8",
-      "to": "action:drop_line_fish",
-      "relation": "requires_skill"
     },
     {
       "from": "tool:gorge_hook",
@@ -2699,6 +2694,11 @@
       "from": "recipe:build_soaking_pit",
       "to": "skill:construction",
       "relation": "trains"
+    },
+    {
+      "from": "resource:pandanus_strip",
+      "to": "recipe:build_soaking_pit",
+      "relation": "requires_item"
     },
     {
       "from": "building:firing_pit",
@@ -4394,7 +4394,6 @@
       "tool:bamboo_knife",
       "resource:retted_pandanus",
       "tool:bamboo_spear",
-      "skill:fishing:8",
       "tool:gorge_hook",
       "tool:basket_trap",
       "resource:charcoal",
@@ -4446,6 +4445,7 @@
       "skill:crafting:6",
       "resource:stone_flake",
       "skill:weaving:5",
+      "skill:fishing:8",
       "building:charcoal_kiln",
       "skill:farming:3",
       "resource:taro_corm",
@@ -4592,21 +4592,6 @@
       }
     ],
     "skillGates": {
-      "fishing": [
-        {
-          "level": 8,
-          "unlocks": [
-            "action:drop_line_fish",
-            "recipe:craft_basket_trap"
-          ],
-          "trainedBy": [
-            "action:wade_tidal_pool",
-            "action:spear_fish",
-            "action:drop_line_fish",
-            "station:deploy_basket_trap"
-          ]
-        }
-      ],
       "crafting": [
         {
           "level": 6,
@@ -4708,6 +4693,20 @@
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
             "station:soak_pandanus"
+          ]
+        }
+      ],
+      "fishing": [
+        {
+          "level": 8,
+          "unlocks": [
+            "recipe:craft_basket_trap"
+          ],
+          "trainedBy": [
+            "action:wade_tidal_pool",
+            "action:spear_fish",
+            "action:drop_line_fish",
+            "station:deploy_basket_trap"
           ]
         }
       ],

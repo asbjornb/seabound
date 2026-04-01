@@ -165,6 +165,8 @@ export function selectAvailableStations(state: GameState): StationDef[] {
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    // Hide stations whose setup inputs haven't been discovered yet
+    if (station.setupInputs?.some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     // For stations with maxDeployedPerBuildings, check that at least one applicable building exists
     if (station.maxDeployedPerBuildings) {
       const totalPlots = station.maxDeployedPerBuildings.reduce(

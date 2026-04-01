@@ -184,7 +184,6 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "large_fish", amount: 1, chance: 0.25 },
       { resourceId: "shell", amount: 1, chance: 0.2 },
     ],
-    requiredSkillLevel: 8,
     requiredTools: ["gorge_hook"],
     xpGain: 18,
   },

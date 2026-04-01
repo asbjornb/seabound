@@ -859,6 +859,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     buildingOutput: "soaking_pit",
     requiredBuildings: ["firing_pit"],
+    requiredItems: ["pandanus_strip"],
     durationMs: 10000,
     xpGain: 40,
   },
