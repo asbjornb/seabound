@@ -1755,6 +1755,7 @@ body {
   justify-content: center;
   z-index: 900;
   padding: 16px;
+  overscroll-behavior: contain;
 }
 
 .fq-modal {
