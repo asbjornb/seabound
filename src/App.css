@@ -1749,13 +1749,13 @@ body {
 .fq-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 900;
+  z-index: 400;
+  backdrop-filter: blur(3px);
   padding: 16px;
-  overscroll-behavior: contain;
 }
 
 .fq-modal {
