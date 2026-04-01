@@ -89,7 +89,7 @@ export function FeedbackQuestion({
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const triggeredRef = useRef(false);
-  const idleTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Trigger after idle period — reset timer on any interaction
   useEffect(() => {
