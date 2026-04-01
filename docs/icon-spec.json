@@ -1482,6 +1482,18 @@
       "tags": ["phase2", "building", "craft", "pandanus"]
     },
     {
+      "id": "stone_tidal_weir",
+      "object": "Crescent-shaped stone fish trap in shallows",
+      "description": "A low crescent wall of stacked grey-blue stones rising from shallow turquoise water. Small fish visible inside the trap area. Wet stone surfaces catch tropical sunlight. Sandy bottom visible through clear water.",
+      "use": "Settlement panel, building card",
+      "theme": "maritime",
+      "category": "building_fishing",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase2", "building", "fishing", "maritime", "stone"]
+    },
+    {
       "id": "pottery_wheel",
       "object": "Hand-spun stone pottery wheel",
       "description": "A thick flat stone disc mounted on a short bamboo axle, with a shaped clay pot forming on top. The stone is grey-blue, the clay pot warm amber. Motion blur or slight radial lines suggesting spinning.",
@@ -1508,5 +1520,5 @@
   ],
   "states": {},
   "createdAt": "2026-03-27T00:00:00Z",
-  "updatedAt": "2026-03-31T00:00:00Z"
+  "updatedAt": "2026-04-01T00:00:00Z"
 }
