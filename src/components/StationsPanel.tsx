@@ -1,3 +1,4 @@
+import { getStationInputAmount } from "../data/milestones";
 import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
@@ -118,9 +119,15 @@ export function StationsPanel({
             // Hide stations when all slots are filled
             if (currentCount >= maxDeployed) return null;
 
+            const skillLevel = state.skills[station.skillId]?.level ?? 0;
+            const effectiveInputs = station.setupInputs?.map((inp) => ({
+              ...inp,
+              amount: getStationInputAmount(station.skillId, skillLevel, station.id, inp.resourceId, inp.amount),
+            }));
+
             const canAffordInputs =
-              !station.setupInputs ||
-              station.setupInputs.every(
+              !effectiveInputs ||
+              effectiveInputs.every(
                 (inp) => getResource(state, inp.resourceId) >= inp.amount
               );
 
@@ -156,10 +163,10 @@ export function StationsPanel({
                     })}
                   </div>
                 )}
-                {station.setupInputs && (
+                {effectiveInputs && (
                   <div className="recipe-inputs">
                     Needs:{" "}
-                    {station.setupInputs.map((inp, i) => {
+                    {effectiveInputs.map((inp, i) => {
                       const have = getResource(state, inp.resourceId);
                       const enough = have >= inp.amount;
                       return (
