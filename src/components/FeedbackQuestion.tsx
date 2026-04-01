@@ -90,6 +90,8 @@ export function FeedbackQuestion({
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const triggeredRef = useRef(false);
+  // Tap detection: only dismiss on backdrop tap, not scroll gestures
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
 
   // Simple 15s timer after mount — raft gate already ensures engagement
   useEffect(() => {
@@ -125,6 +127,22 @@ export function FeedbackQuestion({
 
   const minimize = () => {
     setMode("minimized");
+  };
+
+  const onOverlayPointerDown = (e: React.PointerEvent) => {
+    pointerStartRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const onOverlayPointerUp = (e: React.PointerEvent) => {
+    const start = pointerStartRef.current;
+    pointerStartRef.current = null;
+    if (!start) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    // Only count as a tap if the pointer barely moved (<10px)
+    if (dx * dx + dy * dy < 100) {
+      dismiss();
+    }
   };
 
   const formatPlaytime = (ms: number) => {
@@ -184,8 +202,12 @@ export function FeedbackQuestion({
   }
 
   return createPortal(
-    <div className="fq-overlay" onTouchMove={(e) => e.preventDefault()}>
-      <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fq-overlay"
+      onPointerDown={onOverlayPointerDown}
+      onPointerUp={onOverlayPointerUp}
+    >
+      <div className="fq-modal" onPointerDown={(e) => e.stopPropagation()}>
         <button className="fq-close" onClick={dismiss}>✕</button>
         <p className="fq-intro">Quick question to help improve SeaBound:</p>
         <p className="fq-question">{question}</p>
