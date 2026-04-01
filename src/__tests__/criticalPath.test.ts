@@ -338,6 +338,8 @@ describe("Critical Path: Beach → Dugout", () => {
     expect(state.buildings).toContain("fiber_loom");
 
     // Braid cordage (requires fiber_loom, replaces twist_cordage)
+    // Clear excess cordage from earlier grants so output storage isn't full
+    state.resources.cordage = Math.min(state.resources.cordage ?? 0, 5);
     grant({ dried_fiber: 10 });
     assertRecipeAvailable("braid_cordage");
     craft("braid_cordage");
