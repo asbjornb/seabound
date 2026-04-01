@@ -26,8 +26,8 @@ export const STATIONS: StationDef[] = [
     durationMs: 480000, // 8 minutes
     requiredBuildings: ["stone_tidal_weir"],
     yields: [
-      { resourceId: "small_fish", amount: 4 },
-      { resourceId: "large_fish", amount: 2, chance: 0.5 },
+      { resourceId: "small_fish", amount: 5 },
+      { resourceId: "large_fish", amount: 2, chance: 0.6 },
       { resourceId: "crab", amount: 2, chance: 0.5 },
       { resourceId: "shell", amount: 1, chance: 0.4 },
     ],
