@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { getResources, getTools, getActions, getRecipes } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
-import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap } from "../engine/gameState";
+import { getMoraleDurationMultiplier, getStorageGroupTotal, getStorageLimit, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -152,6 +152,14 @@ export function InventoryPanel({ state }: { state: GameState }) {
               const def = RESOURCES[id];
               const limit = getStorageLimit(state, id);
               const atCap = isAtStorageCap(state, id);
+              const groupId = def?.storageCapGroup;
+              const groupTotal = groupId ? getStorageGroupTotal(state, groupId) : undefined;
+              // Find names of other resources sharing this group
+              const groupPeers = groupId
+                ? Object.values(RESOURCES)
+                    .filter((r) => r.storageCapGroup === groupId && r.id !== id)
+                    .map((r) => r.name)
+                : [];
               return (
                 <div
                   key={id}
@@ -162,11 +170,16 @@ export function InventoryPanel({ state }: { state: GameState }) {
                       <GameIcon id={id as ResourceId} /> {def?.name ?? id}
                     </span>
                     <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
-                      {amount}/{limit}
+                      {groupTotal != null ? `${amount} (${groupTotal}/${limit})` : `${amount}/${limit}`}
                     </span>
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}
+                    {groupPeers.length > 0 && (
+                      <div className="storage-group-hint">
+                        Shares storage with {groupPeers.join(", ")}
+                      </div>
+                    )}
                     {toolEnables[id] && (
                       <div className="tool-enables">
                         Enables: {toolEnables[id].join(", ")}

@@ -1150,6 +1150,13 @@ body {
   font-style: italic;
 }
 
+.storage-group-hint {
+  margin-top: 3px;
+  color: var(--warning);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
 /* ═══════════════════════════════════════
    Stations (set-wait-collect)
    ═══════════════════════════════════════ */

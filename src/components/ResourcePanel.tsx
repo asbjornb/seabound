@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getBuildings, getRecipes, getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
-import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
+import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageGroupTotal, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -62,19 +62,22 @@ export function ResourcePanel({ state }: { state: GameState }) {
         </div>
       )}
       {entries.map(([id, amount]) => {
+        const def = RESOURCES[id];
         const limit = getStorageLimit(state, id);
         const atCap = isAtStorageCap(state, id);
+        const groupId = def?.storageCapGroup;
+        const groupTotal = groupId ? getStorageGroupTotal(state, groupId) : undefined;
         return (
           <span
             key={id}
             className={`resource-chip${atCap ? " at-cap" : ""}`}
-            title={RESOURCES[id]?.description}
+            title={def?.description}
           >
-            <GameIcon id={id as ResourceId} size={16} /> {RESOURCES[id]?.name ?? id}
+            <GameIcon id={id as ResourceId} size={16} /> {def?.name ?? id}
             <>
               :{" "}
               <span className="amount">
-                {amount}/{limit}
+                {groupTotal != null ? `${amount} (${groupTotal}/${limit} shared)` : `${amount}/${limit}`}
               </span>
             </>
           </span>
