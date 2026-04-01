@@ -515,7 +515,14 @@ export default function App() {
       )}
 
       <FeedbackBanner />
-      <FeedbackQuestion hasPlayedEnough={game.state.completedRecipes.includes("build_raft")} />
+      <FeedbackQuestion
+        hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
+        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
+        phaseName={currentPhase.name}
+        discoveredBiomes={game.state.discoveredBiomes}
+        totalPlayTimeMs={game.state.totalPlayTimeMs}
+        activeTab={activeTab}
+      />
     </div>
   );
 }
