@@ -150,7 +150,6 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 5000,
     drops: [{ resourceId: "clay", amount: 1 }],
     requiredBiome: "jungle_interior",
-    requiredSkillLevel: 5,
     xpGain: 12,
   },
 

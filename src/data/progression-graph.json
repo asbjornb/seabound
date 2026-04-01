@@ -498,12 +498,6 @@
       "label": "Outrigger Canoe"
     },
     {
-      "id": "skill:foraging:5",
-      "type": "skill_level",
-      "label": "Foraging Lv5",
-      "category": "foraging"
-    },
-    {
       "id": "skill:fishing:8",
       "type": "skill_level",
       "label": "Fishing Lv8",
@@ -1406,11 +1400,6 @@
       "from": "action:dig_clay",
       "to": "skill:foraging",
       "relation": "trains"
-    },
-    {
-      "from": "skill:foraging:5",
-      "to": "action:dig_clay",
-      "relation": "requires_skill"
     },
     {
       "from": "biome:jungle_interior",
@@ -4502,7 +4491,6 @@
       "tool:hammerstone",
       "skill:construction:16",
       "building:stone_hearth",
-      "skill:foraging:5",
       "building:pottery_wheel",
       "skill:construction:13",
       "resource:sail",
@@ -4591,7 +4579,6 @@
       "recipe:build_well",
       "recipe:upgrade_farm_plot",
       "resource:chert",
-      "skill:foraging:5",
       "skill:construction:6",
       "skill:construction:10",
       "building:tended_garden",
@@ -4617,22 +4604,6 @@
       }
     ],
     "skillGates": {
-      "foraging": [
-        {
-          "level": 5,
-          "unlocks": [
-            "action:dig_clay"
-          ],
-          "trainedBy": [
-            "action:gather_coconuts",
-            "action:collect_driftwood",
-            "action:comb_rocky_shore",
-            "action:collect_palm_frond",
-            "action:collect_dry_grass",
-            "action:dig_clay"
-          ]
-        }
-      ],
       "fishing": [
         {
           "level": 8,
