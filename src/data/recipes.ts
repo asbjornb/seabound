@@ -864,6 +864,25 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 40,
   },
 
+  // Building: Stone Tidal Weir (Fishing 11)
+  {
+    id: "build_stone_tidal_weir",
+    name: "Stone Tidal Weir",
+    description:
+      "Stack flat stones into a crescent wall across the shallows. Fish swim in at high tide and can't find their way out.",
+    skillId: "fishing",
+    panel: "build",
+    requiredSkillLevel: 11,
+    inputs: [
+      { resourceId: "flat_stone", amount: 15 },
+      { resourceId: "large_log", amount: 4 },
+      { resourceId: "cordage", amount: 6 },
+    ],
+    buildingOutput: "stone_tidal_weir",
+    durationMs: 30000,
+    xpGain: 80,
+  },
+
   // Shape Clay Pot (unlocks when clay is found)
   {
     id: "shape_clay_pot",

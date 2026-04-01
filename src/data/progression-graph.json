@@ -498,6 +498,11 @@
       "label": "Outrigger Canoe"
     },
     {
+      "id": "building:stone_tidal_weir",
+      "type": "building",
+      "label": "Stone Tidal Weir"
+    },
+    {
       "id": "skill:crafting:6",
       "type": "skill_level",
       "label": "Crafting Lv6",
@@ -525,6 +530,12 @@
       "id": "skill:fishing:8",
       "type": "skill_level",
       "label": "Fishing Lv8",
+      "category": "fishing"
+    },
+    {
+      "id": "skill:fishing:11",
+      "type": "skill_level",
+      "label": "Fishing Lv11",
       "category": "fishing"
     },
     {
@@ -1032,6 +1043,12 @@
       "category": "construction"
     },
     {
+      "id": "recipe:build_stone_tidal_weir",
+      "type": "recipe",
+      "label": "Stone Tidal Weir",
+      "category": "fishing"
+    },
+    {
       "id": "recipe:shape_clay_pot",
       "type": "recipe",
       "label": "Shape Clay Pot",
@@ -1173,6 +1190,12 @@
       "id": "station:deploy_basket_trap",
       "type": "station",
       "label": "Basket Trap",
+      "category": "fishing"
+    },
+    {
+      "id": "station:harvest_tidal_weir",
+      "type": "station",
+      "label": "Tidal Weir",
       "category": "fishing"
     },
     {
@@ -2706,6 +2729,36 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:build_stone_tidal_weir",
+      "to": "building:stone_tidal_weir",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_stone_tidal_weir",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "recipe:build_stone_tidal_weir",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_stone_tidal_weir",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_stone_tidal_weir",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:fishing:11",
+      "to": "recipe:build_stone_tidal_weir",
+      "relation": "requires_skill"
+    },
+    {
       "from": "recipe:shape_clay_pot",
       "to": "resource:shaped_clay_pot",
       "relation": "produces"
@@ -4106,6 +4159,36 @@
       "relation": "requires_tool"
     },
     {
+      "from": "station:harvest_tidal_weir",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "station:harvest_tidal_weir",
+      "to": "resource:large_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "station:harvest_tidal_weir",
+      "to": "resource:crab",
+      "relation": "produces"
+    },
+    {
+      "from": "station:harvest_tidal_weir",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "station:harvest_tidal_weir",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:stone_tidal_weir",
+      "to": "station:harvest_tidal_weir",
+      "relation": "requires_building"
+    },
+    {
       "from": "station:plant_wild_seeds",
       "to": "resource:rough_fiber",
       "relation": "produces"
@@ -4368,6 +4451,7 @@
       "action:spear_fish",
       "action:drop_line_fish",
       "station:deploy_basket_trap",
+      "station:harvest_tidal_weir",
       "recipe:cook_fish",
       "recipe:cook_crab",
       "recipe:cook_large_fish",
@@ -4396,6 +4480,7 @@
       "tool:bamboo_spear",
       "tool:gorge_hook",
       "tool:basket_trap",
+      "building:stone_tidal_weir",
       "resource:charcoal",
       "skill:cooking:2",
       "skill:cooking:4",
@@ -4425,6 +4510,7 @@
       "recipe:craft_bamboo_spear",
       "recipe:craft_gorge_hook",
       "recipe:craft_basket_trap",
+      "recipe:build_stone_tidal_weir",
       "station:burn_charcoal",
       "recipe:craft_digging_stick",
       "station:cultivate_taro",
@@ -4446,6 +4532,7 @@
       "resource:stone_flake",
       "skill:weaving:5",
       "skill:fishing:8",
+      "skill:fishing:11",
       "building:charcoal_kiln",
       "skill:farming:3",
       "resource:taro_corm",
@@ -4706,7 +4793,23 @@
             "action:wade_tidal_pool",
             "action:spear_fish",
             "action:drop_line_fish",
-            "station:deploy_basket_trap"
+            "recipe:build_stone_tidal_weir",
+            "station:deploy_basket_trap",
+            "station:harvest_tidal_weir"
+          ]
+        },
+        {
+          "level": 11,
+          "unlocks": [
+            "recipe:build_stone_tidal_weir"
+          ],
+          "trainedBy": [
+            "action:wade_tidal_pool",
+            "action:spear_fish",
+            "action:drop_line_fish",
+            "recipe:build_stone_tidal_weir",
+            "station:deploy_basket_trap",
+            "station:harvest_tidal_weir"
           ]
         }
       ],
