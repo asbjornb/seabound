@@ -1,6 +1,6 @@
 # SeaBound
 
-**[Play now at seabound.pages.dev](https://seabound.pages.dev)**
+**[Play now at seabound.dev](https://seabound.dev)**
 
 A crafting progression idle game. Mobile-first, web-based.
 

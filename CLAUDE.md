@@ -1,6 +1,6 @@
 # SeaBound
 
-Crafting progression idle game — a tropical island castaway survival game inspired by RuneScape skill leveling, Minecraft crafting depth, and idle game offline progression. Mobile-first, web-based. Live at https://seabound.pages.dev
+Crafting progression idle game — a tropical island castaway survival game inspired by RuneScape skill leveling, Minecraft crafting depth, and idle game offline progression. Mobile-first, web-based. Live at https://seabound.dev
 
 This is a single-playthrough game — there is no prestige, rebirth, or reset loop. The player progresses through one continuous run from castaway to thriving settlement. Challenge modes may be added in the future, but the core design has no repeating reset cycle.
 
