@@ -1492,6 +1492,18 @@
       "chainRole": "derived",
       "size": 64,
       "tags": ["phase2", "building", "craft", "pottery"]
+    },
+    {
+      "id": "stone_tidal_weir",
+      "object": "Crescent-shaped stone fish trap in shallows",
+      "description": "A curved wall of stacked grey stones partially submerged in shallow turquoise water. Fish visible inside the crescent. Stones are rough and natural-looking, arranged in a half-moon shape that narrows at the opening.",
+      "use": "Settlement panel, building card, station icon",
+      "theme": "water",
+      "category": "building_fishing",
+      "chain": "fishing_structures",
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase2", "building", "fishing", "stone"]
     }
   ],
   "states": {},
