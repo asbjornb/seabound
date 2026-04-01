@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
@@ -6,7 +6,7 @@ const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
 const STORAGE_KEY = "seabound_feedbackQ";
 const COOLDOWN_MS = 5 * 24 * 60 * 60 * 1000; // 5 days
 const MAX_DISMISSALS = 3;
-const SHOW_DELAY_MS = 3000; // let the player see the game first
+const ACTIVE_PLAY_MS = 60_000; // show after 60s of active play
 
 const QUESTIONS = [
   "What is the worst icon in the game?",
@@ -42,21 +42,43 @@ function pickQuestion(): string {
 }
 
 export function FeedbackQuestion() {
-  const [visible, setVisible] = useState(false);
+  const [mode, setMode] = useState<"hidden" | "modal" | "minimized">("hidden");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const activeTimeRef = useRef(0);
+  const lastTickRef = useRef(0);
+  const triggeredRef = useRef(false);
 
+  // Track active play time via pointer/key activity, then show after threshold
   useEffect(() => {
     const state = loadState();
     if (state.stopped) return;
     if (Date.now() - state.lastAsked < COOLDOWN_MS) return;
 
-    const timer = setTimeout(() => {
-      setQuestion(pickQuestion());
-      setVisible(true);
-    }, SHOW_DELAY_MS);
-    return () => clearTimeout(timer);
+    const onActivity = () => {
+      const now = Date.now();
+      // Count time since last activity tick, but cap gaps at 2s
+      // so AFK time doesn't count
+      if (lastTickRef.current > 0) {
+        const delta = Math.min(now - lastTickRef.current, 2000);
+        activeTimeRef.current += delta;
+      }
+      lastTickRef.current = now;
+
+      if (!triggeredRef.current && activeTimeRef.current >= ACTIVE_PLAY_MS) {
+        triggeredRef.current = true;
+        setQuestion(pickQuestion());
+        setMode("modal");
+      }
+    };
+
+    window.addEventListener("pointerdown", onActivity);
+    window.addEventListener("keydown", onActivity);
+    return () => {
+      window.removeEventListener("pointerdown", onActivity);
+      window.removeEventListener("keydown", onActivity);
+    };
   }, []);
 
   const dismiss = () => {
@@ -65,7 +87,11 @@ export function FeedbackQuestion() {
     state.dismissals += 1;
     if (state.dismissals >= MAX_DISMISSALS) state.stopped = true;
     saveState(state);
-    setVisible(false);
+    setMode("hidden");
+  };
+
+  const minimize = () => {
+    setMode("minimized");
   };
 
   const submit = async () => {
@@ -89,7 +115,7 @@ export function FeedbackQuestion() {
         state.lastAsked = Date.now();
         state.dismissals = 0; // reset streak — they engaged
         saveState(state);
-        setTimeout(() => setVisible(false), 2000);
+        setTimeout(() => setMode("hidden"), 2000);
       } else {
         setStatus("error");
       }
@@ -98,7 +124,15 @@ export function FeedbackQuestion() {
     }
   };
 
-  if (!visible) return null;
+  if (mode === "hidden") return null;
+
+  if (mode === "minimized") {
+    return (
+      <button className="fq-pill" onClick={() => setMode("modal")}>
+        Answer a quick question?
+      </button>
+    );
+  }
 
   return (
     <div className="fq-overlay" onClick={dismiss}>
@@ -127,6 +161,7 @@ export function FeedbackQuestion() {
                   ? "Failed — retry"
                   : "Send"}
           </button>
+          <button className="fq-check" onClick={minimize}>Let me check</button>
           <button className="fq-skip" onClick={dismiss}>Skip</button>
         </div>
       </div>
