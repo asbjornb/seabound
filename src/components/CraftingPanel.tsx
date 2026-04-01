@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain } from "../engine/gameState";
+import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -60,6 +60,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
   const craftableCount = recipes.filter((r) =>
     getEffectiveInputs(r, state).every((inp) => getResource(state, inp.resourceId) >= inp.amount)
     && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
+    && !(r.output && isAtStorageCap(state, r.output.resourceId))
   ).length;
 
   return (
@@ -82,6 +83,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             )
             && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
+            && !(r.output && isAtStorageCap(state, r.output.resourceId))
           );
           if (list.length === 0) return null;
         }
@@ -103,7 +105,8 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                 (inp) => canAffordInput(inp, state)
               );
               const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
-              const disabled = !canAffordInputs || !canAffordTags;
+              const outputFull = !!(recipe.output && isAtStorageCap(state, recipe.output.resourceId));
+              const disabled = !canAffordInputs || !canAffordTags || outputFull;
 
               // Resolve which tagged resources would be used (for display)
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
@@ -246,6 +249,26 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                         return doubleChance > 0
                           ? ` — ${Math.round(doubleChance * 100)}% chance to double`
                           : null;
+                      })()}
+                      {outputFull && (
+                        <span className="storage-full-warning"> — Storage full</span>
+                      )}
+                      {(() => {
+                        const groupMembers = getStorageGroupMembers(state, recipe.output!.resourceId);
+                        if (groupMembers.length === 0) return null;
+                        const limit = getStorageLimit(state, recipe.output!.resourceId);
+                        const groupTotal = getStorageGroupTotal(state, RESOURCES[recipe.output!.resourceId]?.storageCapGroup ?? "");
+                        return (
+                          <div className="storage-group-info">
+                            Shares storage ({groupTotal}/{limit}) with{" "}
+                            {groupMembers.map((m, i) => (
+                              <span key={m.id}>
+                                {i > 0 && ", "}
+                                <GameIcon id={m.id} size={16} />{m.name} ({m.amount})
+                              </span>
+                            ))}
+                          </div>
+                        );
                       })()}
                     </div>
                   ) : recipe.moraleGain ? (

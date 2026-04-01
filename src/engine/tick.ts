@@ -139,6 +139,11 @@ export function processTick(state: GameState, now: number): TickResult {
     if (def.repeatable) {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
+        // Block if output storage is full (don't waste inputs)
+        if (def.output && isAtStorageCap(state, def.output.resourceId)) {
+          state.currentAction = null;
+          break;
+        }
         // Check and consume inputs for this cycle
         const canAfford = effectiveInputs.every(
           (input) => canAffordInput(input, state)
@@ -181,26 +186,31 @@ export function processTick(state: GameState, now: number): TickResult {
       }
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
-        // Consume inputs at completion
-        const canAfford = effectiveInputs.every(
-          (input) => canAffordInput(input, state)
-        );
-        const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
-        if (!canAfford || !resolvedTagInputs) {
+        // Block if output storage is full (don't waste inputs)
+        if (def.output && isAtStorageCap(state, def.output.resourceId)) {
           state.currentAction = null;
         } else {
-          const resolvedInputs = resolveAlternateInputs(effectiveInputs, state);
-          for (const input of resolvedInputs) {
-            state.resources[input.resourceId] =
-              (state.resources[input.resourceId] ?? 0) - input.amount;
+          // Consume inputs at completion
+          const canAfford = effectiveInputs.every(
+            (input) => canAffordInput(input, state)
+          );
+          const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
+          if (!canAfford || !resolvedTagInputs) {
+            state.currentAction = null;
+          } else {
+            const resolvedInputs = resolveAlternateInputs(effectiveInputs, state);
+            for (const input of resolvedInputs) {
+              state.resources[input.resourceId] =
+                (state.resources[input.resourceId] ?? 0) - input.amount;
+            }
+            for (const input of resolvedTagInputs) {
+              state.resources[input.resourceId] =
+                (state.resources[input.resourceId] ?? 0) - input.amount;
+            }
+            const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
+            if (event) completions.push(event);
+            state.currentAction = null;
           }
-          for (const input of resolvedTagInputs) {
-            state.resources[input.resourceId] =
-              (state.resources[input.resourceId] ?? 0) - input.amount;
-          }
-          const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
-          if (event) completions.push(event);
-          state.currentAction = null;
         }
       }
     }
