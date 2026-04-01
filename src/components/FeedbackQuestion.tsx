@@ -184,7 +184,7 @@ export function FeedbackQuestion({
   }
 
   return createPortal(
-    <div className="fq-overlay" onClick={minimize}>
+    <div className="fq-overlay" onTouchMove={(e) => e.preventDefault()}>
       <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
         <button className="fq-close" onClick={dismiss}>✕</button>
         <p className="fq-intro">Quick question to help improve SeaBound:</p>

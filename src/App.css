@@ -1755,6 +1755,9 @@ body {
   justify-content: center;
   z-index: 900;
   padding: 16px;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
 }
 
 .fq-modal {
@@ -1766,6 +1769,7 @@ body {
   width: 100%;
   position: relative;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  touch-action: auto;
 }
 
 .fq-close {
