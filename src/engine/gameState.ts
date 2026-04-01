@@ -412,6 +412,20 @@ export function isAtStorageCap(state: GameState, resourceId: string): boolean {
   return used >= limit;
 }
 
+/** Get the names of other resources sharing the same storageCapGroup. */
+export function getStorageGroupMembers(state: GameState, resourceId: string): { id: string; name: string; amount: number }[] {
+  const RESOURCES = getResources();
+  const def = RESOURCES[resourceId];
+  if (!def?.storageCapGroup) return [];
+  const members: { id: string; name: string; amount: number }[] = [];
+  for (const [rid, rdef] of Object.entries(RESOURCES)) {
+    if (rdef.storageCapGroup === def.storageCapGroup && rid !== resourceId) {
+      members.push({ id: rid, name: rdef.name, amount: state.resources[rid] ?? 0 });
+    }
+  }
+  return members;
+}
+
 /** Add resource, clamping to the storage limit. Returns the amount actually added.
  *  If current amount already exceeds the limit (e.g. old save), no more is added but nothing is removed.
  *  Resources with a storageCapGroup share their cap with all resources in the group. */

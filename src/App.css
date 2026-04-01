@@ -1146,6 +1146,23 @@ body {
   font-style: italic;
 }
 
+.storage-group-hint {
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-size: 0.85em;
+}
+
+.storage-group-info {
+  margin-top: 2px;
+  color: var(--text-dim);
+  font-size: 0.85em;
+}
+
+.storage-full-warning {
+  color: var(--warning);
+  font-weight: bold;
+}
+
 /* ═══════════════════════════════════════
    Stations (set-wait-collect)
    ═══════════════════════════════════════ */

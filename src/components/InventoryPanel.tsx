@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { getResources, getTools, getActions, getRecipes } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
-import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap } from "../engine/gameState";
+import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -167,6 +167,22 @@ export function InventoryPanel({ state }: { state: GameState }) {
                   </div>
                   <div className="inventory-item-desc">
                     {def?.description}
+                    {(() => {
+                      const groupMembers = getStorageGroupMembers(state, id);
+                      if (groupMembers.length === 0) return null;
+                      return (
+                        <div className="storage-group-hint">
+                          Shares storage with{" "}
+                          {groupMembers.map((m, i) => (
+                            <span key={m.id}>
+                              {i > 0 && ", "}
+                              <GameIcon id={m.id as ResourceId} size={16} />{m.name}
+                              {m.amount > 0 && ` (${m.amount})`}
+                            </span>
+                          ))}
+                        </div>
+                      );
+                    })()}
                     {toolEnables[id] && (
                       <div className="tool-enables">
                         Enables: {toolEnables[id].join(", ")}
