@@ -84,7 +84,7 @@ export function FeedbackQuestion({
   totalPlayTimeMs,
   activeTab,
 }: FeedbackQuestionProps) {
-  const [mode, setMode] = useState<"hidden" | "banner" | "minimized">("hidden");
+  const [mode, setMode] = useState<"hidden" | "modal" | "minimized">("hidden");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -108,7 +108,7 @@ export function FeedbackQuestion({
         triggeredRef.current = true;
         const s = loadState();
         setQuestion(pickQuestion(s.answeredCount));
-        setMode("banner");
+        setMode("modal");
       }, IDLE_TRIGGER_MS);
     };
 
@@ -190,14 +190,15 @@ export function FeedbackQuestion({
 
   if (mode === "minimized") {
     return (
-      <button className="fq-pill" onClick={() => setMode("banner")}>
+      <button className="fq-pill" onClick={() => setMode("modal")}>
         Answer a quick question?
       </button>
     );
   }
 
   return (
-    <div className="fq-banner">
+    <div className="fq-overlay" onClick={minimize}>
+      <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
       <button className="fq-close" onClick={dismiss}>✕</button>
       <p className="fq-intro">Quick question to help improve SeaBound:</p>
       <p className="fq-question">{question}</p>
@@ -225,6 +226,7 @@ export function FeedbackQuestion({
         </button>
         <button className="fq-check" onClick={minimize}>Let me check</button>
         <button className="fq-skip" onClick={dismiss}>Skip</button>
+      </div>
       </div>
     </div>
   );
