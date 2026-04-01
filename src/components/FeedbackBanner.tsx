@@ -23,6 +23,7 @@ export function FeedbackBanner() {
         body: JSON.stringify({
           message: text.trim(),
           _subject: "SeaBound Feedback",
+          _url: window.location.href,
         }),
       });
       if (res.ok) {
