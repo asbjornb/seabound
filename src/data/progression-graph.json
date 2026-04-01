@@ -498,12 +498,6 @@
       "label": "Outrigger Canoe"
     },
     {
-      "id": "skill:woodworking:10",
-      "type": "skill_level",
-      "label": "Woodworking Lv10",
-      "category": "woodworking"
-    },
-    {
       "id": "skill:foraging:5",
       "type": "skill_level",
       "label": "Foraging Lv5",
@@ -513,12 +507,6 @@
       "id": "skill:fishing:8",
       "type": "skill_level",
       "label": "Fishing Lv8",
-      "category": "fishing"
-    },
-    {
-      "id": "skill:fishing:10",
-      "type": "skill_level",
-      "label": "Fishing Lv10",
       "category": "fishing"
     },
     {
@@ -1404,11 +1392,6 @@
       "from": "action:fell_large_tree",
       "to": "skill:woodworking",
       "relation": "trains"
-    },
-    {
-      "from": "skill:woodworking:10",
-      "to": "action:fell_large_tree",
-      "relation": "requires_skill"
     },
     {
       "from": "biome:jungle_interior",
@@ -4161,11 +4144,6 @@
       "relation": "requires_tool"
     },
     {
-      "from": "skill:fishing:10",
-      "to": "station:deploy_basket_trap",
-      "relation": "requires_skill"
-    },
-    {
       "from": "station:plant_wild_seeds",
       "to": "resource:rough_fiber",
       "relation": "produces"
@@ -4457,7 +4435,6 @@
       "skill:fishing:8",
       "tool:gorge_hook",
       "tool:basket_trap",
-      "skill:fishing:10",
       "resource:charcoal",
       "skill:cooking:2",
       "skill:cooking:4",
@@ -4495,7 +4472,6 @@
       "recipe:fire_clay_pot",
       "recipe:kiln_fire_pot",
       "expedition:oceanic_voyage",
-      "skill:woodworking:10",
       "biome:jungle_interior",
       "tool:stone_axe",
       "biome:rocky_shore",
@@ -4604,7 +4580,6 @@
       "recipe:build_camp_fire",
       "action:wade_tidal_pool",
       "station:soak_pandanus",
-      "skill:woodworking:10",
       "biome:jungle_interior",
       "tool:stone_axe",
       "tool:bow_drill_kit",
@@ -4660,21 +4635,6 @@
       }
     ],
     "skillGates": {
-      "woodworking": [
-        {
-          "level": 10,
-          "unlocks": [
-            "action:fell_large_tree"
-          ],
-          "trainedBy": [
-            "action:harvest_bamboo",
-            "action:fell_large_tree",
-            "recipe:split_bamboo_cane",
-            "recipe:char_log_interior",
-            "recipe:scrape_hull"
-          ]
-        }
-      ],
       "foraging": [
         {
           "level": 5,
@@ -4697,18 +4657,6 @@
           "unlocks": [
             "action:drop_line_fish",
             "recipe:craft_basket_trap"
-          ],
-          "trainedBy": [
-            "action:wade_tidal_pool",
-            "action:spear_fish",
-            "action:drop_line_fish",
-            "station:deploy_basket_trap"
-          ]
-        },
-        {
-          "level": 10,
-          "unlocks": [
-            "station:deploy_basket_trap"
           ],
           "trainedBy": [
             "action:wade_tidal_pool",
