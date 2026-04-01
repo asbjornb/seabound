@@ -633,7 +633,6 @@ export const RECIPES: RecipeDef[] = [
       "Lash a bamboo outrigger float to the dugout and rig a woven sail. Ready for open ocean.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "sail", amount: 1 },
       { resourceId: "rope", amount: 3 },

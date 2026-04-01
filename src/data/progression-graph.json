@@ -2348,11 +2348,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:8",
-      "to": "recipe:build_outrigger",
-      "relation": "requires_skill"
-    },
-    {
       "from": "recipe:knap_obsidian_blade",
       "to": "tool:obsidian_blade",
       "relation": "crafts_tool"
@@ -4512,7 +4507,6 @@
       "skill:construction:13",
       "resource:sail",
       "resource:rope",
-      "skill:construction:8",
       "resource:sealed_clay_jar",
       "recipe:knap_stone_blade",
       "recipe:build_pandanus_grove",
@@ -4935,8 +4929,7 @@
         {
           "level": 8,
           "unlocks": [
-            "recipe:build_hammock",
-            "recipe:build_outrigger"
+            "recipe:build_hammock"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
