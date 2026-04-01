@@ -209,6 +209,5 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     description:
       "A crescent of stacked stones in the shallows. Fish wash in at high tide and can't escape.",
     unlocks: "Harvest tidal weir station — bulk passive fishing",
-    storageBonus: [{ tag: "food", amount: 5 }],
   },
 };

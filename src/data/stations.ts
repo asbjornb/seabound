@@ -23,11 +23,11 @@ export const STATIONS: StationDef[] = [
     description:
       "Check the stone weir at low tide and collect whatever swam in.",
     skillId: "fishing",
-    durationMs: 300000, // 5 minutes
+    durationMs: 480000, // 8 minutes
     requiredBuildings: ["stone_tidal_weir"],
     yields: [
       { resourceId: "small_fish", amount: 4 },
-      { resourceId: "large_fish", amount: 2, chance: 0.4 },
+      { resourceId: "large_fish", amount: 2, chance: 0.5 },
       { resourceId: "crab", amount: 2, chance: 0.5 },
       { resourceId: "shell", amount: 1, chance: 0.4 },
     ],
