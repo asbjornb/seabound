@@ -120,6 +120,8 @@ export function createInitialState(): GameState {
     completedRecipes: [],
     expeditionPity: {},
     lastSeenDiscoveryId: -1,
+    routines: [],
+    activeRoutine: null,
   };
 }
 
@@ -285,6 +287,13 @@ export function normalizeGameState(raw: unknown): GameState | null {
     }
   }
   loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
+  // Migration: ensure routines fields exist
+  if (!loaded.routines) {
+    loaded.routines = [];
+  }
+  if (loaded.activeRoutine === undefined) {
+    loaded.activeRoutine = null;
+  }
 
   return loaded;
 }

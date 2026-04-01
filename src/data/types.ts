@@ -235,6 +235,28 @@ export interface PlacedStation {
   deployedAt: number;
 }
 
+// ═══════════════════════════════════════
+// Routines (automation chains)
+// ═══════════════════════════════════════
+
+export interface RoutineStep {
+  actionId: string;
+  actionType: "gather" | "craft";
+  count: number; // 0 = run until natural stop, >0 = stop after N completions
+}
+
+export interface Routine {
+  id: string;
+  name: string;
+  steps: RoutineStep[];
+}
+
+export interface RoutineProgress {
+  routineId: string;
+  currentStep: number;
+  completionsInStep: number;
+}
+
 export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool";
 
 export interface DiscoveryEntry {
@@ -275,4 +297,6 @@ export interface GameState {
   lastSeenDiscoveryId: number; // highest discovery ID the player has seen (for toast dedup)
   victory?: boolean; // true when the player has won (completed a victory expedition)
   modId?: string; // if set, this save belongs to a specific mod
+  routines: Routine[];
+  activeRoutine: RoutineProgress | null;
 }

@@ -13,6 +13,7 @@ import { LogPanel } from "./components/LogPanel";
 import { ModPanel } from "./components/ModPanel";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
+import { RoutinesPanel } from "./components/RoutinesPanel";
 import { SearchPanel } from "./components/SearchPanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
@@ -20,6 +21,7 @@ import { StationsPanel } from "./components/StationsPanel";
 import { VictoryScreen } from "./components/VictoryScreen";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
+import { isRoutinesUnlocked } from "./data/routines";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -138,6 +140,11 @@ export default function App() {
   const hasAnyResource = useMemo(() => selectHasAnyResource(game.state), [game.state]);
 
   // On mobile, inventory is a tab; on desktop it's always visible as sidebar
+  const routinesUnlocked = useMemo(
+    () => isRoutinesUnlocked(game.state),
+    [game.state]
+  );
+
   const visibleTabs = useMemo(() => {
     return selectVisibleTabs({
       hasFoodAccess,
@@ -149,6 +156,7 @@ export default function App() {
       buildingCount: game.state.buildings.length,
       availableStationCount: game.availableStations.length,
       deployedStationCount: game.state.stations.length,
+      routinesUnlocked,
     });
   }, [
     hasFoodAccess,
@@ -160,6 +168,7 @@ export default function App() {
     game.state.buildings.length,
     game.availableStations.length,
     game.state.stations.length,
+    routinesUnlocked,
   ]);
 
   // Fall back to gather if current tab isn't visible
@@ -448,6 +457,17 @@ export default function App() {
                 expeditions={game.availableExpeditions}
                 state={game.state}
                 onStart={game.startExpedition}
+              />
+            )}
+            {activeTab === "routines" && (
+              <RoutinesPanel
+                state={game.state}
+                availableActions={game.availableActions}
+                availableRecipes={game.availableRecipes}
+                onSaveRoutine={game.saveRoutine}
+                onDeleteRoutine={game.deleteRoutine}
+                onStartRoutine={game.startRoutine}
+                onStopRoutine={game.stopRoutine}
               />
             )}
             {activeTab === "skills" && <SkillsPanel state={game.state} />}

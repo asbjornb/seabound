@@ -26,7 +26,7 @@ import {
   hasVessel,
 } from "./gameState";
 
-export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills";
+export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills" | "routines";
 
 
 export function resourceHasUse(resourceId: string, state: GameState, _visited?: Set<string>): boolean {
@@ -309,6 +309,7 @@ export function selectVisibleTabs(params: {
   buildingCount: number;
   availableStationCount: number;
   deployedStationCount: number;
+  routinesUnlocked: boolean;
 }): GameTab[] {
   const tabs: GameTab[] = ["gather"];
   if (params.craftRecipeCount > 0) tabs.push("craft");
@@ -323,6 +324,7 @@ export function selectVisibleTabs(params: {
     tabs.push("build");
   }
   if (params.hasFoodAccess) tabs.push("explore");
+  if (params.routinesUnlocked) tabs.push("routines");
   if (params.hasAnyResource) tabs.push("inventory");
   if (params.hasAnyXp) tabs.push("skills");
   return tabs;
