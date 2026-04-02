@@ -1058,11 +1058,62 @@ body {
   flex-direction: column;
 }
 
+/* Toolbar: search + view toggle */
+.inventory-toolbar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.inventory-search {
+  flex: 1;
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.inventory-search::placeholder {
+  color: var(--text-dim);
+}
+.inventory-search:focus {
+  border-color: var(--accent);
+}
+
+.inventory-view-toggle {
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  width: 30px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inventory-view-toggle:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+
+/* Controls row: filters + sort */
+.inventory-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
 .inventory-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-bottom: 10px;
 }
 
 .inventory-filter {
@@ -1087,10 +1138,31 @@ body {
   background: var(--bg-hover);
 }
 
+.inventory-sort {
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  cursor: pointer;
+  outline: none;
+}
+.inventory-sort:focus {
+  border-color: var(--accent);
+}
+
 .inventory-category {
   margin-bottom: 8px;
 }
 
+.section-count {
+  font-weight: 400;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+/* ── List view ── */
 .inventory-items {
   display: flex;
   flex-direction: column;
@@ -1139,6 +1211,110 @@ body {
   font-size: 0.7rem;
   color: var(--text-dim);
   margin-top: 2px;
+}
+
+/* ── Grid view ── */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 4px;
+}
+
+.inventory-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 2px 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  min-width: 0;
+}
+.inventory-tile:hover {
+  border-color: var(--text-dim);
+  background: var(--bg-hover);
+}
+.inventory-tile.at-cap {
+  border-color: var(--warning);
+}
+.inventory-tile.selected {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.tile-name {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  padding: 0 2px;
+  margin-top: 2px;
+}
+
+.tile-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--success);
+  margin-top: 1px;
+}
+.tile-count.at-cap {
+  color: var(--warning);
+}
+
+/* Mini fullness bar under each tile */
+.tile-fullness-bar {
+  width: 80%;
+  height: 3px;
+  background: var(--bar-bg);
+  border-radius: 2px;
+  margin-top: 2px;
+  overflow: hidden;
+}
+.tile-fullness-fill {
+  height: 100%;
+  background: var(--success);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.tile-fullness-fill.medium {
+  background: var(--accent);
+}
+.tile-fullness-fill.high {
+  background: var(--warning);
+}
+
+/* Expanded detail popover below tile */
+.tile-detail {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 6px 8px;
+  min-width: 160px;
+  max-width: 220px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  margin-top: 4px;
+}
+.tile-detail-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.tile-detail-amount {
+  font-size: 0.72rem;
+  color: var(--success);
+  font-weight: 600;
+  margin-bottom: 2px;
 }
 .tool-enables {
   margin-top: 3px;
