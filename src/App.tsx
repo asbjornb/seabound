@@ -78,7 +78,7 @@ export default function App() {
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
-  const isOldDomain = window.location.hostname.endsWith(".pages.dev");
+  const isOldDomain = window.location.hostname === "seabound.pages.dev";
 
   // Close "more" menu on outside click
   useEffect(() => {
