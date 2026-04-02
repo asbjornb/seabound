@@ -5,10 +5,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "explore_beach",
     name: "Explore Along the Beach",
     description:
-      "Follow the shoreline and nearby treeline looking for useful areas. Costs 5 food per trip.",
+      "Follow the shoreline and nearby treeline looking for useful areas. Costs 4 food per trip.",
     skillId: "navigation",
     durationMs: 8000,
-    foodCost: 5,
+    foodCost: 4,
     xpGain: 15,
     hideWhenAllFound: true,
     outcomes: [
@@ -44,10 +44,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "explore_interior",
     name: "Explore Island Interior",
     description:
-      "Push deeper into the island interior, following animal trails and streams. Costs 8 food per trip.",
+      "Push deeper into the island interior, following animal trails and streams. Costs 6 food per trip.",
     skillId: "navigation",
     durationMs: 12000,
-    foodCost: 8,
+    foodCost: 6,
     xpGain: 25,
     requiredBiomes: ["coconut_grove"],
     hideWhenAllFound: true,
@@ -92,10 +92,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     id: "sail_nearby_island",
     name: "Sail to Nearby Island",
     description:
-      "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 3 food per trip.",
+      "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 7 food per trip.",
     skillId: "navigation",
     durationMs: 16000,
-    foodCost: 3,
+    foodCost: 7,
     xpGain: 35,
     requiredVessel: "raft",
     outcomes: [
