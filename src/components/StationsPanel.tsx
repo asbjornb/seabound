@@ -1,7 +1,9 @@
+import { type MouseEvent, useCallback } from "react";
 import { getStationInputAmount } from "../data/milestones";
 import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
+import type { FlyupItem } from "./CollectFlyup";
 
 interface Props {
   availableStations: StationDef[];
@@ -9,6 +11,7 @@ interface Props {
   state: GameState;
   onDeploy: (station: StationDef) => void;
   onCollect: (index: number) => void;
+  onFlyup?: (items: FlyupItem[]) => void;
 }
 
 function formatTime(ms: number): string {
@@ -25,11 +28,36 @@ export function StationsPanel({
   state,
   onDeploy,
   onCollect,
+  onFlyup,
 }: Props) {
   const now = Date.now();
   const RESOURCES = getResources();
   const BUILDINGS = getBuildings();
   const SKILLS = getSkills();
+
+  const handleCollect = useCallback(
+    (index: number, e: MouseEvent) => {
+      const placed = state.stations[index];
+      const def = placed && getStationById(placed.stationId);
+      if (def && onFlyup) {
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top;
+        let flyupId = Date.now();
+        const items = def.yields
+          .filter((d) => (d.chance ?? 1) > 0)
+          .map((d) => ({
+            id: flyupId++,
+            text: `+${d.amount} ${RESOURCES[d.resourceId]?.name ?? d.resourceId}`,
+            x,
+            y,
+          }));
+        onFlyup(items);
+      }
+      onCollect(index);
+    },
+    [state.stations, onCollect, onFlyup, RESOURCES]
+  );
 
   // Active stations with their defs
   const activeStations = state.stations.map((placed, index) => {
@@ -59,7 +87,7 @@ export function StationsPanel({
               <div
                 key={index}
                 className={`station-card ${isReady ? "station-ready" : ""}`}
-                onClick={() => isReady && onCollect(index)}
+                onClick={(e) => isReady && handleCollect(index, e)}
               >
                 <div className="action-card-header">
                   <span className="action-name">{def.name}</span>

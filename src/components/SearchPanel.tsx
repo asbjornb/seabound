@@ -7,6 +7,7 @@ import type {
   StationDef,
   ExpeditionDef,
 } from "../data/types";
+import { CloseIcon } from "./CloseIcon";
 import { GameIcon } from "./GameIcon";
 
 type SearchResultType = "gather" | "craft" | "build" | "tend" | "explore";
@@ -248,8 +249,8 @@ export function SearchPanel({
             value={query}
             onChange={(e) => onChangeQuery(e.target.value)}
           />
-          <button className="search-close-btn" onClick={onClose}>
-            &times;
+          <button className="modal-close-btn" onClick={onClose}>
+            <CloseIcon size={16} />
           </button>
         </div>
 

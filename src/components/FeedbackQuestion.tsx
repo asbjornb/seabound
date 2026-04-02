@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { CloseIcon } from "./CloseIcon";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
@@ -202,7 +203,7 @@ export function FeedbackQuestion({
       }}
     >
       <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="fq-close" onClick={dismiss}>&#x2715;</button>
+        <button className="fq-close" onClick={dismiss}><CloseIcon size={14} /></button>
         <p className="fq-intro">Quick question to help improve SeaBound:</p>
         <p className="fq-question">{question}</p>
         <textarea

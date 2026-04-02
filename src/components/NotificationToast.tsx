@@ -78,7 +78,9 @@ export function NotificationToast({
           }}
         >
           <span className="toast-message">{toast.entry.message}</span>
-          <span className="toast-close">&times;</span>
+          <span className="toast-close" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="4" x2="14" y2="14" /><line x1="14" y1="4" x2="4" y2="14" /></svg>
+          </span>
         </div>
       ))}
     </div>
