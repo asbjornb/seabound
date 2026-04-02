@@ -695,6 +695,58 @@ body {
   text-shadow: 0 0 8px rgba(240, 160, 80, 0.25);
 }
 
+/* Hide overflow tabs on mobile — they appear in the "More" menu instead */
+.desktop-only-tab {
+  display: none !important;
+}
+
+/* "More" overflow menu for tabs */
+.tab-more-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.tab-more-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.tab-more-menu {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  min-width: 140px;
+  padding: 4px 0;
+}
+
+.tab-more-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.tab-more-item:hover {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.05));
+  color: var(--text);
+}
+
+.tab-more-item.active {
+  color: var(--accent);
+}
+
 /* Panel area */
 .panel {
   flex: 1;
@@ -1364,8 +1416,18 @@ body {
     display: none;
   }
 
-  /* Hide inventory tab button on desktop */
+  /* Hide inventory tab button on desktop (shown in sidebar) */
   .mobile-only-tab {
+    display: none;
+  }
+
+  /* Show overflow tabs as regular tabs on desktop */
+  .desktop-only-tab {
+    display: flex !important;
+  }
+
+  /* Hide "More" overflow menu on desktop */
+  .tab-more-wrapper {
     display: none;
   }
 
