@@ -9,6 +9,8 @@ const PAUSE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days after 3 dismissals
 const MAX_DISMISSALS = 3;
 const SHOW_DELAY_MS = 15_000; // 15s after page load
 
+const TEST_MODE = new URLSearchParams(window.location.search).has("feedbacktest");
+
 // Early questions — best for players still learning the game
 const EARLY_QUESTIONS = [
   "What was the most confusing moment when you first started playing?",
@@ -64,6 +66,15 @@ function pickQuestion(answeredCount: number): string {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+function getDeviceInfo(): string {
+  const ua = navigator.userAgent;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const dpr = window.devicePixelRatio ?? 1;
+  const touch = "ontouchstart" in window ? "touch" : "no-touch";
+  return `${w}x${h} @${dpr}x ${touch} | ${ua}`;
+}
+
 export interface FeedbackQuestionProps {
   hasPlayedEnough: boolean;
   hasModalOpen: boolean;
@@ -88,7 +99,18 @@ export function FeedbackQuestion({
   const triggeredRef = useRef(false);
 
   useEffect(() => {
-    if (!hasPlayedEnough || hasModalOpen || triggeredRef.current) return;
+    if (triggeredRef.current) return;
+    // In test mode: skip all gates, show after 2s
+    if (TEST_MODE) {
+      const timer = setTimeout(() => {
+        triggeredRef.current = true;
+        setQuestion(pickQuestion(0));
+        setMode("modal");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+
+    if (!hasPlayedEnough || hasModalOpen) return;
 
     const state = loadState();
     const now = Date.now();
@@ -107,14 +129,16 @@ export function FeedbackQuestion({
   }, [hasPlayedEnough, hasModalOpen]);
 
   const dismiss = () => {
-    const state = loadState();
-    state.lastAsked = Date.now();
-    state.dismissals += 1;
-    if (state.dismissals >= MAX_DISMISSALS) {
-      state.pausedUntil = Date.now() + PAUSE_MS;
-      state.dismissals = 0;
+    if (!TEST_MODE) {
+      const state = loadState();
+      state.lastAsked = Date.now();
+      state.dismissals += 1;
+      if (state.dismissals >= MAX_DISMISSALS) {
+        state.pausedUntil = Date.now() + PAUSE_MS;
+        state.dismissals = 0;
+      }
+      saveState(state);
     }
-    saveState(state);
     setMode("hidden");
   };
 
@@ -137,7 +161,8 @@ export function FeedbackQuestion({
         `Biomes: ${discoveredBiomes.join(", ") || "none"}`,
         `Playtime: ${formatPlaytime(totalPlayTimeMs)}`,
         `Tab: ${activeTab}`,
-      ].join(" | ");
+        `Device: ${getDeviceInfo()}`,
+      ].join("\n");
 
       const res = await fetch(WEB3FORMS_URL, {
         method: "POST",
@@ -152,11 +177,13 @@ export function FeedbackQuestion({
       });
       if (res.ok) {
         setStatus("sent");
-        const state = loadState();
-        state.lastAsked = Date.now();
-        state.dismissals = 0;
-        state.answeredCount += 1;
-        saveState(state);
+        if (!TEST_MODE) {
+          const state = loadState();
+          state.lastAsked = Date.now();
+          state.dismissals = 0;
+          state.answeredCount += 1;
+          saveState(state);
+        }
         setTimeout(() => setMode("hidden"), 2000);
       } else {
         setStatus("error");
@@ -176,7 +203,6 @@ export function FeedbackQuestion({
     );
   }
 
-  // Same pattern as log-overlay / mod-panel-overlay — rendered inline, no portal
   return (
     <div className="fq-overlay" onClick={dismiss}>
       <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
