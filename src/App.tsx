@@ -206,6 +206,14 @@ export default function App() {
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
+      <FeedbackQuestion
+        hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
+        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
+        phaseName={currentPhase.name}
+        discoveredBiomes={game.state.discoveredBiomes}
+        totalPlayTimeMs={game.state.totalPlayTimeMs}
+        activeTab={activeTab}
+      />
       {updateAvailable && (
         <div className="update-bar" onClick={() => window.location.reload()}>
           A new version is available — tap to refresh
@@ -515,14 +523,6 @@ export default function App() {
       )}
 
       <FeedbackBanner />
-      <FeedbackQuestion
-        hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
-        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
-        phaseName={currentPhase.name}
-        discoveredBiomes={game.state.discoveredBiomes}
-        totalPlayTimeMs={game.state.totalPlayTimeMs}
-        activeTab={activeTab}
-      />
     </div>
   );
 }
