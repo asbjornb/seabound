@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
@@ -86,6 +87,7 @@ export function FeedbackQuestion({
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const triggeredRef = useRef(false);
+  const touchMovedRef = useRef(false);
 
   useEffect(() => {
     if (!hasPlayedEnough || hasModalOpen || triggeredRef.current) return;
@@ -166,6 +168,15 @@ export function FeedbackQuestion({
     }
   };
 
+  useEffect(() => {
+    if (mode !== "modal") return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mode]);
+
   if (mode === "hidden") return null;
 
   if (mode === "minimized") {
@@ -176,9 +187,20 @@ export function FeedbackQuestion({
     );
   }
 
-  // Same pattern as log-overlay / mod-panel-overlay — rendered inline, no portal
-  return (
-    <div className="fq-overlay" onClick={dismiss}>
+  const modal = (
+    <div
+      className="fq-overlay"
+      onTouchMove={() => {
+        touchMovedRef.current = true;
+      }}
+      onTouchStart={() => {
+        touchMovedRef.current = false;
+      }}
+      onClick={(e) => {
+        if (e.target !== e.currentTarget || touchMovedRef.current) return;
+        dismiss();
+      }}
+    >
       <div className="fq-modal" onClick={(e) => e.stopPropagation()}>
         <button className="fq-close" onClick={dismiss}>&#x2715;</button>
         <p className="fq-intro">Quick question to help improve SeaBound:</p>
@@ -211,4 +233,6 @@ export function FeedbackQuestion({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
