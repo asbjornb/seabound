@@ -33,6 +33,16 @@ describe("resourceHasUse", () => {
     expect(resourceHasUse("breadfruit_cutting", state)).toBe(true);
   });
 
+  it("considers resources used as recipe requiredItems useful", () => {
+    // Bug regression: stone_flake is a requiredItem for gorge_hook recipe,
+    // but resourceHasUse only checked recipe inputs, not requiredItems.
+    // This caused chert to appear useless (via transitive output_no_use),
+    // hiding the Comb Rocky Shores action and locking players out of the
+    // gorge hook progression chain.
+    const state = makeState();
+    expect(resourceHasUse("stone_flake", state)).toBe(true);
+  });
+
   it("returns false for resources with no use and no food/water value", () => {
     const state = makeState();
     // A made-up resource that doesn't exist shouldn't have use

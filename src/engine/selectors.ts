@@ -40,7 +40,8 @@ export function resourceHasUse(resourceId: string, state: GameState, _visited?: 
   return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
     const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
-    if (!usesResource) return false;
+    const requiresResource = recipe.requiredItems?.some((requiredItem) => requiredItem === resourceId);
+    if (!usesResource && !requiresResource) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {
       const bdef = BUILDINGS[recipe.buildingOutput];
       if (!bdef?.maxCount || bdef.maxCount <= 1) return false;
