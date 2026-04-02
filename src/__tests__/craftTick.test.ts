@@ -78,7 +78,7 @@ describe("repeatable craft", () => {
 
 describe("expedition food/water consumption", () => {
   it("stops expedition when food runs out", () => {
-    // explore_beach costs 5 food per cycle, 8s duration
+    // explore_beach costs 4 food per cycle, 8s duration
     const state = makeState({
       currentAction: {
         type: "expedition",
@@ -86,14 +86,14 @@ describe("expedition food/water consumption", () => {
         expeditionId: "explore_beach",
         startedAt: 0,
       },
-      resources: { coconut: 5 }, // 5 food value total
+      resources: { coconut: 4 }, // 4 food value total
       discoveredBiomes: ["beach"],
     });
 
     // Enough time for several cycles (8s each)
     processTick(state, 8000 * 5);
 
-    // Should have completed 1 cycle (consuming 5 food), then stopped
+    // Should have completed 1 cycle (consuming 4 food), then stopped
     expect(state.resources["coconut"]).toBe(0);
     expect(state.currentAction).toBeNull();
   });
