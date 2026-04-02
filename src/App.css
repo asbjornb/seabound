@@ -644,9 +644,24 @@ body {
 }
 
 /* Tabs */
+.tabs-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs-row .search-toggle-btn {
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-left: 1px solid var(--border);
+  padding: 6px 10px;
+  font-size: 1rem;
+  border-radius: 0;
+}
+
 .tabs {
   display: flex;
-  border-bottom: 1px solid var(--border);
+  flex: 1;
 }
 
 .tab {
