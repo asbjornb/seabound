@@ -309,7 +309,7 @@ export const RECIPES: RecipeDef[] = [
       "Line the fire with stones and clay mortar. Holds heat so well it no longer needs kindling.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 14,
+    requiredSkillLevel: 12,
     inputs: [
       { resourceId: "flat_stone", amount: 8 },
       { resourceId: "clay", amount: 4 },
@@ -318,7 +318,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "stone_hearth",
     requiredBuildings: ["camp_fire", "firing_pit"],
     durationMs: 12000,
-    xpGain: 30,
+    xpGain: 40,
   },
   {
     id: "build_palm_leaf_pile",
@@ -333,7 +333,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     buildingOutput: "palm_leaf_pile",
     durationMs: 5000,
-    xpGain: 15,
+    xpGain: 20,
   },
 
   // Comfort tier
@@ -352,7 +352,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "sleeping_mat",
     oneTimeCraft: true,
     durationMs: 6000,
-    xpGain: 12,
+    xpGain: 15,
   },
   {
     id: "build_hammock",
@@ -361,7 +361,7 @@ export const RECIPES: RecipeDef[] = [
       "String a woven fiber hammock between two palms. A proper place to rest.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 8,
+    requiredSkillLevel: 7,
     inputs: [
       { resourceId: "cordage", amount: 6 },
       { resourceId: "dried_fiber", amount: 4 },
@@ -371,7 +371,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "sleeping_mat",
     oneTimeCraft: true,
     durationMs: 12000,
-    xpGain: 30,
+    xpGain: 40,
   },
   {
     id: "build_thatched_hut",
@@ -380,7 +380,7 @@ export const RECIPES: RecipeDef[] = [
       "Build a sturdy bamboo-framed hut with a palm-thatch roof. Real shelter at last.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 11,
+    requiredSkillLevel: 9,
     inputs: [
       { resourceId: "bamboo_cane", amount: 8 },
       { resourceId: "palm_frond", amount: 10 },
@@ -391,7 +391,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "hammock",
     oneTimeCraft: true,
     durationMs: 20000,
-    xpGain: 50,
+    xpGain: 65,
   },
 
   {
@@ -425,7 +425,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "fenced_perimeter",
     durationMs: 10000,
     requiredSkillLevel: 2,
-    xpGain: 25,
+    xpGain: 30,
   },
 
   {
@@ -443,7 +443,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "log_rack",
     requiredBuildings: ["fenced_perimeter"],
     durationMs: 10000,
-    xpGain: 25,
+    xpGain: 30,
   },
 
   {
@@ -482,7 +482,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "raft",
     durationMs: 20000,
     oneTimeCraft: true,
-    xpGain: 50,
+    xpGain: 65,
     hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
 
@@ -619,7 +619,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "dugout",
     durationMs: 20000,
     oneTimeCraft: true,
-    xpGain: 60,
+    xpGain: 75,
   },
 
   // ═══════════════════════════════════════
@@ -641,7 +641,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "dugout",
     durationMs: 25000,
     oneTimeCraft: true,
-    xpGain: 80,
+    xpGain: 100,
   },
 
   // ═══════════════════════════════════════
@@ -758,10 +758,10 @@ export const RECIPES: RecipeDef[] = [
     ],
     buildingOutput: "firing_pit",
     durationMs: 12000,
-    xpGain: 35,
+    xpGain: 45,
   },
 
-  // Building: Kiln (Construction 13)
+  // Building: Kiln (Construction 11)
   {
     id: "build_kiln",
     name: "Kiln",
@@ -769,7 +769,7 @@ export const RECIPES: RecipeDef[] = [
       "Build an enclosed clay kiln over the firing pit. Much higher temperatures for advanced pottery.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 13,
+    requiredSkillLevel: 11,
     inputs: [
       { resourceId: "clay", amount: 10 },
       { resourceId: "flat_stone", amount: 8 },
@@ -779,7 +779,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "kiln",
     requiredBuildings: ["firing_pit"],
     durationMs: 20000,
-    xpGain: 60,
+    xpGain: 75,
   },
 
   // Building: Pottery Wheel (Crafting 11, requires kiln)
@@ -803,7 +803,7 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 50,
   },
 
-  // Building: Charcoal Kiln (Construction 16, requires kiln + stone_hearth)
+  // Building: Charcoal Kiln (Construction 14, requires kiln + stone_hearth)
   {
     id: "build_charcoal_kiln",
     name: "Charcoal Kiln",
@@ -811,7 +811,7 @@ export const RECIPES: RecipeDef[] = [
       "Build a clay-sealed mound for slow-burning logs into charcoal. An ancient fuel upgrade.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 16,
+    requiredSkillLevel: 14,
     inputs: [
       { resourceId: "clay", amount: 8 },
       { resourceId: "flat_stone", amount: 6 },
@@ -821,10 +821,10 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "charcoal_kiln",
     requiredBuildings: ["kiln", "stone_hearth"],
     durationMs: 20000,
-    xpGain: 60,
+    xpGain: 75,
   },
 
-  // Building: Storage Shelf (Construction 17)
+  // Building: Storage Shelf (Construction 15)
   {
     id: "build_storage_shelf",
     name: "Storage Shelf",
@@ -832,7 +832,7 @@ export const RECIPES: RecipeDef[] = [
       "Assemble a bamboo rack and line it with fired pots. A proper place for everything.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 17,
+    requiredSkillLevel: 15,
     inputs: [
       { resourceId: "bamboo_cane", amount: 6 },
       { resourceId: "fired_clay_pot", amount: 3 },
@@ -841,7 +841,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "storage_shelf",
     requiredBuildings: ["thatched_hut"],
     durationMs: 18000,
-    xpGain: 55,
+    xpGain: 70,
   },
 
   // Building: Soaking Pit (Weaving 7)
@@ -861,7 +861,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["firing_pit"],
     requiredItems: ["pandanus_strip"],
     durationMs: 10000,
-    xpGain: 40,
+    xpGain: 50,
   },
 
   // Building: Stone Tidal Weir (Fishing 11)
@@ -1049,7 +1049,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Dig a stone-lined well to the water table. Provides water for farming.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 6,
+    requiredSkillLevel: 5,
     inputs: [
       { resourceId: "flat_stone", amount: 6 },
       { resourceId: "clay", amount: 4 },
@@ -1066,7 +1066,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Upgrade a cleared plot with irrigation and stone borders for better crops.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 7,
+    requiredSkillLevel: 6,
     inputs: [
       { resourceId: "flat_stone", amount: 4 },
       { resourceId: "bamboo_cane", amount: 4 },
@@ -1087,7 +1087,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Upgrade a tended garden with drainage and enriched soil for the best crops.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 10,
+    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "flat_stone", amount: 6 },
       { resourceId: "clay", amount: 6 },
@@ -1112,7 +1112,7 @@ export const RECIPES: RecipeDef[] = [
     description: "Establish a self-sustaining pandanus grove. No replanting needed — just harvest.",
     skillId: "construction",
     panel: "build",
-    requiredSkillLevel: 12,
+    requiredSkillLevel: 10,
     requiredSkills: [{ skillId: "farming", level: 7 }],
     inputs: [
       { resourceId: "pandanus_cutting", amount: 2 },
@@ -1207,7 +1207,7 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 25,
   },
 
-  // Crucible (Construction 15, requires kiln)
+  // Crucible (Construction 13, requires kiln)
   {
     id: "craft_crucible",
     name: "Crucible",
@@ -1215,7 +1215,7 @@ export const RECIPES: RecipeDef[] = [
       "Shape and kiln-fire a thick-walled vessel capable of withstanding smelting temperatures.",
     skillId: "construction",
     panel: "craft",
-    requiredSkillLevel: 15,
+    requiredSkillLevel: 13,
     inputs: [
       { resourceId: "clay", amount: 8 },
       { resourceId: "flat_stone", amount: 4 },
@@ -1225,6 +1225,6 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["kiln"],
     durationMs: 15000,
     oneTimeCraft: true,
-    xpGain: 50,
+    xpGain: 65,
   },
 ];
