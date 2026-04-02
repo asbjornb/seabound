@@ -372,15 +372,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
-  construction: [
-    {
-      level: 9,
-      description: "Efficient builder — all construction 10% faster",
-      effects: [
-        { type: "duration", actionId: "*", multiplier: 0.9 },
-      ],
-    },
-  ],
+  construction: [],
 };
 
 /**
