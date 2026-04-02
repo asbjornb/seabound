@@ -133,7 +133,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     {inputs.map((inp, i) => {
                       const have = getResource(state, inp.resourceId);
                       const enough = have >= inp.amount;
-                      const altId = inp.alternateResourceId;
+                      const altId = inp.alternateResourceId && state.discoveredResources.includes(inp.alternateResourceId) ? inp.alternateResourceId : undefined;
                       const altHave = altId ? getResource(state, altId) : 0;
                       const altEnough = altId ? altHave >= inp.amount : false;
                       return (
