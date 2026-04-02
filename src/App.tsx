@@ -299,6 +299,14 @@ export default function App() {
       <IslandBanner phase={currentPhase.id} />
 
       <div className="app-body">
+        {/* Desktop sidebar: always visible on wide screens */}
+        {(hasAnyResource || hasAnyXp) && (
+          <aside className="inventory-sidebar">
+            {hasAnyXp && <SkillsPanel state={game.state} />}
+            {hasAnyResource && <InventoryPanel state={game.state} />}
+          </aside>
+        )}
+
         <div className="app-main">
           {/* Compact resource bar: visible on mobile, hidden on desktop */}
           <ResourcePanel state={game.state} />
@@ -511,13 +519,6 @@ export default function App() {
           onSeen={game.markDiscoverySeen}
         />
 
-        {/* Desktop sidebar: always visible on wide screens */}
-        {(hasAnyResource || hasAnyXp) && (
-          <aside className="inventory-sidebar">
-            {hasAnyXp && <SkillsPanel state={game.state} />}
-            {hasAnyResource && <InventoryPanel state={game.state} />}
-          </aside>
-        )}
       </div>
 
       {modPanelOpen && (
