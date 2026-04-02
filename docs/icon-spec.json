@@ -903,6 +903,19 @@
       "tags": ["phase2", "building", "fire"]
     },
     {
+      "id": "charcoal_board",
+      "object": "Driftwood plank with charcoal writing",
+      "description": "A flat, sun-bleached piece of driftwood propped upright with charcoal scrawled task lists and tally marks. Simple but purposeful — a castaway's planning board.",
+      "use": "Settlement panel, building card",
+      "theme": "fire",
+      "category": "building_utility",
+      "chain": null,
+      "chainRole": "standalone",
+      "chainNote": "Thematic link to charcoal kiln — uses charcoal as writing material",
+      "size": 64,
+      "tags": ["phase2", "building", "planning"]
+    },
+    {
       "id": "palm_leaf_pile",
       "object": "Thatched storage lean-to",
       "description": "A simple lean-to shelter with palm frond thatch roof, items piled underneath. Basic but functional storage.",
