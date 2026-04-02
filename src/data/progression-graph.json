@@ -463,6 +463,11 @@
       "label": "Charcoal Kiln"
     },
     {
+      "id": "building:charcoal_board",
+      "type": "building",
+      "label": "Charcoal Board"
+    },
+    {
       "id": "building:soaking_pit",
       "type": "building",
       "label": "Soaking Pit"
@@ -1029,6 +1034,12 @@
       "type": "recipe",
       "label": "Charcoal Kiln",
       "category": "construction"
+    },
+    {
+      "id": "recipe:build_charcoal_board",
+      "type": "recipe",
+      "label": "Charcoal Board",
+      "category": "crafting"
     },
     {
       "id": "recipe:build_storage_shelf",
@@ -2656,6 +2667,31 @@
     {
       "from": "building:stone_hearth",
       "to": "recipe:build_charcoal_kiln",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_charcoal_board",
+      "to": "building:charcoal_board",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_charcoal_board",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:build_charcoal_board",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_charcoal_board",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:charcoal_kiln",
+      "to": "recipe:build_charcoal_board",
       "relation": "requires_building"
     },
     {
@@ -4704,6 +4740,7 @@
             "recipe:knap_obsidian_blade",
             "recipe:craft_bamboo_spear",
             "recipe:build_pottery_wheel",
+            "recipe:build_charcoal_board",
             "recipe:shape_clay_pot",
             "recipe:wheel_shape_clay_pot",
             "recipe:fire_clay_pot",
@@ -4736,6 +4773,7 @@
             "recipe:knap_obsidian_blade",
             "recipe:craft_bamboo_spear",
             "recipe:build_pottery_wheel",
+            "recipe:build_charcoal_board",
             "recipe:shape_clay_pot",
             "recipe:wheel_shape_clay_pot",
             "recipe:fire_clay_pot",
