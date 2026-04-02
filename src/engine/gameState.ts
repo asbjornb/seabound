@@ -108,7 +108,7 @@ export function createInitialState(): GameState {
     currentAction: null,
     lastTickAt: Date.now(),
     totalPlayTimeMs: 0,
-    morale: 100,
+    morale: 55,
     moraleDecayProgressMs: 0,
     discoveryLog: [],
     discoveredResources: [],
