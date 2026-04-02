@@ -1,6 +1,8 @@
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { ActionPanel } from "./components/ActionPanel";
 import { ChapterCard } from "./components/ChapterCard";
+import { CloseIcon } from "./components/CloseIcon";
+import { CollectFlyup, type FlyupItem } from "./components/CollectFlyup";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
 import { FeedbackBanner } from "./components/FeedbackBanner";
@@ -68,6 +70,10 @@ export default function App() {
   const [victoryDismissed, setVictoryDismissed] = useState(false);
   const activeModId = getActiveModId();
   const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
+  const [flyups, setFlyups] = useState<FlyupItem[]>([]);
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
+  const [resetInput, setResetInput] = useState("");
+  const [tabTransition, setTabTransition] = useState(false);
   const isOldDomain = window.location.hostname.endsWith(".pages.dev");
 
   // Handle incoming migration from old domain
@@ -86,6 +92,22 @@ export default function App() {
       // invalid migration data — ignore
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleFlyup = useCallback((items: FlyupItem[]) => {
+    setFlyups((prev) => [...prev, ...items]);
+  }, []);
+
+  const handleFlyupDone = useCallback((id: number) => {
+    setFlyups((prev) => prev.filter((f) => f.id !== id));
+  }, []);
+
+  const handleTabSwitch = useCallback((newTab: GameTab) => {
+    setTabTransition(true);
+    setTab(newTab);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setTabTransition(false));
+    });
+  }, []);
 
   const handleMigrate = useCallback(() => {
     const data = JSON.stringify(game.state);
@@ -223,91 +245,38 @@ export default function App() {
         <div className="migrate-bar">
           <span>We've moved to <strong>seabound.dev</strong>!</span>
           <button className="migrate-btn" onClick={handleMigrate}>Move my save</button>
-          <button className="migrate-dismiss" onClick={() => setMigrateBannerDismissed(true)}>✕</button>
+          <button className="migrate-dismiss" onClick={() => setMigrateBannerDismissed(true)}><CloseIcon size={12} /></button>
         </div>
       )}
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
           <button
-            className={`log-toggle-btn${showLog ? " active" : ""}`}
+            className={`btn-ghost${showLog ? " active" : ""}`}
             onClick={() => setShowLog((v) => !v)}
           >
             Journal
           </button>
-          <div className="settings-wrapper">
-            <button
-              className="settings-btn"
-              onClick={() => setSettingsOpen((o) => !o)}
-            >
-              Settings
-            </button>
-            {settingsOpen && (
-              <div className="settings-menu">
-                <button
-                  className="settings-menu-item"
-                  onClick={() => {
-                    game.exportSave();
-                    setSettingsOpen(false);
-                  }}
-                >
-                  Save to file
-                </button>
-                <button
-                  className="settings-menu-item"
-                  onClick={() => {
-                    fileInputRef.current?.click();
-                  }}
-                >
-                  Load from file
-                </button>
-                <label className="settings-menu-item toggle">
-                  <span>Hide flavor text</span>
-                  <input
-                    type="checkbox"
-                    checked={hideFlavorText}
-                    onChange={(e) => {
-                      const v = e.target.checked;
-                      setHideFlavorText(v);
-                      localStorage.setItem("seabound_hideFlavorText", String(v));
-                    }}
-                  />
-                </label>
-                <button
-                  className="settings-menu-item"
-                  onClick={() => {
-                    setModPanelOpen(true);
-                    setSettingsOpen(false);
-                  }}
-                >
-                  Mods{activeModId !== "base" ? ` (${activeModId})` : ""}
-                </button>
-                <button
-                  className="settings-menu-item danger"
-                  onClick={() => {
-                    game.resetGame();
-                    setSettingsOpen(false);
-                  }}
-                >
-                  Reset
-                </button>
-              </div>
-            )}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  game.importSave(file);
-                  e.target.value = "";
-                }
-                setSettingsOpen(false);
-              }}
-            />
-          </div>
+          <button
+            className="btn-ghost"
+            onClick={() => setSettingsOpen((o) => !o)}
+          >
+            Settings
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                game.importSave(file);
+                e.target.value = "";
+              }
+              setSettingsOpen(false);
+            }}
+          />
         </div>
       </header>
 
@@ -396,7 +365,7 @@ export default function App() {
                 <button
                   key={t}
                   className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
-                  onClick={() => setTab(t)}
+                  onClick={() => handleTabSwitch(t)}
                 >
                   <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
                 </button>
@@ -416,7 +385,7 @@ export default function App() {
               <div className="log-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="log-modal-header">
                   <span className="log-modal-title">Journal</span>
-                  <button className="log-modal-close" onClick={() => setShowLog(false)}>✕</button>
+                  <button className="log-modal-close" onClick={() => setShowLog(false)}><CloseIcon size={16} /></button>
                 </div>
                 <div className="log-modal-body">
                   <LogPanel entries={game.state.discoveryLog} />
@@ -425,7 +394,7 @@ export default function App() {
             </div>
           )}
 
-          <main className="panel">
+          <main className={`panel${tabTransition ? " panel-enter" : ""}`}>
             {activeTab === "gather" && (
               <ActionPanel
                 actions={gatherActions}
@@ -453,6 +422,7 @@ export default function App() {
                 state={game.state}
                 onDeploy={game.deployStation}
                 onCollect={game.collectStation}
+                onFlyup={handleFlyup}
               />
             )}
             {activeTab === "build" && (
@@ -524,6 +494,137 @@ export default function App() {
           onJumpToTab={(t) => setTab(t as GameTab)}
         />
       )}
+
+      {/* Settings Modal */}
+      {settingsOpen && (
+        <div className="settings-overlay" onClick={() => setSettingsOpen(false)}>
+          <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="settings-modal-header">
+              <h2>Settings</h2>
+              <button className="modal-close-btn" onClick={() => setSettingsOpen(false)}>
+                <CloseIcon size={16} />
+              </button>
+            </div>
+            <div className="settings-modal-body">
+              <div className="settings-section">
+                <div className="settings-section-title">Save Data</div>
+                <div className="settings-section-actions">
+                  <button
+                    className="btn-secondary"
+                    onClick={() => {
+                      game.exportSave();
+                    }}
+                  >
+                    Save to file
+                  </button>
+                  <button
+                    className="btn-secondary"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Load from file
+                  </button>
+                </div>
+              </div>
+
+              <div className="settings-section">
+                <div className="settings-section-title">Display</div>
+                <label className="settings-toggle">
+                  <span>Hide flavor text</span>
+                  <input
+                    type="checkbox"
+                    checked={hideFlavorText}
+                    onChange={(e) => {
+                      const v = e.target.checked;
+                      setHideFlavorText(v);
+                      localStorage.setItem("seabound_hideFlavorText", String(v));
+                    }}
+                  />
+                </label>
+              </div>
+
+              <div className="settings-section">
+                <div className="settings-section-title">Mods</div>
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    setModPanelOpen(true);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Manage Mods{activeModId !== "base" ? ` (${activeModId})` : ""}
+                </button>
+              </div>
+
+              <div className="settings-section settings-danger-zone">
+                <div className="settings-section-title">Danger Zone</div>
+                <p className="settings-danger-desc">
+                  This will permanently erase all progress. This cannot be undone.
+                </p>
+                <button
+                  className="btn-danger"
+                  onClick={() => {
+                    setResetConfirmOpen(true);
+                    setResetInput("");
+                  }}
+                >
+                  Reset All Progress
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reset Confirmation Dialog */}
+      {resetConfirmOpen && (
+        <div className="reset-overlay" onClick={() => setResetConfirmOpen(false)}>
+          <div className="reset-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="settings-modal-header">
+              <h2>Confirm Reset</h2>
+              <button className="modal-close-btn" onClick={() => setResetConfirmOpen(false)}>
+                <CloseIcon size={16} />
+              </button>
+            </div>
+            <div className="reset-modal-body">
+              <p className="reset-warning">
+                This will permanently delete all your progress, resources, skills, and buildings. There is no undo.
+              </p>
+              <label className="reset-label">
+                Type <strong>RESET</strong> to confirm:
+              </label>
+              <input
+                type="text"
+                className="reset-input"
+                value={resetInput}
+                onChange={(e) => setResetInput(e.target.value)}
+                placeholder="RESET"
+                autoFocus
+              />
+              <div className="reset-actions">
+                <button
+                  className="btn-ghost"
+                  onClick={() => setResetConfirmOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn-danger"
+                  disabled={resetInput !== "RESET"}
+                  onClick={() => {
+                    game.resetGame();
+                    setResetConfirmOpen(false);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Permanently Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <CollectFlyup items={flyups} onDone={handleFlyupDone} />
 
       <FeedbackBanner />
     </div>

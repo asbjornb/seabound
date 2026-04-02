@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { CloseIcon } from "./CloseIcon";
 import { getActionById, getRecipeById } from "../data/registry";
 import {
   areCountsEnabled,
@@ -153,7 +154,7 @@ function RoutineEditor({
             )}
             {steps.length > 1 && (
               <button className="routine-remove-step" onClick={() => removeStep(idx)} title="Remove step">
-                &times;
+                <CloseIcon size={12} />
               </button>
             )}
           </div>

@@ -9,6 +9,7 @@ import {
   saveModPack,
   switchToMod,
 } from "../data/modding";
+import { CloseIcon } from "./CloseIcon";
 
 interface Props {
   onClose: () => void;
@@ -106,8 +107,8 @@ export function ModPanel({ onClose, onModSwitch }: Props) {
       <div className="mod-panel" onClick={(e) => e.stopPropagation()}>
         <div className="mod-panel-header">
           <h2>Mods</h2>
-          <button className="mod-panel-close" onClick={onClose}>
-            &times;
+          <button className="modal-close-btn" onClick={onClose}>
+            <CloseIcon size={16} />
           </button>
         </div>
 
