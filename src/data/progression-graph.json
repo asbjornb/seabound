@@ -539,9 +539,9 @@
       "category": "fishing"
     },
     {
-      "id": "skill:construction:14",
+      "id": "skill:construction:12",
       "type": "skill_level",
-      "label": "Construction Lv14",
+      "label": "Construction Lv12",
       "category": "construction"
     },
     {
@@ -551,15 +551,15 @@
       "category": "construction"
     },
     {
-      "id": "skill:construction:8",
+      "id": "skill:construction:7",
       "type": "skill_level",
-      "label": "Construction Lv8",
+      "label": "Construction Lv7",
       "category": "construction"
     },
     {
-      "id": "skill:construction:11",
+      "id": "skill:construction:9",
       "type": "skill_level",
-      "label": "Construction Lv11",
+      "label": "Construction Lv9",
       "category": "construction"
     },
     {
@@ -569,21 +569,21 @@
       "category": "construction"
     },
     {
-      "id": "skill:construction:13",
+      "id": "skill:construction:11",
       "type": "skill_level",
-      "label": "Construction Lv13",
+      "label": "Construction Lv11",
       "category": "construction"
     },
     {
-      "id": "skill:construction:16",
+      "id": "skill:construction:14",
       "type": "skill_level",
-      "label": "Construction Lv16",
+      "label": "Construction Lv14",
       "category": "construction"
     },
     {
-      "id": "skill:construction:17",
+      "id": "skill:construction:15",
       "type": "skill_level",
-      "label": "Construction Lv17",
+      "label": "Construction Lv15",
       "category": "construction"
     },
     {
@@ -593,15 +593,21 @@
       "category": "construction"
     },
     {
+      "id": "skill:construction:5",
+      "type": "skill_level",
+      "label": "Construction Lv5",
+      "category": "construction"
+    },
+    {
       "id": "skill:construction:6",
       "type": "skill_level",
       "label": "Construction Lv6",
       "category": "construction"
     },
     {
-      "id": "skill:construction:7",
+      "id": "skill:construction:8",
       "type": "skill_level",
-      "label": "Construction Lv7",
+      "label": "Construction Lv8",
       "category": "construction"
     },
     {
@@ -611,15 +617,9 @@
       "category": "construction"
     },
     {
-      "id": "skill:construction:12",
+      "id": "skill:construction:13",
       "type": "skill_level",
-      "label": "Construction Lv12",
-      "category": "construction"
-    },
-    {
-      "id": "skill:construction:15",
-      "type": "skill_level",
-      "label": "Construction Lv15",
+      "label": "Construction Lv13",
       "category": "construction"
     },
     {
@@ -1874,7 +1874,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:14",
+      "from": "skill:construction:12",
       "to": "recipe:build_stone_hearth",
       "relation": "requires_skill"
     },
@@ -1959,7 +1959,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:8",
+      "from": "skill:construction:7",
       "to": "recipe:build_hammock",
       "relation": "requires_skill"
     },
@@ -1994,7 +1994,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:11",
+      "from": "skill:construction:9",
       "to": "recipe:build_thatched_hut",
       "relation": "requires_skill"
     },
@@ -2564,7 +2564,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:13",
+      "from": "skill:construction:11",
       "to": "recipe:build_kiln",
       "relation": "requires_skill"
     },
@@ -2644,7 +2644,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:16",
+      "from": "skill:construction:14",
       "to": "recipe:build_charcoal_kiln",
       "relation": "requires_skill"
     },
@@ -2684,7 +2684,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:17",
+      "from": "skill:construction:15",
       "to": "recipe:build_storage_shelf",
       "relation": "requires_skill"
     },
@@ -3034,7 +3034,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:6",
+      "from": "skill:construction:5",
       "to": "recipe:build_well",
       "relation": "requires_skill"
     },
@@ -3074,7 +3074,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:7",
+      "from": "skill:construction:6",
       "to": "recipe:upgrade_tended_garden",
       "relation": "requires_skill"
     },
@@ -3124,7 +3124,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:10",
+      "from": "skill:construction:8",
       "to": "recipe:upgrade_farm_plot",
       "relation": "requires_skill"
     },
@@ -3179,7 +3179,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:12",
+      "from": "skill:construction:10",
       "to": "recipe:build_pandanus_grove",
       "relation": "requires_skill"
     },
@@ -3434,7 +3434,7 @@
       "relation": "trains"
     },
     {
-      "from": "skill:construction:15",
+      "from": "skill:construction:13",
       "to": "recipe:craft_crucible",
       "relation": "requires_skill"
     },
@@ -4537,7 +4537,7 @@
       "skill:farming:3",
       "resource:taro_corm",
       "resource:clay",
-      "skill:construction:6",
+      "skill:construction:5",
       "skill:farming:12",
       "resource:breadfruit_cutting",
       "resource:shaped_clay_pot",
@@ -4565,10 +4565,10 @@
       "building:pandanus_grove",
       "resource:chert",
       "tool:hammerstone",
-      "skill:construction:16",
+      "skill:construction:14",
       "building:stone_hearth",
       "building:pottery_wheel",
-      "skill:construction:13",
+      "skill:construction:11",
       "resource:sail",
       "resource:rope",
       "resource:sealed_clay_jar",
@@ -4580,16 +4580,16 @@
       "recipe:sew_sail",
       "recipe:twist_rope",
       "recipe:seal_clay_jar",
-      "skill:construction:12",
+      "skill:construction:10",
       "skill:farming:7",
       "building:farm_plot",
-      "skill:construction:14",
+      "skill:construction:12",
       "skill:crafting:11",
       "recipe:upgrade_farm_plot",
-      "skill:construction:10",
+      "skill:construction:8",
       "building:tended_garden",
       "recipe:upgrade_tended_garden",
-      "skill:construction:7",
+      "skill:construction:6",
       "building:cleared_plot",
       "recipe:build_cleared_plot",
       "skill:construction:3"
@@ -4641,7 +4641,7 @@
       "tool:hammerstone",
       "resource:pandanus_cutting",
       "resource:clay",
-      "skill:construction:12",
+      "skill:construction:10",
       "skill:farming:7",
       "tool:digging_stick",
       "building:well",
@@ -4654,15 +4654,15 @@
       "recipe:build_well",
       "recipe:upgrade_farm_plot",
       "resource:chert",
-      "skill:construction:6",
-      "skill:construction:10",
+      "skill:construction:5",
+      "skill:construction:8",
       "building:tended_garden",
       "building:firing_pit",
       "action:comb_rocky_shore",
       "recipe:upgrade_tended_garden",
       "recipe:build_firing_pit",
       "biome:rocky_shore",
-      "skill:construction:7",
+      "skill:construction:6",
       "building:cleared_plot",
       "recipe:build_cleared_plot",
       "skill:construction:3"
@@ -4908,7 +4908,7 @@
           ]
         },
         {
-          "level": 6,
+          "level": 5,
           "unlocks": [
             "recipe:build_well"
           ],
@@ -4939,7 +4939,7 @@
           ]
         },
         {
-          "level": 7,
+          "level": 6,
           "unlocks": [
             "recipe:upgrade_tended_garden"
           ],
@@ -4970,7 +4970,7 @@
           ]
         },
         {
-          "level": 8,
+          "level": 7,
           "unlocks": [
             "recipe:build_hammock"
           ],
@@ -5001,7 +5001,7 @@
           ]
         },
         {
-          "level": 10,
+          "level": 8,
           "unlocks": [
             "recipe:upgrade_farm_plot"
           ],
@@ -5032,7 +5032,7 @@
           ]
         },
         {
-          "level": 11,
+          "level": 9,
           "unlocks": [
             "recipe:build_thatched_hut"
           ],
@@ -5063,7 +5063,7 @@
           ]
         },
         {
-          "level": 12,
+          "level": 10,
           "unlocks": [
             "recipe:build_pandanus_grove"
           ],
@@ -5094,7 +5094,7 @@
           ]
         },
         {
-          "level": 13,
+          "level": 11,
           "unlocks": [
             "recipe:build_kiln"
           ],
@@ -5125,7 +5125,7 @@
           ]
         },
         {
-          "level": 14,
+          "level": 12,
           "unlocks": [
             "recipe:build_stone_hearth"
           ],
@@ -5156,7 +5156,7 @@
           ]
         },
         {
-          "level": 15,
+          "level": 13,
           "unlocks": [
             "recipe:craft_crucible"
           ],
@@ -5187,7 +5187,7 @@
           ]
         },
         {
-          "level": 16,
+          "level": 14,
           "unlocks": [
             "recipe:build_charcoal_kiln"
           ],
@@ -5218,7 +5218,7 @@
           ]
         },
         {
-          "level": 17,
+          "level": 15,
           "unlocks": [
             "recipe:build_storage_shelf"
           ],

@@ -62,6 +62,8 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [hideFlavorText, setHideFlavorText] = useState(
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
@@ -75,6 +77,18 @@ export default function App() {
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
   const isOldDomain = window.location.hostname.endsWith(".pages.dev");
+
+  // Close "more" menu on outside click
+  useEffect(() => {
+    if (!moreMenuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [moreMenuOpen]);
 
   // Handle incoming migration from old domain
   useEffect(() => {
@@ -361,15 +375,48 @@ export default function App() {
 
           <div className="tabs-row">
             <nav className="tabs">
-              {visibleTabs.map((t) => (
+              {visibleTabs.filter((t) => t !== "inventory" && t !== "skills").map((t) => (
                 <button
                   key={t}
-                  className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
+                  className={`tab ${activeTab === t ? "active" : ""}`}
                   onClick={() => handleTabSwitch(t)}
                 >
                   <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
                 </button>
               ))}
+              {/* Desktop: show skills tab inline (inventory is in sidebar on desktop) */}
+              {visibleTabs.includes("skills") && (
+                <button
+                  className={`tab desktop-only-tab ${activeTab === "skills" ? "active" : ""}`}
+                  onClick={() => handleTabSwitch("skills")}
+                >
+                  <GameIcon id="tab_skills" size={22} /><span className="tab-label">Skills</span>
+                </button>
+              )}
+              {/* Mobile: show overflow tabs behind "More" menu (hidden on desktop via CSS) */}
+              {visibleTabs.some((t) => t === "inventory" || t === "skills") && (
+                <div className="tab-more-wrapper" ref={moreMenuRef}>
+                  <button
+                    className={`tab tab-more ${(activeTab === "inventory" || activeTab === "skills") ? "active" : ""}`}
+                    onClick={() => setMoreMenuOpen((o) => !o)}
+                  >
+                    <span className="tab-more-icon">⋯</span><span className="tab-label">More</span>
+                  </button>
+                  {moreMenuOpen && (
+                    <div className="tab-more-menu">
+                      {visibleTabs.filter((t) => t === "inventory" || t === "skills").map((t) => (
+                        <button
+                          key={t}
+                          className={`tab-more-item ${activeTab === t ? "active" : ""}`}
+                          onClick={() => { handleTabSwitch(t); setMoreMenuOpen(false); }}
+                        >
+                          <GameIcon id={`tab_${t}`} size={20} />{t.charAt(0).toUpperCase() + t.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </nav>
             <button
               className="search-toggle-btn"
