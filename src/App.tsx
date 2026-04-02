@@ -56,6 +56,7 @@ export default function App() {
   const updateAvailable = useUpdateChecker();
   const [tab, setTab] = useState<GameTab>("gather");
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [forceShowFeedback, setForceShowFeedback] = useState(false);
   const [modPanelOpen, setModPanelOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showLog, setShowLog] = useState(false);
@@ -227,6 +228,8 @@ export default function App() {
         discoveredBiomes={game.state.discoveredBiomes}
         totalPlayTimeMs={game.state.totalPlayTimeMs}
         activeTab={activeTab}
+        forceShow={forceShowFeedback}
+        onForceShowConsumed={() => setForceShowFeedback(false)}
       />
       {updateAvailable && (
         <div className="update-bar" onClick={() => window.location.reload()}>
@@ -295,6 +298,15 @@ export default function App() {
                   }}
                 >
                   Mods{activeModId !== "base" ? ` (${activeModId})` : ""}
+                </button>
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    setForceShowFeedback(true);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Give feedback
                 </button>
                 <button
                   className="settings-menu-item danger"
