@@ -69,7 +69,9 @@ export default function App() {
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
-  const [victoryDismissed, setVictoryDismissed] = useState(false);
+  const [victoryDismissed, setVictoryDismissed] = useState(
+    () => localStorage.getItem("seabound_victoryDismissed") === "true"
+  );
   const activeModId = getActiveModId();
   const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
   const [flyups, setFlyups] = useState<FlyupItem[]>([]);
@@ -237,7 +239,7 @@ export default function App() {
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {game.state.victory && !victoryDismissed && (
-        <VictoryScreen state={game.state} onContinue={() => setVictoryDismissed(true)} />
+        <VictoryScreen state={game.state} onContinue={() => { setVictoryDismissed(true); localStorage.setItem("seabound_victoryDismissed", "true"); }} />
       )}
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
@@ -659,6 +661,8 @@ export default function App() {
                   disabled={resetInput !== "RESET"}
                   onClick={() => {
                     game.resetGame();
+                    localStorage.removeItem("seabound_victoryDismissed");
+                    setVictoryDismissed(false);
                     setResetConfirmOpen(false);
                     setSettingsOpen(false);
                   }}
