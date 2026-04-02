@@ -149,6 +149,13 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Charcoal station — bulk fuel from large logs; charcoal replaces driftwood in fire recipes",
     storageBonus: [{ tag: "charcoal", amount: 20 }],
   },
+  charcoal_board: {
+    id: "charcoal_board",
+    name: "Charcoal Board",
+    description:
+      "A flat piece of driftwood with charcoal-scrawled plans. Writing things down helps you stay organized.",
+    unlocks: "+1 routine slot — plan your work ahead",
+  },
   soaking_pit: {
     id: "soaking_pit",
     name: "Soaking Pit",

@@ -824,6 +824,24 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 75,
   },
 
+  // Building: Charcoal Board (Crafting, requires charcoal_kiln)
+  {
+    id: "build_charcoal_board",
+    name: "Charcoal Board",
+    description:
+      "Scrawl daily plans on a flat piece of driftwood with charcoal. A simple way to stay organized.",
+    skillId: "crafting",
+    panel: "build",
+    inputs: [
+      { resourceId: "driftwood_branch", amount: 2 },
+      { resourceId: "charcoal", amount: 1 },
+    ],
+    buildingOutput: "charcoal_board",
+    requiredBuildings: ["charcoal_kiln"],
+    durationMs: 8000,
+    xpGain: 30,
+  },
+
   // Building: Storage Shelf (Construction 15)
   {
     id: "build_storage_shelf",

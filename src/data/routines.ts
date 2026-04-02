@@ -18,9 +18,9 @@ export interface RoutineUpgrade {
 
 export const ROUTINE_UPGRADES: RoutineUpgrade[] = [
   {
-    buildingId: "charcoal_kiln",
+    buildingId: "charcoal_board",
     maxRoutines: 1,
-    description: "Charcoal Kiln — you've learned to plan longer burns. +1 routine slot.",
+    description: "Charcoal Board — writing plans down keeps you organized. +1 routine slot.",
   },
   {
     buildingId: "storage_shelf",
