@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
@@ -7,6 +8,46 @@ import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
  * Access via ?dev in the URL. Not linked from the game UI.
  * Auto-generated from the same data files the game uses, so always up-to-date.
  */
+function DevTools() {
+  const [feedbackStatus, setFeedbackStatus] = useState("");
+  const key = "seabound_feedbackQ";
+
+  const reset = () => {
+    localStorage.removeItem(key);
+    setFeedbackStatus("Cleared — reload page to see the modal (15s delay)");
+  };
+
+  const current = localStorage.getItem(key);
+
+  return (
+    <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
+      <h3 style={styles.h3}>Dev Tools</h3>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+        <button
+          onClick={reset}
+          style={{
+            background: "#f0a050",
+            color: "#0c1a1a",
+            border: "none",
+            borderRadius: 6,
+            padding: "0.4rem 0.8rem",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          Reset feedback modal
+        </button>
+        {feedbackStatus && <span style={{ color: "#7acea0", fontSize: "0.85rem" }}>{feedbackStatus}</span>}
+      </div>
+      {current && (
+        <pre style={{ color: "#5a7a6a", fontSize: "0.75rem", marginTop: "0.5rem", whiteSpace: "pre-wrap" }}>
+          {current}
+        </pre>
+      )}
+    </div>
+  );
+}
+
 export function DevWiki() {
   const RESOURCES = getResources();
   const TOOLS = getTools();
@@ -24,6 +65,8 @@ export function DevWiki() {
         Auto-generated from game data. This page reads directly from the source
         data files, so it's always in sync with the game.
       </p>
+
+      <DevTools />
 
       <nav style={styles.toc}>
         <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
