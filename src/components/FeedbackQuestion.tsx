@@ -72,8 +72,6 @@ export interface FeedbackQuestionProps {
   discoveredBiomes: string[];
   totalPlayTimeMs: number;
   activeTab: string;
-  forceShow?: boolean;
-  onForceShowConsumed?: () => void;
 }
 
 export function FeedbackQuestion({
@@ -83,8 +81,6 @@ export function FeedbackQuestion({
   discoveredBiomes,
   totalPlayTimeMs,
   activeTab,
-  forceShow,
-  onForceShowConsumed,
 }: FeedbackQuestionProps) {
   const [mode, setMode] = useState<"hidden" | "modal" | "minimized">("hidden");
   const [question, setQuestion] = useState("");
@@ -92,17 +88,6 @@ export function FeedbackQuestion({
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const triggeredRef = useRef(false);
   const touchMovedRef = useRef(false);
-
-  useEffect(() => {
-    if (!forceShow) return;
-    onForceShowConsumed?.();
-    triggeredRef.current = true;
-    const s = loadState();
-    setQuestion(pickQuestion(s.answeredCount));
-    setAnswer("");
-    setStatus("idle");
-    setMode("modal");
-  }, [forceShow, onForceShowConsumed]);
 
   useEffect(() => {
     if (!hasPlayedEnough || hasModalOpen || triggeredRef.current) return;
