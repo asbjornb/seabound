@@ -318,7 +318,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "stone_hearth",
     requiredBuildings: ["camp_fire", "firing_pit"],
     durationMs: 12000,
-    xpGain: 30,
+    xpGain: 40,
   },
   {
     id: "build_palm_leaf_pile",
@@ -333,7 +333,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     buildingOutput: "palm_leaf_pile",
     durationMs: 5000,
-    xpGain: 15,
+    xpGain: 20,
   },
 
   // Comfort tier
@@ -352,7 +352,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "sleeping_mat",
     oneTimeCraft: true,
     durationMs: 6000,
-    xpGain: 12,
+    xpGain: 15,
   },
   {
     id: "build_hammock",
@@ -371,7 +371,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "sleeping_mat",
     oneTimeCraft: true,
     durationMs: 12000,
-    xpGain: 30,
+    xpGain: 40,
   },
   {
     id: "build_thatched_hut",
@@ -391,7 +391,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "hammock",
     oneTimeCraft: true,
     durationMs: 20000,
-    xpGain: 50,
+    xpGain: 65,
   },
 
   {
@@ -425,7 +425,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "fenced_perimeter",
     durationMs: 10000,
     requiredSkillLevel: 2,
-    xpGain: 25,
+    xpGain: 30,
   },
 
   {
@@ -443,7 +443,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "log_rack",
     requiredBuildings: ["fenced_perimeter"],
     durationMs: 10000,
-    xpGain: 25,
+    xpGain: 30,
   },
 
   {
@@ -482,7 +482,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "raft",
     durationMs: 20000,
     oneTimeCraft: true,
-    xpGain: 50,
+    xpGain: 65,
     hideWhen: [{ type: "has_building", buildingId: "dugout" }],
   },
 
@@ -619,7 +619,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "dugout",
     durationMs: 20000,
     oneTimeCraft: true,
-    xpGain: 60,
+    xpGain: 75,
   },
 
   // ═══════════════════════════════════════
@@ -641,7 +641,7 @@ export const RECIPES: RecipeDef[] = [
     replacesBuilding: "dugout",
     durationMs: 25000,
     oneTimeCraft: true,
-    xpGain: 80,
+    xpGain: 100,
   },
 
   // ═══════════════════════════════════════
@@ -758,7 +758,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     buildingOutput: "firing_pit",
     durationMs: 12000,
-    xpGain: 35,
+    xpGain: 45,
   },
 
   // Building: Kiln (Construction 11)
@@ -779,7 +779,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "kiln",
     requiredBuildings: ["firing_pit"],
     durationMs: 20000,
-    xpGain: 60,
+    xpGain: 75,
   },
 
   // Building: Pottery Wheel (Crafting 11, requires kiln)
@@ -821,7 +821,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "charcoal_kiln",
     requiredBuildings: ["kiln", "stone_hearth"],
     durationMs: 20000,
-    xpGain: 60,
+    xpGain: 75,
   },
 
   // Building: Storage Shelf (Construction 15)
@@ -841,7 +841,7 @@ export const RECIPES: RecipeDef[] = [
     buildingOutput: "storage_shelf",
     requiredBuildings: ["thatched_hut"],
     durationMs: 18000,
-    xpGain: 55,
+    xpGain: 70,
   },
 
   // Building: Soaking Pit (Weaving 7)
@@ -861,7 +861,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["firing_pit"],
     requiredItems: ["pandanus_strip"],
     durationMs: 10000,
-    xpGain: 40,
+    xpGain: 50,
   },
 
   // Building: Stone Tidal Weir (Fishing 11)
@@ -1225,6 +1225,6 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["kiln"],
     durationMs: 15000,
     oneTimeCraft: true,
-    xpGain: 50,
+    xpGain: 65,
   },
 ];
