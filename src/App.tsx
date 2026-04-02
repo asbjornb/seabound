@@ -230,12 +230,6 @@ export default function App() {
         <h1>SeaBound</h1>
         <div className="header-actions">
           <button
-            className="search-toggle-btn"
-            onClick={() => { setSearchOpen(true); setSearchQuery(""); }}
-          >
-            Search
-          </button>
-          <button
             className={`log-toggle-btn${showLog ? " active" : ""}`}
             onClick={() => setShowLog((v) => !v)}
           >
@@ -396,17 +390,26 @@ export default function App() {
             </div>
           ) : null}
 
-          <nav className="tabs">
-            {visibleTabs.map((t) => (
-              <button
-                key={t}
-                className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
-                onClick={() => setTab(t)}
-              >
-                <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
-              </button>
-            ))}
-          </nav>
+          <div className="tabs-row">
+            <nav className="tabs">
+              {visibleTabs.map((t) => (
+                <button
+                  key={t}
+                  className={`tab ${activeTab === t ? "active" : ""} ${t === "inventory" ? "mobile-only-tab" : ""}`}
+                  onClick={() => setTab(t)}
+                >
+                  <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
+                </button>
+              ))}
+            </nav>
+            <button
+              className="search-toggle-btn"
+              onClick={() => { setSearchOpen(true); setSearchQuery(""); }}
+              title="Search actions, recipes, resources..."
+            >
+              🔍
+            </button>
+          </div>
 
           {showLog && (
             <div className="log-overlay" onClick={() => setShowLog(false)}>
