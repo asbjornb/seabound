@@ -80,7 +80,7 @@ body {
   background-image: radial-gradient(ellipse at 50% 0%, var(--phase-sky) 0%, var(--bg) 70%);
   transition: background-image 1.5s ease;
   color: var(--text);
-  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
   min-height: 100dvh;
 }
 
@@ -146,9 +146,11 @@ body {
 }
 
 .header h1 {
+  font-family: "Cinzel", serif;
   font-size: 1.25rem;
+  font-weight: 700;
   color: var(--accent);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-shadow: 0 0 12px var(--phase-glow);
   transition: color 1s ease, text-shadow 1s ease;
 }
@@ -400,11 +402,10 @@ body {
 }
 
 .settings-section-title {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
   color: var(--text-dim);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .settings-section-actions {
@@ -609,9 +610,9 @@ body {
 }
 
 .morale-explainer-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--text-dim);
   opacity: 0.7;
 }
@@ -1177,10 +1178,10 @@ body {
 
 /* Section headers */
 .section-title {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.01em;
   margin: 12px 0 6px;
 }
 
@@ -1719,6 +1720,7 @@ body {
 }
 
 .chapter-name {
+  font-family: "Cinzel", serif;
   font-size: 1.6rem;
   font-weight: 700;
   color: var(--accent);
@@ -1807,6 +1809,7 @@ body {
 }
 
 .victory-title {
+  font-family: "Cinzel", serif;
   font-size: 2rem;
   font-weight: 700;
   color: #f0d060;
@@ -2212,10 +2215,9 @@ body {
 
 .mod-section-title {
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.01em;
   margin-bottom: 8px;
 }
 
