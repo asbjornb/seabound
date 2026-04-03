@@ -49,25 +49,19 @@ function DevTools() {
   );
 }
 
+const WORKER_URL = "https://seabound-api.asbjoernbrandt.workers.dev";
+
 type R2Status = "idle" | "checking" | "ok" | "error";
 
 function R2StorageCheck() {
-  const [url, setUrl] = useState(() => localStorage.getItem("seabound_worker_url") ?? "");
   const [status, setStatus] = useState<R2Status>("idle");
   const [detail, setDetail] = useState("");
 
   const runCheck = useCallback(async () => {
-    const trimmed = url.trim().replace(/\/+$/, "");
-    if (!trimmed) {
-      setStatus("error");
-      setDetail("Enter your worker URL above (e.g. https://seabound-api.xxx.workers.dev)");
-      return;
-    }
-    localStorage.setItem("seabound_worker_url", trimmed);
     setStatus("checking");
     setDetail("");
     try {
-      const res = await fetch(`${trimmed}/api/store?prefix=`, { method: "GET" });
+      const res = await fetch(`${WORKER_URL}/api/store?prefix=`, { method: "GET" });
       if (res.ok) {
         const data = await res.json() as { keys?: { key: string; size: number }[] };
         const count = data.keys?.length ?? 0;
@@ -82,34 +76,14 @@ function R2StorageCheck() {
       setStatus("error");
       setDetail(`Network error: ${err instanceof Error ? err.message : String(err)}`);
     }
-  }, [url]);
+  }, []);
 
   const statusColor =
     status === "ok" ? "#7acea0" : status === "error" ? "#de7a7a" : status === "checking" ? "#d4c87a" : "#7a9a8a";
 
   return (
     <div style={{ marginTop: "0.75rem" }}>
-      <label style={{ display: "block", color: "#7a9a8a", fontSize: "0.8rem", marginBottom: "0.3rem" }}>
-        Worker URL
-      </label>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => { setUrl(e.target.value); setStatus("idle"); }}
-          placeholder="https://seabound-api.xxx.workers.dev"
-          style={{
-            background: "#0c1a1a",
-            color: "#e8e4d8",
-            border: "1px solid #1e3a3a",
-            borderRadius: 6,
-            padding: "0.4rem 0.6rem",
-            fontSize: "0.85rem",
-            fontFamily: "monospace",
-            width: "22rem",
-            maxWidth: "100%",
-          }}
-        />
         <button
           onClick={runCheck}
           disabled={status === "checking"}
