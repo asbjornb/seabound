@@ -2,9 +2,17 @@
  * Lightweight analytics client for Seabound.
  * Sends events to the Cloudflare Worker → R2 pipeline.
  * Fires-and-forgets — never blocks gameplay or throws.
+ *
+ * Disabled in dev (localhost / non-production origins).
  */
 
-const API_URL = import.meta.env.VITE_ANALYTICS_URL as string | undefined;
+export const WORKER_URL = "https://seabound-api.asbjoernbrandt.workers.dev";
+
+/** Only send analytics from production origins. */
+const IS_PROD =
+  typeof window !== "undefined" &&
+  (window.location.hostname === "seabound.dev" ||
+    window.location.hostname.endsWith(".seabound.pages.dev"));
 
 const queue: Record<string, unknown>[] = [];
 let flushTimer: ReturnType<typeof setTimeout> | null = null;
@@ -14,7 +22,7 @@ export function trackEvent(
   event: string,
   data?: Record<string, unknown>,
 ): void {
-  if (!API_URL) return; // analytics disabled (dev / not configured)
+  if (!IS_PROD) return; // analytics disabled in dev
 
   queue.push({
     event,
@@ -40,7 +48,7 @@ function flush(): void {
   const batch = queue.splice(0);
 
   // Fire-and-forget — don't await, don't throw
-  fetch(`${API_URL}/api/analytics`, {
+  fetch(`${WORKER_URL}/api/analytics`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ events: batch }),

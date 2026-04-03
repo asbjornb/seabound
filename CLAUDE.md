@@ -154,16 +154,10 @@ Available as GitHub Actions secrets for CI/CD and deployments:
 | `SEABOUND_API_KEY` | Seabound backend API key |
 | `SEABOUND_WORKER_URL` | Seabound Cloudflare Worker URL |
 
-### Cloudflare Pages Environment Variables
-
-Set in the Cloudflare Pages dashboard (Settings → Environment variables):
-
-| Variable | Purpose |
-|----------|---------|
-| `VITE_ANALYTICS_URL` | Worker URL for analytics (e.g. `https://seabound-api.<account>.workers.dev`). Omit in preview to disable analytics in dev. |
-
 ### Analytics
 
-Game analytics are sent to the Cloudflare Worker → R2 pipeline. Events: `session_start`, `session_end`, `heartbeat` (every 5 min), `milestone`.
+Game analytics are sent to the Cloudflare Worker → R2 pipeline. Events: `session_start`, `session_end`, `heartbeat` (every 5 min), `milestone`. Analytics are only sent from production origins (seabound.dev / *.seabound.pages.dev).
 
-**Query analytics**: `curl -H "Authorization: Bearer $SEABOUND_API_KEY" "$SEABOUND_WORKER_URL/api/analytics/summary?days=30"` — returns funnel, drop-off, time-to-milestone stats.
+**View analytics**: Open `?dev` in the game and click "Load Analytics" — shows funnel, drop-off, time-to-milestone stats.
+
+**Query via CLI**: `curl -H "Authorization: Bearer $SEABOUND_API_KEY" "$SEABOUND_WORKER_URL/api/analytics/summary?days=30"`

@@ -352,9 +352,14 @@ export default {
       return handleAnalytics(request, env, cors);
     }
 
-    // GET /api/analytics/summary — aggregated dashboard (auth required)
+    // GET /api/analytics/summary — aggregated dashboard
+    // Accessible from game origin (for dev wiki) and via API key (for curl)
     if (path === "/api/analytics/summary" && request.method === "GET") {
-      if (!isAuthorized(request, env)) {
+      const origin = request.headers.get("Origin") ?? "";
+      const isGameOrigin =
+        origin === "https://seabound.dev" ||
+        origin.endsWith(".seabound.pages.dev");
+      if (!isGameOrigin && !isAuthorized(request, env)) {
         return json({ error: "Unauthorized" }, 401, cors);
       }
       const days = parseInt(url.searchParams.get("days") ?? "30", 10);
