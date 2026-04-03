@@ -41,6 +41,13 @@ import {
   saveGame,
 } from "./gameState";
 import {
+  checkMilestones,
+  startHeartbeat,
+  stopHeartbeat,
+  trackSessionEnd,
+  trackSessionStart,
+} from "../lib/analytics-events";
+import {
   selectAvailableActions,
   selectAvailableExpeditions,
   selectAvailableRecipes,
@@ -286,6 +293,7 @@ export function useGame() {
             advanceRoutine(next);
           }
         }
+        if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
     }
@@ -319,6 +327,7 @@ export function useGame() {
           }
         }
 
+        if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
     }, TICK_INTERVAL_MS);
@@ -339,6 +348,18 @@ export function useGame() {
     const handler = () => saveGame(stateRef.current);
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
+  }, []);
+
+  // Analytics: session tracking + heartbeat
+  useEffect(() => {
+    trackSessionStart(stateRef.current);
+    startHeartbeat(() => stateRef.current);
+    const handleUnload = () => trackSessionEnd(stateRef.current);
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      stopHeartbeat();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
   const startAction = useCallback((action: ActionDef) => {
