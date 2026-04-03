@@ -32,12 +32,14 @@ import {
   selectBuildRecipes,
   selectCraftRecipes,
   selectCurrentActionName,
+  selectCurrentSkillInfo,
   selectHasAnyResource,
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
   selectActionStatusInfo,
   selectReadyStationCount,
+  selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
 import { useGame } from "./engine/useGame";
@@ -235,6 +237,14 @@ export default function App() {
   );
   const repetitiveXpPercent = Math.round(repetitiveXpMultiplier * 100);
   const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= fullXpThreshold;
+  const currentSkillInfo = useMemo(
+    () => selectCurrentSkillInfo(game.state),
+    [game.state]
+  );
+  const undiscoveredBiomes = useMemo(
+    () => selectUndiscoveredBiomeCount(game.state),
+    [game.state]
+  );
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
@@ -372,6 +382,30 @@ export default function App() {
                 Repetition {game.state.repetitiveActionCount} • XP {repetitiveXpPercent}%
                 {isRepetitionPenaltyActive ? " (malus active)" : ""}
               </div>
+              {currentSkillInfo && (
+                <div className="current-skill-info">
+                  <div className="current-skill-header">
+                    <span className="current-skill-name">
+                      <GameIcon id={`skill_${currentSkillInfo.skillId}`} size={16} />
+                      {currentSkillInfo.skillName} Lvl {currentSkillInfo.level}
+                    </span>
+                    <span className="current-skill-xp">
+                      {currentSkillInfo.xpIntoLevel}/{currentSkillInfo.xpNeeded} XP
+                    </span>
+                  </div>
+                  <div className="skill-progress-bar">
+                    <div
+                      className="skill-progress-fill"
+                      style={{ width: `${currentSkillInfo.progress * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {game.state.currentAction?.type === "expedition" && undiscoveredBiomes > 0 && (
+                <div className="undiscovered-biomes-info">
+                  {undiscoveredBiomes} undiscovered {undiscoveredBiomes === 1 ? "biome" : "biomes"} remaining
+                </div>
+              )}
             </div>
           )}
 
