@@ -280,6 +280,7 @@ export interface GameState {
     expeditionId?: string;
     fullAtStart?: string[]; // resource IDs already at cap when action began
   } | null;
+  /** @deprecated No longer used — stop-when-full is always enforced. Kept for save compat. */
   stopWhenFull?: boolean;
   lastTickAt: number;
   totalPlayTimeMs: number;

@@ -111,7 +111,7 @@ export function processTick(state: GameState, now: number): TickResult {
       remaining -= effectiveDuration;
       const event = applyGatherCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
       if (event) completions.push(event);
-      if ((state.stopWhenFull || state.activeRoutine) && isOutputFull(state)) {
+      if (isOutputFull(state)) {
         state.currentAction = null;
         break;
       }
@@ -166,7 +166,7 @@ export function processTick(state: GameState, now: number): TickResult {
         remaining -= effectiveCraftDuration;
         const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
         if (event) completions.push(event);
-        if ((state.stopWhenFull || state.activeRoutine) && isOutputFull(state)) {
+        if (isOutputFull(state)) {
           state.currentAction = null;
           break;
         }

@@ -15,7 +15,6 @@ describe("stop-if-full", () => {
     expect(action.drops[0].resourceId).toBe("driftwood_branch");
 
     const state = makeState({
-      stopWhenFull: true,
       currentAction: {
         actionId: "collect_driftwood",
         startedAt: 0,
@@ -44,7 +43,6 @@ describe("stop-if-full", () => {
     expect(action).toBeDefined();
 
     const state = makeState({
-      stopWhenFull: true,
       currentAction: {
         actionId: "gather_coconuts",
         startedAt: 0,
@@ -70,7 +68,6 @@ describe("stop-if-full", () => {
     const action = getActionById("collect_driftwood")!;
 
     const state = makeState({
-      stopWhenFull: true,
       currentAction: {
         actionId: "collect_driftwood",
         startedAt: 0,

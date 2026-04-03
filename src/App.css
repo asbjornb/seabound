@@ -738,27 +738,6 @@ body {
   font-weight: 600;
 }
 
-.current-action-buttons {
-  display: flex;
-  gap: 6px;
-}
-
-.stop-when-full-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-.stop-when-full-btn.active {
-  background: var(--bar-fill);
-  border-color: var(--bar-fill);
-  color: white;
-}
-
 .stop-btn {
   background: var(--accent-dim);
   border: none;
