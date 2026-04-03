@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
 import { getBiomeOrder, getBiomes, getResources, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
-import { getResource, hasTool } from "../engine/gameState";
+import { getResource, hasTool, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -67,10 +67,12 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               const disabled = !!missingTool || !!missingResource;
               const isActive = currentActionId === action.id;
               const isNew = !state.completedActions.includes(action.id);
+              const visibleDrops = action.drops.filter((d) => resourceHasUse(d.resourceId, state));
+              const allOutputsFull = visibleDrops.length > 0 && visibleDrops.every((d) => isAtStorageCap(state, d.resourceId));
               return (
                 <div
                   key={action.id}
-                  className={`action-card ${disabled ? "disabled" : ""} ${isActive ? "active" : ""}`}
+                  className={`action-card ${disabled ? "disabled" : ""} ${isActive ? "active" : ""} ${allOutputsFull ? "all-full" : ""}`}
                   onClick={() => !disabled && onStart(action)}
                 >
                   <div className="action-card-header">
@@ -83,11 +85,10 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                     </span>
                   </div>
                   <div className="action-desc">{action.description}</div>
-                  {action.drops.filter((d) => resourceHasUse(d.resourceId, state)).length > 0 ? (
+                  {visibleDrops.length > 0 ? (
                     <div className="action-drops">
                       Drops:
-                      {action.drops
-                        .filter((d) => resourceHasUse(d.resourceId, state))
+                      {visibleDrops
                         .map((d) => ({
                           ...d,
                           effectiveChance: Math.min(
@@ -98,13 +99,17 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                         }))
                         .filter((d) => d.effectiveChance > 0)
                         .sort((a, b) => b.effectiveChance - a.effectiveChance)
-                        .map((d, i) => (
-                        <div key={i} className="drop-row">
+                        .map((d, i) => {
+                          const full = isAtStorageCap(state, d.resourceId);
+                          return (
+                        <div key={i} className={`drop-row ${full ? "full" : ""}`}>
                             <GameIcon id={d.resourceId} size={16} />{d.amount}x{" "}
                             {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                             {" "}({Math.round(d.effectiveChance * 100)}%)
+                            {full && <span className="full-badge">FULL</span>}
                         </div>
-                      ))}
+                          );
+                        })}
                     </div>
                   ) : (
                     <div className="action-drops">XP only</div>
