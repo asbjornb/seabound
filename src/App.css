@@ -1030,16 +1030,45 @@ body {
   opacity: 0.6;
 }
 
-.action-drops .drop-row .full-badge {
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: var(--warning);
-  border: 1px solid var(--warning);
+.drop-storage {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.drop-storage-bar {
+  display: inline-block;
+  width: 28px;
+  height: 5px;
+  background: var(--border);
   border-radius: 3px;
-  padding: 0 3px;
-  margin-left: 4px;
-  line-height: 1.4;
-  letter-spacing: 0.5px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.drop-storage-fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--success);
+  transition: width 0.2s;
+}
+
+.drop-storage.near-full .drop-storage-fill {
+  background: var(--warning);
+}
+
+.drop-storage.full .drop-storage-fill {
+  background: var(--warning);
+}
+
+.drop-storage.full {
+  color: var(--warning);
+  font-weight: 600;
 }
 
 .action-card.all-full {

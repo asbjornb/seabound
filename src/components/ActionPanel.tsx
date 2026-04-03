@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
 import { getBiomeOrder, getBiomes, getResources, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
-import { getResource, hasTool, isAtStorageCap } from "../engine/gameState";
+import { getResource, getStorageLimit, hasTool, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
@@ -101,12 +101,20 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                         .sort((a, b) => b.effectiveChance - a.effectiveChance)
                         .map((d, i) => {
                           const full = isAtStorageCap(state, d.resourceId);
+                          const amount = getResource(state, d.resourceId);
+                          const limit = getStorageLimit(state, d.resourceId);
+                          const pct = Math.min(100, Math.round((amount / limit) * 100));
                           return (
                         <div key={i} className={`drop-row ${full ? "full" : ""}`}>
                             <GameIcon id={d.resourceId} size={16} />{d.amount}x{" "}
                             {RESOURCES[d.resourceId]?.name ?? d.resourceId}
                             {" "}({Math.round(d.effectiveChance * 100)}%)
-                            {full && <span className="full-badge">FULL</span>}
+                            <span className={`drop-storage ${full ? "full" : pct >= 80 ? "near-full" : ""}`}>
+                              <span className="drop-storage-bar">
+                                <span className="drop-storage-fill" style={{ width: `${pct}%` }} />
+                              </span>
+                              {amount}/{limit}
+                            </span>
                         </div>
                           );
                         })}
