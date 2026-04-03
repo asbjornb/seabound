@@ -260,6 +260,17 @@ export function processTick(state: GameState, now: number): TickResult {
       remaining -= effectiveExpDuration;
       const event = applyExpeditionCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
       if (event) completions.push(event);
+
+      // Stop looping if all discoverable biomes have been found
+      if (def.hideWhenAllFound) {
+        const allFound = def.outcomes
+          .filter((o) => o.biomeDiscovery)
+          .every((o) => state.discoveredBiomes.includes(o.biomeDiscovery!));
+        if (allFound) {
+          state.currentAction = null;
+          break;
+        }
+      }
     }
 
     // Stop if player can't afford the next expedition cycle
