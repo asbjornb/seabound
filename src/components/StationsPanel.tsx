@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback } from "react";
 import { getStationInputAmount } from "../data/milestones";
-import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
+import { getBuildings, getResources, getSkills, getStationById, getStations } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { getBuildingCount, getResource } from "../engine/gameState";
 import type { FlyupItem } from "./CollectFlyup";
@@ -142,14 +142,24 @@ export function StationsPanel({
           <div className="section-title">Deploy</div>
           {availableStations.map((station) => {
             let maxDeployed = station.maxDeployed ?? 1;
+            let currentCount: number;
             if (station.maxDeployedPerBuildings) {
               maxDeployed = station.maxDeployedPerBuildings.reduce(
                 (sum, bid) => sum + getBuildingCount(state, bid), 0
               );
+              // Count all active stations sharing any of the same buildings
+              const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+              const sharedStationIds = new Set(
+                getStations()
+                  .filter((s) => s.maxDeployedPerBuildings?.some((bid) => sharedBuildings.has(bid)))
+                  .map((s) => s.id)
+              );
+              currentCount = state.stations.filter((s) => sharedStationIds.has(s.stationId)).length;
+            } else {
+              currentCount = state.stations.filter(
+                (s) => s.stationId === station.id
+              ).length;
             }
-            const currentCount = state.stations.filter(
-              (s) => s.stationId === station.id
-            ).length;
             // Hide stations when all slots are filled
             if (currentCount >= maxDeployed) return null;
 
