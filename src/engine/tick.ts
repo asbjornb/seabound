@@ -67,10 +67,6 @@ export function processTick(state: GameState, now: number): TickResult {
   const elapsedMs = now - state.lastTickAt;
   state.lastTickAt = now;
   state.totalPlayTimeMs += elapsedMs;
-  // Track active playtime only when tab is visible
-  if (typeof document === "undefined" || document.visibilityState === "visible") {
-    state.activePlayTimeMs += elapsedMs;
-  }
 
   const completions: CompletionEvent[] = [];
 
