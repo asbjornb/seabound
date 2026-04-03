@@ -9,7 +9,9 @@ interface Env {
 function corsHeaders(env: Env, request: Request): Record<string, string> {
   const origin = request.headers.get("Origin") ?? "";
   const allowed =
-    origin === env.ALLOWED_ORIGIN || origin.endsWith(".seabound.pages.dev");
+    origin === env.ALLOWED_ORIGIN ||
+    origin === "https://seabound.dev" ||
+    origin.endsWith(".seabound.pages.dev");
   return {
     "Access-Control-Allow-Origin": allowed ? origin : env.ALLOWED_ORIGIN,
     "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
