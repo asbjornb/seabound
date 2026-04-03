@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Dense cluster of tall coconut palms with green fronds, dappled sunlight filtering through the canopy, coconuts hanging from trunks, sandy ground with fallen fronds and husks. Lush but shaded. Sky peeking through leaves: blue-green #1a3530. Trunks: warm brown #6a5030. Fronds: deep green #2a5a30. Ground: sandy #7a6a40.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the canopy color

@@ -6,6 +6,7 @@ import {
   getRecipeById,
   getResources,
   getStationById,
+  getStations,
   getTools,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
@@ -623,9 +624,20 @@ export function useGame() {
         maxDeployed = station.maxDeployedPerBuildings.reduce(
           (sum, bid) => sum + getBuildingCount(prev, bid), 0
         );
+        // Count ALL active stations that share any building in their maxDeployedPerBuildings
+        // (e.g. all crop stations sharing the same plots)
+        const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+        const stationDefsUsingSharedBuildings = new Set(
+          getStations()
+            .filter((s) => s.maxDeployedPerBuildings?.some((bid) => sharedBuildings.has(bid)))
+            .map((s) => s.id)
+        );
+        const currentCount = prev.stations.filter((s) => stationDefsUsingSharedBuildings.has(s.stationId)).length;
+        if (currentCount >= maxDeployed) return prev;
+      } else {
+        const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
+        if (currentCount >= maxDeployed) return prev;
       }
-      const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
-      if (currentCount >= maxDeployed) return prev;
       // Get effective setup inputs (may be modified by milestones)
       const skillLevel = prev.skills[station.skillId].level;
       const effectiveSetupInputs = station.setupInputs ? station.setupInputs.map((inp) => {

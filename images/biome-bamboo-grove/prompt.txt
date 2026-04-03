@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Tall bamboo stalks in dense formation, green and yellow-green shafts rising vertically across the frame, narrow light filtering between stalks, fallen bamboo leaves on the ground. Vertical lines dominate, serene and orderly. Sky glimpses: warm green #1a3020. Bamboo: yellow-green #8aa040 and green #4a7030. Ground: dark earth #2a2a1a. Light shafts: pale gold #c0b060.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the canopy color

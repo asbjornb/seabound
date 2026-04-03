@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Rugged volcanic rocks and tide pools along the shoreline, dark stone formations with barnacles and seaweed, waves crashing against rocks sending up spray, a few crabs visible. Dramatic and exposed. Sky: stormy grey-blue #1a2530. Rocks: dark slate #3a3a40. Water: deep blue #0a3a5a. Spray: white #c0d0d0. Seaweed: dark green #1a3a20.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the sky color

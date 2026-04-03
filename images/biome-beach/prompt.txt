@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Wide open tropical beach, golden sand stretching across the frame, gentle turquoise waves lapping the shore, a few scattered shells and driftwood, distant horizon line. Bright but muted tropical light. Sky: soft blue-grey #2a3a4a. Sand: warm tan #b8a060. Water: teal #1a5a6a. Accent: white foam #d0dada.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the sky color

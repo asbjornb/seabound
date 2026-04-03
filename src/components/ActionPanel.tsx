@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { getBiomeOrder, getBiomes, getResources, getTools } from "../data/registry";
+import { getBiomeOrder, getResources, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
 import { getResource, getStorageLimit, hasTool, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
+import { BiomeBanner } from "./BiomeBanner";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -16,7 +17,6 @@ interface Props {
 export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
-  const BIOMES = getBiomes();
   const BIOME_ORDER = getBiomeOrder();
   const RESOURCES = getResources();
   const TOOLS = getTools();
@@ -44,17 +44,14 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
         const list = grouped.get(biomeId);
         if (!list) return null;
         const isCollapsed = collapsed.has(biomeId);
-        const biomeName = BIOMES[biomeId]?.name ?? biomeId.replace(/_/g, " ");
         return (
           <div key={biomeId}>
-            <div
-              className="section-title collapsible"
-              onClick={() => toggleBiome(biomeId)}
-            >
-              <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-              <GameIcon id={`biome_${biomeId}`} /> {biomeName}
-              <span className="section-count">{list.length}</span>
-            </div>
+            <BiomeBanner
+              biomeId={biomeId}
+              isCollapsed={isCollapsed}
+              actionCount={list.length}
+              onToggle={() => toggleBiome(biomeId)}
+            />
             {!isCollapsed && list.map((action) => {
               // Check tool requirements
               const missingTool = action.requiredTools?.find(
