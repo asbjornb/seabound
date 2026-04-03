@@ -24,16 +24,13 @@ describe("selectAvailableActions", () => {
     expect(actions.some((a) => a.id === "gather_coconuts")).toBe(true);
   });
 
-  it("excludes actions requiring missing tools", () => {
+  it("includes actions with missing tools (shown as disabled in UI)", () => {
     const state = makeState({ discoveredBiomes: ["beach", "coconut_grove"] });
     const actions = selectAvailableActions(state);
-    // Actions requiring tools should be excluded when tools aren't owned
+    // Actions requiring tools should be included even without the tools
+    // (UI shows them as disabled with a "Requires: [tool]" hint)
     const toolActions = actions.filter((a) => a.requiredTools && a.requiredTools.length > 0);
-    for (const action of toolActions) {
-      for (const toolId of action.requiredTools!) {
-        expect(state.tools.includes(toolId)).toBe(true);
-      }
-    }
+    expect(toolActions.length).toBeGreaterThan(0);
   });
 });
 

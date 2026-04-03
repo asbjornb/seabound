@@ -1427,6 +1427,11 @@ body {
   color: var(--text-dim);
   margin-top: 2px;
 }
+.resource-sources {
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-style: italic;
+}
 .tool-enables {
   margin-top: 3px;
   color: var(--accent);

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { getResources, getTools, getActions, getRecipes } from "../data/registry";
+import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
@@ -27,6 +27,36 @@ function buildToolEnablesMap(): Record<string, string[]> {
   return map;
 }
 
+/** Build a map of resource → list of source names (actions, recipes, stations, expeditions that produce it) */
+function buildResourceSourceMap(): Record<string, string[]> {
+  const map: Record<string, string[]> = {};
+  const add = (resId: string, source: string) => {
+    if (!map[resId]) map[resId] = [];
+    if (!map[resId].includes(source)) map[resId].push(source);
+  };
+  for (const action of getActions()) {
+    for (const drop of action.drops) {
+      if ((drop.chance ?? 1) > 0) add(drop.resourceId, action.name);
+    }
+  }
+  for (const recipe of getRecipes()) {
+    if (recipe.output) add(recipe.output.resourceId, recipe.name);
+  }
+  for (const station of getStations()) {
+    for (const y of station.yields) {
+      if ((y.chance ?? 1) > 0) add(y.resourceId, station.name);
+    }
+  }
+  for (const exp of getExpeditions()) {
+    for (const outcome of exp.outcomes) {
+      for (const drop of outcome.drops ?? []) {
+        add(drop.resourceId, exp.name);
+      }
+    }
+  }
+  return map;
+}
+
 type FilterId = "all" | "food" | "tools" | "items";
 
 const FILTER_LABELS: Record<FilterId, string> = {
@@ -41,6 +71,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
   const toolEnables = useMemo(buildToolEnablesMap, []);
+  const resourceSources = useMemo(buildResourceSourceMap, []);
 
   const resourceEntries = Object.entries(state.resources).filter(([id, v]) => {
     if (v <= 0) return false;
@@ -183,6 +214,11 @@ export function InventoryPanel({ state }: { state: GameState }) {
                         </div>
                       );
                     })()}
+                    {resourceSources[id] && (
+                      <div className="resource-sources">
+                        From: {resourceSources[id].join(", ")}
+                      </div>
+                    )}
                     {toolEnables[id] && (
                       <div className="tool-enables">
                         Enables: {toolEnables[id].join(", ")}
