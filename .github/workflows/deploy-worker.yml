@@ -1,0 +1,37 @@
+name: Deploy Worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install worker dependencies
+        working-directory: worker
+        run: npm install
+
+      - name: Create R2 bucket (if not exists)
+        working-directory: worker
+        run: npx wrangler r2 bucket create seabound-storage 2>&1 || echo "Bucket may already exist, continuing..."
+
+      - name: Set worker secret API_KEY
+        working-directory: worker
+        run: echo "${{ secrets.SEABOUND_API_KEY }}" | npx wrangler secret put API_KEY
+
+      - name: Deploy to Cloudflare
+        working-directory: worker
+        run: npx wrangler deploy

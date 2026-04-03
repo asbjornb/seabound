@@ -1,0 +1,10 @@
+name = "seabound-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-18"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "seabound-storage"
+
+[vars]
+ALLOWED_ORIGIN = "https://seabound.pages.dev"
