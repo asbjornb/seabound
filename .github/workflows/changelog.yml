@@ -1,0 +1,183 @@
+name: Changelog
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  changelog:
+    # Skip if this push was the changelog bot itself (avoid infinite loop)
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[changelog]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get change context
+        id: context
+        run: |
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_MSG=$(git log -1 --pretty=%B "$COMMIT_SHA")
+
+          # Try to extract PR number from merge commit message
+          PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP 'Merge pull request #\K[0-9]+' || echo "")
+
+          # Get diff — compare against parent commit(s)
+          # For merge commits, diff against first parent (i.e. what the PR changed)
+          if git rev-parse "$COMMIT_SHA^2" >/dev/null 2>&1; then
+            DIFF=$(git diff "$COMMIT_SHA^1...$COMMIT_SHA^2" -- . ':!src/data/changelog.json' | head -c 12000)
+          else
+            DIFF=$(git diff "$COMMIT_SHA^...$COMMIT_SHA" -- . ':!src/data/changelog.json' | head -c 12000)
+          fi
+
+          # Get PR title and body if we have a PR number
+          PR_TITLE=""
+          PR_BODY=""
+          if [ -n "$PR_NUMBER" ]; then
+            PR_TITLE=$(gh pr view "$PR_NUMBER" --json title -q '.title' 2>/dev/null || echo "")
+            PR_BODY=$(gh pr view "$PR_NUMBER" --json body -q '.body' 2>/dev/null || echo "")
+          fi
+
+          # Get commit messages (for non-merge commits or to supplement PR info)
+          if git rev-parse "$COMMIT_SHA^2" >/dev/null 2>&1; then
+            COMMITS=$(git log --pretty="- %s" "$COMMIT_SHA^1..$COMMIT_SHA^2" 2>/dev/null | head -20)
+          else
+            COMMITS=$(git log -1 --pretty="- %s" "$COMMIT_SHA")
+          fi
+
+          # Write to files (avoid shell escaping issues)
+          echo "$COMMIT_MSG" > /tmp/commit_msg.txt
+          echo "$PR_TITLE" > /tmp/pr_title.txt
+          echo "$PR_BODY" > /tmp/pr_body.txt
+          echo "$COMMITS" > /tmp/commits.txt
+          echo "$DIFF" > /tmp/diff.txt
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate changelog entry
+        id: generate
+        run: |
+          COMMIT_MSG=$(cat /tmp/commit_msg.txt)
+          PR_TITLE=$(cat /tmp/pr_title.txt)
+          PR_BODY=$(cat /tmp/pr_body.txt)
+          COMMITS=$(cat /tmp/commits.txt)
+          DIFF=$(cat /tmp/diff.txt)
+          TODAY=$(date -u +%Y-%m-%d)
+
+          # Build the prompt
+          PROMPT=$(cat <<'PROMPT_END'
+          You are a changelog writer for SeaBound, a crafting/idle browser game (tropical island castaway survival).
+
+          Analyze the following code changes and decide:
+          1. Are there ANY user-facing changes that a player would notice or care about?
+          2. If yes, write concise changelog bullet points.
+
+          IMPORTANT RULES:
+          - Only include changes that PLAYERS would notice: new content, UI changes, gameplay fixes, balance changes, new features, quality-of-life improvements.
+          - SKIP internal/dev changes: analytics, CI/CD, development tools, documentation, refactoring with no visible effect, build config, deployment changes, code cleanup.
+          - SKIP dependency updates unless they visibly affect the game.
+          - Write from the player's perspective. Say "Fixed X" not "Refactored Y module". Say "Added new recipe: Z" not "Created recipe entry in data file".
+          - Be concise — one line per change, no fluff.
+          - Use present tense action verbs: "Add", "Fix", "Improve", "Remove", etc.
+
+          RESPONSE FORMAT:
+          If there are NO user-facing changes, respond with exactly: NO_CHANGES
+          If there ARE user-facing changes, respond with a JSON array of strings, one per change. Example:
+          ["Add new fishing rod tool that speeds up fishing actions", "Fix bug where crafting progress bar showed wrong count"]
+
+          Respond with ONLY "NO_CHANGES" or a JSON array. Nothing else.
+          PROMPT_END
+          )
+
+          # Build the context message
+          CONTEXT="PR Title: ${PR_TITLE:-N/A}
+
+          PR Description:
+          ${PR_BODY:-N/A}
+
+          Commits:
+          ${COMMITS}
+
+          Code Diff (truncated):
+          ${DIFF}"
+
+          # Call Claude API
+          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "content-type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d "$(jq -n \
+              --arg system "$PROMPT" \
+              --arg context "$CONTEXT" \
+              '{
+                model: "claude-haiku-4-5-20251001",
+                max_tokens: 1024,
+                system: $system,
+                messages: [{role: "user", content: $context}]
+              }')")
+
+          # Extract the text response
+          ENTRY=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+
+          if [ -z "$ENTRY" ]; then
+            echo "API call failed or empty response"
+            echo "$RESPONSE" | head -20
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Check if LLM says no changes
+          if echo "$ENTRY" | grep -q "NO_CHANGES"; then
+            echo "No user-facing changes detected — skipping changelog"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+
+          # Validate that ENTRY is valid JSON array
+          if ! echo "$ENTRY" | jq -e 'if type == "array" then true else false end' >/dev/null 2>&1; then
+            echo "LLM response is not a valid JSON array:"
+            echo "$ENTRY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Save the entry and date
+          echo "$ENTRY" > /tmp/changelog_entry.json
+          echo "$TODAY" > /tmp/changelog_date.txt
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Update changelog.json
+        if: steps.generate.outputs.skip != 'true'
+        run: |
+          ENTRY=$(cat /tmp/changelog_entry.json)
+          TODAY=$(cat /tmp/changelog_date.txt)
+          CHANGELOG_FILE="src/data/changelog.json"
+
+          # Read existing changelog
+          if [ -f "$CHANGELOG_FILE" ]; then
+            EXISTING=$(cat "$CHANGELOG_FILE")
+          else
+            EXISTING="[]"
+          fi
+
+          # Prepend new entry (newest first)
+          UPDATED=$(echo "$EXISTING" | jq \
+            --arg date "$TODAY" \
+            --argjson changes "$ENTRY" \
+            '[{date: $date, changes: $changes}] + .')
+
+          echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
+
+      - name: Commit and push
+        if: steps.generate.outputs.skip != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/changelog.json
+          git commit -m "Update changelog [changelog]"
+          git push

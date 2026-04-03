@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
+import changelogData from "../data/changelog.json";
 import { WORKER_URL } from "../lib/analytics";
 
 /**
@@ -9,6 +10,40 @@ import { WORKER_URL } from "../lib/analytics";
  * Access via ?dev in the URL. Not linked from the game UI.
  * Auto-generated from the same data files the game uses, so always up-to-date.
  */
+interface ChangelogEntry {
+  date: string;
+  changes: string[];
+}
+
+function Changelog() {
+  const entries = changelogData as ChangelogEntry[];
+  if (entries.length === 0) {
+    return (
+      <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
+        <h3 style={styles.h3}>Changelog</h3>
+        <p style={styles.desc}>No changelog entries yet.</p>
+      </div>
+    );
+  }
+  return (
+    <section id="changelog" style={{ marginBottom: "1.5rem" }}>
+      <h2 style={styles.h2}>Changelog</h2>
+      {entries.map((entry, i) => (
+        <div key={i} style={{ ...styles.card, marginBottom: "0.5rem" }}>
+          <h3 style={{ ...styles.h3, fontSize: "0.95rem" }}>
+            <span style={{ color: "#f0a050" }}>{entry.date}</span>
+          </h3>
+          <ul style={{ margin: "0.25rem 0 0 1.25rem", padding: 0, color: "#e8e4d8", fontSize: "0.9rem" }}>
+            {entry.changes.map((change, j) => (
+              <li key={j} style={{ marginBottom: "0.2rem" }}>{change}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  );
+}
+
 function DevTools() {
   const [feedbackStatus, setFeedbackStatus] = useState("");
   const key = "seabound_feedbackQ";
@@ -327,12 +362,14 @@ export function DevWiki() {
       </p>
 
       <DevTools />
+      <Changelog />
       <AnalyticsDashboard />
 
       <nav style={styles.toc}>
         <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
         {" · "}
         <strong>Contents:</strong>{" "}
+        <a href="#changelog" style={styles.link}>Changelog</a> ·{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
         <a href="#tools" style={styles.link}>Tools</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
