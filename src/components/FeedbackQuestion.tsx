@@ -26,6 +26,15 @@ const LATE_QUESTIONS = [
   "What would make you recommend SeaBound to a friend?",
 ];
 
+// Direction questions — game design and feature preferences
+const DIRECTION_QUESTIONS = [
+  "Would adding simple combat to the game feel okay for you?",
+  "Would you prefer more story and lore elements in the game?",
+  "Do you have any suggestions for the user interface?",
+  "Do you have any feature suggestions?",
+  "Would you rather have more content or better polish at this point?",
+];
+
 interface FeedbackQState {
   lastAsked: number;
   dismissals: number; // consecutive dismissals without answering
@@ -62,7 +71,12 @@ function saveState(s: FeedbackQState) {
 }
 
 function pickQuestion(answeredCount: number): string {
-  const pool = answeredCount > 0 ? LATE_QUESTIONS : EARLY_QUESTIONS;
+  const pool =
+    answeredCount === 0
+      ? EARLY_QUESTIONS
+      : answeredCount <= 2
+        ? LATE_QUESTIONS
+        : DIRECTION_QUESTIONS;
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
