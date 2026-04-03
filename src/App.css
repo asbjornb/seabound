@@ -1391,10 +1391,15 @@ body {
   padding: 8px 10px;
   box-shadow: var(--card-shadow);
   transition: border-color 0.15s;
+  cursor: pointer;
 }
 
 .inventory-item:hover {
   border-color: var(--text-dim);
+}
+
+.inventory-item.expanded {
+  border-color: var(--accent);
 }
 
 .inventory-item.at-cap {
@@ -1426,6 +1431,11 @@ body {
   font-size: 0.7rem;
   color: var(--text-dim);
   margin-top: 2px;
+}
+.resource-sources {
+  margin-top: 3px;
+  color: var(--text-dim);
+  font-style: italic;
 }
 .tool-enables {
   margin-top: 3px;
