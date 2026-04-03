@@ -32,12 +32,14 @@ import {
   selectBuildRecipes,
   selectCraftRecipes,
   selectCurrentActionName,
+  selectCurrentSkillInfo,
   selectHasAnyResource,
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
   selectActionStatusInfo,
   selectReadyStationCount,
+  selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
 import { useGame } from "./engine/useGame";
@@ -235,6 +237,14 @@ export default function App() {
   );
   const repetitiveXpPercent = Math.round(repetitiveXpMultiplier * 100);
   const isRepetitionPenaltyActive = game.state.repetitiveActionCount >= fullXpThreshold;
+  const currentSkillInfo = useMemo(
+    () => selectCurrentSkillInfo(game.state),
+    [game.state]
+  );
+  const undiscoveredBiomes = useMemo(
+    () => selectUndiscoveredBiomeCount(game.state),
+    [game.state]
+  );
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
@@ -371,6 +381,16 @@ export default function App() {
               >
                 Repetition {game.state.repetitiveActionCount} • XP {repetitiveXpPercent}%
                 {isRepetitionPenaltyActive ? " (malus active)" : ""}
+                {currentSkillInfo && (
+                  <span className="current-skill-hint">
+                    {" "}• {currentSkillInfo.skillName} {currentSkillInfo.level} ({Math.floor(currentSkillInfo.progress * 100)}%)
+                  </span>
+                )}
+                {game.state.currentAction?.type === "expedition" && undiscoveredBiomes > 0 && (
+                  <span className="current-skill-hint">
+                    {" "}• {undiscoveredBiomes} {undiscoveredBiomes === 1 ? "biome" : "biomes"} left
+                  </span>
+                )}
               </div>
             </div>
           )}

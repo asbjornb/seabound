@@ -2,16 +2,19 @@ import { getDurationMultiplier } from "../data/milestones";
 import {
   getActions,
   getActionById,
+  getBiomes,
   getBuildings,
   getExpeditionById,
   getExpeditions,
   getRecipeById,
   getRecipes,
   getResources,
+  getSkills,
   getStationById,
   getStations,
 } from "../data/registry";
-import type { ActionDef, ExpeditionDef, GameState, RecipeDef, StationDef } from "../data/types";
+import { xpForLevel } from "../data/skills";
+import type { ActionDef, ExpeditionDef, GameState, RecipeDef, SkillId, StationDef } from "../data/types";
 import {
   getBuildingCount,
   getGroupBuildingCount,
@@ -270,6 +273,57 @@ export function selectCurrentActionName(state: GameState): string | null {
   return state.currentAction.expeditionId
     ? getExpeditionById(state.currentAction.expeditionId)?.name ?? null
     : null;
+}
+
+export interface CurrentSkillInfo {
+  skillId: SkillId;
+  skillName: string;
+  level: number;
+  progress: number; // 0-1 within current level
+  xpIntoLevel: number;
+  xpNeeded: number;
+}
+
+export function selectCurrentSkillInfo(state: GameState): CurrentSkillInfo | null {
+  if (!state.currentAction) return null;
+
+  let skillId: SkillId | undefined;
+  if (state.currentAction.type === "gather") {
+    skillId = getActionById(state.currentAction.actionId)?.skillId;
+  } else if (state.currentAction.type === "craft") {
+    skillId = state.currentAction.recipeId
+      ? getRecipeById(state.currentAction.recipeId)?.skillId
+      : undefined;
+  } else {
+    skillId = state.currentAction.expeditionId
+      ? getExpeditionById(state.currentAction.expeditionId)?.skillId
+      : undefined;
+  }
+
+  if (!skillId) return null;
+  const skills = getSkills();
+  const def = skills[skillId];
+  if (!def) return null;
+
+  const skill = state.skills[skillId];
+  const currentLevelXp = xpForLevel(skill.level);
+  const nextLevelXp = xpForLevel(skill.level + 1);
+  const xpIntoLevel = skill.xp - currentLevelXp;
+  const xpNeeded = nextLevelXp - currentLevelXp;
+
+  return {
+    skillId,
+    skillName: def.name,
+    level: skill.level,
+    progress: xpNeeded > 0 ? xpIntoLevel / xpNeeded : 1,
+    xpIntoLevel,
+    xpNeeded,
+  };
+}
+
+export function selectUndiscoveredBiomeCount(state: GameState): number {
+  const totalBiomes = Object.keys(getBiomes()).length;
+  return totalBiomes - state.discoveredBiomes.length;
 }
 
 export function selectGatherActions(actions: ActionDef[]): ActionDef[] {
