@@ -49,31 +49,30 @@ function DevTools() {
   );
 }
 
-const WORKER_URL = import.meta.env.VITE_ANALYTICS_URL as string | undefined;
-
 type R2Status = "idle" | "checking" | "ok" | "error";
 
 function R2StorageCheck() {
+  const [url, setUrl] = useState(() => localStorage.getItem("seabound_worker_url") ?? "");
   const [status, setStatus] = useState<R2Status>("idle");
   const [detail, setDetail] = useState("");
 
   const runCheck = useCallback(async () => {
-    if (!WORKER_URL) {
+    const trimmed = url.trim().replace(/\/+$/, "");
+    if (!trimmed) {
       setStatus("error");
-      setDetail("VITE_ANALYTICS_URL not configured — cannot reach worker");
+      setDetail("Enter your worker URL above (e.g. https://seabound-api.xxx.workers.dev)");
       return;
     }
+    localStorage.setItem("seabound_worker_url", trimmed);
     setStatus("checking");
     setDetail("");
     try {
-      const res = await fetch(`${WORKER_URL}/api/store?prefix=`, {
-        method: "GET",
-      });
+      const res = await fetch(`${trimmed}/api/store?prefix=`, { method: "GET" });
       if (res.ok) {
         const data = await res.json() as { keys?: { key: string; size: number }[] };
         const count = data.keys?.length ?? 0;
         setStatus("ok");
-        setDetail(`Worker reachable. Store has ${count} file${count !== 1 ? "s" : ""} (status ${res.status})`);
+        setDetail(`Worker + R2 reachable. Store has ${count} file${count !== 1 ? "s" : ""}.`);
       } else {
         const text = await res.text().catch(() => "");
         setStatus("error");
@@ -83,14 +82,34 @@ function R2StorageCheck() {
       setStatus("error");
       setDetail(`Network error: ${err instanceof Error ? err.message : String(err)}`);
     }
-  }, []);
+  }, [url]);
 
   const statusColor =
     status === "ok" ? "#7acea0" : status === "error" ? "#de7a7a" : status === "checking" ? "#d4c87a" : "#7a9a8a";
 
   return (
     <div style={{ marginTop: "0.75rem" }}>
+      <label style={{ display: "block", color: "#7a9a8a", fontSize: "0.8rem", marginBottom: "0.3rem" }}>
+        Worker URL
+      </label>
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => { setUrl(e.target.value); setStatus("idle"); }}
+          placeholder="https://seabound-api.xxx.workers.dev"
+          style={{
+            background: "#0c1a1a",
+            color: "#e8e4d8",
+            border: "1px solid #1e3a3a",
+            borderRadius: 6,
+            padding: "0.4rem 0.6rem",
+            fontSize: "0.85rem",
+            fontFamily: "monospace",
+            width: "22rem",
+            maxWidth: "100%",
+          }}
+        />
         <button
           onClick={runCheck}
           disabled={status === "checking"}
@@ -105,17 +124,16 @@ function R2StorageCheck() {
             opacity: status === "checking" ? 0.7 : 1,
           }}
         >
-          {status === "checking" ? "Checking…" : "Check R2 Storage"}
+          {status === "checking" ? "Checking..." : "Check R2 Storage"}
         </button>
         {status !== "idle" && (
           <span style={{ color: statusColor, fontSize: "0.85rem", fontWeight: 600 }}>
-            {status === "ok" ? "OK" : status === "error" ? "FAIL" : "…"}
+            {status === "ok" ? "OK" : status === "error" ? "FAIL" : "..."}
           </span>
         )}
       </div>
       {detail && (
         <pre style={{ color: statusColor, fontSize: "0.75rem", marginTop: "0.5rem", whiteSpace: "pre-wrap" }}>
-          {WORKER_URL && <span style={{ color: "#5a7a6a" }}>{WORKER_URL}/api/store\n</span>}
           {detail}
         </pre>
       )}
