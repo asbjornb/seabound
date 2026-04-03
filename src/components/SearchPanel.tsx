@@ -15,6 +15,7 @@ type SearchResultType = "gather" | "craft" | "build" | "tend" | "explore";
 interface SearchResult {
   type: SearchResultType;
   id: string;
+  iconId: string;
   name: string;
   description: string;
   skillId: string;
@@ -52,9 +53,11 @@ function buildIndex(
 
   for (const a of actions) {
     const tabType: SearchResultType = a.panel === "build" ? "build" : "gather";
+    const iconId = a.drops[0]?.resourceId ?? a.skillId;
     results.push({
       type: tabType,
       id: a.id,
+      iconId,
       name: a.name,
       description: a.description,
       skillId: a.skillId,
@@ -70,9 +73,11 @@ function buildIndex(
 
   for (const r of recipes) {
     const tabType: SearchResultType = r.panel === "build" ? "build" : "craft";
+    const iconId = r.output?.resourceId ?? r.toolOutput ?? r.buildingOutput ?? r.skillId;
     results.push({
       type: tabType,
       id: r.id,
+      iconId,
       name: r.name,
       description: r.description,
       skillId: r.skillId,
@@ -90,9 +95,11 @@ function buildIndex(
   }
 
   for (const s of stations) {
+    const iconId = s.yields[0]?.resourceId ?? s.skillId;
     results.push({
       type: "tend",
       id: s.id,
+      iconId,
       name: s.name,
       description: s.description,
       skillId: s.skillId,
@@ -104,9 +111,12 @@ function buildIndex(
   }
 
   for (const e of expeditions) {
+    const firstBiome = e.outcomes.find((o) => o.biomeDiscovery)?.biomeDiscovery;
+    const iconId = firstBiome ? `biome_${firstBiome}` : e.skillId;
     results.push({
       type: "explore",
       id: e.id,
+      iconId,
       name: e.name,
       description: e.description,
       skillId: e.skillId,
@@ -262,7 +272,7 @@ export function SearchPanel({
             <div key={`${r.type}-${r.id}`} className="search-result-card">
               <div className="search-result-header">
                 <span className="search-result-name">
-                  <GameIcon id={r.id} size={18} />
+                  <GameIcon id={r.iconId} size={18} />
                   {r.name}
                 </span>
                 <span className="search-result-type">{TYPE_LABELS[r.type]}</span>
