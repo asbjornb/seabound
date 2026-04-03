@@ -288,6 +288,9 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   }
 
+  // Track total action completions for analytics
+  state.actionCompletions += completions.length;
+
   cleanupObsoleteResources(state);
   return { completions, elapsedMs };
 }
