@@ -3,6 +3,7 @@ import { getActions, getBuildings, getExpeditions, getRecipes, getResources, get
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
+import { WORKER_URL } from "../lib/analytics";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -84,8 +85,6 @@ function DevTools() {
   );
 }
 
-const WORKER_URL = "https://seabound-api.asbjoernbrandt.workers.dev";
-
 type R2Status = "idle" | "checking" | "ok" | "error";
 
 function R2StorageCheck() {
@@ -150,6 +149,200 @@ function R2StorageCheck() {
   );
 }
 
+// -- Analytics types for the summary endpoint --
+
+interface FunnelEntry {
+  milestone: string;
+  reached: number;
+  pctOfTotal: number;
+  medianTotalTimeMin: number | null;
+  medianActiveTimeMin: number | null;
+  medianActions: number | null;
+}
+
+interface AnalyticsSummary {
+  period: string;
+  totalEvents: number;
+  uniquePlayers: number;
+  newPlayers: number;
+  returningPlayers: number;
+  returnRate: number;
+  deviceBreakdown: { mobile: number; desktop: number; unknown: number };
+  funnel: FunnelEntry[];
+  dropOff: Record<string, number>;
+  victories: number;
+}
+
+function AnalyticsDashboard() {
+  const [status, setStatus] = useState<"idle" | "loading" | "loaded" | "error">("idle");
+  const [data, setData] = useState<AnalyticsSummary | null>(null);
+  const [error, setError] = useState("");
+  const [days, setDays] = useState(30);
+
+  const load = useCallback(async () => {
+    setStatus("loading");
+    setError("");
+    try {
+      const res = await fetch(`${WORKER_URL}/api/analytics/summary?days=${days}`);
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`${res.status}: ${text.slice(0, 200)}`);
+      }
+      const json = await res.json() as AnalyticsSummary;
+      setData(json);
+      setStatus("loaded");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+      setStatus("error");
+    }
+  }, [days]);
+
+  const milestoneLabel = (id: string) =>
+    id.replace(/_/g, " ").replace(/^phase /, "Phase: ").replace(/^first /, "First ");
+
+  return (
+    <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
+      <h3 style={styles.h3}>Analytics</h3>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap", marginBottom: "0.75rem" }}>
+        <select
+          value={days}
+          onChange={(e) => setDays(Number(e.target.value))}
+          style={{
+            background: "#1e3a3a",
+            color: "#e8e4d8",
+            border: "1px solid #2d4a3e",
+            borderRadius: 6,
+            padding: "0.4rem 0.6rem",
+            fontSize: "0.85rem",
+          }}
+        >
+          <option value={7}>Last 7 days</option>
+          <option value={14}>Last 14 days</option>
+          <option value={30}>Last 30 days</option>
+          <option value={90}>Last 90 days</option>
+        </select>
+        <button
+          onClick={load}
+          disabled={status === "loading"}
+          style={{
+            background: "#7a50d0",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            padding: "0.4rem 0.8rem",
+            fontWeight: 600,
+            cursor: status === "loading" ? "wait" : "pointer",
+            opacity: status === "loading" ? 0.7 : 1,
+          }}
+        >
+          {status === "loading" ? "Loading..." : "Load Analytics"}
+        </button>
+      </div>
+
+      {status === "error" && (
+        <pre style={{ color: "#de7a7a", fontSize: "0.8rem", whiteSpace: "pre-wrap" }}>{error}</pre>
+      )}
+
+      {data && status === "loaded" && (
+        <div>
+          {/* Overview cards */}
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1rem" }}>
+            {[
+              { label: "Unique Players", value: data.uniquePlayers },
+              { label: "New Players", value: data.newPlayers },
+              { label: "Returning", value: `${data.returningPlayers} (${data.returnRate}%)` },
+              { label: "Victories", value: data.victories },
+              { label: "Mobile", value: data.deviceBreakdown.mobile },
+              { label: "Desktop", value: data.deviceBreakdown.desktop },
+            ].map((card) => (
+              <div key={card.label} style={{
+                background: "#1e3a3a",
+                borderRadius: 6,
+                padding: "0.5rem 0.75rem",
+                minWidth: 90,
+                textAlign: "center",
+              }}>
+                <div style={{ color: "#f0a050", fontSize: "1.2rem", fontWeight: 700 }}>{card.value}</div>
+                <div style={{ color: "#7a9a8a", fontSize: "0.75rem" }}>{card.label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Funnel */}
+          <h4 style={{ color: "#e8e4d8", marginBottom: "0.5rem" }}>Progression Funnel</h4>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th style={styles.th}>Milestone</th>
+                <th style={styles.th}>Reached</th>
+                <th style={styles.th}>%</th>
+                <th style={styles.th}>Median Total (min)</th>
+                <th style={styles.th}>Median Active (min)</th>
+                <th style={styles.th}>Median Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.funnel.map((f) => (
+                <tr key={f.milestone} style={styles.tr}>
+                  <td style={styles.td}>{milestoneLabel(f.milestone)}</td>
+                  <td style={styles.td}>{f.reached}</td>
+                  <td style={styles.td}>
+                    <span style={{
+                      display: "inline-block",
+                      background: "#2d4a3e",
+                      borderRadius: 4,
+                      padding: "0.1rem 0.4rem",
+                      minWidth: 36,
+                      textAlign: "center",
+                      color: f.pctOfTotal > 50 ? "#7acea0" : f.pctOfTotal > 20 ? "#d4c87a" : "#de7a7a",
+                      fontWeight: 600,
+                      fontSize: "0.8rem",
+                    }}>
+                      {f.pctOfTotal}%
+                    </span>
+                  </td>
+                  <td style={styles.td}>{f.medianTotalTimeMin ?? "—"}</td>
+                  <td style={styles.td}>{f.medianActiveTimeMin ?? "—"}</td>
+                  <td style={styles.td}>{f.medianActions ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Drop-off */}
+          {Object.keys(data.dropOff).length > 0 && (
+            <>
+              <h4 style={{ color: "#e8e4d8", marginTop: "1rem", marginBottom: "0.5rem" }}>
+                Drop-off by Last Phase
+              </h4>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                {Object.entries(data.dropOff)
+                  .sort(([, a], [, b]) => b - a)
+                  .map(([phase, count]) => (
+                    <div key={phase} style={{
+                      background: "#1e3a3a",
+                      borderRadius: 6,
+                      padding: "0.4rem 0.6rem",
+                      textAlign: "center",
+                    }}>
+                      <div style={{ color: "#de7a7a", fontSize: "1rem", fontWeight: 700 }}>{count}</div>
+                      <div style={{ color: "#7a9a8a", fontSize: "0.75rem" }}>{phase.replace(/_/g, " ")}</div>
+                    </div>
+                  ))}
+              </div>
+            </>
+          )}
+
+          <div style={{ color: "#5a7a6a", fontSize: "0.75rem", marginTop: "0.75rem" }}>
+            {data.period} — {data.totalEvents} events processed
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function DevWiki() {
   const RESOURCES = getResources();
   const TOOLS = getTools();
@@ -170,6 +363,7 @@ export function DevWiki() {
 
       <DevTools />
       <Changelog />
+      <AnalyticsDashboard />
 
       <nav style={styles.toc}>
         <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>

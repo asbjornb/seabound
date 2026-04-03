@@ -41,6 +41,13 @@ import {
   saveGame,
 } from "./gameState";
 import {
+  checkMilestones,
+  startHeartbeat,
+  stopHeartbeat,
+  trackSessionEnd,
+  trackSessionStart,
+} from "../lib/analytics-events";
+import {
   selectAvailableActions,
   selectAvailableExpeditions,
   selectAvailableRecipes,
@@ -258,6 +265,32 @@ export function useGame() {
   const stateRef = useRef(state);
   stateRef.current = state;
 
+  // Track last user interaction for "engaged time" (clicks/touches within 60s = active)
+  const lastInteractionRef = useRef(Date.now());
+  useEffect(() => {
+    const ENGAGEMENT_TIMEOUT_MS = 60_000;
+    const markActive = () => { lastInteractionRef.current = Date.now(); };
+    window.addEventListener("pointerdown", markActive);
+    window.addEventListener("keydown", markActive);
+
+    // Accumulate activePlayTimeMs every second based on recent interaction
+    const activeTimer = setInterval(() => {
+      const sinceLast = Date.now() - lastInteractionRef.current;
+      if (sinceLast < ENGAGEMENT_TIMEOUT_MS) {
+        setState((prev) => ({
+          ...prev,
+          activePlayTimeMs: prev.activePlayTimeMs + 1000,
+        }));
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener("pointerdown", markActive);
+      window.removeEventListener("keydown", markActive);
+      clearInterval(activeTimer);
+    };
+  }, []);
+
   // Game tick loop
   useEffect(() => {
     // Process offline progress on mount
@@ -286,6 +319,7 @@ export function useGame() {
             advanceRoutine(next);
           }
         }
+        if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
     }
@@ -319,6 +353,7 @@ export function useGame() {
           }
         }
 
+        if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
     }, TICK_INTERVAL_MS);
@@ -339,6 +374,18 @@ export function useGame() {
     const handler = () => saveGame(stateRef.current);
     window.addEventListener("beforeunload", handler);
     return () => window.removeEventListener("beforeunload", handler);
+  }, []);
+
+  // Analytics: session tracking + heartbeat
+  useEffect(() => {
+    trackSessionStart(stateRef.current);
+    startHeartbeat(() => stateRef.current);
+    const handleUnload = () => trackSessionEnd(stateRef.current);
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      stopHeartbeat();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
   const startAction = useCallback((action: ActionDef) => {

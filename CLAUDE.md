@@ -153,3 +153,11 @@ Available as GitHub Actions secrets for CI/CD and deployments:
 | `CLOUDFLARE_API_TOKEN` | Cloudflare Pages deployment |
 | `SEABOUND_API_KEY` | Seabound backend API key |
 | `SEABOUND_WORKER_URL` | Seabound Cloudflare Worker URL |
+
+### Analytics
+
+Game analytics are sent to the Cloudflare Worker → R2 pipeline. Events: `session_start`, `session_end`, `heartbeat` (every 5 min), `milestone`. Analytics are only sent from production origins (seabound.dev / *.seabound.pages.dev).
+
+**View analytics**: Open `?dev` in the game and click "Load Analytics" — shows funnel, drop-off, time-to-milestone stats.
+
+**Query via CLI**: `curl -H "Authorization: Bearer $SEABOUND_API_KEY" "$SEABOUND_WORKER_URL/api/analytics/summary?days=30"`

@@ -120,6 +120,9 @@ export function createInitialState(): GameState {
     completedRecipes: [],
     expeditionPity: {},
     lastSeenDiscoveryId: -1,
+    actionCompletions: 0,
+    activePlayTimeMs: 0,
+    sentMilestones: [],
     routines: [],
     activeRoutine: null,
   };
@@ -287,6 +290,16 @@ export function normalizeGameState(raw: unknown): GameState | null {
     }
   }
   loaded.buildings = loaded.buildings.filter((id) => !!BUILDINGS[id]);
+  // Migration: ensure analytics fields exist
+  if (loaded.actionCompletions == null) {
+    loaded.actionCompletions = 0;
+  }
+  if (loaded.activePlayTimeMs == null) {
+    loaded.activePlayTimeMs = 0;
+  }
+  if (!loaded.sentMilestones) {
+    loaded.sentMilestones = [];
+  }
   // Migration: ensure routines fields exist
   if (!loaded.routines) {
     loaded.routines = [];
