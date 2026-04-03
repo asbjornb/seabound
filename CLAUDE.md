@@ -141,3 +141,15 @@ canvas.save("public/icons/<id>.png")
 ```
 
 No code changes are needed to wire up new icons — just ensure the filename matches the ID used in `src/data/` (resources, buildings, skills, etc.).
+
+## GitHub Repository Secrets
+
+Available as GitHub Actions secrets for CI/CD and deployments:
+
+| Secret | Purpose |
+|--------|---------|
+| `ANTHROPIC_API_KEY` | Anthropic API access |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare Pages deployment |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare Pages deployment |
+| `SEABOUND_API_KEY` | Seabound backend API key |
+| `SEABOUND_WORKER_URL` | Seabound Cloudflare Worker URL |
