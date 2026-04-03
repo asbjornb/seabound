@@ -1,9 +1,46 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
 import { WORKER_URL } from "../lib/analytics";
+
+type DevTab = "wiki" | "admin";
+
+// SHA-256 hash of the admin PIN — update by hashing your chosen PIN
+const ADMIN_PIN_HASH = "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1"; // "pass"
+
+async function hashPin(pin: string): Promise<string> {
+  const data = new TextEncoder().encode(pin);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+function useAdminAuth() {
+  const [authed, setAuthed] = useState(false);
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("seabound_dev_pin");
+    if (stored) {
+      hashPin(stored).then(h => { if (h === ADMIN_PIN_HASH) setAuthed(true); });
+    }
+  }, []);
+
+  const submit = useCallback(async () => {
+    const h = await hashPin(pin);
+    if (h === ADMIN_PIN_HASH) {
+      sessionStorage.setItem("seabound_dev_pin", pin);
+      setAuthed(true);
+      setError("");
+    } else {
+      setError("Wrong PIN");
+    }
+  }, [pin]);
+
+  return { authed, pin, setPin, error, submit };
+}
 
 /**
  * Dev-only wiki page showing all game content.
@@ -353,6 +390,9 @@ export function DevWiki() {
   const EXPEDITIONS = getExpeditions();
   const skillIds = Object.keys(SKILLS) as SkillId[];
 
+  const [tab, setTab] = useState<DevTab>("wiki");
+  const auth = useAdminAuth();
+
   return (
     <div style={styles.page}>
       <h1 style={styles.h1}>SeaBound — Dev Wiki</h1>
@@ -361,19 +401,32 @@ export function DevWiki() {
         data files, so it's always in sync with the game.
       </p>
 
-      <DevTools />
-      <Changelog />
-      <AnalyticsDashboard />
+      {/* Tab bar */}
+      <div style={styles.tabBar}>
+        {(["wiki", "admin"] as const).map(t => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              ...styles.tabButton,
+              ...(tab === t ? styles.tabButtonActive : {}),
+            }}
+          >
+            {t === "wiki" ? "Wiki" : "Admin"}
+          </button>
+        ))}
+        <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600, marginLeft: "auto", fontSize: "0.9rem", alignSelf: "center" }}>
+          Progression Graph
+        </a>
+      </div>
 
+      {tab === "wiki" && (
+        <>
       <nav style={styles.toc}>
-        <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
-        {" · "}
         <strong>Contents:</strong>{" "}
-        <a href="#changelog" style={styles.link}>Changelog</a> ·{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
         <a href="#tools" style={styles.link}>Tools</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
-        <a href="#actions" style={styles.link}>Actions</a> ·{" "}
         <a href="#recipes" style={styles.link}>Recipes</a> ·{" "}
         <a href="#buildings" style={styles.link}>Buildings</a> ·{" "}
         <a href="#expeditions" style={styles.link}>Expeditions</a> ·{" "}
@@ -467,63 +520,6 @@ export function DevWiki() {
                 </tr>
               );
             })}
-          </tbody>
-        </table>
-      </section>
-
-      {/* ── Actions ── */}
-      <section id="actions">
-        <h2 style={styles.h2}>Actions ({ACTIONS.length})</h2>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>ID</th>
-              <th style={styles.th}>Name</th>
-              <th style={styles.th}>Skill</th>
-              <th style={styles.th}>Duration</th>
-              <th style={styles.th}>XP</th>
-              <th style={styles.th}>Requirements</th>
-              <th style={styles.th}>Drops</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ACTIONS.map((a) => (
-              <tr key={a.id} style={styles.tr}>
-                <td style={styles.tdCode}>{a.id}</td>
-                <td style={styles.td}>{a.name}</td>
-                <td style={styles.td}>{a.skillId}</td>
-                <td style={styles.td}>{(a.durationMs / 1000).toFixed(1)}s</td>
-                <td style={styles.td}>{a.xpGain}</td>
-                <td style={styles.tdSmall}>
-                  {[
-                    a.requiredSkillLevel && a.requiredSkillLevel > 1
-                      ? `Lv${a.requiredSkillLevel}`
-                      : null,
-                    a.requiredBiome ? `Biome: ${a.requiredBiome}` : null,
-                    a.requiredTools?.length
-                      ? `Tools: ${a.requiredTools.join(", ")}`
-                      : null,
-                    a.requiredResources?.length
-                      ? `Resources: ${a.requiredResources.join(", ")}`
-                      : null,
-                    a.requiredBuildings?.length
-                      ? `Buildings: ${a.requiredBuildings.join(", ")}`
-                      : null,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ") || "—"}
-                </td>
-                <td style={styles.tdSmall}>
-                  {a.drops.map((d) => {
-                    const pct =
-                      d.chance !== undefined && d.chance < 1
-                        ? ` (${(d.chance * 100).toFixed(0)}%)`
-                        : "";
-                    return `${d.amount}× ${d.resourceId}${pct}`;
-                  }).join(", ")}
-                </td>
-              </tr>
-            ))}
           </tbody>
         </table>
       </section>
@@ -743,6 +739,116 @@ export function DevWiki() {
         })}
       </section>
 
+        </>
+      )}
+
+      {tab === "admin" && (
+        <>
+          {!auth.authed ? (
+            <div style={{ ...styles.card, maxWidth: 340, margin: "2rem auto", textAlign: "center" }}>
+              <h3 style={styles.h3}>Admin PIN</h3>
+              <p style={{ color: "#7a9a8a", fontSize: "0.85rem", marginBottom: "0.75rem" }}>
+                Enter the admin PIN to view actions, analytics, and dev tools.
+              </p>
+              <form onSubmit={e => { e.preventDefault(); auth.submit(); }} style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+                <input
+                  type="password"
+                  value={auth.pin}
+                  onChange={e => auth.setPin(e.target.value)}
+                  placeholder="PIN"
+                  autoFocus
+                  style={{
+                    background: "#1e3a3a",
+                    color: "#e8e4d8",
+                    border: "1px solid #2d4a3e",
+                    borderRadius: 6,
+                    padding: "0.5rem 0.75rem",
+                    fontSize: "1rem",
+                    width: 120,
+                    textAlign: "center",
+                  }}
+                />
+                <button type="submit" style={{
+                  background: "#f0a050",
+                  color: "#0c1a1a",
+                  border: "none",
+                  borderRadius: 6,
+                  padding: "0.5rem 1rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                }}>
+                  Unlock
+                </button>
+              </form>
+              {auth.error && <p style={{ color: "#de7a7a", fontSize: "0.85rem", marginTop: "0.5rem" }}>{auth.error}</p>}
+            </div>
+          ) : (
+            <>
+              <DevTools />
+              <Changelog />
+              <AnalyticsDashboard />
+
+              {/* ── Actions (admin-only) ── */}
+              <section id="actions">
+                <h2 style={styles.h2}>Actions ({ACTIONS.length})</h2>
+                <table style={styles.table}>
+                  <thead>
+                    <tr>
+                      <th style={styles.th}>ID</th>
+                      <th style={styles.th}>Name</th>
+                      <th style={styles.th}>Skill</th>
+                      <th style={styles.th}>Duration</th>
+                      <th style={styles.th}>XP</th>
+                      <th style={styles.th}>Requirements</th>
+                      <th style={styles.th}>Drops</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ACTIONS.map((a) => (
+                      <tr key={a.id} style={styles.tr}>
+                        <td style={styles.tdCode}>{a.id}</td>
+                        <td style={styles.td}>{a.name}</td>
+                        <td style={styles.td}>{a.skillId}</td>
+                        <td style={styles.td}>{(a.durationMs / 1000).toFixed(1)}s</td>
+                        <td style={styles.td}>{a.xpGain}</td>
+                        <td style={styles.tdSmall}>
+                          {[
+                            a.requiredSkillLevel && a.requiredSkillLevel > 1
+                              ? `Lv${a.requiredSkillLevel}`
+                              : null,
+                            a.requiredBiome ? `Biome: ${a.requiredBiome}` : null,
+                            a.requiredTools?.length
+                              ? `Tools: ${a.requiredTools.join(", ")}`
+                              : null,
+                            a.requiredResources?.length
+                              ? `Resources: ${a.requiredResources.join(", ")}`
+                              : null,
+                            a.requiredBuildings?.length
+                              ? `Buildings: ${a.requiredBuildings.join(", ")}`
+                              : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" · ") || "—"}
+                        </td>
+                        <td style={styles.tdSmall}>
+                          {a.drops.map((d) => {
+                            const pct =
+                              d.chance !== undefined && d.chance < 1
+                                ? ` (${(d.chance * 100).toFixed(0)}%)`
+                                : "";
+                            return `${d.amount}× ${d.resourceId}${pct}`;
+                          }).join(", ")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+            </>
+          )}
+        </>
+      )}
+
       <footer style={styles.footer}>
         Generated from source data files. Add new content to{" "}
         <code>src/data/</code> and it appears here automatically.
@@ -950,6 +1056,28 @@ const styles: Record<string, React.CSSProperties> = {
   dim: {
     color: "#5a7a6a",
     fontSize: "0.8rem",
+  },
+  tabBar: {
+    display: "flex",
+    gap: "0.5rem",
+    marginBottom: "1.5rem",
+    borderBottom: "2px solid #1e3a3a",
+    paddingBottom: "0.5rem",
+  },
+  tabButton: {
+    background: "transparent",
+    color: "#7a9a8a",
+    border: "none",
+    borderBottom: "2px solid transparent",
+    padding: "0.5rem 1rem",
+    fontSize: "1rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    marginBottom: "-0.625rem",
+  } as React.CSSProperties,
+  tabButtonActive: {
+    color: "#f0a050",
+    borderBottomColor: "#f0a050",
   },
   footer: {
     marginTop: "3rem",
