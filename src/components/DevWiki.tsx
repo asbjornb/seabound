@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
@@ -42,6 +42,73 @@ function DevTools() {
       {current && (
         <pre style={{ color: "#5a7a6a", fontSize: "0.75rem", marginTop: "0.5rem", whiteSpace: "pre-wrap" }}>
           {current}
+        </pre>
+      )}
+      <R2StorageCheck />
+    </div>
+  );
+}
+
+const WORKER_URL = "https://seabound-api.asbjoernbrandt.workers.dev";
+
+type R2Status = "idle" | "checking" | "ok" | "error";
+
+function R2StorageCheck() {
+  const [status, setStatus] = useState<R2Status>("idle");
+  const [detail, setDetail] = useState("");
+
+  const runCheck = useCallback(async () => {
+    setStatus("checking");
+    setDetail("");
+    try {
+      const res = await fetch(`${WORKER_URL}/api/store?prefix=`, { method: "GET" });
+      if (res.ok) {
+        const data = await res.json() as { keys?: { key: string; size: number }[] };
+        const count = data.keys?.length ?? 0;
+        setStatus("ok");
+        setDetail(`Worker + R2 reachable. Store has ${count} file${count !== 1 ? "s" : ""}.`);
+      } else {
+        const text = await res.text().catch(() => "");
+        setStatus("error");
+        setDetail(`Worker returned ${res.status}: ${text.slice(0, 200)}`);
+      }
+    } catch (err) {
+      setStatus("error");
+      setDetail(`Network error: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }, []);
+
+  const statusColor =
+    status === "ok" ? "#7acea0" : status === "error" ? "#de7a7a" : status === "checking" ? "#d4c87a" : "#7a9a8a";
+
+  return (
+    <div style={{ marginTop: "0.75rem" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+        <button
+          onClick={runCheck}
+          disabled={status === "checking"}
+          style={{
+            background: "#50a0d0",
+            color: "#0c1a1a",
+            border: "none",
+            borderRadius: 6,
+            padding: "0.4rem 0.8rem",
+            fontWeight: 600,
+            cursor: status === "checking" ? "wait" : "pointer",
+            opacity: status === "checking" ? 0.7 : 1,
+          }}
+        >
+          {status === "checking" ? "Checking..." : "Check R2 Storage"}
+        </button>
+        {status !== "idle" && (
+          <span style={{ color: statusColor, fontSize: "0.85rem", fontWeight: 600 }}>
+            {status === "ok" ? "OK" : status === "error" ? "FAIL" : "..."}
+          </span>
+        )}
+      </div>
+      {detail && (
+        <pre style={{ color: statusColor, fontSize: "0.75rem", marginTop: "0.5rem", whiteSpace: "pre-wrap" }}>
+          {detail}
         </pre>
       )}
     </div>
