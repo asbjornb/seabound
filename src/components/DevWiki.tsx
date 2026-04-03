@@ -343,7 +343,16 @@ function AnalyticsDashboard() {
   );
 }
 
+type WikiTab = "content" | "changelog" | "tools";
+
+const tabLabels: Record<WikiTab, string> = {
+  content: "Content",
+  changelog: "Changelog",
+  tools: "Dev Tools",
+};
+
 export function DevWiki() {
+  const [activeTab, setActiveTab] = useState<WikiTab>("content");
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const SKILLS = getSkills();
@@ -361,15 +370,44 @@ export function DevWiki() {
         data files, so it's always in sync with the game.
       </p>
 
-      <DevTools />
-      <Changelog />
-      <AnalyticsDashboard />
+      {/* Tab bar */}
+      <div style={styles.tabBar}>
+        {(Object.keys(tabLabels) as WikiTab[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              ...styles.tabBtn,
+              ...(activeTab === tab ? styles.tabBtnActive : {}),
+            }}
+          >
+            {tabLabels[tab]}
+          </button>
+        ))}
+        <a href="?dev=graph" style={{ ...styles.tabBtn, textDecoration: "none", color: "#7a9a8a" }}>
+          Graph
+        </a>
+        <a href="?dev=dot" style={{ ...styles.tabBtn, textDecoration: "none", color: "#7a9a8a" }}>
+          DOT Graph
+        </a>
+      </div>
 
+      {/* Changelog tab */}
+      {activeTab === "changelog" && <Changelog />}
+
+      {/* Dev Tools tab */}
+      {activeTab === "tools" && (
+        <>
+          <DevTools />
+          <AnalyticsDashboard />
+        </>
+      )}
+
+      {/* Content tab */}
+      {activeTab === "content" && (
+        <>
       <nav style={styles.toc}>
-        <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
-        {" · "}
-        <strong>Contents:</strong>{" "}
-        <a href="#changelog" style={styles.link}>Changelog</a> ·{" "}
+        <strong>Jump to:</strong>{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
         <a href="#tools" style={styles.link}>Tools</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
@@ -742,6 +780,8 @@ export function DevWiki() {
           );
         })}
       </section>
+        </>
+      )}
 
       <footer style={styles.footer}>
         Generated from source data files. Add new content to{" "}
@@ -863,6 +903,29 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#7a9a8a",
     marginBottom: "1.5rem",
     fontSize: "0.9rem",
+  },
+  tabBar: {
+    display: "flex",
+    gap: "0.25rem",
+    marginBottom: "1.5rem",
+    borderBottom: "2px solid #1e3a3a",
+    paddingBottom: "0",
+  },
+  tabBtn: {
+    background: "transparent",
+    border: "none",
+    borderBottom: "2px solid transparent",
+    padding: "0.6rem 1rem",
+    marginBottom: "-2px",
+    color: "#7a9a8a",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "color 0.15s, border-color 0.15s",
+  } as React.CSSProperties,
+  tabBtnActive: {
+    color: "#f0a050",
+    borderBottomColor: "#f0a050",
   },
   toc: {
     background: "#132626",
