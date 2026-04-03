@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Deep tropical jungle interior, thick canopy blocking most light, tangled vines and broad-leafed plants, moss-covered fallen logs, tiny shafts of light piercing the canopy. Mysterious and dense. Sky: near-black #0a1a10. Canopy: very dark green #0a2a10. Vines: medium green #2a4a20. Light shafts: warm gold #a09040. Floor: dark brown #1a1a0a.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the deep canopy color
