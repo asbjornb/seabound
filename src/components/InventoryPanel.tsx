@@ -36,7 +36,7 @@ const FILTER_LABELS: Record<FilterId, string> = {
   items: "Items",
 };
 
-export function InventoryPanel({ state }: { state: GameState }) {
+export function InventoryPanel({ state, highlightedResources }: { state: GameState; highlightedResources?: Set<string> }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -152,10 +152,11 @@ export function InventoryPanel({ state }: { state: GameState }) {
               const def = RESOURCES[id];
               const limit = getStorageLimit(state, id);
               const atCap = isAtStorageCap(state, id);
+              const isHighlighted = highlightedResources?.has(id);
               return (
                 <div
                   key={id}
-                  className={`inventory-item${atCap ? " at-cap" : ""}`}
+                  className={`inventory-item${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}`}
                 >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">

@@ -10,6 +10,7 @@ interface Props {
   state: GameState;
   onBuild: (recipe: RecipeDef) => void;
   onStartAction: (action: ActionDef) => void;
+  onHighlightResources?: (ids: Set<string>) => void;
 }
 
 function formatStorageBonus(b: { tag?: string; excludeTags?: string[]; amount: number }): string {
@@ -24,6 +25,7 @@ export function SettlementPanel({
   state,
   onBuild,
   onStartAction,
+  onHighlightResources,
 }: Props) {
   const BUILDINGS = getBuildings();
   const RESOURCES = getResources();
@@ -98,12 +100,15 @@ export function SettlementPanel({
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
             const disabled = !canAfford;
+            const inputResourceIds = inputs.map((inp) => inp.resourceId);
             const isNew = !state.completedRecipes.includes(recipe.id);
             return (
               <div
                 key={recipe.id}
                 className={`action-card ${disabled ? "disabled" : ""}`}
                 onClick={() => !disabled && onBuild(recipe)}
+                onMouseEnter={() => onHighlightResources?.(new Set(inputResourceIds))}
+                onMouseLeave={() => onHighlightResources?.(new Set())}
               >
                 <div className="action-card-header">
                   <span className="action-name">
@@ -167,6 +172,7 @@ export function SettlementPanel({
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
             const disabled = !canAfford;
+            const inputResourceIds = inputs.map((inp) => inp.resourceId);
             const bdef = recipe.buildingOutput
               ? BUILDINGS[recipe.buildingOutput]
               : undefined;
@@ -177,6 +183,8 @@ export function SettlementPanel({
                 key={recipe.id}
                 className={`action-card ${disabled ? "disabled" : ""}`}
                 onClick={() => !disabled && onBuild(recipe)}
+                onMouseEnter={() => onHighlightResources?.(new Set(inputResourceIds))}
+                onMouseLeave={() => onHighlightResources?.(new Set())}
               >
                 <div className="action-card-header">
                   <span className="action-name">
