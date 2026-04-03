@@ -157,8 +157,8 @@ function advanceRoutine(state: GameState): void {
   const progress = state.activeRoutine;
   const wasLastStep = progress.currentStep >= routine.steps.length - 1;
 
-  // If on the last step and stopWhenFull is on, check if output is full → stop routine
-  if (wasLastStep && state.stopWhenFull) {
+  // If on the last step, check if output is full → stop routine
+  if (wasLastStep) {
     const step = routine.steps[progress.currentStep];
     let outputFull = false;
     if (step.actionType === "gather") {
@@ -506,14 +506,6 @@ export function useGame() {
     });
   }, []);
 
-  const toggleStopWhenFull = useCallback(() => {
-    setState((prev) => {
-      const next = structuredClone(prev);
-      next.stopWhenFull = !prev.stopWhenFull;
-      return next;
-    });
-  }, []);
-
   const saveRoutine = useCallback((routine: Routine) => {
     setState((prev) => {
       const next = structuredClone(prev);
@@ -762,7 +754,6 @@ export function useGame() {
     startCraft,
     startExpedition,
     stopAction,
-    toggleStopWhenFull,
     saveRoutine,
     deleteRoutine,
     startRoutine,
