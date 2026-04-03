@@ -829,50 +829,8 @@ body {
   color: var(--warning);
 }
 
-.current-skill-info {
-  margin-top: 6px;
-}
-
-.current-skill-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3px;
-}
-
-.current-skill-name {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.current-skill-xp {
-  font-size: 0.7rem;
+.current-skill-hint {
   color: var(--text-dim);
-}
-
-.skill-progress-bar {
-  height: 6px;
-  background: var(--bar-bg);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.skill-progress-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 3px;
-  transition: width 0.3s ease;
-}
-
-.undiscovered-biomes-info {
-  margin-top: 5px;
-  font-size: 0.72rem;
-  color: var(--text-dim);
-  font-style: italic;
 }
 
 /* Tabs */

@@ -381,31 +381,17 @@ export default function App() {
               >
                 Repetition {game.state.repetitiveActionCount} • XP {repetitiveXpPercent}%
                 {isRepetitionPenaltyActive ? " (malus active)" : ""}
+                {currentSkillInfo && (
+                  <span className="current-skill-hint">
+                    {" "}• {currentSkillInfo.skillName} {currentSkillInfo.level} ({Math.floor(currentSkillInfo.progress * 100)}%)
+                  </span>
+                )}
+                {game.state.currentAction?.type === "expedition" && undiscoveredBiomes > 0 && (
+                  <span className="current-skill-hint">
+                    {" "}• {undiscoveredBiomes} {undiscoveredBiomes === 1 ? "biome" : "biomes"} left
+                  </span>
+                )}
               </div>
-              {currentSkillInfo && (
-                <div className="current-skill-info">
-                  <div className="current-skill-header">
-                    <span className="current-skill-name">
-                      <GameIcon id={`skill_${currentSkillInfo.skillId}`} size={16} />
-                      {currentSkillInfo.skillName} Lvl {currentSkillInfo.level}
-                    </span>
-                    <span className="current-skill-xp">
-                      {currentSkillInfo.xpIntoLevel}/{currentSkillInfo.xpNeeded} XP
-                    </span>
-                  </div>
-                  <div className="skill-progress-bar">
-                    <div
-                      className="skill-progress-fill"
-                      style={{ width: `${currentSkillInfo.progress * 100}%` }}
-                    />
-                  </div>
-                </div>
-              )}
-              {game.state.currentAction?.type === "expedition" && undiscoveredBiomes > 0 && (
-                <div className="undiscovered-biomes-info">
-                  {undiscoveredBiomes} undiscovered {undiscoveredBiomes === 1 ? "biome" : "biomes"} remaining
-                </div>
-              )}
             </div>
           )}
 
