@@ -27,6 +27,7 @@ import {
   getTotalFood,
   hasTool,
   hasVessel,
+  resolveAlternateInputs,
 } from "./gameState";
 
 export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills" | "routines";
@@ -418,14 +419,15 @@ export function selectActionStatusInfo(state: GameState): ActionStatusInfo | nul
     if (!recipe) return null;
 
     const effectiveInputs = getEffectiveInputs(recipe, state);
-    const inputs = effectiveInputs.map((inp) => ({
+    const resolvedInputs = resolveAlternateInputs(effectiveInputs, state);
+    const inputs = resolvedInputs.map((inp) => ({
       name: RESOURCES[inp.resourceId]?.name ?? inp.resourceId,
       have: getResource(state, inp.resourceId),
       need: inp.amount,
     }));
 
-    const craftsRemaining = effectiveInputs.length > 0
-      ? Math.min(...effectiveInputs.map((inp) => Math.floor(getResource(state, inp.resourceId) / inp.amount)))
+    const craftsRemaining = resolvedInputs.length > 0
+      ? Math.min(...resolvedInputs.map((inp) => Math.floor(getResource(state, inp.resourceId) / inp.amount)))
       : undefined;
 
     const outputs: ActionStatusInfo["outputs"] = [];
