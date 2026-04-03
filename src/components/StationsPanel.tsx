@@ -71,6 +71,12 @@ export function StationsPanel({
     return { placed, def, index, isReady, remaining, progress };
   });
 
+  // Ready stations first, then by remaining time ascending
+  const sortedActiveStations = [...activeStations].sort((a, b) => {
+    if (a.isReady !== b.isReady) return a.isReady ? -1 : 1;
+    return a.remaining - b.remaining;
+  });
+
   const readyCount = activeStations.filter((s) => s.isReady).length;
 
   return (
@@ -81,7 +87,7 @@ export function StationsPanel({
           <div className="section-title">
             Active{readyCount > 0 && ` — ${readyCount} ready!`}
           </div>
-          {activeStations.map(({ def, index, isReady, remaining, progress }) => {
+          {sortedActiveStations.map(({ def, index, isReady, remaining, progress }) => {
             if (!def) return null;
             return (
               <div
