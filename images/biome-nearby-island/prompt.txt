@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+View across open water toward a small distant island, a simple raft or boat at the near shore, wide expanse of dark ocean with small waves, the far island has a single palm tree silhouette. Feeling of adventure and distance. Sky: deep blue-purple #1a1a30. Water: dark blue #0a2a4a with lighter ripples #1a4a6a. Far island: dark silhouette #1a2a1a. Raft: warm brown #5a4020.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can be the sky color

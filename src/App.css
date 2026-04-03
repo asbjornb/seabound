@@ -1701,6 +1701,88 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   Biome Banners (gather tab headers)
+   ═══════════════════════════════════════ */
+
+.biome-banner {
+  position: relative;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+}
+
+.biome-banner-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 40%;
+  pointer-events: none;
+}
+
+.biome-banner-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+
+.biome-banner-arrow {
+  position: relative;
+  z-index: 1;
+  margin-left: 12px;
+  color: #f6efe3;
+  font-size: 0.65rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.biome-banner-label {
+  position: relative;
+  z-index: 1;
+  margin-left: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f6efe3;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.04em;
+}
+
+.biome-banner-count {
+  position: relative;
+  z-index: 1;
+  margin-left: auto;
+  margin-right: 12px;
+  font-size: 0.65rem;
+  color: #f6efe3;
+  opacity: 0.6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Plain fallback for mod biomes without banner art */
+.biome-banner--plain {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 4px 0;
+  gap: 4px;
+  height: auto;
+}
+
+.biome-banner--plain .biome-banner-label {
+  color: var(--text);
+  text-shadow: none;
+  font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════
    Chapter Card (phase transition)
    ═══════════════════════════════════════ */
 
