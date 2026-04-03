@@ -1391,10 +1391,15 @@ body {
   padding: 8px 10px;
   box-shadow: var(--card-shadow);
   transition: border-color 0.15s;
+  cursor: pointer;
 }
 
 .inventory-item:hover {
   border-color: var(--text-dim);
+}
+
+.inventory-item.expanded {
+  border-color: var(--accent);
 }
 
 .inventory-item.at-cap {

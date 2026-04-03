@@ -97,8 +97,7 @@ export function SettlementPanel({
             const canAfford = inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
-            const missingTool = recipe.requiredTools?.find((t) => !hasTool(state, t));
-            const disabled = !canAfford || !!missingTool;
+            const disabled = !canAfford;
             const isNew = !state.completedRecipes.includes(recipe.id);
             return (
               <div
@@ -150,14 +149,6 @@ export function SettlementPanel({
                     })()}
                   </div>
                 ) : null}
-                {missingTool && (
-                  <div className="action-requires">
-                    Requires:{" "}
-                    <span title={TOOLS[missingTool]?.description}>
-                      <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
-                    </span>
-                  </div>
-                )}
                 <div className="action-xp">
                   +{recipe.xpGain} {recipe.skillId} XP
                 </div>
@@ -175,8 +166,7 @@ export function SettlementPanel({
             const canAfford = inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             );
-            const missingTool = recipe.requiredTools?.find((t) => !hasTool(state, t));
-            const disabled = !canAfford || !!missingTool;
+            const disabled = !canAfford;
             const bdef = recipe.buildingOutput
               ? BUILDINGS[recipe.buildingOutput]
               : undefined;
@@ -230,14 +220,6 @@ export function SettlementPanel({
                     );
                   })}
                 </div>
-                {missingTool && (
-                  <div className="action-requires">
-                    Requires:{" "}
-                    <span title={TOOLS[missingTool]?.description}>
-                      <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
-                    </span>
-                  </div>
-                )}
                 <div className="action-xp">
                   +{recipe.xpGain} {recipe.skillId} XP
                 </div>

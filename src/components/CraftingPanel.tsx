@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers, hasTool } from "../engine/gameState";
+import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
 interface Props {
@@ -106,8 +106,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               );
               const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
               const outputFull = !!(recipe.output && isAtStorageCap(state, recipe.output.resourceId));
-              const missingTool = recipe.requiredTools?.find((t) => !hasTool(state, t));
-              const disabled = !canAffordInputs || !canAffordTags || outputFull || !!missingTool;
+              const disabled = !canAffordInputs || !canAffordTags || outputFull;
 
               // Resolve which tagged resources would be used (for display)
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
@@ -284,14 +283,6 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     </div>
                   ) : (
                     <div className="recipe-output">XP only</div>
-                  )}
-                  {missingTool && (
-                    <div className="action-requires">
-                      Requires:{" "}
-                      <span title={TOOLS[missingTool]?.description}>
-                        <GameIcon id={missingTool} size={16} />{TOOLS[missingTool]?.name ?? missingTool}
-                      </span>
-                    </div>
                   )}
                   <div className="action-xp">
                     <GameIcon id={`skill_${recipe.skillId}`} size={16} /> +{recipe.xpGain} {recipe.skillId} XP

@@ -70,6 +70,7 @@ export function InventoryPanel({ state }: { state: GameState }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const toolEnables = useMemo(buildToolEnablesMap, []);
   const resourceSources = useMemo(buildResourceSourceMap, []);
 
@@ -120,6 +121,10 @@ export function InventoryPanel({ state }: { state: GameState }) {
 
   const showTools = filter === "all" || filter === "tools";
 
+  const toggleExpand = (id: string) => {
+    setExpandedId((prev) => (prev === id ? null : id));
+  };
+
   return (
     <div className="inventory-panel">
       <div className={`morale-display${state.morale <= 25 ? " low-morale" : ""}`}>
@@ -149,21 +154,28 @@ export function InventoryPanel({ state }: { state: GameState }) {
           <div className="inventory-items">
             {state.tools.map((toolId) => {
               const def = TOOLS[toolId];
+              const isExpanded = expandedId === `tool:${toolId}`;
               return (
-                <div key={toolId} className="inventory-item">
+                <div
+                  key={toolId}
+                  className={`inventory-item${isExpanded ? " expanded" : ""}`}
+                  onClick={() => toggleExpand(`tool:${toolId}`)}
+                >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
                       <GameIcon id={toolId as ToolId} /> {def?.name ?? toolId}
                     </span>
                   </div>
-                  <div className="inventory-item-desc">
-                    {def?.description}
-                    {toolEnables[toolId] && (
-                      <div className="tool-enables">
-                        Enables: {toolEnables[toolId].join(", ")}
-                      </div>
-                    )}
-                  </div>
+                  {isExpanded && (
+                    <div className="inventory-item-desc">
+                      {def?.description}
+                      {toolEnables[toolId] && (
+                        <div className="tool-enables">
+                          Enables: {toolEnables[toolId].join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -183,10 +195,12 @@ export function InventoryPanel({ state }: { state: GameState }) {
               const def = RESOURCES[id];
               const limit = getStorageLimit(state, id);
               const atCap = isAtStorageCap(state, id);
+              const isExpanded = expandedId === id;
               return (
                 <div
                   key={id}
-                  className={`inventory-item${atCap ? " at-cap" : ""}`}
+                  className={`inventory-item${atCap ? " at-cap" : ""}${isExpanded ? " expanded" : ""}`}
+                  onClick={() => toggleExpand(id)}
                 >
                   <div className="inventory-item-header">
                     <span className="inventory-item-name">
@@ -196,35 +210,37 @@ export function InventoryPanel({ state }: { state: GameState }) {
                       {amount}/{limit}
                     </span>
                   </div>
-                  <div className="inventory-item-desc">
-                    {def?.description}
-                    {(() => {
-                      const groupMembers = getStorageGroupMembers(state, id);
-                      if (groupMembers.length === 0) return null;
-                      return (
-                        <div className="storage-group-hint">
-                          Shares storage with{" "}
-                          {groupMembers.map((m, i) => (
-                            <span key={m.id}>
-                              {i > 0 && ", "}
-                              <GameIcon id={m.id as ResourceId} size={16} />{m.name}
-                              {m.amount > 0 && ` (${m.amount})`}
-                            </span>
-                          ))}
+                  {isExpanded && (
+                    <div className="inventory-item-desc">
+                      {def?.description}
+                      {(() => {
+                        const groupMembers = getStorageGroupMembers(state, id);
+                        if (groupMembers.length === 0) return null;
+                        return (
+                          <div className="storage-group-hint">
+                            Shares storage with{" "}
+                            {groupMembers.map((m, i) => (
+                              <span key={m.id}>
+                                {i > 0 && ", "}
+                                <GameIcon id={m.id as ResourceId} size={16} />{m.name}
+                                {m.amount > 0 && ` (${m.amount})`}
+                              </span>
+                            ))}
+                          </div>
+                        );
+                      })()}
+                      {resourceSources[id] && (
+                        <div className="resource-sources">
+                          From: {resourceSources[id].join(", ")}
                         </div>
-                      );
-                    })()}
-                    {resourceSources[id] && (
-                      <div className="resource-sources">
-                        From: {resourceSources[id].join(", ")}
-                      </div>
-                    )}
-                    {toolEnables[id] && (
-                      <div className="tool-enables">
-                        Enables: {toolEnables[id].join(", ")}
-                      </div>
-                    )}
-                  </div>
+                      )}
+                      {toolEnables[id] && (
+                        <div className="tool-enables">
+                          Enables: {toolEnables[id].join(", ")}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}

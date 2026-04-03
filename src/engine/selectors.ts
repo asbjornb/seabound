@@ -71,8 +71,7 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
     if (action.requiredBiome && !state.discoveredBiomes.includes(action.requiredBiome)) return false;
     if (action.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
-    // Show actions with missing tools as disabled (so players know what to craft)
-    // but hide actions with missing required resources (consumables not yet discovered)
+    if (action.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (action.requiredResources?.some((resId) => getResource(state, resId) < 1)) return false;
     if (action.oneTimeAction && action.drops.some((drop) => getResource(state, drop.resourceId) >= 1)) return false;
     return true;
@@ -105,7 +104,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
     if (recipe.requiredSkills?.some((req) => state.skills[req.skillId].level < req.level)) return false;
     if (recipe.requiredItems?.some((itemId) => getResource(state, itemId) < 1)) return false;
-    // Show recipes with missing tools as disabled (so players know what to craft)
+    if (recipe.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (recipe.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     // Data-driven hide rules
     if (recipe.hideWhen) {
