@@ -498,7 +498,8 @@ function applyExpeditionCompletion(
   } else {
     // Check if there are any undiscovered biomes left on this expedition
     const hasUndiscoveredBiome = def.outcomes.some(
-      (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery)
+      (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery) &&
+        !o.requiredBiomes?.some((req) => !state.discoveredBiomes.includes(req))
     );
     if (hasUndiscoveredBiome) {
       state.expeditionPity[expeditionId] = pityCount + 1;

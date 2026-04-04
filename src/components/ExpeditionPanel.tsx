@@ -17,10 +17,12 @@ function canAfford(exp: ExpeditionDef, state: GameState): boolean {
 }
 
 function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
-  const biomes = exp.outcomes
-    .filter((o) => o.biomeDiscovery)
-    .map((o) => o.biomeDiscovery!);
-  return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+  return exp.outcomes.filter((o) => {
+    if (!o.biomeDiscovery) return false;
+    if (state.discoveredBiomes.includes(o.biomeDiscovery)) return false;
+    if (o.requiredBiomes?.some((req) => !state.discoveredBiomes.includes(req))) return false;
+    return true;
+  }).length;
 }
 
 /** Compute aggregated drop table from active outcomes, weighted by probability. */
