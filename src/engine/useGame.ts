@@ -230,6 +230,14 @@ function processCompletionDiscoveries(
   if (c.biomeDiscovery) {
     const name = c.biomeDiscovery.replace(/_/g, " ");
     addDiscovery(state, "biome", `Discovered the ${name}`);
+    // Bamboo grove is the inflection point — unlocks tools, fiber, cordage, and the entire crafting tree
+    if (c.biomeDiscovery === "bamboo_grove") {
+      addDiscovery(
+        state,
+        "biome",
+        "Bamboo changes everything — tools, fiber, and new possibilities ahead. No path is wrong, explore at your own pace!"
+      );
+    }
   }
   if (c.buildingBuilt) {
     const bdef = BUILDINGS[c.buildingBuilt];
@@ -244,14 +252,6 @@ function processCompletionDiscoveries(
     const tdef = TOOLS[c.toolCrafted];
     const name = tdef?.name ?? c.toolCrafted.replace(/_/g, " ");
     addDiscovery(state, "tool", `Crafted ${name}`);
-    // Bamboo knife is the inflection point — first tool unlocks the entire crafting chain
-    if (c.toolCrafted === "bamboo_knife") {
-      addDiscovery(
-        state,
-        "tool",
-        "Your first real tool! Crafting, building, and new possibilities are wide open. No path is wrong — explore at your own pace."
-      );
-    }
   }
   if (c.newResources) {
     for (const resId of c.newResources) {
