@@ -239,6 +239,14 @@ function processCompletionDiscoveries(
     if (c.buildingBuilt === "dugout" && !state.buildings.includes("raft")) {
       addDiscovery(state, "building", "A raft? Where you're going, you don't need rafts.");
     }
+    // Encourage player when camp fire opens up cooking + tools
+    if (c.buildingBuilt === "camp_fire") {
+      addDiscovery(
+        state,
+        "building",
+        "With fire, your options have exploded — cooking, tools, and more. No path is wrong. Explore at your own pace!"
+      );
+    }
   }
   if (c.toolCrafted) {
     const tdef = TOOLS[c.toolCrafted];

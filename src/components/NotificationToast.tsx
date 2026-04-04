@@ -27,8 +27,7 @@ export function NotificationToast({
     const newEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
       if (entry.id <= lastSeenDiscoveryId) break;
-      // Only show toasts for location discoveries (and recipe unlocks in the future)
-      if (entry.type === "biome") {
+      if (entry.type === "biome" || entry.type === "building") {
         newEntries.push(entry);
       }
     }
