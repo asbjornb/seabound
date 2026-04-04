@@ -303,4 +303,5 @@ export interface GameState {
   modId?: string; // if set, this save belongs to a specific mod
   routines: Routine[];
   activeRoutine: RoutineProgress | null;
+  playerGuid?: string; // cross-device player identity, persists with save data
 }

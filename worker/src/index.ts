@@ -189,9 +189,14 @@ async function handleAnalyticsSummary(
 
     if (e.event === "session_start") {
       p.sessions++;
-      if (e.screenWidth) {
-        p.device = e.screenWidth < 768 ? "mobile" : "desktop";
-      }
+    }
+    // Update device from any event with screenWidth (session_start or heartbeat)
+    if (e.screenWidth) {
+      p.device = e.screenWidth < 768 ? "mobile" : "desktop";
+    }
+    // Track cross-device player GUID
+    if (e.playerGuid) {
+      p.playerGuid = e.playerGuid;
     }
     if (e.totalPlayTimeMs != null && e.totalPlayTimeMs > p.totalPlayTimeMs) {
       p.totalPlayTimeMs = e.totalPlayTimeMs;

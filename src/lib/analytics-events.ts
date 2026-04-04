@@ -41,6 +41,7 @@ function progressSnapshot(state: GameState): Record<string, unknown> {
 
   return {
     playerId: getPlayerId(),
+    playerGuid: state.playerGuid,
     totalPlayTimeMs: state.totalPlayTimeMs,
     activePlayTimeMs: state.activePlayTimeMs,
     actionCompletions: state.actionCompletions,
@@ -79,7 +80,11 @@ export function startHeartbeat(getState: () => GameState): void {
   stopHeartbeat();
   heartbeatTimer = setInterval(() => {
     const state = getState();
-    trackEvent("heartbeat", progressSnapshot(state));
+    trackEvent("heartbeat", {
+      ...progressSnapshot(state),
+      screenWidth: window.screen.width,
+      screenHeight: window.screen.height,
+    });
   }, HEARTBEAT_INTERVAL_MS);
 }
 

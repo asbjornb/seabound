@@ -125,6 +125,7 @@ export function createInitialState(): GameState {
     sentMilestones: [],
     routines: [],
     activeRoutine: null,
+    playerGuid: crypto.randomUUID(),
   };
 }
 
@@ -306,6 +307,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   }
   if (loaded.activeRoutine === undefined) {
     loaded.activeRoutine = null;
+  }
+  // Migration: ensure playerGuid exists (cross-device identity)
+  if (!loaded.playerGuid) {
+    loaded.playerGuid = crypto.randomUUID();
   }
 
   return loaded;
