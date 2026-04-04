@@ -5,7 +5,7 @@ import { CloseIcon } from "./components/CloseIcon";
 import { CollectFlyup, type FlyupItem } from "./components/CollectFlyup";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
-import { DevPinGate } from "./components/DevPinGate";
+
 import { FeedbackBanner } from "./components/FeedbackBanner";
 import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
@@ -53,11 +53,9 @@ export default function App() {
   if (window.location.search.includes("dev")) {
     const params = new URLSearchParams(window.location.search);
     const devPage = params.get("dev");
-    return (
-      <DevPinGate>
-        {devPage === "graph" ? <DevGraph /> : devPage === "dot" ? <DevGraphDot /> : <DevWiki />}
-      </DevPinGate>
-    );
+    if (devPage === "graph") return <DevGraph />;
+    if (devPage === "dot") return <DevGraphDot />;
+    return <DevWiki />;
   }
   const game = useGame();
   const updateAvailable = useUpdateChecker();

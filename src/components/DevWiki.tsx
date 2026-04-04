@@ -4,6 +4,7 @@ import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
 import { WORKER_URL } from "../lib/analytics";
+import { DevPinGate } from "./DevPinGate";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -397,10 +398,10 @@ export function DevWiki() {
 
       {/* Dev Tools tab */}
       {activeTab === "tools" && (
-        <>
+        <DevPinGate>
           <DevTools />
           <AnalyticsDashboard />
-        </>
+        </DevPinGate>
       )}
 
       {/* Content tab */}
