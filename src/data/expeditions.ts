@@ -23,7 +23,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You round the headland and discover a rocky stretch of shoreline — flat stones and tough grass everywhere!",
         biomeDiscovery: "rocky_shore",
-        requiredBiomes: ["coconut_grove"],
       },
       {
         weight: 25,

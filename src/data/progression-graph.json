@@ -46,6 +46,18 @@
       "label": "Shell"
     },
     {
+      "id": "resource:limpet",
+      "type": "resource",
+      "label": "Limpet",
+      "category": "food"
+    },
+    {
+      "id": "resource:cooked_limpet",
+      "type": "resource",
+      "label": "Cooked Limpet",
+      "category": "food"
+    },
+    {
       "id": "resource:bamboo_cane",
       "type": "resource",
       "label": "Bamboo Cane",
@@ -706,6 +718,12 @@
       "category": "foraging"
     },
     {
+      "id": "action:pry_limpets",
+      "type": "action",
+      "label": "Pry Limpets",
+      "category": "foraging"
+    },
+    {
       "id": "action:collect_dry_grass",
       "type": "action",
       "label": "Collect Dry Grass",
@@ -1009,6 +1027,12 @@
       "id": "recipe:cook_crab",
       "type": "recipe",
       "label": "Cook Crab",
+      "category": "cooking"
+    },
+    {
+      "id": "recipe:cook_limpet",
+      "type": "recipe",
+      "label": "Cook Limpets",
       "category": "cooking"
     },
     {
@@ -1327,6 +1351,26 @@
     {
       "from": "biome:coconut_grove",
       "to": "action:collect_palm_frond",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:pry_limpets",
+      "to": "resource:limpet",
+      "relation": "produces"
+    },
+    {
+      "from": "action:pry_limpets",
+      "to": "resource:limpet",
+      "relation": "produces"
+    },
+    {
+      "from": "action:pry_limpets",
+      "to": "skill:foraging",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:rocky_shore",
+      "to": "action:pry_limpets",
       "relation": "requires_biome"
     },
     {
@@ -2520,6 +2564,41 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:cook_limpet",
+      "to": "resource:cooked_limpet",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:limpet",
+      "to": "recipe:cook_limpet",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cook_limpet",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:cook_limpet",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "recipe:cook_limpet",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cook_limpet",
+      "to": "skill:cooking",
+      "relation": "trains"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:cook_limpet",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:build_firing_pit",
       "to": "building:firing_pit",
       "relation": "builds"
@@ -3385,6 +3464,16 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:limpet",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_limpet",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:large_fish",
       "to": "recipe:pack_voyage_provisions",
       "relation": "consumes"
@@ -3540,6 +3629,16 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:limpet",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_limpet",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:large_fish",
       "to": "expedition:explore_beach",
       "relation": "consumes"
@@ -3595,11 +3694,6 @@
       "relation": "discovers"
     },
     {
-      "from": "biome:coconut_grove",
-      "to": "expedition:explore_beach",
-      "relation": "requires_biome_discovered"
-    },
-    {
       "from": "expedition:explore_beach",
       "to": "resource:flat_stone",
       "relation": "produces"
@@ -3621,6 +3715,16 @@
     },
     {
       "from": "resource:crab",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:limpet",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_limpet",
       "to": "expedition:explore_interior",
       "relation": "consumes"
     },
@@ -3726,6 +3830,16 @@
     },
     {
       "from": "resource:crab",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:limpet",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_limpet",
       "to": "expedition:sail_nearby_island",
       "relation": "consumes"
     },
@@ -3846,6 +3960,16 @@
     },
     {
       "from": "resource:crab",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:limpet",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_limpet",
       "to": "expedition:dugout_voyage",
       "relation": "consumes"
     },
@@ -4464,6 +4588,8 @@
       "resource:coconut",
       "resource:small_fish",
       "resource:crab",
+      "resource:limpet",
+      "resource:cooked_limpet",
       "resource:large_fish",
       "resource:cooked_fish",
       "resource:cooked_crab",
@@ -4488,6 +4614,8 @@
       "action:drop_line_fish",
       "station:deploy_basket_trap",
       "station:harvest_tidal_weir",
+      "action:pry_limpets",
+      "recipe:cook_limpet",
       "recipe:cook_fish",
       "recipe:cook_crab",
       "recipe:cook_large_fish",
@@ -4517,6 +4645,7 @@
       "tool:gorge_hook",
       "tool:basket_trap",
       "building:stone_tidal_weir",
+      "biome:rocky_shore",
       "resource:charcoal",
       "skill:cooking:2",
       "skill:cooking:4",
@@ -4557,7 +4686,6 @@
       "expedition:oceanic_voyage",
       "biome:jungle_interior",
       "tool:stone_axe",
-      "biome:rocky_shore",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
@@ -4643,12 +4771,12 @@
       "tool:shell_adze",
       "resource:pandanus_strip",
       "biome:coconut_grove",
-      "resource:coconut",
+      "resource:limpet",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
       "recipe:split_retted_pandanus",
       "expedition:explore_beach",
-      "action:gather_coconuts",
+      "action:pry_limpets",
       "resource:large_log",
       "resource:dry_grass",
       "resource:coconut_husk",
@@ -4656,7 +4784,9 @@
       "building:camp_fire",
       "resource:large_shell",
       "resource:retted_pandanus",
+      "biome:rocky_shore",
       "action:fell_large_tree",
+      "action:gather_coconuts",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
       "action:wade_tidal_pool",
@@ -4697,7 +4827,6 @@
       "action:comb_rocky_shore",
       "recipe:upgrade_tended_garden",
       "recipe:build_firing_pit",
-      "biome:rocky_shore",
       "skill:construction:6",
       "building:cleared_plot",
       "recipe:build_cleared_plot",
@@ -5297,6 +5426,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:cook_limpet",
             "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
@@ -5315,6 +5445,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:cook_limpet",
             "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
@@ -5333,6 +5464,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:cook_limpet",
             "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
@@ -5351,6 +5483,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:cook_limpet",
             "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",
@@ -5369,6 +5502,7 @@
             "recipe:cook_fish",
             "recipe:cook_large_fish",
             "recipe:cook_crab",
+            "recipe:cook_limpet",
             "recipe:fill_water_pot",
             "recipe:seal_clay_jar",
             "recipe:cook_root_vegetable",

@@ -51,6 +51,22 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A sturdy seashell. Tool and craft material.",
   },
 
+  // Rocky Shore food
+  limpet: {
+    id: "limpet",
+    name: "Limpet",
+    description: "A small shellfish pried from the rocks. Chewy but nutritious.",
+    tags: ["food"],
+    foodValue: 1,
+  },
+  cooked_limpet: {
+    id: "cooked_limpet",
+    name: "Cooked Limpet",
+    description: "Fire-roasted limpets. Tender and satisfying.",
+    tags: ["food"],
+    foodValue: 2,
+  },
+
   // Phase 1 - Bamboo Tier
   bamboo_cane: {
     id: "bamboo_cane",
