@@ -1,17 +1,36 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { getBuildings, getRecipes, getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
 import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
 
+const STASH_THRESHOLD = 15;
+const STASH_KEY = "sb_stashed_resources";
+
+function loadStashed(): Set<string> {
+  try {
+    const raw = localStorage.getItem(STASH_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function saveStashed(set: Set<string>) {
+  try { localStorage.setItem(STASH_KEY, JSON.stringify([...set])); } catch { /* */ }
+}
+
 export function ResourcePanel({ state }: { state: GameState }) {
   const RESOURCES = getResources();
   const [showMoraleTip, setShowMoraleTip] = useState(false);
+  const [stashed, setStashed] = useState(loadStashed);
+  const [stashOpen, setStashOpen] = useState(false);
+  const [organizing, setOrganizing] = useState(false);
+
   const entries = Object.entries(state.resources).filter(([id, v]) => {
     if (v <= 0) return false;
     const def = RESOURCES[id];
-    // Always show food/water resources — they're consumed by expeditions, not just recipes
     if (def?.foodValue || def?.waterValue) return true;
     if (!resourceHasUse(id, state)) return false;
     return true;
@@ -25,6 +44,20 @@ export function ResourcePanel({ state }: { state: GameState }) {
         ? `${-moralePercent}% slower`
         : "normal speed";
 
+  const toggleStash = useCallback((id: string) => {
+    setStashed((prev: Set<string>) => {
+      const next = new Set<string>(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      saveStashed(next);
+      return next;
+    });
+  }, []);
+
+  const useStashSections = entries.length > STASH_THRESHOLD;
+  const pinnedEntries = useStashSections ? entries.filter(([id]) => !stashed.has(id)) : entries;
+  const stashedEntries = useStashSections ? entries.filter(([id]) => stashed.has(id)) : [];
+
   if (entries.length === 0) {
     return (
       <div className="resource-panel">
@@ -35,11 +68,37 @@ export function ResourcePanel({ state }: { state: GameState }) {
     );
   }
 
+  const renderChip = (id: string, amount: number) => {
+    const limit = getStorageLimit(state, id);
+    const atCap = isAtStorageCap(state, id);
+    return (
+      <span
+        key={id}
+        className={`resource-chip${atCap ? " at-cap" : ""}${organizing ? " organizing" : ""}`}
+        title={RESOURCES[id]?.description}
+        onClick={organizing ? () => toggleStash(id) : undefined}
+      >
+        <GameIcon id={id as ResourceId} size={16} /> {RESOURCES[id]?.name ?? id}
+        <>
+          :{" "}
+          <span className="amount">
+            {amount}/{limit}
+          </span>
+        </>
+        {organizing && (
+          <span className="stash-badge" title={stashed.has(id) ? "Show" : "Stash"}>
+            {stashed.has(id) ? "+" : "−"}
+          </span>
+        )}
+      </span>
+    );
+  };
+
   return (
     <div className="resource-panel">
       <span
         className={`resource-chip morale-chip${state.morale <= 25 ? " low-morale" : ""}`}
-        onClick={() => setShowMoraleTip((v) => !v)}
+        onClick={() => setShowMoraleTip((v: boolean) => !v)}
         title={`${moraleLabel} — click for details`}
       >
         Morale:{" "}
@@ -61,25 +120,27 @@ export function ResourcePanel({ state }: { state: GameState }) {
           <MoraleExplainer state={state} moraleLabel={moraleLabel} />
         </div>
       )}
-      {entries.map(([id, amount]) => {
-        const limit = getStorageLimit(state, id);
-        const atCap = isAtStorageCap(state, id);
-        return (
-          <span
-            key={id}
-            className={`resource-chip${atCap ? " at-cap" : ""}`}
-            title={RESOURCES[id]?.description}
+      {pinnedEntries.map(([id, amount]) => renderChip(id, amount))}
+      {useStashSections && stashedEntries.length > 0 && (
+        <>
+          <button
+            className="resource-chip stash-toggle"
+            onClick={() => setStashOpen((v: boolean) => !v)}
           >
-            <GameIcon id={id as ResourceId} size={16} /> {RESOURCES[id]?.name ?? id}
-            <>
-              :{" "}
-              <span className="amount">
-                {amount}/{limit}
-              </span>
-            </>
-          </span>
-        );
-      })}
+            {stashOpen ? "▾" : "▸"} +{stashedEntries.length} more
+          </button>
+          {stashOpen && stashedEntries.map(([id, amount]) => renderChip(id, amount))}
+        </>
+      )}
+      {useStashSections && (
+        <button
+          className={`resource-chip stash-organize-btn${organizing ? " active" : ""}`}
+          onClick={() => setOrganizing((v: boolean) => !v)}
+          title={organizing ? "Done organizing" : "Choose which items to stash"}
+        >
+          {organizing ? "Done" : "Organize"}
+        </button>
+      )}
     </div>
   );
 }
