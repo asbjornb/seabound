@@ -738,23 +738,6 @@ export const RECIPES: RecipeDef[] = [
     repeatable: true,
     xpGain: 5,
   },
-  {
-    id: "cook_limpet",
-    name: "Cook Limpets",
-    description: "Roast limpets over the fire. Simple but filling.",
-    skillId: "cooking",
-    panel: "craft",
-    inputs: [
-      { resourceId: "limpet", amount: 2 },
-      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
-      { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
-    ],
-    output: { resourceId: "cooked_limpet", amount: 1 },
-    requiredBuildings: ["camp_fire"],
-    durationMs: 3000,
-    repeatable: true,
-    xpGain: 5,
-  },
 
   // ═══════════════════════════════════════
   // PHASE 2 — Clay & Pottery

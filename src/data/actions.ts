@@ -59,20 +59,6 @@ export const ACTIONS: ActionDef[] = [
     xpGain: 5,
   },
   {
-    id: "pry_limpets",
-    name: "Pry Limpets",
-    description: "Pry small shellfish from the rocks along the shore.",
-    skillId: "foraging",
-    panel: "gather",
-    durationMs: 4000,
-    drops: [
-      { resourceId: "limpet", amount: 1, chance: 0.55 },
-      { resourceId: "limpet", amount: 1, chance: 0.15 },
-    ],
-    requiredBiome: "rocky_shore",
-    xpGain: 8,
-  },
-  {
     id: "collect_dry_grass",
     name: "Collect Dry Grass",
     description: "Gather tough, sun-dried grass from the rocky shoreline.",
