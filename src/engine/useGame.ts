@@ -244,7 +244,7 @@ function processCompletionDiscoveries(
       addDiscovery(
         state,
         "building",
-        "With fire, your options have exploded — cooking, tools, and more. No path is wrong. Explore at your own pace!"
+        "New places, new materials, and now fire — your options are wide open. No path is wrong. Explore at your own pace!"
       );
     }
   }
