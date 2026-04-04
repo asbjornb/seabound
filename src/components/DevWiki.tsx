@@ -285,9 +285,9 @@ function AnalyticsDashboard() {
                 <th style={styles.th}>Milestone</th>
                 <th style={{ ...styles.th, textAlign: "right" }}>Reached</th>
                 <th style={{ ...styles.th, textAlign: "center" }}>%</th>
-                <th style={{ ...styles.th, textAlign: "right" }} title="Median Total (min)">Med. Total</th>
-                <th style={{ ...styles.th, textAlign: "right" }} title="Median Active (min)">Med. Active</th>
-                <th style={{ ...styles.th, textAlign: "right" }} title="Median Actions">Med. Actions</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Total (min)</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Active (min)</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Actions</th>
               </tr>
             </thead>
             <tbody>
