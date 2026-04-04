@@ -12,14 +12,14 @@ export const BIOMES: Record<string, BiomeDef> = {
     name: "Coconut Grove",
     order: 1,
   },
-  rocky_shore: {
-    id: "rocky_shore",
-    name: "Rocky Shore",
-    order: 2,
-  },
   bamboo_grove: {
     id: "bamboo_grove",
     name: "Bamboo Grove",
+    order: 2,
+  },
+  rocky_shore: {
+    id: "rocky_shore",
+    name: "Rocky Shore",
     order: 3,
   },
   jungle_interior: {

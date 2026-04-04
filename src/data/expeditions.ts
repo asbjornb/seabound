@@ -21,9 +21,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 20,
         description:
-          "You round the headland and discover a rocky stretch of shoreline — flat stones and tough grass everywhere!",
-        biomeDiscovery: "rocky_shore",
-        requiredBiomes: ["coconut_grove"],
+          "You spot a rocky headland in the distance, but the jungle blocks the way. You'd need to find a path through first.",
       },
       {
         weight: 25,
@@ -85,6 +83,48 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         weight: 37,
         description:
           "The jungle is thick and disorienting. You circle back to camp with nothing to show for it.",
+      },
+    ],
+  },
+  {
+    id: "explore_far_shore",
+    name: "Explore Far Shore",
+    description:
+      "Cut through the bamboo grove to reach the far side of the island. Costs 5 food per trip.",
+    skillId: "navigation",
+    durationMs: 10000,
+    foodCost: 5,
+    xpGain: 20,
+    requiredBiomes: ["bamboo_grove"],
+    hideWhenAllFound: true,
+    outcomes: [
+      {
+        weight: 20,
+        description:
+          "You push through the bamboo and emerge on a windswept rocky shore — flat stones and tough grass everywhere!",
+        biomeDiscovery: "rocky_shore",
+      },
+      {
+        weight: 25,
+        description:
+          "You find some useful stones scattered along the far shoreline.",
+        drops: [
+          { resourceId: "flat_stone", amount: 2 },
+          { resourceId: "chert", amount: 1, chance: 0.4 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "You gather dry grass from the windswept cliffs above the shore.",
+        drops: [
+          { resourceId: "dry_grass", amount: 3 },
+        ],
+      },
+      {
+        weight: 35,
+        description:
+          "The path through the bamboo is tangled and slow. You turn back before reaching the far shore.",
       },
     ],
   },

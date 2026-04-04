@@ -1180,6 +1180,12 @@
       "category": "navigation"
     },
     {
+      "id": "expedition:explore_far_shore",
+      "type": "expedition",
+      "label": "Explore Far Shore",
+      "category": "navigation"
+    },
+    {
       "id": "expedition:sail_nearby_island",
       "type": "expedition",
       "label": "Sail to Nearby Island",
@@ -3591,16 +3597,6 @@
     },
     {
       "from": "expedition:explore_beach",
-      "to": "biome:rocky_shore",
-      "relation": "discovers"
-    },
-    {
-      "from": "biome:coconut_grove",
-      "to": "expedition:explore_beach",
-      "relation": "requires_biome_discovered"
-    },
-    {
-      "from": "expedition:explore_beach",
       "to": "resource:flat_stone",
       "relation": "produces"
     },
@@ -3702,6 +3698,96 @@
     {
       "from": "expedition:explore_interior",
       "to": "resource:large_shell",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_far_shore",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:explore_far_shore",
+      "relation": "consumes"
+    },
+    {
+      "from": "biome:bamboo_grove",
+      "to": "expedition:explore_far_shore",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:explore_far_shore",
+      "to": "biome:rocky_shore",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:explore_far_shore",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_far_shore",
+      "to": "resource:chert",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_far_shore",
+      "to": "resource:dry_grass",
       "relation": "produces"
     },
     {
@@ -4533,6 +4619,7 @@
       "resource:fired_clay_pot",
       "action:fell_large_tree",
       "action:collect_dry_grass",
+      "expedition:explore_far_shore",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
       "expedition:sail_nearby_island",
@@ -4694,10 +4781,10 @@
       "skill:construction:8",
       "building:tended_garden",
       "building:firing_pit",
-      "action:comb_rocky_shore",
+      "expedition:explore_far_shore",
       "recipe:upgrade_tended_garden",
       "recipe:build_firing_pit",
-      "biome:rocky_shore",
+      "biome:bamboo_grove",
       "skill:construction:6",
       "building:cleared_plot",
       "recipe:build_cleared_plot",
