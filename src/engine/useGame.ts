@@ -229,7 +229,11 @@ function processCompletionDiscoveries(
 
   if (c.biomeDiscovery) {
     const name = c.biomeDiscovery.replace(/_/g, " ");
-    addDiscovery(state, "biome", `Discovered the ${name}`);
+    // Bamboo grove is the inflection point — unlocks tools, fiber, cordage, and the entire crafting tree
+    const extra = c.biomeDiscovery === "bamboo_grove"
+      ? ". Your options just exploded — new tools, crafts, and structures await. No path is wrong, explore at your own pace and enjoy the world opening up!"
+      : "";
+    addDiscovery(state, "biome", `Discovered the ${name}${extra}`);
   }
   if (c.buildingBuilt) {
     const bdef = BUILDINGS[c.buildingBuilt];

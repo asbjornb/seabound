@@ -11,19 +11,16 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   fishing: [
     {
       level: 2,
-      description: "+2% fish and crab chance from tidal pools",
-
+      description: "+5% crab chance from tidal pools",
       effects: [
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.02 },
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.05 },
       ],
     },
     {
       level: 3,
-      description: "+2% fish and crab chance from tidal pools",
+      description: "+10% fish chance from tidal pools",
       effects: [
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.02 },
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.10 },
       ],
     },
     {
