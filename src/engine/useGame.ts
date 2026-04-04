@@ -239,19 +239,19 @@ function processCompletionDiscoveries(
     if (c.buildingBuilt === "dugout" && !state.buildings.includes("raft")) {
       addDiscovery(state, "building", "A raft? Where you're going, you don't need rafts.");
     }
-    // Encourage player when camp fire opens up cooking + tools
-    if (c.buildingBuilt === "camp_fire") {
-      addDiscovery(
-        state,
-        "building",
-        "New places, new materials, and now fire — your options are wide open. No path is wrong. Explore at your own pace!"
-      );
-    }
   }
   if (c.toolCrafted) {
     const tdef = TOOLS[c.toolCrafted];
     const name = tdef?.name ?? c.toolCrafted.replace(/_/g, " ");
     addDiscovery(state, "tool", `Crafted ${name}`);
+    // Bamboo knife is the inflection point — first tool unlocks the entire crafting chain
+    if (c.toolCrafted === "bamboo_knife") {
+      addDiscovery(
+        state,
+        "tool",
+        "Your first real tool! Crafting, building, and new possibilities are wide open. No path is wrong — explore at your own pace."
+      );
+    }
   }
   if (c.newResources) {
     for (const resId of c.newResources) {
