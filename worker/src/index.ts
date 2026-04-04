@@ -53,9 +53,31 @@ async function handleAnalytics(
   const timestamp = Date.now();
   const key = `analytics/${date}/${timestamp}-${crypto.randomUUID().slice(0, 8)}.json`;
 
+  // Write raw file
   await env.BUCKET.put(key, body, {
     httpMetadata: { contentType: "application/json" },
   });
+
+  // Append to daily rollup (best-effort, race-safe via read-modify-write)
+  try {
+    const parsed = JSON.parse(body);
+    const newEvents: unknown[] = parsed.events ?? [parsed];
+    const rollupKey = `analytics-rollup/${date}.json`;
+    const existing = await env.BUCKET.get(rollupKey);
+    let events: unknown[] = [];
+    if (existing) {
+      try {
+        const data = JSON.parse(await existing.text());
+        events = data.events ?? [];
+      } catch { /* start fresh if corrupted */ }
+    }
+    events.push(...newEvents);
+    await env.BUCKET.put(rollupKey, JSON.stringify({ events }), {
+      httpMetadata: { contentType: "application/json" },
+    });
+  } catch {
+    // Rollup update is best-effort; raw file is already saved
+  }
 
   return json({ ok: true, key }, 200, cors);
 }
@@ -109,37 +131,37 @@ async function handleAnalyticsSummary(
   cors: Record<string, string>,
   daysBack: number,
 ): Promise<Response> {
-  // Collect all analytics files for the date range
+  // Read daily rollup files (1 per day) instead of individual event files
   const events: AnalyticsEvent[] = [];
   const now = new Date();
 
+  const rollupKeys: string[] = [];
   for (let d = 0; d < daysBack; d++) {
     const date = new Date(now);
     date.setDate(date.getDate() - d);
-    const prefix = `analytics/${date.toISOString().slice(0, 10)}/`;
-
-    let cursor: string | undefined;
-    do {
-      const listed = await env.BUCKET.list({ prefix, cursor, limit: 500 });
-      for (const obj of listed.objects) {
-        try {
-          const body = await env.BUCKET.get(obj.key);
-          if (!body) continue;
-          const parsed = JSON.parse(await body.text());
-          const batch = parsed.events ?? [parsed];
-          for (const e of batch) {
-            if (e.event) events.push(e);
-          }
-        } catch {
-          // skip malformed files
-        }
-      }
-      cursor = listed.truncated ? listed.cursor : undefined;
-    } while (cursor);
+    rollupKeys.push(`analytics-rollup/${date.toISOString().slice(0, 10)}.json`);
   }
 
-  // Aggregate per player
+  // Fetch all rollup files in parallel (max ~90 files vs thousands)
+  const results = await Promise.all(
+    rollupKeys.map((key) => env.BUCKET.get(key).catch(() => null)),
+  );
+  for (const body of results) {
+    if (!body) continue;
+    try {
+      const parsed = JSON.parse(await body.text());
+      const batch = parsed.events ?? [];
+      for (const e of batch) {
+        if (e.event) events.push(e);
+      }
+    } catch {
+      // skip malformed rollups
+    }
+  }
+
+  // Aggregate per player (use Set for O(1) milestone lookups)
   const players = new Map<string, PlayerSummary>();
+  const playerMilestoneSets = new Map<string, Set<string>>();
 
   for (const e of events) {
     const pid = e.playerId ?? "unknown";
@@ -157,8 +179,10 @@ async function handleAnalyticsSummary(
         victory: false,
         device: "unknown",
       });
+      playerMilestoneSets.set(pid, new Set());
     }
     const p = players.get(pid)!;
+    const ms = playerMilestoneSets.get(pid)!;
     const ts = new Date(e.ts).toISOString();
     if (ts < p.firstSeen) p.firstSeen = ts;
     if (ts > p.lastSeen) p.lastSeen = ts;
@@ -169,7 +193,6 @@ async function handleAnalyticsSummary(
         p.device = e.screenWidth < 768 ? "mobile" : "desktop";
       }
     }
-    // Always update to latest known values
     if (e.totalPlayTimeMs != null && e.totalPlayTimeMs > p.totalPlayTimeMs) {
       p.totalPlayTimeMs = e.totalPlayTimeMs;
     }
@@ -185,7 +208,8 @@ async function handleAnalyticsSummary(
     if (e.phase) p.lastPhase = e.phase;
     if (e.victory) p.victory = true;
 
-    if (e.event === "milestone" && e.milestoneId && !p.milestones.includes(e.milestoneId)) {
+    if (e.event === "milestone" && e.milestoneId && !ms.has(e.milestoneId)) {
+      ms.add(e.milestoneId);
       p.milestones.push(e.milestoneId);
     }
   }
@@ -224,9 +248,18 @@ async function handleAnalyticsSummary(
 
   const msToMin = (ms: number | null) => ms != null ? Math.round(ms / 60000) : null;
 
+  // Pre-compute milestone reach counts using Sets
+  const milestoneCounts = new Map<string, number>();
+  for (const mid of milestoneIds) milestoneCounts.set(mid, 0);
+  for (const ms of playerMilestoneSets.values()) {
+    for (const mid of milestoneIds) {
+      if (ms.has(mid)) milestoneCounts.set(mid, milestoneCounts.get(mid)! + 1);
+    }
+  }
+
   const totalPlayers = players.size;
   const funnel = milestoneIds.map((mid) => {
-    const reached = [...players.values()].filter((p) => p.milestones.includes(mid)).length;
+    const reached = milestoneCounts.get(mid)!;
     return {
       milestone: mid,
       reached,
@@ -258,11 +291,15 @@ async function handleAnalyticsSummary(
     ).size,
     returningPlayers,
     returnRate: totalPlayers > 0 ? Math.round((returningPlayers / totalPlayers) * 100) : 0,
-    deviceBreakdown: {
-      mobile: [...players.values()].filter((p) => p.device === "mobile").length,
-      desktop: [...players.values()].filter((p) => p.device === "desktop").length,
-      unknown: [...players.values()].filter((p) => p.device === "unknown").length,
-    },
+    deviceBreakdown: (() => {
+      const counts = { mobile: 0, desktop: 0, unknown: 0 };
+      for (const p of players.values()) {
+        if (p.device === "mobile") counts.mobile++;
+        else if (p.device === "desktop") counts.desktop++;
+        else counts.unknown++;
+      }
+      return counts;
+    })(),
     funnel,
     dropOff,
     victories: [...players.values()].filter((p) => p.victory).length,
