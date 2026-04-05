@@ -1,7 +1,48 @@
 {
   "meta": {
-    "oldestReviewed": null,
+    "oldestReviewed": "4056c6c02d7bf1fa95b9f835ea3d0b7fe86281bc",
     "newestReviewed": "b3af74b80431c92560d739cbb02e08947de77a48"
   },
-  "entries": []
+  "entries": [
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Add biome discovery modal with banner images that appears when discovering new biomes",
+        "Add depth filter to dependency graph focus mode—limit traversal to 1-10 steps from a focused node to see just the next few unlocks without the full tree",
+        "Add new 'Comb Rock Pools' action for Rocky Shore that gives 35% chance for crabs and 15% chance for fish",
+        "Add new 'Rock Pool Cache' building that provides +3 storage for fish, crabs, and shells",
+        "Apply all Fishing skill milestones to both Wade Tidal Pool and Comb Rock Pools actions",
+        "Fix expedition progress bar to show only undiscovered biomes for the current expedition instead of all undiscovered biomes globally",
+        "Fix mobile modal display issue where taps during animation could dismiss modals before they become visible",
+        "Fix modal rendering layering issues on Chrome Android by rendering modals inline instead of in a separate portal",
+        "Improve Spear Fishing: now has 15% chance to catch large fish and 15% chance to catch crabs, plus 10% faster action speed at Fishing level 8",
+        "Remove building toast notifications — settlement panel already displays new buildings clearly",
+        "Replace small text toast notifications with full-screen modal showing biome name, banner image, and discovery flavor text"
+      ]
+    },
+    {
+      "date": "2026-04-04",
+      "changes": [
+        "Add collapsible stash section to resource panel for organizing items when inventory exceeds 15 items",
+        "Add encouraging messages when discovering the Bamboo Grove and building the Camp Fire",
+        "Add grid view toggle to inventory panel for compact icon-only display",
+        "Improve early game food production pacing with stronger early fishing bonuses",
+        "Increase Fishing Level 2 milestone: now grants +5% crab chance (previously +2% fish and crab)",
+        "Increase Fishing Level 3 milestone: now grants +10% fish chance (previously +2% fish and crab)",
+        "Move tools section below items in inventory (tools don't change often)",
+        "Save inventory view preference (list/grid) to local storage",
+        "Show building discovery notifications in toast alerts alongside biome discoveries"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "changes": [
+        "Add item source information in inventory (shows which actions, recipes, stations, or expeditions produce each resource)",
+        "Fix bug where crop stations could exceed plot limits by counting each crop type separately instead of sharing plot slots",
+        "Make inventory items tap-to-expand to show detailed information",
+        "Replace small biome icons with panoramic banner headers in the gather tab for a more immersive visual experience",
+        "Show tool prerequisites on locked actions and recipes instead of hiding them completely"
+      ]
+    }
+  ]
 }
