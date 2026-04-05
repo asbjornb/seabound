@@ -9,6 +9,7 @@ interface Props {
   recipes: RecipeDef[];
   state: GameState;
   onCraft: (recipe: RecipeDef) => void;
+  onHighlightResources?: (ids: Set<string>) => void;
   queueMode?: boolean;
 }
 
@@ -24,7 +25,7 @@ function isOneTimeCraft(recipe: RecipeDef): boolean {
   return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !BUILDINGS[recipe.buildingOutput]?.maxCount));
 }
 
-export function CraftingPanel({ recipes, state, onCraft, queueMode }: Props) {
+export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, queueMode }: Props) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const BUILDINGS = getBuildings();
@@ -113,12 +114,15 @@ export function CraftingPanel({ recipes, state, onCraft, queueMode }: Props) {
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
 
               const isNew = !state.completedRecipes.includes(recipe.id);
+              const inputResourceIds = inputs.map((inp) => inp.resourceId);
               const showQueueHint = queueMode && !disabled;
               return (
                 <div
                   key={recipe.id}
                   className={`action-card ${disabled ? "disabled" : ""}`}
                   onClick={() => !disabled && onCraft(recipe)}
+                  onMouseEnter={() => onHighlightResources?.(new Set(inputResourceIds))}
+                  onMouseLeave={() => onHighlightResources?.(new Set())}
                 >
                   <div className="action-card-header">
                     <span className="action-name">

@@ -110,6 +110,7 @@ export default function App() {
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
+  const [highlightedResources, setHighlightedResources] = useState<Set<string>>(new Set());
   const isOldDomain = window.location.hostname === "seabound.pages.dev";
   const queueMode = game.state.queueMode;
 
@@ -389,7 +390,7 @@ export default function App() {
         {(hasAnyResource || hasAnyXp) && (
           <aside className="inventory-sidebar">
             {hasAnyXp && <SkillsPanel state={game.state} />}
-            {hasAnyResource && <InventoryPanel state={game.state} />}
+            {hasAnyResource && <InventoryPanel state={game.state} highlightedResources={highlightedResources} />}
           </aside>
         )}
 
@@ -588,6 +589,7 @@ export default function App() {
                 recipes={craftRecipes}
                 state={game.state}
                 onCraft={handleStartCraft}
+                onHighlightResources={setHighlightedResources}
                 queueMode={queueMode && !!game.state.currentAction}
               />
             )}
@@ -608,6 +610,7 @@ export default function App() {
                 state={game.state}
                 onBuild={handleStartCraft}
                 onStartAction={handleStartAction}
+                onHighlightResources={setHighlightedResources}
               />
             )}
             {activeTab === "explore" && (

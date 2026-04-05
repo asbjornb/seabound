@@ -68,7 +68,7 @@ const FILTER_LABELS: Record<FilterId, string> = {
 
 type ViewMode = "list" | "grid";
 
-export function InventoryPanel({ state }: { state: GameState }) {
+export function InventoryPanel({ state, highlightedResources }: { state: GameState; highlightedResources?: Set<string> }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -176,10 +176,11 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 const def = RESOURCES[id];
                 const limit = getStorageLimit(state, id);
                 const atCap = isAtStorageCap(state, id);
+                const isHighlighted = highlightedResources?.has(id);
                 return (
                   <div
                     key={id}
-                    className={`inventory-grid-cell${atCap ? " at-cap" : ""}`}
+                    className={`inventory-grid-cell${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}`}
                     title={`${def?.name ?? id}: ${amount}/${limit}`}
                   >
                     <GameIcon id={id as ResourceId} size={28} />
@@ -194,11 +195,12 @@ export function InventoryPanel({ state }: { state: GameState }) {
                 const def = RESOURCES[id];
                 const limit = getStorageLimit(state, id);
                 const atCap = isAtStorageCap(state, id);
+                const isHighlighted = highlightedResources?.has(id);
                 const isExpanded = expandedId === id;
                 return (
                   <div
                     key={id}
-                    className={`inventory-item${atCap ? " at-cap" : ""}${isExpanded ? " expanded" : ""}`}
+                    className={`inventory-item${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}${isExpanded ? " expanded" : ""}`}
                     onClick={() => toggleExpand(id)}
                   >
                     <div className="inventory-item-header">

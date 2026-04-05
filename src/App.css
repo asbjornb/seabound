@@ -1619,6 +1619,10 @@ body {
 .inventory-grid-cell.at-cap {
   border-color: var(--warning);
 }
+.inventory-grid-cell.highlighted {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 40%, transparent);
+}
 .grid-cell-count {
   font-size: 0.6rem;
   color: var(--success);
@@ -1646,7 +1650,7 @@ body {
   border-radius: 6px;
   padding: 8px 10px;
   box-shadow: var(--card-shadow);
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 
@@ -1660,6 +1664,11 @@ body {
 
 .inventory-item.at-cap {
   border-color: var(--warning);
+}
+
+.inventory-item.highlighted {
+  border-color: var(--accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .inventory-item-header {
