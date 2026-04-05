@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "dfb5ba8dacc20f396f3b9f5fb7c336bfcdfdbf14",
+    "oldestReviewed": "ff2ecba449b02536299a258578049e2b13f53d4c",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -271,41 +271,84 @@
     {
       "date": "2026-03-28",
       "changes": [
+        "Add 'Stop if full' button to automatically stop actions when output storage reaches capacity",
         "Add NEW badge to uncompleted actions and recipes to help them stand out",
         "Add data-driven game configuration - all game content (resources, recipes, buildings, skills, biomes) can now be customized via mods",
+        "Add loot/drop table display to expedition cards showing weighted drops by probability",
         "Add mod icon support: export mod packs as .zip files with bundled custom icons",
         "Add mod management system - import, export, and switch between game mods from Settings",
         "Allow importing mod packs from .zip files containing icons; legacy .json imports still supported",
         "Change missing recipe input color from blue to orange for better visibility",
         "Change tool requirement label from 'Requires' to 'Uses' for clarity",
         "Display effective morale gain on crafting cards when soft cap applies (e.g. '+2 Morale (+1 actual — soft cap above 100)')",
+        "Display remaining craft count in progress bar when inputs are running low",
         "Fix 'stop if full' setting now persists when switching between actions instead of resetting",
         "Fix actions now properly validate required buildings before starting",
         "Fix bug where recipes were hidden if their materials weren't properly marked as discovered",
         "Fix expeditions continuing when player lacks sufficient food or water for the next cycle",
         "Fix inventory panel visibility on mobile with dedicated tab",
         "Fix mod icons to display custom artwork from imported mods instead of only static fallbacks",
+        "Fix progress bar to stay visible while scrolling",
         "Fix repeatable crafts continuing when player can no longer afford the next cycle",
         "Fix stackable buildings (like farming plots) now correctly respect their maximum count limit",
         "Fix tasks can no longer start without required tools or resources",
+        "Fix wild seeds UI incorrectly limiting deployments to 1 despite having multiple farming plots",
         "Hide char_log_interior and scrape_hull recipes after dugout is built, since they're no longer needed",
         "Hide gathering action drops that are no longer used in any recipes",
         "Hide inventory and resource panel items with no remaining use in recipes (except food/water)",
         "Hide stone flake and blade recipes from crafting panel once their outputs are no longer needed",
         "Hide twist cordage recipe once fiber loom is built (braid cordage is strictly better)",
         "Improve content extensibility - mods can add custom resources, recipes, skills, and other game content with full validation",
+        "Improve mobile layout by stacking sections vertically instead of using exclusive tabs",
         "Improve morale speed label consistency: now shows '% faster', '% slower', or 'normal speed' for clarity",
         "Improve recipe display by hiding redundant material requirements that are already listed as inputs",
+        "Loot tables now update dynamically based on discovered biomes",
         "Mobile devices retain skills modal behavior; desktop shows skills permanently in sidebar",
+        "Move Inventory to a modal overlay on mobile (desktop still shows sidebar)",
+        "Move Skills to a modal overlay (opens as popup instead of tab)",
         "Reduce weaving requirement for basket trap from level 6 to level 5",
         "Remove weaving 5 skill requirement from braid cordage (now only requires fiber loom building)",
         "Reorganize weaving milestones: twist cordage bonuses now unlock at Weaving 2-3 instead of 2 and 5",
+        "Replace tab navigation with collapsible accordion sections for Gather, Craft, Build, and Explore",
         "Restore saved progress when returning to a previously-active action",
         "Restore tab-based navigation layout for better overview and reduced scrolling",
         "Save partial progress when switching between actions so you don't lose time already invested in the current cycle",
+        "Show contextual summaries on collapsed section headers (recipe count, station ready count, current action name)",
+        "Show input resource amounts and output storage status in the progress bar for crafting actions",
         "Show morale speed bonus (+X% / -X%) directly on the morale display in the top panel so you always see the effect",
         "Skills panel now displays in desktop sidebar alongside inventory for easier access",
         "Style recipe 'Uses' tool/item text green to match satisfied requirements"
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "changes": [
+        "Add 'Hide flavor text' setting to reduce visual clutter on action cards, inventory items, and building cards",
+        "Add alternative feedback options: GitHub issues and direct email",
+        "Add feedback banner at bottom of page with anonymous feedback form",
+        "Add fun discovery message when building a dugout before ever crafting a raft",
+        "Add new discovery outcome to dugout voyages: discover nearby islands with obsidian",
+        "Add vessel tier system: dugout now satisfies any expedition requiring a raft",
+        "Always show percentage for all drops including 100% guaranteed items",
+        "Clarify Fiber Loom unlock text to show that Weaving skill level 5 is also required to access braiding",
+        "Display drops vertically (one per line) instead of comma-separated for better readability",
+        "Hide raft recipe from crafting menu once you've built a dugout",
+        "Reduce Bamboo Knife crafting XP reward from 12 to 8",
+        "Reduce Bamboo Knife crafting time from 4s to 3s",
+        "Simplify Bamboo Knife recipe to require only 1 bamboo splinter (no longer needs rough fiber)",
+        "Sort drops by chance descending (guaranteed drops appear first)"
+      ]
+    },
+    {
+      "date": "2026-03-23",
+      "changes": [
+        "Add tag-based recipe inputs system to support flexible ingredient combinations",
+        "Change voyage provisions recipe to require 5 different foods instead of 2 cooked fish + 3 coconut",
+        "Move Dry Fiber recipe to Crafting skill (no level requirement)",
+        "Move Sealed Clay Jar recipe to Cooking skill (requires Cooking level 12, down from Preservation 15)",
+        "Move Sun-dried mastery milestone to Crafting level 3 (50% chance to double Dry Fiber output)",
+        "Move Voyage Provisions recipe to Cooking skill (no level requirement)",
+        "Remove Preservation skill — recipes merged into Cooking and Crafting"
       ]
     }
   ]
