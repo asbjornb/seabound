@@ -136,6 +136,42 @@ body {
   padding: 0 4px;
 }
 
+/* What's New banner */
+.whats-new-bar {
+  background: #1a3a5c;
+  color: #e8e4d8;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.whats-new-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.whats-new-title {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+.whats-new-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.whats-new-list {
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  line-height: 1.5;
+}
+.whats-new-list li {
+  margin-bottom: 1px;
+}
+
 /* Header */
 .header {
   display: flex;

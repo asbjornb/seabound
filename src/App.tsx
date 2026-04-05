@@ -24,6 +24,7 @@ import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { VictoryScreen } from "./components/VictoryScreen";
+import { WhatsNew } from "./components/WhatsNew";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
 import { isRoutinesUnlocked } from "./data/routines";
@@ -296,6 +297,7 @@ export default function App() {
           <button className="migrate-dismiss" onClick={() => setMigrateBannerDismissed(true)}><CloseIcon size={12} /></button>
         </div>
       )}
+      <WhatsNew />
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
