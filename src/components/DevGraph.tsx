@@ -89,6 +89,7 @@ export function DevGraph() {
   const [focusDirection, setFocusDirection] = useState<FocusDirection>("upstream");
   const [focusMode, setFocusMode] = useState<FocusMode>("greedy");
   const [hiddenTypes, setHiddenTypes] = useState<Set<string>>(new Set());
+  const [focusDepth, setFocusDepth] = useState<number | null>(null);
 
   const toggleHiddenType = useCallback((type: string) => {
     setHiddenTypes(prev => {
@@ -100,9 +101,9 @@ export function DevGraph() {
   }, []);
 
   const { nodes: filteredNodes, edges: filteredEdges } = useMemo(() => {
-    const base = getFilteredData(filter, selectedSkill, focusTarget, focusDirection, focusMode);
+    const base = getFilteredData(filter, selectedSkill, focusTarget, focusDirection, focusMode, focusDepth ?? undefined);
     return applyTypeHiding(base.nodes, base.edges, hiddenTypes);
-  }, [filter, selectedSkill, focusTarget, focusDirection, focusMode, hiddenTypes]);
+  }, [filter, selectedSkill, focusTarget, focusDirection, focusMode, focusDepth, hiddenTypes]);
 
   // Warning node IDs visible in current filter (used to dim out-of-view warnings)
   const visibleWarningIds = useMemo(() => {
@@ -344,6 +345,12 @@ export function DevGraph() {
               <button style={focusMode === "greedy" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusMode("greedy")}>Greedy</button>
               <button style={focusMode === "all" ? styles.filterActive : styles.filterBtn} onClick={() => setFocusMode("all")}>All paths</button>
             </>)}
+            <span style={styles.separator}>|</span>
+            <span style={{ color: "#5a7a6a", fontSize: "0.75rem" }}>Depth:</span>
+            <button style={focusDepth === null ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDepth(null)}>All</button>
+            {[1, 2, 3, 4, 6, 10].map(d => (
+              <button key={d} style={focusDepth === d ? styles.filterActive : styles.filterBtn} onClick={() => setFocusDepth(d)}>{d}</button>
+            ))}
           </div>
         )}
         {filter === "skill_gates" && (
