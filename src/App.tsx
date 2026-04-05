@@ -243,7 +243,7 @@ export default function App() {
     [game.state]
   );
   const undiscoveredBiomes = useMemo(
-    () => selectUndiscoveredBiomeCount(game.state),
+    () => selectUndiscoveredBiomeCount(game.state, game.state.currentAction?.expeditionId),
     [game.state]
   );
 
