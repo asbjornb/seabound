@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "fbd34c79ade7739cc55a0839215e7a5ef4d9a0de",
+    "oldestReviewed": "dfb5ba8dacc20f396f3b9f5fb7c336bfcdfdbf14",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -257,11 +257,55 @@
         "Ensure players can always fill storage with \"stop at full\" before penalty takes effect",
         "Fenced Perimeter now grants +5 max woven baskets (increases capacity from 20 to 25)",
         "Fix XP diminishing returns to scale with storage capacity expansions",
+        "Fix coconuts and other food/water resources no longer disappearing from gather drops",
         "Fix crafting recipe durations to now benefit from skill milestones (previously only gathering actions got this bonus)",
         "Fix expedition durations to now benefit from skill milestones (previously only gathering actions got this bonus)",
         "Fix farming seeds and corms being incorrectly filtered from action drops",
+        "Fix food and water resources now properly appear in action UI",
+        "Fix gathering stopping prematurely when one output resource fills up — now correctly continues as long as any output has available storage",
+        "Fix stop-if-full feature to correctly pause actions when output storage is full (was incorrectly skipping actions with rare drops)",
         "Remove Construction skill requirement from Dugout assembly — now only gated by the tree-felling chain",
         "Show morale gain on Maintain Camp recipe in the Settlement panel, including soft cap warning when morale is above 100"
+      ]
+    },
+    {
+      "date": "2026-03-28",
+      "changes": [
+        "Add NEW badge to uncompleted actions and recipes to help them stand out",
+        "Add data-driven game configuration - all game content (resources, recipes, buildings, skills, biomes) can now be customized via mods",
+        "Add mod icon support: export mod packs as .zip files with bundled custom icons",
+        "Add mod management system - import, export, and switch between game mods from Settings",
+        "Allow importing mod packs from .zip files containing icons; legacy .json imports still supported",
+        "Change missing recipe input color from blue to orange for better visibility",
+        "Change tool requirement label from 'Requires' to 'Uses' for clarity",
+        "Display effective morale gain on crafting cards when soft cap applies (e.g. '+2 Morale (+1 actual — soft cap above 100)')",
+        "Fix 'stop if full' setting now persists when switching between actions instead of resetting",
+        "Fix actions now properly validate required buildings before starting",
+        "Fix bug where recipes were hidden if their materials weren't properly marked as discovered",
+        "Fix expeditions continuing when player lacks sufficient food or water for the next cycle",
+        "Fix inventory panel visibility on mobile with dedicated tab",
+        "Fix mod icons to display custom artwork from imported mods instead of only static fallbacks",
+        "Fix repeatable crafts continuing when player can no longer afford the next cycle",
+        "Fix stackable buildings (like farming plots) now correctly respect their maximum count limit",
+        "Fix tasks can no longer start without required tools or resources",
+        "Hide char_log_interior and scrape_hull recipes after dugout is built, since they're no longer needed",
+        "Hide gathering action drops that are no longer used in any recipes",
+        "Hide inventory and resource panel items with no remaining use in recipes (except food/water)",
+        "Hide stone flake and blade recipes from crafting panel once their outputs are no longer needed",
+        "Hide twist cordage recipe once fiber loom is built (braid cordage is strictly better)",
+        "Improve content extensibility - mods can add custom resources, recipes, skills, and other game content with full validation",
+        "Improve morale speed label consistency: now shows '% faster', '% slower', or 'normal speed' for clarity",
+        "Improve recipe display by hiding redundant material requirements that are already listed as inputs",
+        "Mobile devices retain skills modal behavior; desktop shows skills permanently in sidebar",
+        "Reduce weaving requirement for basket trap from level 6 to level 5",
+        "Remove weaving 5 skill requirement from braid cordage (now only requires fiber loom building)",
+        "Reorganize weaving milestones: twist cordage bonuses now unlock at Weaving 2-3 instead of 2 and 5",
+        "Restore saved progress when returning to a previously-active action",
+        "Restore tab-based navigation layout for better overview and reduced scrolling",
+        "Save partial progress when switching between actions so you don't lose time already invested in the current cycle",
+        "Show morale speed bonus (+X% / -X%) directly on the morale display in the top panel so you always see the effect",
+        "Skills panel now displays in desktop sidebar alongside inventory for easier access",
+        "Style recipe 'Uses' tool/item text green to match satisfied requirements"
       ]
     }
   ]
