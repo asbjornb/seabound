@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
 import { CloseIcon } from "./CloseIcon";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
@@ -249,5 +248,5 @@ export function FeedbackQuestion({
     </div>
   );
 
-  return createPortal(modal, document.body);
+  return modal;
 }
