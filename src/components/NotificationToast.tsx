@@ -27,7 +27,7 @@ export function NotificationToast({
     const newEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
       if (entry.id <= lastSeenDiscoveryId) break;
-      if (entry.type === "biome" || entry.type === "building") {
+      if (entry.type === "biome") {
         newEntries.push(entry);
       }
     }

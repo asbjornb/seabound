@@ -1691,7 +1691,6 @@ body {
 
 .toast-biome { border-left: 3px solid var(--success); color: var(--success); }
 .toast-level { border-left: 3px solid var(--warning); color: var(--warning); }
-.toast-building { border-left: 3px solid var(--accent); color: var(--accent); }
 .toast-resource { border-left: 3px solid var(--bar-xp); color: var(--bar-xp); }
 .toast-craft { border-left: 3px solid #c084fc; color: #c084fc; }
 
