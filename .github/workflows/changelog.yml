@@ -88,6 +88,7 @@ jobs:
           IMPORTANT RULES:
           - Only include changes that PLAYERS would notice: new content, UI changes, gameplay fixes, balance changes, new features, quality-of-life improvements.
           - SKIP internal/dev changes: analytics, CI/CD, development tools, documentation, refactoring with no visible effect, build config, deployment changes, code cleanup.
+          - SKIP dev wiki and dependency/progression graph changes — these are developer-only tools accessed via ?dev query param, not player-facing features.
           - SKIP dependency updates unless they visibly affect the game.
           - Write from the player's perspective. Say "Fixed X" not "Refactored Y module". Say "Added new recipe: Z" not "Created recipe entry in data file".
           - Be concise — one line per change, no fluff.
