@@ -3,6 +3,7 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getPhases,
   getRecipeById,
   getResources,
   getStationById,
@@ -757,7 +758,19 @@ export function useGame() {
     setState((prev) => {
       if (prev.seenPhases.includes(phaseId)) return prev;
       const next = structuredClone(prev);
-      next.seenPhases.push(phaseId);
+      // Also mark all lower-order phases as seen (in case player skipped them)
+      const phases = getPhases();
+      const target = phases.find((p) => p.id === phaseId);
+      if (target) {
+        for (const p of phases) {
+          if (p.order <= target.order && !next.seenPhases.includes(p.id)) {
+            next.seenPhases.push(p.id);
+          }
+        }
+      } else {
+        next.seenPhases.push(phaseId);
+      }
+      checkMilestones(next);
       return next;
     });
   }, []);

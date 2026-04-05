@@ -109,7 +109,7 @@ const MILESTONES: { id: string; check: (state: GameState) => boolean }[] = [
   // Phase milestones (funnel)
   { id: "phase_bamboo", check: (s) => s.seenPhases.includes("bamboo") },
   { id: "phase_fire", check: (s) => s.seenPhases.includes("fire") },
-  { id: "phase_stone_clay", check: (s) => s.seenPhases.includes("stone_clay") },
+  { id: "phase_stone_clay", check: (s) => s.seenPhases.includes("stone") },
   { id: "phase_maritime", check: (s) => s.seenPhases.includes("maritime") },
   { id: "phase_voyage", check: (s) => s.seenPhases.includes("voyage") },
   // First skill level-ups (early engagement)
