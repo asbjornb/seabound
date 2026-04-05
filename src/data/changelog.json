@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "0a2b06e17dce5404accb83680ac62bb4008f9b01",
+    "oldestReviewed": "fbd34c79ade7739cc55a0839215e7a5ef4d9a0de",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -208,11 +208,60 @@
     {
       "date": "2026-03-30",
       "changes": [
+        "Add 'Escape' phase triggered by building the outrigger canoe",
+        "Add 'Fit Outrigger & Sail' recipe: requires sail + 3 rope + 6 bamboo (Construction 8)",
+        "Add 'Oceanic Voyage' expedition: final journey requiring outrigger canoe and 10 voyage provisions",
+        "Add Outrigger Canoe building as the final vessel upgrade from dugout",
         "Add Search button in header that opens a searchable modal overlay with relevance-ranked results",
         "Add global search feature to find actions, recipes, stations, and expeditions by name, inputs, or outputs",
+        "Add hover hint to morale chip indicating it can be clicked for details",
+        "Add new 'Tend' tab (🌱) for managing stations like fish traps and crop plots, separate from building construction",
         "Add quick-start buttons in search results to immediately begin actions or jump to relevant tabs",
+        "Add victory screen displaying total skill levels, biomes discovered, and buildings built",
         "Auto-redeploy stations like basket traps and pandanus groves after collection, eliminating the extra click to set them again",
-        "Fix bug where base building recipes would reappear after upgrading to a higher-tier building (e.g., sleeping mat recipe showing again after building hammock)"
+        "Dugout voyages now return empty fired clay pots (85% chance per pot) as rewards",
+        "Fix bug where base building recipes would reappear after upgrading to a higher-tier building (e.g., sleeping mat recipe showing again after building hammock)",
+        "Fix farmland recipes being incorrectly blocked when the farmland group is at max capacity",
+        "Fix farmland upgrade chain (Cleared Plot → Tended Garden → Farm Plot) now correctly shares a combined limit of 3 total farmland instead of allowing 9",
+        "Fix incorrect comment for Kiln recipe (was Construction 25)",
+        "Improve morale tooltip with expanded panel showing speed effects, decay rate, restoration methods, and comfort building status",
+        "Increase Kiln building requirement from Construction 10 to Construction 13",
+        "Oceanic voyage now returns empty fired clay pots and sealed clay jars on completion",
+        "Remove direct water collection action — fresh water now requires building a well and using the \"Fill Water Pot\" recipe",
+        "Rename 'Voyage by Dugout' expedition to 'Sail to Far Island'",
+        "Station ready-to-collect notifications now direct you to the Tend tab instead of Build tab",
+        "Stations panel moved from Build tab to dedicated Tend tab for better organization"
+      ]
+    },
+    {
+      "date": "2026-03-29",
+      "changes": [
+        "Add Grow Pandanus farming action requiring Farming level 8",
+        "Add Pandanus Cutting resource obtainable from Dugout Voyages",
+        "Add Pandanus Fiber system as a mid-game upgrade path alternative to coconut husk",
+        "Add Pandanus Grove building that auto-regrows pandanus leaves for harvesting",
+        "Add Pandanus fiber processing recipes: dry leaves, cut strips, weave cordage, twist rope, and sew sails",
+        "Add Rope and Sail resources crafted from pandanus fibers",
+        "Add farming skill milestone bonuses for Grow Pandanus and Harvest Pandanus Grove actions",
+        "Add pity system for biome discovery expeditions — failed discovery attempts gradually increase chances of finding new biomes, reducing extremely long discovery droughts",
+        "Add skill milestones for Construction: speed up all construction recipes",
+        "Add skill milestones for Cooking: cook fish faster, occasionally double cooked root vegetables, speed up all cooking, and pack provisions faster",
+        "Add skill milestones for Crafting: shape clay pots faster and speed up all crafting recipes",
+        "Add skill milestones for Farming: plant wild seeds faster",
+        "Add skill milestones for Foraging: gather coconuts faster, improve flat stone chances, and find extra driftwood",
+        "Add skill milestones for Navigation: discover new biomes more easily, speed up expeditions, and get better drops",
+        "Add skill milestones for Weaving: speed up all weaving recipes",
+        "Add skill milestones for Woodworking: harvest bamboo faster",
+        "Add three-tier comfort building system: Sleeping Mat, Hammock, and Thatched Hut that progressively slow morale decay during active play (20%, 35%, and 50% respectively)",
+        "Buildings can now provide bonuses to the max count of other stackable buildings",
+        "Ensure players can always fill storage with \"stop at full\" before penalty takes effect",
+        "Fenced Perimeter now grants +5 max woven baskets (increases capacity from 20 to 25)",
+        "Fix XP diminishing returns to scale with storage capacity expansions",
+        "Fix crafting recipe durations to now benefit from skill milestones (previously only gathering actions got this bonus)",
+        "Fix expedition durations to now benefit from skill milestones (previously only gathering actions got this bonus)",
+        "Fix farming seeds and corms being incorrectly filtered from action drops",
+        "Remove Construction skill requirement from Dugout assembly — now only gated by the tree-felling chain",
+        "Show morale gain on Maintain Camp recipe in the Settlement panel, including soft cap warning when morale is above 100"
       ]
     }
   ]
