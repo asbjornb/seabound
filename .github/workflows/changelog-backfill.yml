@@ -75,11 +75,11 @@ jobs:
               PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP '\(#\K[0-9]+(?=\))' || echo "")
             fi
 
-            # Get diff
+            # Get diff (use || true to avoid SIGPIPE exit 141 from head)
             if git rev-parse "$SHA^2" >/dev/null 2>&1; then
-              DIFF=$(git diff "$SHA^1...$SHA^2" -- . ':!src/data/changelog.json' | head -c 12000)
+              DIFF=$(git diff "$SHA^1...$SHA^2" -- . ':!src/data/changelog.json' | head -c 12000 || true)
             else
-              DIFF=$(git diff "$SHA^...$SHA" -- . ':!src/data/changelog.json' | head -c 12000)
+              DIFF=$(git diff "$SHA^...$SHA" -- . ':!src/data/changelog.json' | head -c 12000 || true)
             fi
 
             # Get PR info
@@ -154,6 +154,9 @@ jobs:
               echo "  Response: $(echo "$RESPONSE" | head -5)"
               continue
             fi
+
+            # Strip markdown code fences if present (e.g. ```json ... ```)
+            ENTRY=$(echo "$ENTRY" | sed '/^```/d')
 
             if echo "$ENTRY" | grep -q "NO_CHANGES"; then
               echo "  No user-facing changes"
