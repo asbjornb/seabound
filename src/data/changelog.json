@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "ff2ecba449b02536299a258578049e2b13f53d4c",
+    "oldestReviewed": "d872edd47fc83612be2f6ddadd3b7296b3f92228",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -343,12 +343,62 @@
       "date": "2026-03-23",
       "changes": [
         "Add tag-based recipe inputs system to support flexible ingredient combinations",
+        "Bamboo Knife gives 30% chance to yield +1 extra output when shredding coconut husk",
+        "Bamboo Knife is no longer a dead-end item in progression",
+        "Bamboo Knife now required to craft Bamboo Spear",
+        "Bamboo Knife speeds up Shred Coconut Husk and Split Bamboo Cane by 10%",
         "Change voyage provisions recipe to require 5 different foods instead of 2 cooked fish + 3 coconut",
+        "Fix dugout button in Dev Wiki that was incorrectly labeled as a resource instead of a building",
+        "Fix expedition food requirements now correctly choosing the cheapest food source instead of requiring all food types",
+        "Improve minimal upstream path algorithm to treat expedition food as fungible (any food option counts, not all of them)",
         "Move Dry Fiber recipe to Crafting skill (no level requirement)",
         "Move Sealed Clay Jar recipe to Cooking skill (requires Cooking level 12, down from Preservation 15)",
         "Move Sun-dried mastery milestone to Crafting level 3 (50% chance to double Dry Fiber output)",
         "Move Voyage Provisions recipe to Cooking skill (no level requirement)",
+        "Obsidian Blade now required to craft Basket Trap",
+        "Reduce minimal path calculation complexity by excluding optional speed bonuses (speeds_up, boosts_output edges are no longer required dependencies)",
         "Remove Preservation skill — recipes merged into Cooking and Crafting"
+      ]
+    },
+    {
+      "date": "2026-03-22",
+      "changes": [
+        "Remove skill level requirement from Fire Clay Pot recipe (now only gated by Firing Pit building availability)",
+        "Remove skill level requirement from Firing Pit recipe (now only gated by clay availability)"
+      ]
+    },
+    {
+      "date": "2026-03-21",
+      "changes": [
+        "Add Rocky Shore biome as a new discoverable area (accessible after coconut grove discovery)",
+        "Add Stone Hearth building upgrade that removes dry grass kindling requirement from all cooking recipes",
+        "Add Stone Hearth recipe (Construction 14, requires 8 flat stone, 4 clay, 2 cordage)",
+        "Add dry grass kindling requirement to cooking recipes (cooked fish, cooked large fish, cooked crab)",
+        "Add support for recipes requiring multiple skills at specific levels",
+        "Fix bug where resources were consumed at action start instead of completion, allowing players to start actions they couldn't actually afford",
+        "Fix drop line fishing not being available at Fishing level 8",
+        "Improve expedition system to gracefully stop if food or water runs out during a multi-cycle expedition instead of canceling the entire action",
+        "Merge stone and chert collection into single 'Comb Rocky Shore' action (4 second gather, yields flat stone or chert)",
+        "Move Crucible recipe from Preservation to Construction skill and reduce required skill level from 25 to 15",
+        "Move Fire Clay Pot recipe from Preservation to Crafting skill",
+        "Move dry grass collection to Rocky Shore biome (previously gated by Foraging 3)",
+        "Reduce Assemble dugout recipe skill requirement from Construction 18 to 8 — complete dugout canoes much sooner",
+        "Reduce Clay kiln recipe skill requirement from Construction 25 to 10 — build kilns much sooner",
+        "Reduce Fell large tree action skill requirement from Woodworking 15 to 10 — fell trees earlier",
+        "Reduce Firing pit recipe skill requirement from Construction 12 to 6 — unlock clay firing earlier",
+        "Reduce Raft recipe skill requirement from Construction 8 to 5 — craft rafts earlier",
+        "Reduce Smelting vessel recipe skill requirement from Preservation 30 to 25",
+        "Reduce Stone axe recipe skill requirement from Crafting 14 to 10 — access stone axes sooner",
+        "Remove skill gates from Char log and Scrape hull recipes — progression now depends on tools instead",
+        "Remove skill level requirement from shell adze recipe",
+        "Remove skill level requirements from bamboo tier recipes (split bamboo cane, bamboo knife, bow drill kit)",
+        "Remove skill level requirements from stone tool recipes (hammerstone, stone flake, stone blade, stone axe, obsidian blade) — now gated by material and tool dependencies instead",
+        "Rename Camp tab to Build for a consistent Gather → Craft → Build → Explore progression flow",
+        "Reorder main tabs to follow the logical Gather → Craft → Build → Explore sequence",
+        "Reorganize gather panel to group actions by biome instead of skill level",
+        "Shift core progression from skill levels to biome discovery and crafting chains — skill levels now gate efficiency improvements and advanced techniques only",
+        "Update Preservation skill description to focus on food preservation techniques",
+        "Update basket trap recipe to require both Weaving 6 and Fishing 8"
       ]
     }
   ]
