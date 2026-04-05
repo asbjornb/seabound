@@ -81,62 +81,7 @@ export function StationsPanel({
 
   return (
     <div>
-      {/* Active / ready stations */}
-      {activeStations.length > 0 && (
-        <>
-          <div className="section-title">
-            Active{readyCount > 0 && ` — ${readyCount} ready!`}
-          </div>
-          {sortedActiveStations.map(({ def, index, isReady, remaining, progress }) => {
-            if (!def) return null;
-            return (
-              <div
-                key={index}
-                className={`station-card ${isReady ? "station-ready" : ""}`}
-                onClick={(e) => isReady && handleCollect(index, e)}
-              >
-                <div className="action-card-header">
-                  <span className="action-name">{def.name}</span>
-                  <span className="action-time">
-                    {isReady ? "Ready!" : formatTime(remaining)}
-                  </span>
-                </div>
-                {!isReady && (
-                  <div className="progress-bar station-progress">
-                    <div
-                      className="progress-fill"
-                      style={{ width: `${progress * 100}%` }}
-                    />
-                  </div>
-                )}
-                {isReady && (
-                  <div className="station-collect-hint">Tap to collect</div>
-                )}
-                <div className="action-drops">
-                  Yields:{" "}
-                  {def.yields
-                    .filter((d) => (d.chance ?? 1) > 0)
-                    .map((d, i) => (
-                      <span key={i}>
-                        {i > 0 && ", "}
-                        {d.amount}x{" "}
-                        {RESOURCES[d.resourceId]?.name ?? d.resourceId}
-                        {d.chance != null && d.chance < 1
-                          ? ` (${Math.round(d.chance * 100)}%)`
-                          : ""}
-                      </span>
-                    ))}
-                </div>
-                <div className="action-xp">
-                  +{def.xpGain} {def.skillId} XP
-                </div>
-              </div>
-            );
-          })}
-        </>
-      )}
-
-      {/* Available stations to deploy */}
+      {/* Available stations to deploy — shown first so active stations growing below don't shift buttons */}
       {availableStations.length > 0 && (
         <>
           <div className="section-title">Deploy</div>
@@ -243,6 +188,61 @@ export function StationsPanel({
                 </div>
                 <div className="action-xp">
                   +{station.xpGain} {station.skillId} XP
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+
+      {/* Active / ready stations — below deploy so new entries don't push buttons */}
+      {activeStations.length > 0 && (
+        <>
+          <div className="section-title">
+            Active{readyCount > 0 && ` — ${readyCount} ready!`}
+          </div>
+          {sortedActiveStations.map(({ def, index, isReady, remaining, progress }) => {
+            if (!def) return null;
+            return (
+              <div
+                key={index}
+                className={`station-card ${isReady ? "station-ready" : ""}`}
+                onClick={(e) => isReady && handleCollect(index, e)}
+              >
+                <div className="action-card-header">
+                  <span className="action-name">{def.name}</span>
+                  <span className="action-time">
+                    {isReady ? "Ready!" : formatTime(remaining)}
+                  </span>
+                </div>
+                {!isReady && (
+                  <div className="progress-bar station-progress">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${progress * 100}%` }}
+                    />
+                  </div>
+                )}
+                {isReady && (
+                  <div className="station-collect-hint">Tap to collect</div>
+                )}
+                <div className="action-drops">
+                  Yields:{" "}
+                  {def.yields
+                    .filter((d) => (d.chance ?? 1) > 0)
+                    .map((d, i) => (
+                      <span key={i}>
+                        {i > 0 && ", "}
+                        {d.amount}x{" "}
+                        {RESOURCES[d.resourceId]?.name ?? d.resourceId}
+                        {d.chance != null && d.chance < 1
+                          ? ` (${Math.round(d.chance * 100)}%)`
+                          : ""}
+                      </span>
+                    ))}
+                </div>
+                <div className="action-xp">
+                  +{def.xpGain} {def.skillId} XP
                 </div>
               </div>
             );
