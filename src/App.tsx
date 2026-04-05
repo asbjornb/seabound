@@ -385,9 +385,20 @@ export default function App() {
             <div className="current-action">
               <div className="current-action-info">
                 <span className="current-action-name">{currentActionName}</span>
-                <button className="stop-btn" onClick={game.stopAction}>
-                  Stop
-                </button>
+                <div className="current-action-buttons">
+                  {queueUnlocked && (
+                    <button
+                      className={`queue-toggle${queueMode ? " active" : ""}`}
+                      onClick={() => setQueueMode((v) => !v)}
+                      title="When active, clicking an action queues it instead of switching"
+                    >
+                      Queue {queueMode ? "On" : "Off"}
+                    </button>
+                  )}
+                  <button className="stop-btn" onClick={game.stopAction}>
+                    Stop
+                  </button>
+                </div>
               </div>
               <div className="progress-bar">
                 <div
@@ -441,31 +452,25 @@ export default function App() {
                   </span>
                 )}
               </div>
-              {queueUnlocked && (
+              {game.state.actionQueue.length > 0 && (
                 <div className="action-queue-row">
-                  <button
-                    className={`queue-toggle${queueMode ? " active" : ""}`}
-                    onClick={() => setQueueMode((v) => !v)}
-                    title="When active, clicking an action queues it instead of switching"
-                  >
-                    Queue {queueMode ? "On" : "Off"}
-                  </button>
-                  {game.state.actionQueue.length > 0 && (
-                    <div className="queued-actions">
-                      {game.state.actionQueue.map((q, i) => (
-                        <span key={i} className="queued-action-tag">
-                          <GameIcon id={q.actionId} size={14} />
-                          {getQueuedActionName(q)}
-                        </span>
-                      ))}
-                      <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                  {queueMode && game.state.actionQueue.length === 0 && (
-                    <span className="queue-hint">Click an action to queue it next ({game.state.actionQueue.length}/{maxQueueSize})</span>
-                  )}
+                  <span className="queue-label">Next:</span>
+                  <div className="queued-actions">
+                    {game.state.actionQueue.map((q, i) => (
+                      <span key={i} className="queued-action-tag">
+                        <GameIcon id={q.actionId} size={14} />
+                        {getQueuedActionName(q)}
+                      </span>
+                    ))}
+                    <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              )}
+              {queueMode && game.state.actionQueue.length === 0 && (
+                <div className="action-queue-row">
+                  <span className="queue-hint">Click an action to queue it next ({game.state.actionQueue.length}/{maxQueueSize})</span>
                 </div>
               )}
             </div>

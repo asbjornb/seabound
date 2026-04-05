@@ -577,10 +577,13 @@ export function useGame() {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
       saveCurrentActionProgress(next);
-      resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       next.activeRoutine = null; // also stop any running routine
-      next.actionQueue = []; // also clear the queue
+      // If queue has items, let the next tick advance it (don't reset repetition count)
+      // If queue is empty, this is a full stop — reset repetition
+      if (next.actionQueue.length === 0) {
+        resetRepetitiveCountOnManualActionChange(next, null);
+      }
       return next;
     });
   }, []);

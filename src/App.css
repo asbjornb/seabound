@@ -821,6 +821,17 @@ body {
 .current-action-name {
   font-size: 0.85rem;
   font-weight: 600;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-action-buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .stop-btn {
@@ -908,7 +919,7 @@ body {
 }
 
 .queue-toggle {
-  padding: 2px 8px;
+  padding: 3px 10px;
   border: 1px solid var(--border);
   border-radius: 4px;
   background: var(--bg-card);
@@ -916,6 +927,12 @@ body {
   font-size: 0.72rem;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.queue-label {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  font-weight: 600;
 }
 
 .queue-toggle.active {
