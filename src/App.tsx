@@ -24,7 +24,7 @@ import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { VictoryScreen } from "./components/VictoryScreen";
-import { WhatsNew } from "./components/WhatsNew";
+import { WhatsNew, ChangelogModal } from "./components/WhatsNew";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
@@ -91,6 +91,7 @@ export default function App() {
   const activeModId = getActiveModId();
   const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
   const [flyups, setFlyups] = useState<FlyupItem[]>([]);
+  const [changelogOpen, setChangelogOpen] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
@@ -625,6 +626,10 @@ export default function App() {
 
       </div>
 
+      {changelogOpen && (
+        <ChangelogModal onClose={() => setChangelogOpen(false)} />
+      )}
+
       {modPanelOpen && (
         <ModPanel
           onClose={() => setModPanelOpen(false)}
@@ -694,6 +699,19 @@ export default function App() {
                     }}
                   />
                 </label>
+              </div>
+
+              <div className="settings-section">
+                <div className="settings-section-title">About</div>
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    setChangelogOpen(true);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Changelog
+                </button>
               </div>
 
               <div className="settings-section">
