@@ -1990,6 +1990,132 @@ body {
 .phase-chapter-voyage .chapter-name { color: #f0d060; text-shadow: 0 0 24px rgba(240, 208, 96, 0.6); }
 
 /* ═══════════════════════════════════════
+   Biome Discovery Modal
+   ═══════════════════════════════════════ */
+
+.biome-discovery-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 450;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  transition: background 0.6s ease, backdrop-filter 0.6s ease;
+  cursor: pointer;
+  padding: 24px;
+}
+
+.biome-discovery-overlay.visible {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.biome-discovery-overlay.exiting {
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+}
+
+.biome-discovery-card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6), 0 0 80px rgba(74, 222, 128, 0.08);
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.biome-discovery-overlay.visible .biome-discovery-card {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.biome-discovery-overlay.exiting .biome-discovery-card {
+  opacity: 0;
+  transform: scale(1.05) translateY(-10px);
+}
+
+.biome-discovery-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+}
+
+.biome-discovery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+}
+
+.biome-discovery-image-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: linear-gradient(to top, var(--bg-card), transparent);
+  pointer-events: none;
+}
+
+.biome-discovery-content {
+  text-align: center;
+  padding: 16px 24px 24px;
+}
+
+.biome-discovery-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--success);
+  margin-bottom: 6px;
+}
+
+.biome-discovery-name {
+  font-family: "Cinzel", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f6efe3;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+  letter-spacing: 0.04em;
+}
+
+.biome-discovery-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--success);
+  opacity: 0.4;
+  margin: 12px auto;
+}
+
+.biome-discovery-message {
+  font-size: 0.82rem;
+  color: var(--text);
+  opacity: 0.8;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.biome-discovery-tap {
+  margin-top: 20px;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  opacity: 0.5;
+  animation: tap-pulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════
    Victory Screen
    ═══════════════════════════════════════ */
 

@@ -267,6 +267,8 @@ export interface DiscoveryEntry {
   type: DiscoveryType;
   message: string;
   timestamp: number;
+  /** For biome discoveries, the biome ID (used by the discovery modal) */
+  biomeId?: BiomeId;
 }
 
 export interface GameState {

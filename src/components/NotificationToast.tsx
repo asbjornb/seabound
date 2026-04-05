@@ -12,10 +12,12 @@ export function NotificationToast({
   discoveryLog,
   lastSeenDiscoveryId,
   onSeen,
+  onBiomeDiscovery,
 }: {
   discoveryLog: DiscoveryEntry[];
   lastSeenDiscoveryId: number;
   onSeen: (id: number) => void;
+  onBiomeDiscovery?: (entry: DiscoveryEntry) => void;
 }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -24,15 +26,15 @@ export function NotificationToast({
     if (discoveryLog.length === 0) return;
 
     // discoveryLog is newest-first (unshift), so index 0 is newest
-    const newEntries: DiscoveryEntry[] = [];
+    const newBiomeEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
       if (entry.id <= lastSeenDiscoveryId) break;
-      if (entry.type === "biome") {
-        newEntries.push(entry);
+      if (entry.type === "biome" && entry.biomeId) {
+        newBiomeEntries.push(entry);
       }
     }
 
-    if (newEntries.length === 0) {
+    if (newBiomeEntries.length === 0) {
       // Still mark latest as seen even if no biome toasts, so we don't re-scan next time
       if (discoveryLog[0].id > lastSeenDiscoveryId) {
         onSeen(discoveryLog[0].id);
@@ -43,14 +45,22 @@ export function NotificationToast({
     // Mark all current entries as seen
     onSeen(discoveryLog[0].id);
 
-    // Add new toasts
-    const toAdd = newEntries.slice(0, MAX_VISIBLE).reverse();
+    // Route biome discoveries to the modal handler
+    if (onBiomeDiscovery) {
+      // Oldest first so they queue in order
+      for (const entry of newBiomeEntries.slice().reverse()) {
+        onBiomeDiscovery(entry);
+      }
+      return;
+    }
+
+    // Fallback: show as toasts if no modal handler
+    const toAdd = newBiomeEntries.slice(0, MAX_VISIBLE).reverse();
     setToasts((prev) => {
       const next = [...prev, ...toAdd.map((e) => ({ entry: e, dismissing: false }))];
-      // Keep only the most recent toasts if too many pile up
       return next.slice(-MAX_VISIBLE);
     });
-  }, [discoveryLog, lastSeenDiscoveryId, onSeen]);
+  }, [discoveryLog, lastSeenDiscoveryId, onSeen, onBiomeDiscovery]);
 
   // Remove after dismiss animation
   const handleAnimationEnd = (id: number) => {
