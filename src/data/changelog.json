@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "28102ca9ece95790b01ae620ee883877e0ff10d2"
+    "newestReviewed": "2865cae60b7cc496b4d0980e0089e9b5dacfa5a2"
   },
   "entries": [
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Fix dry grass action never stopping when output is full"
+      ]
+    },
     {
       "date": "2026-04-05",
       "changes": [
