@@ -244,7 +244,7 @@ export interface PlacedStation {
 
 export interface QueuedAction {
   actionId: string;
-  actionType: "gather" | "craft" | "expedition";
+  actionType: "gather" | "craft" | "expedition" | "routine";
 }
 
 // ═══════════════════════════════════════

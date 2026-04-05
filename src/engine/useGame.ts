@@ -232,8 +232,21 @@ function advanceRoutine(state: GameState): void {
 function advanceQueue(state: GameState): void {
   while (state.actionQueue.length > 0) {
     const queued = state.actionQueue[0];
-    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
     state.actionQueue.shift();
+
+    if (queued.actionType === "routine") {
+      const routine = state.routines.find((r) => r.id === queued.actionId);
+      if (!routine || routine.steps.length === 0) continue;
+      state.activeRoutine = { routineId: queued.actionId, currentStep: 0, completionsInStep: 0 };
+      const step = routine.steps[0];
+      if (!tryStartRoutineStep(state, step)) {
+        advanceRoutine(state);
+        if (!state.activeRoutine) continue;
+      }
+      return;
+    }
+
+    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
     if (tryStartRoutineStep(state, step)) {
       return;
     }
