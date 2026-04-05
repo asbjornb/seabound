@@ -1560,6 +1560,27 @@ body {
   margin-bottom: 10px;
 }
 
+.inventory-search {
+  width: 100%;
+  padding: 5px 8px;
+  margin-bottom: 10px;
+  background: var(--bar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 0.78rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.inventory-search:focus {
+  border-color: var(--accent);
+}
+
+.inventory-search::placeholder {
+  color: var(--text-dim);
+}
+
 .inventory-filter {
   background: var(--bar-bg);
   border: 1px solid var(--border);

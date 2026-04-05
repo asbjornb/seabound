@@ -72,6 +72,7 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
+  const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     try { return (localStorage.getItem("sb_inv_view") as ViewMode) ?? "list"; } catch { return "list"; }
@@ -115,16 +116,22 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
   if (hasTools) presentFilters.push("tools");
   if (hasItems) presentFilters.push("items");
 
+  const searchLower = search.toLowerCase();
+
   // Filter resources
   const filteredResources = resourceEntries.filter(([id]) => {
-    if (filter === "all") return true;
-    const tags = RESOURCES[id]?.tags ?? [];
-    if (filter === "food") return tags.includes("food");
-    if (filter === "items") return !tags.includes("food");
-    return false; // "tools" filter hides resources
+    if (filter === "tools") return false;
+    if (filter === "food" && !RESOURCES[id]?.tags?.includes("food")) return false;
+    if (filter === "items" && RESOURCES[id]?.tags?.includes("food")) return false;
+    if (searchLower && !(RESOURCES[id]?.name ?? id).toLowerCase().includes(searchLower)) return false;
+    return true;
   });
 
   const showTools = filter === "all" || filter === "tools";
+  const filteredTools = state.tools.filter((toolId) => {
+    if (!searchLower) return true;
+    return (TOOLS[toolId]?.name ?? toolId).toLowerCase().includes(searchLower);
+  });
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev: string | null) => (prev === id ? null : id));
@@ -162,6 +169,13 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
           {viewMode === "list" ? "⊞" : "☰"}
         </button>
       </div>
+      <input
+        type="text"
+        className="inventory-search"
+        placeholder="Search items…"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       {/* Resources */}
       {filteredResources.length > 0 && (
@@ -251,12 +265,12 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
       )}
 
       {/* Tools section — below items since tools don't change often */}
-      {showTools && hasTools && (
+      {showTools && filteredTools.length > 0 && (
         <div className="inventory-category">
           <h3 className="section-title">Tools</h3>
           {viewMode === "grid" ? (
             <div className="inventory-grid">
-              {state.tools.map((toolId) => {
+              {filteredTools.map((toolId) => {
                 const def = TOOLS[toolId];
                 return (
                   <div
@@ -271,7 +285,7 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
             </div>
           ) : (
             <div className="inventory-items">
-              {state.tools.map((toolId) => {
+              {filteredTools.map((toolId) => {
                 const def = TOOLS[toolId];
                 const isExpanded = expandedId === `tool:${toolId}`;
                 return (
