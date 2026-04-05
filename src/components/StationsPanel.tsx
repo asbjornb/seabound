@@ -1,4 +1,4 @@
-import { type MouseEvent, useCallback } from "react";
+import { type MouseEvent, useCallback, useLayoutEffect, useRef } from "react";
 import { getStationInputAmount } from "../data/milestones";
 import { getBuildings, getResources, getSkills, getStationById, getStations } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
@@ -79,6 +79,32 @@ export function StationsPanel({
 
   const readyCount = activeStations.filter((s) => s.isReady).length;
 
+  // Scroll compensation: when a new station is deployed, the active section
+  // grows above the deploy buttons. Adjust the scroll container so the deploy
+  // buttons stay in the same viewport position.
+  const deployRef = useRef<HTMLDivElement>(null);
+  const prevStationCount = useRef(state.stations.length);
+  const prevDeployOffsetTop = useRef<number | null>(null);
+
+  // Snapshot the deploy section's offsetTop before each paint
+  if (deployRef.current) {
+    prevDeployOffsetTop.current = deployRef.current.offsetTop;
+  }
+
+  useLayoutEffect(() => {
+    const prev = prevStationCount.current;
+    prevStationCount.current = state.stations.length;
+    if (state.stations.length > prev && deployRef.current && prevDeployOffsetTop.current != null) {
+      const scrollContainer = deployRef.current.closest(".panel") as HTMLElement | null;
+      if (scrollContainer) {
+        const delta = deployRef.current.offsetTop - prevDeployOffsetTop.current;
+        if (delta > 0) {
+          scrollContainer.scrollTop += delta;
+        }
+      }
+    }
+  }, [state.stations.length]);
+
   return (
     <div>
       {/* Active / ready stations */}
@@ -138,7 +164,7 @@ export function StationsPanel({
 
       {/* Available stations to deploy */}
       {availableStations.length > 0 && (
-        <>
+        <div ref={deployRef}>
           <div className="section-title">Deploy</div>
           {availableStations.map((station) => {
             let maxDeployed = station.maxDeployed ?? 1;
@@ -247,7 +273,7 @@ export function StationsPanel({
               </div>
             );
           })}
-        </>
+        </div>
       )}
 
       {/* Locked stations — player has the seed/cutting but not the skill level */}
