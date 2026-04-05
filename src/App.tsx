@@ -60,6 +60,21 @@ function getQueuedActionName(q: QueuedAction): string {
   return getRecipeById(q.actionId)?.name ?? q.actionId;
 }
 
+function getQueuedActionIcon(q: QueuedAction): string {
+  if (q.actionType === "gather") {
+    const action = getActionById(q.actionId);
+    if (action && action.drops.length > 0) return action.drops[0].resourceId;
+  } else {
+    const recipe = getRecipeById(q.actionId);
+    if (recipe) {
+      if (recipe.output) return recipe.output.resourceId;
+      if (recipe.toolOutput) return recipe.toolOutput;
+      if (recipe.buildingOutput) return recipe.buildingOutput;
+    }
+  }
+  return q.actionId;
+}
+
 export default function App() {
   // Dev tools: ?dev for wiki, ?dev=graph for progression graph
   if (window.location.search.includes("dev")) {
@@ -459,7 +474,7 @@ export default function App() {
                   <div className="queued-actions">
                     {game.state.actionQueue.map((q, i) => (
                       <span key={i} className="queued-action-tag">
-                        <GameIcon id={q.actionId} size={14} />
+                        <GameIcon id={getQueuedActionIcon(q)} size={14} />
                         {getQueuedActionName(q)}
                       </span>
                     ))}
