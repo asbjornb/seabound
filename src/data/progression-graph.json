@@ -32,18 +32,19 @@
       "id": "resource:small_fish",
       "type": "resource",
       "label": "Small Fish",
-      "category": "food"
+      "category": "food,tidal"
     },
     {
       "id": "resource:crab",
       "type": "resource",
       "label": "Crab",
-      "category": "food"
+      "category": "food,tidal"
     },
     {
       "id": "resource:shell",
       "type": "resource",
-      "label": "Shell"
+      "label": "Shell",
+      "category": "tidal"
     },
     {
       "id": "resource:bamboo_cane",
@@ -76,7 +77,8 @@
     {
       "id": "resource:large_shell",
       "type": "resource",
-      "label": "Large Shell"
+      "label": "Large Shell",
+      "category": "tidal"
     },
     {
       "id": "resource:dry_grass",
@@ -503,6 +505,11 @@
       "label": "Outrigger Canoe"
     },
     {
+      "id": "building:rock_pool_cache",
+      "type": "building",
+      "label": "Rock Pool Cache"
+    },
+    {
       "id": "building:stone_tidal_weir",
       "type": "building",
       "label": "Stone Tidal Weir"
@@ -718,6 +725,12 @@
       "category": "fishing"
     },
     {
+      "id": "action:comb_rock_pools",
+      "type": "action",
+      "label": "Comb Rock Pools",
+      "category": "fishing"
+    },
+    {
       "id": "action:dig_drainage_trench",
       "type": "action",
       "label": "Dig Drainage Trench",
@@ -877,6 +890,12 @@
       "id": "recipe:build_palm_leaf_pile",
       "type": "recipe",
       "label": "Palm Leaf Pile",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:build_rock_pool_cache",
+      "type": "recipe",
+      "label": "Rock Pool Cache",
       "category": "construction"
     },
     {
@@ -1373,6 +1392,36 @@
       "from": "action:wade_tidal_pool",
       "to": "skill:fishing",
       "relation": "trains"
+    },
+    {
+      "from": "action:comb_rock_pools",
+      "to": "resource:small_fish",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rock_pools",
+      "to": "resource:crab",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rock_pools",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rock_pools",
+      "to": "resource:large_shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:comb_rock_pools",
+      "to": "skill:fishing",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:rocky_shore",
+      "to": "action:comb_rock_pools",
+      "relation": "requires_biome"
     },
     {
       "from": "action:dig_drainage_trench",
@@ -1916,6 +1965,26 @@
     },
     {
       "from": "recipe:build_palm_leaf_pile",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:build_rock_pool_cache",
+      "to": "building:rock_pool_cache",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_rock_pool_cache",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:build_rock_pool_cache",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_rock_pool_cache",
       "to": "skill:construction",
       "relation": "trains"
     },
@@ -4484,6 +4553,7 @@
       "recipe:split_retted_pandanus",
       "action:gather_coconuts",
       "action:wade_tidal_pool",
+      "action:comb_rock_pools",
       "action:spear_fish",
       "action:drop_line_fish",
       "station:deploy_basket_trap",
@@ -4513,6 +4583,7 @@
       "resource:dried_pandanus_leaf",
       "tool:bamboo_knife",
       "resource:retted_pandanus",
+      "biome:rocky_shore",
       "tool:bamboo_spear",
       "tool:gorge_hook",
       "tool:basket_trap",
@@ -4557,7 +4628,6 @@
       "expedition:oceanic_voyage",
       "biome:jungle_interior",
       "tool:stone_axe",
-      "biome:rocky_shore",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
@@ -4829,6 +4899,7 @@
           ],
           "trainedBy": [
             "action:wade_tidal_pool",
+            "action:comb_rock_pools",
             "action:spear_fish",
             "action:drop_line_fish",
             "recipe:build_stone_tidal_weir",
@@ -4843,6 +4914,7 @@
           ],
           "trainedBy": [
             "action:wade_tidal_pool",
+            "action:comb_rock_pools",
             "action:spear_fish",
             "action:drop_line_fish",
             "recipe:build_stone_tidal_weir",
@@ -4862,6 +4934,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -4893,6 +4966,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -4924,6 +4998,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -4955,6 +5030,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -4986,6 +5062,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5017,6 +5094,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5048,6 +5126,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5079,6 +5158,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5110,6 +5190,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5141,6 +5222,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5172,6 +5254,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5203,6 +5286,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5234,6 +5318,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",
@@ -5265,6 +5350,7 @@
             "recipe:maintain_camp",
             "recipe:build_stone_hearth",
             "recipe:build_palm_leaf_pile",
+            "recipe:build_rock_pool_cache",
             "recipe:build_sleeping_mat",
             "recipe:build_hammock",
             "recipe:build_thatched_hut",

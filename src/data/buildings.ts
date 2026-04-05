@@ -210,6 +210,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     unlocks: "Oceanic Voyage expedition — the way home",
     vesselTier: 3,
   },
+  rock_pool_cache: {
+    id: "rock_pool_cache",
+    name: "Rock Pool Cache",
+    description:
+      "A stone-walled tidal pool that keeps your catch alive and fresh. An ancient trick.",
+    unlocks: "+3 storage for fish, crabs, and shells",
+    storageBonus: [{ tag: "tidal", amount: 3 }],
+  },
   stone_tidal_weir: {
     id: "stone_tidal_weir",
     name: "Stone Tidal Weir",

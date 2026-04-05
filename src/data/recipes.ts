@@ -335,6 +335,21 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 5000,
     xpGain: 20,
   },
+  {
+    id: "build_rock_pool_cache",
+    name: "Rock Pool Cache",
+    description:
+      "Wall off a rocky tidal pool with flat stones. Keeps fish and crabs alive until you need them.",
+    skillId: "construction",
+    panel: "build",
+    inputs: [
+      { resourceId: "flat_stone", amount: 6 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    buildingOutput: "rock_pool_cache",
+    durationMs: 8000,
+    xpGain: 20,
+  },
 
   // Comfort tier
   {

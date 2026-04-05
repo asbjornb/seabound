@@ -35,20 +35,21 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "small_fish",
     name: "Small Fish",
     description: "A small tidal pool fish. Edible when cooked.",
-    tags: ["food"],
+    tags: ["food", "tidal"],
     foodValue: 1,
   },
   crab: {
     id: "crab",
     name: "Crab",
     description: "A small shore crab. Can be cooked.",
-    tags: ["food"],
+    tags: ["food", "tidal"],
     foodValue: 1,
   },
   shell: {
     id: "shell",
     name: "Shell",
     description: "A sturdy seashell. Tool and craft material.",
+    tags: ["tidal"],
   },
 
   // Phase 1 - Bamboo Tier
@@ -85,6 +86,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     id: "large_shell",
     name: "Large Shell",
     description: "A big sturdy shell. Can be shaped into an adze.",
+    tags: ["tidal"],
   },
 
   // Phase 1b - Fire
