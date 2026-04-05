@@ -2,20 +2,14 @@ name: Changelog Backfill
 
 on:
   workflow_dispatch:
-    inputs:
-      count:
-        description: "Number of merge commits to process (oldest first)"
-        required: true
-        default: "20"
-      dry_run:
-        description: "Dry run — print what would be added without committing"
-        required: false
-        type: boolean
-        default: false
 
 permissions:
   contents: write
   pull-requests: read
+
+concurrency:
+  group: changelog
+  cancel-in-progress: false
 
 jobs:
   backfill:
@@ -29,36 +23,47 @@ jobs:
       - name: Backfill changelog
         run: |
           set -euo pipefail
-          COUNT="${{ inputs.count }}"
-          DRY_RUN="${{ inputs.dry_run }}"
           CHANGELOG_FILE="src/data/changelog.json"
+          BATCH_SIZE=20
 
-          # Get merge commits on main (oldest first), skip changelog bot commits
-          MERGE_SHAS=$(git log --merges --first-parent --format="%H" -n "$COUNT" main \
-            | grep -v "$(git log --all --author='github-actions\[bot\]' --format='%H' | head -100 || true)" \
-            | tac)
+          # Read current meta
+          OLDEST=$(jq -r '.meta.oldestReviewed // empty' "$CHANGELOG_FILE")
+
+          if [ -n "$OLDEST" ]; then
+            echo "Continuing from oldest reviewed: $OLDEST"
+            # Get merge commits on main BEFORE the oldest reviewed (first-parent only)
+            MERGE_SHAS=$(git log --merges --first-parent --format="%H" -n "$BATCH_SIZE" "$OLDEST^" -- 2>/dev/null | tac || true)
+          else
+            echo "No previous backfill — starting from HEAD of main"
+            MERGE_SHAS=$(git log --merges --first-parent --format="%H" -n "$BATCH_SIZE" main | tac)
+          fi
 
           if [ -z "$MERGE_SHAS" ]; then
-            echo "No merge commits found"
+            echo "No more merge commits to process — backfill complete!"
             exit 0
           fi
 
           TOTAL=$(echo "$MERGE_SHAS" | wc -l)
           echo "Processing $TOTAL merge commits..."
 
-          # Collect all new entries as a JSON array (oldest first, so newest ends up on top after prepend)
           NEW_ENTRIES="[]"
           PROCESSED=0
           ADDED=0
+          EARLIEST_SHA=""
 
           for SHA in $MERGE_SHAS; do
             PROCESSED=$((PROCESSED + 1))
             COMMIT_MSG=$(git log -1 --pretty=%B "$SHA")
             COMMIT_DATE=$(git log -1 --format=%cd --date=short "$SHA")
 
+            # Track the earliest SHA we process (first in our oldest-first list)
+            if [ -z "$EARLIEST_SHA" ]; then
+              EARLIEST_SHA="$SHA"
+            fi
+
             # Skip changelog commits
             if echo "$COMMIT_MSG" | grep -q '\[changelog\]'; then
-              echo "[$PROCESSED/$TOTAL] Skipping changelog commit: $(echo "$COMMIT_MSG" | head -1)"
+              echo "[$PROCESSED/$TOTAL] Skipping changelog commit"
               continue
             fi
 
@@ -92,7 +97,6 @@ jobs:
               COMMITS=$(git log -1 --pretty="- %s" "$SHA")
             fi
 
-            # Build context
             CONTEXT="PR Title: ${PR_TITLE:-N/A}
 
             PR Description:
@@ -156,7 +160,6 @@ jobs:
               continue
             fi
 
-            # Validate JSON array
             if ! echo "$ENTRY" | jq -e 'if type == "array" then true else false end' >/dev/null 2>&1; then
               echo "  Invalid JSON response — skipping"
               echo "  Response: $ENTRY"
@@ -166,76 +169,76 @@ jobs:
             echo "  Found changes: $ENTRY"
             ADDED=$((ADDED + 1))
 
-            # Append entry (we'll reverse/sort later)
             NEW_ENTRIES=$(echo "$NEW_ENTRIES" | jq \
               --arg date "$COMMIT_DATE" \
               --argjson changes "$ENTRY" \
               '. + [{date: $date, changes: $changes}]')
 
-            # Rate limit — avoid hammering the API
+            # Rate limit
             sleep 1
           done
 
           echo ""
           echo "=== Summary: $ADDED changelog entries from $TOTAL merge commits ==="
 
-          if [ "$ADDED" -eq 0 ]; then
-            echo "No user-facing changes found in any commits"
-            exit 0
+          # Pull latest before modifying (in case regular changelog updated it)
+          git pull --rebase origin main || true
+
+          # Re-read after pull
+          EXISTING=$(cat "$CHANGELOG_FILE")
+
+          # Group new entries by date
+          GROUPED="[]"
+          if [ "$ADDED" -gt 0 ]; then
+            GROUPED=$(echo "$NEW_ENTRIES" | jq '
+              group_by(.date)
+              | map({
+                  date: .[0].date,
+                  changes: [.[].changes[]] | unique
+                })
+              | sort_by(.date) | reverse
+            ')
           fi
 
-          # Group changes by date (merge entries with same date)
-          GROUPED=$(echo "$NEW_ENTRIES" | jq '
-            group_by(.date)
-            | map({
-                date: .[0].date,
-                changes: [.[].changes[]] | unique
-              })
-            | sort_by(.date) | reverse
-          ')
-
-          echo ""
-          echo "Grouped entries:"
-          echo "$GROUPED" | jq '.'
-
-          if [ "$DRY_RUN" = "true" ]; then
-            echo ""
-            echo "=== DRY RUN — not committing ==="
-            exit 0
-          fi
-
-          # Merge with existing changelog (newest first, avoid duplicate dates)
-          if [ -f "$CHANGELOG_FILE" ]; then
-            EXISTING=$(cat "$CHANGELOG_FILE")
-          else
-            EXISTING="[]"
-          fi
-
-          # Merge: for dates that exist in both, combine changes; otherwise just concat
+          # Merge new entries into existing, deduplicating by date
           UPDATED=$(jq -n \
             --argjson new "$GROUPED" \
             --argjson existing "$EXISTING" \
+            --arg earliest "$EARLIEST_SHA" \
             '
-            ($existing | map({(.date): .changes}) | add // {}) as $existing_map |
-            ($new | map({(.date): .changes}) | add // {}) as $new_map |
-            ($existing_map + $new_map | keys) as $all_dates |
-            # For each date, merge changes from both sources
-            [
-              $all_dates[] as $d |
-              {
-                date: $d,
-                changes: (($existing_map[$d] // []) + ($new_map[$d] // []) | unique)
-              }
-            ]
-            | sort_by(.date) | reverse
+            $existing
+            | .meta.oldestReviewed = $earliest
+            | .meta.newestReviewed as $nr
+            | if $nr == null then .meta.newestReviewed = $earliest else . end
+            | ($existing.entries | map({(.date): .changes}) | add // {}) as $existing_map
+            | ($new | map({(.date): .changes}) | add // {}) as $new_map
+            | ([$existing_map, $new_map] | add | keys) as $all_dates
+            | .entries = [
+                $all_dates[] as $d |
+                {
+                  date: $d,
+                  changes: (($existing_map[$d] // []) + ($new_map[$d] // []) | unique)
+                }
+              ]
+            | .entries |= sort_by(.date) | .entries |= reverse
             ')
 
           echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
 
+          echo ""
+          echo "Updated meta: oldest=$EARLIEST_SHA"
+          echo "Remaining merge commits before this batch: $(git log --merges --first-parent --oneline "$EARLIEST_SHA^" -- 2>/dev/null | wc -l || echo 0)"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add "$CHANGELOG_FILE"
-          git commit -m "Backfill changelog from last $COUNT merge commits [changelog]"
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Backfill changelog (batch of $BATCH_SIZE) [changelog]"
           git push
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

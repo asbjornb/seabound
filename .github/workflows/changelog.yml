@@ -8,6 +8,10 @@ permissions:
   contents: write
   pull-requests: read
 
+concurrency:
+  group: changelog
+  cancel-in-progress: false
+
 jobs:
   changelog:
     # Skip if this push was the changelog bot itself (avoid infinite loop)
@@ -161,30 +165,50 @@ jobs:
       - name: Update changelog.json
         if: steps.generate.outputs.skip != 'true'
         run: |
+          COMMIT_SHA="${{ github.sha }}"
           ENTRY=$(cat /tmp/changelog_entry.json)
           TODAY=$(cat /tmp/changelog_date.txt)
           CHANGELOG_FILE="src/data/changelog.json"
 
-          # Read existing changelog
-          if [ -f "$CHANGELOG_FILE" ]; then
-            EXISTING=$(cat "$CHANGELOG_FILE")
-          else
-            EXISTING="[]"
-          fi
+          # Pull latest in case backfill or another run updated the file
+          git pull --rebase origin main || true
 
-          # Prepend new entry (newest first)
+          EXISTING=$(cat "$CHANGELOG_FILE")
+
+          # Prepend new entry and update meta.newestReviewed
           UPDATED=$(echo "$EXISTING" | jq \
             --arg date "$TODAY" \
+            --arg sha "$COMMIT_SHA" \
             --argjson changes "$ENTRY" \
-            '[{date: $date, changes: $changes}] + .')
+            '.meta.newestReviewed = $sha
+            | .entries = [{date: $date, changes: $changes}] + .entries')
 
           echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
 
-      - name: Commit and push
-        if: steps.generate.outputs.skip != 'true'
+      - name: Update meta even if no entry
+        if: steps.generate.outputs.skip == 'true'
         run: |
+          COMMIT_SHA="${{ github.sha }}"
+          CHANGELOG_FILE="src/data/changelog.json"
+
+          git pull --rebase origin main || true
+
+          EXISTING=$(cat "$CHANGELOG_FILE")
+          UPDATED=$(echo "$EXISTING" | jq --arg sha "$COMMIT_SHA" '.meta.newestReviewed = $sha')
+          echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
+
+      - name: Commit and push
+        run: |
+          CHANGELOG_FILE="src/data/changelog.json"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/changelog.json
+          git add "$CHANGELOG_FILE"
+
+          # Only commit if there are actual changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
           git commit -m "Update changelog [changelog]"
           git push
