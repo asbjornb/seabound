@@ -239,6 +239,15 @@ export interface PlacedStation {
 }
 
 // ═══════════════════════════════════════
+// Action Queue (simple next-action queue)
+// ═══════════════════════════════════════
+
+export interface QueuedAction {
+  actionId: string;
+  actionType: "gather" | "craft";
+}
+
+// ═══════════════════════════════════════
 // Routines (automation chains)
 // ═══════════════════════════════════════
 
@@ -308,4 +317,5 @@ export interface GameState {
   modId?: string; // if set, this save belongs to a specific mod
   routines: Routine[];
   activeRoutine: RoutineProgress | null;
+  actionQueue: QueuedAction[];
 }

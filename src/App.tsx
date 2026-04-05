@@ -27,8 +27,9 @@ import { VictoryScreen } from "./components/VictoryScreen";
 import { WhatsNew } from "./components/WhatsNew";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
+import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
-import { DiscoveryEntry } from "./data/types";
+import { DiscoveryEntry, QueuedAction } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -46,10 +47,18 @@ import {
   selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
+import { getActionById, getRecipeById } from "./data/registry";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
+
+function getQueuedActionName(q: QueuedAction): string {
+  if (q.actionType === "gather") {
+    return getActionById(q.actionId)?.name ?? q.actionId;
+  }
+  return getRecipeById(q.actionId)?.name ?? q.actionId;
+}
 
 export default function App() {
   // Dev tools: ?dev for wiki, ?dev=graph for progression graph
@@ -86,6 +95,7 @@ export default function App() {
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
   const isOldDomain = window.location.hostname === "seabound.pages.dev";
+  const [queueMode, setQueueMode] = useState(false);
 
   // Close "more" menu on outside click
   useEffect(() => {
@@ -197,6 +207,14 @@ export default function App() {
   const hasAnyResource = useMemo(() => selectHasAnyResource(game.state), [game.state]);
 
   // On mobile, inventory is a tab; on desktop it's always visible as sidebar
+  const queueUnlocked = useMemo(
+    () => isQueueUnlocked(game.state),
+    [game.state]
+  );
+  const maxQueueSize = useMemo(
+    () => getMaxQueueSize(game.state),
+    [game.state]
+  );
   const routinesUnlocked = useMemo(
     () => isRoutinesUnlocked(game.state),
     [game.state]
@@ -261,6 +279,24 @@ export default function App() {
     () => selectUndiscoveredBiomeCount(game.state, game.state.currentAction?.expeditionId),
     [game.state]
   );
+
+  // Queue-aware action callbacks: when queue mode is on and an action is running,
+  // clicking an action queues it instead of immediately switching
+  const handleStartAction = useCallback((action: Parameters<typeof game.startAction>[0]) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: action.id, actionType: "gather" });
+    } else {
+      game.startAction(action);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startAction, game.queueAction]);
+
+  const handleStartCraft = useCallback((recipe: Parameters<typeof game.startCraft>[0]) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: recipe.id, actionType: "craft" });
+    } else {
+      game.startCraft(recipe);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startCraft, game.queueAction]);
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
@@ -405,6 +441,33 @@ export default function App() {
                   </span>
                 )}
               </div>
+              {queueUnlocked && (
+                <div className="action-queue-row">
+                  <button
+                    className={`queue-toggle${queueMode ? " active" : ""}`}
+                    onClick={() => setQueueMode((v) => !v)}
+                    title="When active, clicking an action queues it instead of switching"
+                  >
+                    Queue {queueMode ? "On" : "Off"}
+                  </button>
+                  {game.state.actionQueue.length > 0 && (
+                    <div className="queued-actions">
+                      {game.state.actionQueue.map((q, i) => (
+                        <span key={i} className="queued-action-tag">
+                          <GameIcon id={q.actionId} size={14} />
+                          {getQueuedActionName(q)}
+                        </span>
+                      ))}
+                      <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                  {queueMode && game.state.actionQueue.length === 0 && (
+                    <span className="queue-hint">Click an action to queue it next ({game.state.actionQueue.length}/{maxQueueSize})</span>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -489,8 +552,9 @@ export default function App() {
               <ActionPanel
                 actions={gatherActions}
                 state={game.state}
-                onStart={game.startAction}
+                onStart={handleStartAction}
                 currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
+                queueMode={queueMode && !!game.state.currentAction}
               />
             )}
             {activeTab === "inventory" && (
@@ -502,7 +566,8 @@ export default function App() {
               <CraftingPanel
                 recipes={craftRecipes}
                 state={game.state}
-                onCraft={game.startCraft}
+                onCraft={handleStartCraft}
+                queueMode={queueMode && !!game.state.currentAction}
               />
             )}
             {activeTab === "tend" && (
@@ -520,8 +585,8 @@ export default function App() {
                 buildRecipes={buildRecipes}
                 buildActions={buildActions}
                 state={game.state}
-                onBuild={game.startCraft}
-                onStartAction={game.startAction}
+                onBuild={handleStartCraft}
+                onStartAction={handleStartAction}
               />
             )}
             {activeTab === "explore" && (

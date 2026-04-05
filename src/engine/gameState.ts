@@ -125,6 +125,7 @@ export function createInitialState(): GameState {
     sentMilestones: [],
     routines: [],
     activeRoutine: null,
+    actionQueue: [],
   };
 }
 
@@ -306,6 +307,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   }
   if (loaded.activeRoutine === undefined) {
     loaded.activeRoutine = null;
+  }
+  // Migration: ensure actionQueue exists
+  if (!loaded.actionQueue) {
+    loaded.actionQueue = [];
   }
 
   return loaded;

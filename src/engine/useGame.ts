@@ -16,11 +16,13 @@ import type {
   DiscoveryType,
   ExpeditionDef,
   GameState,
+  QueuedAction,
   RecipeDef,
   Routine,
   RoutineStep,
   StationDef,
 } from "../data/types";
+import { getMaxQueueSize, isQueueUnlocked } from "../data/queue";
 
 import {
   addResource,
@@ -205,6 +207,19 @@ function advanceRoutine(state: GameState): void {
   state.activeRoutine = null;
 }
 
+/** Try to start the next queued action. Removes the entry on success or if it can't start. */
+function advanceQueue(state: GameState): void {
+  while (state.actionQueue.length > 0) {
+    const queued = state.actionQueue[0];
+    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
+    state.actionQueue.shift();
+    if (tryStartRoutineStep(state, step)) {
+      return;
+    }
+    // If the queued action can't start (e.g. missing resources), skip it and try the next
+  }
+}
+
 let nextDiscoveryId = 0;
 
 function addDiscovery(
@@ -324,6 +339,10 @@ export function useGame() {
             advanceRoutine(next);
           }
         }
+        // Queue advancement for offline progress (only if no routine is active)
+        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          advanceQueue(next);
+        }
         if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
@@ -356,6 +375,10 @@ export function useGame() {
           if (!next.currentAction) {
             advanceRoutine(next);
           }
+        }
+        // Queue advancement (only if no routine is active)
+        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          advanceQueue(next);
         }
 
         if (result.completions.length > 0) checkMilestones(next);
@@ -425,6 +448,7 @@ export function useGame() {
       }
       const next = structuredClone(prev);
       next.activeRoutine = null; // manual action cancels any running routine
+      next.actionQueue = []; // manual action clears the queue
       saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       const actionKey = `gather:${action.id}`;
@@ -490,6 +514,7 @@ export function useGame() {
         if (recipe.output && isAtStorageCap(prev, recipe.output.resourceId)) return prev;
         const next = structuredClone(prev);
         next.activeRoutine = null; // manual craft cancels any running routine
+        next.actionQueue = []; // manual craft clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         const actionKey = `craft:${recipe.id}`;
@@ -530,6 +555,7 @@ export function useGame() {
         }
         const next = structuredClone(prev);
         next.activeRoutine = null; // manual expedition cancels any running routine
+        next.actionQueue = []; // manual expedition clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
         const actionKey = `expedition:${expedition.id}`;
@@ -554,7 +580,26 @@ export function useGame() {
       resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       next.activeRoutine = null; // also stop any running routine
+      next.actionQueue = []; // also clear the queue
       return next;
+    });
+  }, []);
+
+  const queueAction = useCallback((queued: QueuedAction) => {
+    setState((prev) => {
+      if (!isQueueUnlocked(prev)) return prev;
+      const maxSize = getMaxQueueSize(prev);
+      if (prev.actionQueue.length >= maxSize) return prev;
+      const next = structuredClone(prev);
+      next.actionQueue.push(queued);
+      return next;
+    });
+  }, []);
+
+  const clearQueue = useCallback(() => {
+    setState((prev) => {
+      if (prev.actionQueue.length === 0) return prev;
+      return { ...prev, actionQueue: [] };
     });
   }, []);
 
@@ -829,6 +874,8 @@ export function useGame() {
     startCraft,
     startExpedition,
     stopAction,
+    queueAction,
+    clearQueue,
     saveRoutine,
     deleteRoutine,
     startRoutine,

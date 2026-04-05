@@ -9,6 +9,7 @@ interface Props {
   recipes: RecipeDef[];
   state: GameState;
   onCraft: (recipe: RecipeDef) => void;
+  queueMode?: boolean;
 }
 
 type CategoryId = "tools" | "repeatable";
@@ -23,7 +24,7 @@ function isOneTimeCraft(recipe: RecipeDef): boolean {
   return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !BUILDINGS[recipe.buildingOutput]?.maxCount));
 }
 
-export function CraftingPanel({ recipes, state, onCraft }: Props) {
+export function CraftingPanel({ recipes, state, onCraft, queueMode }: Props) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const BUILDINGS = getBuildings();
@@ -112,6 +113,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
               const resolvedTags = recipe.tagInputs ? resolveTagInputs(recipe.tagInputs, state) : null;
 
               const isNew = !state.completedRecipes.includes(recipe.id);
+              const showQueueHint = queueMode && !disabled;
               return (
                 <div
                   key={recipe.id}
@@ -122,6 +124,7 @@ export function CraftingPanel({ recipes, state, onCraft }: Props) {
                     <span className="action-name">
                       {recipe.name}
                       {isNew && <span className="new-badge">NEW</span>}
+                      {showQueueHint && <span className="queue-badge">QUEUE</span>}
                     </span>
                     <span className="action-time">
                       {(recipe.durationMs / 1000).toFixed(1)}s

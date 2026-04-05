@@ -1001,6 +1001,24 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 15,
   },
 
+  // Building: Clay Tablet (queue upgrade — requires firing pit + clay)
+  {
+    id: "build_clay_tablet",
+    name: "Clay Tablet",
+    description:
+      "Press task marks into wet clay and fire it hard. A simple planner to remember what comes next.",
+    skillId: "crafting",
+    panel: "build",
+    inputs: [
+      { resourceId: "clay", amount: 4 },
+      { resourceId: "flat_stone", amount: 2 },
+    ],
+    buildingOutput: "clay_tablet",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 8000,
+    xpGain: 25,
+  },
+
   // Fill Water Pot (requires well)
   {
     id: "fill_water_pot",
