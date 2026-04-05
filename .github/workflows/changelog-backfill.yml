@@ -15,7 +15,7 @@ jobs:
   backfill:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -129,8 +129,8 @@ jobs:
             ["Add new fishing rod tool that speeds up fishing actions", "Fix bug where crafting progress bar showed wrong count"]
 
             Respond with ONLY "NO_CHANGES" or a JSON array. Nothing else.
-            PROMPT_END
-            )
+          PROMPT_END
+          )
 
             # Call Claude API
             RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
