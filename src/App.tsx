@@ -29,7 +29,7 @@ import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
-import { DiscoveryEntry, QueuedAction } from "./data/types";
+import { DiscoveryEntry, QueuedAction, Routine } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -47,30 +47,44 @@ import {
   selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
-import { getActionById, getRecipeById } from "./data/registry";
+import { getActionById, getExpeditionById, getRecipeById } from "./data/registry";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
 
-function getQueuedActionName(q: QueuedAction): string {
+function getQueuedActionName(q: QueuedAction, routines: Routine[]): string {
   if (q.actionType === "gather") {
     return getActionById(q.actionId)?.name ?? q.actionId;
+  }
+  if (q.actionType === "expedition") {
+    return getExpeditionById(q.actionId)?.name ?? q.actionId;
+  }
+  if (q.actionType === "routine") {
+    return routines.find((r) => r.id === q.actionId)?.name ?? q.actionId;
   }
   return getRecipeById(q.actionId)?.name ?? q.actionId;
 }
 
-function getQueuedActionIcon(q: QueuedAction): string {
+function getQueuedActionIcon(q: QueuedAction, routines: Routine[]): string {
   if (q.actionType === "gather") {
     const action = getActionById(q.actionId);
     if (action && action.drops.length > 0) return action.drops[0].resourceId;
-  } else {
+  } else if (q.actionType === "craft") {
     const recipe = getRecipeById(q.actionId);
     if (recipe) {
       if (recipe.output) return recipe.output.resourceId;
       if (recipe.toolOutput) return recipe.toolOutput;
       if (recipe.buildingOutput) return recipe.buildingOutput;
     }
+  } else if (q.actionType === "expedition") {
+    return q.actionId;
+  } else if (q.actionType === "routine") {
+    const routine = routines.find((r) => r.id === q.actionId);
+    if (routine && routine.steps.length > 0) {
+      return getQueuedActionIcon({ actionId: routine.steps[0].actionId, actionType: routine.steps[0].actionType }, routines);
+    }
+    return "tab_routines";
   }
   return q.actionId;
 }
@@ -315,6 +329,22 @@ export default function App() {
     }
   }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startCraft, game.queueAction]);
 
+  const handleStartExpedition = useCallback((expedition: Parameters<typeof game.startExpedition>[0]) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: expedition.id, actionType: "expedition" });
+    } else {
+      game.startExpedition(expedition);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startExpedition, game.queueAction]);
+
+  const handleStartRoutine = useCallback((routineId: string) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: routineId, actionType: "routine" });
+    } else {
+      game.startRoutine(routineId);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startRoutine, game.queueAction]);
+
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {game.state.victory && !victoryDismissed && (
@@ -475,8 +505,8 @@ export default function App() {
                   <div className="queued-actions">
                     {game.state.actionQueue.map((q, i) => (
                       <span key={i} className="queued-action-tag">
-                        <GameIcon id={getQueuedActionIcon(q)} size={14} />
-                        {getQueuedActionName(q)}
+                        <GameIcon id={getQueuedActionIcon(q, game.state.routines)} size={14} />
+                        {getQueuedActionName(q, game.state.routines)}
                       </span>
                     ))}
                     <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
@@ -617,7 +647,7 @@ export default function App() {
               <ExpeditionPanel
                 expeditions={game.availableExpeditions}
                 state={game.state}
-                onStart={game.startExpedition}
+                onStart={handleStartExpedition}
               />
             )}
             {activeTab === "routines" && (
@@ -627,7 +657,7 @@ export default function App() {
                 availableRecipes={game.availableRecipes}
                 onSaveRoutine={game.saveRoutine}
                 onDeleteRoutine={game.deleteRoutine}
-                onStartRoutine={game.startRoutine}
+                onStartRoutine={handleStartRoutine}
                 onStopRoutine={game.stopRoutine}
               />
             )}
@@ -664,10 +694,10 @@ export default function App() {
           recipes={game.availableRecipes}
           stations={game.availableStations}
           expeditions={game.availableExpeditions}
-          onStartAction={game.startAction}
-          onStartCraft={game.startCraft}
+          onStartAction={handleStartAction}
+          onStartCraft={handleStartCraft}
           onDeployStation={game.deployStation}
-          onStartExpedition={game.startExpedition}
+          onStartExpedition={handleStartExpedition}
           onJumpToTab={(t) => setTab(t as GameTab)}
         />
       )}

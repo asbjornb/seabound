@@ -244,7 +244,7 @@ export interface PlacedStation {
 
 export interface QueuedAction {
   actionId: string;
-  actionType: "gather" | "craft";
+  actionType: "gather" | "craft" | "expedition" | "routine";
 }
 
 // ═══════════════════════════════════════
@@ -253,7 +253,7 @@ export interface QueuedAction {
 
 export interface RoutineStep {
   actionId: string;
-  actionType: "gather" | "craft";
+  actionType: "gather" | "craft" | "expedition";
   count: number; // 0 = run until natural stop, >0 = stop after N completions
 }
 

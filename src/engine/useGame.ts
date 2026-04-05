@@ -3,6 +3,7 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getExpeditionById,
   getPhases,
   getRecipeById,
   getResources,
@@ -153,6 +154,26 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
     return true;
   }
 
+  if (step.actionType === "expedition") {
+    const expedition = getExpeditionById(step.actionId);
+    if (!expedition) return false;
+    if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
+    if (expedition.foodCost && getTotalFood(state) < expedition.foodCost) return false;
+    if (expedition.waterCost && getTotalWater(state) < expedition.waterCost) return false;
+    if (expedition.inputs?.some((inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount)) return false;
+
+    saveCurrentActionProgress(state);
+    resetRepetitiveCountOnManualActionChange(state, `expedition:${expedition.id}`);
+    state.currentAction = {
+      actionId: expedition.id,
+      startedAt: Date.now(),
+      type: "expedition",
+      expeditionId: expedition.id,
+    };
+    restoreActionProgress(state, `expedition:${expedition.id}`);
+    return true;
+  }
+
   return false;
 }
 
@@ -211,8 +232,21 @@ function advanceRoutine(state: GameState): void {
 function advanceQueue(state: GameState): void {
   while (state.actionQueue.length > 0) {
     const queued = state.actionQueue[0];
-    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
     state.actionQueue.shift();
+
+    if (queued.actionType === "routine") {
+      const routine = state.routines.find((r) => r.id === queued.actionId);
+      if (!routine || routine.steps.length === 0) continue;
+      state.activeRoutine = { routineId: queued.actionId, currentStep: 0, completionsInStep: 0 };
+      const step = routine.steps[0];
+      if (!tryStartRoutineStep(state, step)) {
+        advanceRoutine(state);
+        if (!state.activeRoutine) continue;
+      }
+      return;
+    }
+
+    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
     if (tryStartRoutineStep(state, step)) {
       return;
     }
