@@ -99,8 +99,8 @@ export const ACTIONS: ActionDef[] = [
     panel: "gather",
     durationMs: 4000,
     drops: [
-      { resourceId: "small_fish", amount: 1, chance: 0.1 },
-      { resourceId: "crab", amount: 1, chance: 0.15 },
+      { resourceId: "small_fish", amount: 1, chance: 0.15 },
+      { resourceId: "crab", amount: 1, chance: 0.35 },
       { resourceId: "shell", amount: 1 },
       { resourceId: "large_shell", amount: 1, chance: 0.01 },
     ],
