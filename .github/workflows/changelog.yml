@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   changelog:
     # Skip if this push was the changelog bot itself (avoid infinite loop)
@@ -21,8 +25,11 @@ jobs:
           COMMIT_SHA="${{ github.sha }}"
           COMMIT_MSG=$(git log -1 --pretty=%B "$COMMIT_SHA")
 
-          # Try to extract PR number from merge commit message
+          # Try to extract PR number from merge commit or squash merge message
           PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP 'Merge pull request #\K[0-9]+' || echo "")
+          if [ -z "$PR_NUMBER" ]; then
+            PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP '\(#\K[0-9]+(?=\))' || echo "")
+          fi
 
           # Get diff — compare against parent commit(s)
           # For merge commits, diff against first parent (i.e. what the PR changed)
