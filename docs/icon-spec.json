@@ -903,6 +903,19 @@
       "tags": ["phase2", "building", "fire"]
     },
     {
+      "id": "clay_tablet",
+      "object": "Small fired clay slab with etched task marks",
+      "description": "A palm-sized terracotta clay tablet with scratched tally marks and task symbols. Fired hard in a pit, edges slightly rough. Simple planning aid — a castaway's first to-do list.",
+      "use": "Settlement panel, building card",
+      "theme": "fire",
+      "category": "building_utility",
+      "chain": null,
+      "chainRole": "standalone",
+      "chainNote": "Thematic precursor to charcoal board — simpler planning tool from fired clay",
+      "size": 64,
+      "tags": ["phase2", "building", "planning", "clay"]
+    },
+    {
       "id": "charcoal_board",
       "object": "Driftwood plank with charcoal writing",
       "description": "A flat, sun-bleached piece of driftwood propped upright with charcoal scrawled task lists and tally marks. Simple but purposeful — a castaway's planning board.",

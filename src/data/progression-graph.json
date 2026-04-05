@@ -465,6 +465,11 @@
       "label": "Charcoal Kiln"
     },
     {
+      "id": "building:clay_tablet",
+      "type": "building",
+      "label": "Clay Tablet"
+    },
+    {
       "id": "building:charcoal_board",
       "type": "building",
       "label": "Charcoal Board"
@@ -1106,6 +1111,12 @@
       "id": "recipe:build_clay_storage_jar",
       "type": "recipe",
       "label": "Clay Storage Jar",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:build_clay_tablet",
+      "type": "recipe",
+      "label": "Clay Tablet",
       "category": "crafting"
     },
     {
@@ -2999,6 +3010,31 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:build_clay_tablet",
+      "to": "building:clay_tablet",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_clay_tablet",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_clay_tablet",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_clay_tablet",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:firing_pit",
+      "to": "recipe:build_clay_tablet",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:fill_water_pot",
       "to": "resource:fresh_water",
       "relation": "produces"
@@ -4821,6 +4857,7 @@
             "recipe:fire_clay_pot",
             "recipe:kiln_fire_pot",
             "recipe:build_clay_storage_jar",
+            "recipe:build_clay_tablet",
             "recipe:craft_digging_stick"
           ]
         },
@@ -4854,6 +4891,7 @@
             "recipe:fire_clay_pot",
             "recipe:kiln_fire_pot",
             "recipe:build_clay_storage_jar",
+            "recipe:build_clay_tablet",
             "recipe:craft_digging_stick"
           ]
         }

@@ -12,9 +12,10 @@ interface Props {
   state: GameState;
   onStart: (action: ActionDef) => void;
   currentActionId?: string | null;
+  queueMode?: boolean;
 }
 
-export function ActionPanel({ actions, state, onStart, currentActionId }: Props) {
+export function ActionPanel({ actions, state, onStart, currentActionId, queueMode }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const BIOME_ORDER = getBiomeOrder();
@@ -63,6 +64,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
               );
               const disabled = !!missingTool || !!missingResource;
               const isActive = currentActionId === action.id;
+              const showQueueHint = queueMode && !isActive && !disabled;
               const isNew = !state.completedActions.includes(action.id);
               const visibleDrops = action.drops.filter((d) => resourceHasUse(d.resourceId, state));
               const allOutputsFull = visibleDrops.length > 0 && visibleDrops.every((d) => isAtStorageCap(state, d.resourceId));
@@ -76,6 +78,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId }: Props)
                     <span className="action-name">
                       {action.name}
                       {isNew && <span className="new-badge">NEW</span>}
+                      {showQueueHint && <span className="queue-badge">QUEUE</span>}
                     </span>
                     <span className="action-time">
                       {(action.durationMs / 1000).toFixed(1)}s
