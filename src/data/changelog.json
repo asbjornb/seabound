@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "4056c6c02d7bf1fa95b9f835ea3d0b7fe86281bc",
+    "oldestReviewed": "9289bc87367e1733601be227e87c46ed190074ee",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -37,11 +37,34 @@
     {
       "date": "2026-04-03",
       "changes": [
+        "Action cards where all outputs are full now show an amber border and reduced opacity to help you quickly identify which actions are worth clicking",
+        "Add direction and feature feedback questions that appear after players have answered 3+ survey responses, cycling between early, late, and direction question pools",
         "Add item source information in inventory (shows which actions, recipes, stations, or expeditions produce each resource)",
+        "Display currently training skill with level and XP progress while performing actions",
         "Fix bug where crop stations could exceed plot limits by counting each crop type separately instead of sharing plot slots",
+        "Fix expedition loop running one extra cycle after discovering the last biome",
+        "Fix progress bar showing incorrect craft count when using substitute resources",
+        "Fix search panel to display correct icons for resources and buildings in search results",
         "Make inventory items tap-to-expand to show detailed information",
+        "Remove the 'Stop if full' toggle button from the action interface",
+        "Replace FULL badge with mini storage bars showing current amount/limit for each drop",
         "Replace small biome icons with panoramic banner headers in the gather tab for a more immersive visual experience",
-        "Show tool prerequisites on locked actions and recipes instead of hiding them completely"
+        "Show count of undiscovered biomes remaining during expeditions",
+        "Show storage status on gather action cards: individual resource drops now display a 'FULL' badge and dim when at storage cap",
+        "Show tool prerequisites on locked actions and recipes instead of hiding them completely",
+        "Sort ready-to-collect stations to the top of the active stations list, with in-progress stations sorted by time remaining",
+        "Stop-when-full is now always enforced — actions automatically stop when output storage is full, preventing unproductive grinding",
+        "Storage bars now turn amber at 80%+ capacity and display amber text when full for better at-a-glance inventory status"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "changes": [
+        "Fix alternate crafting resources showing as available before being discovered by the player",
+        "Increase food cost for 'Sail to Nearby Island' expedition from 3 to 7 per trip",
+        "Lower starting morale from 100 to 55, giving players more room to improve morale through gameplay",
+        "Reduce food cost for 'Explore Along the Beach' expedition from 5 to 4 per trip",
+        "Reduce food cost for 'Explore Island Interior' expedition from 8 to 6 per trip"
       ]
     }
   ]
