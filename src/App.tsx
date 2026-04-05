@@ -1,5 +1,6 @@
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { ActionPanel } from "./components/ActionPanel";
+import { BiomeDiscoveryModal } from "./components/BiomeDiscoveryModal";
 import { ChapterCard } from "./components/ChapterCard";
 import { CloseIcon } from "./components/CloseIcon";
 import { CollectFlyup, type FlyupItem } from "./components/CollectFlyup";
@@ -26,6 +27,7 @@ import { VictoryScreen } from "./components/VictoryScreen";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
 import { isRoutinesUnlocked } from "./data/routines";
+import { DiscoveryEntry } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -72,6 +74,7 @@ export default function App() {
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
+  const [biomeDiscoveryQueue, setBiomeDiscoveryQueue] = useState<DiscoveryEntry[]>([]);
   const [victoryDismissed, setVictoryDismissed] = useState(
     () => localStorage.getItem("seabound_victoryDismissed") === "true"
   );
@@ -155,6 +158,17 @@ export default function App() {
       setPendingChapter(null);
     }
   };
+
+  // Biome discovery modal queue
+  const handleBiomeDiscovery = useCallback((entry: DiscoveryEntry) => {
+    setBiomeDiscoveryQueue((prev) => [...prev, entry]);
+  }, []);
+
+  const dismissBiomeDiscovery = useCallback(() => {
+    setBiomeDiscoveryQueue((prev) => prev.slice(1));
+  }, []);
+
+  const pendingBiome = biomeDiscoveryQueue[0] ?? null;
 
   // Split recipes by explicit panel metadata
   const craftRecipes = useMemo(
@@ -255,9 +269,16 @@ export default function App() {
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
+      {pendingBiome && !pendingChapter && !game.state.victory && (
+        <BiomeDiscoveryModal
+          biomeId={pendingBiome.biomeId!}
+          message={pendingBiome.message}
+          onDismiss={dismissBiomeDiscovery}
+        />
+      )}
       <FeedbackQuestion
         hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
-        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
+        hasModalOpen={!!pendingChapter || !!pendingBiome || settingsOpen || modPanelOpen || searchOpen || showLog}
         phaseName={currentPhase.name}
         discoveredBiomes={game.state.discoveredBiomes}
         totalPlayTimeMs={game.state.totalPlayTimeMs}
@@ -527,6 +548,7 @@ export default function App() {
           discoveryLog={game.state.discoveryLog}
           lastSeenDiscoveryId={game.state.lastSeenDiscoveryId}
           onSeen={game.markDiscoverySeen}
+          onBiomeDiscovery={handleBiomeDiscovery}
         />
 
       </div>

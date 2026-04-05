@@ -209,13 +209,15 @@ let nextDiscoveryId = 0;
 function addDiscovery(
   state: GameState,
   type: DiscoveryType,
-  message: string
+  message: string,
+  extra?: { biomeId?: string }
 ): void {
   state.discoveryLog.unshift({
     id: nextDiscoveryId++,
     type,
     message,
     timestamp: Date.now(),
+    ...extra,
   });
 }
 
@@ -228,12 +230,9 @@ function processCompletionDiscoveries(
   const RESOURCES = getResources();
 
   if (c.biomeDiscovery) {
-    const name = c.biomeDiscovery.replace(/_/g, " ");
-    // Bamboo grove is the inflection point — unlocks tools, fiber, cordage, and the entire crafting tree
-    const extra = c.biomeDiscovery === "bamboo_grove"
-      ? ". Your options just exploded — new tools, crafts, and structures await. No path is wrong, explore at your own pace and enjoy the world opening up!"
-      : "";
-    addDiscovery(state, "biome", `Discovered the ${name}${extra}`);
+    // Use the expedition outcome flavor text if available, otherwise fall back to generic
+    const flavorText = c.expeditionMessage ?? `You discovered the ${c.biomeDiscovery.replace(/_/g, " ")}!`;
+    addDiscovery(state, "biome", flavorText, { biomeId: c.biomeDiscovery });
   }
   if (c.buildingBuilt) {
     const bdef = BUILDINGS[c.buildingBuilt];
