@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "1db6b4fe6d2a673a7406786f3846d7d87f340623",
+    "oldestReviewed": "e2c94b574cd4e42aadc3d3fe3bc796bc60732b95",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -97,23 +97,68 @@
     {
       "date": "2026-04-01",
       "changes": [
+        "Add Routines automation feature - chain multiple gather/craft actions into repeating sequences",
         "Add Stone Tidal Weir building — a mid-game passive fishing station unlocked at Fishing level 11",
         "Add Tidal Weir station that yields bulk fish, crabs, and shells every 8 minutes once the Stone Tidal Weir is built",
         "Add feedback question modal that appears after idle gameplay",
         "Add flow arrows between routine steps for clearer visualization",
+        "Charcoal Kiln building upgrade unlocks +1 routine slot",
+        "Create custom routines with 2+ steps that automatically advance through gather or craft actions",
+        "Display which resources share storage with current item in crafting panel",
+        "Display which resources share storage with current item in inventory panel",
         "Expand fishing progression with new tier at Fishing level 11",
         "Feedback answers are submitted anonymously to help improve the game",
         "Feedback prompts have a 5-day cooldown between asks; dismiss 3 times to pause for 30 days",
+        "Fix Drop Line Fishing action no longer requiring Fishing level 8 — the gorge_hook tool requirement provides sufficient gating",
         "Fix feedback question modal display on mobile by rendering inline instead of using portal",
         "Fix feedback question modal positioning on mobile devices — now stays centered in viewport regardless of scroll",
         "Fix modal disappearing when scrolling on mobile devices",
         "Fix modal dismissal on mobile by improving tap detection to ignore scroll gestures",
         "Fix routine loop symbol display (was broken HTML entity)",
+        "Fix station UI not showing correct costs when milestone upgrades reduce setup requirements",
+        "Gather steps auto-stop when output is full to allow routine progression",
         "Improve feedback question trigger to use simpler 15-second timer instead of activity detection",
+        "Manual action changes cancel the active routine",
         "Minimize feedback modal to a floating button to answer later without interrupting gameplay",
+        "Outrigger Canoe building upgrade enables +2 steps per routine",
+        "Prevent crafting when output storage is full to avoid wasting inputs",
         "Redesign routine cards to match action card layout with better visual hierarchy",
+        "Routines unlock when any skill reaches level 15",
+        "Show 'Storage full' warning on recipe cards when output storage is at capacity",
         "Show actual resource icons for each routine step instead of generic icons",
-        "Simplify feedback question modal dismissal to use standard click detection like other modals"
+        "Simplify feedback question modal dismissal to use standard click detection like other modals",
+        "Soaking Pit building now only appears after you've processed pandanus the basic way, creating a clearer upgrade path",
+        "Stations no longer appear in the available list until you've discovered the resources needed for their setup (e.g., Grow Pandanus won't show until you find a pandanus_cutting)",
+        "Storage Shelf building upgrade enables step counts and +1 step per routine"
+      ]
+    },
+    {
+      "date": "2026-03-31",
+      "changes": [
+        "Add 'Continue Playing' button to victory screen to dismiss the overlay and keep playing after completing the game",
+        "Add Charcoal Kiln building — convert 3 large logs into 15 charcoal over 10 minutes for bulk fuel production",
+        "Add Charcoal resource as alternative fuel for cooking and clay firing recipes",
+        "Add Clay Storage Jar building: +1 food storage per jar, stackable up to 5 (requires Firing Pit)",
+        "Add Log Rack building: +10 storage for large items (requires Fenced Perimeter)",
+        "Add Storage Shelf building (Construction 17) — +5 general item storage and +10 food storage",
+        "Add Woodworking Lv12 milestone — fell large trees 15% faster",
+        "Add migration banner on old .pages.dev domain with 'Move my save' button to transfer your save to seabound.dev",
+        "Add missing dry grass kindling requirement to several cooking recipes for consistency",
+        "Add new chapter banner image for the Voyage phase",
+        "Add recipes now accept alternate resources — charcoal can replace driftwood in most fire-based crafting",
+        "Auto-import saves when visiting seabound.dev with migration data in the URL",
+        "Fenced Perimeter now provides +5 storage for large items",
+        "Fix Charcoal Kiln storage bonus to only affect charcoal (was incorrectly giving +20 to all storage)",
+        "Fix duplicate biome discovery toasts appearing after page reload",
+        "Fix recipes incorrectly reappearing after upgrading buildings (e.g. char_log_interior and scrape_hull would show again after upgrading dugout to outrigger)",
+        "Fix sail recipe to craft only once (like other boat upgrade components)",
+        "Improve Crafting Panel UI to display alternate resource options with 'or' separator",
+        "Improve journal display by converting it to a centered modal overlay with backdrop blur for better visibility and consistency with other UI elements",
+        "Remove Cooking level 12 requirement from Sealed Clay Jar recipe — now craftable as soon as you have a Firing Pit",
+        "Remove one-time limitation from large tree felling action",
+        "Rename Chapter 5 from \"Escape\" to \"Voyage\" with updated tagline",
+        "Storage Shelf requires bamboo cane, fired clay pots, and cordage to build",
+        "Thatched Hut now provides +5 food storage"
       ]
     }
   ]
