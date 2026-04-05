@@ -111,7 +111,7 @@ export default function App() {
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
   const isOldDomain = window.location.hostname === "seabound.pages.dev";
-  const [queueMode, setQueueMode] = useState(false);
+  const queueMode = game.state.queueMode;
 
   // Close "more" menu on outside click
   useEffect(() => {
@@ -405,7 +405,7 @@ export default function App() {
                   {queueUnlocked && (
                     <button
                       className={`queue-toggle${queueMode ? " active" : ""}`}
-                      onClick={() => setQueueMode((v) => !v)}
+                      onClick={() => game.toggleQueueMode()}
                       title="When active, clicking an action queues it instead of switching"
                     >
                       Queue {queueMode ? "On" : "Off"}

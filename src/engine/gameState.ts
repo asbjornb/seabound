@@ -126,6 +126,7 @@ export function createInitialState(): GameState {
     routines: [],
     activeRoutine: null,
     actionQueue: [],
+    queueMode: false,
   };
 }
 
@@ -311,6 +312,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure actionQueue exists
   if (!loaded.actionQueue) {
     loaded.actionQueue = [];
+  }
+  // Migration: ensure queueMode exists
+  if (loaded.queueMode === undefined) {
+    loaded.queueMode = false;
   }
 
   return loaded;
