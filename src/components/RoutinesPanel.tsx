@@ -35,6 +35,7 @@ function getStepIcon(step: RoutineStep): string {
     if (recipe.output) return recipe.output.resourceId;
     if (recipe.toolOutput) return recipe.toolOutput;
     if (recipe.buildingOutput) return recipe.buildingOutput;
+    return recipe.id;
   }
   return "tab_craft";
 }

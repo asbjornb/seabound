@@ -73,7 +73,7 @@ function buildIndex(
 
   for (const r of recipes) {
     const tabType: SearchResultType = r.panel === "build" ? "build" : "craft";
-    const iconId = r.output?.resourceId ?? r.toolOutput ?? r.buildingOutput ?? r.skillId;
+    const iconId = r.output?.resourceId ?? r.toolOutput ?? r.buildingOutput ?? r.id;
     results.push({
       type: tabType,
       id: r.id,
