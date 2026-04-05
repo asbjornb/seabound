@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "9289bc87367e1733601be227e87c46ed190074ee",
+    "oldestReviewed": "1db6b4fe6d2a673a7406786f3846d7d87f340623",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -60,11 +60,60 @@
     {
       "date": "2026-04-02",
       "changes": [
+        "Add 'Give feedback' button in settings menu to manually trigger feedback modal",
+        "Add Cinzel serif display font to game title, chapter names, and victory screen for a more adventurous feel",
+        "Add collection flyup animation when gathering resources from stations",
+        "Add dev tool to reset feedback modal state for testing purposes",
+        "Add new Charcoal Board building that grants +1 routine slot — craft it from 2 driftwood + 1 charcoal",
+        "Add reset confirmation dialog requiring user to type 'RESET' to confirm dangerous actions",
+        "Add subtle crossfade transition when switching between tabs",
+        "Add support for prefers-reduced-motion accessibility setting",
+        "Add unified button variants (primary, secondary, ghost, danger) for UI consistency",
+        "Adjust Construction skill requirements for various recipes: Well now requires Lv5 (was Lv6), Hammock requires Lv7 (was Lv8), and other recipes shifted down accordingly",
+        "Change search button from text label to magnifying glass icon",
+        "Compress Construction skill tree: skill now caps at level 15 instead of 17",
+        "Convert settings dropdown to a full modal with organized sections",
         "Fix alternate crafting resources showing as available before being discovered by the player",
+        "Fix bug where stone_flake appeared useless after crafting stone_blade, blocking access to gorge hook progression",
+        "Fix feedback modal not displaying correctly on mobile devices",
+        "Fix feedback question modal on mobile to prevent accidental dismissal during touch scrolling",
+        "Fix tab bar overflow on mobile by moving Inventory and Skills tabs to a dropdown menu",
+        "Fix win screen re-appearing after dismissing it and reloading the page",
+        "Improve feedback modal visibility and usability on small screens by preventing background page scrolling when modal is open",
+        "Improve mobile UI layout by keeping frequently-used tabs visible and hiding less-used tabs behind a 'More' menu",
+        "Improve typography with Inter body font for cleaner, more polished text",
+        "Increase XP rewards from one-time construction builds by ~25-30% (sleeping mat, hammock, stone hearth, palm leaf pile)",
         "Increase food cost for 'Sail to Nearby Island' expedition from 3 to 7 per trip",
         "Lower starting morale from 100 to 55, giving players more room to improve morale through gameplay",
+        "Move search button from header to tab bar area for better discoverability",
+        "Move the +1 routine slot bonus from Charcoal Kiln to the new Charcoal Board building",
         "Reduce food cost for 'Explore Along the Beach' expedition from 5 to 4 per trip",
-        "Reduce food cost for 'Explore Island Interior' expedition from 8 to 6 per trip"
+        "Reduce food cost for 'Explore Island Interior' expedition from 8 to 6 per trip",
+        "Remove Construction Lv9 'Efficient builder' milestone — construction speed bonus no longer available",
+        "Replace all close buttons with consistent SVG CloseIcon component",
+        "Update section headers from uppercase to sentence-case with bolder weight for a warmer aesthetic"
+      ]
+    },
+    {
+      "date": "2026-04-01",
+      "changes": [
+        "Add Stone Tidal Weir building — a mid-game passive fishing station unlocked at Fishing level 11",
+        "Add Tidal Weir station that yields bulk fish, crabs, and shells every 8 minutes once the Stone Tidal Weir is built",
+        "Add feedback question modal that appears after idle gameplay",
+        "Add flow arrows between routine steps for clearer visualization",
+        "Expand fishing progression with new tier at Fishing level 11",
+        "Feedback answers are submitted anonymously to help improve the game",
+        "Feedback prompts have a 5-day cooldown between asks; dismiss 3 times to pause for 30 days",
+        "Fix feedback question modal display on mobile by rendering inline instead of using portal",
+        "Fix feedback question modal positioning on mobile devices — now stays centered in viewport regardless of scroll",
+        "Fix modal disappearing when scrolling on mobile devices",
+        "Fix modal dismissal on mobile by improving tap detection to ignore scroll gestures",
+        "Fix routine loop symbol display (was broken HTML entity)",
+        "Improve feedback question trigger to use simpler 15-second timer instead of activity detection",
+        "Minimize feedback modal to a floating button to answer later without interrupting gameplay",
+        "Redesign routine cards to match action card layout with better visual hierarchy",
+        "Show actual resource icons for each routine step instead of generic icons",
+        "Simplify feedback question modal dismissal to use standard click detection like other modals"
       ]
     }
   ]
