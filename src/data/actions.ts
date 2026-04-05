@@ -181,7 +181,8 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0 },
+      { resourceId: "large_fish", amount: 1, chance: 0.15 },
+      { resourceId: "crab", amount: 1, chance: 0.15 },
       { resourceId: "shell", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["bamboo_spear"],

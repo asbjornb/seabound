@@ -1495,6 +1495,11 @@
     },
     {
       "from": "action:spear_fish",
+      "to": "resource:crab",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
       "to": "resource:shell",
       "relation": "produces"
     },
