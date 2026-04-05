@@ -137,6 +137,8 @@ export interface ActionDef {
   xpGain: number;
   /** If true, action disappears once the player owns ≥1 of any drop resource. */
   oneTimeAction?: boolean;
+  /** Hide this action when ALL conditions are met. Used for progression replacements. */
+  hideWhen?: RecipeHideCondition[];
 }
 
 export interface RecipeInput {
@@ -183,6 +185,7 @@ export interface RecipeDef {
 export type RecipeHideCondition =
   | { type: "has_building"; buildingId: BuildingId }
   | { type: "has_tool"; toolId: ToolId }
+  | { type: "has_biome"; biomeId: BiomeId }
   | { type: "output_no_use" }; // hide when the output resource has no remaining use
 
 export interface ExpeditionDef {

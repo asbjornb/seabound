@@ -928,6 +928,18 @@
       "tags": ["phase0", "building", "storage"]
     },
     {
+      "id": "rock_pool_cache",
+      "object": "Stone-walled tidal pool with trapped fish",
+      "description": "A small natural rock pool reinforced with stacked flat grey stones, shallow turquoise water inside with a couple of small fish and a crab visible. Driftwood braces along the edges. Rough, natural-looking stonework.",
+      "use": "Settlement panel, building card",
+      "theme": "stone",
+      "category": "building_storage",
+      "chain": "fishing_structures",
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase0", "building", "storage", "fishing", "stone"]
+    },
+    {
       "id": "drying_rack",
       "object": "Wooden drying rack",
       "description": "A simple wooden frame with horizontal bars, items (fish, fibers) hanging to dry. Sun rays hitting it.",
