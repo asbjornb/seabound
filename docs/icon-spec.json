@@ -356,6 +356,19 @@
       "tags": ["phase1", "beach", "mineral"]
     },
     {
+      "id": "craft_shell_beads",
+      "object": "Shell bead necklace",
+      "description": "A short necklace or strand of small polished shells threaded on a natural fiber cord. Decorative, handmade feel. Five shells spaced along a curved cord.",
+      "use": "Recipe icon for Shell Beads crafting (morale boost)",
+      "theme": "bare_hands",
+      "category": "shell",
+      "chain": "shell",
+      "chainRole": "derived",
+      "chainNote": "Same small spiral shells as 'shell', but multiple arranged on a string — decorative craft product",
+      "size": 64,
+      "tags": ["phase0", "crafting", "morale"]
+    },
+    {
       "id": "bamboo_cane",
       "object": "Whole bamboo stalk section",
       "description": "A green bamboo cane segment with visible nodes/joints. Fresh-cut, bright green with pale yellow at the nodes.",

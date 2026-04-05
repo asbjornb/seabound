@@ -357,6 +357,18 @@ resources:
     size: 64
     tags: [phase1, beach, mineral]
 
+  - id: craft_shell_beads
+    object: "Shell bead necklace"
+    description: "A short necklace or strand of small polished shells threaded on a natural fiber cord. Decorative, handmade feel. Five shells spaced along a curved cord."
+    use: "Recipe icon for Shell Beads crafting (morale boost)"
+    theme: bare_hands
+    category: shell
+    chain: shell
+    chain_role: derived
+    chain_note: "Same small spiral shells as 'shell', but multiple arranged on a string — decorative craft product"
+    size: 64
+    tags: [phase0, crafting, morale]
+
   # ── Bamboo chain ───────────────────────────────────────────────────────────
 
   - id: bamboo_cane
@@ -1229,7 +1241,7 @@ ui:
 # small_fish         | small_fish         | cooked_fish
 # large_fish         | large_fish         | cooked_large_fish
 # crab               | crab               | cooked_crab
-# shell              | shell              | large_shell
+# shell              | shell              | large_shell, craft_shell_beads
 # bamboo             | bamboo_cane        | bamboo_splinter
 # root_veg           | root_vegetable     | cooked_root_vegetable
 # taro               | taro_corm          | taro_root, cooked_taro
