@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "b089ed945dcc9fce71d7a227d42ced9bd064d08f"
+    "newestReviewed": "7f37c75d3b06cbfcb348497e610db81ecc216ea9"
   },
   "entries": [
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Fix icons in action queue display to show correct resource/tool/building icons instead of broken action IDs"
+      ]
+    },
     {
       "date": "2026-04-05",
       "changes": [
