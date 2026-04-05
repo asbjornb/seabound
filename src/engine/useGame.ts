@@ -3,6 +3,7 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getExpeditionById,
   getPhases,
   getRecipeById,
   getResources,
@@ -150,6 +151,26 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
       ...(fullAtStart.length > 0 && { fullAtStart }),
     };
     restoreActionProgress(state, `craft:${recipe.id}`);
+    return true;
+  }
+
+  if (step.actionType === "expedition") {
+    const expedition = getExpeditionById(step.actionId);
+    if (!expedition) return false;
+    if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
+    if (expedition.foodCost && getTotalFood(state) < expedition.foodCost) return false;
+    if (expedition.waterCost && getTotalWater(state) < expedition.waterCost) return false;
+    if (expedition.inputs?.some((inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount)) return false;
+
+    saveCurrentActionProgress(state);
+    resetRepetitiveCountOnManualActionChange(state, `expedition:${expedition.id}`);
+    state.currentAction = {
+      actionId: expedition.id,
+      startedAt: Date.now(),
+      type: "expedition",
+      expeditionId: expedition.id,
+    };
+    restoreActionProgress(state, `expedition:${expedition.id}`);
     return true;
   }
 
