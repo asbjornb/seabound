@@ -66,11 +66,16 @@ const FILTER_LABELS: Record<FilterId, string> = {
   items: "Items",
 };
 
+type ViewMode = "list" | "grid";
+
 export function InventoryPanel({ state, highlightedResources }: { state: GameState; highlightedResources?: Set<string> }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    try { return (localStorage.getItem("sb_inv_view") as ViewMode) ?? "list"; } catch { return "list"; }
+  });
   const toolEnables = useMemo(buildToolEnablesMap, []);
   const resourceSources = useMemo(buildResourceSourceMap, []);
 
@@ -122,7 +127,7 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
   const showTools = filter === "all" || filter === "tools";
 
   const toggleExpand = (id: string) => {
-    setExpandedId((prev) => (prev === id ? null : id));
+    setExpandedId((prev: string | null) => (prev === id ? null : id));
   };
 
   return (
@@ -145,43 +150,18 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
             {FILTER_LABELS[f]}
           </button>
         ))}
+        <button
+          className="inventory-view-toggle"
+          onClick={() => {
+            const next = viewMode === "list" ? "grid" : "list";
+            setViewMode(next);
+            try { localStorage.setItem("sb_inv_view", next); } catch { /* */ }
+          }}
+          title={viewMode === "list" ? "Compact grid view" : "List view"}
+        >
+          {viewMode === "list" ? "⊞" : "☰"}
+        </button>
       </div>
-
-      {/* Tools section */}
-      {showTools && hasTools && (
-        <div className="inventory-category">
-          <h3 className="section-title">Tools</h3>
-          <div className="inventory-items">
-            {state.tools.map((toolId) => {
-              const def = TOOLS[toolId];
-              const isExpanded = expandedId === `tool:${toolId}`;
-              return (
-                <div
-                  key={toolId}
-                  className={`inventory-item${isExpanded ? " expanded" : ""}`}
-                  onClick={() => toggleExpand(`tool:${toolId}`)}
-                >
-                  <div className="inventory-item-header">
-                    <span className="inventory-item-name">
-                      <GameIcon id={toolId as ToolId} /> {def?.name ?? toolId}
-                    </span>
-                  </div>
-                  {isExpanded && (
-                    <div className="inventory-item-desc">
-                      {def?.description}
-                      {toolEnables[toolId] && (
-                        <div className="tool-enables">
-                          Enables: {toolEnables[toolId].join(", ")}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Resources */}
       {filteredResources.length > 0 && (
@@ -190,62 +170,136 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
             <h3 className="section-title">{FILTER_LABELS[filter]}</h3>
           )}
           {filter === "all" && <h3 className="section-title">Items</h3>}
-          <div className="inventory-items">
-            {filteredResources.map(([id, amount]) => {
-              const def = RESOURCES[id];
-              const limit = getStorageLimit(state, id);
-              const atCap = isAtStorageCap(state, id);
-              const isHighlighted = highlightedResources?.has(id);
-              const isExpanded = expandedId === id;
-              return (
-                <div
-                  key={id}
-                  className={`inventory-item${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}${isExpanded ? " expanded" : ""}`}
-                  onClick={() => toggleExpand(id)}
-                >
-                  <div className="inventory-item-header">
-                    <span className="inventory-item-name">
-                      <GameIcon id={id as ResourceId} /> {def?.name ?? id}
-                    </span>
-                    <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
-                      {amount}/{limit}
-                    </span>
+          {viewMode === "grid" ? (
+            <div className="inventory-grid">
+              {filteredResources.map(([id, amount]) => {
+                const def = RESOURCES[id];
+                const limit = getStorageLimit(state, id);
+                const atCap = isAtStorageCap(state, id);
+                const isHighlighted = highlightedResources?.has(id);
+                return (
+                  <div
+                    key={id}
+                    className={`inventory-grid-cell${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}`}
+                    title={`${def?.name ?? id}: ${amount}/${limit}`}
+                  >
+                    <GameIcon id={id as ResourceId} size={28} />
+                    <span className={`grid-cell-count${atCap ? " at-cap" : ""}`}>{amount}</span>
                   </div>
-                  {isExpanded && (
-                    <div className="inventory-item-desc">
-                      {def?.description}
-                      {(() => {
-                        const groupMembers = getStorageGroupMembers(state, id);
-                        if (groupMembers.length === 0) return null;
-                        return (
-                          <div className="storage-group-hint">
-                            Shares storage with{" "}
-                            {groupMembers.map((m, i) => (
-                              <span key={m.id}>
-                                {i > 0 && ", "}
-                                <GameIcon id={m.id as ResourceId} size={16} />{m.name}
-                                {m.amount > 0 && ` (${m.amount})`}
-                              </span>
-                            ))}
-                          </div>
-                        );
-                      })()}
-                      {resourceSources[id] && (
-                        <div className="resource-sources">
-                          From: {resourceSources[id].join(", ")}
-                        </div>
-                      )}
-                      {toolEnables[id] && (
-                        <div className="tool-enables">
-                          Enables: {toolEnables[id].join(", ")}
-                        </div>
-                      )}
+                );
+              })}
+            </div>
+          ) : (
+            <div className="inventory-items">
+              {filteredResources.map(([id, amount]) => {
+                const def = RESOURCES[id];
+                const limit = getStorageLimit(state, id);
+                const atCap = isAtStorageCap(state, id);
+                const isHighlighted = highlightedResources?.has(id);
+                const isExpanded = expandedId === id;
+                return (
+                  <div
+                    key={id}
+                    className={`inventory-item${atCap ? " at-cap" : ""}${isHighlighted ? " highlighted" : ""}${isExpanded ? " expanded" : ""}`}
+                    onClick={() => toggleExpand(id)}
+                  >
+                    <div className="inventory-item-header">
+                      <span className="inventory-item-name">
+                        <GameIcon id={id as ResourceId} /> {def?.name ?? id}
+                      </span>
+                      <span className={`inventory-item-count${atCap ? " at-cap" : ""}`}>
+                        {amount}/{limit}
+                      </span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                    {isExpanded && (
+                      <div className="inventory-item-desc">
+                        {def?.description}
+                        {(() => {
+                          const groupMembers = getStorageGroupMembers(state, id);
+                          if (groupMembers.length === 0) return null;
+                          return (
+                            <div className="storage-group-hint">
+                              Shares storage with{" "}
+                              {groupMembers.map((m, i) => (
+                                <span key={m.id}>
+                                  {i > 0 && ", "}
+                                  <GameIcon id={m.id as ResourceId} size={16} />{m.name}
+                                  {m.amount > 0 && ` (${m.amount})`}
+                                </span>
+                              ))}
+                            </div>
+                          );
+                        })()}
+                        {resourceSources[id] && (
+                          <div className="resource-sources">
+                            From: {resourceSources[id].join(", ")}
+                          </div>
+                        )}
+                        {toolEnables[id] && (
+                          <div className="tool-enables">
+                            Enables: {toolEnables[id].join(", ")}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tools section — below items since tools don't change often */}
+      {showTools && hasTools && (
+        <div className="inventory-category">
+          <h3 className="section-title">Tools</h3>
+          {viewMode === "grid" ? (
+            <div className="inventory-grid">
+              {state.tools.map((toolId) => {
+                const def = TOOLS[toolId];
+                return (
+                  <div
+                    key={toolId}
+                    className="inventory-grid-cell"
+                    title={def?.name ?? toolId}
+                  >
+                    <GameIcon id={toolId as ToolId} size={28} />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="inventory-items">
+              {state.tools.map((toolId) => {
+                const def = TOOLS[toolId];
+                const isExpanded = expandedId === `tool:${toolId}`;
+                return (
+                  <div
+                    key={toolId}
+                    className={`inventory-item${isExpanded ? " expanded" : ""}`}
+                    onClick={() => toggleExpand(`tool:${toolId}`)}
+                  >
+                    <div className="inventory-item-header">
+                      <span className="inventory-item-name">
+                        <GameIcon id={toolId as ToolId} /> {def?.name ?? toolId}
+                      </span>
+                    </div>
+                    {isExpanded && (
+                      <div className="inventory-item-desc">
+                        {def?.description}
+                        {toolEnables[toolId] && (
+                          <div className="tool-enables">
+                            Enables: {toolEnables[toolId].join(", ")}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>

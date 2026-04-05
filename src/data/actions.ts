@@ -88,6 +88,24 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "large_shell", amount: 1, chance: 0.01 },
     ],
     xpGain: 8,
+    hideWhen: [{ type: "has_biome", biomeId: "rocky_shore" }],
+  },
+  {
+    id: "comb_rock_pools",
+    name: "Comb Rock Pools",
+    description:
+      "Pick through the deeper rocky pools — better spots for crabs to hide.",
+    skillId: "fishing",
+    panel: "gather",
+    durationMs: 4000,
+    drops: [
+      { resourceId: "small_fish", amount: 1, chance: 0.15 },
+      { resourceId: "crab", amount: 1, chance: 0.35 },
+      { resourceId: "shell", amount: 1 },
+      { resourceId: "large_shell", amount: 1, chance: 0.01 },
+    ],
+    requiredBiome: "rocky_shore",
+    xpGain: 8,
   },
 
   // Construction
@@ -163,7 +181,8 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0 },
+      { resourceId: "large_fish", amount: 1, chance: 0.15 },
+      { resourceId: "crab", amount: 1, chance: 0.15 },
       { resourceId: "shell", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["bamboo_spear"],

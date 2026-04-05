@@ -94,6 +94,7 @@ Over time your camp grows into a small settlement with workshops, farms, and spe
 ## Design Goals
 
 - **Single playthrough** — no prestige, rebirth, or reset loops; one continuous run from castaway to thriving settlement (challenge modes may come later, but no repeating reset cycle)
+- **Sandbox progression** — content unlocks in broad waves rather than a strict linear path; at any point the player has multiple valid things to pursue (better food, new tools, exploration, building) — like Minecraft, the fun is in choosing your own priorities
 - Focus on satisfying progression
 - No artificial waiting or pay-to-skip mechanics
 - Deep crafting and resource chains

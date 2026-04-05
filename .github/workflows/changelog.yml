@@ -4,6 +4,14 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: changelog
+  cancel-in-progress: false
+
 jobs:
   changelog:
     # Skip if this push was the changelog bot itself (avoid infinite loop)
@@ -21,8 +29,11 @@ jobs:
           COMMIT_SHA="${{ github.sha }}"
           COMMIT_MSG=$(git log -1 --pretty=%B "$COMMIT_SHA")
 
-          # Try to extract PR number from merge commit message
+          # Try to extract PR number from merge commit or squash merge message
           PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP 'Merge pull request #\K[0-9]+' || echo "")
+          if [ -z "$PR_NUMBER" ]; then
+            PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP '\(#\K[0-9]+(?=\))' || echo "")
+          fi
 
           # Get diff — compare against parent commit(s)
           # For merge commits, diff against first parent (i.e. what the PR changed)
@@ -77,6 +88,7 @@ jobs:
           IMPORTANT RULES:
           - Only include changes that PLAYERS would notice: new content, UI changes, gameplay fixes, balance changes, new features, quality-of-life improvements.
           - SKIP internal/dev changes: analytics, CI/CD, development tools, documentation, refactoring with no visible effect, build config, deployment changes, code cleanup.
+          - SKIP dev wiki and dependency/progression graph changes — these are developer-only tools accessed via ?dev query param, not player-facing features.
           - SKIP dependency updates unless they visibly affect the game.
           - Write from the player's perspective. Say "Fixed X" not "Refactored Y module". Say "Added new recipe: Z" not "Created recipe entry in data file".
           - Be concise — one line per change, no fluff.
@@ -154,30 +166,50 @@ jobs:
       - name: Update changelog.json
         if: steps.generate.outputs.skip != 'true'
         run: |
+          COMMIT_SHA="${{ github.sha }}"
           ENTRY=$(cat /tmp/changelog_entry.json)
           TODAY=$(cat /tmp/changelog_date.txt)
           CHANGELOG_FILE="src/data/changelog.json"
 
-          # Read existing changelog
-          if [ -f "$CHANGELOG_FILE" ]; then
-            EXISTING=$(cat "$CHANGELOG_FILE")
-          else
-            EXISTING="[]"
-          fi
+          # Pull latest in case backfill or another run updated the file
+          git pull --rebase origin main || true
 
-          # Prepend new entry (newest first)
+          EXISTING=$(cat "$CHANGELOG_FILE")
+
+          # Prepend new entry and update meta.newestReviewed
           UPDATED=$(echo "$EXISTING" | jq \
             --arg date "$TODAY" \
+            --arg sha "$COMMIT_SHA" \
             --argjson changes "$ENTRY" \
-            '[{date: $date, changes: $changes}] + .')
+            '.meta.newestReviewed = $sha
+            | .entries = [{date: $date, changes: $changes}] + .entries')
 
           echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
 
-      - name: Commit and push
-        if: steps.generate.outputs.skip != 'true'
+      - name: Update meta even if no entry
+        if: steps.generate.outputs.skip == 'true'
         run: |
+          COMMIT_SHA="${{ github.sha }}"
+          CHANGELOG_FILE="src/data/changelog.json"
+
+          git pull --rebase origin main || true
+
+          EXISTING=$(cat "$CHANGELOG_FILE")
+          UPDATED=$(echo "$EXISTING" | jq --arg sha "$COMMIT_SHA" '.meta.newestReviewed = $sha')
+          echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
+
+      - name: Commit and push
+        run: |
+          CHANGELOG_FILE="src/data/changelog.json"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/data/changelog.json
+          git add "$CHANGELOG_FILE"
+
+          # Only commit if there are actual changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
           git commit -m "Update changelog [changelog]"
           git push

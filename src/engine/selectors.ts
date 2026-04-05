@@ -74,6 +74,21 @@ export function selectAvailableActions(state: GameState): ActionDef[] {
     if (action.requiredTools?.some((toolId) => !hasTool(state, toolId))) return false;
     if (action.requiredResources?.some((resId) => getResource(state, resId) < 1)) return false;
     if (action.oneTimeAction && action.drops.some((drop) => getResource(state, drop.resourceId) >= 1)) return false;
+    if (action.hideWhen) {
+      const allMet = action.hideWhen.every((cond) => {
+        switch (cond.type) {
+          case "has_building":
+            return state.buildings.includes(cond.buildingId);
+          case "has_tool":
+            return state.tools.includes(cond.toolId);
+          case "has_biome":
+            return state.discoveredBiomes.includes(cond.biomeId);
+          default:
+            return false;
+        }
+      });
+      if (allMet) return false;
+    }
     return true;
   });
 }
@@ -114,6 +129,8 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
             return hasBuildingOrUpgrade(cond.buildingId);
           case "has_tool":
             return state.tools.includes(cond.toolId);
+          case "has_biome":
+            return state.discoveredBiomes.includes(cond.biomeId);
           case "output_no_use":
             return recipe.output ? !resourceHasUse(recipe.output.resourceId, state) : false;
           default:
@@ -322,7 +339,16 @@ export function selectCurrentSkillInfo(state: GameState): CurrentSkillInfo | nul
   };
 }
 
-export function selectUndiscoveredBiomeCount(state: GameState): number {
+export function selectUndiscoveredBiomeCount(state: GameState, expeditionId?: string): number {
+  if (expeditionId) {
+    const exp = getExpeditionById(expeditionId);
+    if (exp) {
+      const biomes = exp.outcomes
+        .filter((o) => o.biomeDiscovery)
+        .map((o) => o.biomeDiscovery!);
+      return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+    }
+  }
   const totalBiomes = Object.keys(getBiomes()).length;
   return totalBiomes - state.discoveredBiomes.length;
 }

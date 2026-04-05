@@ -1,10 +1,12 @@
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { ActionPanel } from "./components/ActionPanel";
+import { BiomeDiscoveryModal } from "./components/BiomeDiscoveryModal";
 import { ChapterCard } from "./components/ChapterCard";
 import { CloseIcon } from "./components/CloseIcon";
 import { CollectFlyup, type FlyupItem } from "./components/CollectFlyup";
 import { CraftingPanel } from "./components/CraftingPanel";
 import { DevGraph } from "./components/DevGraph";
+
 import { FeedbackBanner } from "./components/FeedbackBanner";
 import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
@@ -22,9 +24,12 @@ import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
 import { StationsPanel } from "./components/StationsPanel";
 import { VictoryScreen } from "./components/VictoryScreen";
+import { WhatsNew, ChangelogModal } from "./components/WhatsNew";
 import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
+import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
+import { DiscoveryEntry, QueuedAction } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -42,10 +47,33 @@ import {
   selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
+import { getActionById, getRecipeById } from "./data/registry";
 import { useGame } from "./engine/useGame";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
+
+function getQueuedActionName(q: QueuedAction): string {
+  if (q.actionType === "gather") {
+    return getActionById(q.actionId)?.name ?? q.actionId;
+  }
+  return getRecipeById(q.actionId)?.name ?? q.actionId;
+}
+
+function getQueuedActionIcon(q: QueuedAction): string {
+  if (q.actionType === "gather") {
+    const action = getActionById(q.actionId);
+    if (action && action.drops.length > 0) return action.drops[0].resourceId;
+  } else {
+    const recipe = getRecipeById(q.actionId);
+    if (recipe) {
+      if (recipe.output) return recipe.output.resourceId;
+      if (recipe.toolOutput) return recipe.toolOutput;
+      if (recipe.buildingOutput) return recipe.buildingOutput;
+    }
+  }
+  return q.actionId;
+}
 
 export default function App() {
   // Dev tools: ?dev for wiki, ?dev=graph for progression graph
@@ -71,17 +99,20 @@ export default function App() {
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
   const [pendingChapter, setPendingChapter] = useState<PhaseInfo | null>(null);
+  const [biomeDiscoveryQueue, setBiomeDiscoveryQueue] = useState<DiscoveryEntry[]>([]);
   const [victoryDismissed, setVictoryDismissed] = useState(
     () => localStorage.getItem("seabound_victoryDismissed") === "true"
   );
   const activeModId = getActiveModId();
   const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
   const [flyups, setFlyups] = useState<FlyupItem[]>([]);
+  const [changelogOpen, setChangelogOpen] = useState(false);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
   const [highlightedResources, setHighlightedResources] = useState<Set<string>>(new Set());
   const isOldDomain = window.location.hostname === "seabound.pages.dev";
+  const queueMode = game.state.queueMode;
 
   // Close "more" menu on outside click
   useEffect(() => {
@@ -156,6 +187,17 @@ export default function App() {
     }
   };
 
+  // Biome discovery modal queue
+  const handleBiomeDiscovery = useCallback((entry: DiscoveryEntry) => {
+    setBiomeDiscoveryQueue((prev) => [...prev, entry]);
+  }, []);
+
+  const dismissBiomeDiscovery = useCallback(() => {
+    setBiomeDiscoveryQueue((prev) => prev.slice(1));
+  }, []);
+
+  const pendingBiome = biomeDiscoveryQueue[0] ?? null;
+
   // Split recipes by explicit panel metadata
   const craftRecipes = useMemo(
     () => selectCraftRecipes(game.availableRecipes),
@@ -182,6 +224,14 @@ export default function App() {
   const hasAnyResource = useMemo(() => selectHasAnyResource(game.state), [game.state]);
 
   // On mobile, inventory is a tab; on desktop it's always visible as sidebar
+  const queueUnlocked = useMemo(
+    () => isQueueUnlocked(game.state),
+    [game.state]
+  );
+  const maxQueueSize = useMemo(
+    () => getMaxQueueSize(game.state),
+    [game.state]
+  );
   const routinesUnlocked = useMemo(
     () => isRoutinesUnlocked(game.state),
     [game.state]
@@ -243,9 +293,27 @@ export default function App() {
     [game.state]
   );
   const undiscoveredBiomes = useMemo(
-    () => selectUndiscoveredBiomeCount(game.state),
+    () => selectUndiscoveredBiomeCount(game.state, game.state.currentAction?.expeditionId),
     [game.state]
   );
+
+  // Queue-aware action callbacks: when queue mode is on and an action is running,
+  // clicking an action queues it instead of immediately switching
+  const handleStartAction = useCallback((action: Parameters<typeof game.startAction>[0]) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: action.id, actionType: "gather" });
+    } else {
+      game.startAction(action);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startAction, game.queueAction]);
+
+  const handleStartCraft = useCallback((recipe: Parameters<typeof game.startCraft>[0]) => {
+    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
+      game.queueAction({ actionId: recipe.id, actionType: "craft" });
+    } else {
+      game.startCraft(recipe);
+    }
+  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startCraft, game.queueAction]);
 
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
@@ -255,9 +323,16 @@ export default function App() {
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />
       )}
+      {pendingBiome && !pendingChapter && !game.state.victory && (
+        <BiomeDiscoveryModal
+          biomeId={pendingBiome.biomeId!}
+          message={pendingBiome.message}
+          onDismiss={dismissBiomeDiscovery}
+        />
+      )}
       <FeedbackQuestion
         hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
-        hasModalOpen={!!pendingChapter || settingsOpen || modPanelOpen || searchOpen || showLog}
+        hasModalOpen={!!pendingChapter || !!pendingBiome || settingsOpen || modPanelOpen || searchOpen || showLog}
         phaseName={currentPhase.name}
         discoveredBiomes={game.state.discoveredBiomes}
         totalPlayTimeMs={game.state.totalPlayTimeMs}
@@ -275,6 +350,7 @@ export default function App() {
           <button className="migrate-dismiss" onClick={() => setMigrateBannerDismissed(true)}><CloseIcon size={12} /></button>
         </div>
       )}
+      <WhatsNew />
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
@@ -326,9 +402,20 @@ export default function App() {
             <div className="current-action">
               <div className="current-action-info">
                 <span className="current-action-name">{currentActionName}</span>
-                <button className="stop-btn" onClick={game.stopAction}>
-                  Stop
-                </button>
+                <div className="current-action-buttons">
+                  {queueUnlocked && (
+                    <button
+                      className={`queue-toggle${queueMode ? " active" : ""}`}
+                      onClick={() => game.toggleQueueMode()}
+                      title="When active, clicking an action queues it instead of switching"
+                    >
+                      Queue {queueMode ? "On" : "Off"}
+                    </button>
+                  )}
+                  <button className="stop-btn" onClick={game.stopAction}>
+                    Stop
+                  </button>
+                </div>
               </div>
               <div className="progress-bar">
                 <div
@@ -382,6 +469,27 @@ export default function App() {
                   </span>
                 )}
               </div>
+              {game.state.actionQueue.length > 0 && (
+                <div className="action-queue-row">
+                  <span className="queue-label">Next:</span>
+                  <div className="queued-actions">
+                    {game.state.actionQueue.map((q, i) => (
+                      <span key={i} className="queued-action-tag">
+                        <GameIcon id={getQueuedActionIcon(q)} size={14} />
+                        {getQueuedActionName(q)}
+                      </span>
+                    ))}
+                    <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              )}
+              {queueMode && game.state.actionQueue.length === 0 && (
+                <div className="action-queue-row">
+                  <span className="queue-hint">Click an action to queue it next ({game.state.actionQueue.length}/{maxQueueSize})</span>
+                </div>
+              )}
             </div>
           )}
 
@@ -466,8 +574,9 @@ export default function App() {
               <ActionPanel
                 actions={gatherActions}
                 state={game.state}
-                onStart={game.startAction}
+                onStart={handleStartAction}
                 currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
+                queueMode={queueMode && !!game.state.currentAction}
               />
             )}
             {activeTab === "inventory" && (
@@ -479,8 +588,9 @@ export default function App() {
               <CraftingPanel
                 recipes={craftRecipes}
                 state={game.state}
-                onCraft={game.startCraft}
+                onCraft={handleStartCraft}
                 onHighlightResources={setHighlightedResources}
+                queueMode={queueMode && !!game.state.currentAction}
               />
             )}
             {activeTab === "tend" && (
@@ -498,8 +608,8 @@ export default function App() {
                 buildRecipes={buildRecipes}
                 buildActions={buildActions}
                 state={game.state}
-                onBuild={game.startCraft}
-                onStartAction={game.startAction}
+                onBuild={handleStartCraft}
+                onStartAction={handleStartAction}
                 onHighlightResources={setHighlightedResources}
               />
             )}
@@ -529,9 +639,14 @@ export default function App() {
           discoveryLog={game.state.discoveryLog}
           lastSeenDiscoveryId={game.state.lastSeenDiscoveryId}
           onSeen={game.markDiscoverySeen}
+          onBiomeDiscovery={handleBiomeDiscovery}
         />
 
       </div>
+
+      {changelogOpen && (
+        <ChangelogModal onClose={() => setChangelogOpen(false)} />
+      )}
 
       {modPanelOpen && (
         <ModPanel
@@ -602,6 +717,19 @@ export default function App() {
                     }}
                   />
                 </label>
+              </div>
+
+              <div className="settings-section">
+                <div className="settings-section-title">About</div>
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    setChangelogOpen(true);
+                    setSettingsOpen(false);
+                  }}
+                >
+                  Changelog
+                </button>
               </div>
 
               <div className="settings-section">

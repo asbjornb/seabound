@@ -4,6 +4,7 @@ import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
 import { WORKER_URL } from "../lib/analytics";
+import { DevPinGate } from "./DevPinGate";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -16,7 +17,7 @@ interface ChangelogEntry {
 }
 
 function Changelog() {
-  const entries = changelogData as ChangelogEntry[];
+  const entries = (changelogData as { entries: ChangelogEntry[] }).entries;
   if (entries.length === 0) {
     return (
       <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
@@ -197,8 +198,14 @@ function AnalyticsDashboard() {
     }
   }, [days]);
 
-  const milestoneLabel = (id: string) =>
-    id.replace(/_/g, " ").replace(/^phase /, "Phase: ").replace(/^first /, "First ");
+  const milestoneLabel = (id: string) => {
+    const s = id.replace(/_/g, " ");
+    if (s.startsWith("phase ")) {
+      const phase = s.slice(6);
+      return `Phase: ${phase.includes(" ") ? phase.split(" ").join(" & ") : phase}`;
+    }
+    return s.replace(/^first /, "First ");
+  };
 
   return (
     <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
@@ -271,23 +278,24 @@ function AnalyticsDashboard() {
 
           {/* Funnel */}
           <h4 style={{ color: "#e8e4d8", marginBottom: "0.5rem" }}>Progression Funnel</h4>
-          <table style={styles.table}>
+          <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+          <table style={{ ...styles.table, minWidth: 480 }}>
             <thead>
               <tr>
                 <th style={styles.th}>Milestone</th>
-                <th style={styles.th}>Reached</th>
-                <th style={styles.th}>%</th>
-                <th style={styles.th}>Median Total (min)</th>
-                <th style={styles.th}>Median Active (min)</th>
-                <th style={styles.th}>Median Actions</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Reached</th>
+                <th style={{ ...styles.th, textAlign: "center" }}>%</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Total (min)</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Active (min)</th>
+                <th style={{ ...styles.th, textAlign: "right" }}>Median Actions</th>
               </tr>
             </thead>
             <tbody>
               {data.funnel.map((f) => (
                 <tr key={f.milestone} style={styles.tr}>
-                  <td style={styles.td}>{milestoneLabel(f.milestone)}</td>
-                  <td style={styles.td}>{f.reached}</td>
-                  <td style={styles.td}>
+                  <td style={{ ...styles.td, whiteSpace: "nowrap" }}>{milestoneLabel(f.milestone)}</td>
+                  <td style={{ ...styles.td, textAlign: "right" }}>{f.reached}</td>
+                  <td style={{ ...styles.td, textAlign: "center" }}>
                     <span style={{
                       display: "inline-block",
                       background: "#2d4a3e",
@@ -302,13 +310,14 @@ function AnalyticsDashboard() {
                       {f.pctOfTotal}%
                     </span>
                   </td>
-                  <td style={styles.td}>{f.medianTotalTimeMin ?? "—"}</td>
-                  <td style={styles.td}>{f.medianActiveTimeMin ?? "—"}</td>
-                  <td style={styles.td}>{f.medianActions ?? "—"}</td>
+                  <td style={{ ...styles.td, textAlign: "right" }}>{f.medianTotalTimeMin ?? "—"}</td>
+                  <td style={{ ...styles.td, textAlign: "right" }}>{f.medianActiveTimeMin ?? "—"}</td>
+                  <td style={{ ...styles.td, textAlign: "right" }}>{f.medianActions ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* Drop-off */}
           {Object.keys(data.dropOff).length > 0 && (
@@ -343,7 +352,16 @@ function AnalyticsDashboard() {
   );
 }
 
+type WikiTab = "content" | "changelog" | "tools";
+
+const tabLabels: Record<WikiTab, string> = {
+  content: "Content",
+  changelog: "Changelog",
+  tools: "Dev Tools",
+};
+
 export function DevWiki() {
+  const [activeTab, setActiveTab] = useState<WikiTab>("content");
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const SKILLS = getSkills();
@@ -361,15 +379,44 @@ export function DevWiki() {
         data files, so it's always in sync with the game.
       </p>
 
-      <DevTools />
-      <Changelog />
-      <AnalyticsDashboard />
+      {/* Tab bar */}
+      <div style={styles.tabBar}>
+        {(Object.keys(tabLabels) as WikiTab[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              ...styles.tabBtn,
+              ...(activeTab === tab ? styles.tabBtnActive : {}),
+            }}
+          >
+            {tabLabels[tab]}
+          </button>
+        ))}
+        <a href="?dev=graph" style={{ ...styles.tabBtn, textDecoration: "none", color: "#7a9a8a" }}>
+          Graph
+        </a>
+        <a href="?dev=dot" style={{ ...styles.tabBtn, textDecoration: "none", color: "#7a9a8a" }}>
+          DOT Graph
+        </a>
+      </div>
 
+      {/* Changelog tab */}
+      {activeTab === "changelog" && <Changelog />}
+
+      {/* Dev Tools tab */}
+      {activeTab === "tools" && (
+        <DevPinGate>
+          <DevTools />
+          <AnalyticsDashboard />
+        </DevPinGate>
+      )}
+
+      {/* Content tab */}
+      {activeTab === "content" && (
+        <>
       <nav style={styles.toc}>
-        <a href="?dev=graph" style={{ ...styles.link, fontWeight: 600 }}>Progression Graph</a>
-        {" · "}
-        <strong>Contents:</strong>{" "}
-        <a href="#changelog" style={styles.link}>Changelog</a> ·{" "}
+        <strong>Jump to:</strong>{" "}
         <a href="#resources" style={styles.link}>Resources</a> ·{" "}
         <a href="#tools" style={styles.link}>Tools</a> ·{" "}
         <a href="#skills" style={styles.link}>Skills</a> ·{" "}
@@ -742,6 +789,8 @@ export function DevWiki() {
           );
         })}
       </section>
+        </>
+      )}
 
       <footer style={styles.footer}>
         Generated from source data files. Add new content to{" "}
@@ -863,6 +912,29 @@ const styles: Record<string, React.CSSProperties> = {
     color: "#7a9a8a",
     marginBottom: "1.5rem",
     fontSize: "0.9rem",
+  },
+  tabBar: {
+    display: "flex",
+    gap: "0.25rem",
+    marginBottom: "1.5rem",
+    borderBottom: "2px solid #1e3a3a",
+    paddingBottom: "0",
+  },
+  tabBtn: {
+    background: "transparent",
+    border: "none",
+    borderBottom: "2px solid transparent",
+    padding: "0.6rem 1rem",
+    marginBottom: "-2px",
+    color: "#7a9a8a",
+    fontSize: "0.9rem",
+    fontWeight: 600,
+    cursor: "pointer",
+    transition: "color 0.15s, border-color 0.15s",
+  } as React.CSSProperties,
+  tabBtnActive: {
+    color: "#f0a050",
+    borderBottomColor: "#f0a050",
   },
   toc: {
     background: "#132626",

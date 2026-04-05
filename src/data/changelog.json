@@ -1,1 +1,257 @@
-[]
+{
+  "meta": {
+    "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
+    "newestReviewed": "5a0992ab31e5dc0eec371cb94d21e114f9c7c41d"
+  },
+  "entries": [
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Fix queue mode setting not persisting across page refreshes"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Fix icons in action queue display to show correct resource/tool/building icons instead of broken action IDs"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Fix dry grass action never stopping when output is full"
+      ]
+    },
+    {
+      "date": "2026-04-05",
+      "changes": [
+        "Add biome discovery modal with banner images, name, and flavor text when discovering new biomes",
+        "Add new 'Comb Rock Pools' action for Rocky Shore and 'Rock Pool Cache' building (+3 storage for fish, crabs, shells)",
+        "Apply all Fishing skill milestones to both Wade Tidal Pool and Comb Rock Pools actions",
+        "Fix expedition progress bar to show only undiscovered biomes for the current expedition",
+        "Fix mobile modal display and layering issues on Chrome Android",
+        "Improve Spear Fishing: now has 15% chance to catch large fish and 15% chance to catch crabs, plus 10% faster at Fishing level 8"
+      ]
+    },
+    {
+      "date": "2026-04-04",
+      "changes": [
+        "Add collapsible stash section to resource panel for organizing items when inventory exceeds 15 items",
+        "Add encouraging messages when discovering the Bamboo Grove and building the Camp Fire",
+        "Add grid view toggle to inventory panel with saved preference",
+        "Improve early game food production pacing with stronger Fishing Level 2 (+5% crab) and Level 3 (+10% fish) milestones",
+        "Move tools section below items in inventory (tools don't change often)",
+        "Show building discovery notifications in toast alerts alongside biome discoveries"
+      ]
+    },
+    {
+      "date": "2026-04-03",
+      "changes": [
+        "Action cards where all outputs are full now show an amber border and reduced opacity",
+        "Add item source information in inventory (shows which actions, recipes, stations, or expeditions produce each resource)",
+        "Display currently training skill with level and XP progress while performing actions",
+        "Fix crop stations exceeding plot limits, expedition loop running one extra cycle, and progress bar showing incorrect craft count with substitutes",
+        "Make inventory items tap-to-expand to show detailed information",
+        "Replace biome icons with panoramic banner headers in the gather tab",
+        "Show mini storage bars on gather action drops with amber warnings at 80%+ capacity",
+        "Show tool prerequisites on locked actions and recipes instead of hiding them completely",
+        "Sort ready-to-collect stations to the top, with in-progress stations sorted by time remaining",
+        "Stop-when-full is now always enforced — actions automatically stop when output storage is full",
+        "Show count of undiscovered biomes remaining during expeditions"
+      ]
+    },
+    {
+      "date": "2026-04-02",
+      "changes": [
+        "Add 'Give feedback' button in settings menu",
+        "Add Cinzel serif display font to game title, chapter names, and victory screen",
+        "Add collection flyup animation when gathering resources from stations",
+        "Add new Charcoal Board building that grants +1 routine slot (moved from Charcoal Kiln)",
+        "Add reset confirmation dialog requiring user to type 'RESET' to confirm dangerous actions",
+        "Add subtle crossfade transition when switching between tabs and support for prefers-reduced-motion",
+        "Adjust Construction skill requirements: Well now Lv5 (was Lv6), Hammock Lv7 (was Lv8), skill cap reduced to 15",
+        "Convert settings dropdown to a full modal with organized sections",
+        "Fix alternate crafting resources showing as available before discovery, and stone_flake appearing useless after crafting stone_blade",
+        "Fix feedback modal display and accidental dismissal on mobile devices",
+        "Fix tab bar overflow on mobile by moving less-used tabs behind a 'More' menu",
+        "Fix win screen re-appearing after dismissing it and reloading the page",
+        "Improve typography with Inter body font and sentence-case section headers",
+        "Increase XP rewards from one-time construction builds by ~25-30%",
+        "Lower starting morale from 100 to 55, giving players more room to improve through gameplay",
+        "Rebalance expedition food costs: Beach exploration 5→4, Interior 8→6, Nearby Island 3→7"
+      ]
+    },
+    {
+      "date": "2026-04-01",
+      "changes": [
+        "Add Routines automation feature — chain 2+ gather/craft actions into repeating sequences that unlock at skill level 15",
+        "Add Stone Tidal Weir building and Tidal Weir station (Fishing level 11) — yields bulk fish, crabs, and shells every 8 minutes",
+        "Add feedback question modal that appears after idle gameplay with 5-day cooldown and minimizable floating button",
+        "Building upgrades expand routines: Charcoal Kiln (+1 slot), Storage Shelf (+1 step and step counts), Outrigger Canoe (+2 steps)",
+        "Display which resources share storage with current item in crafting and inventory panels",
+        "Fix Drop Line Fishing no longer requiring Fishing level 8 — gorge_hook tool provides sufficient gating",
+        "Fix mobile modal issues: disappearing on scroll, incorrect positioning, and accidental dismissal",
+        "Fix routine loop symbol display and station UI not showing correct costs with milestone upgrades",
+        "Gather steps auto-stop when output is full to allow routine progression, and crafting is prevented when output storage is full",
+        "Soaking Pit and stations now only appear after discovering the required resources, creating clearer upgrade paths"
+      ]
+    },
+    {
+      "date": "2026-03-31",
+      "changes": [
+        "Add 'Continue Playing' button to victory screen with golden glow effect",
+        "Add Charcoal Kiln building and Charcoal resource — convert large logs into charcoal as alternative fuel for cooking and firing recipes",
+        "Add Clay Storage Jar building: +1 food storage per jar, stackable up to 5",
+        "Add Log Rack (+10 large item storage), Storage Shelf (+5 general and +10 food storage), and Soaking Pit (+5 pandanus storage) buildings",
+        "Add Pottery Wheel building (halves clay pot shaping time) and new wheel-throw and kiln-fire pot recipes",
+        "Add Retted Pandanus resource and pottery breakage mechanic with clay wedging milestone to reduce cracking",
+        "Add new speed milestones: Cooking 7, Crafting 7, Farming 6, Fishing 7, Foraging 8, Weaving 8, and Woodworking 6 (all +10% faster)",
+        "Add Woodworking Lv12 milestone (fell large trees 15% faster), Crafting 5 (double pandanus strips), Crafting 9 (clay wedging), Crafting 12 (batch firing), and Weaving 10 (faster rope)",
+        "Add migration banner on old .pages.dev domain with 'Move my save' button and auto-import on seabound.dev",
+        "Add chapter banner image for the Voyage phase and rename Chapter 5 from 'Escape' to 'Voyage'",
+        "Charcoal can now replace driftwood in most fire-based crafting recipes",
+        "Fired clay pots and fresh water now share a combined storage cap",
+        "Fix fully-deployed stations remaining visible in Deploy section, and recipes reappearing after building upgrades",
+        "Fix Charcoal Kiln storage bonus to only affect charcoal, and auto-stop not triggering on chance-based drops",
+        "Fix duplicate biome discovery toasts and harvest_pandanus_grove requiring wrong skill level",
+        "Fresh water no longer triggers 'sink chance' when filling pots",
+        "Improve Crafting Panel UI to display alternate resource options with 'or' separator",
+        "Improve journal display as centered modal overlay and tab bar with stacked icon/label design",
+        "Improve visual clarity of resource and building icons across the game",
+        "Increase expedition food costs: Sail to Far Island 5→10, Sail to Nearby Island 3→10",
+        "Increase XP gains from farming stations and lower Taro requirement from Farming Lv5 to Lv3",
+        "Move Farming Lv7 gate to building the Pandanus Grove, remove well requirement for Grow Pandanus",
+        "Remove skill level requirements from sail and sealed clay jar recipes",
+        "Replace emoji tab icons with custom game icons",
+        "Show locked stations in Tend tab and which buildings provide crop station slots",
+        "Fenced Perimeter now provides +5 large item storage and Thatched Hut +5 food storage"
+      ]
+    },
+    {
+      "date": "2026-03-30",
+      "changes": [
+        "Add 'Escape' phase triggered by building the Outrigger Canoe, with 'Fit Outrigger & Sail' recipe and 'Oceanic Voyage' final expedition",
+        "Add global search to find actions, recipes, stations, and expeditions by name, inputs, or outputs with quick-start buttons",
+        "Add new 'Tend' tab for managing stations like fish traps and crop plots, separate from building construction",
+        "Add victory screen displaying total skill levels, biomes discovered, and buildings built",
+        "Auto-redeploy stations like basket traps and pandanus groves after collection",
+        "Dugout and oceanic voyages now return empty fired clay pots and sealed clay jars as rewards",
+        "Fix base building recipes reappearing after upgrades, and farmland upgrade chain now correctly shares a combined limit of 3",
+        "Improve morale tooltip with expanded panel showing speed effects, decay rate, and restoration methods",
+        "Increase Kiln building requirement from Construction 10 to 13",
+        "Remove direct water collection — fresh water now requires a well and 'Fill Water Pot' recipe"
+      ]
+    },
+    {
+      "date": "2026-03-29",
+      "changes": [
+        "Add Pandanus Fiber system: new mid-game fiber path with Pandanus Cutting, Grove building, and recipes for drying, stripping, weaving cordage, twisting rope, and sewing sails",
+        "Add pity system for biome discovery expeditions — failed attempts gradually increase discovery chances",
+        "Add skill milestones for all skills: speed bonuses, double output chances, and improved drop rates for Construction, Cooking, Crafting, Farming, Fishing, Foraging, Navigation, Weaving, and Woodworking",
+        "Add three-tier comfort buildings: Sleeping Mat (20%), Hammock (35%), and Thatched Hut (50%) progressively slow morale decay",
+        "Buildings can now provide bonuses to the max count of other stackable buildings (e.g., Fenced Perimeter grants +5 max woven baskets)",
+        "Fix crafting and expedition durations to benefit from skill milestones (previously only gathering actions got this bonus)",
+        "Fix food/water resources disappearing from gather drops and farming seeds being incorrectly filtered",
+        "Fix gathering stopping prematurely when one output fills up — now continues as long as any output has storage",
+        "Fix stop-if-full to correctly pause on chance-based drops and scale XP diminishing returns with storage expansions",
+        "Remove Construction skill requirement from Dugout assembly — now only gated by the tree-felling chain",
+        "Show morale gain on Maintain Camp recipe, including soft cap warning when morale is above 100"
+      ]
+    },
+    {
+      "date": "2026-03-28",
+      "changes": [
+        "Add 'Stop if full' button to automatically stop actions when output storage reaches capacity, with persistent setting",
+        "Add NEW badge to uncompleted actions and recipes to help them stand out",
+        "Add mod system — import, export, and switch between game data mods from Settings, with .zip icon support and full validation",
+        "Add loot/drop table display to expedition cards showing weighted drops by probability, updating dynamically with discovered biomes",
+        "Display effective morale gain on crafting cards when soft cap applies, and show morale speed bonus on the top panel",
+        "Display remaining craft count in progress bar when inputs are running low, and show input/output storage status",
+        "Fix actions validating required buildings, tools, and resources before starting, and crafts/expeditions stopping when you can't afford the next cycle",
+        "Fix recipes hidden when materials weren't marked as discovered, and stackable buildings not respecting max count",
+        "Fix wild seeds UI incorrectly limiting deployments to 1 despite having multiple farming plots",
+        "Hide obsolete recipes automatically: dugout components after building, stone flake/blade when unneeded, twist cordage after fiber loom",
+        "Hide gathering drops and inventory items with no remaining recipe use (except food/water)",
+        "Improve mobile layout: Inventory and Skills as modal overlays, skills in desktop sidebar, stacked sections",
+        "Save partial progress when switching between actions so you don't lose invested time",
+        "Reduce weaving requirement for basket trap from level 6 to 5, and remove weaving 5 requirement from braid cordage",
+        "Reorganize weaving milestones: twist cordage bonuses now unlock at Weaving 2-3"
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "changes": [
+        "Add 'Hide flavor text' setting to reduce visual clutter on action cards, inventory items, and building cards",
+        "Add feedback banner with anonymous feedback form and alternative options (GitHub issues, email)",
+        "Add fun discovery message when building a dugout before ever crafting a raft",
+        "Add vessel tier system: dugout now satisfies any expedition requiring a raft, and hide raft recipe once dugout is built",
+        "Add new discovery outcome to dugout voyages: discover nearby islands with obsidian",
+        "Display drops vertically sorted by chance descending, always showing percentages including 100%",
+        "Simplify Bamboo Knife: requires only 1 bamboo splinter, crafts in 3s (was 4s), reduced XP from 12 to 8"
+      ]
+    },
+    {
+      "date": "2026-03-23",
+      "changes": [
+        "Bamboo Knife reworked: now required for Bamboo Spear, speeds up Shred Coconut Husk and Split Bamboo by 10%, and gives 30% chance for +1 extra shredding output",
+        "Change voyage provisions recipe to require 5 different foods instead of 2 cooked fish + 3 coconut",
+        "Fix expedition food requirements to choose cheapest food source instead of requiring all food types",
+        "Obsidian Blade now required to craft Basket Trap",
+        "Remove Preservation skill — recipes merged into Cooking and Crafting (Dry Fiber, Sealed Clay Jar, Voyage Provisions moved)"
+      ]
+    },
+    {
+      "date": "2026-03-22",
+      "changes": [
+        "Remove skill level requirements from Fire Clay Pot and Firing Pit recipes — now gated by material and building availability only"
+      ]
+    },
+    {
+      "date": "2026-03-21",
+      "changes": [
+        "Add Rocky Shore biome with 'Comb Rocky Shore' action (flat stone or chert) and move dry grass collection there",
+        "Add Stone Hearth building (Construction 14) that removes dry grass kindling requirement from all cooking recipes",
+        "Add XP diminishing returns: reduced XP after 30 completions, scaling down to 10% by 100 completions, with progressive scaling for levels above 10",
+        "Add chapter card transitions with thematic flavor text and dynamic color themes that shift per phase",
+        "Add evolving island banner that grows as you progress (palm tree → bamboo → fire → stones → raft)",
+        "Add toast notifications for discoveries with tap-to-dismiss and close button",
+        "Add tool capability descriptions in inventory showing which actions and recipes each tool enables",
+        "Add visual highlight to the currently active gathering action with a glowing border effect",
+        "Major progression rework: shift gating from skill levels to biome discovery and crafting chains — skills now gate efficiency only",
+        "Reduce skill requirements across the board: Raft (8→5), Firing Pit (12→6), Dugout (18→8), Kiln (25→10), Stone Axe (14→10), Fell Large Tree (15→10)",
+        "Remove skill level requirements from stone tool recipes, bamboo tier recipes, shell adze, and boat component recipes — now gated by materials and tools",
+        "Reorganize UI: tabs reordered to Gather → Craft → Build → Explore, gather grouped by biome, crafting grouped by type",
+        "Fix resources consumed at action start instead of completion, and morale decay not accumulating properly",
+        "Fix drop line fishing availability and notification toasts re-appearing on reload",
+        "Hide obsolete recipes automatically when their outputs are no longer needed",
+        "Improve expeditions to gracefully stop when food/water runs out instead of canceling entirely"
+      ]
+    },
+    {
+      "date": "2026-03-18",
+      "changes": [
+        "Add resource icons throughout the UI: crafting inputs/outputs, gathering drops, and required tools"
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "changes": [
+        "Add 'Craftable now' filter in Crafting panel to hide recipes you can't afford",
+        "Add 'Sail to Nearby Island' expedition with Nearby Island biome, Obsidian, and Obsidian Blade resources",
+        "Add fishing progression: Drop Line Fishing (Fishing 8) with Gorge Hook, and Basket Trap Fishing (Fishing 10) with Basket Trap",
+        "Add Fiber Loom building and Braid Cordage recipe for more efficient cordage production",
+        "Add pottery chain: Shaped Clay Pot → Fired Clay Pot → Sealed Clay Jar, with Firing Pit and Kiln buildings",
+        "Add Raft vessel recipe (Construction 8) and Crucible recipe (Preservation 30)",
+        "Add station system: deploy traps and farms that passively generate resources over time, with offline support",
+        "Add new milestones: Crafting 5 (extra cordage), Preservation 3 (double drying), Fishing 12 (faster drop line), Fishing 15 (+10% large fish)",
+        "Add visual polish: ambient gradient, card hover effects, shimmer progress bars, glow effects, and emoji icons throughout",
+        "Add collapsible skill sections in Actions and Crafting panels with item count badges",
+        "Add update checker banner that prompts players to refresh when a new version is available",
+        "Obsidian Blade provides 15% speed boost to all cutting actions and recipes",
+        "Move twist cordage and 'Rope hand' milestone from crafting to weaving skill",
+        "Fix recipes showing up before required resources are discovered, and remove shell beads as physical items",
+        "Show current inventory quantity and double-output percentages on crafting recipes"
+      ]
+    }
+  ]
+}

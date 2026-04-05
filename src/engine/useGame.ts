@@ -3,6 +3,7 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getPhases,
   getRecipeById,
   getResources,
   getStationById,
@@ -15,11 +16,13 @@ import type {
   DiscoveryType,
   ExpeditionDef,
   GameState,
+  QueuedAction,
   RecipeDef,
   Routine,
   RoutineStep,
   StationDef,
 } from "../data/types";
+import { getMaxQueueSize, isQueueUnlocked } from "../data/queue";
 
 import {
   addResource,
@@ -204,18 +207,33 @@ function advanceRoutine(state: GameState): void {
   state.activeRoutine = null;
 }
 
+/** Try to start the next queued action. Removes the entry on success or if it can't start. */
+function advanceQueue(state: GameState): void {
+  while (state.actionQueue.length > 0) {
+    const queued = state.actionQueue[0];
+    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
+    state.actionQueue.shift();
+    if (tryStartRoutineStep(state, step)) {
+      return;
+    }
+    // If the queued action can't start (e.g. missing resources), skip it and try the next
+  }
+}
+
 let nextDiscoveryId = 0;
 
 function addDiscovery(
   state: GameState,
   type: DiscoveryType,
-  message: string
+  message: string,
+  extra?: { biomeId?: string }
 ): void {
   state.discoveryLog.unshift({
     id: nextDiscoveryId++,
     type,
     message,
     timestamp: Date.now(),
+    ...extra,
   });
 }
 
@@ -228,8 +246,9 @@ function processCompletionDiscoveries(
   const RESOURCES = getResources();
 
   if (c.biomeDiscovery) {
-    const name = c.biomeDiscovery.replace(/_/g, " ");
-    addDiscovery(state, "biome", `Discovered the ${name}`);
+    // Use the expedition outcome flavor text if available, otherwise fall back to generic
+    const flavorText = c.expeditionMessage ?? `You discovered the ${c.biomeDiscovery.replace(/_/g, " ")}!`;
+    addDiscovery(state, "biome", flavorText, { biomeId: c.biomeDiscovery });
   }
   if (c.buildingBuilt) {
     const bdef = BUILDINGS[c.buildingBuilt];
@@ -320,6 +339,10 @@ export function useGame() {
             advanceRoutine(next);
           }
         }
+        // Queue advancement for offline progress (only if no routine is active)
+        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          advanceQueue(next);
+        }
         if (result.completions.length > 0) checkMilestones(next);
         return next;
       });
@@ -352,6 +375,10 @@ export function useGame() {
           if (!next.currentAction) {
             advanceRoutine(next);
           }
+        }
+        // Queue advancement (only if no routine is active)
+        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          advanceQueue(next);
         }
 
         if (result.completions.length > 0) checkMilestones(next);
@@ -421,6 +448,7 @@ export function useGame() {
       }
       const next = structuredClone(prev);
       next.activeRoutine = null; // manual action cancels any running routine
+      next.actionQueue = []; // manual action clears the queue
       saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
       const actionKey = `gather:${action.id}`;
@@ -486,6 +514,7 @@ export function useGame() {
         if (recipe.output && isAtStorageCap(prev, recipe.output.resourceId)) return prev;
         const next = structuredClone(prev);
         next.activeRoutine = null; // manual craft cancels any running routine
+        next.actionQueue = []; // manual craft clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
         const actionKey = `craft:${recipe.id}`;
@@ -526,6 +555,7 @@ export function useGame() {
         }
         const next = structuredClone(prev);
         next.activeRoutine = null; // manual expedition cancels any running routine
+        next.actionQueue = []; // manual expedition clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
         const actionKey = `expedition:${expedition.id}`;
@@ -547,11 +577,37 @@ export function useGame() {
       if (!prev.currentAction) return prev;
       const next = structuredClone(prev);
       saveCurrentActionProgress(next);
-      resetRepetitiveCountOnManualActionChange(next, null);
       next.currentAction = null;
       next.activeRoutine = null; // also stop any running routine
+      // If queue has items, let the next tick advance it (don't reset repetition count)
+      // If queue is empty, this is a full stop — reset repetition
+      if (next.actionQueue.length === 0) {
+        resetRepetitiveCountOnManualActionChange(next, null);
+      }
       return next;
     });
+  }, []);
+
+  const queueAction = useCallback((queued: QueuedAction) => {
+    setState((prev) => {
+      if (!isQueueUnlocked(prev)) return prev;
+      const maxSize = getMaxQueueSize(prev);
+      if (prev.actionQueue.length >= maxSize) return prev;
+      const next = structuredClone(prev);
+      next.actionQueue.push(queued);
+      return next;
+    });
+  }, []);
+
+  const clearQueue = useCallback(() => {
+    setState((prev) => {
+      if (prev.actionQueue.length === 0) return prev;
+      return { ...prev, actionQueue: [] };
+    });
+  }, []);
+
+  const toggleQueueMode = useCallback(() => {
+    setState((prev) => ({ ...prev, queueMode: !prev.queueMode }));
   }, []);
 
   const saveRoutine = useCallback((routine: Routine) => {
@@ -753,7 +809,19 @@ export function useGame() {
     setState((prev) => {
       if (prev.seenPhases.includes(phaseId)) return prev;
       const next = structuredClone(prev);
-      next.seenPhases.push(phaseId);
+      // Also mark all lower-order phases as seen (in case player skipped them)
+      const phases = getPhases();
+      const target = phases.find((p) => p.id === phaseId);
+      if (target) {
+        for (const p of phases) {
+          if (p.order <= target.order && !next.seenPhases.includes(p.id)) {
+            next.seenPhases.push(p.id);
+          }
+        }
+      } else {
+        next.seenPhases.push(phaseId);
+      }
+      checkMilestones(next);
       return next;
     });
   }, []);
@@ -813,6 +881,9 @@ export function useGame() {
     startCraft,
     startExpedition,
     stopAction,
+    queueAction,
+    clearQueue,
+    toggleQueueMode,
     saveRoutine,
     deleteRoutine,
     startRoutine,

@@ -1,0 +1,249 @@
+name: Changelog Backfill
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: changelog
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Backfill changelog
+        run: |
+          set -euo pipefail
+          CHANGELOG_FILE="src/data/changelog.json"
+          BATCH_SIZE=20
+
+          # Read current meta
+          OLDEST=$(jq -r '.meta.oldestReviewed // empty' "$CHANGELOG_FILE")
+
+          if [ -n "$OLDEST" ]; then
+            echo "Continuing from oldest reviewed: $OLDEST"
+            # Get merge commits on main BEFORE the oldest reviewed (first-parent only)
+            MERGE_SHAS=$(git log --merges --first-parent --format="%H" -n "$BATCH_SIZE" "$OLDEST^" -- 2>/dev/null | tac || true)
+          else
+            echo "No previous backfill — starting from HEAD of main"
+            MERGE_SHAS=$(git log --merges --first-parent --format="%H" -n "$BATCH_SIZE" main | tac)
+          fi
+
+          if [ -z "$MERGE_SHAS" ]; then
+            echo "No more merge commits to process — backfill complete!"
+            exit 0
+          fi
+
+          TOTAL=$(echo "$MERGE_SHAS" | wc -l)
+          echo "Processing $TOTAL merge commits..."
+
+          NEW_ENTRIES="[]"
+          PROCESSED=0
+          ADDED=0
+          EARLIEST_SHA=""
+
+          for SHA in $MERGE_SHAS; do
+            PROCESSED=$((PROCESSED + 1))
+            COMMIT_MSG=$(git log -1 --pretty=%B "$SHA")
+            COMMIT_DATE=$(git log -1 --format=%cd --date=short "$SHA")
+
+            # Track the earliest SHA we process (first in our oldest-first list)
+            if [ -z "$EARLIEST_SHA" ]; then
+              EARLIEST_SHA="$SHA"
+            fi
+
+            # Skip changelog commits
+            if echo "$COMMIT_MSG" | grep -q '\[changelog\]'; then
+              echo "[$PROCESSED/$TOTAL] Skipping changelog commit"
+              continue
+            fi
+
+            echo "[$PROCESSED/$TOTAL] Processing: $(echo "$COMMIT_MSG" | head -1)"
+
+            # Extract PR number
+            PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP 'Merge pull request #\K[0-9]+' || echo "")
+            if [ -z "$PR_NUMBER" ]; then
+              PR_NUMBER=$(echo "$COMMIT_MSG" | grep -oP '\(#\K[0-9]+(?=\))' || echo "")
+            fi
+
+            # Get diff (use || true to avoid SIGPIPE exit 141 from head)
+            if git rev-parse "$SHA^2" >/dev/null 2>&1; then
+              DIFF=$(git diff "$SHA^1...$SHA^2" -- . ':!src/data/changelog.json' | head -c 12000 || true)
+            else
+              DIFF=$(git diff "$SHA^...$SHA" -- . ':!src/data/changelog.json' | head -c 12000 || true)
+            fi
+
+            # Get PR info
+            PR_TITLE=""
+            PR_BODY=""
+            if [ -n "$PR_NUMBER" ]; then
+              PR_TITLE=$(gh pr view "$PR_NUMBER" --json title -q '.title' 2>/dev/null || echo "")
+              PR_BODY=$(gh pr view "$PR_NUMBER" --json body -q '.body' 2>/dev/null || echo "")
+            fi
+
+            # Get commit messages
+            if git rev-parse "$SHA^2" >/dev/null 2>&1; then
+              COMMITS=$(git log --pretty="- %s" "$SHA^1..$SHA^2" 2>/dev/null | head -20)
+            else
+              COMMITS=$(git log -1 --pretty="- %s" "$SHA")
+            fi
+
+            CONTEXT="PR Title: ${PR_TITLE:-N/A}
+
+            PR Description:
+            ${PR_BODY:-N/A}
+
+            Commits:
+            ${COMMITS}
+
+            Code Diff (truncated):
+            ${DIFF}"
+
+            PROMPT=$(cat <<'PROMPT_END'
+            You are a changelog writer for SeaBound, a crafting/idle browser game (tropical island castaway survival).
+
+            Analyze the following code changes and decide:
+            1. Are there ANY user-facing changes that a player would notice or care about?
+            2. If yes, write concise changelog bullet points.
+
+            IMPORTANT RULES:
+            - Only include changes that PLAYERS would notice: new content, UI changes, gameplay fixes, balance changes, new features, quality-of-life improvements.
+            - SKIP internal/dev changes: analytics, CI/CD, development tools, documentation, refactoring with no visible effect, build config, deployment changes, code cleanup.
+            - SKIP dev wiki and dependency/progression graph changes — these are developer-only tools accessed via ?dev query param, not player-facing features.
+            - SKIP dependency updates unless they visibly affect the game.
+            - Write from the player's perspective. Say "Fixed X" not "Refactored Y module". Say "Added new recipe: Z" not "Created recipe entry in data file".
+            - Be concise — one line per change, no fluff.
+            - Use present tense action verbs: "Add", "Fix", "Improve", "Remove", etc.
+
+            RESPONSE FORMAT:
+            If there are NO user-facing changes, respond with exactly: NO_CHANGES
+            If there ARE user-facing changes, respond with a JSON array of strings, one per change. Example:
+            ["Add new fishing rod tool that speeds up fishing actions", "Fix bug where crafting progress bar showed wrong count"]
+
+            Respond with ONLY "NO_CHANGES" or a JSON array. Nothing else.
+          PROMPT_END
+          )
+
+            # Call Claude API
+            RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+              -H "content-type: application/json" \
+              -H "x-api-key: $ANTHROPIC_API_KEY" \
+              -H "anthropic-version: 2023-06-01" \
+              -d "$(jq -n \
+                --arg system "$PROMPT" \
+                --arg context "$CONTEXT" \
+                '{
+                  model: "claude-haiku-4-5-20251001",
+                  max_tokens: 1024,
+                  system: $system,
+                  messages: [{role: "user", content: $context}]
+                }')")
+
+            ENTRY=$(echo "$RESPONSE" | jq -r '.content[0].text // empty')
+
+            if [ -z "$ENTRY" ]; then
+              echo "  API call failed — skipping"
+              echo "  Response: $(echo "$RESPONSE" | head -5)"
+              continue
+            fi
+
+            # Strip markdown code fences if present (e.g. ```json ... ```)
+            ENTRY=$(echo "$ENTRY" | sed '/^```/d')
+
+            if echo "$ENTRY" | grep -q "NO_CHANGES"; then
+              echo "  No user-facing changes"
+              continue
+            fi
+
+            if ! echo "$ENTRY" | jq -e 'if type == "array" then true else false end' >/dev/null 2>&1; then
+              echo "  Invalid JSON response — skipping"
+              echo "  Response: $ENTRY"
+              continue
+            fi
+
+            echo "  Found changes: $ENTRY"
+            ADDED=$((ADDED + 1))
+
+            NEW_ENTRIES=$(echo "$NEW_ENTRIES" | jq \
+              --arg date "$COMMIT_DATE" \
+              --argjson changes "$ENTRY" \
+              '. + [{date: $date, changes: $changes}]')
+
+            # Rate limit
+            sleep 1
+          done
+
+          echo ""
+          echo "=== Summary: $ADDED changelog entries from $TOTAL merge commits ==="
+
+          # Pull latest before modifying (in case regular changelog updated it)
+          git pull --rebase origin main || true
+
+          # Re-read after pull
+          EXISTING=$(cat "$CHANGELOG_FILE")
+
+          # Group new entries by date
+          GROUPED="[]"
+          if [ "$ADDED" -gt 0 ]; then
+            GROUPED=$(echo "$NEW_ENTRIES" | jq '
+              group_by(.date)
+              | map({
+                  date: .[0].date,
+                  changes: [.[].changes[]] | unique
+                })
+              | sort_by(.date) | reverse
+            ')
+          fi
+
+          # Merge new entries into existing, deduplicating by date
+          UPDATED=$(jq -n \
+            --argjson new "$GROUPED" \
+            --argjson existing "$EXISTING" \
+            --arg earliest "$EARLIEST_SHA" \
+            '
+            $existing
+            | .meta.oldestReviewed = $earliest
+            | .meta.newestReviewed as $nr
+            | if $nr == null then .meta.newestReviewed = $earliest else . end
+            | ($existing.entries | map({(.date): .changes}) | add // {}) as $existing_map
+            | ($new | map({(.date): .changes}) | add // {}) as $new_map
+            | ([$existing_map, $new_map] | add | keys) as $all_dates
+            | .entries = [
+                $all_dates[] as $d |
+                {
+                  date: $d,
+                  changes: (($existing_map[$d] // []) + ($new_map[$d] // []) | unique)
+                }
+              ]
+            | .entries |= sort_by(.date) | .entries |= reverse
+            ')
+
+          echo "$UPDATED" | jq '.' > "$CHANGELOG_FILE"
+
+          echo ""
+          echo "Updated meta: oldest=$EARLIEST_SHA"
+          echo "Remaining merge commits before this batch: $(git log --merges --first-parent --oneline "$EARLIEST_SHA^" -- 2>/dev/null | wc -l || echo 0)"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$CHANGELOG_FILE"
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Backfill changelog (batch of $BATCH_SIZE) [changelog]"
+          git push
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

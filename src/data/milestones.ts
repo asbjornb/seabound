@@ -11,19 +11,18 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   fishing: [
     {
       level: 2,
-      description: "+2% fish and crab chance from tidal pools",
-
+      description: "+5% crab chance from tidal pools",
       effects: [
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.02 },
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.05 },
+        { type: "drop_chance", actionId: "comb_rock_pools", resourceId: "crab", bonus: 0.05 },
       ],
     },
     {
       level: 3,
-      description: "+2% fish and crab chance from tidal pools",
+      description: "+10% fish chance from tidal pools",
       effects: [
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.02 },
-        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.02 },
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.10 },
+        { type: "drop_chance", actionId: "comb_rock_pools", resourceId: "small_fish", bonus: 0.10 },
       ],
     },
     {
@@ -31,6 +30,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Practiced wading — tidal pools 10% faster",
       effects: [
         { type: "duration", actionId: "wade_tidal_pool", multiplier: 0.9 },
+        { type: "duration", actionId: "comb_rock_pools", multiplier: 0.9 },
       ],
     },
     {
@@ -38,6 +38,7 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Sharp eyes — +5% fish chance from tidal pools",
       effects: [
         { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "small_fish", bonus: 0.05 },
+        { type: "drop_chance", actionId: "comb_rock_pools", resourceId: "small_fish", bonus: 0.05 },
       ],
     },
     {
@@ -49,9 +50,10 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     },
     {
       level: 8,
-      description: "Big game — 5% chance to spear a large fish",
+      description: "Big game — 15% chance to spear a large fish, 10% faster",
       effects: [
-        { type: "drop_chance", actionId: "spear_fish", resourceId: "large_fish", bonus: 0.05 },
+        { type: "drop_chance", actionId: "spear_fish", resourceId: "large_fish", bonus: 0.15 },
+        { type: "duration", actionId: "spear_fish", multiplier: 0.9 },
       ],
     },
     {

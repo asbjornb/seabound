@@ -335,6 +335,21 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 5000,
     xpGain: 20,
   },
+  {
+    id: "build_rock_pool_cache",
+    name: "Rock Pool Cache",
+    description:
+      "Wall off a rocky tidal pool with flat stones. Keeps fish and crabs alive until you need them.",
+    skillId: "construction",
+    panel: "build",
+    inputs: [
+      { resourceId: "flat_stone", amount: 6 },
+      { resourceId: "driftwood_branch", amount: 2 },
+    ],
+    buildingOutput: "rock_pool_cache",
+    durationMs: 8000,
+    xpGain: 20,
+  },
 
   // Comfort tier
   {
@@ -984,6 +999,24 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 6000,
     repeatable: true,
     xpGain: 15,
+  },
+
+  // Building: Clay Tablet (queue upgrade — requires firing pit + clay)
+  {
+    id: "build_clay_tablet",
+    name: "Clay Tablet",
+    description:
+      "Press task marks into wet clay and fire it hard. A simple planner to remember what comes next.",
+    skillId: "crafting",
+    panel: "build",
+    inputs: [
+      { resourceId: "clay", amount: 4 },
+      { resourceId: "flat_stone", amount: 2 },
+    ],
+    buildingOutput: "clay_tablet",
+    requiredBuildings: ["firing_pit"],
+    durationMs: 8000,
+    xpGain: 25,
   },
 
   // Fill Water Pot (requires well)

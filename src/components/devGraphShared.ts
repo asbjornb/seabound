@@ -99,28 +99,30 @@ function buildAdjacency() {
 export const { forward, backward, backwardRequired } = buildAdjacency();
 export const nodeById = new Map(allNodes.map(n => [n.id, n]));
 
-export function getUpstream(nodeId: string): Set<string> {
+export function getUpstream(nodeId: string, maxDepth?: number): Set<string> {
   const visited = new Set<string>();
-  const queue = [nodeId];
+  const queue: { id: string; depth: number }[] = [{ id: nodeId, depth: 0 }];
   while (queue.length > 0) {
-    const curr = queue.shift()!;
+    const { id: curr, depth } = queue.shift()!;
     if (visited.has(curr)) continue;
     visited.add(curr);
+    if (maxDepth != null && depth >= maxDepth) continue;
     const parents = backward.get(curr);
-    if (parents) for (const p of parents) queue.push(p);
+    if (parents) for (const p of parents) queue.push({ id: p, depth: depth + 1 });
   }
   return visited;
 }
 
-export function getDownstream(nodeId: string): Set<string> {
+export function getDownstream(nodeId: string, maxDepth?: number): Set<string> {
   const visited = new Set<string>();
-  const queue = [nodeId];
+  const queue: { id: string; depth: number }[] = [{ id: nodeId, depth: 0 }];
   while (queue.length > 0) {
-    const curr = queue.shift()!;
+    const { id: curr, depth } = queue.shift()!;
     if (visited.has(curr)) continue;
     visited.add(curr);
+    if (maxDepth != null && depth >= maxDepth) continue;
     const children = forward.get(curr);
-    if (children) for (const c of children) queue.push(c);
+    if (children) for (const c of children) queue.push({ id: c, depth: depth + 1 });
   }
   return visited;
 }
@@ -159,13 +161,16 @@ function getUpstreamSize(nodeId: string): number {
   return size;
 }
 
-export function getMinimalUpstream(nodeId: string): Set<string> {
+export function getMinimalUpstream(nodeId: string, maxDepth?: number): Set<string> {
   const included = new Set<string>();
-  const queue = [nodeId];
+  const depthOf = new Map<string, number>();
+  const queue: { id: string; depth: number }[] = [{ id: nodeId, depth: 0 }];
   while (queue.length > 0) {
-    const curr = queue.shift()!;
+    const { id: curr, depth } = queue.shift()!;
     if (included.has(curr)) continue;
     included.add(curr);
+    depthOf.set(curr, depth);
+    if (maxDepth != null && depth >= maxDepth) continue;
     const node = nodeById.get(curr);
     if (!node) continue;
 
@@ -177,7 +182,7 @@ export function getMinimalUpstream(nodeId: string): Set<string> {
         const best = producers.reduce((a, b) =>
           getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
         );
-        queue.push(best.from);
+        queue.push({ id: best.from, depth: depth + 1 });
       }
     } else {
       const allParentEdges = allEdges.filter(e => e.to === curr && e.relation !== "speeds_up" && e.relation !== "boosts_output");
@@ -191,12 +196,12 @@ export function getMinimalUpstream(nodeId: string): Set<string> {
       const nonFoodEdges = foodConsumeEdges.length > 0
         ? allParentEdges.filter(e => !foodConsumeEdges.includes(e))
         : allParentEdges;
-      for (const e of nonFoodEdges) queue.push(e.from);
+      for (const e of nonFoodEdges) queue.push({ id: e.from, depth: depth + 1 });
       if (foodConsumeEdges.length > 0) {
         const bestFood = foodConsumeEdges.reduce((a, b) =>
           getUpstreamSize(a.from) < getUpstreamSize(b.from) ? a : b
         );
-        queue.push(bestFood.from);
+        queue.push({ id: bestFood.from, depth: depth + 1 });
       }
     }
   }
@@ -213,15 +218,16 @@ export function getFilteredData(
   focusTarget: string | null,
   focusDirection: FocusDirection,
   focusMode: FocusMode,
+  maxDepth?: number,
 ): { nodes: GraphNode[]; edges: GraphEdge[] } {
   if (mode === "all") return { nodes: allNodes, edges: allEdges };
 
   if (mode === "focus" && focusTarget) {
     let nodeSet: Set<string>;
     if (focusDirection === "upstream") {
-      nodeSet = focusMode === "greedy" ? getMinimalUpstream(focusTarget) : getUpstream(focusTarget);
+      nodeSet = focusMode === "greedy" ? getMinimalUpstream(focusTarget, maxDepth) : getUpstream(focusTarget, maxDepth);
     } else {
-      nodeSet = getDownstream(focusTarget);
+      nodeSet = getDownstream(focusTarget, maxDepth);
     }
     const nodes = allNodes.filter(n => nodeSet.has(n.id));
     const nodeIds = new Set(nodes.map(n => n.id));
