@@ -1,6 +1,6 @@
 {
   "meta": {
-    "oldestReviewed": "743ef25161474c22aa7ead6e98c8f1b9022d013a",
+    "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
     "newestReviewed": "c9702daa4039e172bf2a6424dc383718db0c9689"
   },
   "entries": [
@@ -438,6 +438,62 @@
         "Add resource icons next to items in gathering action drops for better readability",
         "Add resource icons next to required items in crafting recipes",
         "Add resource icons next to required tools in gathering actions"
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "changes": [
+        "Add 'Craftable now' filter button in Crafting panel to hide recipes you can't afford",
+        "Add 'Sail to Nearby Island' expedition - discover volcanic island biome and gather obsidian",
+        "Add Basket Trap Fishing action (Fishing 10) — bulk catch with crab bonus",
+        "Add Basket Trap recipe (Weaving 15) — required tool for basket trap fishing",
+        "Add Braid Cordage recipe (requires Fiber Loom, Weaving level 5)",
+        "Add Crafting level 5 milestone: 15% chance to twist extra cordage",
+        "Add Crucible recipe (Preservation 30) to unlock future smithing with the Kiln",
+        "Add Drop Line Fishing action (Fishing 8) — catches larger fish with 25% chance",
+        "Add Fiber Loom building for more efficient cordage braiding",
+        "Add Fired Clay Pot recipe (Preservation 8) to fire pots in the Firing Pit",
+        "Add Firing Pit building (Construction 12) for basic pottery production",
+        "Add Fishing milestone at level 12 — drop line fishing 15% faster",
+        "Add Fishing milestone at level 15 — +10% large fish chance from drop line",
+        "Add Gorge Hook recipe (Crafting 5) — required tool for drop line fishing",
+        "Add Kiln building (Construction 25) for advanced pottery and future smelting",
+        "Add Nearby Island biome",
+        "Add Obsidian Blade tool recipe (Crafting 8) - knap obsidian and flat stone",
+        "Add Obsidian and Obsidian Blade resources",
+        "Add Preservation level 3 milestone: 50% chance to double drying output",
+        "Add Sealed Clay Jar recipe (Preservation 15) for food preservation and seed storage",
+        "Add Shaped Clay Pot recipe (Crafting 8) to hand-shape clay",
+        "Add ambient background gradient to create atmosphere",
+        "Add animated shimmer effect to progress bars",
+        "Add banner notification when stations are ready to collect",
+        "Add box shadows to cards for improved visual depth",
+        "Add card hover effects with lift animation and glow on action cards",
+        "Add collapsible skill sections in Actions and Crafting panels — tap section headers to expand/collapse",
+        "Add emoji icons throughout the game UI for resources, skills, biomes, buildings, and tabs",
+        "Add glow effects to title text and XP bar",
+        "Add hover highlight to inventory items",
+        "Add item count badges to skill section headers for quick overview",
+        "Add new Raft vessel recipe (Construction 8) - craft with driftwood, cordage, and bamboo",
+        "Add station system: deploy traps/farms that passively generate resources over time",
+        "Add stations panel in camp tab showing active stations with progress bars and ready-to-collect notifications",
+        "Add update checker banner that prompts players to refresh when a new version is available",
+        "Auto-clean existing shell beads from player inventories on load",
+        "Convert basket trap to a station (2-minute timer, works offline)",
+        "Fix inventory clutter by removing shell beads as a physical item (crafting now grants morale only)",
+        "Fix recipes showing up before their required resources are discovered",
+        "Improve UI with smooth arrow rotation animation when collapsing skill sections",
+        "Improve visibility of undiscovered biome counter text with golden color",
+        "Increase Rope Hand milestone chance to 30% for double cordage",
+        "Move 'Rope hand' milestone (15% double cordage chance) from crafting to weaving level 5",
+        "Move inventory tab to end of tab bar, positioning it between camp and skills for better organization",
+        "Move twist cordage recipe from crafting to weaving skill",
+        "Obsidian blade now provides a 15% speed boost to cutting actions (harvest bamboo, fell large tree)",
+        "Obsidian blade now provides a 15% speed boost to cutting-related recipes (split bamboo, scrape hull, shred coconut husk)",
+        "Reduce dry fiber output from 2 to 1 per recipe (2 rough fiber → 1 dried fiber)",
+        "Show current inventory quantity next to craft output items in recipes",
+        "Show double-output percentage on crafting recipes to match gathering action display",
+        "Stations support multiple deployments, setup costs, and XP rewards"
       ]
     }
   ]
