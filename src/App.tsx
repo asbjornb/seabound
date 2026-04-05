@@ -677,8 +677,8 @@ export default function App() {
           recipes={game.availableRecipes}
           stations={game.availableStations}
           expeditions={game.availableExpeditions}
-          onStartAction={game.startAction}
-          onStartCraft={game.startCraft}
+          onStartAction={handleStartAction}
+          onStartCraft={handleStartCraft}
           onDeployStation={game.deployStation}
           onStartExpedition={handleStartExpedition}
           onJumpToTab={(t) => setTab(t as GameTab)}
