@@ -17,7 +17,7 @@ interface ChangelogEntry {
 }
 
 function Changelog() {
-  const entries = changelogData as ChangelogEntry[];
+  const entries = (changelogData as { entries: ChangelogEntry[] }).entries;
   if (entries.length === 0) {
     return (
       <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
