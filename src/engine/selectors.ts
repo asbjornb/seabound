@@ -339,7 +339,16 @@ export function selectCurrentSkillInfo(state: GameState): CurrentSkillInfo | nul
   };
 }
 
-export function selectUndiscoveredBiomeCount(state: GameState): number {
+export function selectUndiscoveredBiomeCount(state: GameState, expeditionId?: string): number {
+  if (expeditionId) {
+    const exp = getExpeditionById(expeditionId);
+    if (exp) {
+      const biomes = exp.outcomes
+        .filter((o) => o.biomeDiscovery)
+        .map((o) => o.biomeDiscovery!);
+      return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+    }
+  }
   const totalBiomes = Object.keys(getBiomes()).length;
   return totalBiomes - state.discoveredBiomes.length;
 }
