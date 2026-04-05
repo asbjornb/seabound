@@ -318,4 +318,5 @@ export interface GameState {
   routines: Routine[];
   activeRoutine: RoutineProgress | null;
   actionQueue: QueuedAction[];
+  queueMode: boolean;
 }

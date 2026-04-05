@@ -606,6 +606,10 @@ export function useGame() {
     });
   }, []);
 
+  const toggleQueueMode = useCallback(() => {
+    setState((prev) => ({ ...prev, queueMode: !prev.queueMode }));
+  }, []);
+
   const saveRoutine = useCallback((routine: Routine) => {
     setState((prev) => {
       const next = structuredClone(prev);
@@ -879,6 +883,7 @@ export function useGame() {
     stopAction,
     queueAction,
     clearQueue,
+    toggleQueueMode,
     saveRoutine,
     deleteRoutine,
     startRoutine,
