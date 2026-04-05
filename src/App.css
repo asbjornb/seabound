@@ -142,7 +142,6 @@ body {
   color: #e8e4d8;
   padding: 10px 16px;
   font-size: 0.82rem;
-  cursor: pointer;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .whats-new-header {
@@ -169,6 +168,39 @@ body {
   line-height: 1.5;
 }
 .whats-new-list li {
+  margin-bottom: 1px;
+}
+.whats-new-full-link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 4px 0 0;
+  text-decoration: underline;
+  opacity: 0.85;
+}
+.whats-new-full-link:hover {
+  opacity: 1;
+}
+
+/* Changelog modal entries */
+.changelog-entry {
+  margin-bottom: 12px;
+}
+.changelog-date {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.changelog-changes {
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.changelog-changes li {
   margin-bottom: 1px;
 }
 
