@@ -7,6 +7,7 @@ import {
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
@@ -30,6 +31,7 @@ export interface CompletionEvent {
   buildingBuilt?: string; // building ID if a building was constructed
   toolCrafted?: string; // tool ID if a tool was crafted
   victory?: boolean; // true if this completion wins the game
+  encounterResult?: EncounterResult; // present on mainland expeditions with difficulty profiles
 }
 
 /** Check if any output resource for the current action is at storage capacity. */
@@ -491,6 +493,9 @@ function applyExpeditionCompletion(
   const def = getExpeditionById(expeditionId);
   if (!def) return null;
 
+  // Resolve combat encounter for mainland expeditions with difficulty profiles
+  const encounter = def.difficulty ? resolveEncounter(state, def.difficulty) : undefined;
+
   // Pick a random outcome weighted by weight (with pity for biome discoveries)
   const pityCount = state.expeditionPity[expeditionId] ?? 0;
   const navLevel = state.skills[def.skillId]?.level ?? 1;
@@ -511,31 +516,35 @@ function applyExpeditionCompletion(
     }
   }
 
-  // Apply drops (with expedition drop bonus from milestones)
+  // Apply drops (with expedition drop bonus from milestones + encounter multiplier)
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
   const dropBonus = getExpeditionDropBonus(def.skillId, navLevel);
+  const encounterDropMult = encounter?.dropMultiplier ?? 1;
   if (outcome.drops) {
     for (const drop of outcome.drops) {
       const rolled = rollDrops([drop]);
       for (const r of rolled) {
-        const boostedAmount = dropBonus > 0
+        const baseAmount = dropBonus > 0
           ? Math.round(r.amount * (1 + dropBonus))
           : r.amount;
+        // Apply encounter multiplier (mainland combat outcomes reduce/maintain drops)
+        const finalAmount = Math.max(1, Math.round(baseAmount * encounterDropMult));
         if (!state.discoveredResources.includes(r.resourceId)) {
           newResources.push(r.resourceId);
           state.discoveredResources.push(r.resourceId);
         }
-        addResource(state, r.resourceId, boostedAmount);
-        drops.push({ name: r.resourceId, amount: boostedAmount });
+        addResource(state, r.resourceId, finalAmount);
+        drops.push({ name: r.resourceId, amount: finalAmount });
       }
     }
   }
 
-  // XP for expeditions
+  // XP for expeditions (encounter result modifies XP)
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
-  const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount, fullXpThreshold);
+  const encounterXpMult = encounter?.xpMultiplier ?? 1;
+  const xpGain = Math.round(applyRepetitiveXp(def.xpGain, repetitiveCount, fullXpThreshold) * encounterXpMult);
   skill.xp += xpGain;
   skill.level = levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
@@ -558,6 +567,7 @@ function applyExpeditionCompletion(
     expeditionMessage: outcome.description,
     newResources: newResources.length > 0 ? newResources : undefined,
     victory: def.victory,
+    encounterResult: encounter,
   };
 }
 
