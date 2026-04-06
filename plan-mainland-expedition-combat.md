@@ -42,10 +42,10 @@ Combat remains embedded in expeditions as checks and events, not real-time encou
 
 ### Expedition Pool Structure
 - Expeditions are always available from a pool.
-- Difficulty bands:
-  - **Low risk:** reliable, low-tier materials/loot.
-  - **Mid risk:** moderate failure chance, better rewards.
-  - **High risk:** meaningful failure risk, best tier drops and rare components.
+- Each expedition has its own difficulty profile — gear checks, hazard types, and stat thresholds are per-expedition, not templated bands.
+- Even early mainland expeditions require basic preparation: crafting a weapon (stone axe, fire-hardened spear, obsidian blade), basic armor (woven fiber, hide), or gathering supplies.
+- Players progress by gearing up for specific expeditions, not by picking a generic risk tier. Like WoW dungeons — you can see the harder content exists, but you need to prepare before you can clear it.
+- Progression is gear-gated: a fresh post-victory player will fail most expeditions until they craft baseline equipment from existing resources and new mainland materials.
 
 ### Run Outcome Loop
 1. Choose expedition + route/loadout.
@@ -213,7 +213,7 @@ Because game UI is already complex, phase rollout should minimize overwhelm.
 
 ### Phase A (Foundation)
 - Post-victory mainland opt-in with experimental warning.
-- Basic expedition difficulty bands + simulated combat checks.
+- Per-expedition difficulty profiles + simulated combat/gear checks.
 - Minimal gear slots + starter affix pool.
 - Logs + journal summary system.
 
@@ -248,7 +248,7 @@ Because game UI is already complex, phase rollout should minimize overwhelm.
 - [ ] Define reset/migration policy for experimental mainland states.
 
 ## 1) Expedition Combat Framework
-- [ ] Create expedition difficulty band templates (low/mid/high risk).
+- [ ] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds).
 - [ ] Implement non-real-time encounter/hazard resolution skeleton.
 - [ ] Add success/failure/partial reward outcome handling.
 - [ ] Add failure insight messaging (what stats/gear would help).
