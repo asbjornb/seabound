@@ -10,6 +10,7 @@
 import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
+import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS } from "./equipment";
 import { EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
@@ -19,8 +20,11 @@ import { STATIONS } from "./stations";
 import { TOOLS } from "./tools";
 import type {
   ActionDef,
+  AffixDef,
   BiomeDef,
   BuildingDef,
+  EquipmentItemDef,
+  EquipmentSlotDef,
   ExpeditionDef,
   PhaseDef,
   RecipeDef,
@@ -51,6 +55,9 @@ export interface GameDataPack {
   expeditions: ExpeditionDef[];
   stations: StationDef[];
   milestones: Partial<Record<string, SkillMilestone[]>>;
+  equipmentSlots: Record<string, EquipmentSlotDef>;
+  equipmentItems: Record<string, EquipmentItemDef>;
+  affixes: Record<string, AffixDef>;
 }
 
 // ═══════════════════════════════════════
@@ -85,6 +92,9 @@ export function createBaseGamePack(): GameDataPack {
     expeditions: [...EXPEDITIONS],
     stations: [...STATIONS],
     milestones: buildBaseMilestones(),
+    equipmentSlots: { ...EQUIPMENT_SLOTS },
+    equipmentItems: { ...EQUIPMENT_ITEMS },
+    affixes: { ...AFFIXES },
   };
 }
 
@@ -177,3 +187,9 @@ export function getStationById(id: string): StationDef | undefined { return _sta
 export function getBiomeOrder(): string[] { return _biomeOrderCache; }
 export function getFoodValues(): { id: string; value: number }[] { return _foodValuesCache; }
 export function getWaterValues(): { id: string; value: number }[] { return _waterValuesCache; }
+
+export function getEquipmentSlots(): Record<string, EquipmentSlotDef> { return _pack.equipmentSlots; }
+export function getEquipmentItems(): Record<string, EquipmentItemDef> { return _pack.equipmentItems; }
+export function getAffixes(): Record<string, AffixDef> { return _pack.affixes; }
+export function getEquipmentItemById(id: string): EquipmentItemDef | undefined { return _pack.equipmentItems[id]; }
+export function getAffixById(id: string): AffixDef | undefined { return _pack.affixes[id]; }

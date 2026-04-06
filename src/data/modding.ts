@@ -57,6 +57,10 @@ function collectIconIds(pack: GameDataPack): string[] {
   for (const id of Object.keys(pack.buildings)) ids.add(id);
   // Biomes (icon convention: biome_{id})
   for (const id of Object.keys(pack.biomes)) ids.add(`biome_${id}`);
+  // Equipment items
+  if (pack.equipmentItems) {
+    for (const id of Object.keys(pack.equipmentItems)) ids.add(id);
+  }
 
   return Array.from(ids);
 }
@@ -236,6 +240,17 @@ export function validateModPack(pack: unknown): ValidationResult {
 }
 
 // ═══════════════════════════════════════
+// Pack normalization (backfill new fields for older mod packs)
+// ═══════════════════════════════════════
+
+function normalizeModPack(pack: GameDataPack): GameDataPack {
+  if (!pack.equipmentSlots) pack.equipmentSlots = {};
+  if (!pack.equipmentItems) pack.equipmentItems = {};
+  if (!pack.affixes) pack.affixes = {};
+  return pack;
+}
+
+// ═══════════════════════════════════════
 // Import
 // ═══════════════════════════════════════
 
@@ -256,7 +271,8 @@ export function importModPackFromJson(json: string): ImportResult {
   const result = validateModPack(parsed);
   if (!result.valid) return { ...result, iconCount: 0 };
 
-  return { ...result, pack: parsed as GameDataPack, iconCount: 0 };
+  const pack = normalizeModPack(parsed as GameDataPack);
+  return { ...result, pack, iconCount: 0 };
 }
 
 /** Import a mod pack from a .zip file. Extracts data.json and icons/. */
@@ -356,7 +372,7 @@ export async function loadModPack(id: string): Promise<GameDataPack | null> {
   return new Promise((resolve, reject) => {
     const tx = db.transaction(MOD_STORE_NAME, "readonly");
     const request = tx.objectStore(MOD_STORE_NAME).get(id);
-    request.onsuccess = () => resolve(request.result ?? null);
+    request.onsuccess = () => resolve(request.result ? normalizeModPack(request.result) : null);
     request.onerror = () => reject(request.error);
   });
 }
