@@ -76,6 +76,8 @@ export interface EncounterResult {
   dropMultiplier: number;
   /** Multiplier to apply to XP gain (1.0 = normal). */
   xpMultiplier: number;
+  /** Human-readable hints about what the player could improve (only on partial/failure). */
+  failureInsights: string[];
 }
 
 /**
@@ -136,5 +138,27 @@ export function resolveEncounter(
     xpMultiplier = 0.6;
   }
 
-  return { grade, checkResults, passRatio, dropMultiplier, xpMultiplier };
+  // Generate failure insights for non-success outcomes
+  const failureInsights: string[] = [];
+  if (grade !== "success") {
+    const failedChecks = checkResults.filter((r) => !r.passed);
+    for (const check of failedChecks) {
+      const statLabel = check.stat.replace(/([A-Z])/g, " $1").toLowerCase();
+      const gap = check.threshold - check.playerValue;
+      if (check.playerValue === 0) {
+        failureInsights.push(`You had no ${statLabel} — need at least ${check.threshold}`);
+      } else {
+        failureInsights.push(`Your ${statLabel} (${check.playerValue}) was ${gap} short of the ${check.threshold} needed`);
+      }
+    }
+    if (difficulty.minGearScore != null && !gearScorePassed) {
+      const gearScore = computeGearScore(loadoutStats);
+      failureInsights.push(`Gear score ${gearScore} is below the ${difficulty.minGearScore} recommended`);
+    }
+    if (difficulty.hint) {
+      failureInsights.push(difficulty.hint);
+    }
+  }
+
+  return { grade, checkResults, passRatio, dropMultiplier, xpMultiplier, failureInsights };
 }

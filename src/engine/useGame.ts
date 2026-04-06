@@ -305,6 +305,12 @@ function processCompletionDiscoveries(
       addDiscovery(state, "resource", `Found ${name} for the first time`);
     }
   }
+  // Show failure insights for mainland expedition combat
+  if (c.encounterResult && c.encounterResult.failureInsights.length > 0) {
+    const gradeLabel = c.encounterResult.grade === "partial" ? "Partial success" : "Expedition failed";
+    const insights = c.encounterResult.failureInsights.slice(0, 3); // cap to avoid toast spam
+    addDiscovery(state, "expedition", `${gradeLabel}: ${insights.join(". ")}`);
+  }
 }
 
 function bumpActionCompletionCount(state: GameState, actionType: string, actionId: string): number {

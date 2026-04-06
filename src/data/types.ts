@@ -387,7 +387,7 @@ export interface RoutineProgress {
   completionsInStep: number;
 }
 
-export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore";
+export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore" | "expedition";
 
 export interface DiscoveryEntry {
   id: number;

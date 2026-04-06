@@ -12,7 +12,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds)
 - [x] Implement non-real-time encounter/hazard resolution skeleton
 - [ ] Add success/failure/partial reward outcome handling
-- [ ] Add failure insight messaging (what stats/gear would help)
+- [x] Add failure insight messaging (what stats/gear would help)
 
 ## 2) Equipment & Affix Foundation
 - [x] Define slot schema and loadout constraints
