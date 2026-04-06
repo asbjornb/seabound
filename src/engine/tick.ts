@@ -17,6 +17,8 @@ export interface TickResult {
 }
 
 export interface CompletionEvent {
+  actionId: string;
+  actionType: "gather" | "craft" | "expedition";
   actionName: string;
   drops: { name: string; amount: number }[];
   xpGain: number;
@@ -337,6 +339,8 @@ function applyGatherCompletion(
   state.repetitiveActionCount += 1;
 
   return {
+    actionId: def.id,
+    actionType: "gather",
     actionName: def.name,
     drops: drops.map((d) => ({ name: d.resourceId, amount: d.amount })),
     xpGain,
@@ -465,6 +469,8 @@ function applyCraftCompletion(
   state.repetitiveActionCount += 1;
 
   return {
+    actionId: def.id,
+    actionType: "craft",
     actionName: def.name,
     drops,
     xpGain,
@@ -541,6 +547,8 @@ function applyExpeditionCompletion(
   }
 
   return {
+    actionId: def.id,
+    actionType: "expedition",
     actionName: def.name,
     drops,
     xpGain,

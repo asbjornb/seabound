@@ -269,7 +269,7 @@ export interface RoutineProgress {
   completionsInStep: number;
 }
 
-export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool";
+export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore";
 
 export interface DiscoveryEntry {
   id: number;
@@ -311,6 +311,8 @@ export interface GameState {
   expeditionPity: Record<string, number>; // consecutive no-biome-discovery attempts per expedition
   lastSeenDiscoveryId: number; // highest discovery ID the player has seen (for toast dedup)
   actionCompletions: number; // total action/craft/expedition completions (engagement proxy)
+  actionCompletionCounts: Record<string, number>; // completion counts keyed by `${type}:${id}`
+  seenLoreNotes: string[]; // IDs of ambient lore notes already shown
   activePlayTimeMs: number; // playtime accumulated only while tab is visible
   sentMilestones: string[]; // analytics milestone IDs already sent (dedup)
   victory?: boolean; // true when the player has won (completed a victory expedition)

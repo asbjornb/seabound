@@ -27,14 +27,18 @@ export function NotificationToast({
 
     // discoveryLog is newest-first (unshift), so index 0 is newest
     const newBiomeEntries: DiscoveryEntry[] = [];
+    const newLoreEntries: DiscoveryEntry[] = [];
     for (const entry of discoveryLog) {
       if (entry.id <= lastSeenDiscoveryId) break;
       if (entry.type === "biome" && entry.biomeId) {
         newBiomeEntries.push(entry);
       }
+      if (entry.type === "lore") {
+        newLoreEntries.push(entry);
+      }
     }
 
-    if (newBiomeEntries.length === 0) {
+    if (newBiomeEntries.length === 0 && newLoreEntries.length === 0) {
       // Still mark latest as seen even if no biome toasts, so we don't re-scan next time
       if (discoveryLog[0].id > lastSeenDiscoveryId) {
         onSeen(discoveryLog[0].id);
@@ -45,6 +49,14 @@ export function NotificationToast({
     // Mark all current entries as seen
     onSeen(discoveryLog[0].id);
 
+    if (newLoreEntries.length > 0) {
+      const loreToAdd = newLoreEntries.slice(0, MAX_VISIBLE).reverse();
+      setToasts((prev) => {
+        const next = [...prev, ...loreToAdd.map((e) => ({ entry: e, dismissing: false }))];
+        return next.slice(-MAX_VISIBLE);
+      });
+    }
+
     // Route biome discoveries to the modal handler
     if (onBiomeDiscovery) {
       // Oldest first so they queue in order
@@ -54,12 +66,14 @@ export function NotificationToast({
       return;
     }
 
-    // Fallback: show as toasts if no modal handler
-    const toAdd = newBiomeEntries.slice(0, MAX_VISIBLE).reverse();
-    setToasts((prev) => {
-      const next = [...prev, ...toAdd.map((e) => ({ entry: e, dismissing: false }))];
-      return next.slice(-MAX_VISIBLE);
-    });
+    // Fallback: show biome discoveries as toasts if no modal handler
+    if (newBiomeEntries.length > 0) {
+      const toAdd = newBiomeEntries.slice(0, MAX_VISIBLE).reverse();
+      setToasts((prev) => {
+        const next = [...prev, ...toAdd.map((e) => ({ entry: e, dismissing: false }))];
+        return next.slice(-MAX_VISIBLE);
+      });
+    }
   }, [discoveryLog, lastSeenDiscoveryId, onSeen, onBiomeDiscovery]);
 
   // Remove after dismiss animation
