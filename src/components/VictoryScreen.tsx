@@ -52,6 +52,32 @@ export function VictoryScreen({ state, onContinue, onUnlockMainland }: Props) {
           <div className="victory-message" style={{ marginTop: "0.5rem", fontSize: "0.85rem", opacity: 0.8 }}>
             Your island progression is safe and unaffected.
           </div>
+          <div className="victory-message" style={{ marginTop: "0.75rem", fontSize: "0.8rem", opacity: 0.7 }}>
+            Have feedback on mainland content?{" "}
+            <a
+              href="#feedback"
+              style={{ color: "var(--accent, #5bb5a2)" }}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.querySelector(".feedback-banner");
+                if (el) {
+                  onContinue();
+                  setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
+                }
+              }}
+            >
+              Send feedback
+            </a>
+            {" "}or{" "}
+            <a
+              href="https://github.com/asbjornb/SeaBound/issues/new?title=Mainland%20Feedback&labels=feedback,mainland"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--accent, #5bb5a2)" }}
+            >
+              open a GitHub issue
+            </a>
+          </div>
           <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.25rem", justifyContent: "center" }}>
             <button
               className="victory-continue"
