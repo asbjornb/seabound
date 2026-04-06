@@ -348,7 +348,7 @@ export default function App() {
   return (
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {game.state.victory && !victoryDismissed && (
-        <VictoryScreen state={game.state} onContinue={() => { setVictoryDismissed(true); localStorage.setItem("seabound_victoryDismissed", "true"); }} />
+        <VictoryScreen state={game.state} onContinue={() => { setVictoryDismissed(true); localStorage.setItem("seabound_victoryDismissed", "true"); }} onUnlockMainland={game.unlockMainland} />
       )}
       {pendingChapter && !game.state.victory && (
         <ChapterCard phase={pendingChapter} onDismiss={dismissChapter} />

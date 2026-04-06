@@ -970,6 +970,13 @@ export function useGame() {
     });
   }, []);
 
+  const unlockMainland = useCallback(() => {
+    setState((prev) => {
+      if (prev.mainlandUnlocked) return prev;
+      return { ...prev, mainlandUnlocked: true };
+    });
+  }, []);
+
   const markPhaseSeen = useCallback((phaseId: string) => {
     setState((prev) => {
       if (prev.seenPhases.includes(phaseId)) return prev;
@@ -1058,6 +1065,7 @@ export function useGame() {
     collectAllStations,
     markDiscoverySeen,
     markPhaseSeen,
+    unlockMainland,
     resetGame,
     exportSave,
     importSave,

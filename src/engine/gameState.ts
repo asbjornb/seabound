@@ -325,6 +325,7 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (loaded.queueMode === undefined) {
     loaded.queueMode = false;
   }
+  // Migration: mainlandUnlocked defaults to undefined (falsy), no action needed
 
   return loaded;
 }
