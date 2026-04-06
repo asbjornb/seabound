@@ -121,6 +121,8 @@ export function createInitialState(): GameState {
     expeditionPity: {},
     lastSeenDiscoveryId: -1,
     actionCompletions: 0,
+    actionCompletionCounts: {},
+    seenLoreNotes: [],
     activePlayTimeMs: 0,
     sentMilestones: [],
     routines: [],
@@ -295,6 +297,12 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure analytics fields exist
   if (loaded.actionCompletions == null) {
     loaded.actionCompletions = 0;
+  }
+  if (!loaded.actionCompletionCounts || typeof loaded.actionCompletionCounts !== "object") {
+    loaded.actionCompletionCounts = {};
+  }
+  if (!loaded.seenLoreNotes) {
+    loaded.seenLoreNotes = [];
   }
   if (loaded.activePlayTimeMs == null) {
     loaded.activePlayTimeMs = 0;

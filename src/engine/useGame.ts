@@ -307,6 +307,66 @@ function processCompletionDiscoveries(
   }
 }
 
+function bumpActionCompletionCount(state: GameState, actionType: string, actionId: string): number {
+  const key = `${actionType}:${actionId}`;
+  const nextCount = (state.actionCompletionCounts[key] ?? 0) + 1;
+  state.actionCompletionCounts[key] = nextCount;
+  return nextCount;
+}
+
+function addAmbientLoreNote(state: GameState, loreId: string, message: string): void {
+  if (state.seenLoreNotes.includes(loreId)) return;
+  state.seenLoreNotes.push(loreId);
+  addDiscovery(state, "lore", message);
+}
+
+function processAmbientLore(state: GameState, c: CompletionEvent): void {
+  const completionCount = bumpActionCompletionCount(state, c.actionType, c.actionId);
+
+  if (c.actionType === "gather" && c.actionId === "drop_line_fish" && completionCount === 4) {
+    addAmbientLoreNote(
+      state,
+      "lore_drop_line_4",
+      "The line goes taut on something heavy, then slack. The bait comes back untouched."
+    );
+  }
+
+  if (c.actionType === "gather" && c.actionId === "comb_rock_pools" && completionCount === 5) {
+    addAmbientLoreNote(
+      state,
+      "lore_rock_pools_5",
+      "For a few breaths, the surf and gulls go silent. Then the island sounds return."
+    );
+  }
+
+  if (c.actionType === "gather" && c.actionId === "collect_driftwood" && completionCount === 7) {
+    addAmbientLoreNote(
+      state,
+      "lore_driftwood_7",
+      "A smooth shell hums faintly when held to your ear, then goes still."
+    );
+  }
+
+  if (c.actionType === "expedition" && c.actionId === "explore_beach" && !c.biomeDiscovery) {
+    const noDiscoveryCount = bumpActionCompletionCount(state, "expedition_no_discovery", c.actionId);
+    if (noDiscoveryCount === 2) {
+      addAmbientLoreNote(
+        state,
+        "lore_explore_beach_no_biome_2",
+        "On the return crossing, a pale light hangs on the horizon where no land should be."
+      );
+    }
+  }
+
+  if (c.actionType === "expedition" && c.actionId === "sail_nearby_island" && completionCount === 3) {
+    addAmbientLoreNote(
+      state,
+      "lore_nearby_island_3",
+      "At dusk, a long wail carries over calm water. It fades before you can place it."
+    );
+  }
+}
+
 export function useGame() {
   const [state, setState] = useState<GameState>(() => {
     const loaded = loadGame() ?? createInitialState();
@@ -355,6 +415,7 @@ export function useGame() {
         const result = processTick(next, Date.now());
         for (const c of result.completions) {
           processCompletionDiscoveries(next, c);
+          processAmbientLore(next, c);
         }
         // Routine advancement for offline progress
         if (next.activeRoutine) {
@@ -388,6 +449,7 @@ export function useGame() {
         const result = processTick(next, Date.now());
         for (const c of result.completions) {
           processCompletionDiscoveries(next, c);
+          processAmbientLore(next, c);
         }
 
         // Routine advancement
