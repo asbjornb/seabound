@@ -10,7 +10,6 @@
 import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
-import { DIFFICULTY_BANDS } from "./difficultyBands";
 import { EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
@@ -22,7 +21,6 @@ import type {
   ActionDef,
   BiomeDef,
   BuildingDef,
-  DifficultyBandDef,
   ExpeditionDef,
   PhaseDef,
   RecipeDef,
@@ -51,7 +49,6 @@ export interface GameDataPack {
   actions: ActionDef[];
   recipes: RecipeDef[];
   expeditions: ExpeditionDef[];
-  difficultyBands: DifficultyBandDef[];
   stations: StationDef[];
   milestones: Partial<Record<string, SkillMilestone[]>>;
 }
@@ -86,7 +83,6 @@ export function createBaseGamePack(): GameDataPack {
     actions: [...ACTIONS],
     recipes: [...RECIPES],
     expeditions: [...EXPEDITIONS],
-    difficultyBands: [...DIFFICULTY_BANDS],
     stations: [...STATIONS],
     milestones: buildBaseMilestones(),
   };
@@ -103,7 +99,6 @@ let _actionsByIdCache: Record<string, ActionDef> = {};
 let _recipesByIdCache: Record<string, RecipeDef> = {};
 let _expeditionsByIdCache: Record<string, ExpeditionDef> = {};
 let _stationsByIdCache: Record<string, StationDef> = {};
-let _difficultyBandsByIdCache: Record<string, DifficultyBandDef> = {};
 let _biomeOrderCache: string[] = [];
 let _foodValuesCache: { id: string; value: number }[] = [];
 let _waterValuesCache: { id: string; value: number }[] = [];
@@ -120,9 +115,6 @@ function rebuildCaches(): void {
 
   _stationsByIdCache = {};
   for (const s of _pack.stations) _stationsByIdCache[s.id] = s;
-
-  _difficultyBandsByIdCache = {};
-  for (const b of _pack.difficultyBands) _difficultyBandsByIdCache[b.id] = b;
 
   _biomeOrderCache = Object.values(_pack.biomes)
     .sort((a, b) => a.order - b.order)
@@ -173,8 +165,6 @@ export function getActions(): ActionDef[] { return _pack.actions; }
 export function getRecipes(): RecipeDef[] { return _pack.recipes; }
 export function getExpeditions(): ExpeditionDef[] { return _pack.expeditions; }
 export function getStations(): StationDef[] { return _pack.stations; }
-export function getDifficultyBands(): DifficultyBandDef[] { return _pack.difficultyBands; }
-export function getDifficultyBandById(id: string): DifficultyBandDef | undefined { return _difficultyBandsByIdCache[id]; }
 export function getMilestonesForSkill(skillId: string): SkillMilestone[] {
   return _pack.milestones[skillId] ?? [];
 }

@@ -188,26 +188,6 @@ export type RecipeHideCondition =
   | { type: "has_biome"; biomeId: BiomeId }
   | { type: "output_no_use" }; // hide when the output resource has no remaining use
 
-// ═══════════════════════════════════════
-// Expedition Difficulty Bands (mainland combat)
-// ═══════════════════════════════════════
-
-export type DifficultyBandId = string;
-
-export interface DifficultyBandDef {
-  id: DifficultyBandId;
-  name: string;
-  description: string;
-  /** Base failure chance before gear/skill modifiers (0-1) */
-  baseFailureChance: number;
-  /** Multiplier on reward quantity/quality (1.0 = baseline) */
-  rewardMultiplier: number;
-  /** Chance that drops arrive in broken/damaged state (0-1) */
-  brokenDropChance: number;
-  /** Number of hazard checks per expedition run */
-  hazardChecks: number;
-}
-
 export interface ExpeditionDef {
   id: string;
   name: string;
@@ -223,7 +203,6 @@ export interface ExpeditionDef {
   outcomes: ExpeditionOutcome[];
   xpGain: number;
   victory?: boolean; // if true, completing this expedition wins the game
-  difficultyBand?: DifficultyBandId; // mainland combat: references a DifficultyBandDef
 }
 
 export interface ExpeditionOutcome {

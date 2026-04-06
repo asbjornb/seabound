@@ -256,10 +256,7 @@ export function importModPackFromJson(json: string): ImportResult {
   const result = validateModPack(parsed);
   if (!result.valid) return { ...result, iconCount: 0 };
 
-  const pack = parsed as GameDataPack;
-  // Default new optional fields for backward compat with older mods
-  if (!pack.difficultyBands) pack.difficultyBands = [];
-  return { ...result, pack, iconCount: 0 };
+  return { ...result, pack: parsed as GameDataPack, iconCount: 0 };
 }
 
 /** Import a mod pack from a .zip file. Extracts data.json and icons/. */
