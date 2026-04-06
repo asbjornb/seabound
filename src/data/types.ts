@@ -316,6 +316,7 @@ export interface GameState {
   activePlayTimeMs: number; // playtime accumulated only while tab is visible
   sentMilestones: string[]; // analytics milestone IDs already sent (dedup)
   victory?: boolean; // true when the player has won (completed a victory expedition)
+  mainlandUnlocked?: boolean; // true when player opts into experimental mainland content post-victory
   modId?: string; // if set, this save belongs to a specific mod
   routines: Routine[];
   activeRoutine: RoutineProgress | null;
