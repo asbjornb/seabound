@@ -1,5 +1,134 @@
 import { ExpeditionDef } from "./types";
 
+// ═══════════════════════════════════════
+// Mainland Expeditions (post-victory)
+// ═══════════════════════════════════════
+
+export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
+  {
+    id: "coastal_ruins",
+    name: "Explore Coastal Ruins",
+    description:
+      "Investigate crumbling stone structures along the mainland shore. Wildlife nests among the rubble.",
+    skillId: "combat",
+    durationMs: 15000,
+    foodCost: 8,
+    waterCost: 2,
+    xpGain: 30,
+    mainland: true,
+    difficulty: {
+      hazards: ["wildlife", "terrain"],
+      statChecks: [
+        { stat: "offense", threshold: 5 },
+        { stat: "defense", threshold: 3 },
+      ],
+      hint: "Bring a weapon and watch your footing on the loose stones.",
+    },
+    outcomes: [
+      {
+        weight: 30,
+        description:
+          "You navigate the ruins carefully, finding useful stone and metal scraps among the rubble.",
+        drops: [
+          { resourceId: "flat_stone", amount: 3 },
+        ],
+      },
+      {
+        weight: 25,
+        description:
+          "A wild boar charges from a collapsed doorway. You fend it off and claim the den's contents.",
+        drops: [
+          { resourceId: "coconut_husk", amount: 3 },
+          { resourceId: "flat_stone", amount: 1 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "Deep in a half-buried chamber, you find a corroded copper deposit in the walls.",
+        drops: [
+          { resourceId: "native_copper", amount: 2 },
+        ],
+      },
+      {
+        weight: 30,
+        description:
+          "The ruins are too unstable to explore safely. You retreat before the walls collapse.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "fire_hardened_spear",
+        chance: 0.1,
+        dropsAsBroken: true,
+        affixRange: { min: 0, max: 1 },
+      },
+    ],
+  },
+  {
+    id: "overgrown_trail",
+    name: "Follow the Overgrown Trail",
+    description:
+      "A faint path leads inland through dense vegetation. The heat is oppressive and the undergrowth hides dangers.",
+    skillId: "combat",
+    durationMs: 20000,
+    foodCost: 10,
+    waterCost: 4,
+    xpGain: 45,
+    mainland: true,
+    difficulty: {
+      hazards: ["heat", "wildlife", "endurance"],
+      statChecks: [
+        { stat: "offense", threshold: 8 },
+        { stat: "heatResist", threshold: 4 },
+        { stat: "endurance", threshold: 3 },
+      ],
+      hint: "A longer trek — pack for heat and bring enough stamina to last.",
+    },
+    outcomes: [
+      {
+        weight: 25,
+        description:
+          "You push through the brush and reach a clearing with an ancient stone foundation. Copper ore glints in an exposed vein.",
+        drops: [
+          { resourceId: "native_copper", amount: 3 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "You stumble on a nest of vipers but dispatch them with your weapon. Their nest sits atop useful materials.",
+        drops: [
+          { resourceId: "coconut_husk", amount: 2 },
+          { resourceId: "flat_stone", amount: 2 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "The trail opens to a moss-covered ruin with remarkably preserved stonework. You salvage what you can.",
+        drops: [
+          { resourceId: "flat_stone", amount: 4 },
+          { resourceId: "native_copper", amount: 1 },
+        ],
+      },
+      {
+        weight: 40,
+        description:
+          "The heat saps your strength and you're forced to turn back before reaching anything of value.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "copper_spear",
+        chance: 0.05,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+  },
+];
+
 export const EXPEDITIONS: ExpeditionDef[] = [
   {
     id: "explore_beach",

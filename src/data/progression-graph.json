@@ -285,6 +285,12 @@
       "label": "Sealed Clay Jar"
     },
     {
+      "id": "resource:native_copper",
+      "type": "resource",
+      "label": "Native Copper",
+      "category": "metal,mainland"
+    },
+    {
       "id": "tool:bamboo_knife",
       "type": "tool",
       "label": "Bamboo Knife"
@@ -4817,12 +4823,24 @@
     "deadEnds": [
       "tool:crucible"
     ],
-    "unreachable": [],
+    "unreachable": [
+      "resource:native_copper"
+    ],
     "warnings": [
       {
         "type": "dead_end",
         "nodeId": "tool:crucible",
         "message": "Crucible is produced but never used as input"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:native_copper",
+        "message": "Native Copper is not reachable from beach start"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:native_copper",
+        "message": "Native Copper is defined but has no production or consumption edges"
       }
     ],
     "skillGates": {

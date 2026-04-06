@@ -11,7 +11,7 @@ import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
 import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS } from "./equipment";
-import { EXPEDITIONS } from "./expeditions";
+import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
 import { RESOURCES } from "./resources";
@@ -89,7 +89,7 @@ export function createBaseGamePack(): GameDataPack {
     phases: [...PHASES],
     actions: [...ACTIONS],
     recipes: [...RECIPES],
-    expeditions: [...EXPEDITIONS],
+    expeditions: [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS],
     stations: [...STATIONS],
     milestones: buildBaseMilestones(),
     equipmentSlots: { ...EQUIPMENT_SLOTS },

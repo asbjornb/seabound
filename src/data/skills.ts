@@ -49,6 +49,12 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     description:
       "Improves expedition outcomes — discovery chance, loot quality, risk reduction.",
   },
+  combat: {
+    id: "combat",
+    name: "Combat",
+    description:
+      "Fighting skill gained from mainland expeditions. Small milestone bonuses to encounter outcomes.",
+  },
 };
 
 // XP required for each level (cumulative). Level 1 = 0 xp, level 2 = 100 xp, etc.
