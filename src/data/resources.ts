@@ -327,4 +327,16 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description:
       "An airtight clay jar. Preserves food for long expeditions and stores seeds.",
   },
+
+  // ═══════════════════════════════════════
+  // Mainland Resources
+  // ═══════════════════════════════════════
+
+  native_copper: {
+    id: "native_copper",
+    name: "Native Copper",
+    description:
+      "A nugget of naturally occurring copper. Soft enough to cold-hammer into shape.",
+    tags: ["metal", "mainland"],
+  },
 };

@@ -255,6 +255,39 @@ export type RecipeHideCondition =
   | { type: "has_biome"; biomeId: BiomeId }
   | { type: "output_no_use" }; // hide when the output resource has no remaining use
 
+// ═══════════════════════════════════════
+// Expedition Combat — Difficulty Profiles
+// ═══════════════════════════════════════
+
+/** Hazard categories that an expedition can present. Gear stats mitigate specific hazards. */
+export type HazardType =
+  | "heat"       // volcanic, desert — mitigated by heatResist
+  | "cold"       // alpine, night exposure — mitigated by coldResist
+  | "wet"        // rain, river crossings — mitigated by wetResist
+  | "wildlife"   // animal encounters — mitigated by offense + defense
+  | "terrain"    // rough ground, cliffs — mitigated by speed + endurance
+  | "endurance"; // long treks, attrition — mitigated by endurance + comfort
+
+/** A single stat check within an expedition's difficulty profile. */
+export interface StatCheck {
+  /** The stat being tested (matches StatModifier.stat, e.g. "offense", "defense", "heatResist"). */
+  stat: string;
+  /** Minimum total stat value for a comfortable pass. Below this, outcomes degrade. */
+  threshold: number;
+}
+
+/** Difficulty profile for a mainland combat expedition. */
+export interface ExpeditionDifficultyProfile {
+  /** Primary hazard types present in this expedition. */
+  hazards: HazardType[];
+  /** Stat checks the player's loadout is evaluated against. */
+  statChecks: StatCheck[];
+  /** Minimum combined gear score (sum of all equipped base + affix stats) for viability. */
+  minGearScore?: number;
+  /** Brief hint shown before departure (e.g. "Bring heat-resistant gear and a sturdy weapon"). */
+  hint: string;
+}
+
 export interface ExpeditionDef {
   id: string;
   name: string;
@@ -270,6 +303,24 @@ export interface ExpeditionDef {
   outcomes: ExpeditionOutcome[];
   xpGain: number;
   victory?: boolean; // if true, completing this expedition wins the game
+  /** If true, this expedition is only available after mainland is unlocked. */
+  mainland?: boolean;
+  /** Combat difficulty profile — present on mainland expeditions with hazard/gear checks. */
+  difficulty?: ExpeditionDifficultyProfile;
+  /** Equipment drops that can be awarded on success (separate from resource drops). */
+  equipmentDrops?: EquipmentDropEntry[];
+}
+
+/** An equipment item that can drop from an expedition outcome. */
+export interface EquipmentDropEntry {
+  /** Base item definition ID. */
+  defId: string;
+  /** Chance this item drops (0-1). */
+  chance: number;
+  /** If true, the item drops in broken condition requiring repair. */
+  dropsAsBroken?: boolean;
+  /** Min/max number of affixes rolled on the dropped item. */
+  affixRange?: { min: number; max: number };
 }
 
 export interface ExpeditionOutcome {

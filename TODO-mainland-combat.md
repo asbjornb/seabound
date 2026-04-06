@@ -1,6 +1,6 @@
 # Mainland Expedition Combat — Implementation Todo
 
-Tracks progress on `plan-mainland-expedition-combat.md`. Each section maps to the spec's numbered sections.
+Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expedition-combat.md). Each section maps to the spec's numbered sections.
 
 ## 0) Product Framing & Safety
 - [x] Add `mainlandUnlocked` flag to GameState + save migration
@@ -9,7 +9,7 @@ Tracks progress on `plan-mainland-expedition-combat.md`. Each section maps to th
 - [x] Add in-modal feedback CTA pointing to existing bottom-page form
 
 ## 1) Expedition Combat Framework
-- [ ] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds)
+- [x] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds)
 - [ ] Implement non-real-time encounter/hazard resolution skeleton
 - [ ] Add success/failure/partial reward outcome handling
 - [ ] Add failure insight messaging (what stats/gear would help)
