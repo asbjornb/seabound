@@ -312,6 +312,13 @@ function processCompletionDiscoveries(
     const insights = c.encounterResult.failureInsights.slice(0, 3); // cap to avoid toast spam
     addDiscovery(state, "expedition", `${gradeLabel}: ${insights.join(". ")}`);
   }
+  // Show equipment drops from mainland expeditions
+  if (c.equipmentDropped) {
+    for (const eq of c.equipmentDropped) {
+      const condLabel = eq.condition === "broken" ? " (broken)" : "";
+      addDiscovery(state, "equipment", `Found ${eq.name}${condLabel}!`);
+    }
+  }
 }
 
 function bumpActionCompletionCount(state: GameState, actionType: string, actionId: string): number {
