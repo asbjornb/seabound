@@ -44,6 +44,7 @@ import {
   loadGame,
   normalizeGameState,
   saveGame,
+  MAINLAND_VERSION,
 } from "./gameState";
 import {
   checkMilestones,
@@ -979,7 +980,7 @@ export function useGame() {
   const unlockMainland = useCallback(() => {
     setState((prev) => {
       if (prev.mainlandUnlocked) return prev;
-      return { ...prev, mainlandUnlocked: true };
+      return { ...prev, mainlandUnlocked: true, mainlandVersion: MAINLAND_VERSION };
     });
   }, []);
 
