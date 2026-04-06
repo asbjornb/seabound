@@ -11,6 +11,7 @@ interface Props {
   state: GameState;
   onDeploy: (station: StationDef) => void;
   onCollect: (index: number) => void;
+  onCollectAll: () => void;
   onFlyup?: (items: FlyupItem[]) => void;
 }
 
@@ -28,6 +29,7 @@ export function StationsPanel({
   state,
   onDeploy,
   onCollect,
+  onCollectAll,
   onFlyup,
 }: Props) {
   const now = Date.now();
@@ -112,6 +114,11 @@ export function StationsPanel({
         <>
           <div className="section-title">
             Active{readyCount > 0 && ` — ${readyCount} ready!`}
+            {readyCount > 1 && (
+              <button className="collect-all-btn" onClick={onCollectAll}>
+                Collect all
+              </button>
+            )}
           </div>
           {sortedActiveStations.map(({ def, index, isReady, remaining, progress }) => {
             if (!def) return null;

@@ -539,7 +539,13 @@ export default function App() {
                   className={`tab ${activeTab === t ? "active" : ""}`}
                   onClick={() => handleTabSwitch(t)}
                 >
-                  <GameIcon id={`tab_${t}`} size={22} /><span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
+                  <span className="tab-icon-wrapper">
+                    <GameIcon id={`tab_${t}`} size={22} />
+                    {t === "tend" && readyStationCount > 0 && (
+                      <span className="tab-badge">{readyStationCount}</span>
+                    )}
+                  </span>
+                  <span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
                 </button>
               ))}
               {/* Desktop: show skills tab inline (inventory is in sidebar on desktop) */}
@@ -630,6 +636,7 @@ export default function App() {
                 state={game.state}
                 onDeploy={game.deployStation}
                 onCollect={game.collectStation}
+                onCollectAll={game.collectAllStations}
                 onFlyup={handleFlyup}
               />
             )}
