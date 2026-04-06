@@ -6,7 +6,7 @@ Tracks progress on `plan-mainland-expedition-combat.md`. Each section maps to th
 - [x] Add `mainlandUnlocked` flag to GameState + save migration
 - [x] Add experimental warning modal on "Continue Playing" (VictoryScreen)
 - [ ] Define reset/migration policy for experimental mainland states
-- [ ] Add in-modal feedback CTA pointing to existing bottom-page form
+- [x] Add in-modal feedback CTA pointing to existing bottom-page form
 
 ## 1) Expedition Combat Framework
 - [ ] Create expedition difficulty band templates (low/mid/high risk)

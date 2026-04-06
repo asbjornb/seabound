@@ -52,6 +52,10 @@ export function VictoryScreen({ state, onContinue, onUnlockMainland }: Props) {
           <div className="victory-message" style={{ marginTop: "0.5rem", fontSize: "0.85rem", opacity: 0.8 }}>
             Your island progression is safe and unaffected.
           </div>
+          <div className="victory-message" style={{ marginTop: "0.75rem", fontSize: "0.8rem", opacity: 0.7 }}>
+            We'd love your feedback on mainland content — there's a
+            form at the bottom of the page.
+          </div>
           <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.25rem", justifyContent: "center" }}>
             <button
               className="victory-continue"
