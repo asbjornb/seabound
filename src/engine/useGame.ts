@@ -814,6 +814,75 @@ export function useGame() {
     });
   }, []);
 
+  const collectAllStations = useCallback(() => {
+    setState((prev) => {
+      const now = Date.now();
+      // Find indices of ready stations (reverse order to handle splicing)
+      const readyIndices: number[] = [];
+      for (let i = prev.stations.length - 1; i >= 0; i--) {
+        const placed = prev.stations[i];
+        const def = getStationById(placed.stationId);
+        if (def && now >= placed.deployedAt + def.durationMs) {
+          readyIndices.push(i);
+        }
+      }
+      if (readyIndices.length === 0) return prev;
+
+      const next = structuredClone(prev);
+      const RESOURCES = getResources();
+
+      for (const index of readyIndices) {
+        const placed = next.stations[index];
+        const def = getStationById(placed.stationId)!;
+        const skillLevel = next.skills[def.skillId].level;
+        const newResources: string[] = [];
+        const droppedAmounts = new Map<string, number>();
+
+        for (const drop of def.yields) {
+          let chance = drop.chance ?? 1;
+          chance = Math.min(1, chance + getDropChanceBonus(def.skillId, skillLevel, def.id, drop.resourceId));
+          if (Math.random() < chance) {
+            if (!next.discoveredResources.includes(drop.resourceId)) {
+              newResources.push(drop.resourceId);
+              next.discoveredResources.push(drop.resourceId);
+            }
+            addResource(next, drop.resourceId, drop.amount);
+            droppedAmounts.set(drop.resourceId, (droppedAmounts.get(drop.resourceId) ?? 0) + drop.amount);
+          }
+        }
+
+        const guaranteedDrops = getStationGuaranteedDrops(def.skillId, skillLevel, def.id);
+        for (const [resourceId, minAmount] of guaranteedDrops) {
+          const got = droppedAmounts.get(resourceId) ?? 0;
+          if (got < minAmount) {
+            if (!next.discoveredResources.includes(resourceId)) {
+              newResources.push(resourceId);
+              next.discoveredResources.push(resourceId);
+            }
+            addResource(next, resourceId, minAmount - got);
+          }
+        }
+
+        const skill = next.skills[def.skillId];
+        skill.xp += def.xpGain;
+        skill.level = levelFromXp(skill.xp);
+
+        for (const resId of newResources) {
+          const rdef = RESOURCES[resId];
+          const name = rdef?.name ?? resId.replace(/_/g, " ");
+          addDiscovery(next, "resource", `Found ${name} for the first time`);
+        }
+
+        next.stations.splice(index, 1);
+        if (!def.setupInputs || def.setupInputs.length === 0) {
+          next.stations.push({ stationId: def.id, deployedAt: Date.now() });
+        }
+      }
+
+      return next;
+    });
+  }, []);
+
   const resetGame = useCallback(() => {
     const fresh = createInitialState();
     setState(fresh);
@@ -924,6 +993,7 @@ export function useGame() {
     stopRoutine,
     deployStation,
     collectStation,
+    collectAllStations,
     markDiscoverySeen,
     markPhaseSeen,
     resetGame,
