@@ -9,7 +9,7 @@ Tracks progress on `plan-mainland-expedition-combat.md`. Each section maps to th
 - [x] Add in-modal feedback CTA pointing to existing bottom-page form
 
 ## 1) Expedition Combat Framework
-- [ ] Create expedition difficulty band templates (low/mid/high risk)
+- [ ] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds)
 - [ ] Implement non-real-time encounter/hazard resolution skeleton
 - [ ] Add success/failure/partial reward outcome handling
 - [ ] Add failure insight messaging (what stats/gear would help)
