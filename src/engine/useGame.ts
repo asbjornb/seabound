@@ -42,9 +42,9 @@ import {
   hasBuilding,
   hasVessel,
   loadGame,
-  MAINLAND_VERSION,
   normalizeGameState,
   saveGame,
+  MAINLAND_VERSION,
 } from "./gameState";
 import {
   checkMilestones,
