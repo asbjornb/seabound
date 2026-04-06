@@ -42,6 +42,7 @@ import {
   hasBuilding,
   hasVessel,
   loadGame,
+  MAINLAND_VERSION,
   normalizeGameState,
   saveGame,
 } from "./gameState";
@@ -979,7 +980,7 @@ export function useGame() {
   const unlockMainland = useCallback(() => {
     setState((prev) => {
       if (prev.mainlandUnlocked) return prev;
-      return { ...prev, mainlandUnlocked: true };
+      return { ...prev, mainlandUnlocked: true, mainlandVersion: MAINLAND_VERSION };
     });
   }, []);
 

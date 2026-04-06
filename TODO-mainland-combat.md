@@ -5,7 +5,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 ## 0) Product Framing & Safety
 - [x] Add `mainlandUnlocked` flag to GameState + save migration
 - [x] Add experimental warning modal on "Continue Playing" (VictoryScreen)
-- [ ] Define reset/migration policy for experimental mainland states
+- [x] Define reset/migration policy for experimental mainland states
 - [x] Add in-modal feedback CTA pointing to existing bottom-page form
 
 ## 1) Expedition Combat Framework

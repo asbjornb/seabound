@@ -435,6 +435,7 @@ export interface GameState {
   sentMilestones: string[]; // analytics milestone IDs already sent (dedup)
   victory?: boolean; // true when the player has won (completed a victory expedition)
   mainlandUnlocked?: boolean; // true when player opts into experimental mainland content post-victory
+  mainlandVersion?: number; // experimental version marker — bumped when mainland format changes, triggers reset
   modId?: string; // if set, this save belongs to a specific mod
   routines: Routine[];
   activeRoutine: RoutineProgress | null;
