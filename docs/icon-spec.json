@@ -1567,6 +1567,30 @@
       "chainRole": "standalone",
       "size": 64,
       "tags": ["phase2", "building", "fishing", "stone"]
+    },
+    {
+      "id": "native_copper",
+      "object": "Native copper nugget",
+      "description": "A rough, reddish-orange nugget of native copper with a dull metallic sheen. Irregular shape with hints of green patina on edges. Warm, sun-lit metal against transparent background.",
+      "use": "Inventory, mainland resource drops, smithing recipes",
+      "theme": "metal",
+      "category": "metal",
+      "chain": "copper",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "mineral", "metal"]
+    },
+    {
+      "id": "skill_combat",
+      "object": "Crossed spear and shield",
+      "description": "Two crossed weapons — a wooden spear and a small round shield — forming an X. Warm tropical wood tones with wrapped fiber grips. Slight battle-worn scratches.",
+      "use": "Skills panel, action cards, milestone badges",
+      "theme": "combat",
+      "category": "skill",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["skill", "mainland", "combat"]
     }
   ],
   "states": {},
