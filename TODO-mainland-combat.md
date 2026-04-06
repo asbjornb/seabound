@@ -10,7 +10,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 
 ## 1) Expedition Combat Framework
 - [x] Define per-expedition difficulty profiles (gear checks, hazard types, stat thresholds)
-- [ ] Implement non-real-time encounter/hazard resolution skeleton
+- [x] Implement non-real-time encounter/hazard resolution skeleton
 - [ ] Add success/failure/partial reward outcome handling
 - [ ] Add failure insight messaging (what stats/gear would help)
 
