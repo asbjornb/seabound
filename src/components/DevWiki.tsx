@@ -5,6 +5,7 @@ import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
 import { WORKER_URL } from "../lib/analytics";
 import { DevPinGate } from "./DevPinGate";
+import { getFeatureFlags, setFeatureFlag } from "../engine/featureFlags";
 
 /**
  * Dev-only wiki page showing all game content.
@@ -47,6 +48,7 @@ function Changelog() {
 
 function DevTools() {
   const [feedbackStatus, setFeedbackStatus] = useState("");
+  const [mainlandEnabled, setMainlandEnabled] = useState(() => getFeatureFlags().mainland);
   const key = "seabound_feedbackQ";
 
   const reset = () => {
@@ -59,6 +61,24 @@ function DevTools() {
   return (
     <div style={{ ...styles.card, marginBottom: "1.5rem" }}>
       <h3 style={styles.h3}>Dev Tools</h3>
+
+      <div style={{ marginBottom: "0.75rem" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", color: "#e8e4d8", fontSize: "0.9rem" }}>
+          <input
+            type="checkbox"
+            checked={mainlandEnabled}
+            onChange={(e) => {
+              const v = e.target.checked;
+              setFeatureFlag("mainland", v);
+              setMainlandEnabled(v);
+            }}
+            style={{ accentColor: "#f0a050", width: 18, height: 18 }}
+          />
+          <span>Mainland content</span>
+          <span style={{ color: "#5a7a6a", fontSize: "0.8rem" }}>(requires reload)</span>
+        </label>
+      </div>
+
       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
         <button
           onClick={reset}
