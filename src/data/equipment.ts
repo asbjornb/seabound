@@ -1,0 +1,323 @@
+import { AffixDef, EquipmentItemDef, EquipmentSlotDef } from "./types";
+
+// ═══════════════════════════════════════
+// Equipment Slots
+// ═══════════════════════════════════════
+
+export const EQUIPMENT_SLOTS: Record<string, EquipmentSlotDef> = {
+  weapon: {
+    id: "weapon",
+    name: "Weapon",
+    description: "Primary weapon — axes, spears, blades.",
+    order: 0,
+  },
+  offhand: {
+    id: "offhand",
+    name: "Off-Hand",
+    description: "Shield, torch, or secondary tool.",
+    order: 1,
+  },
+  head: {
+    id: "head",
+    name: "Head",
+    description: "Headgear — helmets, hoods, wraps.",
+    order: 2,
+  },
+  body: {
+    id: "body",
+    name: "Body",
+    description: "Torso armor — hide vests, woven shirts, plate.",
+    order: 3,
+  },
+  legs: {
+    id: "legs",
+    name: "Legs",
+    description: "Leg protection — wraps, greaves, trousers.",
+    order: 4,
+  },
+  feet: {
+    id: "feet",
+    name: "Feet",
+    description: "Footwear — sandals, boots, wrappings.",
+    order: 5,
+  },
+};
+
+// ═══════════════════════════════════════
+// Affix Definitions
+// ═══════════════════════════════════════
+
+export const AFFIXES: Record<string, AffixDef> = {
+  // Terrain / hazard mitigation family
+  affix_heat_resist: {
+    id: "affix_heat_resist",
+    name: "Heat Resistant",
+    family: "terrain",
+    description: "Reduces penalties from extreme heat hazards.",
+    modifiers: [{ stat: "heatResist", value: 10 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+  affix_cold_resist: {
+    id: "affix_cold_resist",
+    name: "Cold Resistant",
+    family: "terrain",
+    description: "Reduces penalties from cold and exposure hazards.",
+    modifiers: [{ stat: "coldResist", value: 10 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+  affix_waterproof: {
+    id: "affix_waterproof",
+    name: "Waterproof",
+    family: "terrain",
+    description: "Reduces penalties from rain, rivers, and wet terrain.",
+    modifiers: [{ stat: "wetResist", value: 10 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+
+  // Offense family
+  affix_sharp: {
+    id: "affix_sharp",
+    name: "Sharpened",
+    family: "offense",
+    description: "Increased damage in encounter checks.",
+    modifiers: [{ stat: "offense", value: 8 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    allowedSlots: ["weapon"],
+  },
+  affix_heavy_strike: {
+    id: "affix_heavy_strike",
+    name: "Heavy",
+    family: "offense",
+    description: "Hits harder but slightly slower. Strong against armored threats.",
+    modifiers: [
+      { stat: "offense", value: 12 },
+      { stat: "speed", value: -3 },
+    ],
+    rollRange: { min: 0.5, max: 1.0 },
+    allowedSlots: ["weapon"],
+  },
+
+  // Defense family
+  affix_reinforced: {
+    id: "affix_reinforced",
+    name: "Reinforced",
+    family: "defense",
+    description: "Extra protection against physical encounters.",
+    modifiers: [{ stat: "defense", value: 8 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    allowedSlots: ["body", "head", "legs"],
+  },
+  affix_padded: {
+    id: "affix_padded",
+    name: "Padded",
+    family: "defense",
+    description: "Cushioned layer absorbs impact.",
+    modifiers: [{ stat: "defense", value: 5 }, { stat: "comfort", value: 3 }],
+    rollRange: { min: 0.5, max: 1.0 },
+    allowedSlots: ["body", "legs"],
+  },
+
+  // Utility family
+  affix_light: {
+    id: "affix_light",
+    name: "Lightweight",
+    family: "utility",
+    description: "Reduced encumbrance, faster movement through terrain.",
+    modifiers: [{ stat: "speed", value: 5 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+  affix_pocketed: {
+    id: "affix_pocketed",
+    name: "Pocketed",
+    family: "utility",
+    description: "Extra carrying capacity for expedition supplies.",
+    modifiers: [{ stat: "carryCapacity", value: 4 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    allowedSlots: ["body", "legs"],
+  },
+  affix_sturdy: {
+    id: "affix_sturdy",
+    name: "Sturdy",
+    family: "utility",
+    description: "More durable — degrades slower during expeditions.",
+    modifiers: [{ stat: "durability", value: 10 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+
+  // Endurance family
+  affix_enduring: {
+    id: "affix_enduring",
+    name: "Enduring",
+    family: "endurance",
+    description: "Improves stamina during long expeditions.",
+    modifiers: [{ stat: "endurance", value: 6 }],
+    rollRange: { min: 0.5, max: 1.0 },
+  },
+};
+
+// ═══════════════════════════════════════
+// Base Equipment Item Definitions
+// ═══════════════════════════════════════
+// Tier 0: Improvised gear from existing island resources
+// Tier 1: Crafted gear from early mainland materials (copper era)
+
+export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
+  // ── Tier 0: Improvised (island resources) ──
+
+  fire_hardened_spear: {
+    id: "fire_hardened_spear",
+    name: "Fire-Hardened Spear",
+    description: "A bamboo spear with a fire-hardened tip. Basic but functional.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 6 }, { stat: "speed", value: 2 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["wood", "weapon"],
+  },
+  stone_club: {
+    id: "stone_club",
+    name: "Stone Club",
+    description: "A heavy stone lashed to a wooden handle. Blunt but punishing.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 8 }, { stat: "speed", value: -2 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["stone", "weapon"],
+  },
+  obsidian_dagger: {
+    id: "obsidian_dagger",
+    name: "Obsidian Dagger",
+    description: "A razor-sharp obsidian blade. Fast and deadly, but fragile.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 10 }, { stat: "durability", value: -5 }],
+    tier: 0,
+    maxAffixes: 2,
+    tags: ["stone", "weapon"],
+  },
+  woven_fiber_vest: {
+    id: "woven_fiber_vest",
+    name: "Woven Fiber Vest",
+    description: "Rough fiber woven into a basic chest covering. Better than nothing.",
+    slot: "body",
+    baseStats: [{ stat: "defense", value: 4 }, { stat: "heatResist", value: 2 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["fiber", "armor"],
+  },
+  palm_frond_hat: {
+    id: "palm_frond_hat",
+    name: "Palm Frond Hat",
+    description: "A wide-brimmed hat woven from palm fronds. Shade from the sun.",
+    slot: "head",
+    baseStats: [{ stat: "heatResist", value: 5 }, { stat: "comfort", value: 2 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["fiber", "armor"],
+  },
+  hide_wraps: {
+    id: "hide_wraps",
+    name: "Hide Wraps",
+    description: "Strips of dried hide bound around the legs. Protects against scrapes and thorns.",
+    slot: "legs",
+    baseStats: [{ stat: "defense", value: 3 }, { stat: "speed", value: 1 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["hide", "armor"],
+  },
+  bamboo_sandals: {
+    id: "bamboo_sandals",
+    name: "Bamboo Sandals",
+    description: "Simple bamboo-sole sandals lashed with fiber. Protects feet from rough terrain.",
+    slot: "feet",
+    baseStats: [{ stat: "speed", value: 3 }, { stat: "defense", value: 1 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["wood", "armor"],
+  },
+  bamboo_buckler: {
+    id: "bamboo_buckler",
+    name: "Bamboo Buckler",
+    description: "A small round shield of woven bamboo. Light and fast to deploy.",
+    slot: "offhand",
+    baseStats: [{ stat: "defense", value: 5 }, { stat: "speed", value: -1 }],
+    tier: 0,
+    maxAffixes: 1,
+    tags: ["wood", "shield"],
+  },
+
+  // ── Tier 1: Copper-era gear (early mainland) ──
+
+  copper_spear: {
+    id: "copper_spear",
+    name: "Copper Spear",
+    description: "A spear tipped with hammered native copper. A real step up.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 14 }, { stat: "speed", value: 1 }],
+    requiredSkills: [{ skillId: "combat", level: 3 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["metal", "weapon"],
+  },
+  copper_axe: {
+    id: "copper_axe",
+    name: "Copper Axe",
+    description: "A heavy copper-headed axe. Cleaves through obstacles and enemies alike.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 16 }, { stat: "speed", value: -3 }],
+    requiredSkills: [{ skillId: "combat", level: 3 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["metal", "weapon"],
+  },
+  copper_shield: {
+    id: "copper_shield",
+    name: "Copper Shield",
+    description: "A round shield with a hammered copper face. Deflects blows reliably.",
+    slot: "offhand",
+    baseStats: [{ stat: "defense", value: 10 }, { stat: "speed", value: -2 }],
+    requiredSkills: [{ skillId: "combat", level: 2 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["metal", "shield"],
+  },
+  hide_armor: {
+    id: "hide_armor",
+    name: "Hide Armor",
+    description: "Layered cured hides stitched into a proper chest piece.",
+    slot: "body",
+    baseStats: [{ stat: "defense", value: 8 }, { stat: "endurance", value: 2 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
+  },
+  hide_cap: {
+    id: "hide_cap",
+    name: "Hide Cap",
+    description: "A fitted cap of layered hide. Protects the head without blocking vision.",
+    slot: "head",
+    baseStats: [{ stat: "defense", value: 5 }, { stat: "coldResist", value: 3 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
+  },
+  hide_leggings: {
+    id: "hide_leggings",
+    name: "Hide Leggings",
+    description: "Fitted hide trousers. Good mobility with decent protection.",
+    slot: "legs",
+    baseStats: [{ stat: "defense", value: 6 }, { stat: "speed", value: 1 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
+  },
+  hide_boots: {
+    id: "hide_boots",
+    name: "Hide Boots",
+    description: "Sturdy boots of stitched hide. Good ankle support for rough terrain.",
+    slot: "feet",
+    baseStats: [{ stat: "speed", value: 2 }, { stat: "defense", value: 4 }, { stat: "wetResist", value: 3 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
+  },
+};

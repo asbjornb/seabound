@@ -254,10 +254,10 @@ Because game UI is already complex, phase rollout should minimize overwhelm.
 - [ ] Add failure insight messaging (what stats/gear would help).
 
 ## 2) Equipment & Affix Foundation
-- [ ] Define slot schema and loadout constraints.
-- [ ] Implement base equipment item structure.
-- [ ] Implement affix attachment and bounded roll ranges.
-- [ ] Add first pass of expedition-focused affix families.
+- [x] Define slot schema and loadout constraints.
+- [x] Implement base equipment item structure.
+- [x] Implement affix attachment and bounded roll ranges.
+- [x] Add first pass of expedition-focused affix families.
 - [ ] Add basic equipment sorting/filtering in inventory UI.
 
 ## 3) Logging & Journal

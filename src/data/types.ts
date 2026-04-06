@@ -119,6 +119,73 @@ export interface PhaseDef {
   conditions: PhaseCondition[]; // ANY of these triggers the phase (OR logic)
 }
 
+// ═══════════════════════════════════════
+// Equipment System
+// ═══════════════════════════════════════
+
+export type EquipmentSlotId = string;
+
+export interface EquipmentSlotDef {
+  id: EquipmentSlotId;
+  name: string;
+  description: string;
+  order: number; // display order in loadout UI
+}
+
+/** A stat modifier on an equipment item — either base or from an affix. */
+export interface StatModifier {
+  stat: string; // e.g. "hazardMitigation", "carryCapacity", "endurance"
+  value: number; // flat bonus (can be negative for penalties)
+}
+
+export interface AffixDef {
+  id: string;
+  name: string;
+  family: string; // grouping for UI and roll exclusion (e.g. "terrain", "offense")
+  description: string;
+  modifiers: StatModifier[];
+  /** Bounded roll range — actual values scale linearly between min and max tier. */
+  rollRange?: { min: number; max: number }; // multiplied against modifier values
+  /** If set, affix can only appear on items in these slots. */
+  allowedSlots?: EquipmentSlotId[];
+}
+
+export type ItemCondition = "pristine" | "worn" | "damaged" | "broken";
+
+export interface EquipmentItemDef {
+  id: string;
+  name: string;
+  description: string;
+  slot: EquipmentSlotId;
+  /** Base stats before affixes. */
+  baseStats: StatModifier[];
+  /** Required skill levels to equip (e.g. combat 5). */
+  requiredSkills?: { skillId: SkillId; level: number }[];
+  /** Material tier — higher tiers are generally stronger and harder to obtain. */
+  tier: number;
+  /** If true, this is a unique item with fixed special properties. */
+  unique?: boolean;
+  /** Max number of affix slots on this item (rolled affixes fill these). */
+  maxAffixes: number;
+  /** Tags for filtering/categorization (e.g. "metal", "leather", "weapon"). */
+  tags?: string[];
+}
+
+/** A concrete equipment item instance in a player's inventory. */
+export interface EquipmentItem {
+  /** Unique instance ID (generated at drop/craft time). */
+  instanceId: string;
+  /** Reference to the base item definition. */
+  defId: string;
+  /** Rolled affixes on this specific item. */
+  affixes: { affixId: string; rollValue: number }[]; // rollValue 0-1 within rollRange
+  /** Current condition. Broken items cannot be equipped. */
+  condition: ItemCondition;
+}
+
+/** Player's equipped loadout — one item per slot. */
+export type Loadout = Record<EquipmentSlotId, string | null>; // maps slot → instanceId or null
+
 export type ContentPanel = "gather" | "craft" | "build";
 
 export interface ActionDef {
@@ -322,4 +389,8 @@ export interface GameState {
   activeRoutine: RoutineProgress | null;
   actionQueue: QueuedAction[];
   queueMode: boolean;
+
+  // Equipment system (mainland)
+  equipmentInventory: EquipmentItem[];
+  loadout: Loadout;
 }

@@ -129,6 +129,8 @@ export function createInitialState(): GameState {
     activeRoutine: null,
     actionQueue: [],
     queueMode: false,
+    equipmentInventory: [],
+    loadout: {},
   };
 }
 
@@ -326,6 +328,13 @@ export function normalizeGameState(raw: unknown): GameState | null {
     loaded.queueMode = false;
   }
   // Migration: mainlandUnlocked defaults to undefined (falsy), no action needed
+  // Migration: ensure equipment system fields exist
+  if (!loaded.equipmentInventory) {
+    loaded.equipmentInventory = [];
+  }
+  if (!loaded.loadout) {
+    loaded.loadout = {};
+  }
 
   return loaded;
 }
