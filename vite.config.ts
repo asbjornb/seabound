@@ -4,6 +4,7 @@ import type { Plugin } from "vite";
 
 function versionPlugin(): Plugin {
   const buildId = Date.now().toString(36);
+  const silent = process.env.SILENT_DEPLOY === "1";
   return {
     name: "version-plugin",
     config() {
@@ -13,7 +14,7 @@ function versionPlugin(): Plugin {
       this.emitFile({
         type: "asset",
         fileName: "version.json",
-        source: JSON.stringify({ buildId }),
+        source: JSON.stringify({ buildId, silent }),
       });
     },
   };
