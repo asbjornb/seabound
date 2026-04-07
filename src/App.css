@@ -305,6 +305,90 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   Combat Log Modal
+   ═══════════════════════════════════════ */
+
+.combat-log-grade {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.combat-log-outcome {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+}
+
+.combat-log-section {
+  margin-bottom: 12px;
+}
+
+.combat-log-section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+}
+
+.combat-log-check {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  padding: 2px 0;
+}
+
+.combat-log-check-name {
+  text-transform: capitalize;
+}
+
+.combat-log-pass-ratio {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-align: right;
+  margin-top: 2px;
+}
+
+.combat-log-drop {
+  font-size: 0.82rem;
+  padding: 1px 0;
+}
+
+.combat-log-xp {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.combat-log-insight {
+  font-size: 0.82rem;
+  color: #f0c040;
+  padding: 2px 0;
+}
+
+.combat-log-clear-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.combat-log-clear-btn:hover {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+/* ═══════════════════════════════════════
    Unified Button Variants
    ═══════════════════════════════════════ */
 

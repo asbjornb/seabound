@@ -342,6 +342,16 @@ function processCompletionDiscoveries(
     if (state.combatLog.length > 50) {
       state.combatLog.length = 50;
     }
+
+    // Persist lower-detail expedition summary in journal
+    const gradeLabel = c.encounterResult.grade === "success" ? "Success" : c.encounterResult.grade === "partial" ? "Partial" : "Failed";
+    const dropCount = c.drops.reduce((sum, d) => sum + d.amount, 0);
+    const eqCount = c.equipmentDropped?.length ?? 0;
+    const lootParts: string[] = [];
+    if (dropCount > 0) lootParts.push(`${dropCount} resources`);
+    if (eqCount > 0) lootParts.push(`${eqCount} equipment`);
+    const lootSummary = lootParts.length > 0 ? ` — ${lootParts.join(", ")}` : "";
+    addDiscovery(state, "expedition", `${c.actionName}: ${gradeLabel} (${Math.round(c.encounterResult.passRatio * 100)}% checks passed)${lootSummary}`);
   }
 }
 
@@ -1056,6 +1066,23 @@ export function useGame() {
     []
   );
 
+  const clearCombatLog = useCallback(() => {
+    setState((prev) => {
+      if (prev.combatLog.length === 0) return prev;
+      return { ...prev, combatLog: [] };
+    });
+  }, []);
+
+  const deleteCombatLogEntry = useCallback((id: number) => {
+    setState((prev) => {
+      const idx = prev.combatLog.findIndex((e) => e.id === id);
+      if (idx === -1) return prev;
+      const next = structuredClone(prev);
+      next.combatLog.splice(idx, 1);
+      return next;
+    });
+  }, []);
+
   const importSaveFromJson = useCallback(
     (json: string): boolean => {
       try {
@@ -1108,5 +1135,7 @@ export function useGame() {
     exportSave,
     importSave,
     importSaveFromJson,
+    clearCombatLog,
+    deleteCombatLogEntry,
   };
 }

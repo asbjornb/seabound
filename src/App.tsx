@@ -29,7 +29,8 @@ import { GameIcon } from "./components/GameIcon";
 import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
-import { DiscoveryEntry, QueuedAction, Routine } from "./data/types";
+import { CombatLogModal } from "./components/CombatLogModal";
+import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameTab,
@@ -121,6 +122,8 @@ export default function App() {
   const [migrateBannerDismissed, setMigrateBannerDismissed] = useState(false);
   const [flyups, setFlyups] = useState<FlyupItem[]>([]);
   const [changelogOpen, setChangelogOpen] = useState(false);
+  const [pendingCombatLog, setPendingCombatLog] = useState<CombatLogEntry | null>(null);
+  const lastSeenCombatLogIdRef = useRef(game.state.combatLog.length > 0 ? game.state.combatLog[0].id : -1);
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false);
   const [resetInput, setResetInput] = useState("");
   const [tabTransition, setTabTransition] = useState(false);
@@ -183,6 +186,16 @@ export default function App() {
     // After mod switch, reload the game state for the new mod
     window.location.reload();
   }, []);
+
+  // Show combat log modal when a new mainland expedition completes
+  useEffect(() => {
+    if (game.state.combatLog.length === 0) return;
+    const newest = game.state.combatLog[0];
+    if (newest.id > lastSeenCombatLogIdRef.current) {
+      lastSeenCombatLogIdRef.current = newest.id;
+      setPendingCombatLog(newest);
+    }
+  }, [game.state.combatLog]);
 
   // Phase detection
   const currentPhase = useMemo(() => getCurrentPhase(game.state), [game.state]);
@@ -362,7 +375,7 @@ export default function App() {
       )}
       <FeedbackQuestion
         hasPlayedEnough={game.state.completedRecipes.includes("build_raft")}
-        hasModalOpen={!!pendingChapter || !!pendingBiome || settingsOpen || modPanelOpen || searchOpen || showLog}
+        hasModalOpen={!!pendingChapter || !!pendingBiome || settingsOpen || modPanelOpen || searchOpen || showLog || !!pendingCombatLog}
         phaseName={currentPhase.name}
         discoveredBiomes={game.state.discoveredBiomes}
         totalPlayTimeMs={game.state.totalPlayTimeMs}
@@ -600,9 +613,53 @@ export default function App() {
                 </div>
                 <div className="log-modal-body">
                   <LogPanel entries={game.state.discoveryLog} />
+                  {game.state.combatLog.length > 0 && (
+                    <div style={{ marginTop: 16 }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                        <span className="combat-log-section-title" style={{ border: "none", margin: 0, padding: 0 }}>
+                          Combat Logs ({game.state.combatLog.length})
+                        </span>
+                        <button className="combat-log-clear-btn" onClick={() => game.clearCombatLog()}>
+                          Clear All
+                        </button>
+                      </div>
+                      {game.state.combatLog.map((entry) => {
+                        const gradeColor = entry.grade === "success" ? "#2ecc71" : entry.grade === "partial" ? "#f0c040" : "#e74c3c";
+                        return (
+                          <div
+                            key={entry.id}
+                            className="log-entry log-expedition"
+                            style={{ cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                            onClick={() => { setShowLog(false); setPendingCombatLog(entry); }}
+                          >
+                            <div>
+                              <span className="log-time">
+                                {new Date(entry.timestamp).toLocaleDateString([], { month: "short", day: "numeric" })}
+                              </span>
+                              <span style={{ color: gradeColor, fontWeight: 600, marginRight: 6 }}>
+                                {entry.grade === "success" ? "✓" : entry.grade === "partial" ? "◐" : "✗"}
+                              </span>
+                              {entry.expeditionName}
+                            </div>
+                            <button
+                              className="combat-log-clear-btn"
+                              onClick={(e) => { e.stopPropagation(); game.deleteCombatLogEntry(entry.id); }}
+                              title="Delete this log"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+          )}
+
+          {pendingCombatLog && (
+            <CombatLogModal entry={pendingCombatLog} onClose={() => setPendingCombatLog(null)} />
           )}
 
           <main className={`panel${tabTransition ? " panel-enter" : ""}`}>
