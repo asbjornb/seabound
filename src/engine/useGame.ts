@@ -1211,6 +1211,32 @@ export function useGame() {
     });
   }, []);
 
+  /** Equip or unequip an equipment item. Toggles: if already equipped, unequips; otherwise equips to its slot. */
+  const equipItem = useCallback((instanceId: string) => {
+    setState((prev) => {
+      const item = prev.equipmentInventory.find((i) => i.instanceId === instanceId);
+      if (!item) return prev;
+
+      // Cannot equip broken items
+      if (item.condition === "broken") return prev;
+
+      const def = getEquipmentItemById(item.defId);
+      if (!def) return prev;
+
+      const next = structuredClone(prev);
+
+      // If already equipped in its slot, unequip
+      if (next.loadout[def.slot] === instanceId) {
+        next.loadout[def.slot] = null;
+        return next;
+      }
+
+      // Equip to the item's slot (replacing whatever was there)
+      next.loadout[def.slot] = instanceId;
+      return next;
+    });
+  }, []);
+
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
@@ -1252,5 +1278,6 @@ export function useGame() {
     deleteCombatLogEntry,
     repairItem,
     salvageItem,
+    equipItem,
   };
 }

@@ -100,7 +100,7 @@ function sortEquipment(items: EquipmentItem[], sortBy: EquipSortKey): EquipmentI
 
 type ViewMode = "list" | "grid";
 
-export function InventoryPanel({ state, highlightedResources, onRepairItem, onSalvageItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void; onSalvageItem?: (instanceId: string) => void }) {
+export function InventoryPanel({ state, highlightedResources, onRepairItem, onSalvageItem, onEquipItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void; onSalvageItem?: (instanceId: string) => void; onEquipItem?: (instanceId: string) => void }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -366,6 +366,7 @@ export function InventoryPanel({ state, highlightedResources, onRepairItem, onSa
           onToggleExpand={toggleExpand}
           onRepairItem={onRepairItem}
           onSalvageItem={onSalvageItem}
+          onEquipItem={onEquipItem}
         />
       )}
     </div>
@@ -435,6 +436,7 @@ function EquipmentSection({
   onToggleExpand,
   onRepairItem,
   onSalvageItem,
+  onEquipItem,
 }: {
   items: EquipmentItem[];
   loadout: GameState["loadout"];
@@ -448,6 +450,7 @@ function EquipmentSection({
   onToggleExpand: (id: string) => void;
   onRepairItem?: (instanceId: string) => void;
   onSalvageItem?: (instanceId: string) => void;
+  onEquipItem?: (instanceId: string) => void;
 }) {
   const SLOTS = getEquipmentSlots();
   const equippedIds = new Set(Object.values(loadout).filter((id): id is string => id != null));
@@ -562,6 +565,18 @@ function EquipmentSection({
                       })}
                     </div>
                   )}
+                  <div className="equip-actions">
+                    <button
+                      className={`equip-btn${isEquipped ? " unequip" : ""}`}
+                      disabled={item.condition === "broken" && !isEquipped}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEquipItem?.(item.instanceId);
+                      }}
+                    >
+                      {isEquipped ? "Unequip" : "Equip"}
+                    </button>
+                  </div>
                   {item.condition !== "pristine" && (() => {
                     const recipe = findRepairRecipe(item);
                     if (!recipe) return null;
