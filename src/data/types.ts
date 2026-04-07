@@ -203,6 +203,32 @@ export interface RepairRecipeDef {
   xpGain: number;
 }
 
+/** An entry in a salvage table — a material returned when salvaging gear. */
+export interface SalvageOutput {
+  resourceId: ResourceId;
+  /** Base amount returned (scaled by condition). */
+  amount: number;
+  /** Chance this output is included (0-1, defaults to 1). */
+  chance?: number;
+}
+
+/** A salvage table — defines what's returned when breaking down equipment. */
+export interface SalvageTableDef {
+  id: string;
+  name: string;
+  description: string;
+  /** Equipment tags this table applies to (e.g. "metal", "hide"). */
+  targetTags: string[];
+  /** Base material outputs. */
+  outputs: SalvageOutput[];
+  /** Bonus affix reagent outputs when the item has affixes. One rolled per affix on the item. */
+  affixReagentOutputs?: { affixFamily: string; resourceId: ResourceId; chance: number }[];
+  /** Minimum smithing level required. */
+  requiredSkillLevel: number;
+  /** Smithing XP gained per salvage. */
+  xpGain: number;
+}
+
 export type ContentPanel = "gather" | "craft" | "build";
 
 export interface ActionDef {

@@ -40,9 +40,9 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Add repair UI flow and repair outcome messaging
 
 ## 6) Salvage & Material Economy
-- [ ] Add salvage action for unwanted gear
-- [ ] Add salvage tables returning partial base materials
-- [ ] Add affix reagent/catalyst outputs for long-loop crafting value
+- [x] Add salvage action for unwanted gear
+- [x] Add salvage tables returning partial base materials
+- [x] Add affix reagent/catalyst outputs for long-loop crafting value
 - [ ] Tune sinks/sources to avoid material inflation
 
 ## 7) Combat Skill Balance

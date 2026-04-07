@@ -1984,6 +1984,45 @@ body {
   opacity: 0.4;
   cursor: not-allowed;
 }
+.equip-salvage {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--text-dim) 20%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.equip-salvage-yields {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  flex: 1;
+}
+.salvage-material {
+  white-space: nowrap;
+}
+.salvage-reagent-hint {
+  white-space: nowrap;
+  font-style: italic;
+  color: color-mix(in srgb, var(--accent) 70%, var(--text-dim));
+}
+.salvage-btn {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--error, #e06060);
+  background: color-mix(in srgb, var(--error, #e06060) 10%, var(--bg-card));
+  color: var(--error, #e06060);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.salvage-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--error, #e06060) 25%, var(--bg-card));
+}
+.salvage-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .storage-group-info {
   margin-top: 2px;

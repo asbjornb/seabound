@@ -10,7 +10,7 @@
 import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
-import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS, REPAIR_RECIPES } from "./equipment";
+import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS, REPAIR_RECIPES, SALVAGE_TABLES } from "./equipment";
 import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
@@ -30,6 +30,7 @@ import type {
   RecipeDef,
   RepairRecipeDef,
   ResourceDef,
+  SalvageTableDef,
   SkillDef,
   SkillMilestone,
   StationDef,
@@ -60,6 +61,7 @@ export interface GameDataPack {
   equipmentItems: Record<string, EquipmentItemDef>;
   affixes: Record<string, AffixDef>;
   repairRecipes: RepairRecipeDef[];
+  salvageTables: SalvageTableDef[];
 }
 
 // ═══════════════════════════════════════
@@ -98,6 +100,7 @@ export function createBaseGamePack(): GameDataPack {
     equipmentItems: { ...EQUIPMENT_ITEMS },
     affixes: { ...AFFIXES },
     repairRecipes: [...REPAIR_RECIPES],
+    salvageTables: [...SALVAGE_TABLES],
   };
 }
 
@@ -197,3 +200,4 @@ export function getAffixes(): Record<string, AffixDef> { return _pack.affixes; }
 export function getEquipmentItemById(id: string): EquipmentItemDef | undefined { return _pack.equipmentItems[id]; }
 export function getAffixById(id: string): AffixDef | undefined { return _pack.affixes[id]; }
 export function getRepairRecipes(): RepairRecipeDef[] { return _pack.repairRecipes; }
+export function getSalvageTables(): SalvageTableDef[] { return _pack.salvageTables; }

@@ -1,4 +1,4 @@
-import { AffixDef, EquipmentItemDef, EquipmentSlotDef, RepairRecipeDef } from "./types";
+import { AffixDef, EquipmentItemDef, EquipmentSlotDef, RepairRecipeDef, SalvageTableDef } from "./types";
 
 // ═══════════════════════════════════════
 // Equipment Slots
@@ -388,5 +388,87 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
     requiredSkillLevel: 5,
     requiredBuildings: ["kiln"],
     xpGain: 25,
+  },
+];
+
+// ═══════════════════════════════════════
+// Salvage Tables
+// ═══════════════════════════════════════
+// Salvaging destroys an equipment item and returns partial base materials.
+// Condition affects yield: pristine 100%, worn 75%, damaged 50%, broken 25%.
+// Items with affixes have a chance to also yield affix reagents (one roll per affix).
+
+const AFFIX_REAGENT_OUTPUTS: SalvageTableDef["affixReagentOutputs"] = [
+  { affixFamily: "terrain", resourceId: "terrain_essence", chance: 0.5 },
+  { affixFamily: "offense", resourceId: "combat_essence", chance: 0.5 },
+  { affixFamily: "defense", resourceId: "combat_essence", chance: 0.5 },
+  { affixFamily: "utility", resourceId: "utility_essence", chance: 0.5 },
+  { affixFamily: "endurance", resourceId: "combat_essence", chance: 0.4 },
+];
+
+export const SALVAGE_TABLES: SalvageTableDef[] = [
+  {
+    id: "salvage_wood",
+    name: "Salvage Wood Gear",
+    description: "Break down wooden equipment for bamboo and fiber scraps.",
+    targetTags: ["wood"],
+    outputs: [
+      { resourceId: "bamboo_cane", amount: 2 },
+      { resourceId: "rough_fiber", amount: 1 },
+    ],
+    affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
+    requiredSkillLevel: 0,
+    xpGain: 5,
+  },
+  {
+    id: "salvage_stone",
+    name: "Salvage Stone Gear",
+    description: "Chip apart stone equipment for usable stone fragments.",
+    targetTags: ["stone"],
+    outputs: [
+      { resourceId: "flat_stone", amount: 2 },
+      { resourceId: "rough_fiber", amount: 1, chance: 0.5 },
+    ],
+    affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
+    requiredSkillLevel: 0,
+    xpGain: 5,
+  },
+  {
+    id: "salvage_fiber",
+    name: "Salvage Fiber Gear",
+    description: "Unravel woven fiber equipment for raw fiber.",
+    targetTags: ["fiber"],
+    outputs: [
+      { resourceId: "rough_fiber", amount: 2 },
+    ],
+    affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
+    requiredSkillLevel: 0,
+    xpGain: 4,
+  },
+  {
+    id: "salvage_hide",
+    name: "Salvage Hide Gear",
+    description: "Strip down hide armor for usable leather scraps.",
+    targetTags: ["hide"],
+    outputs: [
+      { resourceId: "hide", amount: 1 },
+      { resourceId: "rough_fiber", amount: 1, chance: 0.5 },
+    ],
+    affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
+    requiredSkillLevel: 2,
+    xpGain: 8,
+  },
+  {
+    id: "salvage_metal",
+    name: "Salvage Metal Gear",
+    description: "Melt down metal equipment to recover copper fragments.",
+    targetTags: ["metal"],
+    outputs: [
+      { resourceId: "native_copper", amount: 2 },
+      { resourceId: "charcoal", amount: 1, chance: 0.5 },
+    ],
+    affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
+    requiredSkillLevel: 3,
+    xpGain: 12,
   },
 ];

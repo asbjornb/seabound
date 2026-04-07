@@ -433,7 +433,7 @@ export default function App() {
         {(hasAnyResource || hasAnyXp) && (
           <aside className="inventory-sidebar">
             {hasAnyXp && <SkillsPanel state={game.state} />}
-            {hasAnyResource && <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} />}
+            {hasAnyResource && <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} />}
           </aside>
         )}
 
@@ -674,7 +674,7 @@ export default function App() {
             )}
             {activeTab === "inventory" && (
               <div className="mobile-only-panel">
-                <InventoryPanel state={game.state} onRepairItem={game.repairItem} />
+                <InventoryPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} />
               </div>
             )}
             {activeTab === "craft" && (

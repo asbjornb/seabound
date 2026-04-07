@@ -3,12 +3,14 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getAffixById,
   getEquipmentItemById,
   getExpeditionById,
   getPhases,
   getRecipeById,
   getRepairRecipes,
   getResources,
+  getSalvageTables,
   getStationById,
   getStations,
   getTools,
@@ -1153,6 +1155,75 @@ export function useGame() {
     });
   }, []);
 
+  /** Condition multiplier for salvage yield: pristine=1, worn=0.75, damaged=0.5, broken=0.25 */
+  const CONDITION_SALVAGE_MULT: Record<string, number> = {
+    pristine: 1,
+    worn: 0.75,
+    damaged: 0.5,
+    broken: 0.25,
+  };
+
+  const salvageItem = useCallback((instanceId: string) => {
+    setState((prev) => {
+      const itemIdx = prev.equipmentInventory.findIndex((i) => i.instanceId === instanceId);
+      if (itemIdx === -1) return prev;
+      const item = prev.equipmentInventory[itemIdx];
+
+      // Cannot salvage equipped items
+      if (Object.values(prev.loadout).includes(instanceId)) return prev;
+
+      const def = getEquipmentItemById(item.defId);
+      if (!def) return prev;
+
+      // Find matching salvage table by tag
+      const salvageTables = getSalvageTables();
+      const table = salvageTables.find((t) =>
+        t.targetTags.some((tag) => def.tags?.includes(tag))
+      );
+      if (!table) return prev;
+
+      // Check smithing level
+      const smithingSkill = prev.skills["smithing"];
+      if (!smithingSkill || smithingSkill.level < table.requiredSkillLevel) return prev;
+
+      const next = structuredClone(prev);
+
+      // Calculate condition multiplier
+      const condMult = CONDITION_SALVAGE_MULT[item.condition] ?? 0.5;
+
+      // Grant base material outputs
+      for (const output of table.outputs) {
+        const chance = output.chance ?? 1;
+        if (Math.random() > chance) continue;
+        const amount = Math.max(1, Math.round(output.amount * condMult));
+        next.resources[output.resourceId] = (next.resources[output.resourceId] ?? 0) + amount;
+      }
+
+      // Roll affix reagent outputs (one roll per affix on the item)
+      if (table.affixReagentOutputs && item.affixes.length > 0) {
+        for (const affix of item.affixes) {
+          const affixDef = getAffixById(affix.affixId);
+          if (!affixDef) continue;
+          const reagentEntry = table.affixReagentOutputs.find((r) => r.affixFamily === affixDef.family);
+          if (!reagentEntry) continue;
+          if (Math.random() <= reagentEntry.chance) {
+            next.resources[reagentEntry.resourceId] = (next.resources[reagentEntry.resourceId] ?? 0) + 1;
+          }
+        }
+      }
+
+      // Remove item from inventory
+      next.equipmentInventory.splice(itemIdx, 1);
+
+      // Grant smithing XP
+      const skill = next.skills["smithing"];
+      skill.xp += table.xpGain;
+      skill.level = levelFromXp(skill.xp);
+
+      return next;
+    });
+  }, []);
+
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
@@ -1193,5 +1264,6 @@ export function useGame() {
     clearCombatLog,
     deleteCombatLogEntry,
     repairItem,
+    salvageItem,
   };
 }
