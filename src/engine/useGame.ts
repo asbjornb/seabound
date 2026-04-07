@@ -10,7 +10,6 @@ import {
   getRepairRecipes,
   getResources,
   getStationById,
-  getStations,
   getTools,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
@@ -31,10 +30,10 @@ import { getMaxQueueSize, isQueueUnlocked } from "../data/queue";
 import {
   addResource,
   canAffordInput,
+  canDeploySharedStation,
   isAtStorageCap,
   canAffordTagInputs,
   createInitialState,
-  getBuildingCount,
   getGroupBuildingCount,
   getEffectiveInputs,
   getEffectiveMaxCount,
@@ -821,23 +820,11 @@ export function useGame() {
           if (!prev.buildings.includes(bid)) return prev;
         }
       }
-      // Check max deployed
-      let maxDeployed = station.maxDeployed ?? 1;
+      // Check max deployed — use bipartite matching for shared building slots
       if (station.maxDeployedPerBuildings) {
-        maxDeployed = station.maxDeployedPerBuildings.reduce(
-          (sum, bid) => sum + getBuildingCount(prev, bid), 0
-        );
-        // Count ALL active stations that share any building in their maxDeployedPerBuildings
-        // (e.g. all crop stations sharing the same plots)
-        const sharedBuildings = new Set(station.maxDeployedPerBuildings);
-        const stationDefsUsingSharedBuildings = new Set(
-          getStations()
-            .filter((s) => s.maxDeployedPerBuildings?.some((bid) => sharedBuildings.has(bid)))
-            .map((s) => s.id)
-        );
-        const currentCount = prev.stations.filter((s) => stationDefsUsingSharedBuildings.has(s.stationId)).length;
-        if (currentCount >= maxDeployed) return prev;
+        if (!canDeploySharedStation(station, prev.stations, prev)) return prev;
       } else {
+        const maxDeployed = station.maxDeployed ?? 1;
         const currentCount = prev.stations.filter((s) => s.stationId === station.id).length;
         if (currentCount >= maxDeployed) return prev;
       }

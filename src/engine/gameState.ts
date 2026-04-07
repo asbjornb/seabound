@@ -4,11 +4,12 @@ import {
   getPhases,
   getResources,
   getSkills,
+  getStations,
   getTools,
   getFoodValues,
   getWaterValues,
 } from "../data/registry";
-import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, TagInput, ToolId } from "../data/types";
+import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, StationDef, TagInput, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -660,4 +661,132 @@ export function deductFood(state: GameState, amount: number): Record<string, num
     }
   }
   return remaining <= 0 ? taken : null;
+}
+
+/**
+ * Check if a station can be deployed given the current active stations,
+ * using bipartite matching to correctly handle shared building slots.
+ *
+ * The naive approach (count all shared stations against this station's buildings)
+ * is too conservative: e.g. pandanus on a cleared_plot would block taro from
+ * using a tended_garden. This function checks whether a valid assignment of
+ * all active stations + the new one to building slots exists.
+ */
+export function canDeploySharedStation(
+  station: StationDef,
+  activeStations: { stationId: string }[],
+  state: GameState,
+): boolean {
+  if (!station.maxDeployedPerBuildings) return true;
+
+  const allStations = getStations();
+  const stationMap = new Map(allStations.map((s) => [s.id, s]));
+
+  // Find all station defs that transitively share buildings with this one
+  const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+  const sharedStationIds = new Set<string>();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const s of allStations) {
+      if (sharedStationIds.has(s.id) || !s.maxDeployedPerBuildings) continue;
+      if (s.maxDeployedPerBuildings.some((bid) => sharedBuildings.has(bid))) {
+        sharedStationIds.add(s.id);
+        for (const bid of s.maxDeployedPerBuildings) {
+          if (!sharedBuildings.has(bid)) {
+            sharedBuildings.add(bid);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  // Build slot pool from all shared buildings
+  const slots: string[] = [];
+  for (const bid of sharedBuildings) {
+    const count = getBuildingCount(state, bid);
+    for (let i = 0; i < count; i++) slots.push(bid);
+  }
+
+  // Stations to assign: active ones in the shared group + the proposed new one
+  const stationsToAssign: string[] = activeStations
+    .filter((s) => sharedStationIds.has(s.stationId))
+    .map((s) => s.stationId);
+  stationsToAssign.push(station.id);
+
+  if (stationsToAssign.length > slots.length) return false;
+
+  // For each station, which slot indices can it use?
+  const stationToSlots: number[][] = stationsToAssign.map((sid) => {
+    const def = stationMap.get(sid);
+    const valid = new Set(def?.maxDeployedPerBuildings ?? []);
+    const indices: number[] = [];
+    for (let i = 0; i < slots.length; i++) {
+      if (valid.has(slots[i])) indices.push(i);
+    }
+    return indices;
+  });
+
+  // Bipartite matching via augmenting paths
+  const slotAssignment = new Array<number>(slots.length).fill(-1);
+
+  function tryAugment(stationIdx: number, visited: Set<number>): boolean {
+    for (const slotIdx of stationToSlots[stationIdx]) {
+      if (visited.has(slotIdx)) continue;
+      visited.add(slotIdx);
+      if (slotAssignment[slotIdx] === -1 || tryAugment(slotAssignment[slotIdx], visited)) {
+        slotAssignment[slotIdx] = stationIdx;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  let matched = 0;
+  for (let i = 0; i < stationsToAssign.length; i++) {
+    if (tryAugment(i, new Set())) matched++;
+  }
+
+  return matched === stationsToAssign.length;
+}
+
+/** Get shared slot usage info for UI display. */
+export function getSharedSlotInfo(
+  station: StationDef,
+  activeStations: { stationId: string }[],
+  state: GameState,
+): { used: number; total: number } {
+  if (!station.maxDeployedPerBuildings) {
+    const total = station.maxDeployed ?? 1;
+    const used = activeStations.filter((s) => s.stationId === station.id).length;
+    return { used, total };
+  }
+
+  const allStations = getStations();
+
+  // Find all shared buildings (transitive)
+  const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+  const sharedStationIds = new Set<string>();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const s of allStations) {
+      if (sharedStationIds.has(s.id) || !s.maxDeployedPerBuildings) continue;
+      if (s.maxDeployedPerBuildings.some((bid) => sharedBuildings.has(bid))) {
+        sharedStationIds.add(s.id);
+        for (const bid of s.maxDeployedPerBuildings) {
+          if (!sharedBuildings.has(bid)) {
+            sharedBuildings.add(bid);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  let total = 0;
+  for (const bid of sharedBuildings) total += getBuildingCount(state, bid);
+  const used = activeStations.filter((s) => sharedStationIds.has(s.stationId)).length;
+  return { used, total };
 }
