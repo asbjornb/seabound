@@ -3825,6 +3825,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:native_copper",
+      "to": "recipe:smelt_copper",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:charcoal",
       "to": "recipe:smelt_copper",
       "relation": "consumes"
@@ -5246,7 +5251,6 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "resource:native_copper",
       "resource:bronze_ingot",
       "resource:steel_ingot"
     ],
@@ -5279,11 +5283,6 @@
       "recipe:build_bloomery"
     ],
     "warnings": [
-      {
-        "type": "dead_end",
-        "nodeId": "resource:native_copper",
-        "message": "Native Copper is produced but never used as input"
-      },
       {
         "type": "dead_end",
         "nodeId": "resource:bronze_ingot",

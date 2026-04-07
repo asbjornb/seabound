@@ -43,7 +43,7 @@ export function resourceHasUse(resourceId: string, state: GameState, _visited?: 
   const BUILDINGS = getBuildings();
   return getRecipes().some((recipe) => {
     const effectiveInputs = getEffectiveInputs(recipe, state);
-    const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId);
+    const usesResource = effectiveInputs.some((input) => input.resourceId === resourceId || input.alternateResourceId === resourceId);
     const requiresResource = recipe.requiredItems?.some((requiredItem) => requiredItem === resourceId);
     if (!usesResource && !requiresResource) return false;
     if (recipe.buildingOutput && state.buildings.includes(recipe.buildingOutput)) {

@@ -1291,7 +1291,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "smithing",
     panel: "craft",
     inputs: [
-      { resourceId: "copper_ore", amount: 2 },
+      { resourceId: "copper_ore", amount: 2, alternateResourceId: "native_copper" },
       { resourceId: "charcoal", amount: 2 },
     ],
     output: { resourceId: "copper_ingot", amount: 1 },
