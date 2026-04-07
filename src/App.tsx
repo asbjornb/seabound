@@ -30,6 +30,7 @@ import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
 import { CombatLogModal } from "./components/CombatLogModal";
+import { trackCombatLogOpen } from "./lib/analytics-events";
 import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
@@ -194,6 +195,7 @@ export default function App() {
     if (newest.id > lastSeenCombatLogIdRef.current) {
       lastSeenCombatLogIdRef.current = newest.id;
       setPendingCombatLog(newest);
+      trackCombatLogOpen();
     }
   }, [game.state.combatLog]);
 
@@ -630,7 +632,7 @@ export default function App() {
                             key={entry.id}
                             className="log-entry log-expedition"
                             style={{ cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center" }}
-                            onClick={() => { setShowLog(false); setPendingCombatLog(entry); }}
+                            onClick={() => { setShowLog(false); setPendingCombatLog(entry); trackCombatLogOpen(); }}
                           >
                             <div>
                               <span className="log-time">

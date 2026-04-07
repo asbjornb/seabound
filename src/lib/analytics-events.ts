@@ -123,6 +123,105 @@ const MILESTONES: { id: string; check: (state: GameState) => boolean }[] = [
  * Check all milestones against current state and fire events for newly reached ones.
  * Call after every completion batch.
  */
+// ── Mainland combat telemetry ──────────────────────────────────
+//
+// Review cadence: check analytics dashboard weekly during experimental mainland phase.
+// Key metrics to review:
+//   - expedition_complete: pick rate distribution and failure rate per expedition
+//   - repair_item / salvage_item: repair-vs-salvage ratio, material tag bottlenecks
+//   - combat_log_open / combat_log_clear: engagement with log UI
+//   - mainland_optionality: % of mainland players using combat/smithing vs skipping
+// Query: curl -H "Authorization: Bearer $SEABOUND_API_KEY" "$SEABOUND_WORKER_URL/api/analytics/summary?days=7"
+
+/** Fire when a mainland expedition completes. Tracks pick rates and failure rates by tier. */
+export function trackExpeditionComplete(
+  state: GameState,
+  expeditionId: string,
+  grade: "success" | "partial" | "failure",
+  passRatio: number,
+  equipmentDropCount: number,
+): void {
+  trackEvent("expedition_complete", {
+    playerId: getPlayerId(),
+    expeditionId,
+    grade,
+    passRatio,
+    equipmentDropCount,
+    combatLevel: state.skills["combat"]?.level ?? 0,
+    smithingLevel: state.skills["smithing"]?.level ?? 0,
+    totalPlayTimeMs: state.totalPlayTimeMs,
+  });
+}
+
+/** Fire when a player repairs an item. Tracks repair bottlenecks and smithing engagement. */
+export function trackRepairItem(
+  state: GameState,
+  itemDefId: string,
+  fromCondition: string,
+  materialTag: string,
+): void {
+  trackEvent("repair_item", {
+    playerId: getPlayerId(),
+    itemDefId,
+    fromCondition,
+    materialTag,
+    smithingLevel: state.skills["smithing"]?.level ?? 0,
+    totalPlayTimeMs: state.totalPlayTimeMs,
+  });
+}
+
+/** Fire when a player salvages an item. Tracks salvage engagement. */
+export function trackSalvageItem(
+  state: GameState,
+  itemDefId: string,
+  condition: string,
+  materialTag: string,
+): void {
+  trackEvent("salvage_item", {
+    playerId: getPlayerId(),
+    itemDefId,
+    condition,
+    materialTag,
+    smithingLevel: state.skills["smithing"]?.level ?? 0,
+  });
+}
+
+/** Fire when a player opens a combat log entry. */
+export function trackCombatLogOpen(): void {
+  trackEvent("combat_log_open", { playerId: getPlayerId() });
+}
+
+/** Fire when a player clears the combat log. */
+export function trackCombatLogClear(entryCount: number): void {
+  trackEvent("combat_log_clear", { playerId: getPlayerId(), entryCount });
+}
+
+/** Fire on session_start/heartbeat with optionality metrics for mainland players. */
+export function trackOptionalitySnapshot(state: GameState): void {
+  if (!state.mainlandUnlocked) return;
+  const combatLevel = state.skills["combat"]?.level ?? 0;
+  const smithingLevel = state.skills["smithing"]?.level ?? 0;
+  const miningLevel = state.skills["mining"]?.level ?? 0;
+  const expeditionCount = Object.entries(state.actionCompletionCounts)
+    .filter(([k]) => k.startsWith("expedition:"))
+    .reduce((sum, [, v]) => sum + v, 0);
+  const repairCount = state.actionCompletionCounts["repair:total"] ?? 0;
+  const salvageCount = state.actionCompletionCounts["salvage:total"] ?? 0;
+  const equipmentOwned = state.equipmentInventory?.length ?? 0;
+
+  trackEvent("mainland_optionality", {
+    playerId: getPlayerId(),
+    combatLevel,
+    smithingLevel,
+    miningLevel,
+    expeditionCount,
+    repairCount,
+    salvageCount,
+    equipmentOwned,
+    totalPlayTimeMs: state.totalPlayTimeMs,
+  });
+}
+
 export function checkMilestones(state: GameState): string[] {
   const newlyReached: string[] = [];
 

@@ -15,6 +15,13 @@ import {
   getTools,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
+import {
+  trackExpeditionComplete,
+  trackRepairItem,
+  trackSalvageItem,
+  trackCombatLogClear,
+  trackOptionalitySnapshot,
+} from "../lib/analytics-events";
 import type {
   ActionDef,
   DiscoveryType,
@@ -347,6 +354,15 @@ function processCompletionDiscoveries(
       state.combatLog.length = 50;
     }
 
+    // Track expedition telemetry
+    trackExpeditionComplete(
+      state,
+      c.actionId,
+      c.encounterResult.grade,
+      c.encounterResult.passRatio,
+      c.equipmentDropped?.length ?? 0,
+    );
+
     // Persist lower-detail expedition summary in journal
     const gradeLabel = c.encounterResult.grade === "success" ? "Success" : c.encounterResult.grade === "partial" ? "Partial" : "Failed";
     const dropCount = c.drops.reduce((sum, d) => sum + d.amount, 0);
@@ -552,9 +568,10 @@ export function useGame() {
     return () => window.removeEventListener("beforeunload", handler);
   }, []);
 
-  // Analytics: session tracking + heartbeat
+  // Analytics: session tracking + heartbeat + mainland optionality
   useEffect(() => {
     trackSessionStart(stateRef.current);
+    trackOptionalitySnapshot(stateRef.current);
     startHeartbeat(() => stateRef.current);
     const handleUnload = () => trackSessionEnd(stateRef.current);
     window.addEventListener("beforeunload", handleUnload);
@@ -1061,6 +1078,7 @@ export function useGame() {
   const clearCombatLog = useCallback(() => {
     setState((prev) => {
       if (prev.combatLog.length === 0) return prev;
+      trackCombatLogClear(prev.combatLog.length);
       return { ...prev, combatLog: [] };
     });
   }, []);
@@ -1138,16 +1156,21 @@ export function useGame() {
       skill.xp += recipe.xpGain;
       skill.level = levelFromXp(skill.xp);
 
+      // Track repair telemetry
+      trackRepairItem(next, item.defId, item.condition, recipe.targetTags[0] ?? "unknown");
+      // Count repairs for optionality metrics
+      next.actionCompletionCounts["repair:total"] = (next.actionCompletionCounts["repair:total"] ?? 0) + 1;
+
       return next;
     });
   }, []);
 
-  /** Condition multiplier for salvage yield: pristine=1, worn=0.75, damaged=0.5, broken=0.25 */
+  /** Condition multiplier for salvage yield: pristine=1, worn=0.75, damaged=0.5, broken=0.4 */
   const CONDITION_SALVAGE_MULT: Record<string, number> = {
     pristine: 1,
     worn: 0.75,
     damaged: 0.5,
-    broken: 0.25,
+    broken: 0.4,
   };
 
   const salvageItem = useCallback((instanceId: string) => {
@@ -1206,6 +1229,11 @@ export function useGame() {
       const skill = next.skills["smithing"];
       skill.xp += table.xpGain;
       skill.level = levelFromXp(skill.xp);
+
+      // Track salvage telemetry
+      trackSalvageItem(next, item.defId, item.condition, table.targetTags[0] ?? "unknown");
+      // Count salvages for optionality metrics
+      next.actionCompletionCounts["salvage:total"] = (next.actionCompletionCounts["salvage:total"] ?? 0) + 1;
 
       return next;
     });
