@@ -91,7 +91,8 @@ export type MilestoneEffect =
   | { type: "station_input_reduce"; stationId: string; resourceId: ResourceId; newAmount: number } // reduce setup input cost
   | { type: "station_guaranteed_drop"; stationId: string; resourceId: ResourceId; minAmount: number } // guarantee minimum drop
   | { type: "expedition_biome_bonus"; bonus: number } // flat weight bonus added to undiscovered biome outcomes
-  | { type: "expedition_drop_bonus"; bonus: number }; // e.g. 0.15 = +15% expedition drop amounts (rounded)
+  | { type: "expedition_drop_bonus"; bonus: number } // e.g. 0.15 = +15% expedition drop amounts (rounded)
+  | { type: "combat_stat_bonus"; stat: string; bonus: number }; // flat bonus to a combat stat during encounter resolution
 
 export interface SkillMilestone {
   level: number;

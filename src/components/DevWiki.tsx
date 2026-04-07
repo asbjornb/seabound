@@ -877,6 +877,8 @@ function formatEffect(e: MilestoneEffect): string {
       return `+${(e.bonus * 100).toFixed(0)}% biome discovery weight`;
     case "expedition_drop_bonus":
       return `+${(e.bonus * 100).toFixed(0)}% expedition drops`;
+    case "combat_stat_bonus":
+      return `+${e.bonus} ${e.stat}`;
   }
 }
 

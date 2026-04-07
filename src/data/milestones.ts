@@ -374,6 +374,72 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  combat: [
+    {
+      level: 2,
+      description: "Steady grip — +1 offense from combat experience",
+      effects: [
+        { type: "combat_stat_bonus", stat: "offense", bonus: 1 },
+      ],
+    },
+    {
+      level: 3,
+      description: "Battle rhythm — mainland expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 4,
+      description: "Brace for impact — +1 defense",
+      effects: [
+        { type: "combat_stat_bonus", stat: "defense", bonus: 1 },
+      ],
+    },
+    {
+      level: 5,
+      description: "Scavenger's instinct — +10% mainland expedition drops",
+      effects: [
+        { type: "expedition_drop_bonus", bonus: 0.1 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Heat acclimation — +1 heat resistance",
+      effects: [
+        { type: "combat_stat_bonus", stat: "heatResist", bonus: 1 },
+      ],
+    },
+    {
+      level: 7,
+      description: "Seasoned fighter — mainland expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 8,
+      description: "Endurance training — +1 endurance",
+      effects: [
+        { type: "combat_stat_bonus", stat: "endurance", bonus: 1 },
+      ],
+    },
+    {
+      level: 9,
+      description: "Keen looter — +10% mainland expedition drops",
+      effects: [
+        { type: "expedition_drop_bonus", bonus: 0.1 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Veteran fighter — +1 offense, +1 defense",
+      effects: [
+        { type: "combat_stat_bonus", stat: "offense", bonus: 1 },
+        { type: "combat_stat_bonus", stat: "defense", bonus: 1 },
+      ],
+    },
+  ],
   construction: [],
   mining: [
     {
@@ -700,4 +766,25 @@ export function getExpeditionDropBonus(
     }
   }
   return bonus;
+}
+
+/**
+ * Get total combat stat bonuses from milestones.
+ * Returns a map of stat name → flat bonus to add during encounter resolution.
+ */
+export function getCombatStatBonuses(
+  skillId: SkillId,
+  skillLevel: number
+): Record<string, number> {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const bonuses: Record<string, number> = {};
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "combat_stat_bonus") {
+        bonuses[e.stat] = (bonuses[e.stat] ?? 0) + e.bonus;
+      }
+    }
+  }
+  return bonuses;
 }
