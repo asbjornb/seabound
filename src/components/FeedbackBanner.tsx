@@ -3,6 +3,12 @@ import { useState } from "react";
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
 
+function getDeviceType(): string {
+  const hasTouchScreen = navigator.maxTouchPoints > 0;
+  const isNarrow = window.matchMedia("(max-width: 768px)").matches;
+  return hasTouchScreen && isNarrow ? "mobile" : "desktop";
+}
+
 export function FeedbackBanner() {
   const [text, setText] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
@@ -23,7 +29,7 @@ export function FeedbackBanner() {
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
           subject: "SeaBound Feedback",
-          message: text.trim(),
+          message: `${text.trim()}\n\n---\nDevice: ${getDeviceType()}`,
           from_name: "SeaBound Feedback Form",
           page_url: window.location.href,
         }),
