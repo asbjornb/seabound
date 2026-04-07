@@ -46,9 +46,9 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [ ] Tune sinks/sources to avoid material inflation
 
 ## 7) Combat Skill Balance
-- [ ] Define small milestone bonuses (not large linear stat scaling)
-- [ ] Ensure combat skill contributes without eclipsing gear/planning choices
-- [ ] Validate optionality: content still completable via low-combat alternatives
+- [x] Define small milestone bonuses (not large linear stat scaling)
+- [x] Ensure combat skill contributes without eclipsing gear/planning choices
+- [x] Validate optionality: content still completable via low-combat alternatives
 
 ## 8) UX Complexity Control
 - [ ] Ship minimal expedition + loadout + results flow first

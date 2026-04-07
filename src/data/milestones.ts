@@ -374,6 +374,43 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
   ],
+  combat: [
+    {
+      level: 2,
+      description: "Battle rhythm — mainland expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 4,
+      description: "Scavenger's instinct — +10% mainland expedition drops",
+      effects: [
+        { type: "expedition_drop_bonus", bonus: 0.1 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Seasoned fighter — mainland expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 8,
+      description: "Keen looter — +15% mainland expedition drops",
+      effects: [
+        { type: "expedition_drop_bonus", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Veteran explorer — mainland expeditions 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+  ],
   construction: [],
   mining: [
     {
