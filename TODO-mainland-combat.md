@@ -22,7 +22,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Add basic equipment sorting/filtering in inventory UI
 
 ## 3) Logging & Journal
-- [ ] Implement per-run detailed combat log generation
+- [x] Implement per-run detailed combat log generation
 - [ ] Add one-time prominent log presentation after expedition
 - [ ] Add player action to clear/delete detailed logs
 - [ ] Persist lower-detail expedition summaries in journal

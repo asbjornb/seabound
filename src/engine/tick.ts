@@ -8,7 +8,7 @@ import {
   getRecipeById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState } from "../data/types";
+import type { BiomeId, CombatLogEntry, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
@@ -35,6 +35,7 @@ export interface CompletionEvent {
   victory?: boolean; // true if this completion wins the game
   encounterResult?: EncounterResult; // present on mainland expeditions with difficulty profiles
   equipmentDropped?: { defId: string; name: string; condition: string }[]; // equipment items gained
+  combatLogEntry?: CombatLogEntry; // detailed combat log for mainland expeditions
 }
 
 /** Check if any output resource for the current action is at storage capacity. */
@@ -628,6 +629,31 @@ function applyExpeditionCompletion(
     state.currentAction = null;
   }
 
+  // Generate detailed combat log for mainland expeditions with encounters
+  let combatLogEntry: CombatLogEntry | undefined;
+  if (encounter && def.difficulty) {
+    const logId = (state.combatLogs.length > 0
+      ? Math.max(...state.combatLogs.map((l) => l.id)) + 1
+      : 0);
+    combatLogEntry = {
+      id: logId,
+      completedAt: Date.now(),
+      expeditionId: def.id,
+      expeditionName: def.name,
+      grade: encounter.grade,
+      checkResults: encounter.checkResults,
+      passRatio: encounter.passRatio,
+      dropMultiplier: encounter.dropMultiplier,
+      xpMultiplier: encounter.xpMultiplier,
+      failureInsights: encounter.failureInsights,
+      drops,
+      xpGain,
+      equipmentDropped,
+      hazards: def.difficulty.hazards,
+    };
+    state.combatLogs.push(combatLogEntry);
+  }
+
   return {
     actionId: def.id,
     actionType: "expedition",
@@ -642,6 +668,7 @@ function applyExpeditionCompletion(
     victory: def.victory,
     encounterResult: encounter,
     equipmentDropped,
+    combatLogEntry,
   };
 }
 

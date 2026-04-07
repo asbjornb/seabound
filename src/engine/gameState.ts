@@ -131,6 +131,7 @@ export function createInitialState(): GameState {
     queueMode: false,
     equipmentInventory: [],
     loadout: {},
+    combatLogs: [],
   };
 }
 
@@ -340,6 +341,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
   }
   if (!loaded.loadout) {
     loaded.loadout = {};
+  }
+  // Migration: ensure combatLogs exists
+  if (!loaded.combatLogs) {
+    loaded.combatLogs = [];
   }
   // Migration: stamp mainland version on saves that don't have one yet
   if (loaded.mainlandUnlocked && !loaded.mainlandVersion) {

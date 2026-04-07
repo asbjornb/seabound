@@ -445,4 +445,39 @@ export interface GameState {
   // Equipment system (mainland)
   equipmentInventory: EquipmentItem[];
   loadout: Loadout;
+
+  // Combat logs (mainland)
+  combatLogs: CombatLogEntry[];
+}
+
+/** Detailed per-run combat log generated after a mainland expedition with encounters. */
+export interface CombatLogEntry {
+  /** Unique ID for this log entry. */
+  id: number;
+  /** Timestamp when the expedition completed. */
+  completedAt: number;
+  /** Expedition definition ID. */
+  expeditionId: string;
+  /** Expedition display name. */
+  expeditionName: string;
+  /** Overall encounter grade. */
+  grade: "success" | "partial" | "failure";
+  /** Per-stat check results showing player value vs threshold. */
+  checkResults: { stat: string; threshold: number; playerValue: number; passed: boolean }[];
+  /** Fraction of checks passed (0-1). */
+  passRatio: number;
+  /** Drop multiplier applied based on grade. */
+  dropMultiplier: number;
+  /** XP multiplier applied based on grade. */
+  xpMultiplier: number;
+  /** Human-readable failure insights (empty on success). */
+  failureInsights: string[];
+  /** Resource drops received (after multipliers). */
+  drops: { name: string; amount: number }[];
+  /** XP gained (after multipliers). */
+  xpGain: number;
+  /** Equipment items dropped, if any. */
+  equipmentDropped?: { defId: string; name: string; condition: string }[];
+  /** Hazard types present in this expedition. */
+  hazards: string[];
 }
