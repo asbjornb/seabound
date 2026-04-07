@@ -1,12 +1,14 @@
 import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus, getOutputChanceBonus } from "../data/milestones";
 import {
   getActionById,
+  getAffixes,
   getBuildings,
+  getEquipmentItemById,
   getExpeditionById,
   getRecipeById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import type { BiomeId, Drop, ExpeditionOutcome, GameState } from "../data/types";
+import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
@@ -32,6 +34,7 @@ export interface CompletionEvent {
   toolCrafted?: string; // tool ID if a tool was crafted
   victory?: boolean; // true if this completion wins the game
   encounterResult?: EncounterResult; // present on mainland expeditions with difficulty profiles
+  equipmentDropped?: { defId: string; name: string; condition: string }[]; // equipment items gained
 }
 
 /** Check if any output resource for the current action is at storage capacity. */
@@ -484,6 +487,52 @@ function applyCraftCompletion(
   };
 }
 
+/** Roll equipment drops from an expedition, applying encounter grade to drop chances. */
+function rollEquipmentDrops(
+  entries: EquipmentDropEntry[],
+  gradeChanceMult: number
+): EquipmentItem[] {
+  const allAffixes = getAffixes();
+  const items: EquipmentItem[] = [];
+
+  for (const entry of entries) {
+    const adjustedChance = entry.chance * gradeChanceMult;
+    if (Math.random() >= adjustedChance) continue;
+
+    const def = getEquipmentItemById(entry.defId);
+    if (!def) continue;
+
+    // Roll random affixes
+    const affixRange = entry.affixRange ?? { min: 0, max: 0 };
+    const numAffixes = affixRange.min + Math.floor(Math.random() * (affixRange.max - affixRange.min + 1));
+    const capped = Math.min(numAffixes, def.maxAffixes);
+
+    // Pick eligible affixes (filter by allowedSlots if set)
+    const eligible = Object.values(allAffixes).filter(
+      (a) => !a.allowedSlots || a.allowedSlots.includes(def.slot)
+    );
+
+    const pickedAffixes: EquipmentItem["affixes"] = [];
+    const usedIds = new Set<string>();
+    for (let i = 0; i < capped && eligible.length > usedIds.size; i++) {
+      const remaining = eligible.filter((a) => !usedIds.has(a.id));
+      if (remaining.length === 0) break;
+      const pick = remaining[Math.floor(Math.random() * remaining.length)];
+      usedIds.add(pick.id);
+      pickedAffixes.push({ affixId: pick.id, rollValue: Math.random() });
+    }
+
+    items.push({
+      instanceId: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      defId: entry.defId,
+      affixes: pickedAffixes,
+      condition: entry.dropsAsBroken ? "broken" : "pristine",
+    });
+  }
+
+  return items;
+}
+
 function applyExpeditionCompletion(
   state: GameState,
   expeditionId: string,
@@ -540,6 +589,30 @@ function applyExpeditionCompletion(
     }
   }
 
+  // Equipment drops (mainland expeditions only, gated by encounter grade)
+  let equipmentDropped: CompletionEvent["equipmentDropped"];
+  if (def.equipmentDrops && def.equipmentDrops.length > 0) {
+    // Grade-based chance multiplier: success = full chance, partial = halved, failure = none
+    let gradeChanceMult = 1;
+    if (encounter) {
+      if (encounter.grade === "failure") gradeChanceMult = 0;
+      else if (encounter.grade === "partial") gradeChanceMult = 0.5;
+    }
+
+    if (gradeChanceMult > 0) {
+      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult);
+      for (const item of rolledItems) {
+        state.equipmentInventory.push(item);
+      }
+      if (rolledItems.length > 0) {
+        equipmentDropped = rolledItems.map((item) => {
+          const itemDef = getEquipmentItemById(item.defId);
+          return { defId: item.defId, name: itemDef?.name ?? item.defId, condition: item.condition };
+        });
+      }
+    }
+  }
+
   // XP for expeditions (encounter result modifies XP)
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
@@ -568,6 +641,7 @@ function applyExpeditionCompletion(
     newResources: newResources.length > 0 ? newResources : undefined,
     victory: def.victory,
     encounterResult: encounter,
+    equipmentDropped,
   };
 }
 
