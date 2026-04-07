@@ -387,6 +387,40 @@ export interface RoutineProgress {
   completionsInStep: number;
 }
 
+// ═══════════════════════════════════════
+// Combat Log (per-expedition detailed logs)
+// ═══════════════════════════════════════
+
+export interface CombatLogEntry {
+  id: number;
+  timestamp: number;
+  expeditionId: string;
+  expeditionName: string;
+  /** Overall encounter grade. */
+  grade: "success" | "partial" | "failure";
+  /** Per-stat check breakdown. */
+  checkResults: { stat: string; threshold: number; playerValue: number; passed: boolean }[];
+  /** Fraction of checks passed (0-1). */
+  passRatio: number;
+  /** Multipliers applied to drops and XP. */
+  dropMultiplier: number;
+  xpMultiplier: number;
+  /** Human-readable failure hints (empty on success). */
+  failureInsights: string[];
+  /** Resources gained (after multipliers). */
+  drops: { name: string; amount: number }[];
+  /** XP earned. */
+  xpGain: number;
+  /** Equipment items found. */
+  equipmentDropped?: { defId: string; name: string; condition: string }[];
+  /** Outcome flavor text. */
+  outcomeMessage?: string;
+}
+
+// ═══════════════════════════════════════
+// Discovery Log
+// ═══════════════════════════════════════
+
 export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore" | "expedition" | "equipment";
 
 export interface DiscoveryEntry {
@@ -445,4 +479,7 @@ export interface GameState {
   // Equipment system (mainland)
   equipmentInventory: EquipmentItem[];
   loadout: Loadout;
+
+  // Detailed per-expedition combat logs (mainland)
+  combatLog: CombatLogEntry[];
 }
