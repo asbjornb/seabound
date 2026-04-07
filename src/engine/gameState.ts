@@ -4,11 +4,12 @@ import {
   getPhases,
   getResources,
   getSkills,
+  getStations,
   getTools,
   getFoodValues,
   getWaterValues,
 } from "../data/registry";
-import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, TagInput, ToolId } from "../data/types";
+import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, StationDef, TagInput, ToolId } from "../data/types";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -660,4 +661,125 @@ export function deductFood(state: GameState, amount: number): Record<string, num
     }
   }
   return remaining <= 0 ? taken : null;
+}
+
+/**
+ * Greedy slot allocator: assign stations to their lowest-tier compatible
+ * building first. This keeps higher-tier slots free for crops that need them.
+ * Returns the remaining slot counts after assignment.
+ */
+function allocateSlots(
+  stationIds: string[],
+  stationMap: Map<string, StationDef>,
+  slotCounts: Map<string, number>,
+): Map<string, number> {
+  const remaining = new Map(slotCounts);
+  for (const sid of stationIds) {
+    const def = stationMap.get(sid);
+    if (!def?.maxDeployedPerBuildings) continue;
+    // Assign to lowest-tier compatible building that has a free slot
+    // (maxDeployedPerBuildings is ordered lowest → highest tier)
+    for (const bid of def.maxDeployedPerBuildings) {
+      const avail = remaining.get(bid) ?? 0;
+      if (avail > 0) {
+        remaining.set(bid, avail - 1);
+        break;
+      }
+    }
+  }
+  return remaining;
+}
+
+/**
+ * Check if a station can be deployed given the current active stations.
+ * Assigns each active crop to its lowest-tier compatible plot first,
+ * then checks if a slot remains for the new station.
+ */
+export function canDeploySharedStation(
+  station: StationDef,
+  activeStations: { stationId: string }[],
+  state: GameState,
+): boolean {
+  if (!station.maxDeployedPerBuildings) return true;
+
+  const allStations = getStations();
+  const stationMap = new Map(allStations.map((s) => [s.id, s]));
+
+  // Find all station defs that transitively share buildings
+  const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+  const sharedStationIds = new Set<string>();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const s of allStations) {
+      if (sharedStationIds.has(s.id) || !s.maxDeployedPerBuildings) continue;
+      if (s.maxDeployedPerBuildings.some((bid) => sharedBuildings.has(bid))) {
+        sharedStationIds.add(s.id);
+        for (const bid of s.maxDeployedPerBuildings) {
+          if (!sharedBuildings.has(bid)) {
+            sharedBuildings.add(bid);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  // Build slot pool
+  const slotCounts = new Map<string, number>();
+  for (const bid of sharedBuildings) {
+    slotCounts.set(bid, getBuildingCount(state, bid));
+  }
+
+  // Assign active stations to lowest-tier slots first
+  const activeIds = activeStations
+    .filter((s) => sharedStationIds.has(s.stationId))
+    .map((s) => s.stationId);
+  const remaining = allocateSlots(activeIds, stationMap, slotCounts);
+
+  // Check if the new station fits in any remaining slot
+  for (const bid of station.maxDeployedPerBuildings) {
+    if ((remaining.get(bid) ?? 0) > 0) return true;
+  }
+  return false;
+}
+
+/** Get shared slot usage info for UI display. */
+export function getSharedSlotInfo(
+  station: StationDef,
+  activeStations: { stationId: string }[],
+  state: GameState,
+): { used: number; total: number } {
+  if (!station.maxDeployedPerBuildings) {
+    const total = station.maxDeployed ?? 1;
+    const used = activeStations.filter((s) => s.stationId === station.id).length;
+    return { used, total };
+  }
+
+  const allStations = getStations();
+
+  // Find all shared buildings (transitive)
+  const sharedBuildings = new Set(station.maxDeployedPerBuildings);
+  const sharedStationIds = new Set<string>();
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const s of allStations) {
+      if (sharedStationIds.has(s.id) || !s.maxDeployedPerBuildings) continue;
+      if (s.maxDeployedPerBuildings.some((bid) => sharedBuildings.has(bid))) {
+        sharedStationIds.add(s.id);
+        for (const bid of s.maxDeployedPerBuildings) {
+          if (!sharedBuildings.has(bid)) {
+            sharedBuildings.add(bid);
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+
+  let total = 0;
+  for (const bid of sharedBuildings) total += getBuildingCount(state, bid);
+  const used = activeStations.filter((s) => sharedStationIds.has(s.stationId)).length;
+  return { used, total };
 }
