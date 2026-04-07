@@ -206,8 +206,8 @@ export const BUILDINGS: Record<string, BuildingDef> = {
   well: {
     id: "well",
     name: "Well",
-    description: "A stone-lined well dug to the water table. Provides water for farming.",
-    unlocks: "Watered farming — required for taro and later crops",
+    description: "A stone-lined well dug to the water table. Provides fresh water for expeditions and farming.",
+    unlocks: "Fresh water for expeditions — also required for taro and later crops",
   },
   outrigger_canoe: {
     id: "outrigger_canoe",

@@ -1097,7 +1097,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "build_well",
     name: "Well",
-    description: "Dig a stone-lined well to the water table. Provides water for farming.",
+    description: "Dig a stone-lined well to the water table. Provides fresh water for expeditions and farming.",
     skillId: "construction",
     panel: "build",
     requiredSkillLevel: 5,
