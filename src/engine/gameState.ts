@@ -664,13 +664,36 @@ export function deductFood(state: GameState, amount: number): Record<string, num
 }
 
 /**
- * Check if a station can be deployed given the current active stations,
- * using bipartite matching to correctly handle shared building slots.
- *
- * The naive approach (count all shared stations against this station's buildings)
- * is too conservative: e.g. pandanus on a cleared_plot would block taro from
- * using a tended_garden. This function checks whether a valid assignment of
- * all active stations + the new one to building slots exists.
+ * Greedy slot allocator: assign stations to their lowest-tier compatible
+ * building first. This keeps higher-tier slots free for crops that need them.
+ * Returns the remaining slot counts after assignment.
+ */
+function allocateSlots(
+  stationIds: string[],
+  stationMap: Map<string, StationDef>,
+  slotCounts: Map<string, number>,
+): Map<string, number> {
+  const remaining = new Map(slotCounts);
+  for (const sid of stationIds) {
+    const def = stationMap.get(sid);
+    if (!def?.maxDeployedPerBuildings) continue;
+    // Assign to lowest-tier compatible building that has a free slot
+    // (maxDeployedPerBuildings is ordered lowest → highest tier)
+    for (const bid of def.maxDeployedPerBuildings) {
+      const avail = remaining.get(bid) ?? 0;
+      if (avail > 0) {
+        remaining.set(bid, avail - 1);
+        break;
+      }
+    }
+  }
+  return remaining;
+}
+
+/**
+ * Check if a station can be deployed given the current active stations.
+ * Assigns each active crop to its lowest-tier compatible plot first,
+ * then checks if a slot remains for the new station.
  */
 export function canDeploySharedStation(
   station: StationDef,
@@ -682,7 +705,7 @@ export function canDeploySharedStation(
   const allStations = getStations();
   const stationMap = new Map(allStations.map((s) => [s.id, s]));
 
-  // Find all station defs that transitively share buildings with this one
+  // Find all station defs that transitively share buildings
   const sharedBuildings = new Set(station.maxDeployedPerBuildings);
   const sharedStationIds = new Set<string>();
   let changed = true;
@@ -702,53 +725,23 @@ export function canDeploySharedStation(
     }
   }
 
-  // Build slot pool from all shared buildings
-  const slots: string[] = [];
+  // Build slot pool
+  const slotCounts = new Map<string, number>();
   for (const bid of sharedBuildings) {
-    const count = getBuildingCount(state, bid);
-    for (let i = 0; i < count; i++) slots.push(bid);
+    slotCounts.set(bid, getBuildingCount(state, bid));
   }
 
-  // Stations to assign: active ones in the shared group + the proposed new one
-  const stationsToAssign: string[] = activeStations
+  // Assign active stations to lowest-tier slots first
+  const activeIds = activeStations
     .filter((s) => sharedStationIds.has(s.stationId))
     .map((s) => s.stationId);
-  stationsToAssign.push(station.id);
+  const remaining = allocateSlots(activeIds, stationMap, slotCounts);
 
-  if (stationsToAssign.length > slots.length) return false;
-
-  // For each station, which slot indices can it use?
-  const stationToSlots: number[][] = stationsToAssign.map((sid) => {
-    const def = stationMap.get(sid);
-    const valid = new Set(def?.maxDeployedPerBuildings ?? []);
-    const indices: number[] = [];
-    for (let i = 0; i < slots.length; i++) {
-      if (valid.has(slots[i])) indices.push(i);
-    }
-    return indices;
-  });
-
-  // Bipartite matching via augmenting paths
-  const slotAssignment = new Array<number>(slots.length).fill(-1);
-
-  function tryAugment(stationIdx: number, visited: Set<number>): boolean {
-    for (const slotIdx of stationToSlots[stationIdx]) {
-      if (visited.has(slotIdx)) continue;
-      visited.add(slotIdx);
-      if (slotAssignment[slotIdx] === -1 || tryAugment(slotAssignment[slotIdx], visited)) {
-        slotAssignment[slotIdx] = stationIdx;
-        return true;
-      }
-    }
-    return false;
+  // Check if the new station fits in any remaining slot
+  for (const bid of station.maxDeployedPerBuildings) {
+    if ((remaining.get(bid) ?? 0) > 0) return true;
   }
-
-  let matched = 0;
-  for (let i = 0; i < stationsToAssign.length; i++) {
-    if (tryAugment(i, new Set())) matched++;
-  }
-
-  return matched === stationsToAssign.length;
+  return false;
 }
 
 /** Get shared slot usage info for UI display. */
