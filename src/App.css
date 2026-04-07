@@ -2024,6 +2024,103 @@ body {
   cursor: not-allowed;
 }
 
+/* Equip/Unequip button */
+.equip-actions {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+}
+.equip-btn {
+  font-size: 0.7rem;
+  padding: 3px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg-card));
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.equip-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 30%, var(--bg-card));
+}
+.equip-btn.unequip {
+  border-color: var(--text-dim);
+  background: color-mix(in srgb, var(--text-dim) 10%, var(--bg-card));
+  color: var(--text-dim);
+}
+.equip-btn.unequip:hover {
+  background: color-mix(in srgb, var(--text-dim) 25%, var(--bg-card));
+}
+.equip-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Loadout preview on mainland expeditions */
+.loadout-preview {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--bg-card) 60%, var(--bg-body));
+  border: 1px solid color-mix(in srgb, var(--text-dim) 20%, transparent);
+  font-size: 0.75rem;
+}
+.loadout-preview-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.check-pass {
+  color: var(--success, #4caf50);
+  font-size: 0.7rem;
+}
+.check-fail {
+  color: var(--error, #e06060);
+  font-size: 0.7rem;
+}
+.loadout-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.loadout-check {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.loadout-check.pass {
+  color: var(--success, #4caf50);
+  background: color-mix(in srgb, var(--success, #4caf50) 10%, transparent);
+}
+.loadout-check.fail {
+  color: var(--error, #e06060);
+  background: color-mix(in srgb, var(--error, #e06060) 10%, transparent);
+}
+.loadout-hint {
+  margin-top: 4px;
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+
+/* Drop list collapse toggle */
+.drop-list-toggle {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 1px 6px;
+  font-size: 0.7rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.drop-list-toggle:hover {
+  color: var(--text-main);
+}
+
 .storage-group-info {
   margin-top: 2px;
   color: var(--text-dim);

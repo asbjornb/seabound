@@ -51,9 +51,9 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Validate optionality: content still completable via low-combat alternatives
 
 ## 8) UX Complexity Control
-- [ ] Ship minimal expedition + loadout + results flow first
-- [ ] Defer advanced comparison/stash tooling to later milestone
-- [ ] Add readability improvements for large drop lists
+- [x] Ship minimal expedition + loadout + results flow first
+- [x] Defer advanced comparison/stash tooling to later milestone
+- [x] Add readability improvements for large drop lists
 
 ## 9) Content Authoring
 - [ ] Author initial mainland expedition set with clear profiles

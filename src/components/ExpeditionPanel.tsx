@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { getResources } from "../data/registry";
 import { ExpeditionDef, GameState } from "../data/types";
+import { computeLoadoutStats, computeGearScore } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
@@ -64,6 +66,80 @@ function getEffectiveDrops(
       chance: totalChance,
     }))
     .sort((a, b) => b.chance - a.chance);
+}
+
+/** Collapse threshold — drop lists longer than this get a "show more" toggle. */
+const DROP_LIST_COLLAPSE_THRESHOLD = 5;
+
+function DropList({ drops, resources }: { drops: { resourceId: string; amount: number; chance: number }[]; resources: Record<string, { name?: string }> }) {
+  const [expanded, setExpanded] = useState(false);
+  if (drops.length === 0) return null;
+
+  const shouldCollapse = drops.length > DROP_LIST_COLLAPSE_THRESHOLD;
+  const visible = shouldCollapse && !expanded ? drops.slice(0, DROP_LIST_COLLAPSE_THRESHOLD) : drops;
+  const hiddenCount = drops.length - DROP_LIST_COLLAPSE_THRESHOLD;
+
+  return (
+    <div className="action-drops">
+      Loot table:
+      {visible.map((d, i) => (
+        <div key={i} className="drop-row">
+          <GameIcon id={d.resourceId} size={16} />
+          {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
+          ({Math.round(d.chance * 100)}%)
+        </div>
+      ))}
+      {shouldCollapse && (
+        <button
+          className="drop-list-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+        >
+          {expanded ? "Show less" : `+${hiddenCount} more...`}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/** Show current loadout stats vs expedition stat checks. */
+function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }) {
+  if (!exp.difficulty) return null;
+
+  const loadoutStats = computeLoadoutStats(state);
+  const gearScore = computeGearScore(loadoutStats);
+  const checks = exp.difficulty.statChecks;
+  const allPassing = checks.every((c) => (loadoutStats[c.stat] ?? 0) >= c.threshold) &&
+    (exp.difficulty.minGearScore == null || gearScore >= exp.difficulty.minGearScore);
+
+  return (
+    <div className="loadout-preview">
+      <div className="loadout-preview-title">
+        Your Loadout {allPassing ? <span className="check-pass">Ready</span> : <span className="check-fail">Underprepared</span>}
+      </div>
+      <div className="loadout-checks">
+        {checks.map((c) => {
+          const val = loadoutStats[c.stat] ?? 0;
+          const passing = val >= c.threshold;
+          return (
+            <span key={c.stat} className={`loadout-check${passing ? " pass" : " fail"}`}>
+              {c.stat} {val}/{c.threshold}
+            </span>
+          );
+        })}
+        {exp.difficulty.minGearScore != null && (
+          <span className={`loadout-check${gearScore >= exp.difficulty.minGearScore ? " pass" : " fail"}`}>
+            gear score {gearScore}/{exp.difficulty.minGearScore}
+          </span>
+        )}
+      </div>
+      {exp.difficulty.hint && !allPassing && (
+        <div className="loadout-hint">{exp.difficulty.hint}</div>
+      )}
+    </div>
+  );
 }
 
 export function ExpeditionPanel({
@@ -167,22 +243,8 @@ export function ExpeditionPanel({
               </div>
             )}
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>
-            {(() => {
-              const drops = getEffectiveDrops(exp, state);
-              if (drops.length === 0) return null;
-              return (
-                <div className="action-drops">
-                  Loot table:
-                  {drops.map((d, i) => (
-                    <div key={i} className="drop-row">
-                      <GameIcon id={d.resourceId} size={16} />
-                      {d.amount}x {RESOURCES[d.resourceId]?.name ?? d.resourceId}{" "}
-                      ({Math.round(d.chance * 100)}%)
-                    </div>
-                  ))}
-                </div>
-              );
-            })()}
+            {exp.mainland && <LoadoutPreview state={state} exp={exp} />}
+            <DropList drops={getEffectiveDrops(exp, state)} resources={RESOURCES} />
           </div>
         );
       })}
