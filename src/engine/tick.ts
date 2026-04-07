@@ -370,7 +370,18 @@ function applyCraftCompletion(
   let buildingBuilt: string | undefined;
   let toolCrafted: string | undefined;
 
-  if (def.toolOutput) {
+  if (def.equipmentOutput) {
+    // Equipment craft — create a pristine equipment item and add to inventory
+    const eqDef = getEquipmentItemById(def.equipmentOutput);
+    const instanceId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    state.equipmentInventory.push({
+      instanceId,
+      defId: def.equipmentOutput,
+      affixes: [],
+      condition: "pristine",
+    });
+    drops.push({ name: eqDef?.name ?? def.equipmentOutput, amount: 1 });
+  } else if (def.toolOutput) {
     // Tool craft — add to tools list
     if (!state.tools.includes(def.toolOutput)) {
       state.tools.push(def.toolOutput);

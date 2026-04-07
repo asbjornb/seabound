@@ -276,6 +276,7 @@ export interface RecipeDef {
   output?: { resourceId: ResourceId; amount: number };
   outputChance?: number; // 0-1, chance the output is produced (inputs always consumed). Defaults to 1.
   toolOutput?: ToolId; // if set, crafting grants this tool instead of a resource
+  equipmentOutput?: string; // if set, crafting grants this equipment item (defId) in pristine condition
   durationMs: number;
   requiredSkillLevel?: number;
   requiredSkills?: { skillId: SkillId; level: number }[]; // dual-skill gates

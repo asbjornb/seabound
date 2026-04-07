@@ -5,6 +5,8 @@ import { ExpeditionDef } from "./types";
 // ═══════════════════════════════════════
 
 export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
+  // ── Low-tier repeatable expeditions ──
+
   {
     id: "coastal_ruins",
     name: "Explore Coastal Ruins",
@@ -66,6 +68,69 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     ],
   },
   {
+    id: "tidal_caves",
+    name: "Search the Tidal Caves",
+    description:
+      "Wade into sea caves exposed at low tide. The slippery rock hides copper veins and the bones of stranded creatures.",
+    skillId: "combat",
+    durationMs: 12000,
+    foodCost: 6,
+    waterCost: 2,
+    xpGain: 25,
+    mainland: true,
+    difficulty: {
+      hazards: ["wet", "terrain"],
+      statChecks: [
+        { stat: "wetResist", threshold: 3 },
+        { stat: "speed", threshold: 3 },
+      ],
+      hint: "Waterproof gear and sure footing will keep you safe on the slick stone.",
+    },
+    outcomes: [
+      {
+        weight: 30,
+        description:
+          "The cave walls sparkle with copper deposits. You chip away what you can before the tide turns.",
+        drops: [
+          { resourceId: "copper_ore", amount: 2 },
+        ],
+      },
+      {
+        weight: 25,
+        description:
+          "You find a cache of flat stones wedged between tide pools, smoothed by centuries of waves.",
+        drops: [
+          { resourceId: "flat_stone", amount: 4 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "A collapsed section reveals a vein of greenish ore — malachite, rich in copper.",
+        drops: [
+          { resourceId: "copper_ore", amount: 3 },
+          { resourceId: "native_copper", amount: 1 },
+        ],
+      },
+      {
+        weight: 30,
+        description:
+          "The tide comes in faster than expected. You scramble out with soaked gear and nothing to show for it.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "bamboo_buckler",
+        chance: 0.08,
+        dropsAsBroken: true,
+        affixRange: { min: 0, max: 1 },
+      },
+    ],
+  },
+
+  // ── Mid-tier expeditions with clear difficulty profiles ──
+
+  {
     id: "overgrown_trail",
     name: "Follow the Overgrown Trail",
     description:
@@ -124,6 +189,272 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         chance: 0.05,
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
+      },
+    ],
+  },
+  {
+    id: "flooded_quarry",
+    name: "Descend into the Flooded Quarry",
+    description:
+      "An ancient quarry, half-submerged by groundwater. Tin ore glints beneath the murky surface among toppled pillars.",
+    skillId: "combat",
+    durationMs: 22000,
+    foodCost: 10,
+    waterCost: 5,
+    xpGain: 50,
+    mainland: true,
+    difficulty: {
+      hazards: ["wet", "terrain", "endurance"],
+      statChecks: [
+        { stat: "wetResist", threshold: 5 },
+        { stat: "endurance", threshold: 5 },
+        { stat: "defense", threshold: 4 },
+      ],
+      hint: "You'll be waist-deep in water for hours. Bring waterproof gear and stamina.",
+    },
+    outcomes: [
+      {
+        weight: 25,
+        description:
+          "You wade to the quarry floor and pry dark cassiterite pebbles from the exposed rock face.",
+        drops: [
+          { resourceId: "tin_ore", amount: 2 },
+          { resourceId: "flat_stone", amount: 2 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "Beneath a collapsed pillar you find a pocket of ore — both copper and tin, side by side.",
+        drops: [
+          { resourceId: "tin_ore", amount: 1 },
+          { resourceId: "copper_ore", amount: 2 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "The deepest chamber holds a cache of corroded bronze tools, too far gone to use but rich in salvageable metal.",
+        drops: [
+          { resourceId: "tin_ore", amount: 3 },
+        ],
+      },
+      {
+        weight: 40,
+        description:
+          "The water rises suddenly — an underground spring surging. You climb out with nothing but soaked clothes.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "copper_shield",
+        chance: 0.06,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+  },
+  {
+    id: "ridge_pass",
+    name: "Cross the Windswept Ridge",
+    description:
+      "A narrow ridge path climbs above the treeline. Cold winds scour the exposed rock, but iron-bearing stone lies in the cliffs beyond.",
+    skillId: "combat",
+    durationMs: 25000,
+    foodCost: 12,
+    waterCost: 5,
+    xpGain: 60,
+    mainland: true,
+    difficulty: {
+      hazards: ["cold", "terrain", "endurance"],
+      statChecks: [
+        { stat: "coldResist", threshold: 5 },
+        { stat: "speed", threshold: 4 },
+        { stat: "endurance", threshold: 6 },
+      ],
+      hint: "Wrap up warm and travel light. The cold and the climb will test your limits.",
+    },
+    outcomes: [
+      {
+        weight: 25,
+        description:
+          "Beyond the ridge, you find an exposed cliff face veined with red-brown iron ore. You fill your pack.",
+        drops: [
+          { resourceId: "iron_ore", amount: 2 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "At the summit you discover a collapsed cairn. Among the stones: charcoal and ore, left by someone long gone.",
+        drops: [
+          { resourceId: "iron_ore", amount: 1 },
+          { resourceId: "charcoal", amount: 4 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "A sheltered hollow on the far side holds a seam of both iron and copper ore, still untouched.",
+        drops: [
+          { resourceId: "iron_ore", amount: 2 },
+          { resourceId: "copper_ore", amount: 2 },
+        ],
+      },
+      {
+        weight: 40,
+        description:
+          "The wind drives you back before you reach the far side. You retreat, half-frozen, with nothing.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "bronze_helm",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+  },
+
+  // ── High-risk expeditions with unique chase rewards ──
+
+  {
+    id: "sunken_temple",
+    name: "Enter the Sunken Temple",
+    description:
+      "A half-collapsed temple sinks into the jungle floor, its stone steps descending into darkness. The air is thick and the walls groan.",
+    skillId: "combat",
+    durationMs: 30000,
+    foodCost: 15,
+    waterCost: 6,
+    xpGain: 80,
+    mainland: true,
+    difficulty: {
+      hazards: ["wildlife", "terrain", "endurance"],
+      statChecks: [
+        { stat: "offense", threshold: 14 },
+        { stat: "defense", threshold: 10 },
+        { stat: "endurance", threshold: 8 },
+      ],
+      minGearScore: 30,
+      hint: "This is no place for the unprepared. Bring your best weapons, strongest armor, and deep reserves of stamina.",
+    },
+    outcomes: [
+      {
+        weight: 20,
+        description:
+          "You fight through collapsing corridors and feral animals denning in the inner chambers. In the deepest room, bronze artifacts lie undisturbed on a stone altar.",
+        drops: [
+          { resourceId: "bronze_ingot", amount: 3 },
+          { resourceId: "tin_ore", amount: 2 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "The lower level is flooded, but you wade through and find a collapsed storeroom. Corroded bronze vessels and tools — heavy, but worth the haul.",
+        drops: [
+          { resourceId: "bronze_ingot", amount: 2 },
+          { resourceId: "copper_ingot", amount: 2 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "Behind a fallen column, you discover a sealed alcove with remarkably preserved metalwork. The bronze gleams as if it were forged yesterday.",
+        drops: [
+          { resourceId: "bronze_ingot", amount: 4 },
+        ],
+      },
+      {
+        weight: 45,
+        description:
+          "The ceiling groans and a section collapses behind you. You barely escape with your life — and nothing else.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "bronze_sword",
+        chance: 0.08,
+        dropsAsBroken: true,
+        affixRange: { min: 2, max: 3 },
+      },
+      {
+        defId: "bronze_cuirass",
+        chance: 0.05,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 3 },
+      },
+    ],
+  },
+  {
+    id: "volcanic_rift",
+    name: "Brave the Volcanic Rift",
+    description:
+      "A jagged rift vents sulfurous heat from deep underground. The extreme temperatures forge rare minerals in the rock walls — if you can survive long enough to collect them.",
+    skillId: "combat",
+    durationMs: 35000,
+    foodCost: 18,
+    waterCost: 8,
+    xpGain: 100,
+    mainland: true,
+    difficulty: {
+      hazards: ["heat", "terrain", "endurance"],
+      statChecks: [
+        { stat: "heatResist", threshold: 10 },
+        { stat: "endurance", threshold: 10 },
+        { stat: "defense", threshold: 8 },
+      ],
+      minGearScore: 40,
+      hint: "The heat alone will kill you without serious protection. Only attempt this fully equipped and provisioned.",
+    },
+    outcomes: [
+      {
+        weight: 20,
+        description:
+          "You descend along a narrow ledge, shielding your face from the heat. In a cooled lava tube, you find iron ore deposits of extraordinary purity.",
+        drops: [
+          { resourceId: "iron_ore", amount: 4 },
+          { resourceId: "charcoal", amount: 6 },
+        ],
+      },
+      {
+        weight: 15,
+        description:
+          "Deep in the rift, volcanic glass and metallic deposits line the walls. You chip away what you can carry.",
+        drops: [
+          { resourceId: "iron_ore", amount: 3 },
+          { resourceId: "obsidian", amount: 3 },
+        ],
+      },
+      {
+        weight: 10,
+        description:
+          "At the deepest point, you find a vein of dense, dark ore fused by volcanic heat. It's heavier than anything you've seen — practically steel.",
+        drops: [
+          { resourceId: "iron_ore", amount: 5 },
+          { resourceId: "tin_ore", amount: 3 },
+        ],
+      },
+      {
+        weight: 55,
+        description:
+          "A geyser of superheated steam erupts ahead of you. The path is impassable — you turn back, dehydrated and empty-handed.",
+      },
+    ],
+    equipmentDrops: [
+      {
+        defId: "bronze_greaves",
+        chance: 0.06,
+        dropsAsBroken: true,
+        affixRange: { min: 2, max: 3 },
+      },
+      {
+        defId: "bronze_shield",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 2, max: 3 },
       },
     ],
   },
