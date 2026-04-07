@@ -3,9 +3,11 @@ import { getDropChanceBonus, getStationInputAmount, getStationGuaranteedDrops } 
 import {
   getActionById,
   getBuildings,
+  getEquipmentItemById,
   getExpeditionById,
   getPhases,
   getRecipeById,
+  getRepairRecipes,
   getResources,
   getStationById,
   getStations,
@@ -17,6 +19,7 @@ import type {
   DiscoveryType,
   ExpeditionDef,
   GameState,
+  ItemCondition,
   QueuedAction,
   RecipeDef,
   Routine,
@@ -1098,6 +1101,58 @@ export function useGame() {
     []
   );
 
+  const CONDITION_ORDER: ItemCondition[] = ["broken", "damaged", "worn", "pristine"];
+
+  const repairItem = useCallback((instanceId: string) => {
+    setState((prev) => {
+      const itemIdx = prev.equipmentInventory.findIndex((i) => i.instanceId === instanceId);
+      if (itemIdx === -1) return prev;
+      const item = prev.equipmentInventory[itemIdx];
+      if (item.condition === "pristine") return prev;
+
+      const def = getEquipmentItemById(item.defId);
+      if (!def) return prev;
+
+      // Find matching repair recipe by tag
+      const repairRecipes = getRepairRecipes();
+      const recipe = repairRecipes.find((r) =>
+        r.targetTags.some((tag) => def.tags?.includes(tag))
+      );
+      if (!recipe) return prev;
+
+      // Check smithing level
+      const smithingSkill = prev.skills["smithing"];
+      if (!smithingSkill || smithingSkill.level < recipe.requiredSkillLevel) return prev;
+
+      // Check required buildings
+      if (recipe.requiredBuildings?.some((b) => !hasBuilding(prev, b))) return prev;
+
+      // Check materials
+      for (const inp of recipe.inputs) {
+        if ((prev.resources[inp.resourceId] ?? 0) < inp.amount) return prev;
+      }
+
+      const next = structuredClone(prev);
+
+      // Consume materials
+      for (const inp of recipe.inputs) {
+        next.resources[inp.resourceId] = (next.resources[inp.resourceId] ?? 0) - inp.amount;
+      }
+
+      // Improve condition by one step
+      const currentIdx = CONDITION_ORDER.indexOf(item.condition);
+      const nextCondition = CONDITION_ORDER[currentIdx + 1];
+      next.equipmentInventory[itemIdx] = { ...next.equipmentInventory[itemIdx], condition: nextCondition };
+
+      // Grant smithing XP
+      const skill = next.skills["smithing"];
+      skill.xp += recipe.xpGain;
+      skill.level = levelFromXp(skill.xp);
+
+      return next;
+    });
+  }, []);
+
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
@@ -1137,5 +1192,6 @@ export function useGame() {
     importSaveFromJson,
     clearCombatLog,
     deleteCombatLogEntry,
+    repairItem,
   };
 }

@@ -1,4 +1,4 @@
-import { AffixDef, EquipmentItemDef, EquipmentSlotDef } from "./types";
+import { AffixDef, EquipmentItemDef, EquipmentSlotDef, RepairRecipeDef } from "./types";
 
 // ═══════════════════════════════════════
 // Equipment Slots
@@ -321,3 +321,72 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     tags: ["hide", "armor"],
   },
 };
+
+// ═══════════════════════════════════════
+// Repair Recipes
+// ═══════════════════════════════════════
+// Each repair improves condition by one step: broken → damaged → worn → pristine.
+// Recipes match equipment by tag. Higher-tier items need more materials.
+
+export const REPAIR_RECIPES: RepairRecipeDef[] = [
+  {
+    id: "repair_wood",
+    name: "Repair Wood Gear",
+    description: "Patch and reinforce wooden equipment with bamboo and fiber.",
+    targetTags: ["wood"],
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 2 },
+      { resourceId: "rough_fiber", amount: 2 },
+    ],
+    requiredSkillLevel: 0,
+    xpGain: 10,
+  },
+  {
+    id: "repair_stone",
+    name: "Repair Stone Gear",
+    description: "Re-knap and re-bind stone equipment with fresh materials.",
+    targetTags: ["stone"],
+    inputs: [
+      { resourceId: "flat_stone", amount: 2 },
+      { resourceId: "rough_fiber", amount: 1 },
+    ],
+    requiredSkillLevel: 0,
+    xpGain: 10,
+  },
+  {
+    id: "repair_fiber",
+    name: "Repair Fiber Gear",
+    description: "Re-weave damaged fiber armor with fresh fibers.",
+    targetTags: ["fiber"],
+    inputs: [
+      { resourceId: "rough_fiber", amount: 3 },
+    ],
+    requiredSkillLevel: 0,
+    xpGain: 8,
+  },
+  {
+    id: "repair_hide",
+    name: "Repair Hide Gear",
+    description: "Patch and re-stitch hide armor using cured leather strips.",
+    targetTags: ["hide"],
+    inputs: [
+      { resourceId: "hide", amount: 2 },
+      { resourceId: "rough_fiber", amount: 1 },
+    ],
+    requiredSkillLevel: 3,
+    xpGain: 15,
+  },
+  {
+    id: "repair_metal",
+    name: "Repair Metal Gear",
+    description: "Hammer out dents and re-forge damaged metal equipment at the kiln.",
+    targetTags: ["metal"],
+    inputs: [
+      { resourceId: "copper_ingot", amount: 1 },
+      { resourceId: "charcoal", amount: 2 },
+    ],
+    requiredSkillLevel: 5,
+    requiredBuildings: ["kiln"],
+    xpGain: 25,
+  },
+];

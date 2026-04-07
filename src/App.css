@@ -1947,6 +1947,43 @@ body {
   border-radius: 3px;
   cursor: help;
 }
+.equip-repair {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--text-dim) 20%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.equip-repair-cost {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  flex: 1;
+}
+.repair-material {
+  white-space: nowrap;
+}
+.repair-material.insufficient {
+  color: var(--error, #e06060);
+}
+.repair-btn {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg-card));
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.repair-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 30%, var(--bg-card));
+}
+.repair-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .storage-group-info {
   margin-top: 2px;

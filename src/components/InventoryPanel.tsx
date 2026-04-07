@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getEquipmentSlots, getEquipmentItemById, getAffixById } from "../data/registry";
-import { ResourceId, ToolId, GameState, EquipmentItem } from "../data/types";
+import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes } from "../data/registry";
+import { ResourceId, ToolId, GameState, EquipmentItem, RepairRecipeDef } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
@@ -100,7 +100,7 @@ function sortEquipment(items: EquipmentItem[], sortBy: EquipSortKey): EquipmentI
 
 type ViewMode = "list" | "grid";
 
-export function InventoryPanel({ state, highlightedResources }: { state: GameState; highlightedResources?: Set<string> }) {
+export function InventoryPanel({ state, highlightedResources, onRepairItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -356,6 +356,7 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
         <EquipmentSection
           items={state.equipmentInventory}
           loadout={state.loadout}
+          state={state}
           search={searchLower}
           slotFilter={equipSlotFilter}
           onSlotFilter={setEquipSlotFilter}
@@ -363,6 +364,7 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
           onSort={setEquipSort}
           expandedId={expandedId}
           onToggleExpand={toggleExpand}
+          onRepairItem={onRepairItem}
         />
       )}
     </div>
@@ -373,9 +375,41 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
 // Equipment Section (extracted for clarity)
 // ═══════════════════════════════════════
 
+const NEXT_CONDITION_LABEL: Record<string, string> = {
+  broken: "Damaged",
+  damaged: "Worn",
+  worn: "Pristine",
+};
+
+/** Find the repair recipe that applies to an equipment item, if any. */
+function findRepairRecipe(item: EquipmentItem): RepairRecipeDef | undefined {
+  const def = getEquipmentItemById(item.defId);
+  if (!def?.tags) return undefined;
+  return getRepairRecipes().find((r) =>
+    r.targetTags.some((tag) => def.tags!.includes(tag))
+  );
+}
+
+/** Check if the player can afford a repair. */
+function canAffordRepair(recipe: RepairRecipeDef, state: GameState): boolean {
+  for (const inp of recipe.inputs) {
+    if ((state.resources[inp.resourceId] ?? 0) < inp.amount) return false;
+  }
+  return true;
+}
+
+/** Check if the player meets repair requirements (skill + buildings). */
+function meetsRepairRequirements(recipe: RepairRecipeDef, state: GameState): boolean {
+  const smithingLevel = state.skills["smithing"]?.level ?? 0;
+  if (smithingLevel < recipe.requiredSkillLevel) return false;
+  if (recipe.requiredBuildings?.some((b) => !state.buildings.includes(b))) return false;
+  return true;
+}
+
 function EquipmentSection({
   items,
   loadout,
+  state,
   search,
   slotFilter,
   onSlotFilter,
@@ -383,9 +417,11 @@ function EquipmentSection({
   onSort,
   expandedId,
   onToggleExpand,
+  onRepairItem,
 }: {
   items: EquipmentItem[];
   loadout: GameState["loadout"];
+  state: GameState;
   search: string;
   slotFilter: string;
   onSlotFilter: (s: string) => void;
@@ -393,6 +429,7 @@ function EquipmentSection({
   onSort: (s: EquipSortKey) => void;
   expandedId: string | null;
   onToggleExpand: (id: string) => void;
+  onRepairItem?: (instanceId: string) => void;
 }) {
   const SLOTS = getEquipmentSlots();
   const equippedIds = new Set(Object.values(loadout).filter((id): id is string => id != null));
@@ -507,6 +544,44 @@ function EquipmentSection({
                       })}
                     </div>
                   )}
+                  {item.condition !== "pristine" && (() => {
+                    const recipe = findRepairRecipe(item);
+                    if (!recipe) return null;
+                    const meetsReqs = meetsRepairRequirements(recipe, state);
+                    const canAfford = canAffordRepair(recipe, state);
+                    const RESOURCES = getResources();
+                    return (
+                      <div className="equip-repair">
+                        <div className="equip-repair-cost">
+                          Repair to {NEXT_CONDITION_LABEL[item.condition]}:
+                          {recipe.inputs.map((inp) => {
+                            const rdef = RESOURCES[inp.resourceId];
+                            const has = state.resources[inp.resourceId] ?? 0;
+                            return (
+                              <span key={inp.resourceId} className={`repair-material${has < inp.amount ? " insufficient" : ""}`}>
+                                {" "}{rdef?.name ?? inp.resourceId} {has}/{inp.amount}
+                              </span>
+                            );
+                          })}
+                          {recipe.requiredSkillLevel > 0 && (
+                            <span className={`repair-material${(state.skills["smithing"]?.level ?? 0) < recipe.requiredSkillLevel ? " insufficient" : ""}`}>
+                              {" "}Smithing Lv{recipe.requiredSkillLevel}
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          className="repair-btn"
+                          disabled={!meetsReqs || !canAfford}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRepairItem?.(item.instanceId);
+                          }}
+                        >
+                          Repair
+                        </button>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
