@@ -208,4 +208,52 @@ export const ACTIONS: ActionDef[] = [
   },
 
   // Basket trap moved to stations system (set-wait-collect)
+
+  // ═══════════════════════════════════════
+  // MAINLAND — Mining
+  // ═══════════════════════════════════════
+  {
+    id: "prospect_copper",
+    name: "Prospect Copper Vein",
+    description: "Chip away at exposed green-streaked rock to extract copper ore.",
+    skillId: "mining",
+    panel: "gather",
+    durationMs: 8000,
+    drops: [
+      { resourceId: "copper_ore", amount: 1 },
+      { resourceId: "native_copper", amount: 1, chance: 0.15 },
+    ],
+    requiredBiome: "coastal_cliffs",
+    xpGain: 15,
+  },
+  {
+    id: "prospect_tin",
+    name: "Prospect Tin Deposit",
+    description: "Search riverbeds and cliff faces for dark cassiterite pebbles.",
+    skillId: "mining",
+    panel: "gather",
+    durationMs: 10000,
+    drops: [
+      { resourceId: "tin_ore", amount: 1 },
+      { resourceId: "flat_stone", amount: 1, chance: 0.1 },
+    ],
+    requiredBiome: "coastal_cliffs",
+    requiredSkillLevel: 5,
+    xpGain: 22,
+  },
+  {
+    id: "mine_iron",
+    name: "Mine Iron Ore",
+    description: "Dig into red-earth hillside deposits to pry out heavy iron ore.",
+    skillId: "mining",
+    panel: "gather",
+    durationMs: 12000,
+    drops: [
+      { resourceId: "iron_ore", amount: 1 },
+      { resourceId: "flat_stone", amount: 1, chance: 0.15 },
+    ],
+    requiredBiome: "inland_hills",
+    requiredSkillLevel: 10,
+    xpGain: 35,
+  },
 ];

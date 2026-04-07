@@ -32,4 +32,18 @@ export const BIOMES: Record<string, BiomeDef> = {
     name: "Nearby Island",
     order: 5,
   },
+
+  // Mainland biomes
+  coastal_cliffs: {
+    id: "coastal_cliffs",
+    name: "Coastal Cliffs",
+    description: "Eroded sea cliffs with exposed mineral veins. Copper and tin gleam in the rock face.",
+    order: 10,
+  },
+  inland_hills: {
+    id: "inland_hills",
+    name: "Inland Hills",
+    description: "Rolling hills of red earth. Iron-rich deposits lie just beneath the surface.",
+    order: 11,
+  },
 };

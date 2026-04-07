@@ -232,4 +232,13 @@ export const BUILDINGS: Record<string, BuildingDef> = {
       "A crescent of stacked stones in the shallows. Fish wash in at high tide and can't escape.",
     unlocks: "Harvest tidal weir station — bulk passive fishing",
   },
+
+  // Mainland buildings
+  bloomery: {
+    id: "bloomery",
+    name: "Bloomery",
+    description:
+      "A clay-walled shaft furnace fed by bellows. Hot enough to reduce iron ore into workable bloom.",
+    unlocks: "Iron smelting — smelt iron ore into iron bloom",
+  },
 };
