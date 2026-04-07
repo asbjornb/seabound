@@ -2340,6 +2340,46 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   Screen Switcher (Island / Mainland)
+   ═══════════════════════════════════════ */
+
+.screen-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+
+.screen-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.screen-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.screen-btn.active {
+  color: var(--accent);
+  background: rgba(240, 160, 80, 0.08);
+  border-color: var(--accent);
+}
+
+/* ═══════════════════════════════════════
    Island Banner (phase artwork)
    ═══════════════════════════════════════ */
 

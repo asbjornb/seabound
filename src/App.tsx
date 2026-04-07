@@ -34,18 +34,22 @@ import { trackCombatLogOpen } from "./lib/analytics-events";
 import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
+  GameScreen,
   GameTab,
+  selectActionsByScreen,
   selectBuildActions,
   selectBuildRecipes,
   selectCraftRecipes,
   selectCurrentActionName,
   selectCurrentSkillInfo,
+  selectExpeditionsByScreen,
   selectHasAnyResource,
   selectHasAnyXp,
   selectHasFoodAccess,
   selectGatherActions,
   selectActionStatusInfo,
   selectReadyStationCount,
+  selectRecipesByScreen,
   selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
@@ -103,6 +107,7 @@ export default function App() {
   const game = useGame();
   const updateAvailable = useUpdateChecker();
   const [tab, setTab] = useState<GameTab>("gather");
+  const [screen, setScreen] = useState<GameScreen>("island");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modPanelOpen, setModPanelOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -177,6 +182,15 @@ export default function App() {
     });
   }, []);
 
+  const handleScreenSwitch = useCallback((newScreen: GameScreen) => {
+    setScreen(newScreen);
+    setTab("gather"); // Reset to gather when switching screens
+    setTabTransition(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setTabTransition(false));
+    });
+  }, []);
+
   const handleMigrate = useCallback(() => {
     const data = JSON.stringify(game.state);
     const encoded = btoa(encodeURIComponent(data));
@@ -227,24 +241,36 @@ export default function App() {
 
   const pendingBiome = biomeDiscoveryQueue[0] ?? null;
 
-  // Split recipes by explicit panel metadata
-  const craftRecipes = useMemo(
-    () => selectCraftRecipes(game.availableRecipes),
-    [game.availableRecipes]
+  // Filter content by active screen, then split by panel
+  const screenActions = useMemo(
+    () => selectActionsByScreen(game.availableActions, screen),
+    [game.availableActions, screen]
   );
-  const buildRecipes = useMemo(
-    () => selectBuildRecipes(game.availableRecipes),
-    [game.availableRecipes]
+  const screenRecipes = useMemo(
+    () => selectRecipesByScreen(game.availableRecipes, screen),
+    [game.availableRecipes, screen]
+  );
+  const screenExpeditions = useMemo(
+    () => selectExpeditionsByScreen(game.availableExpeditions, screen),
+    [game.availableExpeditions, screen]
   );
 
-  // Split actions by explicit panel metadata
+  // Split by panel metadata
+  const craftRecipes = useMemo(
+    () => selectCraftRecipes(screenRecipes),
+    [screenRecipes]
+  );
+  const buildRecipes = useMemo(
+    () => selectBuildRecipes(screenRecipes),
+    [screenRecipes]
+  );
   const gatherActions = useMemo(
-    () => selectGatherActions(game.availableActions),
-    [game.availableActions]
+    () => selectGatherActions(screenActions),
+    [screenActions]
   );
   const buildActions = useMemo(
-    () => selectBuildActions(game.availableActions),
-    [game.availableActions]
+    () => selectBuildActions(screenActions),
+    [screenActions]
   );
 
   // Progressive tab visibility
@@ -275,9 +301,10 @@ export default function App() {
       buildRecipeCount: buildRecipes.length,
       buildActionCount: buildActions.length,
       buildingCount: game.state.buildings.length,
-      availableStationCount: game.availableStations.length,
-      deployedStationCount: game.state.stations.length,
-      routinesUnlocked,
+      availableStationCount: screen === "mainland" ? 0 : game.availableStations.length,
+      deployedStationCount: screen === "mainland" ? 0 : game.state.stations.length,
+      routinesUnlocked: screen === "mainland" ? false : routinesUnlocked,
+      screen,
     });
   }, [
     hasFoodAccess,
@@ -290,6 +317,7 @@ export default function App() {
     game.availableStations.length,
     game.state.stations.length,
     routinesUnlocked,
+    screen,
   ]);
 
   // Fall back to gather if current tab isn't visible
@@ -428,7 +456,26 @@ export default function App() {
         </div>
       </header>
 
-      <IslandBanner phase={currentPhase.id} />
+      {screen === "island" && <IslandBanner phase={currentPhase.id} />}
+
+      {game.state.mainlandUnlocked && (
+        <nav className="screen-switcher">
+          <button
+            className={`screen-btn${screen === "island" ? " active" : ""}`}
+            onClick={() => handleScreenSwitch("island")}
+          >
+            <GameIcon id="tab_explore" size={18} />
+            Island
+          </button>
+          <button
+            className={`screen-btn${screen === "mainland" ? " active" : ""}`}
+            onClick={() => handleScreenSwitch("mainland")}
+          >
+            <GameIcon id="coastal_cliffs" size={18} />
+            Mainland
+          </button>
+        </nav>
+      )}
 
       <div className="app-body">
         {/* Desktop sidebar: always visible on wide screens */}
@@ -538,7 +585,7 @@ export default function App() {
             </div>
           )}
 
-          {readyStationCount > 0 ? (
+          {readyStationCount > 0 && screen === "island" ? (
             <div className="station-ready-banner" onClick={() => setTab("tend")}>
               {readyStationCount === 1
                 ? "1 station ready to collect!"
@@ -711,7 +758,7 @@ export default function App() {
             )}
             {activeTab === "explore" && (
               <ExpeditionPanel
-                expeditions={game.availableExpeditions}
+                expeditions={screenExpeditions}
                 state={game.state}
                 onStart={handleStartExpedition}
               />

@@ -32,6 +32,11 @@ import {
 
 export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills" | "routines";
 
+export type GameScreen = "island" | "mainland";
+
+/** Skills that belong to the mainland screen. Everything else is island. */
+const MAINLAND_SKILLS = new Set(["combat", "mining", "smithing"]);
+
 
 export function resourceHasUse(resourceId: string, state: GameState, _visited?: Set<string>): boolean {
   const RESOURCES = getResources();
@@ -353,6 +358,10 @@ export function selectUndiscoveredBiomeCount(state: GameState, expeditionId?: st
   return totalBiomes - state.discoveredBiomes.length;
 }
 
+export function isMainlandSkill(skillId: string): boolean {
+  return MAINLAND_SKILLS.has(skillId);
+}
+
 export function selectGatherActions(actions: ActionDef[]): ActionDef[] {
   return actions.filter((action) => action.panel === "gather");
 }
@@ -367,6 +376,27 @@ export function selectCraftRecipes(recipes: RecipeDef[]): RecipeDef[] {
 
 export function selectBuildRecipes(recipes: RecipeDef[]): RecipeDef[] {
   return recipes.filter((recipe) => recipe.panel === "build");
+}
+
+/** Filter actions to only those belonging to the given screen. */
+export function selectActionsByScreen(actions: ActionDef[], screen: GameScreen): ActionDef[] {
+  return actions.filter((a) =>
+    screen === "mainland" ? MAINLAND_SKILLS.has(a.skillId) : !MAINLAND_SKILLS.has(a.skillId)
+  );
+}
+
+/** Filter recipes to only those belonging to the given screen. */
+export function selectRecipesByScreen(recipes: RecipeDef[], screen: GameScreen): RecipeDef[] {
+  return recipes.filter((r) =>
+    screen === "mainland" ? MAINLAND_SKILLS.has(r.skillId) : !MAINLAND_SKILLS.has(r.skillId)
+  );
+}
+
+/** Filter expeditions to only those belonging to the given screen. */
+export function selectExpeditionsByScreen(expeditions: ExpeditionDef[], screen: GameScreen): ExpeditionDef[] {
+  return expeditions.filter((e) =>
+    screen === "mainland" ? !!e.mainland : !e.mainland
+  );
 }
 
 export function selectHasAnyXp(state: GameState): boolean {
@@ -392,7 +422,20 @@ export function selectVisibleTabs(params: {
   availableStationCount: number;
   deployedStationCount: number;
   routinesUnlocked: boolean;
+  screen?: GameScreen;
 }): GameTab[] {
+  if (params.screen === "mainland") {
+    // Mainland has a simpler tab set — no tend/routines (yet)
+    const tabs: GameTab[] = ["gather"];
+    if (params.craftRecipeCount > 0) tabs.push("craft");
+    if (params.buildRecipeCount > 0 || params.buildActionCount > 0 || params.buildingCount > 0) {
+      tabs.push("build");
+    }
+    if (params.hasFoodAccess) tabs.push("explore");
+    if (params.hasAnyResource) tabs.push("inventory");
+    if (params.hasAnyXp) tabs.push("skills");
+    return tabs;
+  }
   const tabs: GameTab[] = ["gather"];
   if (params.craftRecipeCount > 0) tabs.push("craft");
   if (params.availableStationCount > 0 || params.deployedStationCount > 0) {
@@ -410,6 +453,21 @@ export function selectVisibleTabs(params: {
   if (params.hasAnyResource) tabs.push("inventory");
   if (params.hasAnyXp) tabs.push("skills");
   return tabs;
+}
+
+/** Check if the player has any mainland skill XP. */
+export function selectHasMainlandXp(state: GameState): boolean {
+  return Array.from(MAINLAND_SKILLS).some((skillId) => (state.skills[skillId]?.xp ?? 0) > 0);
+}
+
+/** Check if the player has any mainland resources in inventory. */
+export function selectHasMainlandResources(state: GameState): boolean {
+  const RESOURCES = getResources();
+  return Object.entries(state.resources).some(([id, amount]) => {
+    if (amount <= 0) return false;
+    const def = RESOURCES[id];
+    return def?.tags?.includes("mainland");
+  });
 }
 
 export interface ActionStatusInfo {
