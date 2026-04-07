@@ -186,6 +186,23 @@ export interface EquipmentItem {
 /** Player's equipped loadout — one item per slot. */
 export type Loadout = Record<EquipmentSlotId, string | null>; // maps slot → instanceId or null
 
+/** A recipe for repairing equipment — improves condition by one step. */
+export interface RepairRecipeDef {
+  id: string;
+  name: string;
+  description: string;
+  /** Equipment tags this recipe applies to (e.g. "metal", "hide"). */
+  targetTags: string[];
+  /** Base materials consumed. */
+  inputs: RecipeInput[];
+  /** Minimum smithing level required. */
+  requiredSkillLevel: number;
+  /** Required buildings to perform repair. */
+  requiredBuildings?: BuildingId[];
+  /** Smithing XP gained per repair. */
+  xpGain: number;
+}
+
 export type ContentPanel = "gather" | "craft" | "build";
 
 export interface ActionDef {

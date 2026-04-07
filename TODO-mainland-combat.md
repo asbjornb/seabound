@@ -34,10 +34,10 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [ ] Add baseline smithing recipes for dependable tier gear
 
 ## 5) Broken Drop + Repair Loop
-- [ ] Add item condition states including broken/damaged
-- [ ] Add expedition drop rules that can produce broken high-tier gear
-- [ ] Add repair recipe schema (materials + smithing level gates)
-- [ ] Add repair UI flow and repair outcome messaging
+- [x] Add item condition states including broken/damaged
+- [x] Add expedition drop rules that can produce broken high-tier gear
+- [x] Add repair recipe schema (materials + smithing level gates)
+- [x] Add repair UI flow and repair outcome messaging
 
 ## 6) Salvage & Material Economy
 - [ ] Add salvage action for unwanted gear
