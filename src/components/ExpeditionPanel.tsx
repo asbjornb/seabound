@@ -142,6 +142,13 @@ export function ExpeditionPanel({
                 )}
               </div>
             )}
+            {exp.waterCost != null && exp.waterCost > 0 && getTotalWater(state) < exp.waterCost && (
+              <div className="action-desc" style={{ fontStyle: "italic", color: "#a0a0a0", fontSize: "0.85em" }}>
+                {!state.buildings.includes("well")
+                  ? "Tip: Build a Well (Construction tab) to access fresh water"
+                  : "Tip: Use \"Fill Water Pot\" in the Crafting tab to collect water"}
+              </div>
+            )}
             {exp.inputs && exp.inputs.length > 0 && (
               <div className="action-requires">
                 Requires:{" "}
