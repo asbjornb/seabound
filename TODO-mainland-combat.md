@@ -31,7 +31,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Define historical metal progression resource chain
 - [x] Add mining skill milestones aligned to resource tiers
 - [x] Add smithing skill milestones aligned to repair/crafting thresholds
-- [ ] Add baseline smithing recipes for dependable tier gear
+- [x] Add baseline smithing recipes for dependable tier gear
 
 ## 5) Broken Drop + Repair Loop
 - [x] Add item condition states including broken/damaged
@@ -56,10 +56,10 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Add readability improvements for large drop lists
 
 ## 9) Content Authoring
-- [ ] Author initial mainland expedition set with clear profiles
-- [ ] Add low-tier repeatable expeditions with stage-relevant rare drops
-- [ ] Add high-risk expeditions with unique chase rewards
-- [ ] Ensure no active human factions; ruins/environmental storytelling only
+- [x] Author initial mainland expedition set with clear profiles
+- [x] Add low-tier repeatable expeditions with stage-relevant rare drops
+- [x] Add high-risk expeditions with unique chase rewards
+- [x] Ensure no active human factions; ruins/environmental storytelling only
 
 ## 10) Validation & Telemetry
 - [ ] Track expedition pick rates and failure rates by tier

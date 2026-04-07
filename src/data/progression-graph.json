@@ -807,6 +807,30 @@
       "category": "smithing"
     },
     {
+      "id": "skill:smithing:3",
+      "type": "skill_level",
+      "label": "Smithing Lv3",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:5",
+      "type": "skill_level",
+      "label": "Smithing Lv5",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:4",
+      "type": "skill_level",
+      "label": "Smithing Lv4",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:2",
+      "type": "skill_level",
+      "label": "Smithing Lv2",
+      "category": "smithing"
+    },
+    {
       "id": "skill:smithing:12",
       "type": "skill_level",
       "label": "Smithing Lv12",
@@ -1362,6 +1386,48 @@
       "id": "recipe:forge_steel",
       "type": "recipe",
       "label": "Forge Steel",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_copper_spear",
+      "type": "recipe",
+      "label": "Forge Copper Spear",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_copper_axe",
+      "type": "recipe",
+      "label": "Forge Copper Axe",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_copper_shield",
+      "type": "recipe",
+      "label": "Forge Copper Shield",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:stitch_hide_armor",
+      "type": "recipe",
+      "label": "Stitch Hide Armor",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:stitch_hide_cap",
+      "type": "recipe",
+      "label": "Stitch Hide Cap",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:stitch_hide_leggings",
+      "type": "recipe",
+      "label": "Stitch Hide Leggings",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:stitch_hide_boots",
+      "type": "recipe",
+      "label": "Stitch Hide Boots",
       "category": "smithing"
     },
     {
@@ -3998,6 +4064,191 @@
       "relation": "requires_building"
     },
     {
+      "from": "resource:copper_ingot",
+      "to": "recipe:forge_copper_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_copper_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_copper_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_copper_spear",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:3",
+      "to": "recipe:forge_copper_spear",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:forge_copper_spear",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:copper_ingot",
+      "to": "recipe:forge_copper_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_copper_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_copper_axe",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_copper_axe",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:5",
+      "to": "recipe:forge_copper_axe",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:forge_copper_axe",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:copper_ingot",
+      "to": "recipe:forge_copper_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_copper_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:forge_copper_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_copper_shield",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:4",
+      "to": "recipe:forge_copper_shield",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:forge_copper_shield",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:stitch_hide_armor",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:stitch_hide_armor",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:stitch_hide_armor",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:stitch_hide_armor",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:2",
+      "to": "recipe:stitch_hide_armor",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:stitch_hide_cap",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:stitch_hide_cap",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:stitch_hide_cap",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:2",
+      "to": "recipe:stitch_hide_cap",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:stitch_hide_leggings",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:stitch_hide_leggings",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:stitch_hide_leggings",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:stitch_hide_leggings",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:2",
+      "to": "recipe:stitch_hide_leggings",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:stitch_hide_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:stitch_hide_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:stitch_hide_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:stitch_hide_boots",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:3",
+      "to": "recipe:stitch_hide_boots",
+      "relation": "requires_skill"
+    },
+    {
       "from": "recipe:build_bloomery",
       "to": "building:bloomery",
       "relation": "builds"
@@ -5292,6 +5543,10 @@
       "skill:smithing:15",
       "skill:smithing:17",
       "skill:smithing:22",
+      "skill:smithing:3",
+      "skill:smithing:5",
+      "skill:smithing:4",
+      "skill:smithing:2",
       "skill:smithing:12",
       "action:prospect_copper",
       "action:prospect_tin",
@@ -5301,6 +5556,13 @@
       "recipe:smelt_iron_bloom",
       "recipe:hammer_iron_bloom",
       "recipe:forge_steel",
+      "recipe:forge_copper_spear",
+      "recipe:forge_copper_axe",
+      "recipe:forge_copper_shield",
+      "recipe:stitch_hide_armor",
+      "recipe:stitch_hide_cap",
+      "recipe:stitch_hide_leggings",
+      "recipe:stitch_hide_boots",
       "recipe:build_bloomery"
     ],
     "warnings": [
@@ -5411,6 +5673,26 @@
       },
       {
         "type": "unreachable",
+        "nodeId": "skill:smithing:3",
+        "message": "Smithing Lv3 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:5",
+        "message": "Smithing Lv5 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:4",
+        "message": "Smithing Lv4 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:2",
+        "message": "Smithing Lv2 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
         "nodeId": "skill:smithing:12",
         "message": "Smithing Lv12 is not reachable from beach start"
       },
@@ -5453,6 +5735,41 @@
         "type": "unreachable",
         "nodeId": "recipe:forge_steel",
         "message": "Forge Steel is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_copper_spear",
+        "message": "Forge Copper Spear is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_copper_axe",
+        "message": "Forge Copper Axe is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_copper_shield",
+        "message": "Forge Copper Shield is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:stitch_hide_armor",
+        "message": "Stitch Hide Armor is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:stitch_hide_cap",
+        "message": "Stitch Hide Cap is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:stitch_hide_leggings",
+        "message": "Stitch Hide Leggings is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:stitch_hide_boots",
+        "message": "Stitch Hide Boots is not reachable from beach start"
       },
       {
         "type": "unreachable",
@@ -6243,6 +6560,93 @@
       ],
       "smithing": [
         {
+          "level": 2,
+          "unlocks": [
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 3,
+          "unlocks": [
+            "recipe:forge_copper_spear",
+            "recipe:stitch_hide_boots"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:forge_copper_shield"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:forge_copper_axe"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
           "level": 8,
           "unlocks": [
             "recipe:smelt_bronze"
@@ -6253,6 +6657,13 @@
             "recipe:smelt_iron_bloom",
             "recipe:hammer_iron_bloom",
             "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6267,6 +6678,13 @@
             "recipe:smelt_iron_bloom",
             "recipe:hammer_iron_bloom",
             "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6281,6 +6699,13 @@
             "recipe:smelt_iron_bloom",
             "recipe:hammer_iron_bloom",
             "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6295,6 +6720,13 @@
             "recipe:smelt_iron_bloom",
             "recipe:hammer_iron_bloom",
             "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6309,6 +6741,13 @@
             "recipe:smelt_iron_bloom",
             "recipe:hammer_iron_bloom",
             "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
             "recipe:build_bloomery"
           ]
         }
