@@ -450,8 +450,8 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
     description: "Hammer out dents and re-forge damaged metal equipment at the kiln.",
     targetTags: ["metal"],
     inputs: [
-      { resourceId: "copper_ingot", amount: 1 },
-      { resourceId: "charcoal", amount: 2 },
+      { resourceId: "native_copper", amount: 2 },
+      { resourceId: "charcoal", amount: 1 },
     ],
     requiredSkillLevel: 5,
     requiredBuildings: ["kiln"],
@@ -519,7 +519,7 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
     description: "Strip down hide armor for usable leather scraps.",
     targetTags: ["hide"],
     outputs: [
-      { resourceId: "hide", amount: 1 },
+      { resourceId: "hide", amount: 2 },
       { resourceId: "rough_fiber", amount: 1, chance: 0.5 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
@@ -532,8 +532,8 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
     description: "Melt down metal equipment to recover copper fragments.",
     targetTags: ["metal"],
     outputs: [
-      { resourceId: "native_copper", amount: 2 },
-      { resourceId: "charcoal", amount: 1, chance: 0.5 },
+      { resourceId: "native_copper", amount: 3 },
+      { resourceId: "charcoal", amount: 1, chance: 0.75 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
     requiredSkillLevel: 3,

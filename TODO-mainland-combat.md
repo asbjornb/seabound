@@ -43,7 +43,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Add salvage action for unwanted gear
 - [x] Add salvage tables returning partial base materials
 - [x] Add affix reagent/catalyst outputs for long-loop crafting value
-- [ ] Tune sinks/sources to avoid material inflation
+- [x] Tune sinks/sources to avoid material inflation
 
 ## 7) Combat Skill Balance
 - [x] Define small milestone bonuses (not large linear stat scaling)
@@ -62,8 +62,8 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Ensure no active human factions; ruins/environmental storytelling only
 
 ## 10) Validation & Telemetry
-- [ ] Track expedition pick rates and failure rates by tier
-- [ ] Track repair bottlenecks and smithing engagement
-- [ ] Track log-open and log-clear behavior
-- [ ] Capture optionality metrics (players progressing with/without new skills)
-- [ ] Add feedback review cadence for experimental iteration
+- [x] Track expedition pick rates and failure rates by tier
+- [x] Track repair bottlenecks and smithing engagement
+- [x] Track log-open and log-clear behavior
+- [x] Capture optionality metrics (players progressing with/without new skills)
+- [x] Add feedback review cadence for experimental iteration
