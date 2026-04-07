@@ -23,9 +23,9 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 
 ## 3) Logging & Journal
 - [x] Implement per-run detailed combat log generation
-- [ ] Add one-time prominent log presentation after expedition
-- [ ] Add player action to clear/delete detailed logs
-- [ ] Persist lower-detail expedition summaries in journal
+- [x] Add one-time prominent log presentation after expedition
+- [x] Add player action to clear/delete detailed logs
+- [x] Persist lower-detail expedition summaries in journal
 
 ## 4) Mining & Smithing Foundations
 - [ ] Define historical metal progression resource chain
