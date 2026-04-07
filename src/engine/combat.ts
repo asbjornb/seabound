@@ -8,7 +8,9 @@
  * The outcome grade then influences drop rates and XP in the caller.
  */
 
+import { getCombatStatBonuses } from "../data/milestones";
 import { getAffixById, getEquipmentItemById } from "../data/registry";
+import { levelFromXp } from "../data/skills";
 import type { ExpeditionDifficultyProfile, GameState, StatCheck } from "../data/types";
 
 // ═══════════════════════════════════════
@@ -96,6 +98,14 @@ export function resolveEncounter(
   difficulty: ExpeditionDifficultyProfile
 ): EncounterResult {
   const loadoutStats = computeLoadoutStats(state);
+
+  // Apply small flat stat bonuses from combat skill milestones
+  const combatLevel = levelFromXp(state.skills["combat"]?.xp ?? 0);
+  const milestoneBonuses = getCombatStatBonuses("combat", combatLevel);
+  for (const [stat, bonus] of Object.entries(milestoneBonuses)) {
+    loadoutStats[stat] = (loadoutStats[stat] ?? 0) + bonus;
+  }
+
   const checks = difficulty.statChecks;
 
   const checkResults: EncounterResult["checkResults"] = checks.map((check: StatCheck) => {
