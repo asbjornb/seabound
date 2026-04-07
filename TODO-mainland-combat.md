@@ -19,7 +19,7 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Implement base equipment item structure
 - [x] Implement affix attachment and bounded roll ranges
 - [x] Add first pass of expedition-focused affix families
-- [ ] Add basic equipment sorting/filtering in inventory UI
+- [x] Add basic equipment sorting/filtering in inventory UI
 
 ## 3) Logging & Journal
 - [ ] Implement per-run detailed combat log generation

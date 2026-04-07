@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions } from "../data/registry";
-import { ResourceId, ToolId, GameState } from "../data/types";
+import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getEquipmentSlots, getEquipmentItemById, getAffixById } from "../data/registry";
+import { ResourceId, ToolId, GameState, EquipmentItem } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
@@ -66,6 +66,38 @@ const FILTER_LABELS: Record<FilterId, string> = {
   items: "Items",
 };
 
+type EquipSortKey = "name" | "tier" | "slot";
+
+const EQUIP_SORT_LABELS: Record<EquipSortKey, string> = {
+  name: "Name",
+  tier: "Tier",
+  slot: "Slot",
+};
+
+const CONDITION_LABELS: Record<string, string> = {
+  pristine: "Pristine",
+  worn: "Worn",
+  damaged: "Damaged",
+  broken: "Broken",
+};
+
+function sortEquipment(items: EquipmentItem[], sortBy: EquipSortKey): EquipmentItem[] {
+  const SLOTS = getEquipmentSlots();
+  return [...items].sort((a, b) => {
+    const defA = getEquipmentItemById(a.defId);
+    const defB = getEquipmentItemById(b.defId);
+    if (!defA || !defB) return 0;
+    switch (sortBy) {
+      case "name":
+        return defA.name.localeCompare(defB.name);
+      case "tier":
+        return defB.tier - defA.tier || defA.name.localeCompare(defB.name);
+      case "slot":
+        return (SLOTS[defA.slot]?.order ?? 99) - (SLOTS[defB.slot]?.order ?? 99) || defA.name.localeCompare(defB.name);
+    }
+  });
+}
+
 type ViewMode = "list" | "grid";
 
 export function InventoryPanel({ state, highlightedResources }: { state: GameState; highlightedResources?: Set<string> }) {
@@ -74,6 +106,8 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
   const [filter, setFilter] = useState<FilterId>("all");
   const [search, setSearch] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [equipSlotFilter, setEquipSlotFilter] = useState<string>("all");
+  const [equipSort, setEquipSort] = useState<EquipSortKey>("slot");
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     try { return (localStorage.getItem("sb_inv_view") as ViewMode) ?? "list"; } catch { return "list"; }
   });
@@ -316,6 +350,172 @@ export function InventoryPanel({ state, highlightedResources }: { state: GameSta
           )}
         </div>
       )}
+
+      {/* Equipment section — shows when player has equipment items */}
+      {state.equipmentInventory.length > 0 && (
+        <EquipmentSection
+          items={state.equipmentInventory}
+          loadout={state.loadout}
+          search={searchLower}
+          slotFilter={equipSlotFilter}
+          onSlotFilter={setEquipSlotFilter}
+          sortBy={equipSort}
+          onSort={setEquipSort}
+          expandedId={expandedId}
+          onToggleExpand={toggleExpand}
+        />
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════
+// Equipment Section (extracted for clarity)
+// ═══════════════════════════════════════
+
+function EquipmentSection({
+  items,
+  loadout,
+  search,
+  slotFilter,
+  onSlotFilter,
+  sortBy,
+  onSort,
+  expandedId,
+  onToggleExpand,
+}: {
+  items: EquipmentItem[];
+  loadout: GameState["loadout"];
+  search: string;
+  slotFilter: string;
+  onSlotFilter: (s: string) => void;
+  sortBy: EquipSortKey;
+  onSort: (s: EquipSortKey) => void;
+  expandedId: string | null;
+  onToggleExpand: (id: string) => void;
+}) {
+  const SLOTS = getEquipmentSlots();
+  const equippedIds = new Set(Object.values(loadout).filter((id): id is string => id != null));
+
+  // Filter by slot and search
+  const filtered = items.filter((item) => {
+    const def = getEquipmentItemById(item.defId);
+    if (!def) return false;
+    if (slotFilter !== "all" && def.slot !== slotFilter) return false;
+    if (search && !def.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const sorted = useMemo(() => sortEquipment(filtered, sortBy), [filtered, sortBy]);
+
+  // Slot filter buttons: only show slots the player has items for
+  const presentSlots = useMemo(() => {
+    const slotSet = new Set<string>();
+    for (const item of items) {
+      const def = getEquipmentItemById(item.defId);
+      if (def) slotSet.add(def.slot);
+    }
+    return Object.values(SLOTS)
+      .filter((s) => slotSet.has(s.id))
+      .sort((a, b) => a.order - b.order);
+  }, [items, SLOTS]);
+
+  if (sorted.length === 0 && slotFilter === "all" && !search) return null;
+
+  return (
+    <div className="inventory-category">
+      <h3 className="section-title">Equipment ({items.length})</h3>
+      <div className="inventory-filters">
+        <button
+          className={`inventory-filter${slotFilter === "all" ? " active" : ""}`}
+          onClick={() => onSlotFilter("all")}
+        >
+          All
+        </button>
+        {presentSlots.map((slot) => (
+          <button
+            key={slot.id}
+            className={`inventory-filter${slotFilter === slot.id ? " active" : ""}`}
+            onClick={() => onSlotFilter(slot.id)}
+          >
+            {slot.name}
+          </button>
+        ))}
+      </div>
+      <div className="equip-sort-row">
+        <span className="equip-sort-label">Sort:</span>
+        {(Object.keys(EQUIP_SORT_LABELS) as EquipSortKey[]).map((key) => (
+          <button
+            key={key}
+            className={`inventory-filter${sortBy === key ? " active" : ""}`}
+            onClick={() => onSort(key)}
+          >
+            {EQUIP_SORT_LABELS[key]}
+          </button>
+        ))}
+      </div>
+      <div className="inventory-items">
+        {sorted.map((item) => {
+          const def = getEquipmentItemById(item.defId);
+          if (!def) return null;
+          const isEquipped = equippedIds.has(item.instanceId);
+          const isExpanded = expandedId === `equip:${item.instanceId}`;
+          const conditionClass = item.condition === "broken" ? " broken" : item.condition === "damaged" ? " damaged" : "";
+          return (
+            <div
+              key={item.instanceId}
+              className={`inventory-item${isExpanded ? " expanded" : ""}${conditionClass}${isEquipped ? " equipped" : ""}`}
+              onClick={() => onToggleExpand(`equip:${item.instanceId}`)}
+            >
+              <div className="inventory-item-header">
+                <span className="inventory-item-name">
+                  {def.name}
+                  {isEquipped && <span className="equip-badge">E</span>}
+                </span>
+                <span className="equip-meta">
+                  <span className="equip-slot-tag">{SLOTS[def.slot]?.name ?? def.slot}</span>
+                  {item.condition !== "pristine" && (
+                    <span className={`equip-condition${conditionClass}`}>
+                      {CONDITION_LABELS[item.condition] ?? item.condition}
+                    </span>
+                  )}
+                </span>
+              </div>
+              {isExpanded && (
+                <div className="inventory-item-desc">
+                  {def.description}
+                  <div className="equip-stats">
+                    <span className="equip-tier">Tier {def.tier}</span>
+                    {def.baseStats.map((s) => (
+                      <span key={s.stat} className={`equip-stat${s.value < 0 ? " negative" : ""}`}>
+                        {s.stat} {s.value > 0 ? "+" : ""}{s.value}
+                      </span>
+                    ))}
+                  </div>
+                  {item.affixes.length > 0 && (
+                    <div className="equip-affixes">
+                      {item.affixes.map((a) => {
+                        const affixDef = getAffixById(a.affixId);
+                        if (!affixDef) return null;
+                        const range = affixDef.rollRange ?? { min: 1, max: 1 };
+                        const scale = range.min + a.rollValue * (range.max - range.min);
+                        return (
+                          <span key={a.affixId} className="equip-affix" title={affixDef.description}>
+                            {affixDef.name} ({Math.round(scale * 100)}%)
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {sorted.length === 0 && (
+          <p className="empty-message">No equipment matches filters.</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1775,6 +1775,95 @@ body {
   font-size: 0.85em;
 }
 
+/* Equipment inventory section */
+.equip-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.equip-sort-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-right: 2px;
+}
+.equip-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.equip-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.equip-slot-tag {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  background: var(--bar-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.equip-condition {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+.equip-condition.damaged {
+  color: var(--warning);
+}
+.equip-condition.broken {
+  color: var(--error, #e06060);
+}
+.inventory-item.equipped {
+  border-left: 3px solid var(--accent);
+}
+.inventory-item.broken {
+  opacity: 0.6;
+}
+.inventory-item.damaged {
+  border-color: var(--warning);
+}
+.equip-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.equip-tier {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  background: var(--bar-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.equip-stat {
+  font-size: 0.68rem;
+  color: var(--success);
+}
+.equip-stat.negative {
+  color: var(--warning);
+}
+.equip-affixes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.equip-affix {
+  font-size: 0.66rem;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  padding: 1px 5px;
+  border-radius: 3px;
+  cursor: help;
+}
+
 .storage-group-info {
   margin-top: 2px;
   color: var(--text-dim);
