@@ -4,6 +4,12 @@ import { CloseIcon } from "./CloseIcon";
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
 
+function getDeviceType(): string {
+  const hasTouchScreen = navigator.maxTouchPoints > 0;
+  const isNarrow = window.matchMedia("(max-width: 768px)").matches;
+  return hasTouchScreen && isNarrow ? "mobile" : "desktop";
+}
+
 const STORAGE_KEY = "seabound_feedbackQ";
 const COOLDOWN_MS = 5 * 24 * 60 * 60 * 1000; // 5 days
 const PAUSE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days after 3 dismissals
@@ -153,6 +159,7 @@ export function FeedbackQuestion({
         `Biomes: ${discoveredBiomes.join(", ") || "none"}`,
         `Playtime: ${formatPlaytime(totalPlayTimeMs)}`,
         `Tab: ${activeTab}`,
+        `Device: ${getDeviceType()}`,
       ].join(" | ");
 
       const res = await fetch(WEB3FORMS_URL, {
