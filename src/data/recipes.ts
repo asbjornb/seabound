@@ -1278,4 +1278,124 @@ export const RECIPES: RecipeDef[] = [
     oneTimeCraft: true,
     xpGain: 65,
   },
+
+  // ═══════════════════════════════════════
+  // MAINLAND — Smithing: Smelting & Forging
+  // ═══════════════════════════════════════
+
+  // Era 1: Copper
+  {
+    id: "smelt_copper",
+    name: "Smelt Copper",
+    description: "Melt copper ore in the crucible to produce a pure copper ingot.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "copper_ore", amount: 2 },
+      { resourceId: "charcoal", amount: 2 },
+    ],
+    output: { resourceId: "copper_ingot", amount: 1 },
+    requiredTools: ["crucible"],
+    requiredBuildings: ["kiln"],
+    durationMs: 12000,
+    repeatable: true,
+    xpGain: 20,
+  },
+
+  // Era 2: Bronze
+  {
+    id: "smelt_bronze",
+    name: "Smelt Bronze",
+    description: "Combine copper and tin in the crucible to forge a superior alloy.",
+    skillId: "smithing",
+    panel: "craft",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "copper_ingot", amount: 1 },
+      { resourceId: "tin_ore", amount: 2 },
+      { resourceId: "charcoal", amount: 3 },
+    ],
+    output: { resourceId: "bronze_ingot", amount: 1 },
+    requiredTools: ["crucible"],
+    requiredBuildings: ["kiln"],
+    durationMs: 15000,
+    repeatable: true,
+    xpGain: 35,
+  },
+
+  // Era 3: Iron — bloomery process
+  {
+    id: "smelt_iron_bloom",
+    name: "Smelt Iron Bloom",
+    description: "Reduce iron ore in the bloomery to produce a spongy mass of crude iron.",
+    skillId: "smithing",
+    panel: "craft",
+    requiredSkillLevel: 15,
+    inputs: [
+      { resourceId: "iron_ore", amount: 3 },
+      { resourceId: "charcoal", amount: 5 },
+    ],
+    output: { resourceId: "iron_bloom", amount: 1 },
+    requiredBuildings: ["bloomery"],
+    durationMs: 20000,
+    repeatable: true,
+    xpGain: 50,
+  },
+  {
+    id: "hammer_iron_bloom",
+    name: "Hammer Iron Bloom",
+    description: "Hammer the bloom repeatedly to drive out slag and consolidate the iron.",
+    skillId: "smithing",
+    panel: "craft",
+    requiredSkillLevel: 17,
+    inputs: [
+      { resourceId: "iron_bloom", amount: 1 },
+      { resourceId: "charcoal", amount: 2 },
+    ],
+    output: { resourceId: "iron_ingot", amount: 1 },
+    requiredBuildings: ["bloomery"],
+    durationMs: 15000,
+    repeatable: true,
+    xpGain: 60,
+  },
+
+  // Era 4: Steel — costly late-game
+  {
+    id: "forge_steel",
+    name: "Forge Steel",
+    description: "Carburize iron with charcoal at extreme heat. Slow, costly, but the metal is unmatched.",
+    skillId: "smithing",
+    panel: "craft",
+    requiredSkillLevel: 22,
+    inputs: [
+      { resourceId: "iron_ingot", amount: 2 },
+      { resourceId: "charcoal", amount: 8 },
+    ],
+    output: { resourceId: "steel_ingot", amount: 1 },
+    requiredBuildings: ["bloomery"],
+    durationMs: 30000,
+    repeatable: true,
+    xpGain: 90,
+  },
+
+  // Bloomery building recipe
+  {
+    id: "build_bloomery",
+    name: "Bloomery",
+    description: "Construct a clay shaft furnace with bellows. Required for iron smelting.",
+    skillId: "smithing",
+    panel: "build",
+    requiredSkillLevel: 12,
+    requiredSkills: [{ skillId: "construction", level: 10 }],
+    inputs: [
+      { resourceId: "clay", amount: 15 },
+      { resourceId: "flat_stone", amount: 10 },
+      { resourceId: "charcoal", amount: 10 },
+      { resourceId: "copper_ingot", amount: 2 },
+    ],
+    buildingOutput: "bloomery",
+    durationMs: 25000,
+    oneTimeCraft: true,
+    xpGain: 80,
+  },
 ];

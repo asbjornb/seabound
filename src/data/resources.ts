@@ -339,4 +339,68 @@ export const RESOURCES: Record<string, ResourceDef> = {
       "A nugget of naturally occurring copper. Soft enough to cold-hammer into shape.",
     tags: ["metal", "mainland"],
   },
+
+  // Era 1: Copper working
+  copper_ore: {
+    id: "copper_ore",
+    name: "Copper Ore",
+    description:
+      "Green-streaked malachite rock. Smelting it yields pure copper.",
+    tags: ["ore", "mainland"],
+  },
+  copper_ingot: {
+    id: "copper_ingot",
+    name: "Copper Ingot",
+    description:
+      "A bar of smelted copper. Soft and workable — the first true metal.",
+    tags: ["metal", "mainland"],
+  },
+
+  // Era 2: Bronze age
+  tin_ore: {
+    id: "tin_ore",
+    name: "Tin Ore",
+    description:
+      "Dark cassiterite pebbles. Rare but essential for hardening copper into bronze.",
+    tags: ["ore", "mainland"],
+  },
+  bronze_ingot: {
+    id: "bronze_ingot",
+    name: "Bronze Ingot",
+    description:
+      "An alloy of copper and tin — harder and holds an edge far better than pure copper.",
+    tags: ["metal", "mainland"],
+  },
+
+  // Era 3: Iron age
+  iron_ore: {
+    id: "iron_ore",
+    name: "Iron Ore",
+    description:
+      "Heavy red-brown ore. Requires a bloomery furnace and serious heat to reduce.",
+    tags: ["ore", "mainland"],
+  },
+  iron_bloom: {
+    id: "iron_bloom",
+    name: "Iron Bloom",
+    description:
+      "A spongy mass of crude iron from the bloomery. Must be hammered to drive out slag.",
+    tags: ["metal", "mainland"],
+  },
+  iron_ingot: {
+    id: "iron_ingot",
+    name: "Iron Ingot",
+    description:
+      "Wrought iron hammered clean of impurities. Strong and versatile.",
+    tags: ["metal", "mainland"],
+  },
+
+  // Era 4: Steel (late, costly)
+  steel_ingot: {
+    id: "steel_ingot",
+    name: "Steel Ingot",
+    description:
+      "Iron refined with charcoal at extreme heat. The pinnacle of the smith's art.",
+    tags: ["metal", "mainland"],
+  },
 };

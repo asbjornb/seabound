@@ -291,6 +291,54 @@
       "category": "metal,mainland"
     },
     {
+      "id": "resource:copper_ore",
+      "type": "resource",
+      "label": "Copper Ore",
+      "category": "ore,mainland"
+    },
+    {
+      "id": "resource:copper_ingot",
+      "type": "resource",
+      "label": "Copper Ingot",
+      "category": "metal,mainland"
+    },
+    {
+      "id": "resource:tin_ore",
+      "type": "resource",
+      "label": "Tin Ore",
+      "category": "ore,mainland"
+    },
+    {
+      "id": "resource:bronze_ingot",
+      "type": "resource",
+      "label": "Bronze Ingot",
+      "category": "metal,mainland"
+    },
+    {
+      "id": "resource:iron_ore",
+      "type": "resource",
+      "label": "Iron Ore",
+      "category": "ore,mainland"
+    },
+    {
+      "id": "resource:iron_bloom",
+      "type": "resource",
+      "label": "Iron Bloom",
+      "category": "metal,mainland"
+    },
+    {
+      "id": "resource:iron_ingot",
+      "type": "resource",
+      "label": "Iron Ingot",
+      "category": "metal,mainland"
+    },
+    {
+      "id": "resource:steel_ingot",
+      "type": "resource",
+      "label": "Steel Ingot",
+      "category": "metal,mainland"
+    },
+    {
       "id": "tool:bamboo_knife",
       "type": "tool",
       "label": "Bamboo Knife"
@@ -526,6 +574,23 @@
       "label": "Stone Tidal Weir"
     },
     {
+      "id": "building:bloomery",
+      "type": "building",
+      "label": "Bloomery"
+    },
+    {
+      "id": "skill:mining:5",
+      "type": "skill_level",
+      "label": "Mining Lv5",
+      "category": "mining"
+    },
+    {
+      "id": "skill:mining:10",
+      "type": "skill_level",
+      "label": "Mining Lv10",
+      "category": "mining"
+    },
+    {
       "id": "skill:crafting:6",
       "type": "skill_level",
       "label": "Crafting Lv6",
@@ -700,6 +765,36 @@
       "category": "farming"
     },
     {
+      "id": "skill:smithing:8",
+      "type": "skill_level",
+      "label": "Smithing Lv8",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:15",
+      "type": "skill_level",
+      "label": "Smithing Lv15",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:17",
+      "type": "skill_level",
+      "label": "Smithing Lv17",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:22",
+      "type": "skill_level",
+      "label": "Smithing Lv22",
+      "category": "smithing"
+    },
+    {
+      "id": "skill:smithing:12",
+      "type": "skill_level",
+      "label": "Smithing Lv12",
+      "category": "smithing"
+    },
+    {
       "id": "action:gather_coconuts",
       "type": "action",
       "label": "Gather Fallen Coconuts",
@@ -776,6 +871,24 @@
       "type": "action",
       "label": "Drop Line Fishing",
       "category": "fishing"
+    },
+    {
+      "id": "action:prospect_copper",
+      "type": "action",
+      "label": "Prospect Copper Vein",
+      "category": "mining"
+    },
+    {
+      "id": "action:prospect_tin",
+      "type": "action",
+      "label": "Prospect Tin Deposit",
+      "category": "mining"
+    },
+    {
+      "id": "action:mine_iron",
+      "type": "action",
+      "label": "Mine Iron Ore",
+      "category": "mining"
     },
     {
       "id": "recipe:shred_coconut_husk",
@@ -1204,6 +1317,42 @@
       "category": "construction"
     },
     {
+      "id": "recipe:smelt_copper",
+      "type": "recipe",
+      "label": "Smelt Copper",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:smelt_bronze",
+      "type": "recipe",
+      "label": "Smelt Bronze",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:smelt_iron_bloom",
+      "type": "recipe",
+      "label": "Smelt Iron Bloom",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:hammer_iron_bloom",
+      "type": "recipe",
+      "label": "Hammer Iron Bloom",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel",
+      "type": "recipe",
+      "label": "Forge Steel",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:build_bloomery",
+      "type": "recipe",
+      "label": "Bloomery",
+      "category": "smithing"
+    },
+    {
       "id": "expedition:explore_beach",
       "type": "expedition",
       "label": "Explore Along the Beach",
@@ -1554,6 +1703,76 @@
       "from": "tool:gorge_hook",
       "to": "action:drop_line_fish",
       "relation": "requires_tool"
+    },
+    {
+      "from": "action:prospect_copper",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "action:prospect_copper",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "action:prospect_copper",
+      "to": "skill:mining",
+      "relation": "trains"
+    },
+    {
+      "from": "biome:coastal_cliffs",
+      "to": "action:prospect_copper",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:prospect_tin",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "action:prospect_tin",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "action:prospect_tin",
+      "to": "skill:mining",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:mining:5",
+      "to": "action:prospect_tin",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "biome:coastal_cliffs",
+      "to": "action:prospect_tin",
+      "relation": "requires_biome"
+    },
+    {
+      "from": "action:mine_iron",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "action:mine_iron",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "action:mine_iron",
+      "to": "skill:mining",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:mining:10",
+      "to": "action:mine_iron",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "biome:inland_hills",
+      "to": "action:mine_iron",
+      "relation": "requires_biome"
     },
     {
       "from": "recipe:shred_coconut_husk",
@@ -3596,6 +3815,206 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:smelt_copper",
+      "to": "resource:copper_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:copper_ore",
+      "to": "recipe:smelt_copper",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:smelt_copper",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:smelt_copper",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:crucible",
+      "to": "recipe:smelt_copper",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:smelt_copper",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:smelt_bronze",
+      "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:copper_ingot",
+      "to": "recipe:smelt_bronze",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:tin_ore",
+      "to": "recipe:smelt_bronze",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:smelt_bronze",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:smelt_bronze",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:8",
+      "to": "recipe:smelt_bronze",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "tool:crucible",
+      "to": "recipe:smelt_bronze",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:smelt_bronze",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:smelt_iron_bloom",
+      "to": "resource:iron_bloom",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:iron_ore",
+      "to": "recipe:smelt_iron_bloom",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:smelt_iron_bloom",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:smelt_iron_bloom",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:15",
+      "to": "recipe:smelt_iron_bloom",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:smelt_iron_bloom",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:hammer_iron_bloom",
+      "to": "resource:iron_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:iron_bloom",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:hammer_iron_bloom",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:17",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:forge_steel",
+      "to": "resource:steel_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_steel",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:forge_steel",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:22",
+      "to": "recipe:forge_steel",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel",
+      "relation": "requires_building"
+    },
+    {
+      "from": "recipe:build_bloomery",
+      "to": "building:bloomery",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:clay",
+      "to": "recipe:build_bloomery",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_bloomery",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:build_bloomery",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:copper_ingot",
+      "to": "recipe:build_bloomery",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_bloomery",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:12",
+      "to": "recipe:build_bloomery",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "skill:construction:10",
+      "to": "recipe:build_bloomery",
+      "relation": "requires_skill"
+    },
+    {
       "from": "tool:bamboo_knife",
       "to": "recipe:shred_coconut_husk",
       "relation": "speeds_up"
@@ -4655,6 +5074,8 @@
       "recipe:build_camp_fire",
       "expedition:sail_nearby_island",
       "action:comb_rocky_shore",
+      "action:prospect_tin",
+      "action:mine_iron",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
       "action:collect_palm_frond",
@@ -4678,6 +5099,10 @@
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
+      "skill:mining:5",
+      "biome:coastal_cliffs",
+      "skill:mining:10",
+      "biome:inland_hills",
       "resource:pandanus_leaves",
       "resource:bamboo_splinter",
       "resource:shell",
@@ -4821,16 +5246,53 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "tool:crucible"
+      "resource:native_copper",
+      "resource:bronze_ingot",
+      "resource:steel_ingot"
     ],
     "unreachable": [
-      "resource:native_copper"
+      "resource:native_copper",
+      "resource:copper_ore",
+      "resource:copper_ingot",
+      "resource:tin_ore",
+      "resource:bronze_ingot",
+      "resource:iron_ore",
+      "resource:iron_bloom",
+      "resource:iron_ingot",
+      "resource:steel_ingot",
+      "building:bloomery",
+      "skill:mining:5",
+      "skill:mining:10",
+      "skill:smithing:8",
+      "skill:smithing:15",
+      "skill:smithing:17",
+      "skill:smithing:22",
+      "skill:smithing:12",
+      "action:prospect_copper",
+      "action:prospect_tin",
+      "action:mine_iron",
+      "recipe:smelt_copper",
+      "recipe:smelt_bronze",
+      "recipe:smelt_iron_bloom",
+      "recipe:hammer_iron_bloom",
+      "recipe:forge_steel",
+      "recipe:build_bloomery"
     ],
     "warnings": [
       {
         "type": "dead_end",
-        "nodeId": "tool:crucible",
-        "message": "Crucible is produced but never used as input"
+        "nodeId": "resource:native_copper",
+        "message": "Native Copper is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:bronze_ingot",
+        "message": "Bronze Ingot is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:steel_ingot",
+        "message": "Steel Ingot is produced but never used as input"
       },
       {
         "type": "unreachable",
@@ -4838,12 +5300,156 @@
         "message": "Native Copper is not reachable from beach start"
       },
       {
-        "type": "orphan_resource",
-        "nodeId": "resource:native_copper",
-        "message": "Native Copper is defined but has no production or consumption edges"
+        "type": "unreachable",
+        "nodeId": "resource:copper_ore",
+        "message": "Copper Ore is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:copper_ingot",
+        "message": "Copper Ingot is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:tin_ore",
+        "message": "Tin Ore is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:bronze_ingot",
+        "message": "Bronze Ingot is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:iron_ore",
+        "message": "Iron Ore is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:iron_bloom",
+        "message": "Iron Bloom is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:iron_ingot",
+        "message": "Iron Ingot is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:steel_ingot",
+        "message": "Steel Ingot is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "building:bloomery",
+        "message": "Bloomery is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:mining:5",
+        "message": "Mining Lv5 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:mining:10",
+        "message": "Mining Lv10 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:8",
+        "message": "Smithing Lv8 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:15",
+        "message": "Smithing Lv15 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:17",
+        "message": "Smithing Lv17 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:22",
+        "message": "Smithing Lv22 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "skill:smithing:12",
+        "message": "Smithing Lv12 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "action:prospect_copper",
+        "message": "Prospect Copper Vein is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "action:prospect_tin",
+        "message": "Prospect Tin Deposit is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "action:mine_iron",
+        "message": "Mine Iron Ore is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:smelt_copper",
+        "message": "Smelt Copper is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:smelt_bronze",
+        "message": "Smelt Bronze is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:smelt_iron_bloom",
+        "message": "Smelt Iron Bloom is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:hammer_iron_bloom",
+        "message": "Hammer Iron Bloom is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_steel",
+        "message": "Forge Steel is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:build_bloomery",
+        "message": "Bloomery is not reachable from beach start"
       }
     ],
     "skillGates": {
+      "mining": [
+        {
+          "level": 5,
+          "unlocks": [
+            "action:prospect_tin"
+          ],
+          "trainedBy": [
+            "action:prospect_copper",
+            "action:prospect_tin",
+            "action:mine_iron"
+          ]
+        },
+        {
+          "level": 10,
+          "unlocks": [
+            "action:mine_iron"
+          ],
+          "trainedBy": [
+            "action:prospect_copper",
+            "action:prospect_tin",
+            "action:mine_iron"
+          ]
+        }
+      ],
       "crafting": [
         {
           "level": 6,
@@ -5244,7 +5850,8 @@
         {
           "level": 10,
           "unlocks": [
-            "recipe:build_pandanus_grove"
+            "recipe:build_pandanus_grove",
+            "recipe:build_bloomery"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
@@ -5581,6 +6188,78 @@
             "station:grow_pandanus",
             "station:grow_breadfruit",
             "station:harvest_pandanus_grove"
+          ]
+        }
+      ],
+      "smithing": [
+        {
+          "level": 8,
+          "unlocks": [
+            "recipe:smelt_bronze"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 12,
+          "unlocks": [
+            "recipe:build_bloomery"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 15,
+          "unlocks": [
+            "recipe:smelt_iron_bloom"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 17,
+          "unlocks": [
+            "recipe:hammer_iron_bloom"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 22,
+          "unlocks": [
+            "recipe:forge_steel"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:build_bloomery"
           ]
         }
       ]

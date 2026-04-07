@@ -375,6 +375,101 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     },
   ],
   construction: [],
+  mining: [
+    {
+      level: 2,
+      description: "Keen prospector — mine copper 10% faster",
+      effects: [
+        { type: "duration", actionId: "prospect_copper", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 4,
+      description: "Copper nose — +15% native copper chance from copper veins",
+      effects: [
+        { type: "drop_chance", actionId: "prospect_copper", resourceId: "native_copper", bonus: 0.15 },
+      ],
+    },
+    {
+      level: 6,
+      description: "Experienced miner — all mining 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 8,
+      description: "Tin seeker — prospect tin 15% faster",
+      effects: [
+        { type: "duration", actionId: "prospect_tin", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 12,
+      description: "Iron sense — mine iron 15% faster",
+      effects: [
+        { type: "duration", actionId: "mine_iron", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 15,
+      description: "Deep vein — all mining 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+  ],
+  smithing: [
+    {
+      level: 3,
+      description: "Steady pour — 10% chance to double copper smelting output",
+      effects: [
+        { type: "double_output", chance: 0.1, recipeId: "smelt_copper" },
+      ],
+    },
+    {
+      level: 5,
+      description: "Even heat — all smelting 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 10,
+      description: "Alloy instinct — 10% chance to double bronze output",
+      effects: [
+        { type: "double_output", chance: 0.1, recipeId: "smelt_bronze" },
+      ],
+    },
+    {
+      level: 13,
+      description: "Bellows mastery — all smithing 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 18,
+      description: "Hammer rhythm — bloom hammering 20% faster",
+      effects: [
+        { type: "duration", actionId: "hammer_iron_bloom", multiplier: 0.8 },
+      ],
+    },
+    {
+      level: 20,
+      description: "Master smith — all smithing 10% faster",
+      effects: [
+        { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 24,
+      description: "Steel refinement — 15% chance to double steel output",
+      effects: [
+        { type: "double_output", chance: 0.15, recipeId: "forge_steel" },
+      ],
+    },
+  ],
 };
 
 /**

@@ -28,9 +28,9 @@ Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expeditio
 - [x] Persist lower-detail expedition summaries in journal
 
 ## 4) Mining & Smithing Foundations
-- [ ] Define historical metal progression resource chain
-- [ ] Add mining skill milestones aligned to resource tiers
-- [ ] Add smithing skill milestones aligned to repair/crafting thresholds
+- [x] Define historical metal progression resource chain
+- [x] Add mining skill milestones aligned to resource tiers
+- [x] Add smithing skill milestones aligned to repair/crafting thresholds
 - [ ] Add baseline smithing recipes for dependable tier gear
 
 ## 5) Broken Drop + Repair Loop

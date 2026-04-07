@@ -55,6 +55,18 @@ export const SKILLS: Record<SkillId, SkillDef> = {
     description:
       "Fighting skill gained from mainland expeditions. Small milestone bonuses to encounter outcomes.",
   },
+  mining: {
+    id: "mining",
+    name: "Mining",
+    description:
+      "Extracting ore and stone from the earth. Higher levels unlock richer veins and rarer deposits.",
+  },
+  smithing: {
+    id: "smithing",
+    name: "Smithing",
+    description:
+      "Smelting ore and forging metal into tools, weapons, and armor. The foundation of metalworking.",
+  },
 };
 
 // XP required for each level (cumulative). Level 1 = 0 xp, level 2 = 100 xp, etc.
