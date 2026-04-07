@@ -71,7 +71,7 @@ export const STATIONS: StationDef[] = [
       { resourceId: "taro_corm", amount: 1, chance: 0.15 },
     ],
     xpGain: 35,
-    maxDeployedPerBuildings: ["tended_garden", "farm_plot"],
+    maxDeployedPerBuildings: ["cleared_plot", "tended_garden", "farm_plot"],
   },
   {
     id: "grow_bananas",
