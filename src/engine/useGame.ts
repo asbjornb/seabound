@@ -256,6 +256,7 @@ function advanceQueue(state: GameState): void {
 }
 
 let nextDiscoveryId = 0;
+let nextCombatLogId = 0;
 
 function addDiscovery(
   state: GameState,
@@ -317,6 +318,29 @@ function processCompletionDiscoveries(
     for (const eq of c.equipmentDropped) {
       const condLabel = eq.condition === "broken" ? " (broken)" : "";
       addDiscovery(state, "equipment", `Found ${eq.name}${condLabel}!`);
+    }
+  }
+  // Generate detailed combat log entry for mainland expeditions
+  if (c.encounterResult) {
+    state.combatLog.unshift({
+      id: nextCombatLogId++,
+      timestamp: Date.now(),
+      expeditionId: c.actionId,
+      expeditionName: c.actionName,
+      grade: c.encounterResult.grade,
+      checkResults: c.encounterResult.checkResults,
+      passRatio: c.encounterResult.passRatio,
+      dropMultiplier: c.encounterResult.dropMultiplier,
+      xpMultiplier: c.encounterResult.xpMultiplier,
+      failureInsights: c.encounterResult.failureInsights,
+      drops: c.drops,
+      xpGain: c.xpGain,
+      equipmentDropped: c.equipmentDropped,
+      outcomeMessage: c.expeditionMessage,
+    });
+    // Cap combat log to 50 entries to prevent unbounded growth
+    if (state.combatLog.length > 50) {
+      state.combatLog.length = 50;
     }
   }
 }
