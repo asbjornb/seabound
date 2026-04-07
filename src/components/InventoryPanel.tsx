@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes } from "../data/registry";
-import { ResourceId, ToolId, GameState, EquipmentItem, RepairRecipeDef } from "../data/types";
+import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables } from "../data/registry";
+import { ResourceId, ToolId, GameState, EquipmentItem, RepairRecipeDef, SalvageTableDef } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
@@ -100,7 +100,7 @@ function sortEquipment(items: EquipmentItem[], sortBy: EquipSortKey): EquipmentI
 
 type ViewMode = "list" | "grid";
 
-export function InventoryPanel({ state, highlightedResources, onRepairItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void }) {
+export function InventoryPanel({ state, highlightedResources, onRepairItem, onSalvageItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void; onSalvageItem?: (instanceId: string) => void }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -365,6 +365,7 @@ export function InventoryPanel({ state, highlightedResources, onRepairItem }: { 
           expandedId={expandedId}
           onToggleExpand={toggleExpand}
           onRepairItem={onRepairItem}
+          onSalvageItem={onSalvageItem}
         />
       )}
     </div>
@@ -380,6 +381,21 @@ const NEXT_CONDITION_LABEL: Record<string, string> = {
   damaged: "Worn",
   worn: "Pristine",
 };
+
+/** Find the salvage table that applies to an equipment item, if any. */
+function findSalvageTable(item: EquipmentItem): SalvageTableDef | undefined {
+  const def = getEquipmentItemById(item.defId);
+  if (!def?.tags) return undefined;
+  return getSalvageTables().find((t) =>
+    t.targetTags.some((tag) => def.tags!.includes(tag))
+  );
+}
+
+/** Check if the player meets salvage requirements (skill level). */
+function meetsSalvageRequirements(table: SalvageTableDef, state: GameState): boolean {
+  const smithingLevel = state.skills["smithing"]?.level ?? 0;
+  return smithingLevel >= table.requiredSkillLevel;
+}
 
 /** Find the repair recipe that applies to an equipment item, if any. */
 function findRepairRecipe(item: EquipmentItem): RepairRecipeDef | undefined {
@@ -418,6 +434,7 @@ function EquipmentSection({
   expandedId,
   onToggleExpand,
   onRepairItem,
+  onSalvageItem,
 }: {
   items: EquipmentItem[];
   loadout: GameState["loadout"];
@@ -430,6 +447,7 @@ function EquipmentSection({
   expandedId: string | null;
   onToggleExpand: (id: string) => void;
   onRepairItem?: (instanceId: string) => void;
+  onSalvageItem?: (instanceId: string) => void;
 }) {
   const SLOTS = getEquipmentSlots();
   const equippedIds = new Set(Object.values(loadout).filter((id): id is string => id != null));
@@ -578,6 +596,49 @@ function EquipmentSection({
                           }}
                         >
                           Repair
+                        </button>
+                      </div>
+                    );
+                  })()}
+                  {!isEquipped && (() => {
+                    const table = findSalvageTable(item);
+                    if (!table) return null;
+                    const meetsReqs = meetsSalvageRequirements(table, state);
+                    const RESOURCES = getResources();
+                    const CONDITION_MULT: Record<string, number> = { pristine: 1, worn: 0.75, damaged: 0.5, broken: 0.25 };
+                    const mult = CONDITION_MULT[item.condition] ?? 0.5;
+                    return (
+                      <div className="equip-salvage">
+                        <div className="equip-salvage-yields">
+                          Salvage yields:
+                          {table.outputs.map((out) => {
+                            const rdef = RESOURCES[out.resourceId];
+                            const amt = Math.max(1, Math.round(out.amount * mult));
+                            const chanceLabel = (out.chance ?? 1) < 1 ? ` (${Math.round((out.chance ?? 1) * 100)}%)` : "";
+                            return (
+                              <span key={out.resourceId} className="salvage-material">
+                                {" "}{rdef?.name ?? out.resourceId} x{amt}{chanceLabel}
+                              </span>
+                            );
+                          })}
+                          {item.affixes.length > 0 && (
+                            <span className="salvage-reagent-hint"> + possible reagents</span>
+                          )}
+                          {table.requiredSkillLevel > 0 && (
+                            <span className={`repair-material${(state.skills["smithing"]?.level ?? 0) < table.requiredSkillLevel ? " insufficient" : ""}`}>
+                              {" "}Smithing Lv{table.requiredSkillLevel}
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          className="salvage-btn"
+                          disabled={!meetsReqs}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSalvageItem?.(item.instanceId);
+                          }}
+                        >
+                          Salvage
                         </button>
                       </div>
                     );

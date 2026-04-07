@@ -339,6 +339,24 @@
       "category": "metal,mainland"
     },
     {
+      "id": "resource:terrain_essence",
+      "type": "resource",
+      "label": "Terrain Essence",
+      "category": "reagent,mainland"
+    },
+    {
+      "id": "resource:combat_essence",
+      "type": "resource",
+      "label": "Combat Essence",
+      "category": "reagent,mainland"
+    },
+    {
+      "id": "resource:utility_essence",
+      "type": "resource",
+      "label": "Utility Essence",
+      "category": "reagent,mainland"
+    },
+    {
       "id": "tool:bamboo_knife",
       "type": "tool",
       "label": "Bamboo Knife"
@@ -5264,6 +5282,9 @@
       "resource:iron_bloom",
       "resource:iron_ingot",
       "resource:steel_ingot",
+      "resource:terrain_essence",
+      "resource:combat_essence",
+      "resource:utility_essence",
       "building:bloomery",
       "skill:mining:5",
       "skill:mining:10",
@@ -5337,6 +5358,21 @@
         "type": "unreachable",
         "nodeId": "resource:steel_ingot",
         "message": "Steel Ingot is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:terrain_essence",
+        "message": "Terrain Essence is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:combat_essence",
+        "message": "Combat Essence is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:utility_essence",
+        "message": "Utility Essence is not reachable from beach start"
       },
       {
         "type": "unreachable",
@@ -5422,6 +5458,21 @@
         "type": "unreachable",
         "nodeId": "recipe:build_bloomery",
         "message": "Bloomery is not reachable from beach start"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:terrain_essence",
+        "message": "Terrain Essence is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:combat_essence",
+        "message": "Combat Essence is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:utility_essence",
+        "message": "Utility Essence is defined but has no production or consumption edges"
       }
     ],
     "skillGates": {

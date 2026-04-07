@@ -247,6 +247,8 @@ function normalizeModPack(pack: GameDataPack): GameDataPack {
   if (!pack.equipmentSlots) pack.equipmentSlots = {};
   if (!pack.equipmentItems) pack.equipmentItems = {};
   if (!pack.affixes) pack.affixes = {};
+  if (!pack.repairRecipes) pack.repairRecipes = [];
+  if (!pack.salvageTables) pack.salvageTables = [];
   return pack;
 }
 
