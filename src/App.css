@@ -2298,19 +2298,28 @@ body {
 
 @media (min-width: 768px) {
   .app {
-    max-width: 840px;
+    max-width: 1120px;
   }
 
   .inventory-sidebar {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    width: 280px;
+    width: 260px;
     flex-shrink: 0;
-    border-right: 1px solid var(--border);
     padding: 12px;
     overflow-y: auto;
     background: var(--bg);
+  }
+
+  .sidebar-left {
+    border-right: 1px solid var(--border);
+    order: -1;
+  }
+
+  .sidebar-right {
+    border-left: 1px solid var(--border);
+    order: 1;
   }
 
   /* Hide the compact resource bar on desktop — sidebar replaces it */

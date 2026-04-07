@@ -431,11 +431,17 @@ export default function App() {
       <IslandBanner phase={currentPhase.id} />
 
       <div className="app-body">
-        {/* Desktop sidebar: always visible on wide screens */}
-        {(hasAnyResource || hasAnyXp) && (
-          <aside className="inventory-sidebar">
-            {hasAnyXp && <SkillsPanel state={game.state} />}
-            {hasAnyResource && <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} />}
+        {/* Desktop left sidebar: skills */}
+        {hasAnyXp && (
+          <aside className="inventory-sidebar sidebar-left">
+            <SkillsPanel state={game.state} />
+          </aside>
+        )}
+
+        {/* Desktop right sidebar: inventory (rendered before app-main in DOM, ordered via CSS) */}
+        {hasAnyResource && (
+          <aside className="inventory-sidebar sidebar-right">
+            <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} />
           </aside>
         )}
 
