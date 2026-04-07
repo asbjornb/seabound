@@ -17,6 +17,10 @@ import { resourceHasUse } from "./selectors";
 export interface TickResult {
   completions: CompletionEvent[];
   elapsedMs: number;
+  /** Milliseconds of action time unused when the action was stopped mid-window
+   *  (e.g. storage full, inputs ran out). Used by offline processing to credit
+   *  remaining time to the next queued/routine action. */
+  unusedMs: number;
 }
 
 export interface CompletionEvent {
@@ -71,7 +75,7 @@ function isOutputFull(state: GameState): boolean {
  * This handles offline progress by simulating all completed cycles.
  */
 export function processTick(state: GameState, now: number): TickResult {
-  const elapsedMs = now - state.lastTickAt;
+  const elapsedMs = Math.max(0, now - state.lastTickAt);
   state.lastTickAt = now;
   state.totalPlayTimeMs += elapsedMs;
 
@@ -80,7 +84,12 @@ export function processTick(state: GameState, now: number): TickResult {
   if (!state.currentAction) {
     cleanupObsoleteResources(state);
     // No action running — skip morale decay so idle players aren't punished
-    return { completions, elapsedMs };
+    return { completions, elapsedMs, unusedMs: 0 };
+  }
+
+  // Guard against clock skew: if startedAt is in the future, reset it to now
+  if (state.currentAction.startedAt > now) {
+    state.currentAction.startedAt = now;
   }
 
   // Morale decay: 1 point per effective interval (only while an action is active)
@@ -98,12 +107,13 @@ export function processTick(state: GameState, now: number): TickResult {
   const action = state.currentAction;
   const timeAvailable = now - action.startedAt;
   const fullXpThreshold = getFullXpThreshold(state);
+  let unusedMs = 0;
 
   if (action.type === "gather") {
     const def = getActionById(action.actionId);
     if (!def) {
       state.currentAction = null;
-      return { completions, elapsedMs };
+      return { completions, elapsedMs, unusedMs: 0 };
     }
 
     const skillLevel = state.skills[def.skillId].level;
@@ -119,6 +129,7 @@ export function processTick(state: GameState, now: number): TickResult {
       const event = applyGatherCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
       if (event) completions.push(event);
       if (isOutputFull(state)) {
+        unusedMs = remaining;
         state.currentAction = null;
         break;
       }
@@ -132,7 +143,7 @@ export function processTick(state: GameState, now: number): TickResult {
     const def = recipeId ? getRecipeById(recipeId) : undefined;
     if (!def) {
       state.currentAction = null;
-      return { completions, elapsedMs };
+      return { completions, elapsedMs, unusedMs: 0 };
     }
 
     const craftMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
@@ -148,6 +159,7 @@ export function processTick(state: GameState, now: number): TickResult {
       while (remaining >= effectiveCraftDuration) {
         // Block if output storage is full (don't waste inputs)
         if (def.output && isAtStorageCap(state, def.output.resourceId)) {
+          unusedMs = remaining;
           state.currentAction = null;
           break;
         }
@@ -158,6 +170,7 @@ export function processTick(state: GameState, now: number): TickResult {
         // Resolve tag-based inputs (e.g. "5 different foods")
         const resolvedTagInputs = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
         if (!canAfford || !resolvedTagInputs) {
+          unusedMs = remaining;
           state.currentAction = null;
           break;
         }
@@ -174,6 +187,7 @@ export function processTick(state: GameState, now: number): TickResult {
         const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
         if (event) completions.push(event);
         if (isOutputFull(state)) {
+          unusedMs = remaining;
           state.currentAction = null;
           break;
         }
@@ -186,6 +200,7 @@ export function processTick(state: GameState, now: number): TickResult {
         );
         const resolvedNext = def.tagInputs ? resolveTagInputs(def.tagInputs, state) : [];
         if (!canAffordNext || !resolvedNext) {
+          unusedMs = remaining;
           state.currentAction = null;
         } else {
           state.currentAction.startedAt = now - remaining;
@@ -195,6 +210,7 @@ export function processTick(state: GameState, now: number): TickResult {
       if (timeAvailable >= effectiveCraftDuration) {
         // Block if output storage is full (don't waste inputs)
         if (def.output && isAtStorageCap(state, def.output.resourceId)) {
+          unusedMs = timeAvailable - effectiveCraftDuration;
           state.currentAction = null;
         } else {
           // Consume inputs at completion
@@ -216,6 +232,7 @@ export function processTick(state: GameState, now: number): TickResult {
             }
             const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
             if (event) completions.push(event);
+            unusedMs = timeAvailable - effectiveCraftDuration;
             state.currentAction = null;
           }
         }
@@ -226,7 +243,7 @@ export function processTick(state: GameState, now: number): TickResult {
     const def = expeditionId ? getExpeditionById(expeditionId) : undefined;
     if (!def) {
       state.currentAction = null;
-      return { completions, elapsedMs };
+      return { completions, elapsedMs, unusedMs: 0 };
     }
 
     const expMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
@@ -238,10 +255,12 @@ export function processTick(state: GameState, now: number): TickResult {
     while (remaining >= effectiveExpDuration) {
       // Check and consume food/water for this cycle
       if (def.foodCost && getTotalFood(state) < def.foodCost) {
+        unusedMs = remaining;
         state.currentAction = null;
         break;
       }
       if (def.waterCost && getTotalWater(state) < def.waterCost) {
+        unusedMs = remaining;
         state.currentAction = null;
         break;
       }
@@ -251,6 +270,7 @@ export function processTick(state: GameState, now: number): TickResult {
           (inp) => (state.resources[inp.resourceId] ?? 0) >= inp.amount
         );
         if (!canAffordInputs) {
+          unusedMs = remaining;
           state.currentAction = null;
           break;
         }
@@ -274,6 +294,7 @@ export function processTick(state: GameState, now: number): TickResult {
           .filter((o) => o.biomeDiscovery)
           .every((o) => state.discoveredBiomes.includes(o.biomeDiscovery!));
         if (allFound) {
+          unusedMs = remaining;
           state.currentAction = null;
           break;
         }
@@ -288,6 +309,7 @@ export function processTick(state: GameState, now: number): TickResult {
         (inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount
       );
       if (cantAffordFood || cantAffordWater || cantAffordInputs) {
+        unusedMs = remaining;
         state.currentAction = null;
       } else {
         state.currentAction.startedAt = now - remaining;
@@ -299,7 +321,7 @@ export function processTick(state: GameState, now: number): TickResult {
   state.actionCompletions += completions.length;
 
   cleanupObsoleteResources(state);
-  return { completions, elapsedMs };
+  return { completions, elapsedMs, unusedMs };
 }
 
 /** Clean up resources that have no remaining use in any recipe. */
