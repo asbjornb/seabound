@@ -3435,7 +3435,7 @@ body {
   z-index: 200;
   display: flex;
   justify-content: center;
-  padding-top: 10vh;
+  padding-top: 10dvh;
 }
 
 .search-panel {
@@ -3444,7 +3444,7 @@ body {
   border-radius: 12px;
   width: 90%;
   max-width: 480px;
-  max-height: 70vh;
+  max-height: 70dvh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
@@ -3964,7 +3964,7 @@ body {
 .lookup-sheet {
   width: 100%;
   max-width: 480px;
-  max-height: 80vh;
+  max-height: 80dvh;
   overflow-y: auto;
   background: var(--bg-card, #132626);
   border-radius: 16px 16px 0 0;
@@ -3982,6 +3982,7 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
+  flex-shrink: 0;
 }
 .lookup-header-left {
   display: flex;
@@ -4080,10 +4081,13 @@ body {
    ═══════════════════════════════════════ */
 
 .lookup-browse {
-  max-height: 85vh;
+  max-height: 85dvh;
+  display: flex;
+  flex-direction: column;
 }
 .lookup-search-row {
   margin-bottom: 10px;
+  flex-shrink: 0;
 }
 .lookup-search {
   width: 100%;
@@ -4104,7 +4108,8 @@ body {
 }
 
 .lookup-browse-list {
-  max-height: 60vh;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
 }
 .lookup-browse-item {
@@ -4141,6 +4146,7 @@ body {
   color: var(--text-dim, #7a9a8a);
   margin-top: 8px;
   padding-bottom: 4px;
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════
