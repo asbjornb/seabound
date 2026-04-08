@@ -1,9 +1,17 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "24f598592863e96b5b42b7ffd3359dd3aceb85b3"
+    "newestReviewed": "4b655f188b94513fbdee8f9a80c02defe4c53404"
   },
   "entries": [
+    {
+      "date": "2026-04-08",
+      "changes": [
+        "Fix morale stacking bug that caused action durations to drop to 0ms and create exponential morale spiral",
+        "Adjust morale speed bonus to use diminishing returns with a maximum 30% boost instead of unlimited scaling",
+        "Add 100ms minimum duration floor to prevent runaway action completion loops"
+      ]
+    },
     {
       "date": "2026-04-05",
       "changes": [
