@@ -218,7 +218,7 @@ export const ACTIONS: ActionDef[] = [
     description: "Chip away at exposed green-streaked rock to extract copper ore.",
     skillId: "mining",
     panel: "gather",
-    durationMs: 8000,
+    durationMs: 16000,
     drops: [
       { resourceId: "copper_ore", amount: 1 },
       { resourceId: "native_copper", amount: 1, chance: 0.15 },
@@ -232,7 +232,7 @@ export const ACTIONS: ActionDef[] = [
     description: "Search riverbeds and cliff faces for dark cassiterite pebbles.",
     skillId: "mining",
     panel: "gather",
-    durationMs: 10000,
+    durationMs: 20000,
     drops: [
       { resourceId: "tin_ore", amount: 1 },
       { resourceId: "flat_stone", amount: 1, chance: 0.1 },
@@ -247,7 +247,7 @@ export const ACTIONS: ActionDef[] = [
     description: "Dig into red-earth hillside deposits to pry out heavy iron ore.",
     skillId: "mining",
     panel: "gather",
-    durationMs: 12000,
+    durationMs: 24000,
     drops: [
       { resourceId: "iron_ore", amount: 1 },
       { resourceId: "flat_stone", amount: 1, chance: 0.15 },
