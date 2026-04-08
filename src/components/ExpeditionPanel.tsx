@@ -159,6 +159,35 @@ function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }
   );
 }
 
+/** Context-aware hint showing the player's next step toward getting water. */
+function WaterHint({ state }: { state: GameState }) {
+  let tip: string;
+  if (state.buildings.includes("well")) {
+    tip = "Use \"Fill Water Pot\" in the Crafting tab — needs a Fired Clay Pot";
+  } else if (!state.discoveredBiomes.includes("jungle_interior")) {
+    tip = "Explore the island interior to find clay deposits — you need clay to eventually build a Well for fresh water";
+  } else if (!state.discoveredResources.includes("clay")) {
+    tip = "Dig Clay in the jungle interior (Gather tab) — clay is needed to build pottery and a Well";
+  } else if (!state.buildings.includes("firing_pit")) {
+    tip = "Build a Firing Pit (Construction tab) — you need fired clay pots to fill with water";
+  } else if (!state.discoveredResources.includes("fired_clay_pot")) {
+    tip = "Shape and fire a clay pot (Crafting tab) — fired pots hold water";
+  } else {
+    const skill = state.skills["construction"];
+    if (skill && skill.level < 5) {
+      tip = `Build a Well (Construction tab) — requires Construction level 5 (currently ${skill.level})`;
+    } else {
+      tip = "Build a Well (Construction tab) — needs 6 flat stone, 4 clay, 3 cordage, and a digging stick";
+    }
+  }
+  return (
+    <div className="water-hint">
+      <span className="water-hint-icon"><GameIcon id="fresh_water" size={16} /></span>
+      {tip}
+    </div>
+  );
+}
+
 export function ExpeditionPanel({
   expeditions,
   state,
@@ -236,11 +265,7 @@ export function ExpeditionPanel({
               </div>
             )}
             {exp.waterCost != null && exp.waterCost > 0 && getTotalWater(state) < exp.waterCost && (
-              <div className="action-desc" style={{ fontStyle: "italic", color: "#a0a0a0", fontSize: "0.85em" }}>
-                {!state.buildings.includes("well")
-                  ? "Tip: Build a Well (Construction tab) to access fresh water"
-                  : "Tip: Use \"Fill Water Pot\" in the Crafting tab to collect water"}
-              </div>
+              <WaterHint state={state} />
             )}
             {exp.inputs && exp.inputs.length > 0 && (
               <div className="action-requires">
