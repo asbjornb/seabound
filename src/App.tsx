@@ -26,6 +26,7 @@ import { StationsPanel } from "./components/StationsPanel";
 import { VictoryScreen } from "./components/VictoryScreen";
 import { WhatsNew, ChangelogModal } from "./components/WhatsNew";
 import { GameIcon } from "./components/GameIcon";
+import { ItemLookupWithBrowse, useOpenBrowse } from "./components/ItemLookup";
 import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
@@ -109,6 +110,15 @@ function getStepIcon(step: RoutineStep): string {
     return recipe.id;
   }
   return "tab_craft";
+}
+
+function GuideHeaderButton() {
+  const openBrowse = useOpenBrowse();
+  return (
+    <button className="btn-ghost" onClick={openBrowse}>
+      Guide
+    </button>
+  );
 }
 
 export default function App() {
@@ -405,6 +415,7 @@ export default function App() {
   }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startRoutine, game.queueAction]);
 
   return (
+    <ItemLookupWithBrowse state={game.state}>
     <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {game.state.victory && !victoryDismissed && (
         <VictoryScreen state={game.state} onContinue={() => { setVictoryDismissed(true); localStorage.setItem("seabound_victoryDismissed", "true"); }} onUnlockMainland={game.unlockMainland} />
@@ -443,6 +454,7 @@ export default function App() {
       <header className="header">
         <h1>SeaBound</h1>
         <div className="header-actions">
+          <GuideHeaderButton />
           <button
             className={`btn-ghost${showLog ? " active" : ""}`}
             onClick={() => setShowLog((v) => !v)}
@@ -1003,5 +1015,6 @@ export default function App() {
 
       <FeedbackBanner />
     </div>
+    </ItemLookupWithBrowse>
   );
 }

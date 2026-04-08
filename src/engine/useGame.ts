@@ -434,6 +434,28 @@ function processAmbientLore(state: GameState, c: CompletionEvent): void {
       "At dusk, a long wail carries over calm water. It fades before you can place it."
     );
   }
+
+  // ── Tutorial tips (one-time, dismissable) ──
+
+  // After first craft: teach tapping items
+  if (c.actionType === "craft" && completionCount === 1 &&
+      !state.seenLoreNotes.includes("tip_tap_items")) {
+    addAmbientLoreNote(
+      state,
+      "tip_tap_items",
+      "Tip: Tap any item name to see how to get it and what it\u2019s used for"
+    );
+  }
+
+  // After a few total completions: mention the Guide button
+  const totalCompletions = Object.values(state.actionCompletionCounts).reduce((a, b) => a + b, 0);
+  if (totalCompletions >= 15 && !state.seenLoreNotes.includes("tip_guide_button")) {
+    addAmbientLoreNote(
+      state,
+      "tip_guide_button",
+      "Tip: The Guide button at the top lists every item you\u2019ve seen"
+    );
+  }
 }
 
 export function useGame() {

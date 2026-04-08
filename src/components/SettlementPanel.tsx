@@ -3,6 +3,7 @@ import { ActionDef, BuildingId, GameState, RecipeDef } from "../data/types";
 import { getEffectiveInputs, getResource, getBuildingCount, hasTool, getEffectiveMoraleGain } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
+import { useItemLookup } from "./ItemLookup";
 
 interface Props {
   buildRecipes: RecipeDef[];
@@ -30,6 +31,7 @@ export function SettlementPanel({
   const BUILDINGS = getBuildings();
   const RESOURCES = getResources();
   const TOOLS = getTools();
+  const openLookup = useItemLookup();
   const buildingRecipes = buildRecipes.filter((r) => !!r.buildingOutput);
   const maintenanceRecipes = buildRecipes.filter((r) => !r.buildingOutput);
   return (
@@ -129,8 +131,8 @@ export function SettlementPanel({
                       <span key={i}>
                         {i > 0 && ", "}
                         <span className={enough ? "has" : "missing"}>
-                          {inp.amount}x{" "}
-                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                          <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(inp.resourceId); }}>{inp.amount}x{" "}
+                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId}</span> (
                           {have})
                         </span>
                       </span>
@@ -220,8 +222,8 @@ export function SettlementPanel({
                       <span key={i}>
                         {i > 0 && ", "}
                         <span className={enough ? "has" : "missing"}>
-                          {inp.amount}x{" "}
-                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                          <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(inp.resourceId); }}>{inp.amount}x{" "}
+                          {RESOURCES[inp.resourceId]?.name ?? inp.resourceId}</span> (
                           {have})
                         </span>
                       </span>

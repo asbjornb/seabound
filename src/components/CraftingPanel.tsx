@@ -4,6 +4,7 @@ import { getResources, getTools, getBuildings } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
 import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
+import { useItemLookup } from "./ItemLookup";
 
 interface Props {
   recipes: RecipeDef[];
@@ -29,6 +30,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const BUILDINGS = getBuildings();
+  const openLookup = useItemLookup();
   const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
 
@@ -147,12 +149,12 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                         <span key={i}>
                           {i > 0 && ", "}
                           <span className={enough || altEnough ? "has" : "missing"}>
-                            <GameIcon id={inp.resourceId} size={16} />{inp.amount}x{" "}
-                            {RESOURCES[inp.resourceId]?.name ?? inp.resourceId} (
+                            <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(inp.resourceId); }}><GameIcon id={inp.resourceId} size={16} />{inp.amount}x{" "}
+                            {RESOURCES[inp.resourceId]?.name ?? inp.resourceId}</span> (
                             {have})
                             {altId && (
                               <>
-                                {" "}or <GameIcon id={altId} size={16} />{RESOURCES[altId]?.name ?? altId} ({altHave})
+                                {" "}or <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(altId); }}><GameIcon id={altId} size={16} />{RESOURCES[altId]?.name ?? altId}</span> ({altHave})
                               </>
                             )}
                           </span>
@@ -219,21 +221,21 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                   })()}
                   {recipe.toolOutput ? (
                     <div className="recipe-output">
-                      Produces: <GameIcon id={recipe.toolOutput} size={16} />{" "}
-                      {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}
+                      Produces: <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(recipe.toolOutput!); }}><GameIcon id={recipe.toolOutput} size={16} />{" "}
+                      {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}</span>
                     </div>
                   ) : recipe.buildingOutput ? (
                     <div className="recipe-output">
-                      Builds: {BUILDINGS[recipe.buildingOutput]?.name ?? recipe.buildingOutput}
+                      Builds: <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(recipe.buildingOutput!); }}>{BUILDINGS[recipe.buildingOutput]?.name ?? recipe.buildingOutput}</span>
                       {BUILDINGS[recipe.buildingOutput]?.maxCount && BUILDINGS[recipe.buildingOutput]!.maxCount! > 1
                         ? ` (${getGroupBuildingCount(state, recipe.buildingOutput)}/${getEffectiveMaxCount(state, recipe.buildingOutput)})`
                         : ""}
                     </div>
                   ) : recipe.output ? (
                     <div className="recipe-output">
-                      Produces: <GameIcon id={recipe.output.resourceId} size={16} />{recipe.output.amount}x{" "}
+                      Produces: <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(recipe.output!.resourceId); }}><GameIcon id={recipe.output.resourceId} size={16} />{recipe.output.amount}x{" "}
                       {RESOURCES[recipe.output.resourceId]?.name ??
-                        recipe.output.resourceId}{" "}
+                        recipe.output.resourceId}</span>{" "}
                       ({getResource(state, recipe.output.resourceId)})
                       {(() => {
                         const baseChance = recipe.outputChance ?? 1;
