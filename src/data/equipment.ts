@@ -204,16 +204,6 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     maxAffixes: 1,
     tags: ["fiber", "armor"],
   },
-  palm_frond_hat: {
-    id: "palm_frond_hat",
-    name: "Palm Frond Hat",
-    description: "A wide-brimmed hat woven from palm fronds. Shade from the sun.",
-    slot: "head",
-    baseStats: [{ stat: "heatResist", value: 5 }, { stat: "comfort", value: 2 }],
-    tier: 0,
-    maxAffixes: 1,
-    tags: ["fiber", "armor"],
-  },
   hide_wraps: {
     id: "hide_wraps",
     name: "Hide Wraps",
