@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "e113d10c00d00b60ecb81ddf842fd2b05c7d5be6"
+    "newestReviewed": "779655f6d8a52f3543a4f49993978d2719815d83"
   },
   "entries": [
+    {
+      "date": "2026-04-08",
+      "changes": [
+        "Slow down mainland mining actions: copper mining now takes 16s (was 8s), tin mining takes 20s (was 10s), and iron mining takes 24s (was 12s) to create more deliberate pacing and make speed bonuses more impactful"
+      ]
+    },
     {
       "date": "2026-04-08",
       "changes": [
