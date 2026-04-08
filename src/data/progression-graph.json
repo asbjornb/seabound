@@ -651,12 +651,6 @@
       "category": "weaving"
     },
     {
-      "id": "skill:weaving:2",
-      "type": "skill_level",
-      "label": "Weaving Lv2",
-      "category": "weaving"
-    },
-    {
       "id": "skill:fishing:8",
       "type": "skill_level",
       "label": "Fishing Lv8",
@@ -1447,24 +1441,6 @@
       "type": "recipe",
       "label": "Woven Fiber Vest",
       "category": "weaving"
-    },
-    {
-      "id": "recipe:weave_palm_frond_hat",
-      "type": "recipe",
-      "label": "Palm Frond Hat",
-      "category": "weaving"
-    },
-    {
-      "id": "recipe:craft_hide_wraps",
-      "type": "recipe",
-      "label": "Hide Wraps",
-      "category": "weaving"
-    },
-    {
-      "id": "recipe:craft_bamboo_sandals",
-      "type": "recipe",
-      "label": "Bamboo Sandals",
-      "category": "crafting"
     },
     {
       "id": "recipe:craft_bamboo_buckler",
@@ -4289,71 +4265,6 @@
       "relation": "requires_skill"
     },
     {
-      "from": "resource:palm_frond",
-      "to": "recipe:weave_palm_frond_hat",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:rough_fiber",
-      "to": "recipe:weave_palm_frond_hat",
-      "relation": "consumes"
-    },
-    {
-      "from": "recipe:weave_palm_frond_hat",
-      "to": "skill:weaving",
-      "relation": "trains"
-    },
-    {
-      "from": "skill:weaving:2",
-      "to": "recipe:weave_palm_frond_hat",
-      "relation": "requires_skill"
-    },
-    {
-      "from": "resource:dried_fiber",
-      "to": "recipe:craft_hide_wraps",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cordage",
-      "to": "recipe:craft_hide_wraps",
-      "relation": "consumes"
-    },
-    {
-      "from": "recipe:craft_hide_wraps",
-      "to": "skill:weaving",
-      "relation": "trains"
-    },
-    {
-      "from": "skill:weaving:2",
-      "to": "recipe:craft_hide_wraps",
-      "relation": "requires_skill"
-    },
-    {
-      "from": "resource:bamboo_cane",
-      "to": "recipe:craft_bamboo_sandals",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:rough_fiber",
-      "to": "recipe:craft_bamboo_sandals",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cordage",
-      "to": "recipe:craft_bamboo_sandals",
-      "relation": "consumes"
-    },
-    {
-      "from": "recipe:craft_bamboo_sandals",
-      "to": "skill:crafting",
-      "relation": "trains"
-    },
-    {
-      "from": "skill:crafting:3",
-      "to": "recipe:craft_bamboo_sandals",
-      "relation": "requires_skill"
-    },
-    {
       "from": "resource:bamboo_cane",
       "to": "recipe:craft_bamboo_buckler",
       "relation": "consumes"
@@ -6343,8 +6254,7 @@
           "level": 3,
           "unlocks": [
             "recipe:craft_fire_hardened_spear",
-            "recipe:craft_stone_club",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_stone_club"
           ],
           "trainedBy": [
             "recipe:shred_coconut_husk",
@@ -6375,8 +6285,7 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_obsidian_dagger"
           ]
         },
         {
@@ -6413,8 +6322,7 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_obsidian_dagger"
           ]
         },
         {
@@ -6451,8 +6359,7 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_obsidian_dagger"
           ]
         },
         {
@@ -6489,34 +6396,11 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_obsidian_dagger"
           ]
         }
       ],
       "weaving": [
-        {
-          "level": 2,
-          "unlocks": [
-            "recipe:weave_palm_frond_hat",
-            "recipe:craft_hide_wraps"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "recipe:weave_fiber_vest",
-            "recipe:weave_palm_frond_hat",
-            "recipe:craft_hide_wraps",
-            "station:soak_pandanus"
-          ]
-        },
         {
           "level": 3,
           "unlocks": [
@@ -6533,8 +6417,6 @@
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
             "recipe:weave_fiber_vest",
-            "recipe:weave_palm_frond_hat",
-            "recipe:craft_hide_wraps",
             "station:soak_pandanus"
           ]
         },
@@ -6554,8 +6436,6 @@
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
             "recipe:weave_fiber_vest",
-            "recipe:weave_palm_frond_hat",
-            "recipe:craft_hide_wraps",
             "station:soak_pandanus"
           ]
         },
@@ -6575,8 +6455,6 @@
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
             "recipe:weave_fiber_vest",
-            "recipe:weave_palm_frond_hat",
-            "recipe:craft_hide_wraps",
             "station:soak_pandanus"
           ]
         }
