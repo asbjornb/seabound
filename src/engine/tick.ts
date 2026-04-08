@@ -154,7 +154,7 @@ export function processTick(state: GameState, now: number): TickResult {
 
     const effectiveInputs = getEffectiveInputs(def, state);
 
-    if (def.repeatable && !def.equipmentOutput) {
+    if (def.repeatable) {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
         // Block if output storage is full (don't waste inputs)
