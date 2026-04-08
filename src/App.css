@@ -2088,6 +2088,75 @@ body {
   cursor: not-allowed;
 }
 
+/* Quick equip/unequip button in collapsed header */
+.equip-quick-btn {
+  font-size: 0.7rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg-card));
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  font-weight: bold;
+}
+.equip-quick-btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 30%, var(--bg-card));
+}
+.equip-quick-btn.unequip {
+  border-color: var(--text-dim);
+  background: color-mix(in srgb, var(--text-dim) 10%, var(--bg-card));
+  color: var(--text-dim);
+}
+.equip-quick-btn.unequip:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text-dim) 25%, var(--bg-card));
+}
+.equip-quick-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Discard / trash button */
+.equip-discard {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.discard-confirm-label {
+  font-size: 0.7rem;
+  color: var(--error, #e06060);
+}
+.discard-btn {
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--text-dim);
+  background: color-mix(in srgb, var(--text-dim) 10%, var(--bg-card));
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.discard-btn:hover {
+  background: color-mix(in srgb, var(--text-dim) 25%, var(--bg-card));
+}
+.discard-btn.confirm {
+  border-color: var(--error, #e06060);
+  background: color-mix(in srgb, var(--error, #e06060) 10%, var(--bg-card));
+  color: var(--error, #e06060);
+}
+.discard-btn.confirm:hover {
+  background: color-mix(in srgb, var(--error, #e06060) 25%, var(--bg-card));
+}
+.discard-btn.cancel {
+  border-color: var(--text-dim);
+}
+
 /* Loadout preview on mainland expeditions */
 .loadout-preview {
   margin-top: 6px;

@@ -1289,6 +1289,27 @@ export function useGame() {
     });
   }, []);
 
+  /** Discard an equipment item permanently. Unequips first if equipped. */
+  const discardItem = useCallback((instanceId: string) => {
+    setState((prev) => {
+      const itemIdx = prev.equipmentInventory.findIndex((i) => i.instanceId === instanceId);
+      if (itemIdx === -1) return prev;
+
+      const next = structuredClone(prev);
+
+      // Unequip if currently equipped
+      for (const slot of Object.keys(next.loadout)) {
+        if (next.loadout[slot] === instanceId) {
+          next.loadout[slot] = null;
+        }
+      }
+
+      // Remove from inventory
+      next.equipmentInventory.splice(itemIdx, 1);
+      return next;
+    });
+  }, []);
+
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
@@ -1331,5 +1352,6 @@ export function useGame() {
     repairItem,
     salvageItem,
     equipItem,
+    discardItem,
   };
 }

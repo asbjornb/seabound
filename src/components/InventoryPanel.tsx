@@ -100,7 +100,7 @@ function sortEquipment(items: EquipmentItem[], sortBy: EquipSortKey): EquipmentI
 
 type ViewMode = "list" | "grid";
 
-export function InventoryPanel({ state, highlightedResources, onRepairItem, onSalvageItem, onEquipItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void; onSalvageItem?: (instanceId: string) => void; onEquipItem?: (instanceId: string) => void }) {
+export function InventoryPanel({ state, highlightedResources, onRepairItem, onSalvageItem, onEquipItem, onDiscardItem }: { state: GameState; highlightedResources?: Set<string>; onRepairItem?: (instanceId: string) => void; onSalvageItem?: (instanceId: string) => void; onEquipItem?: (instanceId: string) => void; onDiscardItem?: (instanceId: string) => void }) {
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const [filter, setFilter] = useState<FilterId>("all");
@@ -367,6 +367,7 @@ export function InventoryPanel({ state, highlightedResources, onRepairItem, onSa
           onRepairItem={onRepairItem}
           onSalvageItem={onSalvageItem}
           onEquipItem={onEquipItem}
+          onDiscardItem={onDiscardItem}
         />
       )}
     </div>
@@ -437,6 +438,7 @@ function EquipmentSection({
   onRepairItem,
   onSalvageItem,
   onEquipItem,
+  onDiscardItem,
 }: {
   items: EquipmentItem[];
   loadout: GameState["loadout"];
@@ -451,9 +453,11 @@ function EquipmentSection({
   onRepairItem?: (instanceId: string) => void;
   onSalvageItem?: (instanceId: string) => void;
   onEquipItem?: (instanceId: string) => void;
+  onDiscardItem?: (instanceId: string) => void;
 }) {
   const SLOTS = getEquipmentSlots();
   const equippedIds = new Set(Object.values(loadout).filter((id): id is string => id != null));
+  const [confirmDiscard, setConfirmDiscard] = useState<string | null>(null);
 
   // Filter by slot and search
   const filtered = items.filter((item) => {
@@ -537,6 +541,17 @@ function EquipmentSection({
                       {CONDITION_LABELS[item.condition] ?? item.condition}
                     </span>
                   )}
+                  <button
+                    className={`equip-quick-btn${isEquipped ? " unequip" : ""}`}
+                    disabled={item.condition === "broken" && !isEquipped}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEquipItem?.(item.instanceId);
+                    }}
+                    title={isEquipped ? "Unequip" : "Equip"}
+                  >
+                    {isEquipped ? "\u2212" : "+"}
+                  </button>
                 </span>
               </div>
               {isExpanded && (
@@ -658,6 +673,42 @@ function EquipmentSection({
                       </div>
                     );
                   })()}
+                  <div className="equip-discard">
+                    {confirmDiscard === item.instanceId ? (
+                      <>
+                        <span className="discard-confirm-label">Destroy this item?</span>
+                        <button
+                          className="discard-btn confirm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDiscardItem?.(item.instanceId);
+                            setConfirmDiscard(null);
+                          }}
+                        >
+                          Yes, trash
+                        </button>
+                        <button
+                          className="discard-btn cancel"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDiscard(null);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="discard-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setConfirmDiscard(item.instanceId);
+                        }}
+                      >
+                        Trash
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

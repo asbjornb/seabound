@@ -504,7 +504,7 @@ export default function App() {
         {/* Desktop right sidebar: inventory (rendered before app-main in DOM, ordered via CSS) */}
         {hasAnyResource && (
           <aside className="inventory-sidebar sidebar-right">
-            <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} />
+            <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
           </aside>
         )}
 
@@ -763,7 +763,7 @@ export default function App() {
             )}
             {activeTab === "inventory" && (
               <div className="mobile-only-panel">
-                <InventoryPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} />
+                <InventoryPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
               </div>
             )}
             {activeTab === "craft" && (
