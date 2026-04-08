@@ -4,6 +4,7 @@ import { ExpeditionDef, GameState } from "../data/types";
 import { computeLoadoutStats, computeGearScore, estimateWinRate, computeCheckPassChance } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
+import { useItemLookup } from "./ItemLookup";
 
 interface Props {
   expeditions: ExpeditionDef[];
@@ -165,6 +166,7 @@ export function ExpeditionPanel({
   onStart,
 }: Props) {
   const RESOURCES = getResources();
+  const openLookup = useItemLookup();
   return (
     <div>
       <div className="section-title">Discovered Areas</div>
@@ -223,12 +225,14 @@ export function ExpeditionPanel({
                 {exp.foodCost && exp.waterCost && ", "}
                 {exp.waterCost != null && exp.waterCost > 0 && (
                   <span
+                    className="tappable-item"
                     style={{
                       color:
                         getTotalWater(state) < exp.waterCost
                           ? "#e74c3c"
                           : undefined,
                     }}
+                    onClick={(e) => { e.stopPropagation(); openLookup("fresh_water"); }}
                   >
                     {exp.waterCost} water ({getTotalWater(state)} available)
                   </span>
@@ -237,9 +241,7 @@ export function ExpeditionPanel({
             )}
             {exp.waterCost != null && exp.waterCost > 0 && getTotalWater(state) < exp.waterCost && (
               <div className="action-desc" style={{ fontStyle: "italic", color: "#a0a0a0", fontSize: "0.85em" }}>
-                {!state.buildings.includes("well")
-                  ? "Tip: Build a Well (Construction tab) to access fresh water"
-                  : "Tip: Use \"Fill Water Pot\" in the Crafting tab to collect water"}
+                Tap &ldquo;water&rdquo; above to see how to get it
               </div>
             )}
             {exp.inputs && exp.inputs.length > 0 && (
@@ -251,7 +253,7 @@ export function ExpeditionPanel({
                   return (
                     <span key={inp.resourceId}>
                       {i > 0 && ", "}
-                      <span style={{ color: have < inp.amount ? "#e74c3c" : undefined }}>
+                      <span className="tappable-item" style={{ color: have < inp.amount ? "#e74c3c" : undefined }} onClick={(e) => { e.stopPropagation(); openLookup(inp.resourceId); }}>
                         {inp.amount}x {name} ({have} available)
                       </span>
                     </span>

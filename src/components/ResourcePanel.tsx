@@ -4,6 +4,7 @@ import { GameState, ResourceId } from "../data/types";
 import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
 import { GameIcon } from "./GameIcon";
+import { useItemLookup } from "./ItemLookup";
 
 const STASH_THRESHOLD = 15;
 const STASH_KEY = "sb_stashed_resources";
@@ -23,6 +24,7 @@ function saveStashed(set: Set<string>) {
 
 export function ResourcePanel({ state }: { state: GameState }) {
   const RESOURCES = getResources();
+  const openLookup = useItemLookup();
   const [showMoraleTip, setShowMoraleTip] = useState(false);
   const [stashed, setStashed] = useState(loadStashed);
   const [stashOpen, setStashOpen] = useState(false);
@@ -74,9 +76,9 @@ export function ResourcePanel({ state }: { state: GameState }) {
     return (
       <span
         key={id}
-        className={`resource-chip${atCap ? " at-cap" : ""}${organizing ? " organizing" : ""}`}
+        className={`resource-chip${atCap ? " at-cap" : ""}${organizing ? " organizing" : ""} tappable-item`}
         title={RESOURCES[id]?.description}
-        onClick={organizing ? () => toggleStash(id) : undefined}
+        onClick={organizing ? () => toggleStash(id) : () => openLookup(id)}
       >
         <GameIcon id={id as ResourceId} size={16} /> {RESOURCES[id]?.name ?? id}
         <>
