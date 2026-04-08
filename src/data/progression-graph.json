@@ -621,6 +621,18 @@
       "category": "crafting"
     },
     {
+      "id": "skill:crafting:3",
+      "type": "skill_level",
+      "label": "Crafting Lv3",
+      "category": "crafting"
+    },
+    {
+      "id": "skill:crafting:5",
+      "type": "skill_level",
+      "label": "Crafting Lv5",
+      "category": "crafting"
+    },
+    {
       "id": "skill:weaving:5",
       "type": "skill_level",
       "label": "Weaving Lv5",
@@ -630,6 +642,12 @@
       "id": "skill:weaving:4",
       "type": "skill_level",
       "label": "Weaving Lv4",
+      "category": "weaving"
+    },
+    {
+      "id": "skill:weaving:3",
+      "type": "skill_level",
+      "label": "Weaving Lv3",
       "category": "weaving"
     },
     {
@@ -831,10 +849,22 @@
       "category": "smithing"
     },
     {
+      "id": "skill:smithing:10",
+      "type": "skill_level",
+      "label": "Smithing Lv10",
+      "category": "smithing"
+    },
+    {
       "id": "skill:smithing:12",
       "type": "skill_level",
       "label": "Smithing Lv12",
       "category": "smithing"
+    },
+    {
+      "id": "skill:woodworking:4",
+      "type": "skill_level",
+      "label": "Woodworking Lv4",
+      "category": "woodworking"
     },
     {
       "id": "action:gather_coconuts",
@@ -1389,6 +1419,42 @@
       "category": "smithing"
     },
     {
+      "id": "recipe:craft_fire_hardened_spear",
+      "type": "recipe",
+      "label": "Fire-Hardened Spear",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_stone_club",
+      "type": "recipe",
+      "label": "Stone Club",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_obsidian_dagger",
+      "type": "recipe",
+      "label": "Obsidian Dagger",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:weave_fiber_vest",
+      "type": "recipe",
+      "label": "Woven Fiber Vest",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:craft_bamboo_sandals",
+      "type": "recipe",
+      "label": "Bamboo Sandals",
+      "category": "crafting"
+    },
+    {
+      "id": "recipe:craft_bamboo_buckler",
+      "type": "recipe",
+      "label": "Bamboo Buckler",
+      "category": "woodworking"
+    },
+    {
       "id": "recipe:forge_copper_spear",
       "type": "recipe",
       "label": "Forge Copper Spear",
@@ -1428,6 +1494,42 @@
       "id": "recipe:stitch_hide_boots",
       "type": "recipe",
       "label": "Stitch Hide Boots",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_sword",
+      "type": "recipe",
+      "label": "Forge Bronze Sword",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_shield",
+      "type": "recipe",
+      "label": "Forge Bronze Shield",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_helm",
+      "type": "recipe",
+      "label": "Forge Bronze Helm",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_cuirass",
+      "type": "recipe",
+      "label": "Forge Bronze Cuirass",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_greaves",
+      "type": "recipe",
+      "label": "Forge Bronze Greaves",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_boots",
+      "type": "recipe",
+      "label": "Forge Bronze-Shod Boots",
       "category": "smithing"
     },
     {
@@ -4064,6 +4166,161 @@
       "relation": "requires_building"
     },
     {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_fire_hardened_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_fire_hardened_spear",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_fire_hardened_spear",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:3",
+      "to": "recipe:craft_fire_hardened_spear",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:camp_fire",
+      "to": "recipe:craft_fire_hardened_spear",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_stone_club",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:craft_stone_club",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_stone_club",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_stone_club",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:3",
+      "to": "recipe:craft_stone_club",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:obsidian",
+      "to": "recipe:craft_obsidian_dagger",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_splinter",
+      "to": "recipe:craft_obsidian_dagger",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_obsidian_dagger",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_obsidian_dagger",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:5",
+      "to": "recipe:craft_obsidian_dagger",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "tool:obsidian_blade",
+      "to": "recipe:craft_obsidian_dagger",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:weave_fiber_vest",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:weave_fiber_vest",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:weave_fiber_vest",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:weave_fiber_vest",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:weaving:3",
+      "to": "recipe:weave_fiber_vest",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bamboo_sandals",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:3",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bamboo_buckler",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_bamboo_buckler",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:craft_bamboo_buckler",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bamboo_buckler",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:woodworking:4",
+      "to": "recipe:craft_bamboo_buckler",
+      "relation": "requires_skill"
+    },
+    {
       "from": "resource:copper_ingot",
       "to": "recipe:forge_copper_spear",
       "relation": "consumes"
@@ -4247,6 +4504,181 @@
       "from": "skill:smithing:3",
       "to": "recipe:stitch_hide_boots",
       "relation": "requires_skill"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_bronze_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_sword",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:10",
+      "to": "recipe:forge_bronze_sword",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_sword",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_bronze_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_shield",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:8",
+      "to": "recipe:forge_bronze_shield",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_shield",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:forge_bronze_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_helm",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:8",
+      "to": "recipe:forge_bronze_helm",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_helm",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:forge_bronze_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_cuirass",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:10",
+      "to": "recipe:forge_bronze_cuirass",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_cuirass",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:forge_bronze_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_greaves",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:8",
+      "to": "recipe:forge_bronze_greaves",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_greaves",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:dried_fiber",
+      "to": "recipe:forge_bronze_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_boots",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:smithing:8",
+      "to": "recipe:forge_bronze_boots",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_bronze_boots",
+      "relation": "requires_building"
     },
     {
       "from": "recipe:build_bloomery",
@@ -5515,7 +5947,6 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "resource:bronze_ingot",
       "resource:steel_ingot"
     ],
     "unreachable": [
@@ -5542,6 +5973,7 @@
       "skill:smithing:5",
       "skill:smithing:4",
       "skill:smithing:2",
+      "skill:smithing:10",
       "skill:smithing:12",
       "action:prospect_copper",
       "action:prospect_tin",
@@ -5558,14 +5990,15 @@
       "recipe:stitch_hide_cap",
       "recipe:stitch_hide_leggings",
       "recipe:stitch_hide_boots",
+      "recipe:forge_bronze_sword",
+      "recipe:forge_bronze_shield",
+      "recipe:forge_bronze_helm",
+      "recipe:forge_bronze_cuirass",
+      "recipe:forge_bronze_greaves",
+      "recipe:forge_bronze_boots",
       "recipe:build_bloomery"
     ],
     "warnings": [
-      {
-        "type": "dead_end",
-        "nodeId": "resource:bronze_ingot",
-        "message": "Bronze Ingot is produced but never used as input"
-      },
       {
         "type": "dead_end",
         "nodeId": "resource:steel_ingot",
@@ -5688,6 +6121,11 @@
       },
       {
         "type": "unreachable",
+        "nodeId": "skill:smithing:10",
+        "message": "Smithing Lv10 is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
         "nodeId": "skill:smithing:12",
         "message": "Smithing Lv12 is not reachable from beach start"
       },
@@ -5768,6 +6206,36 @@
       },
       {
         "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_sword",
+        "message": "Forge Bronze Sword is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_shield",
+        "message": "Forge Bronze Shield is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_helm",
+        "message": "Forge Bronze Helm is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_cuirass",
+        "message": "Forge Bronze Cuirass is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_greaves",
+        "message": "Forge Bronze Greaves is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "recipe:forge_bronze_boots",
+        "message": "Forge Bronze-Shod Boots is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
         "nodeId": "recipe:build_bloomery",
         "message": "Bloomery is not reachable from beach start"
       },
@@ -5814,6 +6282,84 @@
       ],
       "crafting": [
         {
+          "level": 3,
+          "unlocks": [
+            "recipe:craft_fire_hardened_spear",
+            "recipe:craft_stone_club",
+            "recipe:craft_bamboo_sandals"
+          ],
+          "trainedBy": [
+            "recipe:shred_coconut_husk",
+            "recipe:craft_shell_beads",
+            "recipe:craft_bamboo_knife",
+            "recipe:dry_fiber",
+            "recipe:dry_pandanus_leaf",
+            "recipe:cut_pandanus_strips",
+            "recipe:craft_bow_drill",
+            "recipe:craft_gorge_hook",
+            "recipe:build_camp_fire",
+            "recipe:build_drying_rack",
+            "recipe:craft_hammerstone",
+            "recipe:strike_stone_flake",
+            "recipe:knap_stone_blade",
+            "recipe:craft_shell_adze",
+            "recipe:craft_stone_axe",
+            "recipe:knap_obsidian_blade",
+            "recipe:craft_bamboo_spear",
+            "recipe:build_pottery_wheel",
+            "recipe:build_charcoal_board",
+            "recipe:shape_clay_pot",
+            "recipe:wheel_shape_clay_pot",
+            "recipe:fire_clay_pot",
+            "recipe:kiln_fire_pot",
+            "recipe:build_clay_storage_jar",
+            "recipe:build_clay_tablet",
+            "recipe:craft_digging_stick",
+            "recipe:craft_fire_hardened_spear",
+            "recipe:craft_stone_club",
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
+          ]
+        },
+        {
+          "level": 5,
+          "unlocks": [
+            "recipe:craft_obsidian_dagger"
+          ],
+          "trainedBy": [
+            "recipe:shred_coconut_husk",
+            "recipe:craft_shell_beads",
+            "recipe:craft_bamboo_knife",
+            "recipe:dry_fiber",
+            "recipe:dry_pandanus_leaf",
+            "recipe:cut_pandanus_strips",
+            "recipe:craft_bow_drill",
+            "recipe:craft_gorge_hook",
+            "recipe:build_camp_fire",
+            "recipe:build_drying_rack",
+            "recipe:craft_hammerstone",
+            "recipe:strike_stone_flake",
+            "recipe:knap_stone_blade",
+            "recipe:craft_shell_adze",
+            "recipe:craft_stone_axe",
+            "recipe:knap_obsidian_blade",
+            "recipe:craft_bamboo_spear",
+            "recipe:build_pottery_wheel",
+            "recipe:build_charcoal_board",
+            "recipe:shape_clay_pot",
+            "recipe:wheel_shape_clay_pot",
+            "recipe:fire_clay_pot",
+            "recipe:kiln_fire_pot",
+            "recipe:build_clay_storage_jar",
+            "recipe:build_clay_tablet",
+            "recipe:craft_digging_stick",
+            "recipe:craft_fire_hardened_spear",
+            "recipe:craft_stone_club",
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
+          ]
+        },
+        {
           "level": 6,
           "unlocks": [
             "recipe:craft_gorge_hook"
@@ -5844,7 +6390,11 @@
             "recipe:kiln_fire_pot",
             "recipe:build_clay_storage_jar",
             "recipe:build_clay_tablet",
-            "recipe:craft_digging_stick"
+            "recipe:craft_digging_stick",
+            "recipe:craft_fire_hardened_spear",
+            "recipe:craft_stone_club",
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         },
         {
@@ -5878,11 +6428,34 @@
             "recipe:kiln_fire_pot",
             "recipe:build_clay_storage_jar",
             "recipe:build_clay_tablet",
-            "recipe:craft_digging_stick"
+            "recipe:craft_digging_stick",
+            "recipe:craft_fire_hardened_spear",
+            "recipe:craft_stone_club",
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         }
       ],
       "weaving": [
+        {
+          "level": 3,
+          "unlocks": [
+            "recipe:weave_fiber_vest"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
+            "recipe:weave_pandanus_cordage",
+            "recipe:twist_rope",
+            "recipe:sew_sail",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom",
+            "recipe:weave_fiber_vest",
+            "station:soak_pandanus"
+          ]
+        },
         {
           "level": 4,
           "unlocks": [
@@ -5898,6 +6471,7 @@
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
+            "recipe:weave_fiber_vest",
             "station:soak_pandanus"
           ]
         },
@@ -5916,6 +6490,7 @@
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
+            "recipe:weave_fiber_vest",
             "station:soak_pandanus"
           ]
         }
@@ -6574,6 +7149,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6596,6 +7177,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6617,6 +7204,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6638,13 +7231,23 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
         {
           "level": 8,
           "unlocks": [
-            "recipe:smelt_bronze"
+            "recipe:smelt_bronze",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots"
           ],
           "trainedBy": [
             "recipe:smelt_copper",
@@ -6659,6 +7262,40 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
+            "recipe:build_bloomery"
+          ]
+        },
+        {
+          "level": 10,
+          "unlocks": [
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_cuirass"
+          ],
+          "trainedBy": [
+            "recipe:smelt_copper",
+            "recipe:smelt_bronze",
+            "recipe:smelt_iron_bloom",
+            "recipe:hammer_iron_bloom",
+            "recipe:forge_steel",
+            "recipe:forge_copper_spear",
+            "recipe:forge_copper_axe",
+            "recipe:forge_copper_shield",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6680,6 +7317,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6701,6 +7344,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6722,6 +7371,12 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
           ]
         },
@@ -6743,7 +7398,29 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:forge_bronze_sword",
+            "recipe:forge_bronze_shield",
+            "recipe:forge_bronze_helm",
+            "recipe:forge_bronze_cuirass",
+            "recipe:forge_bronze_greaves",
+            "recipe:forge_bronze_boots",
             "recipe:build_bloomery"
+          ]
+        }
+      ],
+      "woodworking": [
+        {
+          "level": 4,
+          "unlocks": [
+            "recipe:craft_bamboo_buckler"
+          ],
+          "trainedBy": [
+            "action:harvest_bamboo",
+            "action:fell_large_tree",
+            "recipe:split_bamboo_cane",
+            "recipe:char_log_interior",
+            "recipe:scrape_hull",
+            "recipe:craft_bamboo_buckler"
           ]
         }
       ]
