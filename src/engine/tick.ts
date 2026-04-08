@@ -119,9 +119,9 @@ export function processTick(state: GameState, now: number): TickResult {
     const skillLevel = state.skills[def.skillId].level;
     const moraleMultiplier = getMoraleDurationMultiplier(state.morale);
     const toolMultiplier = getToolSpeedMultiplier(state, def.id);
-    const effectiveDuration = Math.round(
+    const effectiveDuration = Math.max(100, Math.round(
       def.durationMs * getDurationMultiplier(def.skillId, skillLevel, def.id) * moraleMultiplier * toolMultiplier
-    );
+    ));
 
     let remaining = timeAvailable;
     while (remaining >= effectiveDuration) {
@@ -150,7 +150,7 @@ export function processTick(state: GameState, now: number): TickResult {
     const craftToolMultiplier = getToolSpeedMultiplier(state, def.id);
     const craftSkillLevel = state.skills[def.skillId]?.level ?? 1;
     const craftMilestoneMultiplier = getDurationMultiplier(def.skillId, craftSkillLevel, def.id);
-    const effectiveCraftDuration = Math.round(def.durationMs * craftMilestoneMultiplier * craftMoraleMultiplier * craftToolMultiplier);
+    const effectiveCraftDuration = Math.max(100, Math.round(def.durationMs * craftMilestoneMultiplier * craftMoraleMultiplier * craftToolMultiplier));
 
     const effectiveInputs = getEffectiveInputs(def, state);
 
@@ -249,7 +249,7 @@ export function processTick(state: GameState, now: number): TickResult {
     const expMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
     const expSkillLevel = state.skills[def.skillId]?.level ?? 1;
     const expMilestoneMultiplier = getDurationMultiplier(def.skillId, expSkillLevel, def.id);
-    const effectiveExpDuration = Math.round(def.durationMs * expMilestoneMultiplier * expMoraleMultiplier);
+    const effectiveExpDuration = Math.max(100, Math.round(def.durationMs * expMilestoneMultiplier * expMoraleMultiplier));
 
     let remaining = timeAvailable;
     while (remaining >= effectiveExpDuration) {
