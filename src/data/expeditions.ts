@@ -678,7 +678,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You beach on a wooded island and gather materials.",
         drops: [
-          { resourceId: "bamboo_cane", amount: 3 },
           { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
           { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
           { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
