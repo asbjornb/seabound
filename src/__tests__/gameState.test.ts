@@ -110,6 +110,11 @@ describe("getMoraleDurationMultiplier", () => {
   it("goes below 0.8 for morale above 100", () => {
     expect(getMoraleDurationMultiplier(150)).toBeLessThan(0.8);
   });
+
+  it("never goes below 0.2 even at extreme morale", () => {
+    expect(getMoraleDurationMultiplier(300)).toBe(0.2);
+    expect(getMoraleDurationMultiplier(9000)).toBe(0.2);
+  });
 });
 
 describe("getEffectiveMoraleGain", () => {

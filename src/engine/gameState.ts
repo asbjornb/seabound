@@ -532,9 +532,10 @@ export function getEffectiveDecayInterval(state: GameState): number {
 }
 
 /** Duration multiplier from morale. At 100 = 0.8 (20% faster), 50 = 1.0, 0 = 1.2 (20% slower).
- *  Morale can exceed 100 (soft cap) with diminishing returns above. */
+ *  Morale can exceed 100 (soft cap) with diminishing returns above.
+ *  Clamped to 0.2 minimum (max 5× speed) to prevent runaway stacking. */
 export function getMoraleDurationMultiplier(morale: number): number {
-  return 1 - 0.2 * (morale - 50) / 50;
+  return Math.max(0.2, 1 - 0.2 * (morale - 50) / 50);
 }
 
 /** Calculate effective morale gain after soft cap (half effect above 100). */
