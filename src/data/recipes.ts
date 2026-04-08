@@ -1452,6 +1452,23 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 18,
   },
   {
+    id: "craft_bamboo_sandals",
+    name: "Bamboo Sandals",
+    description: "Split bamboo soles lashed with fiber. Protects feet from rough terrain.",
+    skillId: "crafting",
+    panel: "craft",
+    requiredSkillLevel: 3,
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 2 },
+      { resourceId: "rough_fiber", amount: 2 },
+      { resourceId: "cordage", amount: 1 },
+    ],
+    equipmentOutput: "bamboo_sandals",
+    durationMs: 8000,
+    repeatable: true,
+    xpGain: 15,
+  },
+  {
     id: "craft_bamboo_buckler",
     name: "Bamboo Buckler",
     description: "Weave bamboo strips into a small round shield. Light and fast to deploy.",

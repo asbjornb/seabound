@@ -1443,6 +1443,12 @@
       "category": "weaving"
     },
     {
+      "id": "recipe:craft_bamboo_sandals",
+      "type": "recipe",
+      "label": "Bamboo Sandals",
+      "category": "crafting"
+    },
+    {
       "id": "recipe:craft_bamboo_buckler",
       "type": "recipe",
       "label": "Bamboo Buckler",
@@ -4266,6 +4272,31 @@
     },
     {
       "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rough_fiber",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bamboo_sandals",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:crafting:3",
+      "to": "recipe:craft_bamboo_sandals",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "resource:bamboo_cane",
       "to": "recipe:craft_bamboo_buckler",
       "relation": "consumes"
     },
@@ -6254,7 +6285,8 @@
           "level": 3,
           "unlocks": [
             "recipe:craft_fire_hardened_spear",
-            "recipe:craft_stone_club"
+            "recipe:craft_stone_club",
+            "recipe:craft_bamboo_sandals"
           ],
           "trainedBy": [
             "recipe:shred_coconut_husk",
@@ -6285,7 +6317,8 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger"
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         },
         {
@@ -6322,7 +6355,8 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger"
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         },
         {
@@ -6359,7 +6393,8 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger"
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         },
         {
@@ -6396,7 +6431,8 @@
             "recipe:craft_digging_stick",
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
-            "recipe:craft_obsidian_dagger"
+            "recipe:craft_obsidian_dagger",
+            "recipe:craft_bamboo_sandals"
           ]
         }
       ],
