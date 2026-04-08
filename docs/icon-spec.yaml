@@ -599,6 +599,281 @@ resources:
     size: 64
     tags: [maritime, crafted, composite]
 
+  # ── Mainland ores & metals ─────────────────────────────────────────────────
+
+  - id: native_copper
+    object: "Raw copper nugget"
+    description: "A rough nugget of greenish-orange native copper. Naturally occurring, unrefined. Dull metallic sheen with verdigris patches."
+    use: "Resource inventory, crafting input"
+    theme: stone
+    category: mainland_ore
+    chain: copper_chain
+    chain_role: base
+    size: 64
+    tags: [mainland, ore, metal]
+
+  - id: copper_ore
+    object: "Malachite ore chunk"
+    description: "A chunk of rock streaked with bright green malachite veins. Rough, angular, clearly mineral-rich. Green and grey-brown tones."
+    use: "Resource inventory, smelting input"
+    theme: stone
+    category: mainland_ore
+    chain: copper_chain
+    chain_role: derived
+    chain_note: "More refined, greener, distinct mineral banding"
+    size: 64
+    tags: [mainland, ore]
+
+  - id: copper_ingot
+    object: "Copper bar"
+    description: "A flat rectangular bar of smelted copper. Bright reddish-orange with slight hammer marks. Warm metallic glow."
+    use: "Resource inventory, smithing input"
+    theme: fire
+    category: mainland_ore
+    chain: copper_chain
+    chain_role: derived
+    chain_note: "Refined, shaped, bright copper color vs raw greenish nugget"
+    size: 64
+    tags: [mainland, metal, smelted]
+
+  - id: tin_ore
+    object: "Cassiterite pebbles"
+    description: "Dark grey-brown cassiterite pebbles with a slightly metallic lustre. Small, rounded, dense-looking."
+    use: "Resource inventory, smelting input"
+    theme: stone
+    category: mainland_ore
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [mainland, ore]
+
+  - id: bronze_ingot
+    object: "Bronze alloy bar"
+    description: "A golden-brown bronze bar. Heavier and sharper-looking than copper — visible alloy grain. Warm amber-gold metallic tone."
+    use: "Resource inventory, smithing input"
+    theme: fire
+    category: mainland_ore
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [mainland, metal, smelted]
+
+  - id: iron_ore
+    object: "Red-brown iron ore"
+    description: "Heavy chunk of red-brown hematite ore. Rough, earthy, staining. Dark rust-red with grey rock matrix."
+    use: "Resource inventory, smelting input"
+    theme: stone
+    category: mainland_ore
+    chain: iron_chain
+    chain_role: base
+    size: 64
+    tags: [mainland, ore]
+
+  - id: iron_bloom
+    object: "Spongy iron bloom"
+    description: "A rough, porous mass of partially-reduced iron fresh from the bloomery. Grey with dark slag inclusions. Still glowing faintly orange at the core."
+    use: "Resource inventory, smithing input"
+    theme: fire
+    category: mainland_ore
+    chain: iron_chain
+    chain_role: derived
+    chain_note: "Rough, porous, partially refined — between ore and ingot"
+    size: 64
+    tags: [mainland, metal]
+
+  - id: iron_ingot
+    object: "Wrought iron bar"
+    description: "A clean bar of hammered wrought iron. Dark silvery-grey with faint hammer scale. Heavier, more industrial feel than bronze."
+    use: "Resource inventory, smithing input"
+    theme: fire
+    category: mainland_ore
+    chain: iron_chain
+    chain_role: derived
+    chain_note: "Clean, shaped, dark silver vs spongy bloom"
+    size: 64
+    tags: [mainland, metal, smelted]
+
+  - id: combat_essence
+    object: "Glowing red-orange wisp"
+    description: "A swirling wisp of martial energy — fiery red-orange with amber sparks. Abstract, ethereal, suggests combat power."
+    use: "Resource inventory, crafting reagent"
+    theme: fire
+    category: mainland_reagent
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [mainland, reagent]
+
+  - id: terrain_essence
+    object: "Glowing blue-green wisp"
+    description: "A swirling wisp of elemental energy — cool blue-green with earthy particles. Abstract, ethereal, suggests terrain/weather power."
+    use: "Resource inventory, crafting reagent"
+    theme: maritime
+    category: mainland_reagent
+    chain: null
+    chain_role: standalone
+    size: 64
+    tags: [mainland, reagent]
+
+  # ── Mainland equipment: Copper tier ───────────────────────────────────────
+
+  - id: copper_spear
+    object: "Copper-tipped spear"
+    description: "A wooden shaft with a hammered copper spearhead. Bright copper point, lashed with cord. First real metal weapon."
+    use: "Equipment slot, combat weapon"
+    theme: stone
+    category: mainland_equipment
+    chain: copper_weapons
+    chain_role: base
+    size: 64
+    tags: [mainland, weapon, copper]
+
+  - id: copper_axe
+    object: "Copper-headed axe"
+    description: "A heavy axe with a broad copper head. Darker wood haft, green-tinged copper blade. Chunky, brutal."
+    use: "Equipment slot, combat weapon"
+    theme: stone
+    category: mainland_equipment
+    chain: copper_weapons
+    chain_role: derived
+    chain_note: "Broader blade, heavier head than spear"
+    size: 64
+    tags: [mainland, weapon, copper]
+
+  - id: copper_shield
+    object: "Round copper shield"
+    description: "A round wooden shield faced with hammered copper sheet. Dented, battle-worn. Copper patina with a simple boss in the center."
+    use: "Equipment slot, offhand"
+    theme: stone
+    category: mainland_equipment
+    chain: copper_weapons
+    chain_role: derived
+    chain_note: "Defensive, round, flat face with copper plating"
+    size: 64
+    tags: [mainland, shield, copper]
+
+  # ── Mainland equipment: Hide tier ─────────────────────────────────────────
+
+  - id: hide_armor
+    object: "Cured hide chest piece"
+    description: "Layered cured animal hides stitched into a torso covering. Brown leather tones, visible stitching, rugged and handmade."
+    use: "Equipment slot, body armor"
+    theme: bare_hands
+    category: mainland_equipment
+    chain: hide_armor_set
+    chain_role: base
+    size: 64
+    tags: [mainland, armor, hide]
+
+  - id: hide_cap
+    object: "Fitted hide cap"
+    description: "A close-fitting cap of layered hide. Dark brown, simple construction, practical headgear."
+    use: "Equipment slot, head armor"
+    theme: bare_hands
+    category: mainland_equipment
+    chain: hide_armor_set
+    chain_role: derived
+    chain_note: "Smaller, head-shaped, same brown leather as hide_armor"
+    size: 64
+    tags: [mainland, armor, hide]
+
+  - id: hide_leggings
+    object: "Hide trousers"
+    description: "Fitted trousers of stitched hide. Brown leather, visible lacing at the sides. Practical, mobile."
+    use: "Equipment slot, leg armor"
+    theme: bare_hands
+    category: mainland_equipment
+    chain: hide_armor_set
+    chain_role: derived
+    chain_note: "Leg-shaped, same leather as hide_armor"
+    size: 64
+    tags: [mainland, armor, hide]
+
+  - id: hide_boots
+    object: "Sturdy hide boots"
+    description: "Ankle-height boots of stitched hide. Brown leather, thick soles, wrapped lacing. Rugged and durable."
+    use: "Equipment slot, foot armor"
+    theme: bare_hands
+    category: mainland_equipment
+    chain: hide_armor_set
+    chain_role: derived
+    chain_note: "Foot-shaped, same leather as hide_armor"
+    size: 64
+    tags: [mainland, armor, hide]
+
+  # ── Mainland equipment: Bronze tier ───────────────────────────────────────
+
+  - id: bronze_sword
+    object: "Leaf-shaped bronze sword"
+    description: "A classic leaf-shaped bronze blade with a wrapped grip. Golden-amber metal, slight patina. Elegant ancient weapon."
+    use: "Equipment slot, combat weapon"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: base
+    size: 64
+    tags: [mainland, weapon, bronze]
+
+  - id: bronze_shield
+    object: "Heavy bronze round shield"
+    description: "A large round shield cast in bronze with a prominent central boss. Heavy, protective, golden-brown metal."
+    use: "Equipment slot, offhand"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: derived
+    chain_note: "Round defensive piece, same bronze tone as sword"
+    size: 64
+    tags: [mainland, shield, bronze]
+
+  - id: bronze_helm
+    object: "Bronze helmet with cheek guards"
+    description: "A close-fitting bronze helmet with cheek guards and a nasal ridge. Corroded green-gold patina. Ancient warrior feel."
+    use: "Equipment slot, head armor"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: derived
+    chain_note: "Head-shaped, same bronze as sword, with cheek guards"
+    size: 64
+    tags: [mainland, armor, bronze]
+
+  - id: bronze_cuirass
+    object: "Bronze chest plate"
+    description: "Hammered bronze plates shaped to the torso. Muscled breastplate style. Heavy, golden-brown, imposing."
+    use: "Equipment slot, body armor"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: derived
+    chain_note: "Torso-shaped, hammered bronze plates, same metal as sword"
+    size: 64
+    tags: [mainland, armor, bronze]
+
+  - id: bronze_greaves
+    object: "Bronze shin guards"
+    description: "Curved bronze plates strapped over the shins. Dented and battle-scarred. Golden-brown with leather straps."
+    use: "Equipment slot, leg armor"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: derived
+    chain_note: "Shin-shaped, same bronze as sword, with straps"
+    size: 64
+    tags: [mainland, armor, bronze]
+
+  - id: bronze_boots
+    object: "Bronze-reinforced boots"
+    description: "Leather boots with bronze plate reinforcement at toe and heel. Mixed leather and metal. Sturdy, practical."
+    use: "Equipment slot, foot armor"
+    theme: fire
+    category: mainland_equipment
+    chain: bronze_equipment
+    chain_role: derived
+    chain_note: "Boot-shaped, bronze plates on leather, same metal as sword"
+    size: 64
+    tags: [mainland, armor, bronze]
+
 # ─────────────────────────────────────────────────────────────────────────────
 # TOOLS (11 items)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -823,6 +1098,33 @@ skills:
     category: skill
     size: 64
     tags: [skill, maritime]
+
+  - id: combat
+    object: "Crossed sword and shield"
+    description: "A bronze leaf-blade sword crossed with a round shield. Battle-ready but ancient — dented, patinated metal. Warm metallic bronzes and copper tones."
+    use: "Skills panel, action cards, milestone badges"
+    theme: stone
+    category: skill
+    size: 64
+    tags: [skill, mainland]
+
+  - id: mining
+    object: "Pickaxe striking rock"
+    description: "A stone pickaxe swinging into a rock face with sparks and ore fragments flying. Dynamic impact moment. Grey-blue rock, copper-green ore veins visible."
+    use: "Skills panel, action cards, milestone badges"
+    theme: stone
+    category: skill
+    size: 64
+    tags: [skill, mainland]
+
+  - id: smithing
+    object: "Hammer on anvil with sparks"
+    description: "A hammerstone striking a hot metal ingot on a flat stone anvil. Orange sparks and heat glow. Warm fire-lit tones — amber, orange, glowing red metal."
+    use: "Skills panel, action cards, milestone badges"
+    theme: fire
+    category: skill
+    size: 64
+    tags: [skill, mainland]
 
 # ─────────────────────────────────────────────────────────────────────────────
 # BUILDINGS (15 items)
@@ -1092,6 +1394,24 @@ biomes:
     size: 64
     tags: [biome, maritime]
 
+  - id: coastal_cliffs
+    object: "Dramatic sea cliffs"
+    description: "Sheer rocky cliffs dropping into crashing surf. Exposed stone strata, sea birds wheeling. Windswept, rugged. Grey-blue rock with hints of iron-red."
+    use: "Expedition panel, biome headers, discovery toasts"
+    theme: stone
+    category: biome
+    size: 64
+    tags: [biome, mainland]
+
+  - id: inland_hills
+    object: "Rolling forested hills"
+    description: "Green rolling hills stretching inland with scattered trees and exposed rock outcrops. A trail winds between them. More temperate greens than island jungle."
+    use: "Expedition panel, biome headers, discovery toasts"
+    theme: stone
+    category: biome
+    size: 64
+    tags: [biome, mainland]
+
 # ─────────────────────────────────────────────────────────────────────────────
 # UI / TABS (6 items)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1221,6 +1541,24 @@ ui:
     size: 32
     tags: [ui, notification, building]
 
+  - id: island
+    object: "Tropical island silhouette"
+    description: "A small tropical island seen from slight distance — sandy beach ring, 2-3 palm trees, blue ocean surrounding. Warm, inviting, home-base feel. Golden sand, lush green palms, turquoise water."
+    use: "Island/Mainland screen toggle button"
+    theme: bare_hands
+    category: ui_misc
+    size: 48
+    tags: [ui, mainland, always_visible]
+
+  - id: mainland
+    object: "Rugged mainland coastline"
+    description: "A coastline with rocky cliffs and hills stretching inland. More dramatic and adventurous than the island — exposed stone, windswept trees, a path leading inward. Cool grey-blue cliffs, muted greens, hints of ore-red in the rock."
+    use: "Island/Mainland screen toggle button"
+    theme: stone
+    category: ui_misc
+    size: 48
+    tags: [ui, mainland, always_visible]
+
 # ─────────────────────────────────────────────────────────────────────────────
 # GENERATION CHAINS SUMMARY
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1260,23 +1598,31 @@ ui:
 # Standalone (no chain): dry_grass, wild_seed, voyage_provisions,
 #   bow_drill_kit, digging_stick, shell_adze, palm_leaf_pile, drying_rack,
 #   woven_basket, fenced_perimeter, fiber_loom, well
+# copper_chain       | native_copper      | copper_ore, copper_ingot
+# iron_chain         | iron_ore           | iron_bloom, iron_ingot
+# copper_weapons     | copper_spear       | copper_axe, copper_shield
+# hide_armor_set     | hide_armor         | hide_cap, hide_leggings, hide_boots
+# bronze_equipment   | bronze_sword       | bronze_shield, bronze_helm,
+#                    |                    | bronze_cuirass, bronze_greaves, bronze_boots
+#
+# Standalone (mainland): tin_ore, bronze_ingot, combat_essence, terrain_essence
 #
 # ═══════════════════════════════════════════════════════════════════════════════
 # TOTALS
 # ═══════════════════════════════════════════════════════════════════════════════
 #
-# Resources:  42 icons (54 resource IDs, some share chains)
+# Resources:  52 icons (incl. mainland ores, metals, equipment, essences)
 # Tools:      11 icons
-# Skills:      9 icons
+# Skills:     12 icons (+ combat, mining, smithing)
 # Buildings:  15 icons
-# Biomes:      6 icons
+# Biomes:      8 icons (+ coastal_cliffs, inland_hills)
 # Tabs:        6 icons
-# UI/Misc:     7 icons
+# UI/Misc:     9 icons (+ island, mainland toggle)
 # ─────────────
-# TOTAL:      96 unique icons
+# TOTAL:     113 unique icons
 #
 # Generation order:
-#   1. Chain bases (25 icons) — review & approve
-#   2. Chain derived (40 icons) — img2img from approved bases
-#   3. Standalones (31 icons) — batch by category
+#   1. Chain bases (30 icons) — review & approve
+#   2. Chain derived (48 icons) — img2img from approved bases
+#   3. Standalones (35 icons) — batch by category
 # ═══════════════════════════════════════════════════════════════════════════════
