@@ -439,6 +439,43 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
         { type: "combat_stat_bonus", stat: "defense", bonus: 1 },
       ],
     },
+    {
+      level: 12,
+      description: "Tough skin — +5 life from combat experience",
+      effects: [
+        { type: "combat_stat_bonus", stat: "life", bonus: 5 },
+      ],
+    },
+    {
+      level: 14,
+      description: "Quick strikes — +2 attack speed",
+      effects: [
+        { type: "combat_stat_bonus", stat: "attackSpeed", bonus: 2 },
+      ],
+    },
+    {
+      level: 16,
+      description: "Keen eye for openings — +3% crit chance",
+      effects: [
+        { type: "combat_stat_bonus", stat: "critChance", bonus: 3 },
+      ],
+    },
+    {
+      level: 18,
+      description: "Devastating blows — +15% crit multiplier",
+      effects: [
+        { type: "combat_stat_bonus", stat: "critMultiplier", bonus: 15 },
+      ],
+    },
+    {
+      level: 20,
+      description: "Battle-hardened veteran — +5 life, +1 offense, +1 defense",
+      effects: [
+        { type: "combat_stat_bonus", stat: "life", bonus: 5 },
+        { type: "combat_stat_bonus", stat: "offense", bonus: 1 },
+        { type: "combat_stat_bonus", stat: "defense", bonus: 1 },
+      ],
+    },
   ],
   construction: [],
   mining: [
