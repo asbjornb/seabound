@@ -31,7 +31,7 @@ import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
 import { isRoutinesUnlocked } from "./data/routines";
 import { CombatLogModal } from "./components/CombatLogModal";
 import { trackCombatLogOpen } from "./lib/analytics-events";
-import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine } from "./data/types";
+import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine, RoutineStep } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameScreen,
@@ -93,6 +93,22 @@ function getQueuedActionIcon(q: QueuedAction, routines: Routine[]): string {
     return "tab_routines";
   }
   return q.actionId;
+}
+
+function getStepIcon(step: RoutineStep): string {
+  if (step.actionType === "gather") {
+    const action = getActionById(step.actionId);
+    if (action && action.drops.length > 0) return action.drops[0].resourceId;
+    return "biome_beach";
+  }
+  const recipe = getRecipeById(step.actionId);
+  if (recipe) {
+    if (recipe.output) return recipe.output.resourceId;
+    if (recipe.toolOutput) return recipe.toolOutput;
+    if (recipe.buildingOutput) return recipe.buildingOutput;
+    return recipe.id;
+  }
+  return "tab_craft";
 }
 
 export default function App() {
@@ -571,12 +587,31 @@ export default function App() {
                 <div className="action-queue-row">
                   <span className="queue-label">Next:</span>
                   <div className="queued-actions">
-                    {game.state.actionQueue.map((q, i) => (
-                      <span key={i} className="queued-action-tag">
-                        <GameIcon id={getQueuedActionIcon(q, game.state.routines)} size={14} />
-                        {getQueuedActionName(q, game.state.routines)}
-                      </span>
-                    ))}
+                    {game.state.actionQueue.map((q, i) => {
+                      if (q.actionType === "routine") {
+                        const routine = game.state.routines.find((r) => r.id === q.actionId);
+                        return (
+                          <span key={i} className="queued-action-tag queued-routine-tag">
+                            <span className="queued-routine-label">{routine?.name ?? q.actionId}</span>
+                            <span className="queued-routine-steps">
+                              {routine?.steps.map((step, idx) => (
+                                <span key={idx} className="queued-routine-step">
+                                  <GameIcon id={getStepIcon(step)} size={12} />
+                                  {idx < (routine?.steps.length ?? 0) - 1 && <span className="queued-routine-arrow">{"\u2192"}</span>}
+                                </span>
+                              ))}
+                              <span className="queued-routine-loop">{"\u21bb"}</span>
+                            </span>
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={i} className="queued-action-tag">
+                          <GameIcon id={getQueuedActionIcon(q, game.state.routines)} size={14} />
+                          {getQueuedActionName(q, game.state.routines)}
+                        </span>
+                      );
+                    })}
                     <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
                       ✕
                     </button>
