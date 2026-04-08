@@ -385,11 +385,13 @@ export function selectActionsByScreen(actions: ActionDef[], screen: GameScreen):
   );
 }
 
-/** Filter recipes to only those belonging to the given screen. */
+/** Filter recipes to only those belonging to the given screen.
+ *  Equipment crafting recipes (those with equipmentOutput) always belong to mainland. */
 export function selectRecipesByScreen(recipes: RecipeDef[], screen: GameScreen): RecipeDef[] {
-  return recipes.filter((r) =>
-    screen === "mainland" ? MAINLAND_SKILLS.has(r.skillId) : !MAINLAND_SKILLS.has(r.skillId)
-  );
+  return recipes.filter((r) => {
+    const isMainland = MAINLAND_SKILLS.has(r.skillId) || !!r.equipmentOutput;
+    return screen === "mainland" ? isMainland : !isMainland;
+  });
 }
 
 /** Filter expeditions to only those belonging to the given screen. */

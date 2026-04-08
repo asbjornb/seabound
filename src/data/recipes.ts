@@ -1395,7 +1395,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["camp_fire"],
     equipmentOutput: "fire_hardened_spear",
     durationMs: 8000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 15,
   },
   {
@@ -1412,7 +1412,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "stone_club",
     durationMs: 8000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 15,
   },
   {
@@ -1430,7 +1430,7 @@ export const RECIPES: RecipeDef[] = [
     requiredTools: ["obsidian_blade"],
     equipmentOutput: "obsidian_dagger",
     durationMs: 10000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 20,
   },
   {
@@ -1447,7 +1447,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "woven_fiber_vest",
     durationMs: 10000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 18,
   },
   {
@@ -1464,7 +1464,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "bamboo_sandals",
     durationMs: 8000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 15,
   },
   {
@@ -1481,7 +1481,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "bamboo_buckler",
     durationMs: 10000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 18,
   },
 
@@ -1504,7 +1504,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["kiln"],
     equipmentOutput: "copper_spear",
     durationMs: 15000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 35,
   },
   {
@@ -1522,7 +1522,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["kiln"],
     equipmentOutput: "copper_axe",
     durationMs: 18000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 45,
   },
   {
@@ -1540,7 +1540,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["kiln"],
     equipmentOutput: "copper_shield",
     durationMs: 16000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 40,
   },
   {
@@ -1557,7 +1557,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "hide_armor",
     durationMs: 12000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 25,
   },
   {
@@ -1573,7 +1573,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "hide_cap",
     durationMs: 10000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 20,
   },
   {
@@ -1590,7 +1590,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "hide_leggings",
     durationMs: 11000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 22,
   },
   {
@@ -1607,7 +1607,7 @@ export const RECIPES: RecipeDef[] = [
     ],
     equipmentOutput: "hide_boots",
     durationMs: 11000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 22,
   },
 
@@ -1629,7 +1629,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_sword",
     durationMs: 20000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 55,
   },
   {
@@ -1647,7 +1647,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_shield",
     durationMs: 18000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 50,
   },
   {
@@ -1664,7 +1664,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_helm",
     durationMs: 16000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 45,
   },
   {
@@ -1682,7 +1682,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_cuirass",
     durationMs: 22000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 60,
   },
   {
@@ -1700,7 +1700,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_greaves",
     durationMs: 16000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 45,
   },
   {
@@ -1718,7 +1718,7 @@ export const RECIPES: RecipeDef[] = [
     requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_boots",
     durationMs: 16000,
-    repeatable: true,
+    repeatable: false,
     xpGain: 45,
   },
 
