@@ -341,6 +341,7 @@ function processCompletionDiscoveries(
       grade: c.encounterResult.grade,
       checkResults: c.encounterResult.checkResults,
       passRatio: c.encounterResult.passRatio,
+      estimatedWinRate: c.encounterResult.estimatedWinRate,
       dropMultiplier: c.encounterResult.dropMultiplier,
       xpMultiplier: c.encounterResult.xpMultiplier,
       failureInsights: c.encounterResult.failureInsights,

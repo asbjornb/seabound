@@ -147,8 +147,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         { stat: "offense", threshold: 8 },
         { stat: "heatResist", threshold: 4 },
         { stat: "endurance", threshold: 3 },
+        { stat: "attackSpeed", threshold: 3 },
       ],
-      hint: "A longer trek — pack for heat and bring enough stamina to last.",
+      hint: "A longer trek — pack for heat and bring enough stamina to last. Quick strikes help with wildlife.",
     },
     outcomes: [
       {
@@ -209,8 +210,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         { stat: "wetResist", threshold: 5 },
         { stat: "endurance", threshold: 5 },
         { stat: "defense", threshold: 4 },
+        { stat: "life", threshold: 15 },
       ],
-      hint: "You'll be waist-deep in water for hours. Bring waterproof gear and stamina.",
+      hint: "You'll be waist-deep in water for hours. Bring waterproof gear, stamina, and enough toughness to endure.",
     },
     outcomes: [
       {
@@ -271,8 +273,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         { stat: "coldResist", threshold: 5 },
         { stat: "speed", threshold: 4 },
         { stat: "endurance", threshold: 6 },
+        { stat: "life", threshold: 20 },
       ],
-      hint: "Wrap up warm and travel light. The cold and the climb will test your limits.",
+      hint: "Wrap up warm and travel light. The cold and the climb will test your limits. Toughness helps survive the exposure.",
     },
     outcomes: [
       {
@@ -336,9 +339,11 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         { stat: "offense", threshold: 14 },
         { stat: "defense", threshold: 10 },
         { stat: "endurance", threshold: 8 },
+        { stat: "life", threshold: 30 },
+        { stat: "attackSpeed", threshold: 6 },
       ],
       minGearScore: 30,
-      hint: "This is no place for the unprepared. Bring your best weapons, strongest armor, and deep reserves of stamina.",
+      hint: "This is no place for the unprepared. Bring your best weapons, strongest armor, and deep reserves of stamina. Speed and toughness are essential.",
     },
     outcomes: [
       {
@@ -405,9 +410,11 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         { stat: "heatResist", threshold: 10 },
         { stat: "endurance", threshold: 10 },
         { stat: "defense", threshold: 8 },
+        { stat: "life", threshold: 35 },
+        { stat: "attackSpeed", threshold: 5 },
       ],
       minGearScore: 40,
-      hint: "The heat alone will kill you without serious protection. Only attempt this fully equipped and provisioned.",
+      hint: "The heat alone will kill you without serious protection. Only attempt this fully equipped and provisioned. Toughness and quick reflexes help survive the hazards.",
     },
     outcomes: [
       {

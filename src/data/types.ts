@@ -436,6 +436,17 @@ export interface RoutineProgress {
 // Combat Log (per-expedition detailed logs)
 // ═══════════════════════════════════════
 
+export interface CombatCheckResult {
+  stat: string;
+  threshold: number;
+  playerValue: number;
+  /** Probability this check would pass (0-1), before the actual roll. */
+  passChance: number;
+  passed: boolean;
+  /** True if a critical hit boosted this check's effective ratio. */
+  critted?: boolean;
+}
+
 export interface CombatLogEntry {
   id: number;
   timestamp: number;
@@ -444,9 +455,11 @@ export interface CombatLogEntry {
   /** Overall encounter grade. */
   grade: "success" | "partial" | "failure";
   /** Per-stat check breakdown. */
-  checkResults: { stat: string; threshold: number; playerValue: number; passed: boolean }[];
+  checkResults: CombatCheckResult[];
   /** Fraction of checks passed (0-1). */
   passRatio: number;
+  /** Estimated overall success probability before rolling (0-1). */
+  estimatedWinRate: number;
   /** Multipliers applied to drops and XP. */
   dropMultiplier: number;
   xpMultiplier: number;

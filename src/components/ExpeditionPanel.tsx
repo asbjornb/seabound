@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getResources } from "../data/registry";
 import { ExpeditionDef, GameState } from "../data/types";
-import { computeLoadoutStats, computeGearScore } from "../engine/combat";
+import { computeLoadoutStats, computeGearScore, estimateWinRate, computeCheckPassChance } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 
@@ -104,38 +104,55 @@ function DropList({ drops, resources }: { drops: { resourceId: string; amount: n
   );
 }
 
-/** Show current loadout stats vs expedition stat checks. */
+/** Colour a win rate percentage: red → yellow → green. */
+function winRateColor(rate: number): string {
+  if (rate < 0.2) return "#e74c3c";
+  if (rate < 0.5) return "#f0c040";
+  if (rate < 0.75) return "#8bc34a";
+  return "#2ecc71";
+}
+
+/** Show current loadout stats vs expedition stat checks with win rate. */
 function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }) {
   if (!exp.difficulty) return null;
 
   const loadoutStats = computeLoadoutStats(state);
   const gearScore = computeGearScore(loadoutStats);
   const checks = exp.difficulty.statChecks;
-  const allPassing = checks.every((c) => (loadoutStats[c.stat] ?? 0) >= c.threshold) &&
-    (exp.difficulty.minGearScore == null || gearScore >= exp.difficulty.minGearScore);
+  const winRate = estimateWinRate(state, exp.difficulty);
+  const winPct = Math.round(winRate * 100);
 
   return (
     <div className="loadout-preview">
       <div className="loadout-preview-title">
-        Your Loadout {allPassing ? <span className="check-pass">Ready</span> : <span className="check-fail">Underprepared</span>}
+        Win Rate: <span style={{ color: winRateColor(winRate), fontWeight: 700 }}>{winPct}%</span>
       </div>
       <div className="loadout-checks">
         {checks.map((c) => {
           const val = loadoutStats[c.stat] ?? 0;
-          const passing = val >= c.threshold;
+          const chance = computeCheckPassChance(val, c.threshold);
+          const chancePct = Math.round(chance * 100);
           return (
-            <span key={c.stat} className={`loadout-check${passing ? " pass" : " fail"}`}>
-              {c.stat} {val}/{c.threshold}
+            <span
+              key={c.stat}
+              className={`loadout-check${chance >= 0.5 ? " pass" : " fail"}`}
+              title={`${chancePct}% chance to pass this check`}
+            >
+              {c.stat.replace(/([A-Z])/g, " $1")} {val}/{c.threshold} ({chancePct}%)
             </span>
           );
         })}
-        {exp.difficulty.minGearScore != null && (
-          <span className={`loadout-check${gearScore >= exp.difficulty.minGearScore ? " pass" : " fail"}`}>
-            gear score {gearScore}/{exp.difficulty.minGearScore}
-          </span>
-        )}
+        {exp.difficulty.minGearScore != null && (() => {
+          const gsChance = computeCheckPassChance(gearScore, exp.difficulty.minGearScore!);
+          const gsPct = Math.round(gsChance * 100);
+          return (
+            <span className={`loadout-check${gsChance >= 0.5 ? " pass" : " fail"}`}>
+              gear score {gearScore}/{exp.difficulty.minGearScore} ({gsPct}%)
+            </span>
+          );
+        })()}
       </div>
-      {exp.difficulty.hint && !allPassing && (
+      {exp.difficulty.hint && winRate < 0.5 && (
         <div className="loadout-hint">{exp.difficulty.hint}</div>
       )}
     </div>

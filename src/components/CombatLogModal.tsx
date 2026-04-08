@@ -36,6 +36,13 @@ export function CombatLogModal({
             <div className="combat-log-outcome">{entry.outcomeMessage}</div>
           )}
 
+          {/* Win rate */}
+          {entry.estimatedWinRate != null && (
+            <div className="combat-log-win-rate" style={{ color: "var(--text-secondary)", fontSize: "0.85em", marginBottom: 8 }}>
+              Estimated win rate: {Math.round(entry.estimatedWinRate * 100)}%
+            </div>
+          )}
+
           {/* Stat checks */}
           {entry.checkResults.length > 0 && (
             <div className="combat-log-section">
@@ -43,13 +50,15 @@ export function CombatLogModal({
               {entry.checkResults.map((check, i) => (
                 <div key={i} className="combat-log-check">
                   <span className="combat-log-check-name">
-                    {check.stat.replace(/_/g, " ")}
+                    {check.stat.replace(/([A-Z])/g, " $1").replace(/_/g, " ")}
+                    {check.critted && <span style={{ color: "#f0c040" }} title="Critical hit boosted this check"> ★</span>}
                   </span>
                   <span
                     className="combat-log-check-result"
                     style={{ color: check.passed ? "#2ecc71" : "#e74c3c" }}
                   >
                     {Math.round(check.playerValue)} / {check.threshold}
+                    {check.passChance != null && <span style={{ opacity: 0.7 }}> ({Math.round(check.passChance * 100)}%)</span>}
                     {check.passed ? " ✓" : " ✗"}
                   </span>
                 </div>
