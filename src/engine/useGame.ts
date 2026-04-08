@@ -480,33 +480,56 @@ export function useGame() {
     if (offlineMs > 2000) {
       setState((prev) => {
         const next = structuredClone(prev);
-        const result = processTick(next, Date.now());
-        for (const c of result.completions) {
-          processCompletionDiscoveries(next, c);
-          processAmbientLore(next, c);
-        }
-        // Routine advancement for offline progress
-        if (next.activeRoutine) {
-          if (result.completions.length > 0) {
-            next.activeRoutine.completionsInStep += result.completions.length;
-          }
-          const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
-          if (routine) {
-            const step = routine.steps[next.activeRoutine.currentStep];
-            if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
-              saveCurrentActionProgress(next);
-              next.currentAction = null;
+        const now = Date.now();
+
+        // Loop offline processing: when an action completes and a routine/queue
+        // advances to a new action, apply remaining offline time to the new action.
+        // Cap iterations to prevent infinite loops from edge cases.
+        let totalCompletions = 0;
+        for (let pass = 0; pass < 100; pass++) {
+          const result = processTick(next, now);
+          for (const c of result.completions) {
+            try {
+              processCompletionDiscoveries(next, c);
+              processAmbientLore(next, c);
+            } catch {
+              // Don't let discovery/lore processing errors break offline progress
             }
           }
-          if (!next.currentAction) {
-            advanceRoutine(next);
+          totalCompletions += result.completions.length;
+
+          // Routine advancement for offline progress
+          if (next.activeRoutine) {
+            if (result.completions.length > 0) {
+              next.activeRoutine.completionsInStep += result.completions.length;
+            }
+            const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
+            if (routine) {
+              const step = routine.steps[next.activeRoutine.currentStep];
+              if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
+                saveCurrentActionProgress(next);
+                next.currentAction = null;
+              }
+            }
+            if (!next.currentAction) {
+              advanceRoutine(next);
+            }
           }
+          // Queue advancement for offline progress (only if no routine is active)
+          if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+            advanceQueue(next);
+          }
+
+          // Credit remaining offline time to the newly started action
+          if (next.currentAction && result.unusedMs > 0) {
+            next.currentAction.startedAt -= result.unusedMs;
+          }
+
+          // If no action running, no completions happened, or no unused time, stop
+          if (!next.currentAction || result.completions.length === 0 || result.unusedMs === 0) break;
         }
-        // Queue advancement for offline progress (only if no routine is active)
-        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
-          advanceQueue(next);
-        }
-        if (result.completions.length > 0) checkMilestones(next);
+
+        if (totalCompletions > 0) checkMilestones(next);
         return next;
       });
     }
