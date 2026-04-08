@@ -600,7 +600,6 @@ export default function App() {
                                   {idx < (routine?.steps.length ?? 0) - 1 && <span className="queued-routine-arrow">{"\u2192"}</span>}
                                 </span>
                               ))}
-                              <span className="queued-routine-loop">{"\u21bb"}</span>
                             </span>
                           </span>
                         );
