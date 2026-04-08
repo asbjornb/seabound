@@ -107,13 +107,15 @@ describe("getMoraleDurationMultiplier", () => {
     expect(getMoraleDurationMultiplier(100)).toBeCloseTo(0.8);
   });
 
-  it("goes below 0.8 for morale above 100", () => {
+  it("has diminishing returns above 100", () => {
     expect(getMoraleDurationMultiplier(150)).toBeLessThan(0.8);
+    // ~27% boost at 200
+    expect(getMoraleDurationMultiplier(200)).toBeCloseTo(0.733, 2);
   });
 
-  it("never goes below 0.75 even at extreme morale", () => {
-    expect(getMoraleDurationMultiplier(300)).toBe(0.75);
-    expect(getMoraleDurationMultiplier(9000)).toBe(0.75);
+  it("asymptotically approaches 0.70 at extreme morale", () => {
+    expect(getMoraleDurationMultiplier(9000)).toBeGreaterThan(0.70);
+    expect(getMoraleDurationMultiplier(9000)).toBeLessThan(0.71);
   });
 });
 
