@@ -131,8 +131,7 @@ export function computeGearScore(loadoutStats: Record<string, number>): number {
  * - ratio 1.5 (50% over):         ~77% pass chance
  * - ratio 2.0 (double threshold):  ~89% pass chance
  *
- * Floored at 2% — even hopeless attempts have a slim chance.
- * No ceiling — if you've earned 100%, you get 100%.
+ * No artificial clamps — 0 stats means 0% chance, massive stats means 100%.
  */
 export function computeCheckPassChance(
   playerValue: number,
@@ -141,8 +140,7 @@ export function computeCheckPassChance(
   if (threshold <= 0) return 1;
   const ratio = Math.max(0, playerValue) / threshold;
   const K = 3;
-  const raw = Math.pow(ratio, K) / (1 + Math.pow(ratio, K));
-  return Math.max(0.02, raw);
+  return Math.pow(ratio, K) / (1 + Math.pow(ratio, K));
 }
 
 // ═══════════════════════════════════════
