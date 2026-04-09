@@ -324,6 +324,16 @@ function processCompletionDiscoveries(
     const insights = c.encounterResult.failureInsights.slice(0, 3); // cap to avoid toast spam
     addDiscovery(state, "expedition", `${gradeLabel}: ${insights.join(". ")}`);
   }
+  // Show loot drops from expedition loot tables
+  if (c.lootDrops) {
+    for (const loot of c.lootDrops) {
+      const rdef = RESOURCES[loot.name];
+      const name = rdef?.name ?? loot.name.replace(/_/g, " ");
+      const rarityLabel = loot.rarity === "legendary" ? "LEGENDARY" : loot.rarity === "epic" ? "EPIC" : loot.rarity === "rare" ? "Rare" : "";
+      const prefix = rarityLabel ? `${rarityLabel} drop: ` : "";
+      addDiscovery(state, "resource", `${prefix}Found ${name}!`);
+    }
+  }
   // Show equipment drops from mainland expeditions
   if (c.equipmentDropped) {
     for (const eq of c.equipmentDropped) {
@@ -349,6 +359,7 @@ function processCompletionDiscoveries(
       xpGain: c.xpGain,
       equipmentDropped: c.equipmentDropped,
       outcomeMessage: c.expeditionMessage,
+      lootDrops: c.lootDrops,
     });
     // Cap combat log to 50 entries to prevent unbounded growth
     if (state.combatLog.length > 50) {

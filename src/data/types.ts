@@ -57,6 +57,7 @@ export interface ResourceDef {
   foodValue?: number; // if set, this resource counts as food with this value
   waterValue?: number; // if set, this resource counts as water with this value
   storageCapGroup?: string; // if set, resources with the same group share a combined storage cap
+  rarity?: DropRarity; // display rarity tier (for loot drops)
 }
 
 export interface SkillDef {
@@ -77,6 +78,20 @@ export interface Drop {
   resourceId: ResourceId;
   amount: number;
   chance?: number; // 0-1, defaults to 1
+}
+
+// ═══════════════════════════════════════
+// Loot Drop System (expedition chase drops)
+// ═══════════════════════════════════════
+
+export type DropRarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
+
+/** A loot table entry — rolled independently on each expedition completion. */
+export interface LootDrop {
+  resourceId: ResourceId;
+  amount: number;
+  chance: number; // 0-1 base probability
+  rarity: DropRarity;
 }
 
 // ═══════════════════════════════════════
@@ -354,6 +369,8 @@ export interface ExpeditionDef {
   difficulty?: ExpeditionDifficultyProfile;
   /** Equipment drops that can be awarded on success (separate from resource drops). */
   equipmentDrops?: EquipmentDropEntry[];
+  /** Loot table — rolled independently from outcomes. Each entry has its own drop chance and rarity. */
+  lootTable?: LootDrop[];
 }
 
 /** An equipment item that can drop from an expedition outcome. */
@@ -473,6 +490,8 @@ export interface CombatLogEntry {
   equipmentDropped?: { defId: string; name: string; condition: string }[];
   /** Outcome flavor text. */
   outcomeMessage?: string;
+  /** Loot table drops (with rarity info). */
+  lootDrops?: { name: string; amount: number; rarity: DropRarity }[];
 }
 
 // ═══════════════════════════════════════
@@ -540,4 +559,7 @@ export interface GameState {
 
   // Detailed per-expedition combat logs (mainland)
   combatLog: CombatLogEntry[];
+
+  // Loot drop collection log — tracks rare+ drops found
+  lootLog: Record<string, { count: number; firstFound: number }>;
 }

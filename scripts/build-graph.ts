@@ -348,6 +348,13 @@ for (const e of EXPEDITIONS) {
       }
     }
   }
+
+  // Loot table drops
+  if (e.lootTable) {
+    for (const loot of e.lootTable) {
+      addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
+    }
+  }
 }
 
 // Stations
