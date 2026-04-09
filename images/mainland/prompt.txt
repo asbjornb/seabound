@@ -1,0 +1,7 @@
+Pixel art panoramic island scene, 16-bit retro style, dark moody atmosphere, horizontal landscape format (6:1 ratio), minimal detail, small scale, dark ocean background
+
+Rugged coastal cliffs rising from the sea on the left, transitioning into rolling inland hills of red earth on the right. Exposed mineral veins — copper and tin — gleam faintly in the cliff face. A narrow rocky path winds upward from the shore into the hills. Sparse tough vegetation clinging to ledges, no palm trees. A sense of vast unexplored land stretching inland, wild and untamed compared to the familiar island. Feeling of a new frontier, challenge, and raw potential. Sky: warm dark brown #1a1510. Cliffs: dark slate-brown #3a2a20 with copper streaks #c47040. Hills: red-brown earth #5a3020 to #8a4a28. Path: sandy stone #7a6a50. Vegetation: muted sage #4a5a3a.
+
+Keep the overall palette dark — these sit against a #0c1a1a background
+Bottom edge should fade to near-black so it bleeds into the UI below
+Top edge can fade to the sky color listed (used as --phase-sky in the CSS)
