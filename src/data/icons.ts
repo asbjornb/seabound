@@ -79,6 +79,9 @@ export const SKILL_ICONS: Record<SkillId, string> = {
   construction: "\u{1F3D7}\uFE0F",
   farming: "\u{1F331}",
   navigation: "\u{1F9ED}",
+  combat: "\u{2694}\uFE0F",
+  mining: "\u{26CF}\uFE0F",
+  smithing: "\u{1F525}",
 };
 
 export const BIOME_ICONS: Record<BiomeId, string> = {
@@ -88,6 +91,8 @@ export const BIOME_ICONS: Record<BiomeId, string> = {
   bamboo_grove: "\u{1F38D}",
   jungle_interior: "\u{1F332}",
   nearby_island: "\u{1F30B}",
+  coastal_cliffs: "\u{26F0}\uFE0F",
+  inland_hills: "\u{1F3D4}\uFE0F",
 };
 
 export const BUILDING_ICONS: Record<BuildingId, string> = {

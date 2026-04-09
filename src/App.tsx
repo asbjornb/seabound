@@ -492,14 +492,14 @@ export default function App() {
             className={`screen-btn${screen === "island" ? " active" : ""}`}
             onClick={() => handleScreenSwitch("island")}
           >
-            <GameIcon id="tab_explore" size={18} />
+            <GameIcon id="ui_island" size={18} />
             Island
           </button>
           <button
             className={`screen-btn${screen === "mainland" ? " active" : ""}`}
             onClick={() => handleScreenSwitch("mainland")}
           >
-            <GameIcon id="coastal_cliffs" size={18} />
+            <GameIcon id="ui_mainland" size={18} />
             Mainland
           </button>
         </nav>

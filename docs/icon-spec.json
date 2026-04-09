@@ -1377,6 +1377,30 @@
       "tags": ["ui", "notification", "building"]
     },
     {
+      "id": "ui_island",
+      "object": "Tropical island silhouette",
+      "description": "A small tropical island seen from slight distance — sandy beach ring, 2-3 palm trees, blue ocean surrounding. Warm, inviting, home-base feel. Golden sand, lush green palms, turquoise water.",
+      "use": "Island/Mainland screen toggle button",
+      "theme": "bare_hands",
+      "category": "ui_misc",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "mainland", "always_visible"]
+    },
+    {
+      "id": "ui_mainland",
+      "object": "Rugged mainland coastline",
+      "description": "A coastline with rocky cliffs and hills stretching inland. More dramatic and adventurous than the island — exposed stone, windswept trees, a path leading inward. Cool grey-blue cliffs, muted greens, hints of ore-red in the rock.",
+      "use": "Island/Mainland screen toggle button",
+      "theme": "stone",
+      "category": "ui_misc",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "mainland", "always_visible"]
+    },
+    {
       "id": "pandanus_cutting",
       "object": "Pandanus plant cutting",
       "description": "A short pandanus stem cutting with a few spiky leaves sprouting from the top. Fresh green, fibrous base where it was cut. Looks like a small tropical seedling ready to plant.",
