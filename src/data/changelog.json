@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "cfb575042d0b8cd6cee12d8400dbfcde3d50986b"
+    "newestReviewed": "eb966334f38b09766391b50f06717063e1b4eb71"
   },
   "entries": [
+    {
+      "date": "2026-04-09",
+      "changes": [
+        "Add mainland banner image to the game"
+      ]
+    },
     {
       "date": "2026-04-08",
       "changes": [
