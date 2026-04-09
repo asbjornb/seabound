@@ -14,6 +14,7 @@ import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { IslandBanner } from "./components/IslandBanner";
+import { MainlandBanner } from "./components/MainlandBanner";
 import { LogPanel } from "./components/LogPanel";
 import { ModPanel } from "./components/ModPanel";
 import { NotificationToast } from "./components/NotificationToast";
@@ -416,7 +417,7 @@ export default function App() {
 
   return (
     <ItemLookupWithBrowse state={game.state}>
-    <div className={`app phase-${currentPhase.id}${hideFlavorText ? " hide-flavor-text" : ""}`}>
+    <div className={`app phase-${currentPhase.id}${screen === "mainland" ? " screen-mainland" : ""}${hideFlavorText ? " hide-flavor-text" : ""}`}>
       {game.state.victory && !victoryDismissed && (
         <VictoryScreen state={game.state} onContinue={() => { setVictoryDismissed(true); localStorage.setItem("seabound_victoryDismissed", "true"); }} onUnlockMainland={game.unlockMainland} />
       )}
@@ -485,6 +486,7 @@ export default function App() {
       </header>
 
       {screen === "island" && <IslandBanner phase={currentPhase.id} />}
+      {screen === "mainland" && <MainlandBanner />}
 
       {game.state.mainlandUnlocked && (
         <nav className="screen-switcher">
