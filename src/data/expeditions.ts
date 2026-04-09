@@ -65,6 +65,12 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 0, max: 1 },
       },
+      {
+        defId: "rusted_harpoon",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
     ],
     lootTable: [
       { resourceId: "corroded_medallion", amount: 1, chance: 0.18, rarity: "uncommon" },
@@ -128,6 +134,12 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         chance: 0.08,
         dropsAsBroken: true,
         affixRange: { min: 0, max: 1 },
+      },
+      {
+        defId: "coral_encrusted_buckler",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
       },
     ],
     lootTable: [
@@ -199,6 +211,12 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "vine_lash",
+        chance: 0.03,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
     ],
     lootTable: [
       { resourceId: "carved_idol", amount: 1, chance: 0.06, rarity: "rare" },
@@ -266,6 +284,12 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "quarry_crown",
+        chance: 0.03,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
     ],
     lootTable: [
       { resourceId: "raw_gemstone", amount: 1, chance: 0.18, rarity: "uncommon" },
@@ -330,6 +354,12 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         defId: "bronze_helm",
         chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+      {
+        defId: "windrunner_boots",
+        chance: 0.03,
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
@@ -411,6 +441,10 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 3 },
       },
+      {
+        defId: "idol_of_the_deep",
+        chance: 0.015,
+      },
     ],
     lootTable: [
       { resourceId: "temple_idol", amount: 1, chance: 0.06, rarity: "rare" },
@@ -486,6 +520,10 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         chance: 0.04,
         dropsAsBroken: true,
         affixRange: { min: 2, max: 3 },
+      },
+      {
+        defId: "molten_edge",
+        chance: 0.012,
       },
     ],
     lootTable: [

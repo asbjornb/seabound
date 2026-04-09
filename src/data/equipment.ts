@@ -238,6 +238,76 @@ export const AFFIXES: Record<string, AffixDef> = {
     allowedSlots: ["body", "head", "legs", "offhand"],
   },
 
+  // ── Expedition-exclusive affixes ──
+  // These only roll on items dropped from the matching expedition.
+
+  affix_ruin_walker: {
+    id: "affix_ruin_walker",
+    name: "Ruin Walker",
+    family: "terrain",
+    description: "Attuned to crumbling stonework. Moves swiftly through ruins.",
+    modifiers: [{ stat: "speed", value: 6 }, { stat: "defense", value: 4 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    expeditionOnly: "coastal_ruins",
+  },
+  affix_tideborn: {
+    id: "affix_tideborn",
+    name: "Tideborn",
+    family: "terrain",
+    description: "Treated with tidal salts. Resists water and wears less in wet conditions.",
+    modifiers: [{ stat: "wetResist", value: 8 }, { stat: "endurance", value: 4 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    expeditionOnly: "tidal_caves",
+  },
+  affix_predator: {
+    id: "affix_predator",
+    name: "Predator",
+    family: "offense",
+    description: "Honed for the jungle. Strikes fast against wildlife.",
+    modifiers: [{ stat: "offense", value: 6 }, { stat: "attackSpeed", value: 5 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    allowedSlots: ["weapon"],
+    expeditionOnly: "overgrown_trail",
+  },
+  affix_stoneheart: {
+    id: "affix_stoneheart",
+    name: "Stoneheart",
+    family: "defense",
+    description: "Mineral-crusted from quarry depths. Unyielding under pressure.",
+    modifiers: [{ stat: "defense", value: 6 }, { stat: "life", value: 15 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    allowedSlots: ["body", "head", "legs", "offhand"],
+    expeditionOnly: "flooded_quarry",
+  },
+  affix_windswept: {
+    id: "affix_windswept",
+    name: "Windswept",
+    family: "terrain",
+    description: "Weathered by mountain gales. Resists cold and moves with the wind.",
+    modifiers: [{ stat: "coldResist", value: 7 }, { stat: "speed", value: 4 }],
+    rollRange: { min: 0.6, max: 1.0 },
+    expeditionOnly: "ridge_pass",
+  },
+  affix_temple_ward: {
+    id: "affix_temple_ward",
+    name: "Temple Ward",
+    family: "defense",
+    description: "Imbued with the temple's protection. Bolsters life and endurance.",
+    modifiers: [{ stat: "life", value: 20 }, { stat: "endurance", value: 5 }],
+    rollRange: { min: 0.7, max: 1.0 },
+    expeditionOnly: "sunken_temple",
+  },
+  affix_magma_forged: {
+    id: "affix_magma_forged",
+    name: "Magma-Forged",
+    family: "offense",
+    description: "Tempered in volcanic heat. Devastating offense with natural heat resistance.",
+    modifiers: [{ stat: "offense", value: 8 }, { stat: "heatResist", value: 6 }],
+    rollRange: { min: 0.7, max: 1.0 },
+    allowedSlots: ["weapon"],
+    expeditionOnly: "volcanic_rift",
+  },
+
   // ── Hybrid / tradeoff affixes ──
 
   affix_berserker: {
@@ -489,6 +559,97 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     tier: 2,
     maxAffixes: 3,
     tags: ["metal", "armor"],
+  },
+
+  // ── Expedition-exclusive magic items ──
+  // Each drops only from a specific expedition. Random affixes like normal.
+
+  rusted_harpoon: {
+    id: "rusted_harpoon",
+    name: "Rusted Harpoon",
+    description: "A corroded harpoon dredged from the ruins. Long reach and a wicked barbed tip.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 12 }, { stat: "speed", value: 2 }, { stat: "attackSpeed", value: 4 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["metal", "weapon"],
+  },
+  coral_encrusted_buckler: {
+    id: "coral_encrusted_buckler",
+    name: "Coral-Encrusted Buckler",
+    description: "A small shield fused with living coral. Strangely resilient against water.",
+    slot: "offhand",
+    baseStats: [{ stat: "defense", value: 7 }, { stat: "wetResist", value: 5 }, { stat: "life", value: 8 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["stone", "shield"],
+  },
+  vine_lash: {
+    id: "vine_lash",
+    name: "Vine Lash",
+    description: "A braided thorny vine that strikes like a whip. Fast, flexible, and vicious.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 9 }, { stat: "attackSpeed", value: 8 }, { stat: "speed", value: 2 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["wood", "weapon"],
+  },
+  quarry_crown: {
+    id: "quarry_crown",
+    name: "Quarry Crown",
+    description: "A crude helm carved from quartzite. Heavy but nearly unbreakable.",
+    slot: "head",
+    baseStats: [{ stat: "defense", value: 10 }, { stat: "life", value: 14 }, { stat: "speed", value: -2 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["stone", "armor"],
+  },
+  windrunner_boots: {
+    id: "windrunner_boots",
+    name: "Windrunner Boots",
+    description: "Supple leather boots lined with mountain fur. Made for speed at high altitude.",
+    slot: "feet",
+    baseStats: [{ stat: "speed", value: 5 }, { stat: "coldResist", value: 4 }, { stat: "endurance", value: 3 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
+  },
+
+  // ── Unique items ──
+  // Fixed affixes, not randomly rolled. Very rare chase drops.
+
+  idol_of_the_deep: {
+    id: "idol_of_the_deep",
+    name: "Idol of the Deep",
+    description: "A golden idol from the sunken temple's inner sanctum. It pulses with ancient power. Those who carry it endure far beyond their limits.",
+    slot: "offhand",
+    baseStats: [{ stat: "defense", value: 12 }, { stat: "life", value: 30 }],
+    requiredSkills: [{ skillId: "combat", level: 5 }],
+    tier: 2,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_temple_ward", rollValue: 1.0 },
+      { affixId: "affix_fortified", rollValue: 0.9 },
+    ],
+    maxAffixes: 2,
+    tags: ["treasure", "offhand"],
+  },
+  molten_edge: {
+    id: "molten_edge",
+    name: "Molten Edge",
+    description: "A blade forged in the volcanic rift itself. The metal still glows faintly along the edge. It cuts through anything — and the heat keeps predators at bay.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 24 }, { stat: "heatResist", value: 5 }, { stat: "attackSpeed", value: 4 }],
+    requiredSkills: [{ skillId: "combat", level: 6 }],
+    tier: 2,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_magma_forged", rollValue: 1.0 },
+      { affixId: "affix_keen", rollValue: 0.85 },
+      { affixId: "affix_swift", rollValue: 0.8 },
+    ],
+    maxAffixes: 3,
+    tags: ["metal", "weapon"],
   },
 };
 

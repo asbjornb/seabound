@@ -337,8 +337,13 @@ function processCompletionDiscoveries(
   // Show equipment drops from mainland expeditions
   if (c.equipmentDropped) {
     for (const eq of c.equipmentDropped) {
+      const eqDef = getEquipmentItemById(eq.defId);
       const condLabel = eq.condition === "broken" ? " (broken)" : "";
-      addDiscovery(state, "equipment", `Found ${eq.name}${condLabel}!`);
+      if (eqDef?.unique) {
+        addDiscovery(state, "equipment", `UNIQUE drop: ${eq.name}!`);
+      } else {
+        addDiscovery(state, "equipment", `Found ${eq.name}${condLabel}!`);
+      }
     }
   }
   // Generate detailed combat log entry for mainland expeditions

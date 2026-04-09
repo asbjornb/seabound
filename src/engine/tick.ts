@@ -521,10 +521,15 @@ function applyCraftCompletion(
   };
 }
 
-/** Roll equipment drops from an expedition, applying encounter grade to drop chances. */
+/** Roll equipment drops from an expedition, applying encounter grade to drop chances.
+ *  Handles two item types:
+ *  - Magic items: random affixes (includes expedition-exclusive affixes when applicable)
+ *  - Unique items: fixed affixes from the item definition (no random rolling)
+ */
 function rollEquipmentDrops(
   entries: EquipmentDropEntry[],
-  gradeChanceMult: number
+  gradeChanceMult: number,
+  expeditionId?: string
 ): EquipmentItem[] {
   const allAffixes = getAffixes();
   const items: EquipmentItem[] = [];
@@ -536,31 +541,47 @@ function rollEquipmentDrops(
     const def = getEquipmentItemById(entry.defId);
     if (!def) continue;
 
-    // Roll random affixes
-    const affixRange = entry.affixRange ?? { min: 0, max: 0 };
-    const numAffixes = affixRange.min + Math.floor(Math.random() * (affixRange.max - affixRange.min + 1));
-    const capped = Math.min(numAffixes, def.maxAffixes);
+    let pickedAffixes: EquipmentItem["affixes"];
 
-    // Pick eligible affixes (filter by allowedSlots if set)
-    const eligible = Object.values(allAffixes).filter(
-      (a) => !a.allowedSlots || a.allowedSlots.includes(def.slot)
-    );
+    if (def.unique && def.fixedAffixes) {
+      // Unique item: use fixed affixes from definition
+      pickedAffixes = def.fixedAffixes.map((fa) => ({
+        affixId: fa.affixId,
+        rollValue: fa.rollValue,
+      }));
+    } else {
+      // Magic item: roll random affixes
+      const affixRange = entry.affixRange ?? { min: 0, max: 0 };
+      const numAffixes = affixRange.min + Math.floor(Math.random() * (affixRange.max - affixRange.min + 1));
+      const capped = Math.min(numAffixes, def.maxAffixes);
 
-    const pickedAffixes: EquipmentItem["affixes"] = [];
-    const usedIds = new Set<string>();
-    for (let i = 0; i < capped && eligible.length > usedIds.size; i++) {
-      const remaining = eligible.filter((a) => !usedIds.has(a.id));
-      if (remaining.length === 0) break;
-      const pick = remaining[Math.floor(Math.random() * remaining.length)];
-      usedIds.add(pick.id);
-      pickedAffixes.push({ affixId: pick.id, rollValue: Math.random() });
+      // Pick eligible affixes: slot-compatible, plus expedition-exclusive for this expedition
+      const eligible = Object.values(allAffixes).filter((a) => {
+        if (a.allowedSlots && !a.allowedSlots.includes(def.slot)) return false;
+        // Exclude expedition-exclusive affixes from other expeditions
+        if (a.expeditionOnly && a.expeditionOnly !== expeditionId) return false;
+        return true;
+      });
+
+      pickedAffixes = [];
+      const usedIds = new Set<string>();
+      for (let i = 0; i < capped && eligible.length > usedIds.size; i++) {
+        const remaining = eligible.filter((a) => !usedIds.has(a.id));
+        if (remaining.length === 0) break;
+        const pick = remaining[Math.floor(Math.random() * remaining.length)];
+        usedIds.add(pick.id);
+        pickedAffixes.push({ affixId: pick.id, rollValue: Math.random() });
+      }
     }
+
+    // Unique items drop pristine (they're special); magic items follow dropsAsBroken
+    const condition = def.unique ? "pristine" : (entry.dropsAsBroken ? "broken" : "pristine");
 
     items.push({
       instanceId: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
       defId: entry.defId,
       affixes: pickedAffixes,
-      condition: entry.dropsAsBroken ? "broken" : "pristine",
+      condition,
     });
   }
 
@@ -634,7 +655,7 @@ function applyExpeditionCompletion(
     }
 
     if (gradeChanceMult > 0) {
-      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult);
+      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult, def.id);
       for (const item of rolledItems) {
         state.equipmentInventory.push(item);
       }
