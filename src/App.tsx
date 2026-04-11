@@ -12,6 +12,7 @@ import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
+import { EquipmentPanel } from "./components/EquipmentPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { IslandBanner } from "./components/IslandBanner";
 import { MainlandBanner } from "./components/MainlandBanner";
@@ -66,6 +67,7 @@ const MAINLAND_TAB_LABELS: Partial<Record<GameTab, string>> = {
   gather: "Harvest",
   craft: "Forge",
   explore: "Venture",
+  equipment: "Equipment",
 };
 
 function getTabLabel(tab: GameTab, screen: GameScreen): string {
@@ -242,7 +244,7 @@ export default function App() {
     setScreen(newScreen);
     // Inventory and skills are location-agnostic — preserve them when switching screens
     const currentTab = tabRef.current;
-    if (currentTab !== "inventory" && currentTab !== "skills") {
+    if (currentTab !== "inventory" && currentTab !== "skills" && currentTab !== "equipment") {
       setTab("gather");
     }
     setTabTransition(true);
@@ -352,11 +354,14 @@ export default function App() {
     [game.state]
   );
 
+  const hasEquipment = game.state.equipmentInventory.length > 0;
+
   const visibleTabs = useMemo(() => {
     return selectVisibleTabs({
       hasFoodAccess,
       hasAnyResource,
       hasAnyXp,
+      hasEquipment,
       craftRecipeCount: craftRecipes.length,
       buildRecipeCount: buildRecipes.length,
       buildActionCount: buildActions.length,
@@ -370,6 +375,7 @@ export default function App() {
     hasFoodAccess,
     hasAnyResource,
     hasAnyXp,
+    hasEquipment,
     craftRecipes.length,
     buildRecipes.length,
     buildActions.length,
@@ -551,7 +557,7 @@ export default function App() {
         {/* Desktop right sidebar: inventory (rendered before app-main in DOM, ordered via CSS) */}
         {hasAnyResource && (
           <aside className="inventory-sidebar sidebar-right">
-            <InventoryPanel state={game.state} highlightedResources={highlightedResources} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
+            <InventoryPanel state={game.state} highlightedResources={highlightedResources} />
           </aside>
         )}
 
@@ -810,8 +816,11 @@ export default function App() {
             )}
             {activeTab === "inventory" && (
               <div className="mobile-only-panel">
-                <InventoryPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
+                <InventoryPanel state={game.state} />
               </div>
+            )}
+            {activeTab === "equipment" && (
+              <EquipmentPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
             )}
             {activeTab === "craft" && (
               <CraftingPanel
