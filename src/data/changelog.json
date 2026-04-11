@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "712662d5215efbc77d369cad9c0ab5cb823e273b"
+    "newestReviewed": "34befcc5e406f2c11205eb3d1ce8de660276df3f"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Fix \"more\" dropdown menu becoming invisible on mainland biome"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
