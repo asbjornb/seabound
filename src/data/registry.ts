@@ -23,6 +23,7 @@ import type {
   AffixDef,
   BiomeDef,
   BuildingDef,
+  EquipmentItem,
   EquipmentItemDef,
   EquipmentSlotDef,
   ExpeditionDef,
@@ -201,3 +202,15 @@ export function getEquipmentItemById(id: string): EquipmentItemDef | undefined {
 export function getAffixById(id: string): AffixDef | undefined { return _pack.affixes[id]; }
 export function getRepairRecipes(): RepairRecipeDef[] { return _pack.repairRecipes; }
 export function getSalvageTables(): SalvageTableDef[] { return _pack.salvageTables; }
+
+/** Build display name for an equipment item by prepending its affix names. */
+export function getItemDisplayName(item: EquipmentItem): string {
+  const def = _pack.equipmentItems[item.defId];
+  const baseName = def?.name ?? item.defId;
+  if (item.affixes.length === 0) return baseName;
+  const affixNames = item.affixes
+    .map((a) => _pack.affixes[a.affixId]?.name)
+    .filter(Boolean);
+  if (affixNames.length === 0) return baseName;
+  return `${affixNames.join(" ")} ${baseName}`;
+}

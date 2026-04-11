@@ -5,6 +5,7 @@ import {
   getBuildings,
   getEquipmentItemById,
   getExpeditionById,
+  getItemDisplayName,
   getRecipeById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
@@ -672,8 +673,7 @@ function applyExpeditionCompletion(
       }
       if (rolledItems.length > 0) {
         equipmentDropped = rolledItems.map((item) => {
-          const itemDef = getEquipmentItemById(item.defId);
-          return { defId: item.defId, name: itemDef?.name ?? item.defId, condition: item.condition };
+          return { defId: item.defId, name: getItemDisplayName(item), condition: item.condition };
         });
       }
     }

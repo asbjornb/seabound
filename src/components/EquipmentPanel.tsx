@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables, getResources } from "../data/registry";
+import { getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables, getResources, getItemDisplayName } from "../data/registry";
 import { EquipmentItem, GameState, RepairRecipeDef, SalvageTableDef } from "../data/types";
 
 type EquipSortKey = "name" | "tier" | "slot";
@@ -226,7 +226,6 @@ export function EquipmentPanel({
     }
 
     const equippedStats = computeItemStats(equippedItem);
-    const equippedDef = getEquipmentItemById(equippedItem.defId);
     const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
     const diffs: { stat: string; diff: number }[] = [];
     for (const stat of allStatKeys) {
@@ -234,16 +233,17 @@ export function EquipmentPanel({
       if (diff !== 0) diffs.push({ stat, diff });
     }
 
+    const equippedDisplayName = equippedItem ? getItemDisplayName(equippedItem) : "equipped";
     if (diffs.length === 0) return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDef?.name ?? "equipped"}:</span>
+        <span className="compare-label">vs. {equippedDisplayName}:</span>
         <span className="compare-stat">identical stats</span>
       </div>
     );
 
     return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDef?.name ?? "equipped"}:</span>
+        <span className="compare-label">vs. {equippedDisplayName}:</span>
         <div className="compare-stats">
           {diffs.map(({ stat, diff }) => (
             <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
@@ -275,7 +275,7 @@ export function EquipmentPanel({
       >
         <div className="inventory-item-header">
           <span className={`inventory-item-name${def.unique ? " unique-name" : ""}`}>
-            {def.name}
+            {getItemDisplayName(item)}
             {def.unique && <span className="unique-badge">Unique</span>}
             {isEquipped && <span className="equip-badge">E</span>}
           </span>
