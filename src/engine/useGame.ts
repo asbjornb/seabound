@@ -348,8 +348,16 @@ function processCompletionDiscoveries(
       expeditionId: c.actionId,
       expeditionName: c.actionName,
       grade: c.encounterResult.grade,
-      checkResults: c.encounterResult.checkResults,
-      passRatio: c.encounterResult.passRatio,
+      enemyName: c.encounterResult.enemyName,
+      roundsFought: c.encounterResult.roundsFought,
+      playerHpStart: c.encounterResult.playerHpStart,
+      playerHpEnd: c.encounterResult.playerHpEnd,
+      enemyHpStart: c.encounterResult.enemyHpStart,
+      enemyHpEnd: c.encounterResult.enemyHpEnd,
+      totalDamageDealt: c.encounterResult.totalDamageDealt,
+      totalDamageTaken: c.encounterResult.totalDamageTaken,
+      critsLanded: c.encounterResult.critsLanded,
+      dodges: c.encounterResult.dodges,
       estimatedWinRate: c.encounterResult.estimatedWinRate,
       dropMultiplier: c.encounterResult.dropMultiplier,
       xpMultiplier: c.encounterResult.xpMultiplier,
@@ -365,11 +373,12 @@ function processCompletionDiscoveries(
     }
 
     // Track expedition telemetry
+    const hpRatio = c.encounterResult.playerHpStart > 0 ? c.encounterResult.playerHpEnd / c.encounterResult.playerHpStart : 0;
     trackExpeditionComplete(
       state,
       c.actionId,
       c.encounterResult.grade,
-      c.encounterResult.passRatio,
+      hpRatio,
       c.equipmentDropped?.length ?? 0,
     );
 
@@ -381,7 +390,8 @@ function processCompletionDiscoveries(
     if (dropCount > 0) lootParts.push(`${dropCount} resources`);
     if (eqCount > 0) lootParts.push(`${eqCount} equipment`);
     const lootSummary = lootParts.length > 0 ? ` — ${lootParts.join(", ")}` : "";
-    addDiscovery(state, "expedition", `${c.actionName}: ${gradeLabel} (${Math.round(c.encounterResult.passRatio * 100)}% checks passed)${lootSummary}`);
+    const hpPct = c.encounterResult.playerHpStart > 0 ? Math.round(c.encounterResult.playerHpEnd / c.encounterResult.playerHpStart * 100) : 0;
+    addDiscovery(state, "expedition", `${c.actionName}: ${gradeLabel} vs ${c.encounterResult.enemyName} (${hpPct}% HP remaining)${lootSummary}`);
   }
 }
 

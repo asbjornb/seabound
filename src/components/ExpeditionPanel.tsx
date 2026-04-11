@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { getResources } from "../data/registry";
 import type { ExpeditionDef, GameState, LootDrop } from "../data/types";
-import { computeLoadoutStats, computeGearScore, estimateWinRate, computeCheckPassChance } from "../engine/combat";
+import { computeLoadoutStats, estimateWinRate, estimateGradeDistribution } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 import { useItemLookup } from "./ItemLookup";
@@ -31,7 +31,6 @@ function getEffectiveDrops(
   exp: ExpeditionDef,
   state: GameState,
 ): { resourceId: string; amount: number; chance: number }[] {
-  // Filter outcomes the same way pickWeightedOutcome does
   const adjusted = exp.outcomes.map((o) => {
     if (o.biomeDiscovery && state.discoveredBiomes.includes(o.biomeDiscovery))
       return { ...o, weight: 0 };
@@ -46,7 +45,6 @@ function getEffectiveDrops(
   const totalWeight = adjusted.reduce((sum, o) => sum + o.weight, 0);
   if (totalWeight === 0) return [];
 
-  // Aggregate: for each resource, sum probability * amount across outcomes
   const agg = new Map<string, { totalChance: number; amounts: number[] }>();
   for (const o of adjusted) {
     if (o.weight === 0 || !o.drops) continue;
@@ -126,7 +124,7 @@ function LootTableDisplay({ lootTable, resources, state }: { lootTable: LootDrop
   );
 }
 
-/** Colour a win rate percentage: red → yellow → green. */
+/** Colour a win rate percentage: red -> yellow -> green. */
 function winRateColor(rate: number): string {
   if (rate < 0.2) return "#e74c3c";
   if (rate < 0.5) return "#f0c040";
@@ -134,45 +132,78 @@ function winRateColor(rate: number): string {
   return "#2ecc71";
 }
 
-/** Show current loadout stats vs expedition stat checks with win rate. */
+/** Format a stat name for display. */
+function formatStat(stat: string): string {
+  return stat.replace(/([A-Z])/g, " $1").replace(/_/g, " ");
+}
+
+/** Show combat preview: enemy info, player stats comparison, grade distribution. */
 function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }) {
   if (!exp.difficulty) return null;
 
+  const enemy = exp.difficulty.enemy;
   const loadoutStats = computeLoadoutStats(state);
-  const gearScore = computeGearScore(loadoutStats);
-  const checks = exp.difficulty.statChecks;
-  const winRate = estimateWinRate(state, exp.difficulty);
+  const winRate = useMemo(() => estimateWinRate(state, exp.difficulty!), [state, exp]);
+  const grades = useMemo(() => estimateGradeDistribution(state, exp.difficulty!), [state, exp]);
   const winPct = Math.round(winRate * 100);
+
+  // Determine primary damage types for display
+  const dmgTypes = enemy.damageTypes ?? { physical: 1.0 };
+  const typeLabels: string[] = [];
+  if ((dmgTypes.physical ?? 0) > 0) typeLabels.push(`${Math.round((dmgTypes.physical ?? 0) * 100)}% physical`);
+  if ((dmgTypes.heat ?? 0) > 0) typeLabels.push(`${Math.round((dmgTypes.heat ?? 0) * 100)}% heat`);
+  if ((dmgTypes.cold ?? 0) > 0) typeLabels.push(`${Math.round((dmgTypes.cold ?? 0) * 100)}% cold`);
+  if ((dmgTypes.wet ?? 0) > 0) typeLabels.push(`${Math.round((dmgTypes.wet ?? 0) * 100)}% wet`);
+
+  // Key player stats for comparison
+  const playerOffense = loadoutStats["offense"] ?? 0;
+  const playerDefense = loadoutStats["defense"] ?? 0;
+  const playerLife = 50 + (loadoutStats["life"] ?? 0);
 
   return (
     <div className="loadout-preview">
       <div className="loadout-preview-title">
         Win Rate: <span style={{ color: winRateColor(winRate), fontWeight: 700 }}>{winPct}%</span>
       </div>
+
+      {/* Grade distribution bar */}
+      <div className="combat-grade-bar" style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
+        {grades.success > 0 && <div style={{ width: `${grades.success * 100}%`, background: "#2ecc71" }} title={`Success: ${Math.round(grades.success * 100)}%`} />}
+        {grades.partial > 0 && <div style={{ width: `${grades.partial * 100}%`, background: "#f0c040" }} title={`Partial: ${Math.round(grades.partial * 100)}%`} />}
+        {grades.failure > 0 && <div style={{ width: `${grades.failure * 100}%`, background: "#e74c3c" }} title={`Failure: ${Math.round(grades.failure * 100)}%`} />}
+      </div>
+
+      {/* Enemy info */}
+      <div className="combat-enemy-info" style={{ fontSize: "0.85em", color: "var(--text-secondary)", marginBottom: 6 }}>
+        <strong>{enemy.name}</strong> — {enemy.hp} HP, {enemy.damage} dmg ({typeLabels.join(", ")})
+      </div>
+
+      {/* Stat comparison */}
       <div className="loadout-checks">
-        {checks.map((c) => {
-          const val = loadoutStats[c.stat] ?? 0;
-          const chance = computeCheckPassChance(val, c.threshold);
-          const chancePct = Math.round(chance * 100);
-          return (
-            <span
-              key={c.stat}
-              className={`loadout-check${chance >= 0.5 ? " pass" : " fail"}`}
-              title={`${chancePct}% chance to pass this check`}
-            >
-              {c.stat.replace(/([A-Z])/g, " $1")} {val}/{c.threshold} ({chancePct}%)
-            </span>
-          );
-        })}
-        {exp.difficulty.minGearScore != null && (() => {
-          const gsChance = computeCheckPassChance(gearScore, exp.difficulty.minGearScore!);
-          const gsPct = Math.round(gsChance * 100);
-          return (
-            <span className={`loadout-check${gsChance >= 0.5 ? " pass" : " fail"}`}>
-              gear score {gearScore}/{exp.difficulty.minGearScore} ({gsPct}%)
-            </span>
-          );
-        })()}
+        <span className={`loadout-check${playerOffense > enemy.defense ? " pass" : " fail"}`}>
+          atk {playerOffense} vs def {enemy.defense}
+        </span>
+        <span className={`loadout-check${playerDefense > 0 ? " pass" : " fail"}`}>
+          def {playerDefense}
+        </span>
+        <span className={`loadout-check${playerLife > enemy.damage * 5 ? " pass" : " fail"}`}>
+          HP {playerLife}
+        </span>
+        {(dmgTypes.heat ?? 0) > 0 && (
+          <span className={`loadout-check${(loadoutStats["heatResist"] ?? 0) >= 3 ? " pass" : " fail"}`}>
+            {formatStat("heatResist")} {loadoutStats["heatResist"] ?? 0}
+          </span>
+        )}
+        {(dmgTypes.cold ?? 0) > 0 && (
+          <span className={`loadout-check${(loadoutStats["coldResist"] ?? 0) >= 3 ? " pass" : " fail"}`}>
+            {formatStat("coldResist")} {loadoutStats["coldResist"] ?? 0}
+          </span>
+        )}
+        {(dmgTypes.wet ?? 0) > 0 && (
+          <span className={`loadout-check${(loadoutStats["wetResist"] ?? 0) >= 3 ? " pass" : " fail"}`}>
+            {formatStat("wetResist")} {loadoutStats["wetResist"] ?? 0}
+          </span>
+        )}
       </div>
       {exp.difficulty.hint && winRate < 0.5 && (
         <div className="loadout-hint">{exp.difficulty.hint}</div>

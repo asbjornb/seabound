@@ -317,7 +317,7 @@ export type RecipeHideCondition =
 // Expedition Combat — Difficulty Profiles
 // ═══════════════════════════════════════
 
-/** Hazard categories that an expedition can present. Gear stats mitigate specific hazards. */
+/** Hazard categories that an expedition can present (thematic, used for hints/UI). */
 export type HazardType =
   | "heat"       // volcanic, desert — mitigated by heatResist
   | "cold"       // alpine, night exposure — mitigated by coldResist
@@ -326,22 +326,40 @@ export type HazardType =
   | "terrain"    // rough ground, cliffs — mitigated by speed + endurance
   | "endurance"; // long treks, attrition — mitigated by endurance + comfort
 
-/** A single stat check within an expedition's difficulty profile. */
-export interface StatCheck {
-  /** The stat being tested (matches StatModifier.stat, e.g. "offense", "defense", "heatResist"). */
-  stat: string;
-  /** Minimum total stat value for a comfortable pass. Below this, outcomes degrade. */
-  threshold: number;
+/**
+ * Enemy combat profile for round-based combat simulation.
+ * Each expedition with a difficulty defines an enemy the player fights.
+ */
+export interface EnemyCombatProfile {
+  /** Display name of the enemy. */
+  name: string;
+  /** Enemy hit points — must be reduced to 0 to win. */
+  hp: number;
+  /** Base damage per enemy hit. */
+  damage: number;
+  /** Enemy attacks per round (1.0 = one hit per round). */
+  attackSpeed: number;
+  /** Enemy defense — reduces player's physical damage. */
+  defense: number;
+  /**
+   * How the enemy's damage is split across types. Fractions should sum to 1.0.
+   * Physical is reduced by player defense, others by matching resist stats.
+   * Defaults to { physical: 1.0 } if omitted.
+   */
+  damageTypes?: {
+    physical?: number;
+    heat?: number;
+    cold?: number;
+    wet?: number;
+  };
 }
 
 /** Difficulty profile for a mainland combat expedition. */
 export interface ExpeditionDifficultyProfile {
-  /** Primary hazard types present in this expedition. */
+  /** Primary hazard types present in this expedition (thematic). */
   hazards: HazardType[];
-  /** Stat checks the player's loadout is evaluated against. */
-  statChecks: StatCheck[];
-  /** Minimum combined gear score (sum of all equipped base + affix stats) for viability. */
-  minGearScore?: number;
+  /** The enemy the player fights in a round-based combat simulation. */
+  enemy: EnemyCombatProfile;
   /** Brief hint shown before departure (e.g. "Bring heat-resistant gear and a sturdy weapon"). */
   hint: string;
 }
@@ -451,17 +469,6 @@ export interface RoutineProgress {
 // Combat Log (per-expedition detailed logs)
 // ═══════════════════════════════════════
 
-export interface CombatCheckResult {
-  stat: string;
-  threshold: number;
-  playerValue: number;
-  /** Probability this check would pass (0-1), before the actual roll. */
-  passChance: number;
-  passed: boolean;
-  /** True if a critical hit boosted this check's effective ratio. */
-  critted?: boolean;
-}
-
 export interface CombatLogEntry {
   id: number;
   timestamp: number;
@@ -469,10 +476,18 @@ export interface CombatLogEntry {
   expeditionName: string;
   /** Overall encounter grade. */
   grade: "success" | "partial" | "failure";
-  /** Per-stat check breakdown. */
-  checkResults: CombatCheckResult[];
-  /** Fraction of checks passed (0-1). */
-  passRatio: number;
+  /** Enemy name fought. */
+  enemyName: string;
+  /** Combat simulation summary. */
+  roundsFought: number;
+  playerHpStart: number;
+  playerHpEnd: number;
+  enemyHpStart: number;
+  enemyHpEnd: number;
+  totalDamageDealt: number;
+  totalDamageTaken: number;
+  critsLanded: number;
+  dodges: number;
   /** Estimated overall success probability before rolling (0-1). */
   estimatedWinRate: number;
   /** Multipliers applied to drops and XP. */

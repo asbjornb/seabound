@@ -15,6 +15,7 @@ export function CombatLogModal({
   onClose: () => void;
 }) {
   const grade = GRADE_LABELS[entry.grade] ?? { label: entry.grade, color: "var(--text)" };
+  const hpPercent = entry.playerHpStart > 0 ? Math.round((entry.playerHpEnd / entry.playerHpStart) * 100) : 0;
 
   return (
     <div className="log-overlay" onClick={onClose}>
@@ -43,29 +44,59 @@ export function CombatLogModal({
             </div>
           )}
 
-          {/* Stat checks */}
-          {entry.checkResults.length > 0 && (
+          {/* Combat summary */}
+          {entry.enemyName && (
             <div className="combat-log-section">
-              <div className="combat-log-section-title">Stat Checks</div>
-              {entry.checkResults.map((check, i) => (
-                <div key={i} className="combat-log-check">
-                  <span className="combat-log-check-name">
-                    {check.stat.replace(/([A-Z])/g, " $1").replace(/_/g, " ")}
-                    {check.critted && <span style={{ color: "#f0c040" }} title="Critical hit boosted this check"> ★</span>}
-                  </span>
-                  <span
-                    className="combat-log-check-result"
-                    style={{ color: check.passed ? "#2ecc71" : "#e74c3c" }}
-                  >
-                    {Math.round(check.playerValue)} / {check.threshold}
-                    {check.passChance != null && <span style={{ opacity: 0.7 }}> ({Math.round(check.passChance * 100)}%)</span>}
-                    {check.passed ? " ✓" : " ✗"}
+              <div className="combat-log-section-title">Combat vs {entry.enemyName}</div>
+
+              {/* HP bars */}
+              <div style={{ marginBottom: 6 }}>
+                <div className="combat-log-check">
+                  <span className="combat-log-check-name">Your HP</span>
+                  <span className="combat-log-check-result" style={{ color: entry.playerHpEnd > 0 ? "#2ecc71" : "#e74c3c" }}>
+                    {entry.playerHpEnd} / {entry.playerHpStart} ({hpPercent}%)
                   </span>
                 </div>
-              ))}
-              <div className="combat-log-pass-ratio">
-                {Math.round(entry.passRatio * 100)}% passed
+                <div style={{ height: 4, borderRadius: 2, overflow: "hidden", background: "rgba(255,255,255,0.1)", marginBottom: 4 }}>
+                  <div style={{
+                    width: `${hpPercent}%`,
+                    height: "100%",
+                    background: hpPercent > 50 ? "#2ecc71" : hpPercent > 0 ? "#f0c040" : "#e74c3c",
+                  }} />
+                </div>
+                <div className="combat-log-check">
+                  <span className="combat-log-check-name">Enemy HP</span>
+                  <span className="combat-log-check-result" style={{ color: entry.enemyHpEnd <= 0 ? "#2ecc71" : "#e74c3c" }}>
+                    {entry.enemyHpEnd <= 0 ? "Defeated" : `${entry.enemyHpEnd} / ${entry.enemyHpStart}`}
+                  </span>
+                </div>
               </div>
+
+              {/* Combat stats */}
+              <div className="combat-log-check">
+                <span className="combat-log-check-name">Rounds fought</span>
+                <span className="combat-log-check-result">{entry.roundsFought}</span>
+              </div>
+              <div className="combat-log-check">
+                <span className="combat-log-check-name">Damage dealt</span>
+                <span className="combat-log-check-result" style={{ color: "#2ecc71" }}>{entry.totalDamageDealt}</span>
+              </div>
+              <div className="combat-log-check">
+                <span className="combat-log-check-name">Damage taken</span>
+                <span className="combat-log-check-result" style={{ color: entry.totalDamageTaken > 0 ? "#e74c3c" : "#2ecc71" }}>{entry.totalDamageTaken}</span>
+              </div>
+              {entry.critsLanded > 0 && (
+                <div className="combat-log-check">
+                  <span className="combat-log-check-name">Critical hits <span style={{ color: "#f0c040" }}>★</span></span>
+                  <span className="combat-log-check-result" style={{ color: "#f0c040" }}>{entry.critsLanded}</span>
+                </div>
+              )}
+              {entry.dodges > 0 && (
+                <div className="combat-log-check">
+                  <span className="combat-log-check-name">Dodges</span>
+                  <span className="combat-log-check-result" style={{ color: "#8bc34a" }}>{entry.dodges}</span>
+                </div>
+              )}
             </div>
           )}
 
