@@ -1,9 +1,16 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "d0b7bec38621447f6fcf486078ab9bc20d67e538"
+    "newestReviewed": "de6d1c0324b966e83785113e0bafca8758324e0e"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Fix mainland expeditions now returning empty water bottles after use",
+        "Remove duplicate empty water bottle drops from island expedition loot tables"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
