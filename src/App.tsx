@@ -690,7 +690,7 @@ export default function App() {
 
           <div className="tabs-row">
             <nav className="tabs">
-              {visibleTabs.filter((t) => t !== "inventory" && t !== "skills").map((t) => (
+              {visibleTabs.filter((t) => visibleTabs.length <= 7 ? true : t !== "inventory" && t !== "skills").map((t) => (
                 <button
                   key={t}
                   className={`tab ${activeTab === t ? "active" : ""}`}
@@ -706,7 +706,7 @@ export default function App() {
                 </button>
               ))}
               {/* Desktop: show skills tab inline (inventory is in sidebar on desktop) */}
-              {visibleTabs.includes("skills") && (
+              {visibleTabs.length > 7 && visibleTabs.includes("skills") && (
                 <button
                   className={`tab desktop-only-tab ${activeTab === "skills" ? "active" : ""}`}
                   onClick={() => handleTabSwitch("skills")}
@@ -715,7 +715,7 @@ export default function App() {
                 </button>
               )}
               {/* Mobile: show overflow tabs behind "More" menu (hidden on desktop via CSS) */}
-              {visibleTabs.some((t) => t === "inventory" || t === "skills") && (
+              {visibleTabs.length > 7 && visibleTabs.some((t) => t === "inventory" || t === "skills") && (
                 <div className="tab-more-wrapper" ref={moreMenuRef}>
                   <button
                     className={`tab tab-more ${(activeTab === "inventory" || activeTab === "skills") ? "active" : ""}`}
