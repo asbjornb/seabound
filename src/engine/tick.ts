@@ -276,17 +276,7 @@ export function processTick(state: GameState, now: number): TickResult {
         }
       }
       if (def.foodCost) deductFood(state, def.foodCost);
-      if (def.waterCost) {
-        const waterTaken = deductWater(state, def.waterCost);
-        // Return empty containers for consumed water (mainland expeditions only;
-        // island expeditions handle this via outcome drops)
-        if (waterTaken && def.mainland) {
-          const freshWaterUsed = waterTaken["fresh_water"] ?? 0;
-          if (freshWaterUsed > 0) {
-            addResource(state, "fired_clay_pot", freshWaterUsed);
-          }
-        }
-      }
+      if (def.waterCost) deductWater(state, def.waterCost);
       // Deduct resource inputs
       if (def.inputs) {
         for (const inp of def.inputs) {
@@ -650,6 +640,18 @@ function applyExpeditionCompletion(
         addResource(state, r.resourceId, finalAmount);
         drops.push({ name: r.resourceId, amount: finalAmount });
       }
+    }
+  }
+
+  // Return empty water containers (~85% survive the trip)
+  if (def.waterCost && def.waterCost > 0) {
+    let potsReturned = 0;
+    for (let i = 0; i < def.waterCost; i++) {
+      if (Math.random() < 0.85) potsReturned++;
+    }
+    if (potsReturned > 0) {
+      addResource(state, "fired_clay_pot", potsReturned);
+      drops.push({ name: "fired_clay_pot", amount: potsReturned });
     }
   }
 

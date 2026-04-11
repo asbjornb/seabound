@@ -708,11 +708,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You paddle past a volcanic island and discover a cove rich with obsidian outcrops!",
         biomeDiscovery: "nearby_island",
-        drops: [
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-        ],
       },
       {
         weight: 20,
@@ -720,9 +715,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           "You land on a lush islet and find banana plants growing wild. You carefully dig up a shoot.",
         drops: [
           { resourceId: "banana_shoot", amount: 1 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
         ],
       },
       {
@@ -731,9 +723,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           "You discover a breadfruit grove on a distant island and take root cuttings.",
         drops: [
           { resourceId: "breadfruit_cutting", amount: 1 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
         ],
       },
       {
@@ -742,9 +731,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           "You find pandanus plants growing wild along the shore of a far island. You take a cutting.",
         drops: [
           { resourceId: "pandanus_cutting", amount: 1 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
         ],
       },
       {
@@ -753,39 +739,22 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           "You find obsidian outcrops on a distant volcanic shore.",
         drops: [
           { resourceId: "obsidian", amount: 3 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
         ],
       },
       {
         weight: 20,
         description:
           "You beach on a wooded island and gather materials.",
-        drops: [
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-        ],
       },
       {
         weight: 15,
         description:
           "You watch the sunset from a pristine beach. The world feels vast and full of possibility.",
-        drops: [
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-        ],
       },
       {
         weight: 18,
         description:
           "Strong currents push you off course. You return tired but safe.",
-        drops: [
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-        ],
       },
     ],
     lootTable: [
@@ -812,16 +781,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "The sail catches the trade winds and the outrigger cuts through the swells. Days blur into nights. On the third morning, a dark line of land rises from the horizon — not your island, but a new shore. Smoke drifts from a village above the beach. You've made it. You're no longer a castaway.",
         drops: [
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
-          { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
           { resourceId: "sealed_clay_jar", amount: 1, chance: 0.85 },
           { resourceId: "sealed_clay_jar", amount: 1, chance: 0.85 },
           { resourceId: "sealed_clay_jar", amount: 1, chance: 0.85 },
