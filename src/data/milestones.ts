@@ -524,28 +524,28 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   ],
   smithing: [
     {
-      level: 5,
+      level: 3,
       description: "Even heat — all smelting 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
-      level: 13,
+      level: 7,
       description: "Bellows mastery — all smithing 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
       ],
     },
     {
-      level: 18,
+      level: 10,
       description: "Hammer rhythm — bloom hammering 20% faster",
       effects: [
         { type: "duration", actionId: "hammer_iron_bloom", multiplier: 0.8 },
       ],
     },
     {
-      level: 20,
+      level: 13,
       description: "Master smith — all smithing 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
