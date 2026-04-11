@@ -172,7 +172,7 @@ export function selectAvailableRecipes(state: GameState): RecipeDef[] {
 
 export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
   return getExpeditions().filter((expedition) => {
-    if (expedition.victory && state.victory) return false;
+    if (expedition.victory && state.mainlandUnlocked) return false;
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
