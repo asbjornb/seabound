@@ -676,7 +676,8 @@ body {
 /* Hide flavor text mode */
 .hide-flavor-text .action-desc,
 .hide-flavor-text .inventory-item-desc,
-.hide-flavor-text .building-desc {
+.hide-flavor-text .building-desc,
+.hide-flavor-text .equip-description {
   display: none;
 }
 
@@ -2192,6 +2193,116 @@ body {
 }
 .discard-btn.cancel {
   border-color: var(--text-dim);
+}
+
+/* Inline stat preview on collapsed items */
+.equip-stat-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 6px;
+  margin-top: 3px;
+}
+.equip-stat-chip {
+  font-size: 0.65rem;
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 8%, transparent);
+  padding: 0 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.equip-stat-chip.negative {
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+}
+
+/* Expanded item detail area */
+.inventory-item-details {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--text-dim) 15%, transparent);
+}
+.equip-description {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+/* Affix detail rows (name + actual stat values) */
+.equip-affix-detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.affix-mods {
+  display: flex;
+  gap: 4px;
+}
+
+/* Comparison section */
+.equip-compare {
+  margin-top: 6px;
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+}
+.compare-label {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  margin-bottom: 2px;
+  display: block;
+}
+.compare-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-top: 2px;
+}
+.compare-stat {
+  font-size: 0.68rem;
+  padding: 0 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+.compare-stat.gain {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  font-weight: 600;
+}
+.compare-stat.loss {
+  color: var(--error, #e06060);
+  background: color-mix(in srgb, var(--error, #e06060) 10%, transparent);
+  font-weight: 600;
+}
+
+/* Consolidated action bar */
+.equip-action-bar {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--text-dim) 15%, transparent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Repair/salvage detail breakdowns */
+.equip-repair-details,
+.equip-salvage-details {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: center;
+}
+.repair-details-label,
+.salvage-details-label {
+  font-weight: 600;
 }
 
 /* Loadout preview on mainland expeditions */
