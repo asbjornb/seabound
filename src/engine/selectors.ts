@@ -426,11 +426,13 @@ export function selectVisibleTabs(params: {
   availableStationCount: number;
   deployedStationCount: number;
   routinesUnlocked: boolean;
+  gatherActionCount?: number;
   screen?: GameScreen;
 }): GameTab[] {
   if (params.screen === "mainland") {
     // Mainland has a simpler tab set — no tend/build
-    const tabs: GameTab[] = ["gather"];
+    const tabs: GameTab[] = [];
+    if ((params.gatherActionCount ?? 0) > 0) tabs.push("gather");
     if (params.craftRecipeCount > 0) tabs.push("craft");
     if (params.hasFoodAccess) tabs.push("explore");
     if (params.hasEquipment) tabs.push("equipment");

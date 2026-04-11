@@ -14,7 +14,7 @@
 import { writeFileSync, readFileSync } from "fs";
 import { ACTIONS } from "../src/data/actions";
 import { BUILDINGS } from "../src/data/buildings";
-import { EXPEDITIONS } from "../src/data/expeditions";
+import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
 import { RECIPES } from "../src/data/recipes";
 import { RESOURCES } from "../src/data/resources";
 import { SKILLS } from "../src/data/skills";
@@ -294,7 +294,8 @@ for (const t of toolsWithOutput) {
 }
 
 // Expeditions
-for (const e of EXPEDITIONS) {
+const ALL_EXPEDITIONS = [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS];
+for (const e of ALL_EXPEDITIONS) {
   const expId = `expedition:${e.id}`;
   addNode({ id: expId, type: "expedition", label: e.name, category: "navigation" });
 
@@ -619,7 +620,7 @@ function computeReachable(): Set<string> {
       }
     }
 
-    for (const e of EXPEDITIONS) {
+    for (const e of ALL_EXPEDITIONS) {
       const id = `expedition:${e.id}`;
       if (reachable.has(id)) continue;
       const vesselMet = !e.requiredVessel || reachable.has(`building:${e.requiredVessel}`);

@@ -369,6 +369,7 @@ export default function App() {
       availableStationCount: screen === "mainland" ? 0 : game.availableStations.length,
       deployedStationCount: screen === "mainland" ? 0 : game.state.stations.length,
       routinesUnlocked: screen === "mainland" ? false : routinesUnlocked,
+      gatherActionCount: gatherActions.length,
       screen,
     });
   }, [
@@ -379,6 +380,7 @@ export default function App() {
     craftRecipes.length,
     buildRecipes.length,
     buildActions.length,
+    gatherActions.length,
     game.state.buildings.length,
     game.availableStations.length,
     game.state.stations.length,
@@ -386,8 +388,8 @@ export default function App() {
     screen,
   ]);
 
-  // Fall back to gather if current tab isn't visible
-  const activeTab = visibleTabs.includes(tab) ? tab : "gather";
+  // Fall back to first visible tab if current tab isn't visible
+  const activeTab = visibleTabs.includes(tab) ? tab : visibleTabs[0] ?? "gather";
 
   const currentActionName = useMemo(
     () => selectCurrentActionName(game.state),
