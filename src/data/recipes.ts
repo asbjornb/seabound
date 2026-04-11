@@ -1308,7 +1308,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Combine copper and tin in the crucible to forge a superior alloy.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "copper_ingot", amount: 1 },
       { resourceId: "tin_ore", amount: 2 },
@@ -1329,7 +1328,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Reduce iron ore in the bloomery to produce a spongy mass of crude iron.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 15,
     inputs: [
       { resourceId: "iron_ore", amount: 3 },
       { resourceId: "charcoal", amount: 5 },
@@ -1346,7 +1344,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Hammer the bloom repeatedly to drive out slag and consolidate the iron.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 17,
     inputs: [
       { resourceId: "iron_bloom", amount: 1 },
       { resourceId: "charcoal", amount: 2 },
@@ -1365,7 +1362,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Carburize iron with charcoal at extreme heat. Slow, costly, but the metal is unmatched.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 22,
     inputs: [
       { resourceId: "iron_ingot", amount: 2 },
       { resourceId: "charcoal", amount: 8 },
@@ -1495,7 +1491,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Hammer a copper spearhead and bind it to a hardwood shaft. A reliable sidearm for mainland treks.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 3,
     inputs: [
       { resourceId: "copper_ingot", amount: 2 },
       { resourceId: "bamboo_cane", amount: 1 },
@@ -1513,7 +1508,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Cast a heavy copper axe head and haft it with hardwood. Slow but devastating.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 5,
     inputs: [
       { resourceId: "copper_ingot", amount: 3 },
       { resourceId: "bamboo_cane", amount: 1 },
@@ -1531,7 +1525,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Hammer copper sheets over a wooden frame. Dependable protection for the mainland.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 4,
     inputs: [
       { resourceId: "copper_ingot", amount: 2 },
       { resourceId: "bamboo_cane", amount: 2 },
@@ -1549,7 +1542,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Layer and stitch dried fibers into a proper chest piece. The first real armor.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 2,
     inputs: [
       { resourceId: "dried_fiber", amount: 6 },
       { resourceId: "cordage", amount: 2 },
@@ -1566,7 +1558,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Shape and stitch layered fiber into a fitted cap.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 2,
     inputs: [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 1 },
@@ -1582,7 +1573,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Fit and stitch fiber panels into leggings. Good mobility with decent protection.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 2,
     inputs: [
       { resourceId: "dried_fiber", amount: 4 },
       { resourceId: "cordage", amount: 1 },
@@ -1599,7 +1589,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Sole and stitch sturdy fiber boots. Ankle support for rough mainland terrain.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 3,
     inputs: [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 1 },
@@ -1620,7 +1609,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Cast and hammer a leaf-shaped bronze blade. Balanced and sharp — a true weapon.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 10,
     inputs: [
       { resourceId: "bronze_ingot", amount: 3 },
       { resourceId: "bamboo_cane", amount: 1 },
@@ -1638,7 +1626,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Cast a heavy round shield in bronze. Turns aside even determined blows.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "bronze_ingot", amount: 3 },
       { resourceId: "bamboo_cane", amount: 2 },
@@ -1656,7 +1643,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Hammer a close-fitting bronze helmet with cheek guards. Solid head protection.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "bronze_ingot", amount: 2 },
       { resourceId: "dried_fiber", amount: 2 },
@@ -1673,7 +1659,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Hammer bronze plates shaped to the torso. Heavy but formidable protection.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 10,
     inputs: [
       { resourceId: "bronze_ingot", amount: 4 },
       { resourceId: "dried_fiber", amount: 3 },
@@ -1691,7 +1676,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Beat bronze into shin guards. Protects the legs on rough marches.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "bronze_ingot", amount: 2 },
       { resourceId: "dried_fiber", amount: 2 },
@@ -1709,7 +1693,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Reinforce leather boots with bronze plates at the toe and heel.",
     skillId: "smithing",
     panel: "craft",
-    requiredSkillLevel: 8,
     inputs: [
       { resourceId: "bronze_ingot", amount: 2 },
       { resourceId: "dried_fiber", amount: 3 },
@@ -1729,7 +1712,6 @@ export const RECIPES: RecipeDef[] = [
     description: "Construct a clay shaft furnace with bellows. Required for iron smelting.",
     skillId: "smithing",
     panel: "build",
-    requiredSkillLevel: 12,
     requiredSkills: [{ skillId: "construction", level: 10 }],
     inputs: [
       { resourceId: "clay", amount: 15 },

@@ -933,66 +933,6 @@
       "category": "farming"
     },
     {
-      "id": "skill:smithing:8",
-      "type": "skill_level",
-      "label": "Smithing Lv8",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:15",
-      "type": "skill_level",
-      "label": "Smithing Lv15",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:17",
-      "type": "skill_level",
-      "label": "Smithing Lv17",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:22",
-      "type": "skill_level",
-      "label": "Smithing Lv22",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:3",
-      "type": "skill_level",
-      "label": "Smithing Lv3",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:5",
-      "type": "skill_level",
-      "label": "Smithing Lv5",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:4",
-      "type": "skill_level",
-      "label": "Smithing Lv4",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:2",
-      "type": "skill_level",
-      "label": "Smithing Lv2",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:10",
-      "type": "skill_level",
-      "label": "Smithing Lv10",
-      "category": "smithing"
-    },
-    {
-      "id": "skill:smithing:12",
-      "type": "skill_level",
-      "label": "Smithing Lv12",
-      "category": "smithing"
-    },
-    {
       "id": "skill:woodworking:4",
       "type": "skill_level",
       "label": "Woodworking Lv4",
@@ -4230,11 +4170,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:8",
-      "to": "recipe:smelt_bronze",
-      "relation": "requires_skill"
-    },
-    {
       "from": "tool:crucible",
       "to": "recipe:smelt_bronze",
       "relation": "requires_tool"
@@ -4265,11 +4200,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:15",
-      "to": "recipe:smelt_iron_bloom",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:bloomery",
       "to": "recipe:smelt_iron_bloom",
       "relation": "requires_building"
@@ -4295,11 +4225,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:17",
-      "to": "recipe:hammer_iron_bloom",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:bloomery",
       "to": "recipe:hammer_iron_bloom",
       "relation": "requires_building"
@@ -4323,11 +4248,6 @@
       "from": "recipe:forge_steel",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:22",
-      "to": "recipe:forge_steel",
-      "relation": "requires_skill"
     },
     {
       "from": "building:bloomery",
@@ -4510,11 +4430,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:3",
-      "to": "recipe:forge_copper_spear",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:kiln",
       "to": "recipe:forge_copper_spear",
       "relation": "requires_building"
@@ -4538,11 +4453,6 @@
       "from": "recipe:forge_copper_axe",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:5",
-      "to": "recipe:forge_copper_axe",
-      "relation": "requires_skill"
     },
     {
       "from": "building:kiln",
@@ -4570,11 +4480,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:4",
-      "to": "recipe:forge_copper_shield",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:kiln",
       "to": "recipe:forge_copper_shield",
       "relation": "requires_building"
@@ -4600,11 +4505,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:2",
-      "to": "recipe:stitch_hide_armor",
-      "relation": "requires_skill"
-    },
-    {
       "from": "resource:dried_fiber",
       "to": "recipe:stitch_hide_cap",
       "relation": "consumes"
@@ -4618,11 +4518,6 @@
       "from": "recipe:stitch_hide_cap",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:2",
-      "to": "recipe:stitch_hide_cap",
-      "relation": "requires_skill"
     },
     {
       "from": "resource:dried_fiber",
@@ -4645,11 +4540,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:2",
-      "to": "recipe:stitch_hide_leggings",
-      "relation": "requires_skill"
-    },
-    {
       "from": "resource:dried_fiber",
       "to": "recipe:stitch_hide_boots",
       "relation": "consumes"
@@ -4670,11 +4560,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:3",
-      "to": "recipe:stitch_hide_boots",
-      "relation": "requires_skill"
-    },
-    {
       "from": "resource:bronze_ingot",
       "to": "recipe:forge_bronze_sword",
       "relation": "consumes"
@@ -4693,11 +4578,6 @@
       "from": "recipe:forge_bronze_sword",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:10",
-      "to": "recipe:forge_bronze_sword",
-      "relation": "requires_skill"
     },
     {
       "from": "building:bloomery",
@@ -4725,11 +4605,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:8",
-      "to": "recipe:forge_bronze_shield",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:bloomery",
       "to": "recipe:forge_bronze_shield",
       "relation": "requires_building"
@@ -4748,11 +4623,6 @@
       "from": "recipe:forge_bronze_helm",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:8",
-      "to": "recipe:forge_bronze_helm",
-      "relation": "requires_skill"
     },
     {
       "from": "building:bloomery",
@@ -4780,11 +4650,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:10",
-      "to": "recipe:forge_bronze_cuirass",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:bloomery",
       "to": "recipe:forge_bronze_cuirass",
       "relation": "requires_building"
@@ -4810,11 +4675,6 @@
       "relation": "trains"
     },
     {
-      "from": "skill:smithing:8",
-      "to": "recipe:forge_bronze_greaves",
-      "relation": "requires_skill"
-    },
-    {
       "from": "building:bloomery",
       "to": "recipe:forge_bronze_greaves",
       "relation": "requires_building"
@@ -4838,11 +4698,6 @@
       "from": "recipe:forge_bronze_boots",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:8",
-      "to": "recipe:forge_bronze_boots",
-      "relation": "requires_skill"
     },
     {
       "from": "building:bloomery",
@@ -4878,11 +4733,6 @@
       "from": "recipe:build_bloomery",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "skill:smithing:12",
-      "to": "recipe:build_bloomery",
-      "relation": "requires_skill"
     },
     {
       "from": "skill:construction:10",
@@ -7754,286 +7604,6 @@
             "station:grow_pandanus",
             "station:grow_breadfruit",
             "station:harvest_pandanus_grove"
-          ]
-        }
-      ],
-      "smithing": [
-        {
-          "level": 2,
-          "unlocks": [
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 3,
-          "unlocks": [
-            "recipe:forge_copper_spear",
-            "recipe:stitch_hide_boots"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 4,
-          "unlocks": [
-            "recipe:forge_copper_shield"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 5,
-          "unlocks": [
-            "recipe:forge_copper_axe"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 8,
-          "unlocks": [
-            "recipe:smelt_bronze",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 10,
-          "unlocks": [
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_cuirass"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 12,
-          "unlocks": [
-            "recipe:build_bloomery"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 15,
-          "unlocks": [
-            "recipe:smelt_iron_bloom"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 17,
-          "unlocks": [
-            "recipe:hammer_iron_bloom"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
-          ]
-        },
-        {
-          "level": 22,
-          "unlocks": [
-            "recipe:forge_steel"
-          ],
-          "trainedBy": [
-            "recipe:smelt_copper",
-            "recipe:smelt_bronze",
-            "recipe:smelt_iron_bloom",
-            "recipe:hammer_iron_bloom",
-            "recipe:forge_steel",
-            "recipe:forge_copper_spear",
-            "recipe:forge_copper_axe",
-            "recipe:forge_copper_shield",
-            "recipe:stitch_hide_armor",
-            "recipe:stitch_hide_cap",
-            "recipe:stitch_hide_leggings",
-            "recipe:stitch_hide_boots",
-            "recipe:forge_bronze_sword",
-            "recipe:forge_bronze_shield",
-            "recipe:forge_bronze_helm",
-            "recipe:forge_bronze_cuirass",
-            "recipe:forge_bronze_greaves",
-            "recipe:forge_bronze_boots",
-            "recipe:build_bloomery"
           ]
         }
       ],

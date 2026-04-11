@@ -716,7 +716,7 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
       { resourceId: "hide", amount: 2 },
       { resourceId: "rough_fiber", amount: 1 },
     ],
-    requiredSkillLevel: 3,
+    requiredSkillLevel: 0,
     xpGain: 15,
   },
   {
@@ -728,7 +728,7 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
       { resourceId: "native_copper", amount: 2 },
       { resourceId: "charcoal", amount: 1 },
     ],
-    requiredSkillLevel: 5,
+    requiredSkillLevel: 0,
     requiredBuildings: ["kiln"],
     xpGain: 25,
   },
@@ -798,7 +798,7 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
       { resourceId: "rough_fiber", amount: 1, chance: 0.5 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
-    requiredSkillLevel: 2,
+    requiredSkillLevel: 0,
     xpGain: 8,
   },
   {
@@ -811,7 +811,7 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
       { resourceId: "charcoal", amount: 1, chance: 0.75 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
-    requiredSkillLevel: 3,
+    requiredSkillLevel: 0,
     xpGain: 12,
   },
 ];
