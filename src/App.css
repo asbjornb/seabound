@@ -2243,6 +2243,126 @@ body {
   font-size: 0.7rem;
 }
 
+/* ══════════════���════════════════════════
+   Equipment Panel (dedicated tab)
+   ═══════════════════════════════════════ */
+.equipment-panel {
+  padding: 8px;
+}
+
+.loadout-section {
+  margin-bottom: 16px;
+}
+
+.loadout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.loadout-slot {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--text-dim) 25%, transparent);
+  background: color-mix(in srgb, var(--bg-card) 80%, var(--bg-body));
+  cursor: default;
+  min-height: 52px;
+}
+.loadout-slot.filled {
+  border-color: color-mix(in srgb, var(--accent, #3ba5a5) 40%, transparent);
+  background: color-mix(in srgb, var(--accent, #3ba5a5) 8%, var(--bg-card));
+  cursor: pointer;
+}
+.loadout-slot.filled:hover {
+  background: color-mix(in srgb, var(--accent, #3ba5a5) 14%, var(--bg-card));
+}
+.loadout-slot.broken {
+  border-color: color-mix(in srgb, var(--error, #e06060) 40%, transparent);
+}
+.loadout-slot.damaged {
+  border-color: color-mix(in srgb, var(--warning, #f0c040) 40%, transparent);
+}
+
+.loadout-slot-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.loadout-slot-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.loadout-item-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.loadout-item-name.unique-name {
+  color: var(--unique, #d4a017);
+}
+
+.loadout-condition {
+  font-size: 0.65rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.loadout-condition.damaged {
+  color: var(--warning, #f0c040);
+}
+.loadout-condition.broken {
+  color: var(--error, #e06060);
+}
+
+.loadout-empty-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.loadout-totals {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--bg-card) 60%, var(--bg-body));
+  font-size: 0.78rem;
+}
+.loadout-totals-label {
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.equipment-inventory-section {
+  margin-top: 8px;
+}
+
+.equipment-group {
+  margin-top: 6px;
+}
+.equipment-group-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  margin: 8px 0 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-dim) 15%, transparent);
+}
+
 /* Drop list collapse toggle */
 .drop-list-toggle {
   display: inline-block;

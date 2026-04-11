@@ -30,7 +30,7 @@ import {
   resolveAlternateInputs,
 } from "./gameState";
 
-export type GameTab = "gather" | "inventory" | "craft" | "tend" | "build" | "explore" | "skills" | "routines";
+export type GameTab = "gather" | "inventory" | "equipment" | "craft" | "tend" | "build" | "explore" | "skills" | "routines";
 
 export type GameScreen = "island" | "mainland";
 
@@ -418,6 +418,7 @@ export function selectVisibleTabs(params: {
   hasFoodAccess: boolean;
   hasAnyResource: boolean;
   hasAnyXp: boolean;
+  hasEquipment: boolean;
   craftRecipeCount: number;
   buildRecipeCount: number;
   buildActionCount: number;
@@ -435,6 +436,7 @@ export function selectVisibleTabs(params: {
       tabs.push("build");
     }
     if (params.hasFoodAccess) tabs.push("explore");
+    if (params.hasEquipment) tabs.push("equipment");
     if (params.hasAnyResource) tabs.push("inventory");
     if (params.hasAnyXp) tabs.push("skills");
     return tabs;
