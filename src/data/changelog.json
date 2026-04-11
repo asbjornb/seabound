@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "164f60ff9e8db4a6924519f9b695c08625687ba8"
+    "newestReviewed": "b64048bad5b781eceafc30f7f007b6d7ca73c2fb"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Hide oceanic voyage expedition after reaching the mainland"
+      ]
+    },
     {
       "date": "2026-04-09",
       "changes": [
