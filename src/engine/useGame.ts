@@ -21,6 +21,8 @@ import {
   trackSalvageItem,
   trackCombatLogClear,
   trackOptionalitySnapshot,
+  trackRoutineStarted,
+  trackRoutineStopped,
 } from "../lib/analytics-events";
 import type {
   ActionDef,
@@ -220,6 +222,7 @@ function advanceRoutine(state: GameState): void {
     }
     if (outputFull) {
       state.activeRoutine = null;
+      trackRoutineStopped(state, "output_full");
       return;
     }
   }
@@ -238,6 +241,7 @@ function advanceRoutine(state: GameState): void {
 
   // No step could start — deactivate routine
   state.activeRoutine = null;
+  trackRoutineStopped(state, "cant_proceed");
 }
 
 /** Try to start the next queued action. Removes the entry on success or if it can't start. */
@@ -865,6 +869,7 @@ export function useGame() {
         // If still no active routine after trying all steps, bail
         if (!next.activeRoutine) return prev;
       }
+      trackRoutineStarted(next, routine);
       return next;
     });
   }, []);
@@ -876,6 +881,7 @@ export function useGame() {
       next.activeRoutine = null;
       saveCurrentActionProgress(next);
       next.currentAction = null;
+      trackRoutineStopped(next, "manual");
       return next;
     });
   }, []);
