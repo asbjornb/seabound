@@ -5464,11 +5464,6 @@
     },
     {
       "from": "expedition:coastal_ruins",
-      "to": "resource:raw_hide",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:coastal_ruins",
       "to": "resource:sea_worn_journal",
       "relation": "produces"
     },
