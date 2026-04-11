@@ -1,9 +1,17 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "750ff9a7b8a0bc85ff4a390645c752c4dbfb67a9"
+    "newestReviewed": "a2ca5bb15be830ab43eba8beecb7aab09e5e926f"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Remove smithing level requirements — craft, repair, and salvage equipment immediately if you have materials and buildings",
+        "Remove double-output chance milestones from smithing — focus progression on speed bonuses instead",
+        "Compress smithing milestones into earlier levels — reach key efficiency bonuses faster"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
