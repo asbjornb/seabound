@@ -156,6 +156,54 @@
     ]
   },
   {
+    "id": "tab_harvest",
+    "filename": "images/tab_harvest.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Warm amber/orange (#f0a050). Charred edges, smoke wisps.. A curved golden sickle mid-swing through a sheaf of ripe grain. Warm amber tones, a few loose grain kernels scattering. Suggests abundance and agricultural mastery.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 48×48. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Golden sickle reaping grain",
+    "description": "A curved golden sickle mid-swing through a sheaf of ripe grain. Warm amber tones, a few loose grain kernels scattering. Suggests abundance and agricultural mastery — the mainland evolution of bare-handed gathering.",
+    "theme": "fire",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "mainland"
+    ]
+  },
+  {
+    "id": "tab_forge",
+    "filename": "images/tab_forge.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Warm amber/orange (#f0a050). Charred edges, smoke wisps.. A dark iron anvil with a hammer resting on top, orange-hot metal sparks flying. Ember glow underneath suggesting a forge fire. Advanced mainland crafting.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 48×48. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Glowing anvil with hammer",
+    "description": "A dark iron anvil with a hammer resting on top, orange-hot metal sparks flying. Ember glow underneath suggesting a forge fire. Represents advanced mainland crafting — metalwork, smelting, and industrial production.",
+    "theme": "fire",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "mainland"
+    ]
+  },
+  {
+    "id": "tab_venture",
+    "filename": "images/tab_venture.png",
+    "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Ocean blue-cyan (#50b0d0). Weathered wood, salt-bleached.. A wooden ship's wheel overlaid with a four-pointed compass star. Ocean blue-cyan tones with gold compass points. Conveys ambitious voyages and trade.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 48×48. Natural, weathered, handmade feel.",
+    "model": "black-forest-labs/flux-schnell",
+    "category": "ui_tab",
+    "object": "Ship wheel with compass star",
+    "description": "A wooden ship's wheel overlaid with a four-pointed compass star. Ocean blue-cyan tones with gold compass points. Conveys ambitious voyages and trade — the mainland evolution of island exploration.",
+    "theme": "maritime",
+    "size": 48,
+    "tags": [
+      "ui",
+      "tab",
+      "mainland"
+    ]
+  },
+  {
     "id": "ui_settings_gear",
     "filename": "images/ui_settings_gear.png",
     "prompt": "Painterly pixel art — chunky but expressive, 2-3px outlines. Sandy, muted tones (#c8b090). Raw, unprocessed look.. A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.. Single object, centered, filling ~80% of the frame. Slight 3/4 top-down perspective. Transparent background. Top-left lighting, 2-3px outlines at 64×64. Natural, weathered, handmade feel.",
