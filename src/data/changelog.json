@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "c3d3af0e47548f37ed21bb7ae57f2480a9c8f60f"
+    "newestReviewed": "750ff9a7b8a0bc85ff4a390645c752c4dbfb67a9"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Remove unused Sturdy affix from equipment rolls — this stat had no effect on gameplay"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
