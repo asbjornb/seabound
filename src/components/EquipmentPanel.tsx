@@ -490,6 +490,11 @@ export function EquipmentPanel({
                   {item.affixes.length > 0 && (
                     <span className="salvage-reagent-hint"> + possible reagents</span>
                   )}
+                  {table.requiredSkillLevel > 0 && (
+                    <span className={`salvage-material${(state.skills["smithing"]?.level ?? 0) < table.requiredSkillLevel ? " insufficient" : ""}`}>
+                      Smithing Lv{table.requiredSkillLevel}
+                    </span>
+                  )}
                 </div>
               );
             })()}
