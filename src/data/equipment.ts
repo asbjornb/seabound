@@ -713,7 +713,7 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
     description: "Patch and re-stitch hide armor using cured leather strips.",
     targetTags: ["hide"],
     inputs: [
-      { resourceId: "hide", amount: 2 },
+      { resourceId: "cured_leather", amount: 2 },
       { resourceId: "rough_fiber", amount: 1 },
     ],
     requiredSkillLevel: 0,
@@ -794,7 +794,7 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
     description: "Strip down hide armor for usable leather scraps.",
     targetTags: ["hide"],
     outputs: [
-      { resourceId: "hide", amount: 2 },
+      { resourceId: "cured_leather", amount: 2 },
       { resourceId: "rough_fiber", amount: 1, chance: 0.5 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,

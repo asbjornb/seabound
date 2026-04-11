@@ -519,6 +519,21 @@ export const RESOURCES: Record<string, ResourceDef> = {
   // Mainland Resources
   // ═══════════════════════════════════════
 
+  raw_hide: {
+    id: "raw_hide",
+    name: "Raw Hide",
+    description:
+      "Rough animal skin stripped from a mainland kill. Needs curing before it can be worked into armor.",
+    tags: ["mainland"],
+  },
+  cured_leather: {
+    id: "cured_leather",
+    name: "Cured Leather",
+    description:
+      "Smoke-cured hide, supple and tough. Ready for cutting and stitching into armor.",
+    tags: ["mainland"],
+  },
+
   native_copper: {
     id: "native_copper",
     name: "Native Copper",
