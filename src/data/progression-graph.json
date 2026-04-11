@@ -1701,6 +1701,48 @@
       "category": "navigation"
     },
     {
+      "id": "expedition:coastal_ruins",
+      "type": "expedition",
+      "label": "Explore Coastal Ruins",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:tidal_caves",
+      "type": "expedition",
+      "label": "Search the Tidal Caves",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:overgrown_trail",
+      "type": "expedition",
+      "label": "Follow the Overgrown Trail",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:flooded_quarry",
+      "type": "expedition",
+      "label": "Descend into the Flooded Quarry",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:ridge_pass",
+      "type": "expedition",
+      "label": "Cross the Windswept Ridge",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:sunken_temple",
+      "type": "expedition",
+      "label": "Enter the Sunken Temple",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:volcanic_rift",
+      "type": "expedition",
+      "label": "Brave the Volcanic Rift",
+      "category": "navigation"
+    },
+    {
       "id": "station:deploy_basket_trap",
       "type": "station",
       "label": "Basket Trap",
@@ -5573,6 +5615,751 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:coastal_ruins",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:corroded_medallion",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:sea_worn_journal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "biome:coastal_cliffs",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:cave_crystal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:phosphorescent_algae",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "biome:inland_hills",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "biome:coastal_cliffs",
+      "to": "expedition:overgrown_trail",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:carved_idol",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:ancient_compass",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:raw_gemstone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:petrified_wood",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:charcoal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:mountain_crystal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:eagles_plume",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:copper_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:temple_idol",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:cursed_relic",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:charcoal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:obsidian",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:magma_core",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:star_metal_shard",
+      "relation": "produces"
+    },
+    {
       "from": "station:deploy_basket_trap",
       "to": "resource:small_fish",
       "relation": "produces"
@@ -5939,13 +6726,18 @@
       "skill:cooking:8",
       "action:fell_large_tree",
       "action:collect_dry_grass",
+      "expedition:coastal_ruins",
+      "expedition:overgrown_trail",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
       "expedition:sail_nearby_island",
       "expedition:dugout_voyage",
+      "expedition:volcanic_rift",
       "action:comb_rocky_shore",
       "action:prospect_tin",
       "action:mine_iron",
+      "expedition:tidal_caves",
+      "expedition:flooded_quarry",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
       "action:collect_palm_frond",
@@ -5956,6 +6748,7 @@
       "recipe:craft_gorge_hook",
       "recipe:craft_basket_trap",
       "recipe:build_stone_tidal_weir",
+      "expedition:ridge_pass",
       "station:burn_charcoal",
       "recipe:craft_digging_stick",
       "station:cultivate_taro",
@@ -5963,12 +6756,12 @@
       "station:grow_breadfruit",
       "biome:jungle_interior",
       "tool:stone_axe",
+      "resource:fresh_water",
+      "biome:coastal_cliffs",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
-      "resource:fresh_water",
       "skill:mining:5",
-      "biome:coastal_cliffs",
       "skill:mining:10",
       "biome:inland_hills",
       "resource:pandanus_leaves",
@@ -5986,9 +6779,9 @@
       "skill:farming:12",
       "resource:breadfruit_cutting",
       "recipe:craft_stone_axe",
+      "recipe:fill_water_pot",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
-      "recipe:fill_water_pot",
       "station:grow_pandanus",
       "station:harvest_pandanus_grove",
       "recipe:split_bamboo_cane",
@@ -6126,9 +6919,7 @@
       "resource:fire_opal",
       "resource:giant_clam_pearl",
       "resource:ancient_map_fragment",
-      "resource:black_pearl"
-    ],
-    "unreachable": [
+      "resource:black_pearl",
       "resource:corroded_medallion",
       "resource:sea_worn_journal",
       "resource:cave_crystal",
@@ -6142,54 +6933,12 @@
       "resource:temple_idol",
       "resource:cursed_relic",
       "resource:magma_core",
-      "resource:star_metal_shard",
-      "resource:native_copper",
-      "resource:copper_ore",
-      "resource:copper_ingot",
-      "resource:tin_ore",
-      "resource:bronze_ingot",
-      "resource:iron_ore",
-      "resource:iron_bloom",
-      "resource:iron_ingot",
-      "resource:steel_ingot",
+      "resource:star_metal_shard"
+    ],
+    "unreachable": [
       "resource:terrain_essence",
       "resource:combat_essence",
-      "resource:utility_essence",
-      "building:bloomery",
-      "skill:mining:5",
-      "skill:mining:10",
-      "skill:smithing:8",
-      "skill:smithing:15",
-      "skill:smithing:17",
-      "skill:smithing:22",
-      "skill:smithing:3",
-      "skill:smithing:5",
-      "skill:smithing:4",
-      "skill:smithing:2",
-      "skill:smithing:10",
-      "skill:smithing:12",
-      "action:prospect_copper",
-      "action:prospect_tin",
-      "action:mine_iron",
-      "recipe:smelt_copper",
-      "recipe:smelt_bronze",
-      "recipe:smelt_iron_bloom",
-      "recipe:hammer_iron_bloom",
-      "recipe:forge_steel",
-      "recipe:forge_copper_spear",
-      "recipe:forge_copper_axe",
-      "recipe:forge_copper_shield",
-      "recipe:stitch_hide_armor",
-      "recipe:stitch_hide_cap",
-      "recipe:stitch_hide_leggings",
-      "recipe:stitch_hide_boots",
-      "recipe:forge_bronze_sword",
-      "recipe:forge_bronze_shield",
-      "recipe:forge_bronze_helm",
-      "recipe:forge_bronze_cuirass",
-      "recipe:forge_bronze_greaves",
-      "recipe:forge_bronze_boots",
-      "recipe:build_bloomery"
+      "resource:utility_essence"
     ],
     "warnings": [
       {
@@ -6243,119 +6992,74 @@
         "message": "Black Pearl is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:corroded_medallion",
-        "message": "Corroded Medallion is not reachable from beach start"
+        "message": "Corroded Medallion is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:sea_worn_journal",
-        "message": "Sea-Worn Journal is not reachable from beach start"
+        "message": "Sea-Worn Journal is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:cave_crystal",
-        "message": "Cave Crystal is not reachable from beach start"
+        "message": "Cave Crystal is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:phosphorescent_algae",
-        "message": "Phosphorescent Algae is not reachable from beach start"
+        "message": "Phosphorescent Algae is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:carved_idol",
-        "message": "Carved Idol is not reachable from beach start"
+        "message": "Carved Idol is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:ancient_compass",
-        "message": "Ancient Compass is not reachable from beach start"
+        "message": "Ancient Compass is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:raw_gemstone",
-        "message": "Raw Gemstone is not reachable from beach start"
+        "message": "Raw Gemstone is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:petrified_wood",
-        "message": "Petrified Wood is not reachable from beach start"
+        "message": "Petrified Wood is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:mountain_crystal",
-        "message": "Mountain Crystal is not reachable from beach start"
+        "message": "Mountain Crystal is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:eagles_plume",
-        "message": "Eagle's Plume is not reachable from beach start"
+        "message": "Eagle's Plume is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:temple_idol",
-        "message": "Temple Idol is not reachable from beach start"
+        "message": "Temple Idol is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:cursed_relic",
-        "message": "Cursed Relic is not reachable from beach start"
+        "message": "Cursed Relic is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:magma_core",
-        "message": "Magma Core is not reachable from beach start"
+        "message": "Magma Core is produced but never used as input"
       },
       {
-        "type": "unreachable",
+        "type": "dead_end",
         "nodeId": "resource:star_metal_shard",
-        "message": "Star Metal Shard is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:native_copper",
-        "message": "Native Copper is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:copper_ore",
-        "message": "Copper Ore is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:copper_ingot",
-        "message": "Copper Ingot is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:tin_ore",
-        "message": "Tin Ore is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:bronze_ingot",
-        "message": "Bronze Ingot is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:iron_ore",
-        "message": "Iron Ore is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:iron_bloom",
-        "message": "Iron Bloom is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:iron_ingot",
-        "message": "Iron Ingot is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:steel_ingot",
-        "message": "Steel Ingot is not reachable from beach start"
+        "message": "Star Metal Shard is produced but never used as input"
       },
       {
         "type": "unreachable",
@@ -6371,251 +7075,6 @@
         "type": "unreachable",
         "nodeId": "resource:utility_essence",
         "message": "Utility Essence is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "building:bloomery",
-        "message": "Bloomery is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:mining:5",
-        "message": "Mining Lv5 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:mining:10",
-        "message": "Mining Lv10 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:8",
-        "message": "Smithing Lv8 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:15",
-        "message": "Smithing Lv15 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:17",
-        "message": "Smithing Lv17 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:22",
-        "message": "Smithing Lv22 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:3",
-        "message": "Smithing Lv3 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:5",
-        "message": "Smithing Lv5 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:4",
-        "message": "Smithing Lv4 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:2",
-        "message": "Smithing Lv2 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:10",
-        "message": "Smithing Lv10 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "skill:smithing:12",
-        "message": "Smithing Lv12 is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "action:prospect_copper",
-        "message": "Prospect Copper Vein is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "action:prospect_tin",
-        "message": "Prospect Tin Deposit is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "action:mine_iron",
-        "message": "Mine Iron Ore is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:smelt_copper",
-        "message": "Smelt Copper is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:smelt_bronze",
-        "message": "Smelt Bronze is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:smelt_iron_bloom",
-        "message": "Smelt Iron Bloom is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:hammer_iron_bloom",
-        "message": "Hammer Iron Bloom is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_steel",
-        "message": "Forge Steel is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_copper_spear",
-        "message": "Forge Copper Spear is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_copper_axe",
-        "message": "Forge Copper Axe is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_copper_shield",
-        "message": "Forge Copper Shield is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:stitch_hide_armor",
-        "message": "Stitch Hide Armor is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:stitch_hide_cap",
-        "message": "Stitch Hide Cap is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:stitch_hide_leggings",
-        "message": "Stitch Hide Leggings is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:stitch_hide_boots",
-        "message": "Stitch Hide Boots is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_sword",
-        "message": "Forge Bronze Sword is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_shield",
-        "message": "Forge Bronze Shield is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_helm",
-        "message": "Forge Bronze Helm is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_cuirass",
-        "message": "Forge Bronze Cuirass is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_greaves",
-        "message": "Forge Bronze Greaves is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:forge_bronze_boots",
-        "message": "Forge Bronze-Shod Boots is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "recipe:build_bloomery",
-        "message": "Bloomery is not reachable from beach start"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:corroded_medallion",
-        "message": "Corroded Medallion is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:sea_worn_journal",
-        "message": "Sea-Worn Journal is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:cave_crystal",
-        "message": "Cave Crystal is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:phosphorescent_algae",
-        "message": "Phosphorescent Algae is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:carved_idol",
-        "message": "Carved Idol is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:ancient_compass",
-        "message": "Ancient Compass is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:raw_gemstone",
-        "message": "Raw Gemstone is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:petrified_wood",
-        "message": "Petrified Wood is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:mountain_crystal",
-        "message": "Mountain Crystal is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:eagles_plume",
-        "message": "Eagle's Plume is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:temple_idol",
-        "message": "Temple Idol is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:cursed_relic",
-        "message": "Cursed Relic is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:magma_core",
-        "message": "Magma Core is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:star_metal_shard",
-        "message": "Star Metal Shard is defined but has no production or consumption edges"
       },
       {
         "type": "orphan_resource",
