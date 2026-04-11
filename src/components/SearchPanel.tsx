@@ -7,6 +7,7 @@ import type {
   StationDef,
   ExpeditionDef,
 } from "../data/types";
+import type { GameScreen } from "../engine/selectors";
 import { CloseIcon } from "./CloseIcon";
 import { GameIcon } from "./GameIcon";
 
@@ -38,6 +39,7 @@ interface Props {
   onDeployStation: (station: StationDef) => void;
   onStartExpedition: (expedition: ExpeditionDef) => void;
   onJumpToTab: (tab: string) => void;
+  screen?: GameScreen;
 }
 
 function buildIndex(
@@ -178,6 +180,19 @@ const TYPE_LABELS: Record<SearchResultType, string> = {
   explore: "Explore",
 };
 
+const MAINLAND_TYPE_LABELS: Partial<Record<SearchResultType, string>> = {
+  gather: "Harvest",
+  craft: "Forge",
+  explore: "Venture",
+};
+
+function getTypeLabel(type: SearchResultType, screen?: GameScreen): string {
+  if (screen === "mainland") {
+    return MAINLAND_TYPE_LABELS[type] ?? TYPE_LABELS[type];
+  }
+  return TYPE_LABELS[type];
+}
+
 export function SearchPanel({
   query,
   onChangeQuery,
@@ -191,6 +206,7 @@ export function SearchPanel({
   onDeployStation,
   onStartExpedition,
   onJumpToTab,
+  screen,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const SKILLS = getSkills();
@@ -275,7 +291,7 @@ export function SearchPanel({
                   <GameIcon id={r.iconId} size={18} />
                   {r.name}
                 </span>
-                <span className="search-result-type">{TYPE_LABELS[r.type]}</span>
+                <span className="search-result-type">{getTypeLabel(r.type, screen)}</span>
               </div>
               <div className="search-result-meta">
                 <span className="search-result-skill">
@@ -315,7 +331,7 @@ export function SearchPanel({
                   className="search-jump-btn"
                   onClick={() => handleJump(r)}
                 >
-                  Go to {TYPE_LABELS[r.type]}
+                  Go to {getTypeLabel(r.type, screen)}
                 </button>
               </div>
             </div>
