@@ -52,6 +52,8 @@ function progressSnapshot(state: GameState): Record<string, unknown> {
     tools: state.tools.length,
     morale: state.morale,
     victory: state.victory ?? false,
+    routineCount: state.routines.length,
+    routineActive: state.activeRoutine != null,
   };
 }
 
@@ -116,6 +118,11 @@ const MILESTONES: { id: string; check: (state: GameState) => boolean }[] = [
   {
     id: "first_skill_5",
     check: (s) => Object.values(s.skills).some((sk) => sk.level >= 5),
+  },
+  // Routine adoption
+  {
+    id: "first_routine_created",
+    check: (s) => s.routines.length > 0,
   },
 ];
 
@@ -218,6 +225,35 @@ export function trackOptionalitySnapshot(state: GameState): void {
     repairCount,
     salvageCount,
     equipmentOwned,
+    totalPlayTimeMs: state.totalPlayTimeMs,
+  });
+}
+
+// ── Routine analytics ──────────────────────────────────────────
+
+/** Fire when a player starts a routine. Tracks adoption and routine composition. */
+export function trackRoutineStarted(
+  state: GameState,
+  routine: { steps: { actionType: string }[] },
+): void {
+  const stepTypes = routine.steps.map((s) => s.actionType);
+  trackEvent("routine_started", {
+    playerId: getPlayerId(),
+    stepCount: routine.steps.length,
+    stepTypes,
+    routineCount: state.routines.length,
+    totalPlayTimeMs: state.totalPlayTimeMs,
+  });
+}
+
+/** Fire when a routine stops. Tracks engagement and failure modes. */
+export function trackRoutineStopped(
+  state: GameState,
+  reason: "manual" | "output_full" | "cant_proceed",
+): void {
+  trackEvent("routine_stopped", {
+    playerId: getPlayerId(),
+    reason,
     totalPlayTimeMs: state.totalPlayTimeMs,
   });
 }
