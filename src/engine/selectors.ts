@@ -429,14 +429,12 @@ export function selectVisibleTabs(params: {
   screen?: GameScreen;
 }): GameTab[] {
   if (params.screen === "mainland") {
-    // Mainland has a simpler tab set — no tend/routines (yet)
+    // Mainland has a simpler tab set — no tend/build
     const tabs: GameTab[] = ["gather"];
     if (params.craftRecipeCount > 0) tabs.push("craft");
-    if (params.buildRecipeCount > 0 || params.buildActionCount > 0 || params.buildingCount > 0) {
-      tabs.push("build");
-    }
     if (params.hasFoodAccess) tabs.push("explore");
     if (params.hasEquipment) tabs.push("equipment");
+    if (params.routinesUnlocked) tabs.push("routines");
     if (params.hasAnyResource) tabs.push("inventory");
     if (params.hasAnyXp) tabs.push("skills");
     return tabs;
