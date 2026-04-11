@@ -5,50 +5,6 @@ import type { ExpeditionDef } from "./types";
 // ═══════════════════════════════════════
 
 export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
-  // ── Mainland exploration (biome discovery) ──
-
-  {
-    id: "explore_mainland",
-    name: "Scout the Mainland",
-    description:
-      "Venture inland from your landing site, mapping the terrain and looking for resource-rich areas. Costs 8 food and 3 water per trip.",
-    skillId: "navigation",
-    durationMs: 15000,
-    foodCost: 8,
-    waterCost: 3,
-    xpGain: 35,
-    mainland: true,
-    hideWhenAllFound: true,
-    outcomes: [
-      {
-        weight: 25,
-        description:
-          "You follow the coastline and discover towering sea cliffs with exposed mineral veins — green-streaked copper glints in the rock face!",
-        biomeDiscovery: "coastal_cliffs",
-      },
-      {
-        weight: 20,
-        description:
-          "Beyond the cliffs, you push inland and find rolling hills of red earth. Iron-rich deposits lie just beneath the surface!",
-        biomeDiscovery: "inland_hills",
-        requiredBiomes: ["coastal_cliffs"],
-      },
-      {
-        weight: 25,
-        description:
-          "You find useful stones and driftwood along the mainland shore, but nothing remarkable.",
-        drops: [
-          { resourceId: "flat_stone", amount: 3 },
-        ],
-      },
-      {
-        weight: 30,
-        description:
-          "The dense mainland jungle turns you back. You'll need to try a different route next time.",
-      },
-    ],
-  },
-
   // ── Low-tier repeatable expeditions ──
 
   {
@@ -144,7 +100,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 30,
         description:
-          "The cave walls sparkle with copper deposits. You chip away what you can before the tide turns.",
+          "The cave opens onto towering sea cliffs with exposed mineral veins — green-streaked copper glints in the rock face! You chip away what you can before the tide turns.",
+        biomeDiscovery: "coastal_cliffs",
         drops: [
           { resourceId: "copper_ore", amount: 2 },
         ],
@@ -219,7 +176,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 25,
         description:
-          "You push through the brush and reach a clearing with an ancient stone foundation. Copper ore glints in an exposed vein.",
+          "You push through the brush and crest a ridge — rolling hills of red earth stretch ahead, iron-rich deposits visible just beneath the surface! You also spot copper ore glinting in an exposed vein.",
+        biomeDiscovery: "inland_hills",
+        requiredBiomes: ["coastal_cliffs"],
         drops: [
           { resourceId: "native_copper", amount: 3 },
         ],

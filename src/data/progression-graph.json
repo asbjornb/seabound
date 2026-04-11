@@ -1701,12 +1701,6 @@
       "category": "navigation"
     },
     {
-      "id": "expedition:explore_mainland",
-      "type": "expedition",
-      "label": "Scout the Mainland",
-      "category": "navigation"
-    },
-    {
       "id": "expedition:coastal_ruins",
       "type": "expedition",
       "label": "Explore Coastal Ruins",
@@ -5621,96 +5615,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:explore_mainland",
-      "to": "skill:navigation",
-      "relation": "trains"
-    },
-    {
-      "from": "resource:coconut",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:small_fish",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:crab",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:large_fish",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_fish",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_crab",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_large_fish",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:root_vegetable",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_root_vegetable",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cooked_taro",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:banana",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:roasted_breadfruit",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:fresh_water",
-      "to": "expedition:explore_mainland",
-      "relation": "consumes"
-    },
-    {
-      "from": "expedition:explore_mainland",
-      "to": "biome:coastal_cliffs",
-      "relation": "discovers"
-    },
-    {
-      "from": "expedition:explore_mainland",
-      "to": "biome:inland_hills",
-      "relation": "discovers"
-    },
-    {
-      "from": "biome:coastal_cliffs",
-      "to": "expedition:explore_mainland",
-      "relation": "requires_biome_discovered"
-    },
-    {
-      "from": "expedition:explore_mainland",
-      "to": "resource:flat_stone",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:coastal_ruins",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5882,6 +5786,11 @@
     },
     {
       "from": "expedition:tidal_caves",
+      "to": "biome:coastal_cliffs",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:tidal_caves",
       "to": "resource:copper_ore",
       "relation": "produces"
     },
@@ -5982,8 +5891,18 @@
     },
     {
       "from": "expedition:overgrown_trail",
+      "to": "biome:inland_hills",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:overgrown_trail",
       "to": "resource:native_copper",
       "relation": "produces"
+    },
+    {
+      "from": "biome:coastal_cliffs",
+      "to": "expedition:overgrown_trail",
+      "relation": "requires_biome_discovered"
     },
     {
       "from": "expedition:overgrown_trail",
@@ -6817,7 +6736,6 @@
       "action:comb_rocky_shore",
       "action:prospect_tin",
       "action:mine_iron",
-      "expedition:explore_mainland",
       "expedition:tidal_caves",
       "expedition:flooded_quarry",
       "recipe:shred_coconut_husk",
@@ -6839,11 +6757,11 @@
       "biome:jungle_interior",
       "tool:stone_axe",
       "resource:fresh_water",
+      "biome:coastal_cliffs",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
       "skill:mining:5",
-      "biome:coastal_cliffs",
       "skill:mining:10",
       "biome:inland_hills",
       "resource:pandanus_leaves",
