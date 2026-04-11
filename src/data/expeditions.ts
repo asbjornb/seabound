@@ -13,7 +13,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Investigate crumbling stone structures along the mainland shore. Wildlife nests among the rubble.",
     skillId: "combat",
-    durationMs: 15000,
+    durationMs: 120_000,
     foodCost: 8,
     waterCost: 2,
     xpGain: 30,
@@ -88,7 +88,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Wade into sea caves exposed at low tide. The slippery rock hides copper veins and the bones of stranded creatures.",
     skillId: "combat",
-    durationMs: 12000,
+    durationMs: 90_000,
     foodCost: 6,
     waterCost: 2,
     xpGain: 25,
@@ -162,7 +162,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A faint path leads inland through dense vegetation. The heat is oppressive and the undergrowth hides dangers.",
     skillId: "combat",
-    durationMs: 20000,
+    durationMs: 240_000,
     foodCost: 10,
     waterCost: 4,
     xpGain: 45,
@@ -237,7 +237,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "An ancient quarry, half-submerged by groundwater. Tin ore glints beneath the murky surface among toppled pillars.",
     skillId: "combat",
-    durationMs: 22000,
+    durationMs: 240_000,
     foodCost: 10,
     waterCost: 5,
     xpGain: 50,
@@ -310,7 +310,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A narrow ridge path climbs above the treeline. Cold winds scour the exposed rock, but iron-bearing stone lies in the cliffs beyond.",
     skillId: "combat",
-    durationMs: 25000,
+    durationMs: 300_000,
     foodCost: 12,
     waterCost: 5,
     xpGain: 60,
@@ -386,7 +386,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A half-collapsed temple sinks into the jungle floor, its stone steps descending into darkness. The air is thick and the walls groan.",
     skillId: "combat",
-    durationMs: 30000,
+    durationMs: 480_000,
     foodCost: 15,
     waterCost: 6,
     xpGain: 80,
@@ -465,7 +465,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A jagged rift vents sulfurous heat from deep underground. The extreme temperatures forge rare minerals in the rock walls — if you can survive long enough to collect them.",
     skillId: "combat",
-    durationMs: 35000,
+    durationMs: 600_000,
     foodCost: 18,
     waterCost: 8,
     xpGain: 100,
@@ -548,7 +548,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Follow the shoreline and nearby treeline looking for useful areas. Costs 4 food per trip.",
     skillId: "navigation",
-    durationMs: 8000,
+    durationMs: 60_000,
     foodCost: 4,
     xpGain: 15,
     hideWhenAllFound: true,
@@ -591,7 +591,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Push deeper into the island interior, following animal trails and streams. Costs 6 food per trip.",
     skillId: "navigation",
-    durationMs: 12000,
+    durationMs: 120_000,
     foodCost: 6,
     xpGain: 25,
     requiredBiomes: ["coconut_grove"],
@@ -643,7 +643,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Paddle your raft across the channel to a volcanic island visible on the horizon. Costs 7 food per trip.",
     skillId: "navigation",
-    durationMs: 16000,
+    durationMs: 180_000,
     foodCost: 7,
     xpGain: 35,
     requiredVessel: "raft",
@@ -705,7 +705,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Paddle your dugout canoe beyond the near-shore waters. Who knows what you'll find? Costs 10 food and 3 water per trip.",
     skillId: "navigation",
-    durationMs: 20000,
+    durationMs: 300_000,
     foodCost: 10,
     waterCost: 3,
     xpGain: 50,
@@ -777,7 +777,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Set sail across the open ocean. There is no turning back.",
     skillId: "navigation",
-    durationMs: 30000,
+    durationMs: 600_000,
     waterCost: 10,
     xpGain: 100,
     inputs: [{ resourceId: "voyage_provisions", amount: 10 }],
