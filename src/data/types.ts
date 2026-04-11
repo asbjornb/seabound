@@ -158,6 +158,8 @@ export interface AffixDef {
   allowedSlots?: EquipmentSlotId[];
   /** If set, this affix only rolls on items dropped from this expedition. */
   expeditionOnly?: string;
+  /** If true, this affix can roll on forged/crafted equipment (small curated pool). */
+  forgeEligible?: boolean;
 }
 
 export type ItemCondition = "pristine" | "worn" | "damaged" | "broken";

@@ -89,6 +89,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     modifiers: [{ stat: "offense", value: 8 }],
     rollRange: { min: 0.6, max: 1.0 },
     allowedSlots: ["weapon"],
+    forgeEligible: true,
   },
   affix_heavy_strike: {
     id: "affix_heavy_strike",
@@ -101,6 +102,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     ],
     rollRange: { min: 0.5, max: 1.0 },
     allowedSlots: ["weapon"],
+    forgeEligible: true,
   },
 
   // Defense family
@@ -112,6 +114,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     modifiers: [{ stat: "defense", value: 8 }],
     rollRange: { min: 0.6, max: 1.0 },
     allowedSlots: ["body", "head", "legs"],
+    forgeEligible: true,
   },
   affix_padded: {
     id: "affix_padded",
@@ -121,6 +124,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     modifiers: [{ stat: "defense", value: 5 }, { stat: "comfort", value: 3 }],
     rollRange: { min: 0.5, max: 1.0 },
     allowedSlots: ["body", "legs"],
+    forgeEligible: true,
   },
 
   // Utility family
@@ -131,6 +135,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     description: "Reduced encumbrance, faster movement through terrain.",
     modifiers: [{ stat: "speed", value: 5 }],
     rollRange: { min: 0.5, max: 1.0 },
+    forgeEligible: true,
   },
   affix_pocketed: {
     id: "affix_pocketed",
@@ -149,6 +154,7 @@ export const AFFIXES: Record<string, AffixDef> = {
     description: "Improves stamina during long expeditions.",
     modifiers: [{ stat: "endurance", value: 6 }],
     rollRange: { min: 0.5, max: 1.0 },
+    forgeEligible: true,
   },
 
   // ── Life family ──

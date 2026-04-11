@@ -394,13 +394,14 @@ function applyCraftCompletion(
   let toolCrafted: string | undefined;
 
   if (def.equipmentOutput) {
-    // Equipment craft — create a pristine equipment item and add to inventory
+    // Equipment craft — create a pristine equipment item, with a small chance of a forge affix
     const eqDef = getEquipmentItemById(def.equipmentOutput);
+    const forgeAffixes = rollForgeAffix(eqDef);
     const instanceId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     state.equipmentInventory.push({
       instanceId,
       defId: def.equipmentOutput,
-      affixes: [],
+      affixes: forgeAffixes,
       condition: "pristine",
     });
     drops.push({ name: eqDef?.name ?? def.equipmentOutput, amount: 1 });
@@ -519,6 +520,31 @@ function applyCraftCompletion(
     buildingBuilt,
     toolCrafted,
   };
+}
+
+/** 25% chance to roll a single affix from the small forge-eligible pool.
+ *  Forged items cap at 1 affix (vs found items which can roll 2-3+).
+ *  Only affixes marked forgeEligible and slot-compatible are considered.
+ */
+const FORGE_AFFIX_CHANCE = 0.25;
+
+function rollForgeAffix(
+  eqDef: ReturnType<typeof getEquipmentItemById>
+): EquipmentItem["affixes"] {
+  if (!eqDef || eqDef.maxAffixes < 1) return [];
+  if (Math.random() >= FORGE_AFFIX_CHANCE) return [];
+
+  const allAffixes = getAffixes();
+  const eligible = Object.values(allAffixes).filter((a) => {
+    if (!a.forgeEligible) return false;
+    if (a.allowedSlots && !a.allowedSlots.includes(eqDef.slot)) return false;
+    return true;
+  });
+
+  if (eligible.length === 0) return [];
+
+  const pick = eligible[Math.floor(Math.random() * eligible.length)];
+  return [{ affixId: pick.id, rollValue: Math.random() }];
 }
 
 /** Roll equipment drops from an expedition, applying encounter grade to drop chances.
