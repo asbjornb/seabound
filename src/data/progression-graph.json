@@ -5304,37 +5304,7 @@
     },
     {
       "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
       "to": "resource:banana_shoot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
       "relation": "produces"
     },
     {
@@ -5344,97 +5314,12 @@
     },
     {
       "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
       "to": "resource:pandanus_cutting",
       "relation": "produces"
     },
     {
       "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
       "to": "resource:obsidian",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:fired_clay_pot",
       "relation": "produces"
     },
     {
@@ -5471,56 +5356,6 @@
       "from": "resource:voyage_provisions",
       "to": "expedition:oceanic_voyage",
       "relation": "consumes"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:oceanic_voyage",
-      "to": "resource:fired_clay_pot",
-      "relation": "produces"
     },
     {
       "from": "expedition:oceanic_voyage",
@@ -6007,15 +5842,12 @@
       "recipe:knap_stone_blade",
       "recipe:fire_clay_pot",
       "recipe:kiln_fire_pot",
-      "expedition:oceanic_voyage",
       "recipe:build_pandanus_grove",
       "recipe:craft_hammerstone",
       "recipe:build_kiln",
       "recipe:build_stone_hearth",
       "resource:shaped_clay_pot",
       "building:firing_pit",
-      "building:outrigger_canoe",
-      "resource:voyage_provisions",
       "skill:construction:10",
       "skill:farming:7",
       "building:farm_plot",
@@ -6024,19 +5856,11 @@
       "recipe:shape_clay_pot",
       "recipe:wheel_shape_clay_pot",
       "recipe:build_firing_pit",
-      "recipe:build_outrigger",
-      "recipe:pack_voyage_provisions",
       "recipe:upgrade_farm_plot",
       "building:pottery_wheel",
-      "resource:sail",
-      "resource:rope",
-      "resource:sealed_clay_jar",
       "skill:construction:8",
       "building:tended_garden",
       "recipe:build_pottery_wheel",
-      "recipe:sew_sail",
-      "recipe:twist_rope",
-      "recipe:seal_clay_jar",
       "recipe:upgrade_tended_garden",
       "skill:crafting:11",
       "skill:construction:6",
