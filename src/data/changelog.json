@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "29cd74c0fc6163342cd2666c3a178d43123bf6d5"
+    "newestReviewed": "b82f72d1b097207ee0340943308a4f90dc7e9612"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Fix tabs \"More\" menu appearing unnecessarily when there are fewer than 8 tabs open"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
