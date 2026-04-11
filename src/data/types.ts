@@ -142,7 +142,7 @@ export interface EquipmentSlotDef {
 
 /** A stat modifier on an equipment item — either base or from an affix. */
 export interface StatModifier {
-  stat: string; // e.g. "hazardMitigation", "carryCapacity", "endurance"
+  stat: string; // e.g. "offense", "defense", "endurance"
   value: number; // flat bonus (can be negative for penalties)
 }
 
