@@ -26,6 +26,23 @@ const specPath = resolve(import.meta.dirname ?? __dirname, "../docs/icon-spec.js
 const spec = JSON.parse(readFileSync(specPath, "utf8"));
 const specIds = new Set<string>(spec.icons.map((i: { id: string }) => i.id));
 
+// Tab icon IDs — each GameTab needs a tab_{name} icon, plus mainland-renamed variants
+const TAB_ICON_IDS = [
+  "tab_gather",
+  "tab_inventory",
+  "tab_equipment",
+  "tab_craft",
+  "tab_tend",
+  "tab_build",
+  "tab_explore",
+  "tab_skills",
+  "tab_routines",
+  // Mainland-renamed tab icons
+  "tab_harvest",
+  "tab_forge",
+  "tab_venture",
+];
+
 // Collect all icon IDs referenced by game data (same convention as modding.ts collectIconIds)
 const referencedIds = new Set<string>();
 
@@ -34,6 +51,7 @@ for (const id of Object.keys(TOOLS)) referencedIds.add(id);
 for (const id of Object.keys(SKILLS)) referencedIds.add(`skill_${id}`);
 for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
+for (const id of TAB_ICON_IDS) referencedIds.add(id);
 
 // Find missing
 const missing = [...referencedIds].filter((id) => !specIds.has(id)).sort();

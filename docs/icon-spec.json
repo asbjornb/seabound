@@ -1329,6 +1329,18 @@
       "tags": ["ui", "tab", "mainland"]
     },
     {
+      "id": "tab_equipment",
+      "object": "Shield with crossed sword",
+      "description": "A round wooden shield with a short sword crossed behind it. Warm bronze and leather tones — sturdy, battle-worn. Represents the player's equipped gear: weapons, armor, and trinkets.",
+      "use": "Bottom tab bar on mainland screen, visible when player has equipment",
+      "theme": "fire",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "mainland"]
+    },
+    {
       "id": "ui_settings_gear",
       "object": "Gear / cog icon",
       "description": "A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.",
