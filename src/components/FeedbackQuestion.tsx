@@ -29,6 +29,7 @@ const LATE_QUESTIONS = [
   "What part of the game would you most like more of?",
   "What part of the game feels the most unfinished?",
   "What would make you recommend SeaBound to a friend?",
+  "What would make the game slightly nicer for you to play?",
 ];
 
 // Direction questions — game design and feature preferences
