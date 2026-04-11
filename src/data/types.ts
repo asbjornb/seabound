@@ -57,7 +57,6 @@ export interface ResourceDef {
   foodValue?: number; // if set, this resource counts as food with this value
   waterValue?: number; // if set, this resource counts as water with this value
   storageCapGroup?: string; // if set, resources with the same group share a combined storage cap
-  rarity?: DropRarity; // display rarity tier (for loot drops)
 }
 
 export interface SkillDef {
@@ -80,18 +79,11 @@ export interface Drop {
   chance?: number; // 0-1, defaults to 1
 }
 
-// ═══════════════════════════════════════
-// Loot Drop System (expedition chase drops)
-// ═══════════════════════════════════════
-
-export type DropRarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
-
 /** A loot table entry — rolled independently on each expedition completion. */
 export interface LootDrop {
   resourceId: ResourceId;
   amount: number;
   chance: number; // 0-1 base probability
-  rarity: DropRarity;
 }
 
 // ═══════════════════════════════════════
@@ -494,8 +486,6 @@ export interface CombatLogEntry {
   equipmentDropped?: { defId: string; name: string; condition: string }[];
   /** Outcome flavor text. */
   outcomeMessage?: string;
-  /** Loot table drops (with rarity info). */
-  lootDrops?: { name: string; amount: number; rarity: DropRarity }[];
 }
 
 // ═══════════════════════════════════════

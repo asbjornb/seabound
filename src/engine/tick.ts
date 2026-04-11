@@ -8,7 +8,7 @@ import {
   getRecipeById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import type { BiomeId, Drop, DropRarity, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
+import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
@@ -39,7 +39,6 @@ export interface CompletionEvent {
   victory?: boolean; // true if this completion wins the game
   encounterResult?: EncounterResult; // present on mainland expeditions with difficulty profiles
   equipmentDropped?: { defId: string; name: string; condition: string }[]; // equipment items gained
-  lootDrops?: { name: string; amount: number; rarity: DropRarity }[]; // loot table drops
 }
 
 /** Check if any output resource for the current action is at storage capacity. */
@@ -669,7 +668,6 @@ function applyExpeditionCompletion(
   }
 
   // Loot table drops (rolled independently from outcomes)
-  let lootDrops: CompletionEvent["lootDrops"];
   if (def.lootTable && def.lootTable.length > 0) {
     // Navigation level provides a small bonus to loot drop chances (+1% per level)
     const lootChanceBonus = navLevel * 0.01;
@@ -681,25 +679,21 @@ function applyExpeditionCompletion(
     }
 
     const rolledLoot = rollLootTable(def.lootTable, lootChanceBonus, lootGradeMult);
-    if (rolledLoot.length > 0) {
-      lootDrops = [];
-      for (const loot of rolledLoot) {
-        if (!state.discoveredResources.includes(loot.resourceId)) {
-          newResources.push(loot.resourceId);
-          state.discoveredResources.push(loot.resourceId);
-        }
-        addResource(state, loot.resourceId, loot.amount);
-        drops.push({ name: loot.resourceId, amount: loot.amount });
-        lootDrops.push({ name: loot.resourceId, amount: loot.amount, rarity: loot.rarity });
+    for (const loot of rolledLoot) {
+      if (!state.discoveredResources.includes(loot.resourceId)) {
+        newResources.push(loot.resourceId);
+        state.discoveredResources.push(loot.resourceId);
+      }
+      addResource(state, loot.resourceId, loot.amount);
+      drops.push({ name: loot.resourceId, amount: loot.amount });
 
-        // Track in loot log
-        if (!state.lootLog) state.lootLog = {};
-        const entry = state.lootLog[loot.resourceId];
-        if (entry) {
-          entry.count += loot.amount;
-        } else {
-          state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
-        }
+      // Track in loot log
+      if (!state.lootLog) state.lootLog = {};
+      const entry = state.lootLog[loot.resourceId];
+      if (entry) {
+        entry.count += loot.amount;
+      } else {
+        state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
       }
     }
   }
@@ -733,7 +727,6 @@ function applyExpeditionCompletion(
     victory: def.victory,
     encounterResult: encounter,
     equipmentDropped,
-    lootDrops,
   };
 }
 
@@ -825,12 +818,12 @@ function rollLootTable(
   table: LootDrop[],
   chanceBonus: number,
   gradeMult: number
-): { resourceId: string; amount: number; rarity: DropRarity }[] {
-  const result: { resourceId: string; amount: number; rarity: DropRarity }[] = [];
+): { resourceId: string; amount: number }[] {
+  const result: { resourceId: string; amount: number }[] = [];
   for (const entry of table) {
     const adjustedChance = Math.min(1, entry.chance * (1 + chanceBonus) * gradeMult);
     if (Math.random() < adjustedChance) {
-      result.push({ resourceId: entry.resourceId, amount: entry.amount, rarity: entry.rarity });
+      result.push({ resourceId: entry.resourceId, amount: entry.amount });
     }
   }
   return result;

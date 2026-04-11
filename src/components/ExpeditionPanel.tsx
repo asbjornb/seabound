@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getResources } from "../data/registry";
-import type { DropRarity, ExpeditionDef, GameState, LootDrop } from "../data/types";
+import type { ExpeditionDef, GameState, LootDrop } from "../data/types";
 import { computeLoadoutStats, computeGearScore, estimateWinRate, computeCheckPassChance } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -69,21 +69,6 @@ function getEffectiveDrops(
     .sort((a, b) => b.chance - a.chance);
 }
 
-/** Rarity color map for loot drop display. */
-function rarityColor(rarity: DropRarity): string {
-  switch (rarity) {
-    case "uncommon": return "#2ecc71";
-    case "rare": return "#3498db";
-    case "epic": return "#9b59b6";
-    case "legendary": return "#f39c12";
-    default: return "var(--success)";
-  }
-}
-
-function rarityLabel(rarity: DropRarity): string {
-  return rarity.charAt(0).toUpperCase() + rarity.slice(1);
-}
-
 /** Collapse threshold — drop lists longer than this get a "show more" toggle. */
 const DROP_LIST_COLLAPSE_THRESHOLD = 5;
 
@@ -123,21 +108,16 @@ function DropList({ drops, resources }: { drops: { resourceId: string; amount: n
 function LootTableDisplay({ lootTable, resources, state }: { lootTable: LootDrop[]; resources: Record<string, { name?: string }>; state: GameState }) {
   if (lootTable.length === 0) return null;
 
-  // Sort by rarity: legendary > epic > rare > uncommon > common
-  const rarityOrder: Record<DropRarity, number> = { legendary: 0, epic: 1, rare: 2, uncommon: 3, common: 4 };
-  const sorted = [...lootTable].sort((a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]);
-
   return (
     <div className="action-drops loot-table-section">
-      Rare drops:
-      {sorted.map((d, i) => {
+      Bonus drops:
+      {lootTable.map((d, i) => {
         const found = !!state.lootLog?.[d.resourceId];
         return (
-          <div key={i} className={`drop-row loot-drop rarity-${d.rarity}`} style={{ color: rarityColor(d.rarity) }}>
+          <div key={i} className="drop-row loot-drop">
             <GameIcon id={d.resourceId} size={16} />
             {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
-            <span className="loot-chance">({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)</span>
-            <span className="loot-rarity-tag">{rarityLabel(d.rarity)}</span>
+            ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
             {found && <span className="loot-found-mark" title="Found!">&#10003;</span>}
           </div>
         );

@@ -338,14 +338,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Sea Glass",
     description: "Smooth, frosted glass tumbled by decades of ocean currents. Prized for decoration and trade.",
     tags: ["loot"],
-    rarity: "uncommon",
+
   },
   ancient_doubloon: {
     id: "ancient_doubloon",
     name: "Ancient Doubloon",
     description: "A heavy gold coin from a long-lost shipwreck. The markings are worn but unmistakable.",
     tags: ["loot", "treasure"],
-    rarity: "rare",
+
   },
 
   // Interior explore drops
@@ -354,14 +354,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Exotic Feather",
     description: "Brilliant plumage from a rare jungle bird. Too beautiful to ignore.",
     tags: ["loot"],
-    rarity: "uncommon",
+
   },
   glowing_fungus: {
     id: "glowing_fungus",
     name: "Glowing Fungus",
     description: "A bioluminescent mushroom that pulses with soft blue-green light. Fascinating and unsettling.",
     tags: ["loot"],
-    rarity: "rare",
+
   },
 
   // Nearby island drops
@@ -370,14 +370,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Volcanic Glass",
     description: "A naturally formed shard of perfectly clear volcanic glass. Sharp and beautiful.",
     tags: ["loot"],
-    rarity: "uncommon",
+
   },
   fire_opal: {
     id: "fire_opal",
     name: "Fire Opal",
     description: "A blazing orange gemstone forged in volcanic heat. It seems to glow from within.",
     tags: ["loot", "treasure"],
-    rarity: "rare",
+
   },
 
   // Dugout voyage drops
@@ -386,21 +386,21 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Giant Clam Pearl",
     description: "A lustrous pearl found inside an enormous clam. Worth more than everything else you own.",
     tags: ["loot", "treasure"],
-    rarity: "uncommon",
+
   },
   black_pearl: {
     id: "black_pearl",
     name: "Black Pearl",
     description: "An impossibly dark pearl with an iridescent sheen. Legends say they bring fortune — or ruin.",
     tags: ["loot", "treasure"],
-    rarity: "epic",
+
   },
   ancient_map_fragment: {
     id: "ancient_map_fragment",
     name: "Ancient Map Fragment",
     description: "A scrap of weathered parchment showing coastlines you don't recognize. Part of something larger.",
     tags: ["loot", "treasure"],
-    rarity: "rare",
+
   },
 
   // Coastal ruins drops
@@ -409,14 +409,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Corroded Medallion",
     description: "A tarnished bronze medallion depicting a serpent coiled around a tower. Who wore this?",
     tags: ["loot", "mainland"],
-    rarity: "uncommon",
+
   },
   sea_worn_journal: {
     id: "sea_worn_journal",
     name: "Sea-Worn Journal",
     description: "A partially readable journal found in the ruins. The handwriting grows increasingly frantic.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
 
   // Tidal caves drops
@@ -425,14 +425,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Cave Crystal",
     description: "A translucent crystal formation grown over centuries in the dark. It hums faintly when held.",
     tags: ["loot", "mainland"],
-    rarity: "uncommon",
+
   },
   phosphorescent_algae: {
     id: "phosphorescent_algae",
     name: "Phosphorescent Algae",
     description: "Clumps of algae that glow an eerie green in the dark. The caves are alive with light.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
 
   // Overgrown trail drops
@@ -441,14 +441,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Carved Idol",
     description: "A small stone figure with an unsettling expression. It feels heavier than it looks.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
   ancient_compass: {
     id: "ancient_compass",
     name: "Ancient Compass",
     description: "A bronze compass that still points true. The craftsmanship is beyond anything you could make.",
     tags: ["loot", "mainland", "treasure"],
-    rarity: "epic",
+
   },
 
   // Flooded quarry drops
@@ -457,14 +457,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Raw Gemstone",
     description: "An uncut precious stone, cloudy on the outside but with brilliant color at its heart.",
     tags: ["loot", "mainland", "treasure"],
-    rarity: "uncommon",
+
   },
   petrified_wood: {
     id: "petrified_wood",
     name: "Petrified Wood",
     description: "Ancient wood turned to stone over millennia. The grain is perfectly preserved in mineral.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
 
   // Ridge pass drops
@@ -473,14 +473,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Mountain Crystal",
     description: "A cluster of clear quartz crystals from a high ridge. They catch the light like frozen water.",
     tags: ["loot", "mainland"],
-    rarity: "uncommon",
+
   },
   eagles_plume: {
     id: "eagles_plume",
     name: "Eagle's Plume",
     description: "A massive feather from a mountain raptor. It's as long as your forearm.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
 
   // Sunken temple drops
@@ -489,14 +489,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Temple Idol",
     description: "A golden figurine from the temple altar. Its eyes are set with tiny, dark gemstones.",
     tags: ["loot", "mainland", "treasure"],
-    rarity: "rare",
+
   },
   cursed_relic: {
     id: "cursed_relic",
     name: "Cursed Relic",
     description: "A pulsing black artifact covered in indecipherable script. It whispers when no one is listening.",
     tags: ["loot", "mainland", "treasure"],
-    rarity: "legendary",
+
   },
 
   // Volcanic rift drops
@@ -505,14 +505,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Magma Core",
     description: "A dense sphere of solidified lava that radiates warmth. It glows faintly red in the dark.",
     tags: ["loot", "mainland"],
-    rarity: "rare",
+
   },
   star_metal_shard: {
     id: "star_metal_shard",
     name: "Star Metal Shard",
     description: "A fragment of otherworldly metal from a meteor impact. It's impossibly light and impossibly strong.",
     tags: ["loot", "mainland", "treasure"],
-    rarity: "legendary",
+
   },
 
   // ═══════════════════════════════════════

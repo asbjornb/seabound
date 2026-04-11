@@ -81,21 +81,6 @@ export function CombatLogModal({
             </div>
           )}
 
-          {/* Loot Drops (rare) */}
-          {entry.lootDrops && entry.lootDrops.length > 0 && (
-            <div className="combat-log-section">
-              <div className="combat-log-section-title">Rare Loot</div>
-              {entry.lootDrops.map((loot, i) => {
-                const color = loot.rarity === "legendary" ? "#f39c12" : loot.rarity === "epic" ? "#9b59b6" : loot.rarity === "rare" ? "#3498db" : "#2ecc71";
-                return (
-                  <div key={i} className="combat-log-drop" style={{ color }}>
-                    {loot.amount}x {loot.name} <span style={{ fontSize: "0.8em", opacity: 0.8 }}>({loot.rarity})</span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
           {/* Equipment */}
           {entry.equipmentDropped && entry.equipmentDropped.length > 0 && (
             <div className="combat-log-section">

@@ -2244,7 +2244,7 @@ body {
   color: var(--text-main);
 }
 
-/* ── Loot Drop Rarity Styles ── */
+/* ── Loot Table Styles ── */
 
 .loot-table-section {
   margin-top: 4px;
@@ -2258,39 +2258,10 @@ body {
   gap: 4px;
 }
 
-.loot-chance {
-  opacity: 0.7;
-  font-size: 0.9em;
-}
-
-.loot-rarity-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.85;
-  margin-left: 4px;
-  padding: 0 3px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
 .loot-found-mark {
-  color: #2ecc71;
+  color: var(--success);
   font-size: 0.85em;
   margin-left: 2px;
-}
-
-.rarity-legendary .loot-rarity-tag {
-  background: rgba(243, 156, 18, 0.2);
-}
-
-.rarity-epic .loot-rarity-tag {
-  background: rgba(155, 89, 182, 0.2);
-}
-
-.rarity-rare .loot-rarity-tag {
-  background: rgba(52, 152, 219, 0.15);
 }
 
 .storage-group-info {

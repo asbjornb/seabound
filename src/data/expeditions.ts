@@ -73,8 +73,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "corroded_medallion", amount: 1, chance: 0.18, rarity: "uncommon" },
-      { resourceId: "sea_worn_journal", amount: 1, chance: 0.05, rarity: "rare" },
+      { resourceId: "corroded_medallion", amount: 1, chance: 0.18 },
+      { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -143,8 +143,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "cave_crystal", amount: 1, chance: 0.20, rarity: "uncommon" },
-      { resourceId: "phosphorescent_algae", amount: 1, chance: 0.06, rarity: "rare" },
+      { resourceId: "cave_crystal", amount: 1, chance: 0.20 },
+      { resourceId: "phosphorescent_algae", amount: 1, chance: 0.06 },
     ],
   },
 
@@ -219,8 +219,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "carved_idol", amount: 1, chance: 0.06, rarity: "rare" },
-      { resourceId: "ancient_compass", amount: 1, chance: 0.02, rarity: "epic" },
+      { resourceId: "carved_idol", amount: 1, chance: 0.06 },
+      { resourceId: "ancient_compass", amount: 1, chance: 0.02 },
     ],
   },
   {
@@ -292,8 +292,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "raw_gemstone", amount: 1, chance: 0.18, rarity: "uncommon" },
-      { resourceId: "petrified_wood", amount: 1, chance: 0.05, rarity: "rare" },
+      { resourceId: "raw_gemstone", amount: 1, chance: 0.18 },
+      { resourceId: "petrified_wood", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -365,8 +365,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "mountain_crystal", amount: 1, chance: 0.18, rarity: "uncommon" },
-      { resourceId: "eagles_plume", amount: 1, chance: 0.05, rarity: "rare" },
+      { resourceId: "mountain_crystal", amount: 1, chance: 0.18 },
+      { resourceId: "eagles_plume", amount: 1, chance: 0.05 },
     ],
   },
 
@@ -447,8 +447,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "temple_idol", amount: 1, chance: 0.06, rarity: "rare" },
-      { resourceId: "cursed_relic", amount: 1, chance: 0.008, rarity: "legendary" },
+      { resourceId: "temple_idol", amount: 1, chance: 0.06 },
+      { resourceId: "cursed_relic", amount: 1, chance: 0.008 },
     ],
   },
   {
@@ -527,8 +527,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "magma_core", amount: 1, chance: 0.06, rarity: "rare" },
-      { resourceId: "star_metal_shard", amount: 1, chance: 0.008, rarity: "legendary" },
+      { resourceId: "magma_core", amount: 1, chance: 0.06 },
+      { resourceId: "star_metal_shard", amount: 1, chance: 0.008 },
     ],
   },
 ];
@@ -573,8 +573,8 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "sea_glass", amount: 1, chance: 0.20, rarity: "uncommon" },
-      { resourceId: "ancient_doubloon", amount: 1, chance: 0.04, rarity: "rare" },
+      { resourceId: "sea_glass", amount: 1, chance: 0.20 },
+      { resourceId: "ancient_doubloon", amount: 1, chance: 0.04 },
     ],
   },
   {
@@ -625,8 +625,8 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "exotic_feather", amount: 1, chance: 0.18, rarity: "uncommon" },
-      { resourceId: "glowing_fungus", amount: 1, chance: 0.05, rarity: "rare" },
+      { resourceId: "exotic_feather", amount: 1, chance: 0.18 },
+      { resourceId: "glowing_fungus", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -687,8 +687,8 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "volcanic_glass", amount: 1, chance: 0.20, rarity: "uncommon" },
-      { resourceId: "fire_opal", amount: 1, chance: 0.04, rarity: "rare" },
+      { resourceId: "volcanic_glass", amount: 1, chance: 0.20 },
+      { resourceId: "fire_opal", amount: 1, chance: 0.04 },
     ],
   },
   {
@@ -789,9 +789,9 @@ export const EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "giant_clam_pearl", amount: 1, chance: 0.15, rarity: "uncommon" },
-      { resourceId: "ancient_map_fragment", amount: 1, chance: 0.04, rarity: "rare" },
-      { resourceId: "black_pearl", amount: 1, chance: 0.015, rarity: "epic" },
+      { resourceId: "giant_clam_pearl", amount: 1, chance: 0.15 },
+      { resourceId: "ancient_map_fragment", amount: 1, chance: 0.04 },
+      { resourceId: "black_pearl", amount: 1, chance: 0.015 },
     ],
   },
   {
