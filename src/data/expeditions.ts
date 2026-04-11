@@ -38,9 +38,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 25,
         description:
-          "A wild boar charges from a collapsed doorway. You fend it off and skin the carcass before claiming the den's contents.",
+          "A wild boar charges from a collapsed doorway. You fend it off and claim the den's contents.",
         drops: [
-          { resourceId: "raw_hide", amount: 2 },
+          { resourceId: "raw_hide", amount: 1, chance: 0.5 },
           { resourceId: "coconut_husk", amount: 3 },
           { resourceId: "flat_stone", amount: 1 },
         ],
@@ -80,7 +80,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "raw_hide", amount: 1, chance: 0.15 },
+      { resourceId: "raw_hide", amount: 1, chance: 0.35 },
       { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
     ],
   },
@@ -193,9 +193,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 20,
         description:
-          "You stumble on a nest of vipers but dispatch them with your weapon. You skin one for its tough hide and claim the nest's contents.",
+          "You stumble on a nest of vipers but dispatch them with your weapon. Their nest sits atop useful materials.",
         drops: [
-          { resourceId: "raw_hide", amount: 1 },
           { resourceId: "coconut_husk", amount: 2 },
           { resourceId: "flat_stone", amount: 2 },
         ],
@@ -230,7 +229,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       },
     ],
     lootTable: [
-      { resourceId: "raw_hide", amount: 1, chance: 0.12 },
       { resourceId: "carved_idol", amount: 1, chance: 0.06 },
       { resourceId: "ancient_compass", amount: 1, chance: 0.02 },
     ],
@@ -413,7 +411,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         description:
           "You fight through collapsing corridors and feral animals denning in the inner chambers. In the deepest room, bronze artifacts lie undisturbed on a stone altar.",
         drops: [
-          { resourceId: "raw_hide", amount: 3 },
           { resourceId: "bronze_ingot", amount: 3 },
           { resourceId: "tin_ore", amount: 2 },
         ],

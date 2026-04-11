@@ -5664,11 +5664,6 @@
     },
     {
       "from": "expedition:overgrown_trail",
-      "to": "resource:raw_hide",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:overgrown_trail",
       "to": "resource:coconut_husk",
       "relation": "produces"
     },
@@ -5685,11 +5680,6 @@
     {
       "from": "expedition:overgrown_trail",
       "to": "resource:native_copper",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:overgrown_trail",
-      "to": "resource:raw_hide",
       "relation": "produces"
     },
     {
@@ -5981,11 +5971,6 @@
       "from": "resource:fresh_water",
       "to": "expedition:sunken_temple",
       "relation": "consumes"
-    },
-    {
-      "from": "expedition:sunken_temple",
-      "to": "resource:raw_hide",
-      "relation": "produces"
     },
     {
       "from": "expedition:sunken_temple",
