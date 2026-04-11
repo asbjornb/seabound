@@ -643,6 +643,18 @@ function applyExpeditionCompletion(
     }
   }
 
+  // Return empty water containers (~85% survive the trip)
+  if (def.waterCost && def.waterCost > 0) {
+    let potsReturned = 0;
+    for (let i = 0; i < def.waterCost; i++) {
+      if (Math.random() < 0.85) potsReturned++;
+    }
+    if (potsReturned > 0) {
+      addResource(state, "fired_clay_pot", potsReturned);
+      drops.push({ name: "fired_clay_pot", amount: potsReturned });
+    }
+  }
+
   // Equipment drops (mainland expeditions only, gated by encounter grade)
   let equipmentDropped: CompletionEvent["equipmentDropped"];
   if (def.equipmentDrops && def.equipmentDrops.length > 0) {
