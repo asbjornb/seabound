@@ -77,6 +77,18 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 0, max: 2 },
       },
+      {
+        defId: "vine_wrapped_helm",
+        chance: 0.08,
+        dropsAsBroken: true,
+        affixRange: { min: 0, max: 1 },
+      },
+      {
+        defId: "tattered_leggings",
+        chance: 0.06,
+        dropsAsBroken: true,
+        affixRange: { min: 0, max: 1 },
+      },
     ],
     lootTable: [
       { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
