@@ -13,7 +13,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Investigate crumbling stone structures along the mainland shore. Wildlife nests among the rubble.",
     skillId: "combat",
-    durationMs: 15000,
+    durationMs: 50000,
     foodCost: 8,
     waterCost: 2,
     xpGain: 30,
@@ -101,7 +101,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "Wade into sea caves exposed at low tide. The slippery rock hides copper veins and the bones of stranded creatures.",
     skillId: "combat",
-    durationMs: 12000,
+    durationMs: 40000,
     foodCost: 6,
     waterCost: 2,
     xpGain: 25,
@@ -175,7 +175,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A faint path leads inland through dense vegetation. The heat is oppressive and the undergrowth hides dangers.",
     skillId: "combat",
-    durationMs: 20000,
+    durationMs: 70000,
     foodCost: 10,
     waterCost: 4,
     xpGain: 45,
@@ -250,7 +250,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "An ancient quarry, half-submerged by groundwater. Tin ore glints beneath the murky surface among toppled pillars.",
     skillId: "combat",
-    durationMs: 22000,
+    durationMs: 75000,
     foodCost: 10,
     waterCost: 5,
     xpGain: 50,
@@ -323,7 +323,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A narrow ridge path climbs above the treeline. Cold winds scour the exposed rock, but iron-bearing stone lies in the cliffs beyond.",
     skillId: "combat",
-    durationMs: 25000,
+    durationMs: 90000,
     foodCost: 12,
     waterCost: 5,
     xpGain: 60,
@@ -399,7 +399,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A half-collapsed temple sinks into the jungle floor, its stone steps descending into darkness. The air is thick and the walls groan.",
     skillId: "combat",
-    durationMs: 30000,
+    durationMs: 105000,
     foodCost: 15,
     waterCost: 6,
     xpGain: 80,
@@ -478,7 +478,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     description:
       "A jagged rift vents sulfurous heat from deep underground. The extreme temperatures forge rare minerals in the rock walls — if you can survive long enough to collect them.",
     skillId: "combat",
-    durationMs: 35000,
+    durationMs: 120000,
     foodCost: 18,
     waterCost: 8,
     xpGain: 100,
