@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "c042b923654125239343ebd37043ed6af186c477"
+    "newestReviewed": "fc5b281a8319af5b1fd13552d88d50fc44af02bf"
   },
   "entries": [
+    {
+      "date": "2026-04-11",
+      "changes": [
+        "Add 23 new expedition loot and treasure item icons (sea glass, ancient doubloon, exotic feather, glowing fungus, volcanic glass, fire opal, giant clam pearl, black pearl, ancient map fragment, corroded medallion, sea-worn journal, cave crystal, phosphorescent algae, carved idol, ancient compass, raw gemstone, petrified wood, mountain crystal, eagle's plume, temple idol, cursed relic, magma core, star metal shard)"
+      ]
+    },
     {
       "date": "2026-04-11",
       "changes": [
