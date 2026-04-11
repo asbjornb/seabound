@@ -276,7 +276,17 @@ export function processTick(state: GameState, now: number): TickResult {
         }
       }
       if (def.foodCost) deductFood(state, def.foodCost);
-      if (def.waterCost) deductWater(state, def.waterCost);
+      if (def.waterCost) {
+        const waterTaken = deductWater(state, def.waterCost);
+        // Return empty containers for consumed water (mainland expeditions only;
+        // island expeditions handle this via outcome drops)
+        if (waterTaken && def.mainland) {
+          const freshWaterUsed = waterTaken["fresh_water"] ?? 0;
+          if (freshWaterUsed > 0) {
+            addResource(state, "fired_clay_pot", freshWaterUsed);
+          }
+        }
+      }
       // Deduct resource inputs
       if (def.inputs) {
         for (const inp of def.inputs) {
