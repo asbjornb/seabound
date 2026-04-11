@@ -134,7 +134,14 @@ export default function App() {
   const game = useGame();
   const updateAvailable = useUpdateChecker();
   const [tab, setTab] = useState<GameTab>("gather");
-  const [screen, setScreen] = useState<GameScreen>("island");
+  const tabRef = useRef<GameTab>("gather");
+  const [screen, setScreen] = useState<GameScreen>(() => {
+    try {
+      const saved = sessionStorage.getItem("sb_screen");
+      if (saved === "mainland" && game.state.mainlandUnlocked) return "mainland";
+    } catch { /* */ }
+    return "island";
+  });
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modPanelOpen, setModPanelOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -163,6 +170,14 @@ export default function App() {
   const [highlightedResources, setHighlightedResources] = useState<Set<string>>(new Set());
   const isOldDomain = window.location.hostname === "seabound.pages.dev";
   const queueMode = game.state.queueMode;
+
+  // Keep tabRef in sync for use in callbacks
+  tabRef.current = tab;
+
+  // Persist screen choice across remounts
+  useEffect(() => {
+    try { sessionStorage.setItem("sb_screen", screen); } catch { /* */ }
+  }, [screen]);
 
   // Close "more" menu on outside click
   useEffect(() => {
@@ -211,7 +226,11 @@ export default function App() {
 
   const handleScreenSwitch = useCallback((newScreen: GameScreen) => {
     setScreen(newScreen);
-    setTab("gather"); // Reset to gather when switching screens
+    // Inventory and skills are location-agnostic — preserve them when switching screens
+    const currentTab = tabRef.current;
+    if (currentTab !== "inventory" && currentTab !== "skills") {
+      setTab("gather");
+    }
     setTabTransition(true);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => setTabTransition(false));
