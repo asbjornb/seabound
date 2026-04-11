@@ -5541,11 +5541,6 @@
     },
     {
       "from": "expedition:coastal_ruins",
-      "to": "resource:corroded_medallion",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:coastal_ruins",
       "to": "resource:sea_worn_journal",
       "relation": "produces"
     },
@@ -6744,7 +6739,6 @@
       "resource:giant_clam_pearl",
       "resource:ancient_map_fragment",
       "resource:black_pearl",
-      "resource:corroded_medallion",
       "resource:sea_worn_journal",
       "resource:cave_crystal",
       "resource:phosphorescent_algae",
@@ -6760,6 +6754,7 @@
       "resource:star_metal_shard"
     ],
     "unreachable": [
+      "resource:corroded_medallion",
       "resource:terrain_essence",
       "resource:combat_essence",
       "resource:utility_essence"
@@ -6814,11 +6809,6 @@
         "type": "dead_end",
         "nodeId": "resource:black_pearl",
         "message": "Black Pearl is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:corroded_medallion",
-        "message": "Corroded Medallion is produced but never used as input"
       },
       {
         "type": "dead_end",
@@ -6887,6 +6877,11 @@
       },
       {
         "type": "unreachable",
+        "nodeId": "resource:corroded_medallion",
+        "message": "Corroded Medallion is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
         "nodeId": "resource:terrain_essence",
         "message": "Terrain Essence is not reachable from beach start"
       },
@@ -6899,6 +6894,11 @@
         "type": "unreachable",
         "nodeId": "resource:utility_essence",
         "message": "Utility Essence is not reachable from beach start"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:corroded_medallion",
+        "message": "Corroded Medallion is defined but has no production or consumption edges"
       },
       {
         "type": "orphan_resource",

@@ -41,6 +41,12 @@ export const EQUIPMENT_SLOTS: Record<string, EquipmentSlotDef> = {
     description: "Footwear — sandals, boots, wrappings.",
     order: 5,
   },
+  trinket: {
+    id: "trinket",
+    name: "Trinket",
+    description: "Medallions, charms, and relics — passive bonuses from mysterious artifacts.",
+    order: 6,
+  },
 };
 
 // ═══════════════════════════════════════
@@ -613,6 +619,21 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     tier: 1,
     maxAffixes: 2,
     tags: ["hide", "armor"],
+  },
+
+  // ── Trinkets ──
+  // Passive relics found as expedition loot. Equip in the trinket slot.
+
+  corroded_medallion: {
+    id: "corroded_medallion",
+    name: "Corroded Medallion",
+    description:
+      "A tarnished bronze medallion depicting a serpent coiled around a tower. Who wore this? It still carries a faint protective aura.",
+    slot: "trinket",
+    baseStats: [{ stat: "defense", value: 3 }, { stat: "endurance", value: 4 }],
+    tier: 1,
+    maxAffixes: 2,
+    tags: ["metal", "trinket"],
   },
 
   // ── Unique items ──

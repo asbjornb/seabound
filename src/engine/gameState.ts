@@ -355,6 +355,19 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (!loaded.lootLog) {
     loaded.lootLog = {};
   }
+  // Migration: convert corroded_medallion resource to equipment item (now a trinket)
+  if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {
+    const count = loaded.resources["corroded_medallion"];
+    for (let i = 0; i < count; i++) {
+      loaded.equipmentInventory.push({
+        instanceId: `migrated_corroded_medallion_${i}_${Date.now()}`,
+        defId: "corroded_medallion",
+        affixes: [],
+        condition: "broken",
+      });
+    }
+    delete loaded.resources["corroded_medallion"];
+  }
 
   return loaded;
 }
