@@ -524,24 +524,10 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   ],
   smithing: [
     {
-      level: 3,
-      description: "Steady pour — 10% chance to double copper smelting output",
-      effects: [
-        { type: "double_output", chance: 0.1, recipeId: "smelt_copper" },
-      ],
-    },
-    {
       level: 5,
       description: "Even heat — all smelting 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
-      ],
-    },
-    {
-      level: 10,
-      description: "Alloy instinct — 10% chance to double bronze output",
-      effects: [
-        { type: "double_output", chance: 0.1, recipeId: "smelt_bronze" },
       ],
     },
     {
@@ -563,13 +549,6 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Master smith — all smithing 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
-      ],
-    },
-    {
-      level: 24,
-      description: "Steel refinement — 15% chance to double steel output",
-      effects: [
-        { type: "double_output", chance: 0.15, recipeId: "forge_steel" },
       ],
     },
   ],
