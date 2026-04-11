@@ -71,9 +71,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "corroded_medallion",
+        chance: 0.18,
+        dropsAsBroken: true,
+        affixRange: { min: 0, max: 2 },
+      },
     ],
     lootTable: [
-      { resourceId: "corroded_medallion", amount: 1, chance: 0.18 },
       { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
     ],
   },
