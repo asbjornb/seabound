@@ -287,7 +287,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                         </div>
                         {eqDef.maxAffixes > 0 && (
                           <div className="equip-affix-hint">
-                            +up to {eqDef.maxAffixes} random {eqDef.maxAffixes === 1 ? "affix" : "affixes"}
+                            25% chance of a forge affix
                           </div>
                         )}
                         {comparison}
