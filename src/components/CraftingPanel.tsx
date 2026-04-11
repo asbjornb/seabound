@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
-import { getResources, getTools, getBuildings } from "../data/registry";
+import { getResources, getTools, getBuildings, getEquipmentItemById, getEquipmentSlots } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
 import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
+import { computeItemStats, formatStat } from "./EquipmentPanel";
 import { GameIcon } from "./GameIcon";
 import { useItemLookup } from "./ItemLookup";
 
@@ -219,7 +220,80 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                       </div>
                     ) : null;
                   })()}
-                  {recipe.toolOutput ? (
+                  {recipe.equipmentOutput ? (() => {
+                    const eqDef = getEquipmentItemById(recipe.equipmentOutput!);
+                    if (!eqDef) return <div className="recipe-output">Produces: {recipe.equipmentOutput}</div>;
+                    const SLOTS = getEquipmentSlots();
+                    const slotName = SLOTS[eqDef.slot]?.name ?? eqDef.slot;
+
+                    // Compare base stats vs currently equipped item in same slot
+                    const equippedInstanceId = state.loadout[eqDef.slot];
+                    const equippedItem = equippedInstanceId
+                      ? state.equipmentInventory.find((i) => i.instanceId === equippedInstanceId)
+                      : undefined;
+
+                    const baseStats: Record<string, number> = {};
+                    for (const s of eqDef.baseStats) {
+                      baseStats[s.stat] = (baseStats[s.stat] ?? 0) + s.value;
+                    }
+
+                    let comparison: React.ReactNode = null;
+                    if (equippedItem) {
+                      const equippedStats = computeItemStats(equippedItem);
+                      const allStats = new Set([...Object.keys(baseStats), ...Object.keys(equippedStats)]);
+                      const diffs: { stat: string; diff: number }[] = [];
+                      for (const stat of allStats) {
+                        const diff = (baseStats[stat] ?? 0) - (equippedStats[stat] ?? 0);
+                        if (diff !== 0) diffs.push({ stat, diff });
+                      }
+                      const equippedDef = getEquipmentItemById(equippedItem.defId);
+                      const equippedName = equippedDef?.name ?? "equipped";
+                      if (diffs.length > 0) {
+                        comparison = (
+                          <div className="equip-compare">
+                            <span className="compare-label">vs. {equippedName} (base stats):</span>
+                            <div className="compare-stats">
+                              {diffs.map(({ stat, diff }) => (
+                                <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
+                                  {stat} {diff > 0 ? "+" : ""}{diff}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        comparison = (
+                          <div className="equip-compare">
+                            <span className="compare-label">vs. {equippedName}:</span>
+                            <span className="compare-stat">identical base stats</span>
+                          </div>
+                        );
+                      }
+                    }
+
+                    return (
+                      <div className="recipe-output equipment-preview">
+                        <div>
+                          Produces: <GameIcon id={recipe.equipmentOutput!} size={16} /> {eqDef.name}
+                          {" "}<span className="equip-slot-tag">{slotName}</span>
+                          {" "}<span className="equip-tier">T{eqDef.tier}</span>
+                        </div>
+                        <div className="equip-stat-preview">
+                          {eqDef.baseStats.map((s) => (
+                            <span key={s.stat} className={`equip-stat-chip${s.value < 0 ? " negative" : ""}`}>
+                              {s.stat} {formatStat(s.value)}
+                            </span>
+                          ))}
+                        </div>
+                        {eqDef.maxAffixes > 0 && (
+                          <div className="equip-affix-hint">
+                            +up to {eqDef.maxAffixes} random {eqDef.maxAffixes === 1 ? "affix" : "affixes"}
+                          </div>
+                        )}
+                        {comparison}
+                      </div>
+                    );
+                  })() : recipe.toolOutput ? (
                     <div className="recipe-output">
                       Produces: <span className="tappable-item" onClick={(e) => { e.stopPropagation(); openLookup(recipe.toolOutput!); }}><GameIcon id={recipe.toolOutput} size={16} />{" "}
                       {TOOLS[recipe.toolOutput]?.name ?? recipe.toolOutput}</span>

@@ -2214,6 +2214,12 @@ body {
   color: var(--warning);
   background: color-mix(in srgb, var(--warning) 8%, transparent);
 }
+.equip-affix-hint {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 2px;
+}
 
 /* Expanded item detail area */
 .inventory-item-details {
