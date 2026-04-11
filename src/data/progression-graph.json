@@ -423,6 +423,18 @@
       "category": "loot,mainland,treasure"
     },
     {
+      "id": "resource:raw_hide",
+      "type": "resource",
+      "label": "Raw Hide",
+      "category": "mainland"
+    },
+    {
+      "id": "resource:cured_leather",
+      "type": "resource",
+      "label": "Cured Leather",
+      "category": "mainland"
+    },
+    {
       "id": "resource:native_copper",
       "type": "resource",
       "label": "Native Copper",
@@ -1542,6 +1554,12 @@
       "id": "recipe:forge_copper_shield",
       "type": "recipe",
       "label": "Forge Copper Shield",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:cure_raw_hide",
+      "type": "recipe",
+      "label": "Cure Raw Hide",
       "category": "smithing"
     },
     {
@@ -4485,17 +4503,42 @@
       "relation": "requires_building"
     },
     {
-      "from": "resource:dried_fiber",
+      "from": "recipe:cure_raw_hide",
+      "to": "resource:cured_leather",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:raw_hide",
+      "to": "recipe:cure_raw_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cure_raw_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:cure_raw_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cure_raw_hide",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:cure_raw_hide",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_armor",
       "relation": "consumes"
     },
     {
       "from": "resource:cordage",
-      "to": "recipe:stitch_hide_armor",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:rough_fiber",
       "to": "recipe:stitch_hide_armor",
       "relation": "consumes"
     },
@@ -4505,7 +4548,12 @@
       "relation": "trains"
     },
     {
-      "from": "resource:dried_fiber",
+      "from": "building:kiln",
+      "to": "recipe:stitch_hide_armor",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_cap",
       "relation": "consumes"
     },
@@ -4515,12 +4563,22 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:dried_fiber",
+      "to": "recipe:stitch_hide_cap",
+      "relation": "consumes"
+    },
+    {
       "from": "recipe:stitch_hide_cap",
       "to": "skill:smithing",
       "relation": "trains"
     },
     {
-      "from": "resource:dried_fiber",
+      "from": "building:kiln",
+      "to": "recipe:stitch_hide_cap",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_leggings",
       "relation": "consumes"
     },
@@ -4540,7 +4598,12 @@
       "relation": "trains"
     },
     {
-      "from": "resource:dried_fiber",
+      "from": "building:kiln",
+      "to": "recipe:stitch_hide_leggings",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_boots",
       "relation": "consumes"
     },
@@ -4558,6 +4621,11 @@
       "from": "recipe:stitch_hide_boots",
       "to": "skill:smithing",
       "relation": "trains"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:stitch_hide_boots",
+      "relation": "requires_building"
     },
     {
       "from": "resource:bronze_ingot",
@@ -5372,6 +5440,11 @@
     {
       "from": "expedition:coastal_ruins",
       "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:raw_hide",
       "relation": "produces"
     },
     {

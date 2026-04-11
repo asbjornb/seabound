@@ -38,8 +38,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       {
         weight: 25,
         description:
-          "A wild boar charges from a collapsed doorway. You fend it off and claim the den's contents.",
+          "A wild boar charges from a collapsed doorway. You fend it off and skin the carcass before claiming the den's contents.",
         drops: [
+          { resourceId: "raw_hide", amount: 2 },
           { resourceId: "coconut_husk", amount: 3 },
           { resourceId: "flat_stone", amount: 1 },
         ],

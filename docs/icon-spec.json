@@ -1629,6 +1629,30 @@
       "tags": ["phase2", "building", "fishing", "stone"]
     },
     {
+      "id": "raw_hide",
+      "object": "Rough animal hide, folded",
+      "description": "A folded piece of rough, tawny-brown animal hide with visible fur texture on one side and pale flesh on the other. Edges are uneven and ragged. Warm sun-bleached tones with natural creases.",
+      "use": "Inventory, expedition drops, curing recipe input",
+      "theme": "organic",
+      "category": "leather",
+      "chain": "leather",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "organic", "leather"]
+    },
+    {
+      "id": "cured_leather",
+      "object": "Cured leather piece, smooth and dark",
+      "description": "A neatly cut piece of dark brown cured leather, supple and smooth. Slight sheen from smoke-curing. Edges are clean-cut, ready for stitching. Darker and more refined than raw hide.",
+      "use": "Inventory, hide armor crafting recipes, repair material",
+      "theme": "organic",
+      "category": "leather",
+      "chain": "leather",
+      "chainRole": "derived",
+      "size": 64,
+      "tags": ["mainland", "organic", "leather", "crafted"]
+    },
+    {
       "id": "native_copper",
       "object": "Native copper nugget",
       "description": "A rough, reddish-orange nugget of native copper with a dull metallic sheen. Irregular shape with hints of green patina on edges. Warm, sun-lit metal against transparent background.",

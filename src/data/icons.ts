@@ -53,6 +53,8 @@ export const RESOURCE_ICONS: Record<ResourceId, string> = {
   pandanus_strip: "\u{1F9F5}",
   rope: "\u{1FA22}",
   sail: "\u{26F5}",
+  raw_hide: "\u{1F9B4}",
+  cured_leather: "\u{1F45F}",
 };
 
 export const TOOL_ICONS: Record<ToolId, string> = {
