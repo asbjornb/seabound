@@ -61,6 +61,20 @@ import { useUpdateChecker } from "./engine/useUpdateChecker";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
 
+/** Mainland tabs get distinct display names to differentiate from island tabs */
+const MAINLAND_TAB_LABELS: Partial<Record<GameTab, string>> = {
+  gather: "Harvest",
+  craft: "Forge",
+  explore: "Venture",
+};
+
+function getTabLabel(tab: GameTab, screen: GameScreen): string {
+  if (screen === "mainland") {
+    return MAINLAND_TAB_LABELS[tab] ?? tab.charAt(0).toUpperCase() + tab.slice(1);
+  }
+  return tab.charAt(0).toUpperCase() + tab.slice(1);
+}
+
 function getQueuedActionName(q: QueuedAction, routines: Routine[]): string {
   if (q.actionType === "gather") {
     return getActionById(q.actionId)?.name ?? q.actionId;
@@ -680,7 +694,7 @@ export default function App() {
                       <span className="tab-badge">{readyStationCount}</span>
                     )}
                   </span>
-                  <span className="tab-label">{t.charAt(0).toUpperCase() + t.slice(1)}</span>
+                  <span className="tab-label">{getTabLabel(t, screen)}</span>
                 </button>
               ))}
               {/* Desktop: show skills tab inline (inventory is in sidebar on desktop) */}
@@ -709,7 +723,7 @@ export default function App() {
                           className={`tab-more-item ${activeTab === t ? "active" : ""}`}
                           onClick={() => { handleTabSwitch(t); setMoreMenuOpen(false); }}
                         >
-                          <GameIcon id={`tab_${t}`} size={20} />{t.charAt(0).toUpperCase() + t.slice(1)}
+                          <GameIcon id={`tab_${t}`} size={20} />{getTabLabel(t, screen)}
                         </button>
                       ))}
                     </div>
@@ -885,6 +899,7 @@ export default function App() {
           onDeployStation={game.deployStation}
           onStartExpedition={handleStartExpedition}
           onJumpToTab={(t) => setTab(t as GameTab)}
+          screen={screen}
         />
       )}
 
