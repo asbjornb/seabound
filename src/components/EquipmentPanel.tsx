@@ -24,7 +24,7 @@ const NEXT_CONDITION_LABEL: Record<string, string> = {
 };
 
 /** Compute total stats (base + affixes) for an equipment item. */
-function computeItemStats(item: EquipmentItem): Record<string, number> {
+export function computeItemStats(item: EquipmentItem): Record<string, number> {
   const def = getEquipmentItemById(item.defId);
   if (!def) return {};
   const stats: Record<string, number> = {};
@@ -96,7 +96,7 @@ function meetsSalvageRequirements(table: SalvageTableDef, state: GameState): boo
 }
 
 /** Format a stat value with sign. */
-function formatStat(value: number): string {
+export function formatStat(value: number): string {
   return value > 0 ? `+${value}` : `${value}`;
 }
 
