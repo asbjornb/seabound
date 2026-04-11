@@ -8,7 +8,7 @@ import {
   getRecipeById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState } from "../data/types";
+import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
@@ -520,10 +520,15 @@ function applyCraftCompletion(
   };
 }
 
-/** Roll equipment drops from an expedition, applying encounter grade to drop chances. */
+/** Roll equipment drops from an expedition, applying encounter grade to drop chances.
+ *  Handles two item types:
+ *  - Magic items: random affixes (includes expedition-exclusive affixes when applicable)
+ *  - Unique items: fixed affixes from the item definition (no random rolling)
+ */
 function rollEquipmentDrops(
   entries: EquipmentDropEntry[],
-  gradeChanceMult: number
+  gradeChanceMult: number,
+  expeditionId?: string
 ): EquipmentItem[] {
   const allAffixes = getAffixes();
   const items: EquipmentItem[] = [];
@@ -535,31 +540,47 @@ function rollEquipmentDrops(
     const def = getEquipmentItemById(entry.defId);
     if (!def) continue;
 
-    // Roll random affixes
-    const affixRange = entry.affixRange ?? { min: 0, max: 0 };
-    const numAffixes = affixRange.min + Math.floor(Math.random() * (affixRange.max - affixRange.min + 1));
-    const capped = Math.min(numAffixes, def.maxAffixes);
+    let pickedAffixes: EquipmentItem["affixes"];
 
-    // Pick eligible affixes (filter by allowedSlots if set)
-    const eligible = Object.values(allAffixes).filter(
-      (a) => !a.allowedSlots || a.allowedSlots.includes(def.slot)
-    );
+    if (def.unique && def.fixedAffixes) {
+      // Unique item: use fixed affixes from definition
+      pickedAffixes = def.fixedAffixes.map((fa) => ({
+        affixId: fa.affixId,
+        rollValue: fa.rollValue,
+      }));
+    } else {
+      // Magic item: roll random affixes
+      const affixRange = entry.affixRange ?? { min: 0, max: 0 };
+      const numAffixes = affixRange.min + Math.floor(Math.random() * (affixRange.max - affixRange.min + 1));
+      const capped = Math.min(numAffixes, def.maxAffixes);
 
-    const pickedAffixes: EquipmentItem["affixes"] = [];
-    const usedIds = new Set<string>();
-    for (let i = 0; i < capped && eligible.length > usedIds.size; i++) {
-      const remaining = eligible.filter((a) => !usedIds.has(a.id));
-      if (remaining.length === 0) break;
-      const pick = remaining[Math.floor(Math.random() * remaining.length)];
-      usedIds.add(pick.id);
-      pickedAffixes.push({ affixId: pick.id, rollValue: Math.random() });
+      // Pick eligible affixes: slot-compatible, plus expedition-exclusive for this expedition
+      const eligible = Object.values(allAffixes).filter((a) => {
+        if (a.allowedSlots && !a.allowedSlots.includes(def.slot)) return false;
+        // Exclude expedition-exclusive affixes from other expeditions
+        if (a.expeditionOnly && a.expeditionOnly !== expeditionId) return false;
+        return true;
+      });
+
+      pickedAffixes = [];
+      const usedIds = new Set<string>();
+      for (let i = 0; i < capped && eligible.length > usedIds.size; i++) {
+        const remaining = eligible.filter((a) => !usedIds.has(a.id));
+        if (remaining.length === 0) break;
+        const pick = remaining[Math.floor(Math.random() * remaining.length)];
+        usedIds.add(pick.id);
+        pickedAffixes.push({ affixId: pick.id, rollValue: Math.random() });
+      }
     }
+
+    // Unique items drop pristine (they're special); magic items follow dropsAsBroken
+    const condition = def.unique ? "pristine" : (entry.dropsAsBroken ? "broken" : "pristine");
 
     items.push({
       instanceId: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
       defId: entry.defId,
       affixes: pickedAffixes,
-      condition: entry.dropsAsBroken ? "broken" : "pristine",
+      condition,
     });
   }
 
@@ -633,7 +654,7 @@ function applyExpeditionCompletion(
     }
 
     if (gradeChanceMult > 0) {
-      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult);
+      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult, def.id);
       for (const item of rolledItems) {
         state.equipmentInventory.push(item);
       }
@@ -642,6 +663,37 @@ function applyExpeditionCompletion(
           const itemDef = getEquipmentItemById(item.defId);
           return { defId: item.defId, name: itemDef?.name ?? item.defId, condition: item.condition };
         });
+      }
+    }
+  }
+
+  // Loot table drops (rolled independently from outcomes)
+  if (def.lootTable && def.lootTable.length > 0) {
+    // Navigation level provides a small bonus to loot drop chances (+1% per level)
+    const lootChanceBonus = navLevel * 0.01;
+    // Combat grade affects loot drops on mainland expeditions
+    let lootGradeMult = 1;
+    if (encounter) {
+      if (encounter.grade === "failure") lootGradeMult = 0.15;
+      else if (encounter.grade === "partial") lootGradeMult = 0.5;
+    }
+
+    const rolledLoot = rollLootTable(def.lootTable, lootChanceBonus, lootGradeMult);
+    for (const loot of rolledLoot) {
+      if (!state.discoveredResources.includes(loot.resourceId)) {
+        newResources.push(loot.resourceId);
+        state.discoveredResources.push(loot.resourceId);
+      }
+      addResource(state, loot.resourceId, loot.amount);
+      drops.push({ name: loot.resourceId, amount: loot.amount });
+
+      // Track in loot log
+      if (!state.lootLog) state.lootLog = {};
+      const entry = state.lootLog[loot.resourceId];
+      if (entry) {
+        entry.count += loot.amount;
+      } else {
+        state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
       }
     }
   }
@@ -756,6 +808,22 @@ function rollDrops(
     }
     if (Math.random() < chance) {
       result.push({ resourceId: drop.resourceId, amount: drop.amount });
+    }
+  }
+  return result;
+}
+
+/** Roll a loot table — each entry rolled independently with bonus and grade multiplier. */
+function rollLootTable(
+  table: LootDrop[],
+  chanceBonus: number,
+  gradeMult: number
+): { resourceId: string; amount: number }[] {
+  const result: { resourceId: string; amount: number }[] = [];
+  for (const entry of table) {
+    const adjustedChance = Math.min(1, entry.chance * (1 + chanceBonus) * gradeMult);
+    if (Math.random() < adjustedChance) {
+      result.push({ resourceId: entry.resourceId, amount: entry.amount });
     }
   }
   return result;

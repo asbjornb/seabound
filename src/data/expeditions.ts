@@ -1,4 +1,4 @@
-import { ExpeditionDef } from "./types";
+import type { ExpeditionDef } from "./types";
 
 // ═══════════════════════════════════════
 // Mainland Expeditions (post-victory)
@@ -65,6 +65,16 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 0, max: 1 },
       },
+      {
+        defId: "rusted_harpoon",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+    lootTable: [
+      { resourceId: "corroded_medallion", amount: 1, chance: 0.18 },
+      { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -125,6 +135,16 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 0, max: 1 },
       },
+      {
+        defId: "coral_encrusted_buckler",
+        chance: 0.04,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+    lootTable: [
+      { resourceId: "cave_crystal", amount: 1, chance: 0.20 },
+      { resourceId: "phosphorescent_algae", amount: 1, chance: 0.06 },
     ],
   },
 
@@ -191,6 +211,16 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "vine_lash",
+        chance: 0.03,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+    lootTable: [
+      { resourceId: "carved_idol", amount: 1, chance: 0.06 },
+      { resourceId: "ancient_compass", amount: 1, chance: 0.02 },
     ],
   },
   {
@@ -254,6 +284,16 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "quarry_crown",
+        chance: 0.03,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+    lootTable: [
+      { resourceId: "raw_gemstone", amount: 1, chance: 0.18 },
+      { resourceId: "petrified_wood", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -317,6 +357,16 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "windrunner_boots",
+        chance: 0.03,
+        dropsAsBroken: true,
+        affixRange: { min: 1, max: 2 },
+      },
+    ],
+    lootTable: [
+      { resourceId: "mountain_crystal", amount: 1, chance: 0.18 },
+      { resourceId: "eagles_plume", amount: 1, chance: 0.05 },
     ],
   },
 
@@ -391,6 +441,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 3 },
       },
+      {
+        defId: "idol_of_the_deep",
+        chance: 0.015,
+      },
+    ],
+    lootTable: [
+      { resourceId: "temple_idol", amount: 1, chance: 0.06 },
+      { resourceId: "cursed_relic", amount: 1, chance: 0.008 },
     ],
   },
   {
@@ -463,6 +521,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 2, max: 3 },
       },
+      {
+        defId: "molten_edge",
+        chance: 0.012,
+      },
+    ],
+    lootTable: [
+      { resourceId: "magma_core", amount: 1, chance: 0.06 },
+      { resourceId: "star_metal_shard", amount: 1, chance: 0.008 },
     ],
   },
 ];
@@ -505,6 +571,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },
+    ],
+    lootTable: [
+      { resourceId: "sea_glass", amount: 1, chance: 0.20 },
+      { resourceId: "ancient_doubloon", amount: 1, chance: 0.04 },
     ],
   },
   {
@@ -553,6 +623,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "The jungle is thick and disorienting. You circle back to camp with nothing to show for it.",
       },
+    ],
+    lootTable: [
+      { resourceId: "exotic_feather", amount: 1, chance: 0.18 },
+      { resourceId: "glowing_fungus", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -611,6 +685,10 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "Rough seas slow the crossing. You arrive exhausted and return with nothing useful.",
       },
+    ],
+    lootTable: [
+      { resourceId: "volcanic_glass", amount: 1, chance: 0.20 },
+      { resourceId: "fire_opal", amount: 1, chance: 0.04 },
     ],
   },
   {
@@ -709,6 +787,11 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           { resourceId: "fired_clay_pot", amount: 1, chance: 0.85 },
         ],
       },
+    ],
+    lootTable: [
+      { resourceId: "giant_clam_pearl", amount: 1, chance: 0.15 },
+      { resourceId: "ancient_map_fragment", amount: 1, chance: 0.04 },
+      { resourceId: "black_pearl", amount: 1, chance: 0.015 },
     ],
   },
   {

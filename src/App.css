@@ -1929,6 +1929,28 @@ body {
   margin-left: 6px;
   vertical-align: middle;
 }
+
+/* Unique item styling */
+.unique-item {
+  border-color: #f39c12;
+  box-shadow: 0 0 0 1px rgba(243, 156, 18, 0.2);
+}
+.unique-name {
+  color: #f39c12;
+}
+.unique-badge {
+  display: inline-block;
+  background: #f39c12;
+  color: var(--bg);
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
 .equip-meta {
   display: flex;
   gap: 6px;
@@ -2235,6 +2257,26 @@ body {
 }
 .drop-list-toggle:hover {
   color: var(--text-main);
+}
+
+/* ── Loot Table Styles ── */
+
+.loot-table-section {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+
+.loot-drop {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.loot-found-mark {
+  color: var(--success);
+  font-size: 0.85em;
+  margin-left: 2px;
 }
 
 .storage-group-info {

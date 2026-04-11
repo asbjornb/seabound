@@ -285,6 +285,144 @@
       "label": "Sealed Clay Jar"
     },
     {
+      "id": "resource:sea_glass",
+      "type": "resource",
+      "label": "Sea Glass",
+      "category": "loot"
+    },
+    {
+      "id": "resource:ancient_doubloon",
+      "type": "resource",
+      "label": "Ancient Doubloon",
+      "category": "loot,treasure"
+    },
+    {
+      "id": "resource:exotic_feather",
+      "type": "resource",
+      "label": "Exotic Feather",
+      "category": "loot"
+    },
+    {
+      "id": "resource:glowing_fungus",
+      "type": "resource",
+      "label": "Glowing Fungus",
+      "category": "loot"
+    },
+    {
+      "id": "resource:volcanic_glass",
+      "type": "resource",
+      "label": "Volcanic Glass",
+      "category": "loot"
+    },
+    {
+      "id": "resource:fire_opal",
+      "type": "resource",
+      "label": "Fire Opal",
+      "category": "loot,treasure"
+    },
+    {
+      "id": "resource:giant_clam_pearl",
+      "type": "resource",
+      "label": "Giant Clam Pearl",
+      "category": "loot,treasure"
+    },
+    {
+      "id": "resource:black_pearl",
+      "type": "resource",
+      "label": "Black Pearl",
+      "category": "loot,treasure"
+    },
+    {
+      "id": "resource:ancient_map_fragment",
+      "type": "resource",
+      "label": "Ancient Map Fragment",
+      "category": "loot,treasure"
+    },
+    {
+      "id": "resource:corroded_medallion",
+      "type": "resource",
+      "label": "Corroded Medallion",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:sea_worn_journal",
+      "type": "resource",
+      "label": "Sea-Worn Journal",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:cave_crystal",
+      "type": "resource",
+      "label": "Cave Crystal",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:phosphorescent_algae",
+      "type": "resource",
+      "label": "Phosphorescent Algae",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:carved_idol",
+      "type": "resource",
+      "label": "Carved Idol",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:ancient_compass",
+      "type": "resource",
+      "label": "Ancient Compass",
+      "category": "loot,mainland,treasure"
+    },
+    {
+      "id": "resource:raw_gemstone",
+      "type": "resource",
+      "label": "Raw Gemstone",
+      "category": "loot,mainland,treasure"
+    },
+    {
+      "id": "resource:petrified_wood",
+      "type": "resource",
+      "label": "Petrified Wood",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:mountain_crystal",
+      "type": "resource",
+      "label": "Mountain Crystal",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:eagles_plume",
+      "type": "resource",
+      "label": "Eagle's Plume",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:temple_idol",
+      "type": "resource",
+      "label": "Temple Idol",
+      "category": "loot,mainland,treasure"
+    },
+    {
+      "id": "resource:cursed_relic",
+      "type": "resource",
+      "label": "Cursed Relic",
+      "category": "loot,mainland,treasure"
+    },
+    {
+      "id": "resource:magma_core",
+      "type": "resource",
+      "label": "Magma Core",
+      "category": "loot,mainland"
+    },
+    {
+      "id": "resource:star_metal_shard",
+      "type": "resource",
+      "label": "Star Metal Shard",
+      "category": "loot,mainland,treasure"
+    },
+    {
       "id": "resource:native_copper",
       "type": "resource",
       "label": "Native Copper",
@@ -4835,6 +4973,16 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:explore_beach",
+      "to": "resource:sea_glass",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_beach",
+      "to": "resource:ancient_doubloon",
+      "relation": "produces"
+    },
+    {
       "from": "expedition:explore_interior",
       "to": "skill:navigation",
       "relation": "trains"
@@ -4932,6 +5080,16 @@
     {
       "from": "expedition:explore_interior",
       "to": "resource:large_shell",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:exotic_feather",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:explore_interior",
+      "to": "resource:glowing_fungus",
       "relation": "produces"
     },
     {
@@ -5052,6 +5210,16 @@
     {
       "from": "expedition:sail_nearby_island",
       "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:volcanic_glass",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sail_nearby_island",
+      "to": "resource:fire_opal",
       "relation": "produces"
     },
     {
@@ -5267,6 +5435,21 @@
     {
       "from": "expedition:dugout_voyage",
       "to": "resource:fired_clay_pot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:giant_clam_pearl",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:ancient_map_fragment",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:dugout_voyage",
+      "to": "resource:black_pearl",
       "relation": "produces"
     },
     {
@@ -5934,9 +6117,32 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "resource:steel_ingot"
+      "resource:steel_ingot",
+      "resource:sea_glass",
+      "resource:ancient_doubloon",
+      "resource:exotic_feather",
+      "resource:glowing_fungus",
+      "resource:volcanic_glass",
+      "resource:fire_opal",
+      "resource:giant_clam_pearl",
+      "resource:ancient_map_fragment",
+      "resource:black_pearl"
     ],
     "unreachable": [
+      "resource:corroded_medallion",
+      "resource:sea_worn_journal",
+      "resource:cave_crystal",
+      "resource:phosphorescent_algae",
+      "resource:carved_idol",
+      "resource:ancient_compass",
+      "resource:raw_gemstone",
+      "resource:petrified_wood",
+      "resource:mountain_crystal",
+      "resource:eagles_plume",
+      "resource:temple_idol",
+      "resource:cursed_relic",
+      "resource:magma_core",
+      "resource:star_metal_shard",
       "resource:native_copper",
       "resource:copper_ore",
       "resource:copper_ingot",
@@ -5990,6 +6196,121 @@
         "type": "dead_end",
         "nodeId": "resource:steel_ingot",
         "message": "Steel Ingot is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:sea_glass",
+        "message": "Sea Glass is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:ancient_doubloon",
+        "message": "Ancient Doubloon is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:exotic_feather",
+        "message": "Exotic Feather is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:glowing_fungus",
+        "message": "Glowing Fungus is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:volcanic_glass",
+        "message": "Volcanic Glass is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:fire_opal",
+        "message": "Fire Opal is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:giant_clam_pearl",
+        "message": "Giant Clam Pearl is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:ancient_map_fragment",
+        "message": "Ancient Map Fragment is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:black_pearl",
+        "message": "Black Pearl is produced but never used as input"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:corroded_medallion",
+        "message": "Corroded Medallion is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:sea_worn_journal",
+        "message": "Sea-Worn Journal is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:cave_crystal",
+        "message": "Cave Crystal is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:phosphorescent_algae",
+        "message": "Phosphorescent Algae is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:carved_idol",
+        "message": "Carved Idol is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:ancient_compass",
+        "message": "Ancient Compass is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:raw_gemstone",
+        "message": "Raw Gemstone is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:petrified_wood",
+        "message": "Petrified Wood is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:mountain_crystal",
+        "message": "Mountain Crystal is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:eagles_plume",
+        "message": "Eagle's Plume is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:temple_idol",
+        "message": "Temple Idol is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:cursed_relic",
+        "message": "Cursed Relic is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:magma_core",
+        "message": "Magma Core is not reachable from beach start"
+      },
+      {
+        "type": "unreachable",
+        "nodeId": "resource:star_metal_shard",
+        "message": "Star Metal Shard is not reachable from beach start"
       },
       {
         "type": "unreachable",
@@ -6225,6 +6546,76 @@
         "type": "unreachable",
         "nodeId": "recipe:build_bloomery",
         "message": "Bloomery is not reachable from beach start"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:corroded_medallion",
+        "message": "Corroded Medallion is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:sea_worn_journal",
+        "message": "Sea-Worn Journal is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:cave_crystal",
+        "message": "Cave Crystal is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:phosphorescent_algae",
+        "message": "Phosphorescent Algae is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:carved_idol",
+        "message": "Carved Idol is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:ancient_compass",
+        "message": "Ancient Compass is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:raw_gemstone",
+        "message": "Raw Gemstone is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:petrified_wood",
+        "message": "Petrified Wood is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:mountain_crystal",
+        "message": "Mountain Crystal is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:eagles_plume",
+        "message": "Eagle's Plume is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:temple_idol",
+        "message": "Temple Idol is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:cursed_relic",
+        "message": "Cursed Relic is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:magma_core",
+        "message": "Magma Core is defined but has no production or consumption edges"
+      },
+      {
+        "type": "orphan_resource",
+        "nodeId": "resource:star_metal_shard",
+        "message": "Star Metal Shard is defined but has no production or consumption edges"
       },
       {
         "type": "orphan_resource",

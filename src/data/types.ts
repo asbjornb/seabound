@@ -79,6 +79,13 @@ export interface Drop {
   chance?: number; // 0-1, defaults to 1
 }
 
+/** A loot table entry — rolled independently on each expedition completion. */
+export interface LootDrop {
+  resourceId: ResourceId;
+  amount: number;
+  chance: number; // 0-1 base probability
+}
+
 // ═══════════════════════════════════════
 // Skill Milestones
 // ═══════════════════════════════════════
@@ -149,6 +156,8 @@ export interface AffixDef {
   rollRange?: { min: number; max: number }; // multiplied against modifier values
   /** If set, affix can only appear on items in these slots. */
   allowedSlots?: EquipmentSlotId[];
+  /** If set, this affix only rolls on items dropped from this expedition. */
+  expeditionOnly?: string;
 }
 
 export type ItemCondition = "pristine" | "worn" | "damaged" | "broken";
@@ -164,8 +173,10 @@ export interface EquipmentItemDef {
   requiredSkills?: { skillId: SkillId; level: number }[];
   /** Material tier — higher tiers are generally stronger and harder to obtain. */
   tier: number;
-  /** If true, this is a unique item with fixed special properties. */
+  /** If true, this is a unique item with fixed affixes (not randomly rolled). */
   unique?: boolean;
+  /** Fixed affixes for unique items — used instead of random rolling. */
+  fixedAffixes?: { affixId: string; rollValue: number }[];
   /** Max number of affix slots on this item (rolled affixes fill these). */
   maxAffixes: number;
   /** Tags for filtering/categorization (e.g. "metal", "leather", "weapon"). */
@@ -354,6 +365,8 @@ export interface ExpeditionDef {
   difficulty?: ExpeditionDifficultyProfile;
   /** Equipment drops that can be awarded on success (separate from resource drops). */
   equipmentDrops?: EquipmentDropEntry[];
+  /** Loot table — rolled independently from outcomes. Each entry has its own drop chance and rarity. */
+  lootTable?: LootDrop[];
 }
 
 /** An equipment item that can drop from an expedition outcome. */
@@ -540,4 +553,7 @@ export interface GameState {
 
   // Detailed per-expedition combat logs (mainland)
   combatLog: CombatLogEntry[];
+
+  // Loot drop collection log — tracks rare+ drops found
+  lootLog: Record<string, { count: number; firstFound: number }>;
 }

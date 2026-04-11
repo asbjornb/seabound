@@ -1,4 +1,4 @@
-import { ResourceDef } from "./types";
+import type { ResourceDef } from "./types";
 
 export const RESOURCES: Record<string, ResourceDef> = {
   // Phase 0 - Bare Hands (Beach)
@@ -326,6 +326,193 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Sealed Clay Jar",
     description:
       "An airtight clay jar. Preserves food for long expeditions and stores seeds.",
+  },
+
+  // ═══════════════════════════════════════
+  // Expedition Loot Drops (rare chase items)
+  // ═══════════════════════════════════════
+
+  // Beach explore drops
+  sea_glass: {
+    id: "sea_glass",
+    name: "Sea Glass",
+    description: "Smooth, frosted glass tumbled by decades of ocean currents. Prized for decoration and trade.",
+    tags: ["loot"],
+
+  },
+  ancient_doubloon: {
+    id: "ancient_doubloon",
+    name: "Ancient Doubloon",
+    description: "A heavy gold coin from a long-lost shipwreck. The markings are worn but unmistakable.",
+    tags: ["loot", "treasure"],
+
+  },
+
+  // Interior explore drops
+  exotic_feather: {
+    id: "exotic_feather",
+    name: "Exotic Feather",
+    description: "Brilliant plumage from a rare jungle bird. Too beautiful to ignore.",
+    tags: ["loot"],
+
+  },
+  glowing_fungus: {
+    id: "glowing_fungus",
+    name: "Glowing Fungus",
+    description: "A bioluminescent mushroom that pulses with soft blue-green light. Fascinating and unsettling.",
+    tags: ["loot"],
+
+  },
+
+  // Nearby island drops
+  volcanic_glass: {
+    id: "volcanic_glass",
+    name: "Volcanic Glass",
+    description: "A naturally formed shard of perfectly clear volcanic glass. Sharp and beautiful.",
+    tags: ["loot"],
+
+  },
+  fire_opal: {
+    id: "fire_opal",
+    name: "Fire Opal",
+    description: "A blazing orange gemstone forged in volcanic heat. It seems to glow from within.",
+    tags: ["loot", "treasure"],
+
+  },
+
+  // Dugout voyage drops
+  giant_clam_pearl: {
+    id: "giant_clam_pearl",
+    name: "Giant Clam Pearl",
+    description: "A lustrous pearl found inside an enormous clam. Worth more than everything else you own.",
+    tags: ["loot", "treasure"],
+
+  },
+  black_pearl: {
+    id: "black_pearl",
+    name: "Black Pearl",
+    description: "An impossibly dark pearl with an iridescent sheen. Legends say they bring fortune — or ruin.",
+    tags: ["loot", "treasure"],
+
+  },
+  ancient_map_fragment: {
+    id: "ancient_map_fragment",
+    name: "Ancient Map Fragment",
+    description: "A scrap of weathered parchment showing coastlines you don't recognize. Part of something larger.",
+    tags: ["loot", "treasure"],
+
+  },
+
+  // Coastal ruins drops
+  corroded_medallion: {
+    id: "corroded_medallion",
+    name: "Corroded Medallion",
+    description: "A tarnished bronze medallion depicting a serpent coiled around a tower. Who wore this?",
+    tags: ["loot", "mainland"],
+
+  },
+  sea_worn_journal: {
+    id: "sea_worn_journal",
+    name: "Sea-Worn Journal",
+    description: "A partially readable journal found in the ruins. The handwriting grows increasingly frantic.",
+    tags: ["loot", "mainland"],
+
+  },
+
+  // Tidal caves drops
+  cave_crystal: {
+    id: "cave_crystal",
+    name: "Cave Crystal",
+    description: "A translucent crystal formation grown over centuries in the dark. It hums faintly when held.",
+    tags: ["loot", "mainland"],
+
+  },
+  phosphorescent_algae: {
+    id: "phosphorescent_algae",
+    name: "Phosphorescent Algae",
+    description: "Clumps of algae that glow an eerie green in the dark. The caves are alive with light.",
+    tags: ["loot", "mainland"],
+
+  },
+
+  // Overgrown trail drops
+  carved_idol: {
+    id: "carved_idol",
+    name: "Carved Idol",
+    description: "A small stone figure with an unsettling expression. It feels heavier than it looks.",
+    tags: ["loot", "mainland"],
+
+  },
+  ancient_compass: {
+    id: "ancient_compass",
+    name: "Ancient Compass",
+    description: "A bronze compass that still points true. The craftsmanship is beyond anything you could make.",
+    tags: ["loot", "mainland", "treasure"],
+
+  },
+
+  // Flooded quarry drops
+  raw_gemstone: {
+    id: "raw_gemstone",
+    name: "Raw Gemstone",
+    description: "An uncut precious stone, cloudy on the outside but with brilliant color at its heart.",
+    tags: ["loot", "mainland", "treasure"],
+
+  },
+  petrified_wood: {
+    id: "petrified_wood",
+    name: "Petrified Wood",
+    description: "Ancient wood turned to stone over millennia. The grain is perfectly preserved in mineral.",
+    tags: ["loot", "mainland"],
+
+  },
+
+  // Ridge pass drops
+  mountain_crystal: {
+    id: "mountain_crystal",
+    name: "Mountain Crystal",
+    description: "A cluster of clear quartz crystals from a high ridge. They catch the light like frozen water.",
+    tags: ["loot", "mainland"],
+
+  },
+  eagles_plume: {
+    id: "eagles_plume",
+    name: "Eagle's Plume",
+    description: "A massive feather from a mountain raptor. It's as long as your forearm.",
+    tags: ["loot", "mainland"],
+
+  },
+
+  // Sunken temple drops
+  temple_idol: {
+    id: "temple_idol",
+    name: "Temple Idol",
+    description: "A golden figurine from the temple altar. Its eyes are set with tiny, dark gemstones.",
+    tags: ["loot", "mainland", "treasure"],
+
+  },
+  cursed_relic: {
+    id: "cursed_relic",
+    name: "Cursed Relic",
+    description: "A pulsing black artifact covered in indecipherable script. It whispers when no one is listening.",
+    tags: ["loot", "mainland", "treasure"],
+
+  },
+
+  // Volcanic rift drops
+  magma_core: {
+    id: "magma_core",
+    name: "Magma Core",
+    description: "A dense sphere of solidified lava that radiates warmth. It glows faintly red in the dark.",
+    tags: ["loot", "mainland"],
+
+  },
+  star_metal_shard: {
+    id: "star_metal_shard",
+    name: "Star Metal Shard",
+    description: "A fragment of otherworldly metal from a meteor impact. It's impossibly light and impossibly strong.",
+    tags: ["loot", "mainland", "treasure"],
+
   },
 
   // ═══════════════════════════════════════

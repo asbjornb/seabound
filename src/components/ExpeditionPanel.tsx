@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getResources } from "../data/registry";
-import { ExpeditionDef, GameState } from "../data/types";
+import type { ExpeditionDef, GameState, LootDrop } from "../data/types";
 import { computeLoadoutStats, computeGearScore, estimateWinRate, computeCheckPassChance } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -101,6 +101,27 @@ function DropList({ drops, resources }: { drops: { resourceId: string; amount: n
           {expanded ? "Show less" : `+${hiddenCount} more...`}
         </button>
       )}
+    </div>
+  );
+}
+
+function LootTableDisplay({ lootTable, resources, state }: { lootTable: LootDrop[]; resources: Record<string, { name?: string }>; state: GameState }) {
+  if (lootTable.length === 0) return null;
+
+  return (
+    <div className="action-drops loot-table-section">
+      Bonus drops:
+      {lootTable.map((d, i) => {
+        const found = !!state.lootLog?.[d.resourceId];
+        return (
+          <div key={i} className="drop-row loot-drop">
+            <GameIcon id={d.resourceId} size={16} />
+            {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
+            ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
+            {found && <span className="loot-found-mark" title="Found!">&#10003;</span>}
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -264,6 +285,9 @@ export function ExpeditionPanel({
             <div className="action-xp">+{exp.xpGain} {exp.skillId} XP</div>
             {exp.mainland && <LoadoutPreview state={state} exp={exp} />}
             <DropList drops={getEffectiveDrops(exp, state)} resources={RESOURCES} />
+            {exp.lootTable && exp.lootTable.length > 0 && (
+              <LootTableDisplay lootTable={exp.lootTable} resources={RESOURCES} state={state} />
+            )}
           </div>
         );
       })}

@@ -523,15 +523,17 @@ function EquipmentSection({
           const isEquipped = equippedIds.has(item.instanceId);
           const isExpanded = expandedId === `equip:${item.instanceId}`;
           const conditionClass = item.condition === "broken" ? " broken" : item.condition === "damaged" ? " damaged" : "";
+          const uniqueClass = def.unique ? " unique-item" : "";
           return (
             <div
               key={item.instanceId}
-              className={`inventory-item${isExpanded ? " expanded" : ""}${conditionClass}${isEquipped ? " equipped" : ""}`}
+              className={`inventory-item${isExpanded ? " expanded" : ""}${conditionClass}${isEquipped ? " equipped" : ""}${uniqueClass}`}
               onClick={() => onToggleExpand(`equip:${item.instanceId}`)}
             >
               <div className="inventory-item-header">
-                <span className="inventory-item-name">
+                <span className={`inventory-item-name${def.unique ? " unique-name" : ""}`}>
                   {def.name}
+                  {def.unique && <span className="unique-badge">Unique</span>}
                   {isEquipped && <span className="equip-badge">E</span>}
                 </span>
                 <span className="equip-meta">

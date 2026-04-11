@@ -215,6 +215,7 @@ export function validateModPack(pack: unknown): ValidationResult {
       if (outcome.biomeDiscovery) checkBiomeRef(outcome.biomeDiscovery, ctx);
       for (const drop of outcome.drops ?? []) checkResourceRef(drop.resourceId, ctx);
     }
+    for (const loot of exp.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
   }
 
   // Validate stations
