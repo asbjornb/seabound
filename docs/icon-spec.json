@@ -1293,6 +1293,42 @@
       "tags": ["ui", "tab", "routines"]
     },
     {
+      "id": "tab_harvest",
+      "object": "Golden sickle reaping grain",
+      "description": "A curved golden sickle mid-swing through a sheaf of ripe grain. Warm amber tones, a few loose grain kernels scattering. Suggests abundance and agricultural mastery — the mainland evolution of bare-handed gathering.",
+      "use": "Bottom tab bar on mainland screen, replaces Gather icon",
+      "theme": "fire",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "mainland"]
+    },
+    {
+      "id": "tab_forge",
+      "object": "Glowing anvil with hammer",
+      "description": "A dark iron anvil with a hammer resting on top, orange-hot metal sparks flying. Ember glow underneath suggesting a forge fire. Represents advanced mainland crafting — metalwork, smelting, and industrial production.",
+      "use": "Bottom tab bar on mainland screen, replaces Craft icon",
+      "theme": "fire",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "mainland"]
+    },
+    {
+      "id": "tab_venture",
+      "object": "Ship wheel with compass star",
+      "description": "A wooden ship's wheel overlaid with a four-pointed compass star. Ocean blue-cyan tones with gold compass points. Conveys ambitious voyages and trade — the mainland evolution of island exploration.",
+      "use": "Bottom tab bar on mainland screen, replaces Explore icon",
+      "theme": "maritime",
+      "category": "ui_tab",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 48,
+      "tags": ["ui", "tab", "mainland"]
+    },
+    {
       "id": "ui_settings_gear",
       "object": "Gear / cog icon",
       "description": "A coconut shell or carved wood gear — organic take on the settings cog. Not metallic. Island-crafted feel.",
@@ -2295,5 +2331,5 @@
   ],
   "states": {},
   "createdAt": "2026-03-27T00:00:00Z",
-  "updatedAt": "2026-04-08T00:00:00Z"
+  "updatedAt": "2026-04-11T00:00:00Z"
 }
