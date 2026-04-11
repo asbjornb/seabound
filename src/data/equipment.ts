@@ -141,15 +141,6 @@ export const AFFIXES: Record<string, AffixDef> = {
     rollRange: { min: 0.6, max: 1.0 },
     allowedSlots: ["body", "legs"],
   },
-  affix_sturdy: {
-    id: "affix_sturdy",
-    name: "Sturdy",
-    family: "utility",
-    description: "More durable — degrades slower during expeditions.",
-    modifiers: [{ stat: "durability", value: 10 }],
-    rollRange: { min: 0.5, max: 1.0 },
-  },
-
   // Endurance family
   affix_enduring: {
     id: "affix_enduring",
