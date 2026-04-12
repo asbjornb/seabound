@@ -56,7 +56,8 @@ export function ResourcePanel({ state }: { state: GameState }) {
     });
   }, []);
 
-  const useStashSections = entries.length > STASH_THRESHOLD;
+  const hasStashedEntries = entries.some(([id]) => stashed.has(id));
+  const useStashSections = entries.length > STASH_THRESHOLD || hasStashedEntries;
   const pinnedEntries = useStashSections ? entries.filter(([id]) => !stashed.has(id)) : entries;
   const stashedEntries = useStashSections ? entries.filter(([id]) => stashed.has(id)) : [];
 
