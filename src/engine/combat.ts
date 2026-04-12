@@ -84,6 +84,18 @@ function computeCombatSeed(
   return hash;
 }
 
+/**
+ * Cheap key that changes only when combat-relevant inputs change.
+ * Computing this is O(equipped items) — trivial compared to running simulations.
+ * Use as a useMemo dependency to avoid re-running Monte Carlo every tick.
+ */
+export function combatEstimationKey(
+  state: GameState,
+  difficulty: ExpeditionDifficultyProfile,
+): number {
+  return computeCombatSeed(getPlayerCombatStats(state), difficulty);
+}
+
 // ═══════════════════════════════════════
 // Stat Computation (unchanged from before)
 // ═══════════════════════════════════════
