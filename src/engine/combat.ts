@@ -24,16 +24,16 @@ import type { ExpeditionDifficultyProfile, GameState } from "../data/types";
 // ═══════════════════════════════════════
 
 /** Base player HP before the life stat is added. */
-const BASE_PLAYER_HP = 50;
+const BASE_PLAYER_HP = 35;
 
 /** Maximum rounds before combat times out (player loses). */
 const MAX_ROUNDS = 50;
 
 /** Scaling factor for player defense vs physical damage. */
-const DEFENSE_SCALE = 8;
+const DEFENSE_SCALE = 4;
 
 /** Scaling factor for resist stats vs typed damage. */
-const RESIST_SCALE = 10;
+const RESIST_SCALE = 6;
 
 /** Scaling factor for enemy defense vs player offense. */
 const ENEMY_DEFENSE_SCALE = 5;
@@ -45,7 +45,7 @@ const DODGE_SCALE = 3;
 const ENDURANCE_SCALE = 2;
 
 /** How much attackSpeed stat increases hits per round (attackSpeed * this). */
-const ATTACK_SPEED_PER_POINT = 0.08;
+const ATTACK_SPEED_PER_POINT = 0.05;
 
 /** Number of Monte Carlo simulations for win rate estimation. */
 const MONTE_CARLO_RUNS = 200;
@@ -146,7 +146,7 @@ export function computeGearScore(loadoutStats: Record<string, number>): number {
 // Full player combat stats (gear + milestones)
 // ═══════════════════════════════════════
 
-interface PlayerCombatStats {
+export interface PlayerCombatStats {
   offense: number;
   defense: number;
   life: number;
@@ -444,6 +444,32 @@ export function estimateGradeDistribution(
     success: success / MONTE_CARLO_RUNS,
     partial: partial / MONTE_CARLO_RUNS,
     failure: failure / MONTE_CARLO_RUNS,
+  };
+}
+
+/**
+ * Estimate win rate from explicit player stats (no GameState needed).
+ * Used for balance tests and offline tuning.
+ */
+export function estimateWinRateFromStats(
+  player: PlayerCombatStats,
+  difficulty: ExpeditionDifficultyProfile,
+  runs: number = MONTE_CARLO_RUNS,
+): { winRate: number; success: number; partial: number; failure: number } {
+  let success = 0;
+  let partial = 0;
+  let failure = 0;
+  for (let i = 0; i < runs; i++) {
+    const result = simulateCombat(player, difficulty);
+    if (result.grade === "success") success++;
+    else if (result.grade === "partial") partial++;
+    else failure++;
+  }
+  return {
+    winRate: (success + partial) / runs,
+    success: success / runs,
+    partial: partial / runs,
+    failure: failure / runs,
   };
 }
 
