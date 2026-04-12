@@ -43,6 +43,7 @@ import {
   canAffordInput,
   canDeploySharedStation,
   isAtStorageCap,
+  isRecipeOutputBlocked,
   canAffordTagInputs,
   createInitialState,
   getGroupBuildingCount,
@@ -740,8 +741,8 @@ export function useGame() {
         }
         // Check tag-based inputs (e.g. "5 different foods")
         if (recipe.tagInputs && !canAffordTagInputs(recipe.tagInputs, prev)) return prev;
-        // Block if output resource storage is full
-        if (recipe.output && isAtStorageCap(prev, recipe.output.resourceId)) return prev;
+        // Block if output resource storage is full (but allow if inputs free space in the same group)
+        if (recipe.output && isRecipeOutputBlocked(prev, recipe.output.resourceId, inputs)) return prev;
         const next = structuredClone(prev);
         next.activeRoutine = null; // manual craft cancels any running routine
         next.actionQueue = []; // manual craft clears the queue

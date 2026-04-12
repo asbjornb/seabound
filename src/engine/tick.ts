@@ -11,7 +11,7 @@ import {
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
-import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, isRecipeOutputBlocked, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -158,8 +158,8 @@ export function processTick(state: GameState, now: number): TickResult {
     if (def.repeatable) {
       let remaining = timeAvailable;
       while (remaining >= effectiveCraftDuration) {
-        // Block if output storage is full (don't waste inputs)
-        if (def.output && isAtStorageCap(state, def.output.resourceId)) {
+        // Block if output storage is full (but allow if inputs free space in the same group)
+        if (def.output && isRecipeOutputBlocked(state, def.output.resourceId, effectiveInputs)) {
           unusedMs = remaining;
           state.currentAction = null;
           break;
@@ -209,8 +209,8 @@ export function processTick(state: GameState, now: number): TickResult {
       }
     } else {
       if (timeAvailable >= effectiveCraftDuration) {
-        // Block if output storage is full (don't waste inputs)
-        if (def.output && isAtStorageCap(state, def.output.resourceId)) {
+        // Block if output storage is full (but allow if inputs free space in the same group)
+        if (def.output && isRecipeOutputBlocked(state, def.output.resourceId, effectiveInputs)) {
           unusedMs = timeAvailable - effectiveCraftDuration;
           state.currentAction = null;
         } else {

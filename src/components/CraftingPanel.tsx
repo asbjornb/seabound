@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
 import { getResources, getTools, getBuildings, getEquipmentItemById, getEquipmentSlots } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
-import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isAtStorageCap, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
+import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isRecipeOutputBlocked, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
 import { computeItemStats, formatStat } from "./EquipmentPanel";
 import { GameIcon } from "./GameIcon";
 import { useItemLookup } from "./ItemLookup";
@@ -62,11 +62,12 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
   }
 
   // Count craftable for the filter badge
-  const craftableCount = recipes.filter((r) =>
-    getEffectiveInputs(r, state).every((inp) => getResource(state, inp.resourceId) >= inp.amount)
+  const craftableCount = recipes.filter((r) => {
+    const inputs = getEffectiveInputs(r, state);
+    return inputs.every((inp) => getResource(state, inp.resourceId) >= inp.amount)
     && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
-    && !(r.output && isAtStorageCap(state, r.output.resourceId))
-  ).length;
+    && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
+  }).length;
 
   return (
     <div>
@@ -83,13 +84,14 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
         if (!list) return null;
 
         if (craftableOnly) {
-          list = list.filter((r) =>
-            getEffectiveInputs(r, state).every(
+          list = list.filter((r) => {
+            const inputs = getEffectiveInputs(r, state);
+            return inputs.every(
               (inp) => getResource(state, inp.resourceId) >= inp.amount
             )
             && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
-            && !(r.output && isAtStorageCap(state, r.output.resourceId))
-          );
+            && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
+          });
           if (list.length === 0) return null;
         }
 
@@ -110,7 +112,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                 (inp) => canAffordInput(inp, state)
               );
               const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
-              const outputFull = !!(recipe.output && isAtStorageCap(state, recipe.output.resourceId));
+              const outputFull = !!(recipe.output && isRecipeOutputBlocked(state, recipe.output.resourceId, inputs));
               const disabled = !canAffordInputs || !canAffordTags || outputFull;
 
               // Resolve which tagged resources would be used (for display)

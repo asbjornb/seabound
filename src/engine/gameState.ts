@@ -500,6 +500,30 @@ export function isAtStorageCap(state: GameState, resourceId: string): boolean {
   return used >= limit;
 }
 
+/** Like isAtStorageCap, but accounts for recipe inputs that share the same storage group as the output.
+ *  For example, fill_water_pot consumes fired_clay_pot and produces fresh_water — both in the "clay_pot" group.
+ *  When storage is full, consuming the input frees space for the output, so the recipe should still be allowed. */
+export function isRecipeOutputBlocked(state: GameState, outputResourceId: string, inputs: RecipeInput[]): boolean {
+  const RESOURCES = getResources();
+  const def = RESOURCES[outputResourceId];
+  const limit = getStorageLimit(state, outputResourceId);
+  const groupId = def?.storageCapGroup;
+  const used = groupId ? getStorageGroupTotal(state, groupId) : (state.resources[outputResourceId] ?? 0);
+  if (used < limit) return false;
+  // Storage is at cap — check if inputs free up space in the same group
+  if (groupId) {
+    let freed = 0;
+    for (const inp of inputs) {
+      const inputDef = RESOURCES[inp.resourceId];
+      if (inputDef?.storageCapGroup === groupId) {
+        freed += inp.amount;
+      }
+    }
+    if (freed > 0) return false;
+  }
+  return true;
+}
+
 /** Get the names of other resources sharing the same storageCapGroup. */
 export function getStorageGroupMembers(state: GameState, resourceId: string): { id: string; name: string; amount: number }[] {
   const RESOURCES = getResources();
