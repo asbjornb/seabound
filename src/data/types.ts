@@ -573,4 +573,7 @@ export interface GameState {
 
   // Loot drop collection log — tracks rare+ drops found
   lootLog: Record<string, { count: number; firstFound: number }>;
+
+  // Resource IDs the player has manually hidden in the resource panel stash drawer
+  stashedResources: string[];
 }
