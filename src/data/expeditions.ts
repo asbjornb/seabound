@@ -20,10 +20,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["wildlife", "terrain"],
-      statChecks: [
-        { stat: "offense", threshold: 5 },
-        { stat: "defense", threshold: 3 },
-      ],
+      enemy: {
+        name: "Feral Boar",
+        hp: 30,
+        damage: 5,
+        attackSpeed: 1.0,
+        defense: 2,
+        damageTypes: { physical: 1.0 },
+      },
       hint: "Bring a weapon and watch your footing on the loose stones.",
     },
     outcomes: [
@@ -108,10 +112,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["wet", "terrain"],
-      statChecks: [
-        { stat: "wetResist", threshold: 3 },
-        { stat: "speed", threshold: 3 },
-      ],
+      enemy: {
+        name: "Cave Hazards",
+        hp: 25,
+        damage: 6,
+        attackSpeed: 0.8,
+        defense: 1,
+        damageTypes: { physical: 0.3, wet: 0.7 },
+      },
       hint: "Waterproof gear and sure footing will keep you safe on the slick stone.",
     },
     outcomes: [
@@ -182,12 +190,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["heat", "wildlife", "endurance"],
-      statChecks: [
-        { stat: "offense", threshold: 8 },
-        { stat: "heatResist", threshold: 4 },
-        { stat: "endurance", threshold: 3 },
-        { stat: "attackSpeed", threshold: 3 },
-      ],
+      enemy: {
+        name: "Jungle Predator",
+        hp: 60,
+        damage: 9,
+        attackSpeed: 1.2,
+        defense: 4,
+        damageTypes: { physical: 0.5, heat: 0.5 },
+      },
       hint: "A longer trek — pack for heat and bring enough stamina to last. Quick strikes help with wildlife.",
     },
     outcomes: [
@@ -257,12 +267,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["wet", "terrain", "endurance"],
-      statChecks: [
-        { stat: "wetResist", threshold: 5 },
-        { stat: "endurance", threshold: 5 },
-        { stat: "defense", threshold: 4 },
-        { stat: "life", threshold: 15 },
-      ],
+      enemy: {
+        name: "Flooded Depths",
+        hp: 50,
+        damage: 10,
+        attackSpeed: 1.0,
+        defense: 3,
+        damageTypes: { physical: 0.3, wet: 0.7 },
+      },
       hint: "You'll be waist-deep in water for hours. Bring waterproof gear, stamina, and enough toughness to endure.",
     },
     outcomes: [
@@ -330,12 +342,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["cold", "terrain", "endurance"],
-      statChecks: [
-        { stat: "coldResist", threshold: 5 },
-        { stat: "speed", threshold: 4 },
-        { stat: "endurance", threshold: 6 },
-        { stat: "life", threshold: 20 },
-      ],
+      enemy: {
+        name: "Mountain Exposure",
+        hp: 55,
+        damage: 12,
+        attackSpeed: 1.0,
+        defense: 3,
+        damageTypes: { physical: 0.3, cold: 0.7 },
+      },
       hint: "Wrap up warm and travel light. The cold and the climb will test your limits. Toughness helps survive the exposure.",
     },
     outcomes: [
@@ -406,14 +420,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["wildlife", "terrain", "endurance"],
-      statChecks: [
-        { stat: "offense", threshold: 14 },
-        { stat: "defense", threshold: 10 },
-        { stat: "endurance", threshold: 8 },
-        { stat: "life", threshold: 30 },
-        { stat: "attackSpeed", threshold: 6 },
-      ],
-      minGearScore: 30,
+      enemy: {
+        name: "Temple Guardian",
+        hp: 120,
+        damage: 18,
+        attackSpeed: 1.3,
+        defense: 8,
+        damageTypes: { physical: 0.8, wet: 0.2 },
+      },
       hint: "This is no place for the unprepared. Bring your best weapons, strongest armor, and deep reserves of stamina. Speed and toughness are essential.",
     },
     outcomes: [
@@ -485,14 +499,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     mainland: true,
     difficulty: {
       hazards: ["heat", "terrain", "endurance"],
-      statChecks: [
-        { stat: "heatResist", threshold: 10 },
-        { stat: "endurance", threshold: 10 },
-        { stat: "defense", threshold: 8 },
-        { stat: "life", threshold: 35 },
-        { stat: "attackSpeed", threshold: 5 },
-      ],
-      minGearScore: 40,
+      enemy: {
+        name: "Volcanic Horror",
+        hp: 150,
+        damage: 22,
+        attackSpeed: 1.2,
+        defense: 10,
+        damageTypes: { physical: 0.3, heat: 0.7 },
+      },
       hint: "The heat alone will kill you without serious protection. Only attempt this fully equipped and provisioned. Toughness and quick reflexes help survive the hazards.",
     },
     outcomes: [

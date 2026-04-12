@@ -141,7 +141,7 @@ export function createInitialState(): GameState {
  * Current mainland experimental version. Stamped on saves so future migrations
  * can detect which mainland format a save was created under.
  */
-export const MAINLAND_VERSION = 1;
+export const MAINLAND_VERSION = 2;
 
 const SAVE_KEY = "seabound_save";
 
@@ -345,6 +345,11 @@ export function normalizeGameState(raw: unknown): GameState | null {
     loaded.loadout = {};
   }
   if (!loaded.combatLog) {
+    loaded.combatLog = [];
+  }
+  // Migration: clear old-format combat logs (stat-check format → combat sim format)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (loaded.combatLog.length > 0 && (loaded.combatLog[0] as any).checkResults) {
     loaded.combatLog = [];
   }
   // Migration: stamp mainland version on saves that don't have one yet
