@@ -134,6 +134,7 @@ export function createInitialState(): GameState {
     loadout: {},
     combatLog: [],
     lootLog: {},
+    stashedResources: [],
   };
 }
 
@@ -359,6 +360,15 @@ export function normalizeGameState(raw: unknown): GameState | null {
   // Migration: ensure lootLog exists
   if (!loaded.lootLog) {
     loaded.lootLog = {};
+  }
+  // Migration: ensure stashedResources exists (backfill from localStorage)
+  if (!loaded.stashedResources) {
+    try {
+      const raw = localStorage.getItem("sb_stashed_resources");
+      loaded.stashedResources = raw ? JSON.parse(raw) : [];
+    } catch {
+      loaded.stashedResources = [];
+    }
   }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useMemo, useState } from "react";
 import { getBuildings, getRecipes, getResources } from "../data/registry";
 import { GameState, ResourceId } from "../data/types";
 import { getEffectiveDecayInterval, getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, MORALE_DECAY_INTERVAL_MS } from "../engine/gameState";
@@ -7,28 +7,15 @@ import { GameIcon } from "./GameIcon";
 import { useItemLookup } from "./ItemLookup";
 
 const STASH_THRESHOLD = 15;
-const STASH_KEY = "sb_stashed_resources";
 
-function loadStashed(): Set<string> {
-  try {
-    const raw = localStorage.getItem(STASH_KEY);
-    return raw ? new Set(JSON.parse(raw)) : new Set();
-  } catch {
-    return new Set();
-  }
-}
-
-function saveStashed(set: Set<string>) {
-  try { localStorage.setItem(STASH_KEY, JSON.stringify([...set])); } catch { /* */ }
-}
-
-export function ResourcePanel({ state }: { state: GameState }) {
+export function ResourcePanel({ state, onToggleStash }: { state: GameState; onToggleStash: (id: string) => void }) {
   const RESOURCES = getResources();
   const openLookup = useItemLookup();
   const [showMoraleTip, setShowMoraleTip] = useState(false);
-  const [stashed, setStashed] = useState(loadStashed);
   const [stashOpen, setStashOpen] = useState(false);
   const [organizing, setOrganizing] = useState(false);
+
+  const stashed = useMemo(() => new Set(state.stashedResources), [state.stashedResources]);
 
   const entries = Object.entries(state.resources).filter(([id, v]) => {
     if (v <= 0) return false;
@@ -46,17 +33,8 @@ export function ResourcePanel({ state }: { state: GameState }) {
         ? `${-moralePercent}% slower`
         : "normal speed";
 
-  const toggleStash = useCallback((id: string) => {
-    setStashed((prev: Set<string>) => {
-      const next = new Set<string>(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      saveStashed(next);
-      return next;
-    });
-  }, []);
-
-  const useStashSections = entries.length > STASH_THRESHOLD;
+  const hasStashedEntries = entries.some(([id]) => stashed.has(id));
+  const useStashSections = entries.length > STASH_THRESHOLD || hasStashedEntries;
   const pinnedEntries = useStashSections ? entries.filter(([id]) => !stashed.has(id)) : entries;
   const stashedEntries = useStashSections ? entries.filter(([id]) => stashed.has(id)) : [];
 
@@ -78,7 +56,7 @@ export function ResourcePanel({ state }: { state: GameState }) {
         key={id}
         className={`resource-chip${atCap ? " at-cap" : ""}${organizing ? " organizing" : ""} tappable-item`}
         title={RESOURCES[id]?.description}
-        onClick={organizing ? () => toggleStash(id) : () => openLookup(id)}
+        onClick={organizing ? () => onToggleStash(id) : () => openLookup(id)}
       >
         <GameIcon id={id as ResourceId} size={16} /> {RESOURCES[id]?.name ?? id}
         <>

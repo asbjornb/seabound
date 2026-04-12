@@ -1069,6 +1069,19 @@ export function useGame() {
     });
   }, []);
 
+  const toggleResourceStash = useCallback((resourceId: string) => {
+    setState((prev) => {
+      const next = structuredClone(prev);
+      const idx = next.stashedResources.indexOf(resourceId);
+      if (idx >= 0) {
+        next.stashedResources.splice(idx, 1);
+      } else {
+        next.stashedResources.push(resourceId);
+      }
+      return next;
+    });
+  }, []);
+
   const resetGame = useCallback(() => {
     const fresh = createInitialState();
     setState(fresh);
@@ -1386,6 +1399,7 @@ export function useGame() {
     markDiscoverySeen,
     markPhaseSeen,
     unlockMainland,
+    toggleResourceStash,
     resetGame,
     exportSave,
     importSave,

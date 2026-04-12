@@ -565,7 +565,7 @@ export default function App() {
 
         <div className="app-main">
           {/* Compact resource bar: visible on mobile, hidden on desktop */}
-          <ResourcePanel state={game.state} />
+          <ResourcePanel state={game.state} onToggleStash={game.toggleResourceStash} />
 
           {game.state.currentAction && (
             <div className="current-action">
