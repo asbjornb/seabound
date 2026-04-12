@@ -51,6 +51,40 @@ const ATTACK_SPEED_PER_POINT = 0.05;
 const MONTE_CARLO_RUNS = 200;
 
 // ═══════════════════════════════════════
+// Seeded PRNG (deterministic win rate estimation)
+// ═══════════════════════════════════════
+
+/** Mulberry32 — fast 32-bit seeded PRNG returning values in [0, 1). */
+function mulberry32(seed: number): () => number {
+  let s = seed | 0;
+  return () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Derive a deterministic seed from player stats + enemy difficulty. */
+function computeCombatSeed(
+  player: PlayerCombatStats,
+  difficulty: ExpeditionDifficultyProfile,
+): number {
+  let hash = 0x9e3779b9;
+  const values = [
+    player.offense, player.defense, player.life, player.attackSpeed,
+    player.speed, player.endurance, player.heatResist, player.coldResist,
+    player.wetResist, player.critChance, player.critMultiplier,
+    difficulty.enemy.hp, difficulty.enemy.damage, difficulty.enemy.defense,
+    difficulty.enemy.attackSpeed,
+  ];
+  for (const v of values) {
+    hash = ((hash << 5) - hash + Math.round(v * 1000)) | 0;
+  }
+  return hash;
+}
+
+// ═══════════════════════════════════════
 // Stat Computation (unchanged from before)
 // ═══════════════════════════════════════
 
@@ -242,10 +276,10 @@ function calcEnemyHitDamage(
 }
 
 /** Roll number of attacks for a given attackSpeed stat (player) or raw attacks/round (enemy). */
-function rollAttacks(hitsPerRound: number): number {
+function rollAttacks(hitsPerRound: number, rng: () => number = Math.random): number {
   const base = Math.floor(hitsPerRound);
   const frac = hitsPerRound - base;
-  return base + (Math.random() < frac ? 1 : 0);
+  return base + (rng() < frac ? 1 : 0);
 }
 
 // ═══════════════════════════════════════
@@ -280,6 +314,7 @@ export interface EncounterResult {
 function simulateCombat(
   player: PlayerCombatStats,
   difficulty: ExpeditionDifficultyProfile,
+  rng: () => number = Math.random,
 ): Omit<EncounterResult, "estimatedWinRate"> {
   const enemy = difficulty.enemy;
   const damageTypes = enemy.damageTypes ?? { physical: 1.0 };
@@ -300,9 +335,9 @@ function simulateCombat(
     rounds++;
 
     // --- Player attacks ---
-    const playerHits = rollAttacks(playerHitsPerRound);
+    const playerHits = rollAttacks(playerHitsPerRound, rng);
     for (let i = 0; i < playerHits && enemyHp > 0; i++) {
-      const critted = critProb > 0 && Math.random() < critProb;
+      const critted = critProb > 0 && rng() < critProb;
       if (critted) critsLanded++;
       const dmg = calcPlayerHitDamage(player.offense, enemy.defense, critted, player.critMultiplier);
       enemyHp -= dmg;
@@ -312,10 +347,10 @@ function simulateCombat(
     if (enemyHp <= 0) break; // enemy dead before retaliating
 
     // --- Enemy attacks ---
-    const enemyHits = rollAttacks(enemy.attackSpeed);
+    const enemyHits = rollAttacks(enemy.attackSpeed, rng);
     for (let i = 0; i < enemyHits && playerHp > 0; i++) {
       // Dodge roll
-      if (dodgeChance > 0 && Math.random() < dodgeChance) {
+      if (dodgeChance > 0 && rng() < dodgeChance) {
         dodges++;
         continue;
       }
@@ -408,15 +443,17 @@ function simulateCombat(
 /**
  * Estimate win rate by running many combat simulations.
  * Returns a number 0–1 representing the fraction of wins (success + partial).
+ * Uses a seeded PRNG so the same stats + difficulty always produce the same result.
  */
 export function estimateWinRate(
   state: GameState,
   difficulty: ExpeditionDifficultyProfile,
 ): number {
   const player = getPlayerCombatStats(state);
+  const rng = mulberry32(computeCombatSeed(player, difficulty));
   let wins = 0;
   for (let i = 0; i < MONTE_CARLO_RUNS; i++) {
-    const result = simulateCombat(player, difficulty);
+    const result = simulateCombat(player, difficulty, rng);
     if (result.grade !== "failure") wins++;
   }
   return wins / MONTE_CARLO_RUNS;
@@ -425,17 +462,19 @@ export function estimateWinRate(
 /**
  * Estimate the grade distribution by running many simulations.
  * Returns { success, partial, failure } as fractions 0–1.
+ * Uses a seeded PRNG so the same stats + difficulty always produce the same result.
  */
 export function estimateGradeDistribution(
   state: GameState,
   difficulty: ExpeditionDifficultyProfile,
 ): { success: number; partial: number; failure: number } {
   const player = getPlayerCombatStats(state);
+  const rng = mulberry32(computeCombatSeed(player, difficulty));
   let success = 0;
   let partial = 0;
   let failure = 0;
   for (let i = 0; i < MONTE_CARLO_RUNS; i++) {
-    const result = simulateCombat(player, difficulty);
+    const result = simulateCombat(player, difficulty, rng);
     if (result.grade === "success") success++;
     else if (result.grade === "partial") partial++;
     else failure++;
