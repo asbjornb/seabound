@@ -32,6 +32,18 @@ export function CombatLogModal({
             {grade.label}
           </div>
 
+          {/* Grade explanation */}
+          {entry.grade === "partial" && (
+            <div style={{ fontSize: "0.8em", color: "var(--text-secondary)", marginBottom: 4 }}>
+              Enemy defeated but HP fell below 50% — loot and equipment drop rates halved.
+            </div>
+          )}
+          {entry.grade === "failure" && (
+            <div style={{ fontSize: "0.8em", color: "var(--text-secondary)", marginBottom: 4 }}>
+              Enemy survived — greatly reduced loot, no equipment drops.
+            </div>
+          )}
+
           {/* Outcome message */}
           {entry.outcomeMessage && (
             <div className="combat-log-outcome">{entry.outcomeMessage}</div>

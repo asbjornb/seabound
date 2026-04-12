@@ -163,15 +163,27 @@ function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }
   return (
     <div className="loadout-preview">
       <div className="loadout-preview-title">
-        Win Rate: <span style={{ color: winRateColor(winRate), fontWeight: 700 }}>{winPct}%</span>
+        {grades.partial > 0 && grades.failure === 0
+          ? <>Success Rate: <span style={{ color: winRateColor(grades.success), fontWeight: 700 }}>{Math.round(grades.success * 100)}%</span></>
+          : <>Win Rate: <span style={{ color: winRateColor(winRate), fontWeight: 700 }}>{winPct}%</span></>
+        }
       </div>
 
       {/* Grade distribution bar */}
-      <div className="combat-grade-bar" style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
+      <div className="combat-grade-bar" style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 4 }}>
         {grades.success > 0 && <div style={{ width: `${grades.success * 100}%`, background: "#2ecc71" }} title={`Success: ${Math.round(grades.success * 100)}%`} />}
         {grades.partial > 0 && <div style={{ width: `${grades.partial * 100}%`, background: "#f0c040" }} title={`Partial: ${Math.round(grades.partial * 100)}%`} />}
         {grades.failure > 0 && <div style={{ width: `${grades.failure * 100}%`, background: "#e74c3c" }} title={`Failure: ${Math.round(grades.failure * 100)}%`} />}
       </div>
+
+      {/* Grade breakdown text — show when not 100% one grade */}
+      {(grades.success < 1 && grades.partial < 1 && grades.failure < 1) && (
+        <div style={{ fontSize: "0.75em", color: "var(--text-secondary)", marginBottom: 8, display: "flex", gap: 8 }}>
+          {grades.success > 0 && <span style={{ color: "#2ecc71" }}>{Math.round(grades.success * 100)}% full</span>}
+          {grades.partial > 0 && <span style={{ color: "#f0c040" }}>{Math.round(grades.partial * 100)}% partial</span>}
+          {grades.failure > 0 && <span style={{ color: "#e74c3c" }}>{Math.round(grades.failure * 100)}% fail</span>}
+        </div>
+      )}
 
       {/* Enemy info */}
       <div className="combat-enemy-info" style={{ fontSize: "0.85em", color: "var(--text-secondary)", marginBottom: 6 }}>
