@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { getResources } from "../data/registry";
 import type { ExpeditionDef, GameState, LootDrop } from "../data/types";
-import { computeLoadoutStats, estimateWinRate, estimateGradeDistribution } from "../engine/combat";
+import { computeLoadoutStats, estimateWinRate, estimateGradeDistribution, combatEstimationKey } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
 import { useItemLookup } from "./ItemLookup";
@@ -143,8 +143,11 @@ function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }
 
   const enemy = exp.difficulty.enemy;
   const loadoutStats = computeLoadoutStats(state);
-  const winRate = useMemo(() => estimateWinRate(state, exp.difficulty!), [state, exp]);
-  const grades = useMemo(() => estimateGradeDistribution(state, exp.difficulty!), [state, exp]);
+  // Only re-run Monte Carlo when combat-relevant stats actually change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableKey = combatEstimationKey(state, exp.difficulty!);
+  const winRate = useMemo(() => estimateWinRate(state, exp.difficulty!), [stableKey]);
+  const grades = useMemo(() => estimateGradeDistribution(state, exp.difficulty!), [stableKey]);
   const winPct = Math.round(winRate * 100);
 
   // Determine primary damage types for display
