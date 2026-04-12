@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DiscoveryEntry } from "../data/types";
 
 const MAX_VISIBLE = 5;
+const AUTO_DISMISS_MS = 5000;
 
 interface Toast {
   entry: DiscoveryEntry;
@@ -76,15 +77,36 @@ export function NotificationToast({
     }
   }, [discoveryLog, lastSeenDiscoveryId, onSeen, onBiomeDiscovery]);
 
-  // Remove after dismiss animation
-  const handleAnimationEnd = (id: number) => {
-    setToasts((prev) => prev.filter((t) => t.entry.id !== id));
-  };
+  const timersRef = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
 
-  const dismiss = (id: number) => {
+  const dismiss = useCallback((id: number) => {
+    const timer = timersRef.current.get(id);
+    if (timer) {
+      clearTimeout(timer);
+      timersRef.current.delete(id);
+    }
     setToasts((prev) =>
       prev.map((t) => (t.entry.id === id ? { ...t, dismissing: true } : t))
     );
+  }, []);
+
+  // Auto-dismiss toasts after 5 seconds
+  useEffect(() => {
+    for (const t of toasts) {
+      if (t.dismissing || timersRef.current.has(t.entry.id)) continue;
+      timersRef.current.set(
+        t.entry.id,
+        setTimeout(() => {
+          timersRef.current.delete(t.entry.id);
+          dismiss(t.entry.id);
+        }, AUTO_DISMISS_MS)
+      );
+    }
+  }, [toasts, dismiss]);
+
+  // Remove after dismiss animation
+  const handleAnimationEnd = (id: number) => {
+    setToasts((prev) => prev.filter((t) => t.entry.id !== id));
   };
 
   if (toasts.length === 0) return null;
