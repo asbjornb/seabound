@@ -90,10 +90,11 @@ export function NotificationToast({
     );
   }, []);
 
-  // Auto-dismiss toasts after 5 seconds
+  // Auto-dismiss expedition toasts after 5 seconds (lore/biome stay until clicked)
   useEffect(() => {
     for (const t of toasts) {
       if (t.dismissing || timersRef.current.has(t.entry.id)) continue;
+      if (t.entry.type !== "expedition") continue;
       timersRef.current.set(
         t.entry.id,
         setTimeout(() => {
