@@ -195,6 +195,8 @@ export interface EquipmentItem {
   affixes: { affixId: string; rollValue: number }[]; // rollValue 0-1 within rollRange
   /** Current condition. Broken items cannot be equipped. */
   condition: ItemCondition;
+  /** If set, this item has been permanently imbued with a single stat bonus. One per item, ever. */
+  imbued?: { reagentId: string; stat: string; value: number };
 }
 
 /** Player's equipped loadout — one item per slot. */

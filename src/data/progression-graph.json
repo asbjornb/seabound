@@ -351,6 +351,48 @@
       "category": "metal,mainland"
     },
     {
+      "id": "resource:ruin_dust",
+      "type": "resource",
+      "label": "Ruin Dust",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:tidal_salt",
+      "type": "resource",
+      "label": "Tidal Salt",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:jungle_sap",
+      "type": "resource",
+      "label": "Jungle Sap",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:quarry_crystal",
+      "type": "resource",
+      "label": "Quarry Crystal",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:ridge_frost",
+      "type": "resource",
+      "label": "Ridge Frost",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:temple_incense",
+      "type": "resource",
+      "label": "Temple Incense",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
+      "id": "resource:volcanic_shard",
+      "type": "resource",
+      "label": "Volcanic Shard",
+      "category": "reagent,mainland,imbuing"
+    },
+    {
       "id": "resource:terrain_essence",
       "type": "resource",
       "label": "Terrain Essence",
@@ -5280,6 +5322,11 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:ruin_dust",
+      "relation": "produces"
+    },
+    {
       "from": "expedition:tidal_caves",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5372,6 +5419,11 @@
     {
       "from": "expedition:tidal_caves",
       "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:tidal_salt",
       "relation": "produces"
     },
     {
@@ -5480,6 +5532,11 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:jungle_sap",
+      "relation": "produces"
+    },
+    {
       "from": "expedition:flooded_quarry",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5572,6 +5629,11 @@
     {
       "from": "expedition:flooded_quarry",
       "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:quarry_crystal",
       "relation": "produces"
     },
     {
@@ -5670,6 +5732,11 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:ridge_pass",
+      "to": "resource:ridge_frost",
+      "relation": "produces"
+    },
+    {
       "from": "expedition:sunken_temple",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5762,6 +5829,11 @@
     {
       "from": "expedition:sunken_temple",
       "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:temple_incense",
       "relation": "produces"
     },
     {
@@ -5862,6 +5934,11 @@
     {
       "from": "expedition:volcanic_rift",
       "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:volcanic_shard",
       "relation": "produces"
     },
     {
@@ -6404,7 +6481,14 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "resource:steel_ingot"
+      "resource:steel_ingot",
+      "resource:ruin_dust",
+      "resource:tidal_salt",
+      "resource:jungle_sap",
+      "resource:quarry_crystal",
+      "resource:ridge_frost",
+      "resource:temple_incense",
+      "resource:volcanic_shard"
     ],
     "unreachable": [
       "resource:terrain_essence",
@@ -6416,6 +6500,41 @@
         "type": "dead_end",
         "nodeId": "resource:steel_ingot",
         "message": "Steel Ingot is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:ruin_dust",
+        "message": "Ruin Dust is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:tidal_salt",
+        "message": "Tidal Salt is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:jungle_sap",
+        "message": "Jungle Sap is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:quarry_crystal",
+        "message": "Quarry Crystal is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:ridge_frost",
+        "message": "Ridge Frost is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:temple_incense",
+        "message": "Temple Incense is produced but never used as input"
+      },
+      {
+        "type": "dead_end",
+        "nodeId": "resource:volcanic_shard",
+        "message": "Volcanic Shard is produced but never used as input"
       },
       {
         "type": "unreachable",

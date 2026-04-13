@@ -822,7 +822,7 @@ export default function App() {
               </div>
             )}
             {activeTab === "equipment" && (
-              <EquipmentPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} />
+              <EquipmentPanel state={game.state} onRepairItem={game.repairItem} onSalvageItem={game.salvageItem} onEquipItem={game.equipItem} onDiscardItem={game.discardItem} onImbueItem={game.imbueItem} />
             )}
             {activeTab === "craft" && (
               <CraftingPanel

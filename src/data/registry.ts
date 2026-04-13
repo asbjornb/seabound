@@ -10,7 +10,7 @@
 import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
-import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS, REPAIR_RECIPES, SALVAGE_TABLES } from "./equipment";
+import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS, IMBUING_REAGENTS, REPAIR_RECIPES, SALVAGE_TABLES } from "./equipment";
 import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
@@ -203,14 +203,21 @@ export function getAffixById(id: string): AffixDef | undefined { return _pack.af
 export function getRepairRecipes(): RepairRecipeDef[] { return _pack.repairRecipes; }
 export function getSalvageTables(): SalvageTableDef[] { return _pack.salvageTables; }
 
-/** Build display name for an equipment item by prepending its affix names. */
+/** Build display name for an equipment item by prepending its affix names and imbue label. */
 export function getItemDisplayName(item: EquipmentItem): string {
   const def = _pack.equipmentItems[item.defId];
   const baseName = def?.name ?? item.defId;
-  if (item.affixes.length === 0) return baseName;
-  const affixNames = item.affixes
-    .map((a) => _pack.affixes[a.affixId]?.name)
-    .filter(Boolean);
-  if (affixNames.length === 0) return baseName;
-  return `${affixNames.join(" ")} ${baseName}`;
+  const parts: string[] = [];
+  // Affix names first
+  for (const a of item.affixes) {
+    const name = _pack.affixes[a.affixId]?.name;
+    if (name) parts.push(name);
+  }
+  // Imbued label
+  if (item.imbued) {
+    const reagent = IMBUING_REAGENTS.find((r) => r.reagentId === item.imbued!.reagentId);
+    if (reagent) parts.push(reagent.label);
+  }
+  if (parts.length === 0) return baseName;
+  return `${parts.join(" ")} ${baseName}`;
 }

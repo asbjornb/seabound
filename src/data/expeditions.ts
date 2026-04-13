@@ -94,6 +94,13 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 0, max: 1 },
       },
+      {
+        defId: "boar_tusk_necklace",
+        chance: 0.015,
+      },
+    ],
+    lootTable: [
+      { resourceId: "ruin_dust", amount: 1, chance: 0.06 },
     ],
   },
   {
@@ -165,6 +172,13 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "tidecallers_shell",
+        chance: 0.015,
+      },
+    ],
+    lootTable: [
+      { resourceId: "tidal_salt", amount: 1, chance: 0.06 },
     ],
   },
 
@@ -241,6 +255,13 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "predators_fang",
+        chance: 0.012,
+      },
+    ],
+    lootTable: [
+      { resourceId: "jungle_sap", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -312,6 +333,13 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "drowned_kings_crown",
+        chance: 0.012,
+      },
+    ],
+    lootTable: [
+      { resourceId: "quarry_crystal", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -383,6 +411,13 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
+      {
+        defId: "stormstrider_boots",
+        chance: 0.012,
+      },
+    ],
+    lootTable: [
+      { resourceId: "ridge_frost", amount: 1, chance: 0.05 },
     ],
   },
 
@@ -462,6 +497,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         chance: 0.015,
       },
     ],
+    lootTable: [
+      { resourceId: "temple_incense", amount: 1, chance: 0.04 },
+    ],
   },
   {
     id: "volcanic_rift",
@@ -537,6 +575,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         defId: "molten_edge",
         chance: 0.012,
       },
+    ],
+    lootTable: [
+      { resourceId: "volcanic_shard", amount: 1, chance: 0.04 },
     ],
   },
 ];

@@ -14,6 +14,7 @@ import {
   getStationById,
   getTools,
 } from "../data/registry";
+import { IMBUING_REAGENTS } from "../data/equipment";
 import { levelFromXp } from "../data/skills";
 import {
   trackExpeditionComplete,
@@ -1346,6 +1347,44 @@ export function useGame() {
     });
   }, []);
 
+  /** Imbue an equipment item with a reagent — one stat bonus, permanent, one per item. */
+  const imbueItem = useCallback((instanceId: string, reagentId: string) => {
+    const reagentDef = IMBUING_REAGENTS.find((r) => r.reagentId === reagentId);
+    if (!reagentDef) return;
+
+    setState((prev) => {
+      const itemIdx = prev.equipmentInventory.findIndex((i) => i.instanceId === instanceId);
+      if (itemIdx === -1) return prev;
+      const item = prev.equipmentInventory[itemIdx];
+
+      // Cannot imbue if already imbued
+      if (item.imbued) return prev;
+      // Must have the reagent
+      if ((prev.resources[reagentId] ?? 0) < 1) return prev;
+
+      const next = structuredClone(prev);
+      next.resources[reagentId] = (next.resources[reagentId] ?? 0) - 1;
+      next.equipmentInventory[itemIdx] = {
+        ...next.equipmentInventory[itemIdx],
+        imbued: { reagentId: reagentDef.reagentId, stat: reagentDef.stat, value: reagentDef.value },
+      };
+
+      // Log the imbuement as a discovery
+      const def = getEquipmentItemById(item.defId);
+      const itemName = def?.name ?? item.defId;
+      const RESOURCES = getResources();
+      const reagentName = RESOURCES[reagentId]?.name ?? reagentId;
+      next.discoveryLog.push({
+        id: (next.discoveryLog.length > 0 ? next.discoveryLog[next.discoveryLog.length - 1].id : 0) + 1,
+        type: "equipment",
+        message: `Imbued ${itemName} with ${reagentName} — ${reagentDef.label} (${reagentDef.stat} +${reagentDef.value})`,
+        timestamp: Date.now(),
+      });
+
+      return next;
+    });
+  }, []);
+
   /** Discard an equipment item permanently. Unequips first if equipped. */
   const discardItem = useCallback((instanceId: string) => {
     setState((prev) => {
@@ -1411,5 +1450,6 @@ export function useGame() {
     salvageItem,
     equipItem,
     discardItem,
+    imbueItem,
   };
 }
