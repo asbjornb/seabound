@@ -1,0 +1,12 @@
+#!/bin/sh
+# Pre-push hook: run icon spec check to catch missing entries before CI.
+#
+# Install: cp scripts/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+# Or:      npm run setup-hooks
+
+echo "[pre-push] Checking icon references against icon-spec.json..."
+npx tsx scripts/check-icons.ts --check
+if [ $? -ne 0 ]; then
+  echo "[pre-push] ERROR: Missing icon spec entries. Add them to docs/icon-spec.json."
+  exit 1
+fi

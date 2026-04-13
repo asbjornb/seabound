@@ -46,6 +46,20 @@ export function LogPanel({ entries }: { entries: DiscoveryEntry[] }) {
     return entries.filter((entry) => includedSet.has(entry.type));
   }, [entries, includedTypes]);
 
+  /** Group consecutive entries with the same type + message. */
+  const groupedEntries = useMemo(() => {
+    const groups: { entry: DiscoveryEntry; count: number }[] = [];
+    for (const entry of filteredEntries) {
+      const prev = groups[groups.length - 1];
+      if (prev && prev.entry.type === entry.type && prev.entry.message === entry.message) {
+        prev.count++;
+      } else {
+        groups.push({ entry, count: 1 });
+      }
+    }
+    return groups;
+  }, [filteredEntries]);
+
   if (entries.length === 0) {
     return (
       <div className="empty-message">
@@ -89,7 +103,7 @@ export function LogPanel({ entries }: { entries: DiscoveryEntry[] }) {
           No entries in this category yet.
         </div>
       )}
-      {filteredEntries.map((entry) => {
+      {groupedEntries.map(({ entry, count }) => {
         const time = new Date(entry.timestamp);
         const ts = time.toLocaleDateString([], {
           month: "short",
@@ -100,6 +114,7 @@ export function LogPanel({ entries }: { entries: DiscoveryEntry[] }) {
             <span className="log-time">{ts}</span>
             <span className="log-type">{TYPE_LABELS[entry.type] ?? entry.type}</span>
             {entry.message}
+            {count > 1 && <span className="log-count">×{count}</span>}
           </div>
         );
       })}
