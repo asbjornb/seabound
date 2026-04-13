@@ -25,8 +25,15 @@ export default defineConfig({
     react(),
     versionPlugin(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
+      injectRegister: false,
       workbox: {
+        // New SWs activate immediately instead of waiting for all tabs to close.
+        // This ensures update-banner taps always work — without it, the waiting
+        // SW needs a SKIP_WAITING message from the client, which creates a
+        // deadlock when the old client code doesn't send it.
+        skipWaiting: true,
+        clientsClaim: true,
         // Precache the app shell — JS, CSS, HTML, fonts, banners.
         // Game icons (~10 MB) are runtime-cached on first use instead.
         globPatterns: ["**/*.{js,css,html,woff2,webp}"],

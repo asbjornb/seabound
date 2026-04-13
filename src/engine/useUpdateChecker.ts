@@ -1,24 +1,41 @@
 declare const __BUILD_ID__: string;
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { registerSW } from "virtual:pwa-register";
 
 const CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 export function useUpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | null>(null);
+  const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    // Register the service worker for offline support.
-    // When a new SW is waiting, show the update bar. Calling applyUpdate()
-    // sends skipWaiting to the waiting SW and reloads the page.
-    const updateSW = registerSW({
-      onNeedRefresh() {
-        setUpdateAvailable(true);
-      },
+    // Register the service worker ourselves instead of using virtual:pwa-register's
+    // registerSW, which auto-reloads on controllerchange in autoUpdate mode.
+    // We want to show a banner and let the user choose when to reload.
+    //
+    // The generated SW uses skipWaiting + clientsClaim (registerType "autoUpdate"),
+    // so new SWs activate immediately — a plain reload then serves fresh assets.
+    // This also fixes the bootstrap problem: previously with registerType "prompt",
+    // the waiting SW needed a SKIP_WAITING message from the client, but the old
+    // client code never sent it, creating a deadlock.
+    if (import.meta.env.DEV || !("serviceWorker" in navigator)) return;
+
+    navigator.serviceWorker.register("/sw.js").then((reg) => {
+      registrationRef.current = reg;
+      // Periodically check for new SW versions
+      setInterval(() => reg.update(), CHECK_INTERVAL);
     });
-    updateSWRef.current = updateSW;
+
+    // When a new SW takes control (via skipWaiting + clientsClaim), show the
+    // update banner. Skip the first controllerchange on fresh installs where
+    // no previous SW was active.
+    let hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (hadController) {
+        setUpdateAvailable(true);
+      }
+      hadController = true;
+    });
   }, []);
 
   useEffect(() => {
@@ -34,6 +51,8 @@ export function useUpdateChecker() {
         const data = await res.json();
         if (data.buildId && data.buildId !== currentBuild) {
           setUpdateAvailable(true);
+          // Kick the SW to check for updates so it's ready when the user taps
+          registrationRef.current?.update();
         }
       } catch {
         // Network error — ignore
@@ -51,13 +70,7 @@ export function useUpdateChecker() {
   }, []);
 
   const applyUpdate = useCallback(() => {
-    if (updateSWRef.current) {
-      // Activate the waiting service worker, then reload
-      updateSWRef.current(true);
-    } else {
-      // Fallback for version.json-only detection (no waiting SW)
-      window.location.reload();
-    }
+    window.location.reload();
   }, []);
 
   return { updateAvailable, applyUpdate };
