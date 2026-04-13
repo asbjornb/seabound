@@ -4204,11 +4204,6 @@
       "relation": "requires_tool"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:smelt_bronze",
-      "relation": "requires_building"
-    },
-    {
       "from": "recipe:smelt_iron_bloom",
       "to": "resource:iron_bloom",
       "relation": "produces"
@@ -4254,11 +4249,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:hammer_iron_bloom",
-      "relation": "requires_building"
-    },
-    {
       "from": "recipe:forge_steel",
       "to": "resource:steel_ingot",
       "relation": "produces"
@@ -4277,11 +4267,6 @@
       "from": "recipe:forge_steel",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel",
-      "relation": "requires_building"
     },
     {
       "from": "resource:bamboo_cane",
@@ -4459,11 +4444,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_copper_spear",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:copper_ingot",
       "to": "recipe:forge_copper_axe",
       "relation": "consumes"
@@ -4484,11 +4464,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_copper_axe",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:copper_ingot",
       "to": "recipe:forge_copper_shield",
       "relation": "consumes"
@@ -4507,11 +4482,6 @@
       "from": "recipe:forge_copper_shield",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:kiln",
-      "to": "recipe:forge_copper_shield",
-      "relation": "requires_building"
     },
     {
       "from": "recipe:cure_raw_hide",
@@ -4559,11 +4529,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:stitch_hide_armor",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_cap",
       "relation": "consumes"
@@ -4582,11 +4547,6 @@
       "from": "recipe:stitch_hide_cap",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:kiln",
-      "to": "recipe:stitch_hide_cap",
-      "relation": "requires_building"
     },
     {
       "from": "resource:cured_leather",
@@ -4609,11 +4569,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:stitch_hide_leggings",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:cured_leather",
       "to": "recipe:stitch_hide_boots",
       "relation": "consumes"
@@ -4632,11 +4587,6 @@
       "from": "recipe:stitch_hide_boots",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:kiln",
-      "to": "recipe:stitch_hide_boots",
-      "relation": "requires_building"
     },
     {
       "from": "resource:bronze_ingot",
@@ -4774,11 +4724,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_sword",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:iron_ingot",
       "to": "recipe:forge_iron_shield",
       "relation": "consumes"
@@ -4799,11 +4744,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_shield",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:iron_ingot",
       "to": "recipe:forge_iron_helm",
       "relation": "consumes"
@@ -4817,11 +4757,6 @@
       "from": "recipe:forge_iron_helm",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_helm",
-      "relation": "requires_building"
     },
     {
       "from": "resource:iron_ingot",
@@ -4844,11 +4779,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_cuirass",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:iron_ingot",
       "to": "recipe:forge_iron_greaves",
       "relation": "consumes"
@@ -4867,11 +4797,6 @@
       "from": "recipe:forge_iron_greaves",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_greaves",
-      "relation": "requires_building"
     },
     {
       "from": "resource:iron_ingot",
@@ -4894,11 +4819,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_iron_boots",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:steel_ingot",
       "to": "recipe:forge_steel_sword",
       "relation": "consumes"
@@ -4917,11 +4837,6 @@
       "from": "recipe:forge_steel_sword",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_sword",
-      "relation": "requires_building"
     },
     {
       "from": "resource:steel_ingot",
@@ -4944,11 +4859,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_shield",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:steel_ingot",
       "to": "recipe:forge_steel_helm",
       "relation": "consumes"
@@ -4962,11 +4872,6 @@
       "from": "recipe:forge_steel_helm",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_helm",
-      "relation": "requires_building"
     },
     {
       "from": "resource:steel_ingot",
@@ -4989,11 +4894,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_cuirass",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:steel_ingot",
       "to": "recipe:forge_steel_greaves",
       "relation": "consumes"
@@ -5014,11 +4914,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_greaves",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:steel_ingot",
       "to": "recipe:forge_steel_boots",
       "relation": "consumes"
@@ -5037,11 +4932,6 @@
       "from": "recipe:forge_steel_boots",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:bloomery",
-      "to": "recipe:forge_steel_boots",
-      "relation": "requires_building"
     },
     {
       "from": "recipe:build_cartographers_table",
