@@ -11,7 +11,7 @@
  *   npx tsx scripts/check-icons.ts --check  # exit 1 if missing (for CI)
  */
 
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { RESOURCES } from "../src/data/resources";
 import { TOOLS } from "../src/data/tools";
@@ -23,6 +23,7 @@ const isCheck = process.argv.includes("--check");
 
 // Load the icon spec
 const specPath = resolve(import.meta.dirname ?? __dirname, "../docs/icon-spec.json");
+const iconsDir = resolve(import.meta.dirname ?? __dirname, "../public/icons");
 const spec = JSON.parse(readFileSync(specPath, "utf8"));
 const specIds = new Set<string>(spec.icons.map((i: { id: string }) => i.id));
 
@@ -53,21 +54,42 @@ for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
 for (const id of TAB_ICON_IDS) referencedIds.add(id);
 
-// Find missing
-const missing = [...referencedIds].filter((id) => !specIds.has(id)).sort();
+// Find missing from spec
+const missingSpec = [...referencedIds].filter((id) => !specIds.has(id)).sort();
 
-if (missing.length === 0) {
+// Find missing PNG files
+const missingPng = [...referencedIds].filter((id) => !existsSync(resolve(iconsDir, `${id}.png`))).sort();
+
+let failed = false;
+
+if (missingSpec.length === 0) {
   console.log(`✓ All ${referencedIds.size} icon references have entries in icon-spec.json`);
-  process.exit(0);
 } else {
+  failed = true;
   console.error(
-    `✗ ${missing.length} icon reference(s) missing from docs/icon-spec.json:\n`
+    `✗ ${missingSpec.length} icon reference(s) missing from docs/icon-spec.json:\n`
   );
-  for (const id of missing) {
+  for (const id of missingSpec) {
     console.error(`  - ${id}`);
   }
   console.error(
     `\nAdd entries for these icons to docs/icon-spec.json before committing.`
   );
-  process.exit(isCheck ? 1 : 0);
 }
+
+if (missingPng.length === 0) {
+  console.log(`✓ All ${referencedIds.size} icon references have PNG files in public/icons/`);
+} else {
+  failed = true;
+  console.error(
+    `\n✗ ${missingPng.length} icon reference(s) missing PNG files in public/icons/:\n`
+  );
+  for (const id of missingPng) {
+    console.error(`  - ${id}.png`);
+  }
+  console.error(
+    `\nAdd PNG files (256×256 RGBA) to public/icons/ for these icons.`
+  );
+}
+
+process.exit(failed && isCheck ? 1 : 0);
