@@ -507,11 +507,12 @@ export function estimateWinRateFromStats(
   difficulty: ExpeditionDifficultyProfile,
   runs: number = MONTE_CARLO_RUNS,
 ): { winRate: number; success: number; partial: number; failure: number } {
+  const rng = mulberry32(computeCombatSeed(player, difficulty));
   let success = 0;
   let partial = 0;
   let failure = 0;
   for (let i = 0; i < runs; i++) {
-    const result = simulateCombat(player, difficulty);
+    const result = simulateCombat(player, difficulty, rng);
     if (result.grade === "success") success++;
     else if (result.grade === "partial") partial++;
     else failure++;
