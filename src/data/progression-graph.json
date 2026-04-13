@@ -4659,11 +4659,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_sword",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:bronze_ingot",
       "to": "recipe:forge_bronze_shield",
       "relation": "consumes"
@@ -4684,11 +4679,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_shield",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:bronze_ingot",
       "to": "recipe:forge_bronze_helm",
       "relation": "consumes"
@@ -4702,11 +4692,6 @@
       "from": "recipe:forge_bronze_helm",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_helm",
-      "relation": "requires_building"
     },
     {
       "from": "resource:bronze_ingot",
@@ -4729,11 +4714,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_cuirass",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:bronze_ingot",
       "to": "recipe:forge_bronze_greaves",
       "relation": "consumes"
@@ -4754,11 +4734,6 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_greaves",
-      "relation": "requires_building"
-    },
-    {
       "from": "resource:bronze_ingot",
       "to": "recipe:forge_bronze_boots",
       "relation": "consumes"
@@ -4777,11 +4752,6 @@
       "from": "recipe:forge_bronze_boots",
       "to": "skill:smithing",
       "relation": "trains"
-    },
-    {
-      "from": "building:kiln",
-      "to": "recipe:forge_bronze_boots",
-      "relation": "requires_building"
     },
     {
       "from": "resource:iron_ingot",

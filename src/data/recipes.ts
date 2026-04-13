@@ -1620,7 +1620,7 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ── Tier 2: Bronze-Era Equipment ──
-  // Mid-mainland gear. Requires smithing + bronze ingots + kiln.
+  // Mid-mainland gear. Requires smithing + bronze ingots.
 
   {
     id: "forge_bronze_sword",
@@ -1633,7 +1633,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_sword",
     durationMs: 20000,
     repeatable: false,
@@ -1650,7 +1649,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 2 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_shield",
     durationMs: 18000,
     repeatable: false,
@@ -1666,7 +1664,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bronze_ingot", amount: 2 },
       { resourceId: "dried_fiber", amount: 2 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_helm",
     durationMs: 16000,
     repeatable: false,
@@ -1683,7 +1680,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_cuirass",
     durationMs: 22000,
     repeatable: false,
@@ -1700,7 +1696,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 2 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_greaves",
     durationMs: 16000,
     repeatable: false,
@@ -1717,7 +1712,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "bronze_boots",
     durationMs: 16000,
     repeatable: false,
