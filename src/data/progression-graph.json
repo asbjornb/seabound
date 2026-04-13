@@ -285,60 +285,6 @@
       "label": "Sealed Clay Jar"
     },
     {
-      "id": "resource:sea_glass",
-      "type": "resource",
-      "label": "Sea Glass",
-      "category": "loot"
-    },
-    {
-      "id": "resource:ancient_doubloon",
-      "type": "resource",
-      "label": "Ancient Doubloon",
-      "category": "loot,treasure"
-    },
-    {
-      "id": "resource:exotic_feather",
-      "type": "resource",
-      "label": "Exotic Feather",
-      "category": "loot"
-    },
-    {
-      "id": "resource:glowing_fungus",
-      "type": "resource",
-      "label": "Glowing Fungus",
-      "category": "loot"
-    },
-    {
-      "id": "resource:volcanic_glass",
-      "type": "resource",
-      "label": "Volcanic Glass",
-      "category": "loot"
-    },
-    {
-      "id": "resource:fire_opal",
-      "type": "resource",
-      "label": "Fire Opal",
-      "category": "loot,treasure"
-    },
-    {
-      "id": "resource:giant_clam_pearl",
-      "type": "resource",
-      "label": "Giant Clam Pearl",
-      "category": "loot,treasure"
-    },
-    {
-      "id": "resource:black_pearl",
-      "type": "resource",
-      "label": "Black Pearl",
-      "category": "loot,treasure"
-    },
-    {
-      "id": "resource:ancient_map_fragment",
-      "type": "resource",
-      "label": "Ancient Map Fragment",
-      "category": "loot,treasure"
-    },
-    {
       "id": "resource:corroded_medallion",
       "type": "resource",
       "label": "Corroded Medallion",
@@ -4933,16 +4879,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:explore_beach",
-      "to": "resource:sea_glass",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:explore_beach",
-      "to": "resource:ancient_doubloon",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:explore_interior",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5040,16 +4976,6 @@
     {
       "from": "expedition:explore_interior",
       "to": "resource:large_shell",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:explore_interior",
-      "to": "resource:exotic_feather",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:explore_interior",
-      "to": "resource:glowing_fungus",
       "relation": "produces"
     },
     {
@@ -5173,16 +5099,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:sail_nearby_island",
-      "to": "resource:volcanic_glass",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:sail_nearby_island",
-      "to": "resource:fire_opal",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:dugout_voyage",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5280,21 +5196,6 @@
     {
       "from": "expedition:dugout_voyage",
       "to": "resource:obsidian",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:giant_clam_pearl",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:ancient_map_fragment",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:dugout_voyage",
-      "to": "resource:black_pearl",
       "relation": "produces"
     },
     {
@@ -6653,15 +6554,6 @@
     ],
     "deadEnds": [
       "resource:steel_ingot",
-      "resource:sea_glass",
-      "resource:ancient_doubloon",
-      "resource:exotic_feather",
-      "resource:glowing_fungus",
-      "resource:volcanic_glass",
-      "resource:fire_opal",
-      "resource:giant_clam_pearl",
-      "resource:ancient_map_fragment",
-      "resource:black_pearl",
       "resource:sea_worn_journal",
       "resource:cave_crystal",
       "resource:phosphorescent_algae",
@@ -6687,51 +6579,6 @@
         "type": "dead_end",
         "nodeId": "resource:steel_ingot",
         "message": "Steel Ingot is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:sea_glass",
-        "message": "Sea Glass is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:ancient_doubloon",
-        "message": "Ancient Doubloon is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:exotic_feather",
-        "message": "Exotic Feather is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:glowing_fungus",
-        "message": "Glowing Fungus is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:volcanic_glass",
-        "message": "Volcanic Glass is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:fire_opal",
-        "message": "Fire Opal is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:giant_clam_pearl",
-        "message": "Giant Clam Pearl is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:ancient_map_fragment",
-        "message": "Ancient Map Fragment is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:black_pearl",
-        "message": "Black Pearl is produced but never used as input"
       },
       {
         "type": "dead_end",
