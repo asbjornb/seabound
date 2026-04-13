@@ -13,7 +13,7 @@
     "check-icons": "npx tsx scripts/check-icons.ts --check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "setup-hooks": "cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo 'Pre-commit hook installed.'"
+    "setup-hooks": "cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && cp scripts/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'Git hooks installed.'"
   },
   "dependencies": {
     "@fontsource/cinzel": "^5.2.8",
