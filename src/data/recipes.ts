@@ -1315,7 +1315,6 @@ export const RECIPES: RecipeDef[] = [
     ],
     output: { resourceId: "bronze_ingot", amount: 1 },
     requiredTools: ["crucible"],
-    requiredBuildings: ["kiln"],
     durationMs: 15000,
     repeatable: true,
     xpGain: 35,
@@ -1349,7 +1348,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "charcoal", amount: 2 },
     ],
     output: { resourceId: "iron_ingot", amount: 1 },
-    requiredBuildings: ["bloomery"],
     durationMs: 15000,
     repeatable: true,
     xpGain: 60,
@@ -1367,7 +1365,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "charcoal", amount: 8 },
     ],
     output: { resourceId: "steel_ingot", amount: 1 },
-    requiredBuildings: ["bloomery"],
     durationMs: 30000,
     repeatable: true,
     xpGain: 90,
@@ -1483,7 +1480,7 @@ export const RECIPES: RecipeDef[] = [
 
   // ── Tier 1: Smithing Equipment (Copper Era) ──
   // Baseline craftable gear — reliable alternatives to broken expedition drops.
-  // Copper-era gear requires smithing + copper ingots at the kiln.
+  // Copper-era gear requires smithing + copper ingots.
 
   {
     id: "forge_copper_spear",
@@ -1496,7 +1493,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "copper_spear",
     durationMs: 15000,
     repeatable: false,
@@ -1513,7 +1509,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "copper_axe",
     durationMs: 18000,
     repeatable: false,
@@ -1530,7 +1525,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 2 },
       { resourceId: "rough_fiber", amount: 3 },
     ],
-    requiredBuildings: ["kiln"],
     equipmentOutput: "copper_shield",
     durationMs: 16000,
     repeatable: false,
@@ -1562,7 +1556,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cordage", amount: 2 },
     ],
     equipmentOutput: "hide_armor",
-    requiredBuildings: ["kiln"],
     durationMs: 12000,
     repeatable: false,
     xpGain: 25,
@@ -1579,7 +1572,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 1 },
     ],
     equipmentOutput: "hide_cap",
-    requiredBuildings: ["kiln"],
     durationMs: 10000,
     repeatable: false,
     xpGain: 20,
@@ -1596,7 +1588,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "rough_fiber", amount: 1 },
     ],
     equipmentOutput: "hide_leggings",
-    requiredBuildings: ["kiln"],
     durationMs: 11000,
     repeatable: false,
     xpGain: 22,
@@ -1613,14 +1604,13 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
     ],
     equipmentOutput: "hide_boots",
-    requiredBuildings: ["kiln"],
     durationMs: 11000,
     repeatable: false,
     xpGain: 22,
   },
 
   // ── Tier 2: Bronze-Era Equipment ──
-  // Mid-mainland gear. Requires smithing + bronze ingots + bloomery.
+  // Mid-mainland gear. Requires smithing + bronze ingots.
 
   {
     id: "forge_bronze_sword",
@@ -1633,7 +1623,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_sword",
     durationMs: 20000,
     repeatable: false,
@@ -1650,7 +1639,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 2 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_shield",
     durationMs: 18000,
     repeatable: false,
@@ -1666,7 +1654,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bronze_ingot", amount: 2 },
       { resourceId: "dried_fiber", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_helm",
     durationMs: 16000,
     repeatable: false,
@@ -1683,7 +1670,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_cuirass",
     durationMs: 22000,
     repeatable: false,
@@ -1700,7 +1686,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 2 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_greaves",
     durationMs: 16000,
     repeatable: false,
@@ -1717,7 +1702,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dried_fiber", amount: 3 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "bronze_boots",
     durationMs: 16000,
     repeatable: false,
@@ -1725,7 +1709,7 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ── Tier 3: Iron-Era Equipment ──
-  // Late-mainland gear. Requires smithing + iron ingots + bloomery.
+  // Late-mainland gear. Requires smithing + iron ingots.
 
   {
     id: "forge_iron_sword",
@@ -1738,7 +1722,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_sword",
     durationMs: 25000,
     repeatable: false,
@@ -1755,7 +1738,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 2 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_shield",
     durationMs: 22000,
     repeatable: false,
@@ -1771,7 +1753,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "iron_ingot", amount: 2 },
       { resourceId: "cured_leather", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_helm",
     durationMs: 20000,
     repeatable: false,
@@ -1788,7 +1769,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 3 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_cuirass",
     durationMs: 28000,
     repeatable: false,
@@ -1805,7 +1785,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 2 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_greaves",
     durationMs: 20000,
     repeatable: false,
@@ -1822,7 +1801,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 3 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "iron_boots",
     durationMs: 20000,
     repeatable: false,
@@ -1830,7 +1808,7 @@ export const RECIPES: RecipeDef[] = [
   },
 
   // ── Tier 4: Steel-Era Equipment ──
-  // Endgame gear. Requires smithing + steel ingots + bloomery.
+  // Endgame gear. Requires smithing + steel ingots.
 
   {
     id: "forge_steel_sword",
@@ -1843,7 +1821,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_sword",
     durationMs: 35000,
     repeatable: false,
@@ -1860,7 +1837,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "bamboo_cane", amount: 2 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_shield",
     durationMs: 32000,
     repeatable: false,
@@ -1876,7 +1852,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "steel_ingot", amount: 2 },
       { resourceId: "cured_leather", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_helm",
     durationMs: 28000,
     repeatable: false,
@@ -1893,7 +1868,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 3 },
       { resourceId: "cordage", amount: 2 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_cuirass",
     durationMs: 40000,
     repeatable: false,
@@ -1910,7 +1884,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 2 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_greaves",
     durationMs: 28000,
     repeatable: false,
@@ -1927,7 +1900,6 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "cured_leather", amount: 3 },
       { resourceId: "cordage", amount: 1 },
     ],
-    requiredBuildings: ["bloomery"],
     equipmentOutput: "steel_boots",
     durationMs: 28000,
     repeatable: false,
