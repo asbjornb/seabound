@@ -178,4 +178,47 @@ export const STATIONS: StationDef[] = [
     xpGain: 50,
     requiredBuildings: ["pandanus_grove"],
   },
+
+  // ═══════════════════════════════════════
+  // Cartographer's Table (mainland biome discovery)
+  // ═══════════════════════════════════════
+  {
+    id: "chart_coastal_regions",
+    name: "Chart Coastal Regions",
+    description:
+      "Sketch the mainland coastline from memory and sailing notes. Each survey adds detail to your charts — eventually you'll pinpoint the mineral-rich cliffs.",
+    skillId: "navigation",
+    durationMs: 90000, // 1.5 minutes
+    requiredBuildings: ["cartographers_table"],
+    setupInputs: [
+      { resourceId: "rope", amount: 1 },
+      { resourceId: "charcoal", amount: 1 },
+    ],
+    yields: [
+      { resourceId: "flat_stone", amount: 1, chance: 0.3 },
+    ],
+    xpGain: 15,
+    chartBiome: "coastal_cliffs",
+    chartIncrement: 0.05,
+  },
+  {
+    id: "chart_inland_territory",
+    name: "Chart Inland Territory",
+    description:
+      "Cross-reference river charts with coastal surveys to map routes inland. Painstaking work — each session reveals a little more of the interior.",
+    skillId: "navigation",
+    durationMs: 120000, // 2 minutes
+    requiredBuildings: ["cartographers_table"],
+    requiredBiomes: ["coastal_cliffs"],
+    setupInputs: [
+      { resourceId: "rope", amount: 2 },
+      { resourceId: "charcoal", amount: 1 },
+    ],
+    yields: [
+      { resourceId: "flat_stone", amount: 1, chance: 0.2 },
+    ],
+    xpGain: 20,
+    chartBiome: "inland_hills",
+    chartIncrement: 0.05,
+  },
 ];

@@ -422,11 +422,16 @@ export interface StationDef {
   requiredTool?: ToolId; // must own (not consumed)
   requiredSkillLevel?: number;
   requiredBuildings?: BuildingId[];
+  requiredBiomes?: BiomeId[]; // must have discovered these biomes to deploy
   setupInputs?: { resourceId: ResourceId; amount: number }[]; // consumed on deploy
   yields: Drop[];
   xpGain: number;
   maxDeployed?: number; // max simultaneous deployments, default 1
   maxDeployedPerBuildings?: BuildingId[]; // if set, max deployed = total count of these buildings owned
+  /** If set, collecting this station advances chart progress toward discovering this biome. */
+  chartBiome?: BiomeId;
+  /** Progress increment per collection (0-1, e.g. 0.05 = 5%). Required if chartBiome is set. */
+  chartIncrement?: number;
 }
 
 export interface PlacedStation {
@@ -576,4 +581,7 @@ export interface GameState {
 
   // Resource IDs the player has manually hidden in the resource panel stash drawer
   stashedResources: string[];
+
+  // Cartographer's table — cumulative chart progress toward biome discoveries (0.0 to 1.0)
+  chartProgress: Record<string, number>;
 }

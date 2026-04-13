@@ -907,6 +907,13 @@ export function useGame() {
           if (!prev.buildings.includes(bid)) return prev;
         }
       }
+      if (station.requiredBiomes) {
+        for (const biomeId of station.requiredBiomes) {
+          if (!prev.discoveredBiomes.includes(biomeId)) return prev;
+        }
+      }
+      // Skip deploy if the chart biome is already discovered
+      if (station.chartBiome && prev.discoveredBiomes.includes(station.chartBiome)) return prev;
       // Check max deployed — use bipartite matching for shared building slots
       if (station.maxDeployedPerBuildings) {
         if (!canDeploySharedStation(station, prev.stations, prev)) return prev;
@@ -988,6 +995,17 @@ export function useGame() {
         const name = rdef?.name ?? resId.replace(/_/g, " ");
         addDiscovery(next, "resource", `Found ${name} for the first time`);
       }
+      // Chart progress — advance toward biome discovery
+      if (def.chartBiome && def.chartIncrement && !next.discoveredBiomes.includes(def.chartBiome)) {
+        const prev = next.chartProgress[def.chartBiome] ?? 0;
+        const progress = Math.min(prev + def.chartIncrement, 1);
+        next.chartProgress[def.chartBiome] = progress;
+        if (progress >= 1) {
+          next.discoveredBiomes.push(def.chartBiome);
+          const biomeName = def.chartBiome.replace(/_/g, " ");
+          addDiscovery(next, "biome", `Your charts are complete — you've mapped the ${biomeName}!`, { biomeId: def.chartBiome });
+        }
+      }
       // Remove the collected station and auto-redeploy if no setup inputs needed
       next.stations.splice(index, 1);
       if (!def.setupInputs || def.setupInputs.length === 0) {
@@ -1058,6 +1076,18 @@ export function useGame() {
           const rdef = RESOURCES[resId];
           const name = rdef?.name ?? resId.replace(/_/g, " ");
           addDiscovery(next, "resource", `Found ${name} for the first time`);
+        }
+
+        // Chart progress — advance toward biome discovery
+        if (def.chartBiome && def.chartIncrement && !next.discoveredBiomes.includes(def.chartBiome)) {
+          const prevProgress = next.chartProgress[def.chartBiome] ?? 0;
+          const progress = Math.min(prevProgress + def.chartIncrement, 1);
+          next.chartProgress[def.chartBiome] = progress;
+          if (progress >= 1) {
+            next.discoveredBiomes.push(def.chartBiome);
+            const biomeName = def.chartBiome.replace(/_/g, " ");
+            addDiscovery(next, "biome", `Your charts are complete — you've mapped the ${biomeName}!`, { biomeId: def.chartBiome });
+          }
         }
 
         next.stations.splice(index, 1);

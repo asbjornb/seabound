@@ -193,6 +193,9 @@ export function selectAvailableStations(state: GameState): StationDef[] {
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    if (station.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
+    // Hide charting stations once the target biome is discovered
+    if (station.chartBiome && state.discoveredBiomes.includes(station.chartBiome)) return false;
     // Hide stations whose setup inputs haven't been discovered yet
     if (station.setupInputs?.some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     // For stations with maxDeployedPerBuildings, check that at least one applicable building exists

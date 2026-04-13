@@ -135,6 +135,7 @@ export function createInitialState(): GameState {
     combatLog: [],
     lootLog: {},
     stashedResources: [],
+    chartProgress: {},
   };
 }
 
@@ -369,6 +370,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
     } catch {
       loaded.stashedResources = [];
     }
+  }
+  // Migration: ensure chartProgress exists
+  if (!loaded.chartProgress) {
+    loaded.chartProgress = {};
   }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {

@@ -234,6 +234,13 @@ export const BUILDINGS: Record<string, BuildingDef> = {
   },
 
   // Mainland buildings
+  cartographers_table: {
+    id: "cartographers_table",
+    name: "Cartographer's Table",
+    description:
+      "A sturdy bamboo table spread with charcoal-marked charts. Used for methodical coastal and inland surveys — a slow but peaceful alternative to combat expeditions.",
+    unlocks: "Chart Coastal Regions / Chart Inland Territory stations — discover mining biomes without combat",
+  },
   bloomery: {
     id: "bloomery",
     name: "Bloomery",

@@ -145,6 +145,12 @@ export function StationsPanel({
                 {isReady && (
                   <div className="station-collect-hint">Tap to collect</div>
                 )}
+                {def.chartBiome && (
+                  <div style={{ fontStyle: "italic", color: "#f0c040", fontSize: "0.9em", marginTop: 2 }}>
+                    Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
+                    {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}
+                  </div>
+                )}
                 <div className="action-drops">
                   Yields:{" "}
                   {def.yields
@@ -173,6 +179,20 @@ export function StationsPanel({
       {availableStations.length > 0 && (
         <div ref={deployRef}>
           <div className="section-title">Deploy</div>
+          {(() => {
+            const chartStations = availableStations.filter((s) => s.chartBiome);
+            const undiscovered = chartStations.filter(
+              (s) => !state.discoveredBiomes.includes(s.chartBiome!)
+            ).length;
+            if (undiscovered > 0) {
+              return (
+                <div className="action-desc" style={{ fontStyle: "italic", color: "#f0c040", marginBottom: 8 }}>
+                  {undiscovered} undiscovered {undiscovered === 1 ? "area" : "areas"} remaining to chart
+                </div>
+              );
+            }
+            return null;
+          })()}
           {availableStations.map((station) => {
             // Use bipartite matching to check if this station can actually be deployed
             const canDeploy = station.maxDeployedPerBuildings
@@ -211,6 +231,21 @@ export function StationsPanel({
                   </span>
                 </div>
                 <div className="action-desc">{station.description}</div>
+                {station.chartBiome && (
+                  <>
+                    <div className="chart-progress-info">
+                      <span style={{ fontStyle: "italic", color: "#f0c040" }}>
+                        Charted: {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
+                      </span>
+                      <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
+                        <div
+                          className="progress-fill"
+                          style={{ width: `${(state.chartProgress[station.chartBiome] ?? 0) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
                 {station.maxDeployedPerBuildings && (
                   <div className="station-building-info">
                     Uses:{" "}
