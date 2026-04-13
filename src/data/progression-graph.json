@@ -1485,6 +1485,78 @@
       "category": "smithing"
     },
     {
+      "id": "recipe:forge_iron_sword",
+      "type": "recipe",
+      "label": "Forge Iron Sword",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_shield",
+      "type": "recipe",
+      "label": "Forge Iron Shield",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_helm",
+      "type": "recipe",
+      "label": "Forge Iron Helm",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_cuirass",
+      "type": "recipe",
+      "label": "Forge Iron Cuirass",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_greaves",
+      "type": "recipe",
+      "label": "Forge Iron Greaves",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_boots",
+      "type": "recipe",
+      "label": "Forge Iron-Shod Boots",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_sword",
+      "type": "recipe",
+      "label": "Forge Steel Sword",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_shield",
+      "type": "recipe",
+      "label": "Forge Steel Shield",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_helm",
+      "type": "recipe",
+      "label": "Forge Steel Helm",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_cuirass",
+      "type": "recipe",
+      "label": "Forge Steel Cuirass",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_greaves",
+      "type": "recipe",
+      "label": "Forge Steel Greaves",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_boots",
+      "type": "recipe",
+      "label": "Forge Steel-Plated Boots",
+      "category": "smithing"
+    },
+    {
       "id": "recipe:build_bloomery",
       "type": "recipe",
       "label": "Bloomery",
@@ -4635,6 +4707,296 @@
       "relation": "requires_building"
     },
     {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_iron_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_sword",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_sword",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_iron_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_shield",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_shield",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_iron_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_helm",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_helm",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_iron_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_cuirass",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_cuirass",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_iron_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_greaves",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_greaves",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_iron_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_boots",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_iron_boots",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_steel_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_steel_sword",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_sword",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_sword",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_steel_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_steel_shield",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_shield",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_shield",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_helm",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_helm",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_helm",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_steel_cuirass",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_cuirass",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_cuirass",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_steel_greaves",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_greaves",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_greaves",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_steel_boots",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_boots",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel_boots",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:build_bloomery",
       "to": "building:bloomery",
       "relation": "builds"
@@ -6403,20 +6765,13 @@
       "recipe:build_cleared_plot",
       "skill:construction:3"
     ],
-    "deadEnds": [
-      "resource:steel_ingot"
-    ],
+    "deadEnds": [],
     "unreachable": [
       "resource:terrain_essence",
       "resource:combat_essence",
       "resource:utility_essence"
     ],
     "warnings": [
-      {
-        "type": "dead_end",
-        "nodeId": "resource:steel_ingot",
-        "message": "Steel Ingot is produced but never used as input"
-      },
       {
         "type": "unreachable",
         "nodeId": "resource:terrain_essence",
