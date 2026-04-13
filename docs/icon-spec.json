@@ -1882,6 +1882,91 @@
     },
 
     {
+      "id": "ruin_dust",
+      "object": "Pile of fine grey-brown ancient stone dust",
+      "description": "A small mound of fine powdery dust with faint sparkles, scraped from crumbling ancient stonework. Grey-brown with hints of ochre. A few tiny stone fragments mixed in. Looks dry and old.",
+      "use": "Imbuing reagent from Coastal Ruins — permanently adds +5 defense to one equipment item",
+      "theme": "stone",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "tidal_salt",
+      "object": "Cluster of blue-white crystallized sea salt",
+      "description": "Chunky crystals of sea salt with a faint blue-white glow, formed deep in tidal caves. Translucent with angular facets. Looks cold and wet, with a slight brine sheen.",
+      "use": "Imbuing reagent from Tidal Caves — permanently adds +7 wetResist to one equipment item",
+      "theme": "water",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "jungle_sap",
+      "object": "Glob of thick amber-gold caustic tree sap",
+      "description": "A viscous drop of dark amber sap, still sticky and warm. Faint wisps of smoke or steam rise from its surface. Looks corrosive and dangerous — the kind of thing that burns through anything.",
+      "use": "Imbuing reagent from Overgrown Trail — permanently adds +5 offense to one equipment item",
+      "theme": "fire",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "quarry_crystal",
+      "object": "Dense rose-pink mineral crystal",
+      "description": "A dense, faceted crystal with a warm rose-pink inner glow. Pulled from deep quarry rock. Looks heavy and solid, with a faint pulse of warmth visible through its translucent surface.",
+      "use": "Imbuing reagent from Flooded Quarry — permanently adds +15 life to one equipment item",
+      "theme": "stone",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "ridge_frost",
+      "object": "Shard of permanent pale blue ice",
+      "description": "A jagged shard of ice that never melts, pale blue and crystal clear. Faint frost particles drift from its edges. Cold white glow from within. Looks impossibly cold.",
+      "use": "Imbuing reagent from Ridge Pass — permanently adds +7 coldResist to one equipment item",
+      "theme": "ice",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "temple_incense",
+      "object": "Petrified stick of ancient temple incense",
+      "description": "A short stick of petrified incense, dark grey with golden veining. Faint wisps of pale smoke curl from the tip despite being stone-solid. Looks ancient and unyielding.",
+      "use": "Imbuing reagent from Sunken Temple — permanently adds +5 endurance to one equipment item",
+      "theme": "magic",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+    {
+      "id": "volcanic_shard",
+      "object": "Glowing red-black volcanic glass shard",
+      "description": "A razor-sharp sliver of volcanic obsidian that radiates visible heat. Dark black glass with glowing red-orange veins like lava. Faint heat shimmer around it. Looks dangerously hot.",
+      "use": "Imbuing reagent from Volcanic Rift — permanently adds +7 heatResist to one equipment item",
+      "theme": "fire",
+      "category": "resource",
+      "chain": "imbuing_reagents",
+      "chainRole": "base",
+      "size": 64,
+      "tags": ["mainland", "reagent", "imbuing"]
+    },
+
+    {
       "id": "fire_hardened_spear",
       "object": "Fire-hardened bamboo spear",
       "description": "A long bamboo shaft with a fire-blackened, sharpened tip. The point is darkened and glossy from heat treatment. Lashed binding near the tip with dried fiber cordage.",

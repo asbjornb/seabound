@@ -419,6 +419,60 @@ export const RESOURCES: Record<string, ResourceDef> = {
     tags: ["metal", "mainland"],
   },
 
+  // ── Imbuing reagents ──
+  // Rare drops from specific mainland expeditions. Each imbues a single stat onto equipment.
+  // Only one imbuement per item — choose wisely.
+
+  ruin_dust: {
+    id: "ruin_dust",
+    name: "Ruin Dust",
+    description:
+      "Fine powder scraped from ancient stonework in the coastal ruins. Hardens whatever it coats.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  tidal_salt: {
+    id: "tidal_salt",
+    name: "Tidal Salt",
+    description:
+      "Crystallized sea-salt from deep within the tidal caves. Repels water on contact.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  jungle_sap: {
+    id: "jungle_sap",
+    name: "Jungle Sap",
+    description:
+      "Caustic amber sap from a predator-scarred tree. Burns through anything it touches.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  quarry_crystal: {
+    id: "quarry_crystal",
+    name: "Quarry Crystal",
+    description:
+      "A dense mineral crystal pulled from the flooded quarry depths. Pulses with inner warmth.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  ridge_frost: {
+    id: "ridge_frost",
+    name: "Ridge Frost",
+    description:
+      "Permanent ice scraped from the windswept ridge. Never melts, even near flame.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  temple_incense: {
+    id: "temple_incense",
+    name: "Temple Incense",
+    description:
+      "Petrified incense from the sunken temple's inner sanctum. Steady and unyielding.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+  volcanic_shard: {
+    id: "volcanic_shard",
+    name: "Volcanic Shard",
+    description:
+      "A sliver of glass-sharp volcanic rock that radiates heat. Too hot to hold for long.",
+    tags: ["reagent", "mainland", "imbuing"],
+  },
+
   // ── Salvage reagents (affix catalysts) ──
   // Recovered from salvaging affixed equipment. Used in future affix crafting recipes.
 

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { IMBUING_REAGENTS } from "../data/equipment";
 import { getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables, getResources, getItemDisplayName } from "../data/registry";
 import { EquipmentItem, GameState, RepairRecipeDef, SalvageTableDef } from "../data/types";
 
@@ -39,6 +40,10 @@ export function computeItemStats(item: EquipmentItem): Record<string, number> {
     for (const m of affixDef.modifiers) {
       stats[m.stat] = (stats[m.stat] ?? 0) + Math.round(m.value * scale);
     }
+  }
+  // Imbued stat bonus
+  if (item.imbued) {
+    stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + item.imbued.value;
   }
   return stats;
 }
@@ -106,12 +111,14 @@ export function EquipmentPanel({
   onSalvageItem,
   onEquipItem,
   onDiscardItem,
+  onImbueItem,
 }: {
   state: GameState;
   onRepairItem?: (instanceId: string) => void;
   onSalvageItem?: (instanceId: string) => void;
   onEquipItem?: (instanceId: string) => void;
   onDiscardItem?: (instanceId: string) => void;
+  onImbueItem?: (instanceId: string, reagentId: string) => void;
 }) {
   const SLOTS = getEquipmentSlots();
   const [slotFilter, setSlotFilter] = useState<string>("all");
@@ -348,6 +355,48 @@ export function EquipmentPanel({
                 })}
               </div>
             )}
+
+            {/* Imbued stat display */}
+            {item.imbued && (() => {
+              const reagent = IMBUING_REAGENTS.find((r) => r.reagentId === item.imbued!.reagentId);
+              return (
+                <div className="equip-imbued">
+                  <span className="imbued-label">{reagent?.label ?? "Imbued"}</span>
+                  <span className="equip-stat-chip imbued-stat">
+                    {item.imbued.stat} {formatStat(item.imbued.value)}
+                  </span>
+                </div>
+              );
+            })()}
+
+            {/* Imbue options — only show if item has no imbuement yet */}
+            {!item.imbued && (() => {
+              const RESOURCES = getResources();
+              const available = IMBUING_REAGENTS.filter(
+                (r) => (state.resources[r.reagentId] ?? 0) >= 1
+              );
+              if (available.length === 0) return null;
+              return (
+                <div className="equip-imbue-section">
+                  <span className="imbue-section-label">Imbue (permanent, one per item):</span>
+                  <div className="imbue-options">
+                    {available.map((r) => (
+                      <button
+                        key={r.reagentId}
+                        className="imbue-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onImbueItem?.(item.instanceId, r.reagentId);
+                        }}
+                        title={`${RESOURCES[r.reagentId]?.name}: ${r.stat} +${r.value}`}
+                      >
+                        {r.label} ({r.stat} +{r.value})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Comparison vs. equipped */}
             {renderComparison(item)}

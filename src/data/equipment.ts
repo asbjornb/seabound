@@ -1,6 +1,32 @@
 import { AffixDef, EquipmentItemDef, EquipmentSlotDef, RepairRecipeDef, SalvageTableDef } from "./types";
 
 // ═══════════════════════════════════════
+// Imbuing Reagent Definitions
+// ═══════════════════════════════════════
+// Each reagent imbues one specific stat. Only one imbuement per item, ever.
+
+export interface ImbuingReagentDef {
+  /** Resource ID of the reagent consumed. */
+  reagentId: string;
+  /** The stat this reagent grants. */
+  stat: string;
+  /** Flat bonus value added. */
+  value: number;
+  /** Human-readable label for the imbuement. */
+  label: string;
+}
+
+export const IMBUING_REAGENTS: ImbuingReagentDef[] = [
+  { reagentId: "ruin_dust", stat: "defense", value: 5, label: "Ruin-Hardened" },
+  { reagentId: "tidal_salt", stat: "wetResist", value: 7, label: "Saltbound" },
+  { reagentId: "jungle_sap", stat: "offense", value: 5, label: "Sap-Edged" },
+  { reagentId: "quarry_crystal", stat: "life", value: 15, label: "Crystal-Hearted" },
+  { reagentId: "ridge_frost", stat: "coldResist", value: 7, label: "Frostbound" },
+  { reagentId: "temple_incense", stat: "endurance", value: 5, label: "Sanctified" },
+  { reagentId: "volcanic_shard", stat: "heatResist", value: 7, label: "Magma-Touched" },
+];
+
+// ═══════════════════════════════════════
 // Equipment Slots
 // ═══════════════════════════════════════
 
@@ -826,6 +852,90 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     ],
     maxAffixes: 3,
     tags: ["metal", "weapon"],
+  },
+
+  // ── Chase Uniques (one per expedition) ──
+
+  boar_tusk_necklace: {
+    id: "boar_tusk_necklace",
+    name: "Boar Tusk Necklace",
+    description: "A necklace of tusks wrenched from the largest boar in the ruins. The wearer fights with feral aggression — hit harder the more desperate the battle.",
+    slot: "trinket",
+    baseStats: [{ stat: "offense", value: 6 }, { stat: "endurance", value: 5 }, { stat: "life", value: 10 }],
+    requiredSkills: [{ skillId: "combat", level: 2 }],
+    tier: 1,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_berserker", rollValue: 0.9 },
+      { affixId: "affix_enduring", rollValue: 1.0 },
+    ],
+    maxAffixes: 2,
+    tags: ["bone", "trinket"],
+  },
+  tidecallers_shell: {
+    id: "tidecallers_shell",
+    name: "Tidecaller's Shell",
+    description: "A massive spiral shell from the deepest tidal cave. Water flows around the bearer as if repelled by ancient will.",
+    slot: "offhand",
+    baseStats: [{ stat: "defense", value: 6 }, { stat: "wetResist", value: 8 }, { stat: "life", value: 12 }],
+    requiredSkills: [{ skillId: "combat", level: 3 }],
+    tier: 1,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_tideborn", rollValue: 0.9 },
+      { affixId: "affix_vital", rollValue: 0.8 },
+    ],
+    maxAffixes: 2,
+    tags: ["stone", "shield"],
+  },
+  predators_fang: {
+    id: "predators_fang",
+    name: "Predator's Fang",
+    description: "A curved claw torn from the jungle's apex predator, lashed to a bone handle. Impossibly fast — it strikes before the enemy can react.",
+    slot: "weapon",
+    baseStats: [{ stat: "offense", value: 11 }, { stat: "attackSpeed", value: 10 }, { stat: "speed", value: 3 }],
+    requiredSkills: [{ skillId: "combat", level: 4 }],
+    tier: 1,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_predator", rollValue: 1.0 },
+      { affixId: "affix_precise", rollValue: 0.95 },
+      { affixId: "affix_brutal", rollValue: 0.8 },
+    ],
+    maxAffixes: 3,
+    tags: ["bone", "weapon"],
+  },
+  drowned_kings_crown: {
+    id: "drowned_kings_crown",
+    name: "Drowned King's Crown",
+    description: "A corroded bronze circlet dredged from the quarry floor. Whoever wore this ruled through sheer endurance — immovable, unkillable, slow.",
+    slot: "head",
+    baseStats: [{ stat: "defense", value: 10 }, { stat: "life", value: 20 }, { stat: "speed", value: -3 }],
+    requiredSkills: [{ skillId: "combat", level: 4 }],
+    tier: 2,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_stoneheart", rollValue: 0.85 },
+      { affixId: "affix_juggernaut", rollValue: 0.7 },
+    ],
+    maxAffixes: 2,
+    tags: ["metal", "armor"],
+  },
+  stormstrider_boots: {
+    id: "stormstrider_boots",
+    name: "Stormstrider Boots",
+    description: "Fur-lined boots with soles that grip ice like talons. Found frozen to the skeleton of a mountaineer who almost made it to the summit.",
+    slot: "feet",
+    baseStats: [{ stat: "speed", value: 7 }, { stat: "coldResist", value: 8 }, { stat: "endurance", value: 4 }],
+    requiredSkills: [{ skillId: "combat", level: 4 }],
+    tier: 2,
+    unique: true,
+    fixedAffixes: [
+      { affixId: "affix_windswept", rollValue: 1.0 },
+      { affixId: "affix_light", rollValue: 1.0 },
+    ],
+    maxAffixes: 2,
+    tags: ["hide", "armor"],
   },
 };
 

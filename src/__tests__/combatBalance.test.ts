@@ -85,6 +85,33 @@ const TIER2_GEAR: PlayerCombatStats = {
   critMultiplier: 0,
 };
 
+/** Tier 2 gear with a single strategic imbue — volcanic shard on weapon (+7 heatResist). */
+const TIER2_IMBUED_HEAT: PlayerCombatStats = {
+  ...TIER2_GEAR,
+  heatResist: 7,    // volcanic_shard imbue on weapon
+};
+
+/**
+ * Tier 2 gear with all 6 pieces imbued — the endgame loadout.
+ * Weapon: jungle_sap (+5 offense), Shield: ruin_dust (+5 defense),
+ * Cuirass: quarry_crystal (+15 life), Helm: ridge_frost (+7 coldResist),
+ * Greaves: temple_incense (+5 endurance), Boots: volcanic_shard (+7 heatResist).
+ * One imbue per item, one stat per reagent.
+ */
+const TIER2_FULL_IMBUED: PlayerCombatStats = {
+  offense: 25,      // 20 + jungle_sap 5
+  defense: 58,      // 53 + ruin_dust 5
+  life: 93,         // 78 + quarry_crystal 15
+  attackSpeed: 5,
+  speed: -1,
+  endurance: 8,     // 3 + temple_incense 5
+  heatResist: 7,    // volcanic_shard on boots
+  coldResist: 11,   // 4 + ridge_frost on helm
+  wetResist: 4,     // unchanged (tidal_salt not used — 6 items, 6 imbues, chose other stats)
+  critChance: 0,
+  critMultiplier: 0,
+};
+
 // ═══════════════════════════════════════
 // Balance Tests
 // ═══════════════════════════════════════
@@ -165,5 +192,36 @@ describe("combat balance: tier 2 gear progression", () => {
     // Tier 2 bronze gear has no heat resist — volcanic rift punishes this
     const result = estimateWinRateFromStats(TIER2_GEAR, getExpedition("volcanic_rift"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.30);
+  });
+});
+
+describe("combat balance: tier 2 imbued gear progression", () => {
+  it("volcanic_rift becomes doable with a single heat resist imbue (20-45%)", () => {
+    // A single volcanic_shard imbue is the "key" that unlocks the rift — risky but possible.
+    // This is the intended progression: farm the specific reagent to open specific content.
+    const result = estimateWinRateFromStats(TIER2_IMBUED_HEAT, getExpedition("volcanic_rift"), RUNS);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.20);
+    expect(result.winRate).toBeLessThanOrEqual(0.45);
+  });
+
+  it("sunken_temple should be safe with full imbues (>90%)", () => {
+    // Full imbued set (6 reagents across 6 pieces) represents huge investment.
+    // Sunken temple should be reliable at this point.
+    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("sunken_temple"), RUNS);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.90);
+  });
+
+  it("volcanic_rift should be comfortable with full imbues but not risk-free (80-99%)", () => {
+    // Fully imbued T2 gear represents the endgame loadout (sans affixed rares).
+    // Volcanic rift should feel earned — comfortable but never truly trivial.
+    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("volcanic_rift"), RUNS);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.80);
+    expect(result.winRate).toBeLessThanOrEqual(0.99);
+  });
+
+  it("coastal_ruins should be trivial with full imbues (>95%)", () => {
+    // Early content should be a cakewalk — confirms the progression curve.
+    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("coastal_ruins"), RUNS);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.95);
   });
 });

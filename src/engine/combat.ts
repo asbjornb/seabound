@@ -139,6 +139,11 @@ function computeRawLoadoutStats(state: GameState): Record<string, number> {
         stats[mod.stat] = (stats[mod.stat] ?? 0) + Math.round(mod.value * scale);
       }
     }
+
+    // Imbued stat bonus (one per item, permanent)
+    if (item.imbued) {
+      stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + item.imbued.value;
+    }
   }
 
   return stats;

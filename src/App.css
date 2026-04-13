@@ -2337,6 +2337,55 @@ body {
   font-weight: 600;
 }
 
+/* Imbue system */
+.equip-imbued {
+  margin-top: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, #b48a3c 12%, transparent);
+  border: 1px solid color-mix(in srgb, #b48a3c 30%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+}
+.imbued-label {
+  font-weight: 600;
+  color: #d4a843;
+}
+.imbued-stat {
+  color: #d4a843 !important;
+  font-weight: 600;
+}
+.equip-imbue-section {
+  margin-top: 6px;
+  font-size: 0.7rem;
+}
+.imbue-section-label {
+  color: var(--text-dim);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4px;
+}
+.imbue-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.imbue-btn {
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, #d4a843 40%, transparent);
+  background: color-mix(in srgb, #d4a843 10%, transparent);
+  color: #d4a843;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.imbue-btn:hover {
+  background: color-mix(in srgb, #d4a843 22%, transparent);
+}
+
 /* Loadout preview on mainland expeditions */
 .loadout-preview {
   margin-top: 6px;
