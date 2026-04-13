@@ -148,7 +148,7 @@ export default function App() {
     return <DevWiki />;
   }
   const game = useGame();
-  const updateAvailable = useUpdateChecker();
+  const { updateAvailable, applyUpdate } = useUpdateChecker();
   const [tab, setTab] = useState<GameTab>("gather");
   const tabRef = useRef<GameTab>("gather");
   const [screen, setScreen] = useState<GameScreen>(() => {
@@ -481,7 +481,7 @@ export default function App() {
         activeTab={activeTab}
       />
       {updateAvailable && (
-        <div className="update-bar" onClick={() => window.location.reload()}>
+        <div className="update-bar" onClick={applyUpdate}>
           A new version is available — tap to refresh
         </div>
       )}
