@@ -17,6 +17,7 @@ import { xpForLevel } from "../data/skills";
 import type { ActionDef, ExpeditionDef, GameState, RecipeDef, SkillId, StationDef } from "../data/types";
 import {
   getBuildingCount,
+  getBuildingExpeditionSpeedMultiplier,
   getGroupBuildingCount,
   getEffectiveInputs,
   getEffectiveMaxCount,
@@ -193,6 +194,9 @@ export function selectAvailableStations(state: GameState): StationDef[] {
     if (station.requiredSkillLevel && skill.level < station.requiredSkillLevel) return false;
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
+    if (station.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
+    // Hide charting stations once the target biome is discovered
+    if (station.chartBiome && state.discoveredBiomes.includes(station.chartBiome)) return false;
     // Hide stations whose setup inputs haven't been discovered yet
     if (station.setupInputs?.some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     // For stations with maxDeployedPerBuildings, check that at least one applicable building exists
@@ -277,7 +281,8 @@ export function selectCurrentActionTiming(
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
   const expSkillLevel = state.skills[expedition.skillId]?.level ?? 1;
   const expMilestoneMultiplier = getDurationMultiplier(expedition.skillId, expSkillLevel, expedition.id);
-  const effectiveDuration = Math.round(expedition.durationMs * expMilestoneMultiplier * moraleMultiplier);
+  const expBuildingMultiplier = getBuildingExpeditionSpeedMultiplier(state, expedition.skillId);
+  const effectiveDuration = Math.round(expedition.durationMs * expMilestoneMultiplier * moraleMultiplier * expBuildingMultiplier);
   return {
     actionDuration: effectiveDuration,
     actionProgress: Math.min(1, (now - state.currentAction.startedAt) / effectiveDuration),

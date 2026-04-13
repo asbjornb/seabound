@@ -1785,6 +1785,18 @@
       "tags": ["mainland", "metal", "ingot"]
     },
     {
+      "id": "cartographers_table",
+      "object": "Bamboo table with charcoal-marked charts",
+      "description": "A sturdy bamboo table covered with hand-drawn coastal charts marked in charcoal. Rolled-up maps, rope coils, and a charcoal stick rest on the surface.",
+      "use": "Settlement panel, building icon",
+      "theme": "navigation",
+      "category": "building",
+      "chain": "cartography",
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["mainland", "building", "navigation"]
+    },
+    {
       "id": "bloomery",
       "object": "Clay shaft furnace with bellows",
       "description": "A squat clay-walled shaft furnace with leather bellows attached. Wisps of smoke and orange glow from the top opening. Stone base with charcoal residue.",

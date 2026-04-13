@@ -5,6 +5,107 @@ import type { ExpeditionDef } from "./types";
 // ═══════════════════════════════════════
 
 export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
+  // ── Non-combat scouting expeditions (slow alternative to combat paths) ──
+
+  {
+    id: "scout_mainland_coast",
+    name: "Scout the Mainland Coastline",
+    description:
+      "Sail cautiously along the mainland coast, charting safe passages and scanning the cliffs from the water. Consumes rope for rigging and mooring lines. Much slower than braving the tidal caves, but avoids all combat.",
+    skillId: "navigation",
+    durationMs: 120000,
+    foodCost: 12,
+    waterCost: 6,
+    xpGain: 20,
+    mainland: true,
+    requiredVessel: "dugout",
+    hideWhenAllFound: true,
+    inputs: [{ resourceId: "rope", amount: 2 }],
+    outcomes: [
+      {
+        weight: 5,
+        description:
+          "After days of careful sailing, you round a headland and spot towering sea cliffs with green-streaked mineral veins glinting in the afternoon sun. You mark the location on your chart.",
+        biomeDiscovery: "coastal_cliffs",
+        drops: [
+          { resourceId: "copper_ore", amount: 1 },
+        ],
+      },
+      {
+        weight: 20,
+        description:
+          "You chart several coves and inlets but find nothing remarkable. You do spot useful flat stones along the waterline.",
+        drops: [
+          { resourceId: "flat_stone", amount: 2 },
+        ],
+      },
+      {
+        weight: 25,
+        description:
+          "The coastline is monotonous — endless mangroves and mudflats. You gather some driftwood and shells before turning back.",
+        drops: [
+          { resourceId: "coconut_husk", amount: 2 },
+        ],
+      },
+      {
+        weight: 50,
+        description:
+          "Strong coastal currents and poor visibility force you to turn back. Your rope lines fray against the rocks — another wasted trip.",
+      },
+    ],
+  },
+  {
+    id: "chart_river_inland",
+    name: "Chart the River Network",
+    description:
+      "Follow mainland rivers upstream from the coast, hauling your canoe over rapids and portaging around falls. Rope and bamboo poles are consumed rigging tow-lines and building portage rollers. Exhausting, but no combat required.",
+    skillId: "navigation",
+    durationMs: 240000,
+    foodCost: 20,
+    waterCost: 10,
+    xpGain: 30,
+    mainland: true,
+    requiredVessel: "dugout",
+    requiredBiomes: ["coastal_cliffs"],
+    hideWhenAllFound: true,
+    inputs: [
+      { resourceId: "rope", amount: 3 },
+      { resourceId: "bamboo_cane", amount: 2 },
+    ],
+    outcomes: [
+      {
+        weight: 4,
+        description:
+          "Days of grueling portage and river travel finally pay off. The waterway opens into a broad valley of rolling red-earth hills — iron deposits visible in the eroded banks. You carefully chart the route home.",
+        biomeDiscovery: "inland_hills",
+        drops: [
+          { resourceId: "native_copper", amount: 2 },
+        ],
+      },
+      {
+        weight: 18,
+        description:
+          "You follow a promising tributary but it dead-ends in a swamp. You salvage some useful stones from the riverbed before hauling back.",
+        drops: [
+          { resourceId: "flat_stone", amount: 3 },
+        ],
+      },
+      {
+        weight: 23,
+        description:
+          "The river meanders endlessly through dense jungle. You find nothing new and limp back to camp, rope shredded and bamboo poles snapped.",
+        drops: [
+          { resourceId: "coconut_husk", amount: 2 },
+        ],
+      },
+      {
+        weight: 55,
+        description:
+          "The river narrows to impassable rapids. Without a trail through the jungle, there's no way forward. You burn through your supplies and paddle back exhausted.",
+      },
+    ],
+  },
+
   // ── Low-tier repeatable expeditions ──
 
   {

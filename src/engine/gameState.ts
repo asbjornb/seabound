@@ -135,6 +135,7 @@ export function createInitialState(): GameState {
     combatLog: [],
     lootLog: {},
     stashedResources: [],
+    chartProgress: {},
   };
 }
 
@@ -369,6 +370,10 @@ export function normalizeGameState(raw: unknown): GameState | null {
     } catch {
       loaded.stashedResources = [];
     }
+  }
+  // Migration: ensure chartProgress exists
+  if (!loaded.chartProgress) {
+    loaded.chartProgress = {};
   }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {
@@ -606,6 +611,20 @@ export function getEffectiveMoraleGain(currentMorale: number, amount: number): n
     return belowCap + (aboveCap > 0 ? Math.floor(aboveCap / 2) : 0);
   }
   return Math.floor(amount / 2);
+}
+
+/** Get building-based expedition speed multiplier for a skill.
+ *  Stacks multiplicatively if multiple buildings apply. */
+export function getBuildingExpeditionSpeedMultiplier(state: GameState, skillId: string): number {
+  const BUILDINGS = getBuildings();
+  let mult = 1;
+  for (const bid of state.buildings) {
+    const bdef = BUILDINGS[bid];
+    if (bdef?.expeditionSpeedBonus?.skillId === skillId) {
+      mult *= bdef.expeditionSpeedBonus.multiplier;
+    }
+  }
+  return mult;
 }
 
 /** Get tool-based speed multiplier for an action or recipe.

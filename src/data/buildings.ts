@@ -234,6 +234,14 @@ export const BUILDINGS: Record<string, BuildingDef> = {
   },
 
   // Mainland buildings
+  cartographers_table: {
+    id: "cartographers_table",
+    name: "Cartographer's Table",
+    description:
+      "A sturdy bamboo table spread with charcoal-marked charts. Better maps mean faster expeditions for any navigator.",
+    unlocks: "Charting stations (discover mining biomes without combat), 10% faster navigation expeditions",
+    expeditionSpeedBonus: { skillId: "navigation", multiplier: 0.9 },
+  },
   bloomery: {
     id: "bloomery",
     name: "Bloomery",

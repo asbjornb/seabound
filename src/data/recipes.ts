@@ -1934,6 +1934,27 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 85,
   },
 
+  // Cartographer's Table building recipe
+  {
+    id: "build_cartographers_table",
+    name: "Cartographer's Table",
+    description:
+      "Build a sturdy table for charting mainland coastlines and river networks. A peaceful alternative to combat expeditions for discovering new regions.",
+    skillId: "construction",
+    panel: "build",
+    requiredSkillLevel: 10,
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 6 },
+      { resourceId: "flat_stone", amount: 4 },
+      { resourceId: "rope", amount: 2 },
+      { resourceId: "charcoal", amount: 3 },
+    ],
+    buildingOutput: "cartographers_table",
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 50,
+  },
+
   // Bloomery building recipe
   {
     id: "build_bloomery",
