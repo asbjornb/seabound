@@ -1890,6 +1890,11 @@ body {
 .inventory-item-name {
   font-size: 0.82rem;
   font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .inventory-item-count {
@@ -1973,6 +1978,7 @@ body {
   display: flex;
   gap: 6px;
   align-items: center;
+  flex-shrink: 0;
 }
 .equip-slot-tag {
   font-size: 0.68rem;
@@ -2382,9 +2388,7 @@ body {
    ═══════════════════════════════════════ */
 .equipment-panel {
   padding: 8px;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
+  overflow-x: hidden;
 }
 
 .loadout-section {
