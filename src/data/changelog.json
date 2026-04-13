@@ -7,6 +7,12 @@
     {
       "date": "2026-04-13",
       "changes": [
+        "Add non-combat scouting expeditions (Scout the Mainland Coastline, Chart the River Network) as slow alternative paths to discover Coastal Cliffs and Inland Hills without fighting"
+      ]
+    },
+    {
+      "date": "2026-04-13",
+      "changes": [
         "Remove rare loot drops from mainland expeditions (corroded medallion, sea-worn journal, cave crystal, phosphorescent algae, carved idol, ancient compass, raw gemstone, petrified wood, mountain crystal, eagle's plume, temple idol, cursed relic, magma core, star metal shard)"
       ]
     },

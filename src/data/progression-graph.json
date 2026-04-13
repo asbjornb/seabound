@@ -1593,6 +1593,18 @@
       "category": "navigation"
     },
     {
+      "id": "expedition:scout_mainland_coast",
+      "type": "expedition",
+      "label": "Scout the Mainland Coastline",
+      "category": "navigation"
+    },
+    {
+      "id": "expedition:chart_river_inland",
+      "type": "expedition",
+      "label": "Chart the River Network",
+      "category": "navigation"
+    },
+    {
       "id": "expedition:coastal_ruins",
       "type": "expedition",
       "label": "Explore Coastal Ruins",
@@ -5547,6 +5559,201 @@
       "relation": "produces"
     },
     {
+      "from": "expedition:scout_mainland_coast",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:scout_mainland_coast",
+      "relation": "consumes"
+    },
+    {
+      "from": "expedition:scout_mainland_coast",
+      "to": "biome:coastal_cliffs",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:scout_mainland_coast",
+      "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:scout_mainland_coast",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:scout_mainland_coast",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:scout_mainland_coast",
+      "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "skill:navigation",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:coconut",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:small_fish",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:crab",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:large_fish",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_fish",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_crab",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_large_fish",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:root_vegetable",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_root_vegetable",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cooked_taro",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:banana",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:roasted_breadfruit",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:fresh_water",
+      "to": "expedition:chart_river_inland",
+      "relation": "consumes"
+    },
+    {
+      "from": "biome:coastal_cliffs",
+      "to": "expedition:chart_river_inland",
+      "relation": "requires_biome_discovered"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "biome:inland_hills",
+      "relation": "discovers"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:chart_river_inland",
+      "to": "resource:bamboo_cane",
+      "relation": "produces"
+    },
+    {
       "from": "expedition:coastal_ruins",
       "to": "skill:navigation",
       "relation": "trains"
@@ -6515,6 +6722,7 @@
       "recipe:weave_pandanus_cordage",
       "action:harvest_bamboo",
       "expedition:explore_interior",
+      "expedition:chart_river_inland",
       "resource:charred_log",
       "tool:shell_adze",
       "tool:obsidian_blade",
@@ -6535,6 +6743,8 @@
       "resource:banana",
       "resource:roasted_breadfruit",
       "biome:coconut_grove",
+      "resource:fresh_water",
+      "biome:coastal_cliffs",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
       "recipe:knap_obsidian_blade",
@@ -6558,6 +6768,9 @@
       "station:grow_bananas",
       "recipe:roast_breadfruit",
       "expedition:explore_beach",
+      "recipe:fill_water_pot",
+      "expedition:scout_mainland_coast",
+      "expedition:tidal_caves",
       "resource:large_log",
       "resource:dry_grass",
       "resource:coconut_husk",
@@ -6591,6 +6804,7 @@
       "resource:banana_shoot",
       "resource:breadfruit",
       "skill:cooking:8",
+      "resource:fired_clay_pot",
       "action:fell_large_tree",
       "action:collect_dry_grass",
       "expedition:coastal_ruins",
@@ -6603,7 +6817,6 @@
       "action:comb_rocky_shore",
       "action:prospect_tin",
       "action:mine_iron",
-      "expedition:tidal_caves",
       "expedition:flooded_quarry",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
@@ -6621,10 +6834,10 @@
       "station:cultivate_taro",
       "recipe:build_well",
       "station:grow_breadfruit",
+      "recipe:fire_clay_pot",
+      "recipe:kiln_fire_pot",
       "biome:jungle_interior",
       "tool:stone_axe",
-      "resource:fresh_water",
-      "biome:coastal_cliffs",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
@@ -6645,8 +6858,10 @@
       "resource:clay",
       "skill:farming:12",
       "resource:breadfruit_cutting",
+      "resource:shaped_clay_pot",
+      "building:firing_pit",
+      "building:kiln",
       "recipe:craft_stone_axe",
-      "recipe:fill_water_pot",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
       "station:grow_pandanus",
@@ -6655,39 +6870,33 @@
       "recipe:strike_stone_flake",
       "recipe:build_charcoal_kiln",
       "action:dig_clay",
+      "recipe:shape_clay_pot",
+      "recipe:wheel_shape_clay_pot",
+      "recipe:build_firing_pit",
+      "recipe:build_kiln",
       "resource:stone_blade",
-      "resource:fired_clay_pot",
       "resource:pandanus_cutting",
       "building:pandanus_grove",
       "resource:chert",
       "tool:hammerstone",
       "skill:construction:14",
-      "building:kiln",
       "building:stone_hearth",
+      "building:pottery_wheel",
+      "skill:construction:11",
       "recipe:knap_stone_blade",
-      "recipe:fire_clay_pot",
-      "recipe:kiln_fire_pot",
       "recipe:build_pandanus_grove",
       "recipe:craft_hammerstone",
-      "recipe:build_kiln",
       "recipe:build_stone_hearth",
-      "resource:shaped_clay_pot",
-      "building:firing_pit",
+      "recipe:build_pottery_wheel",
       "skill:construction:10",
       "skill:farming:7",
       "building:farm_plot",
-      "skill:construction:11",
       "skill:construction:12",
-      "recipe:shape_clay_pot",
-      "recipe:wheel_shape_clay_pot",
-      "recipe:build_firing_pit",
+      "skill:crafting:11",
       "recipe:upgrade_farm_plot",
-      "building:pottery_wheel",
       "skill:construction:8",
       "building:tended_garden",
-      "recipe:build_pottery_wheel",
       "recipe:upgrade_tended_garden",
-      "skill:crafting:11",
       "skill:construction:6",
       "building:cleared_plot",
       "recipe:build_cleared_plot",
