@@ -1633,6 +1633,28 @@ body {
   opacity: 0.6;
 }
 
+/* Skill sub-group headers (collapsible within categories/biomes) */
+.skill-subgroup-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  padding: 4px 8px;
+  margin-top: 4px;
+}
+
+.skill-subgroup-title.collapsible {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.skill-subgroup-title.collapsible:active {
+  opacity: 0.7;
+}
+
 /* Filter bar */
 .filter-bar {
   margin-bottom: 8px;

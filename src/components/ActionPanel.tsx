@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { getBiomeOrder, getResources, getTools } from "../data/registry";
+import { getBiomeOrder, getResources, getSkills, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
 import { getResource, getStorageLimit, hasTool, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
@@ -20,6 +20,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
 
   const BIOME_ORDER = getBiomeOrder();
   const RESOURCES = getResources();
+  const SKILLS = getSkills();
   const TOOLS = getTools();
 
   const grouped = new Map<string, ActionDef[]>();
@@ -30,11 +31,11 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
     grouped.set(biome, list);
   }
 
-  const toggleBiome = (biomeId: string) => {
+  const toggleSection = (id: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
-      if (next.has(biomeId)) next.delete(biomeId);
-      else next.add(biomeId);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -45,15 +46,42 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
         const list = grouped.get(biomeId);
         if (!list) return null;
         const isCollapsed = collapsed.has(biomeId);
+
+        // Sub-group by skill
+        const bySkill = new Map<string, ActionDef[]>();
+        for (const a of list) {
+          const arr = bySkill.get(a.skillId) ?? [];
+          arr.push(a);
+          bySkill.set(a.skillId, arr);
+        }
+        const skillGroups = Array.from(bySkill.entries());
+        const showSubGroups = skillGroups.length > 1;
+
         return (
           <div key={biomeId}>
             <BiomeBanner
               biomeId={biomeId}
               isCollapsed={isCollapsed}
               actionCount={list.length}
-              onToggle={() => toggleBiome(biomeId)}
+              onToggle={() => toggleSection(biomeId)}
             />
-            {!isCollapsed && list.map((action) => {
+            {!isCollapsed && skillGroups.map(([skillId, skillActions]) => {
+              const subKey = `${biomeId}:${skillId}`;
+              const isSubCollapsed = showSubGroups && collapsed.has(subKey);
+              return (
+                <div key={skillId}>
+                  {showSubGroups && (
+                    <div
+                      className="skill-subgroup-title collapsible"
+                      onClick={() => toggleSection(subKey)}
+                    >
+                      <span className={`collapse-arrow ${isSubCollapsed ? "collapsed" : ""}`}>&#9662;</span>
+                      <GameIcon id={`skill_${skillId}`} size={16} />
+                      {SKILLS[skillId]?.name ?? skillId}
+                      <span className="section-count">{skillActions.length}</span>
+                    </div>
+                  )}
+                  {!isSubCollapsed && skillActions.map((action) => {
               // Check tool requirements
               const missingTool = action.requiredTools?.find(
                 (t) => !hasTool(state, t)
@@ -144,10 +172,12 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                 </div>
               );
             })}
+                </div>
+              );
+            })}
           </div>
         );
       })}
     </div>
-
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getDoubleOutputChance, getOutputChanceBonus } from "../data/milestones";
-import { getResources, getTools, getBuildings, getEquipmentItemById, getEquipmentSlots } from "../data/registry";
+import { getResources, getTools, getBuildings, getSkills, getEquipmentItemById, getEquipmentSlots } from "../data/registry";
 import { GameState, RecipeDef } from "../data/types";
 import { canAffordInput, getEffectiveInputs, getResource, getGroupBuildingCount, getEffectiveMaxCount, canAffordTagInputs, resolveTagInputs, getEffectiveMoraleGain, isRecipeOutputBlocked, getStorageLimit, getStorageGroupTotal, getStorageGroupMembers } from "../engine/gameState";
 import { computeItemStats, formatStat } from "./EquipmentPanel";
@@ -15,9 +15,7 @@ interface Props {
   queueMode?: boolean;
 }
 
-type CategoryId = "tools" | "repeatable";
-
-const CATEGORIES: { id: CategoryId; label: string }[] = [
+const CATEGORIES: { id: string; label: string }[] = [
   { id: "tools", label: "Tools & One-Time Crafts" },
   { id: "repeatable", label: "Repeatable" },
 ];
@@ -31,8 +29,9 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const BUILDINGS = getBuildings();
+  const SKILLS = getSkills();
   const openLookup = useItemLookup();
-  const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
 
   if (recipes.length === 0) {
@@ -43,19 +42,19 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
     );
   }
 
-  const toggleCategory = (catId: CategoryId) => {
+  const toggleSection = (id: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
-      if (next.has(catId)) next.delete(catId);
-      else next.add(catId);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
 
   // Group recipes by category
-  const grouped = new Map<CategoryId, RecipeDef[]>();
+  const grouped = new Map<string, RecipeDef[]>();
   for (const r of recipes) {
-    const catId: CategoryId = isOneTimeCraft(r) ? "tools" : "repeatable";
+    const catId = isOneTimeCraft(r) ? "tools" : "repeatable";
     const list = grouped.get(catId) ?? [];
     list.push(r);
     grouped.set(catId, list);
@@ -96,17 +95,44 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
         }
 
         const isCollapsed = collapsed.has(catId);
+
+        // Sub-group by skill
+        const bySkill = new Map<string, RecipeDef[]>();
+        for (const r of list) {
+          const arr = bySkill.get(r.skillId) ?? [];
+          arr.push(r);
+          bySkill.set(r.skillId, arr);
+        }
+        const skillGroups = Array.from(bySkill.entries());
+        const showSubGroups = skillGroups.length > 1;
+
         return (
           <div key={catId}>
             <div
               className="section-title collapsible"
-              onClick={() => toggleCategory(catId)}
+              onClick={() => toggleSection(catId)}
             >
               <span className={`collapse-arrow ${isCollapsed ? "collapsed" : ""}`}>&#9662;</span>
               {label}
               <span className="section-count">{list.length}</span>
             </div>
-            {!isCollapsed && list.map((recipe) => {
+            {!isCollapsed && skillGroups.map(([skillId, skillRecipes]) => {
+              const subKey = `${catId}:${skillId}`;
+              const isSubCollapsed = showSubGroups && collapsed.has(subKey);
+              return (
+                <div key={skillId}>
+                  {showSubGroups && (
+                    <div
+                      className="skill-subgroup-title collapsible"
+                      onClick={() => toggleSection(subKey)}
+                    >
+                      <span className={`collapse-arrow ${isSubCollapsed ? "collapsed" : ""}`}>&#9662;</span>
+                      <GameIcon id={`skill_${skillId}`} size={16} />
+                      {SKILLS[skillId]?.name ?? skillId}
+                      <span className="section-count">{skillRecipes.length}</span>
+                    </div>
+                  )}
+                  {!isSubCollapsed && skillRecipes.map((recipe) => {
               const inputs = getEffectiveInputs(recipe, state);
               const canAffordInputs = inputs.every(
                 (inp) => canAffordInput(inp, state)
@@ -372,6 +398,9 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                   <div className="action-xp">
                     <GameIcon id={`skill_${recipe.skillId}`} size={16} /> +{recipe.xpGain} {recipe.skillId} XP
                   </div>
+                </div>
+              );
+            })}
                 </div>
               );
             })}
