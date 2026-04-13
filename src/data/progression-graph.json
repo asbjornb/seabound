@@ -285,90 +285,6 @@
       "label": "Sealed Clay Jar"
     },
     {
-      "id": "resource:corroded_medallion",
-      "type": "resource",
-      "label": "Corroded Medallion",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:sea_worn_journal",
-      "type": "resource",
-      "label": "Sea-Worn Journal",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:cave_crystal",
-      "type": "resource",
-      "label": "Cave Crystal",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:phosphorescent_algae",
-      "type": "resource",
-      "label": "Phosphorescent Algae",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:carved_idol",
-      "type": "resource",
-      "label": "Carved Idol",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:ancient_compass",
-      "type": "resource",
-      "label": "Ancient Compass",
-      "category": "loot,mainland,treasure"
-    },
-    {
-      "id": "resource:raw_gemstone",
-      "type": "resource",
-      "label": "Raw Gemstone",
-      "category": "loot,mainland,treasure"
-    },
-    {
-      "id": "resource:petrified_wood",
-      "type": "resource",
-      "label": "Petrified Wood",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:mountain_crystal",
-      "type": "resource",
-      "label": "Mountain Crystal",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:eagles_plume",
-      "type": "resource",
-      "label": "Eagle's Plume",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:temple_idol",
-      "type": "resource",
-      "label": "Temple Idol",
-      "category": "loot,mainland,treasure"
-    },
-    {
-      "id": "resource:cursed_relic",
-      "type": "resource",
-      "label": "Cursed Relic",
-      "category": "loot,mainland,treasure"
-    },
-    {
-      "id": "resource:magma_core",
-      "type": "resource",
-      "label": "Magma Core",
-      "category": "loot,mainland"
-    },
-    {
-      "id": "resource:star_metal_shard",
-      "type": "resource",
-      "label": "Star Metal Shard",
-      "category": "loot,mainland,treasure"
-    },
-    {
       "id": "resource:raw_hide",
       "type": "resource",
       "label": "Raw Hide",
@@ -5364,11 +5280,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:coastal_ruins",
-      "to": "resource:sea_worn_journal",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:tidal_caves",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5461,16 +5372,6 @@
     {
       "from": "expedition:tidal_caves",
       "to": "resource:native_copper",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:tidal_caves",
-      "to": "resource:cave_crystal",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:tidal_caves",
-      "to": "resource:phosphorescent_algae",
       "relation": "produces"
     },
     {
@@ -5579,16 +5480,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:overgrown_trail",
-      "to": "resource:carved_idol",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:overgrown_trail",
-      "to": "resource:ancient_compass",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:flooded_quarry",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5681,16 +5572,6 @@
     {
       "from": "expedition:flooded_quarry",
       "to": "resource:tin_ore",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:flooded_quarry",
-      "to": "resource:raw_gemstone",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:flooded_quarry",
-      "to": "resource:petrified_wood",
       "relation": "produces"
     },
     {
@@ -5789,16 +5670,6 @@
       "relation": "produces"
     },
     {
-      "from": "expedition:ridge_pass",
-      "to": "resource:mountain_crystal",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:ridge_pass",
-      "to": "resource:eagles_plume",
-      "relation": "produces"
-    },
-    {
       "from": "expedition:sunken_temple",
       "to": "skill:navigation",
       "relation": "trains"
@@ -5891,16 +5762,6 @@
     {
       "from": "expedition:sunken_temple",
       "to": "resource:bronze_ingot",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:sunken_temple",
-      "to": "resource:temple_idol",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:sunken_temple",
-      "to": "resource:cursed_relic",
       "relation": "produces"
     },
     {
@@ -6001,16 +5862,6 @@
     {
       "from": "expedition:volcanic_rift",
       "to": "resource:tin_ore",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:volcanic_rift",
-      "to": "resource:magma_core",
-      "relation": "produces"
-    },
-    {
-      "from": "expedition:volcanic_rift",
-      "to": "resource:star_metal_shard",
       "relation": "produces"
     },
     {
@@ -6553,23 +6404,9 @@
       "skill:construction:3"
     ],
     "deadEnds": [
-      "resource:steel_ingot",
-      "resource:sea_worn_journal",
-      "resource:cave_crystal",
-      "resource:phosphorescent_algae",
-      "resource:carved_idol",
-      "resource:ancient_compass",
-      "resource:raw_gemstone",
-      "resource:petrified_wood",
-      "resource:mountain_crystal",
-      "resource:eagles_plume",
-      "resource:temple_idol",
-      "resource:cursed_relic",
-      "resource:magma_core",
-      "resource:star_metal_shard"
+      "resource:steel_ingot"
     ],
     "unreachable": [
-      "resource:corroded_medallion",
       "resource:terrain_essence",
       "resource:combat_essence",
       "resource:utility_essence"
@@ -6579,76 +6416,6 @@
         "type": "dead_end",
         "nodeId": "resource:steel_ingot",
         "message": "Steel Ingot is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:sea_worn_journal",
-        "message": "Sea-Worn Journal is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:cave_crystal",
-        "message": "Cave Crystal is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:phosphorescent_algae",
-        "message": "Phosphorescent Algae is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:carved_idol",
-        "message": "Carved Idol is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:ancient_compass",
-        "message": "Ancient Compass is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:raw_gemstone",
-        "message": "Raw Gemstone is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:petrified_wood",
-        "message": "Petrified Wood is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:mountain_crystal",
-        "message": "Mountain Crystal is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:eagles_plume",
-        "message": "Eagle's Plume is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:temple_idol",
-        "message": "Temple Idol is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:cursed_relic",
-        "message": "Cursed Relic is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:magma_core",
-        "message": "Magma Core is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:star_metal_shard",
-        "message": "Star Metal Shard is produced but never used as input"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:corroded_medallion",
-        "message": "Corroded Medallion is not reachable from beach start"
       },
       {
         "type": "unreachable",
@@ -6664,11 +6431,6 @@
         "type": "unreachable",
         "nodeId": "resource:utility_essence",
         "message": "Utility Essence is not reachable from beach start"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:corroded_medallion",
-        "message": "Corroded Medallion is defined but has no production or consumption edges"
       },
       {
         "type": "orphan_resource",

@@ -95,9 +95,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         affixRange: { min: 0, max: 1 },
       },
     ],
-    lootTable: [
-      { resourceId: "sea_worn_journal", amount: 1, chance: 0.05 },
-    ],
   },
   {
     id: "tidal_caves",
@@ -168,10 +165,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
-    ],
-    lootTable: [
-      { resourceId: "cave_crystal", amount: 1, chance: 0.20 },
-      { resourceId: "phosphorescent_algae", amount: 1, chance: 0.06 },
     ],
   },
 
@@ -249,10 +242,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         affixRange: { min: 1, max: 2 },
       },
     ],
-    lootTable: [
-      { resourceId: "carved_idol", amount: 1, chance: 0.06 },
-      { resourceId: "ancient_compass", amount: 1, chance: 0.02 },
-    ],
   },
   {
     id: "flooded_quarry",
@@ -324,10 +313,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         affixRange: { min: 1, max: 2 },
       },
     ],
-    lootTable: [
-      { resourceId: "raw_gemstone", amount: 1, chance: 0.18 },
-      { resourceId: "petrified_wood", amount: 1, chance: 0.05 },
-    ],
   },
   {
     id: "ridge_pass",
@@ -398,10 +383,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         dropsAsBroken: true,
         affixRange: { min: 1, max: 2 },
       },
-    ],
-    lootTable: [
-      { resourceId: "mountain_crystal", amount: 1, chance: 0.18 },
-      { resourceId: "eagles_plume", amount: 1, chance: 0.05 },
     ],
   },
 
@@ -481,10 +462,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         chance: 0.015,
       },
     ],
-    lootTable: [
-      { resourceId: "temple_idol", amount: 1, chance: 0.06 },
-      { resourceId: "cursed_relic", amount: 1, chance: 0.008 },
-    ],
   },
   {
     id: "volcanic_rift",
@@ -560,10 +537,6 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         defId: "molten_edge",
         chance: 0.012,
       },
-    ],
-    lootTable: [
-      { resourceId: "magma_core", amount: 1, chance: 0.06 },
-      { resourceId: "star_metal_shard", amount: 1, chance: 0.008 },
     ],
   },
 ];
