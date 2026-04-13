@@ -28,6 +28,7 @@ export interface BuildingDef {
   maxCountBonuses?: { buildingId: BuildingId; amount: number }[]; // increases maxCount of other stackable buildings
   vesselTier?: number; // if set, this building is a vessel; higher tiers satisfy lower-tier requirements
   comfortDecayReduction?: number; // 0-1, fraction by which morale decay is slowed (e.g. 0.2 = 20% slower decay)
+  expeditionSpeedBonus?: { skillId: SkillId; multiplier: number }; // e.g. { skillId: "navigation", multiplier: 0.9 } = 10% faster nav expeditions
 }
 
 export interface ToolSpeedBonus {

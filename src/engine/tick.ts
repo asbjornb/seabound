@@ -11,7 +11,7 @@ import {
 import { levelFromXp } from "../data/skills";
 import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
-import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, isRecipeOutputBlocked, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater } from "./gameState";
+import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, isRecipeOutputBlocked, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater, getBuildingExpeditionSpeedMultiplier } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
 import { resourceHasUse } from "./selectors";
 
@@ -250,7 +250,8 @@ export function processTick(state: GameState, now: number): TickResult {
     const expMoraleMultiplier = getMoraleDurationMultiplier(state.morale);
     const expSkillLevel = state.skills[def.skillId]?.level ?? 1;
     const expMilestoneMultiplier = getDurationMultiplier(def.skillId, expSkillLevel, def.id);
-    const effectiveExpDuration = Math.max(100, Math.round(def.durationMs * expMilestoneMultiplier * expMoraleMultiplier));
+    const expBuildingMultiplier = getBuildingExpeditionSpeedMultiplier(state, def.skillId);
+    const effectiveExpDuration = Math.max(100, Math.round(def.durationMs * expMilestoneMultiplier * expMoraleMultiplier * expBuildingMultiplier));
 
     let remaining = timeAvailable;
     while (remaining >= effectiveExpDuration) {

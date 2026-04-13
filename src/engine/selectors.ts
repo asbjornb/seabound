@@ -17,6 +17,7 @@ import { xpForLevel } from "../data/skills";
 import type { ActionDef, ExpeditionDef, GameState, RecipeDef, SkillId, StationDef } from "../data/types";
 import {
   getBuildingCount,
+  getBuildingExpeditionSpeedMultiplier,
   getGroupBuildingCount,
   getEffectiveInputs,
   getEffectiveMaxCount,
@@ -280,7 +281,8 @@ export function selectCurrentActionTiming(
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
   const expSkillLevel = state.skills[expedition.skillId]?.level ?? 1;
   const expMilestoneMultiplier = getDurationMultiplier(expedition.skillId, expSkillLevel, expedition.id);
-  const effectiveDuration = Math.round(expedition.durationMs * expMilestoneMultiplier * moraleMultiplier);
+  const expBuildingMultiplier = getBuildingExpeditionSpeedMultiplier(state, expedition.skillId);
+  const effectiveDuration = Math.round(expedition.durationMs * expMilestoneMultiplier * moraleMultiplier * expBuildingMultiplier);
   return {
     actionDuration: effectiveDuration,
     actionProgress: Math.min(1, (now - state.currentAction.startedAt) / effectiveDuration),

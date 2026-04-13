@@ -238,9 +238,9 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     id: "cartographers_table",
     name: "Cartographer's Table",
     description:
-      "A sturdy bamboo table spread with charcoal-marked charts. Useful for any navigator — charting stations train navigation, and the workspace stores extra supplies.",
-    unlocks: "Charting stations (discover mining biomes without combat), +5 storage for non-food items",
-    storageBonus: [{ excludeTags: ["food", "large"], amount: 5 }],
+      "A sturdy bamboo table spread with charcoal-marked charts. Better maps mean faster expeditions for any navigator.",
+    unlocks: "Charting stations (discover mining biomes without combat), 10% faster navigation expeditions",
+    expeditionSpeedBonus: { skillId: "navigation", multiplier: 0.9 },
   },
   bloomery: {
     id: "bloomery",

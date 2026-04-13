@@ -1724,7 +1724,6 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 45,
   },
 
-<<<<<<< HEAD
   // ── Tier 3: Iron-Era Equipment ──
   // Late-mainland gear. Requires smithing + iron ingots + bloomery.
 
@@ -1954,7 +1953,6 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 15000,
     oneTimeCraft: true,
     xpGain: 50,
-  },
   },
 
   // Bloomery building recipe
