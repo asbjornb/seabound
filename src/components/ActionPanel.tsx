@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getDropChanceBonus } from "../data/milestones";
-import { getBiomeOrder, getResources, getSkills, getTools } from "../data/registry";
+import { getBiomeOrder, getResources, getTools } from "../data/registry";
 import type { ActionDef, GameState } from "../data/types";
 import { getResource, getStorageLimit, hasTool, isAtStorageCap } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
@@ -17,10 +17,10 @@ interface Props {
 
 export function ActionPanel({ actions, state, onStart, currentActionId, queueMode }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [foldedCards, setFoldedCards] = useState<Set<string>>(new Set());
 
   const BIOME_ORDER = getBiomeOrder();
   const RESOURCES = getResources();
-  const SKILLS = getSkills();
   const TOOLS = getTools();
 
   const grouped = new Map<string, ActionDef[]>();
@@ -31,8 +31,18 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
     grouped.set(biome, list);
   }
 
-  const toggleSection = (id: string) => {
+  const toggleBiome = (biomeId: string) => {
     setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(biomeId)) next.delete(biomeId);
+      else next.add(biomeId);
+      return next;
+    });
+  };
+
+  const toggleCard = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFoldedCards((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
@@ -46,42 +56,26 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
         const list = grouped.get(biomeId);
         if (!list) return null;
         const isCollapsed = collapsed.has(biomeId);
-
-        // Sub-group by skill
-        const bySkill = new Map<string, ActionDef[]>();
-        for (const a of list) {
-          const arr = bySkill.get(a.skillId) ?? [];
-          arr.push(a);
-          bySkill.set(a.skillId, arr);
-        }
-        const skillGroups = Array.from(bySkill.entries());
-        const showSubGroups = skillGroups.length > 1;
-
         return (
           <div key={biomeId}>
             <BiomeBanner
               biomeId={biomeId}
               isCollapsed={isCollapsed}
               actionCount={list.length}
-              onToggle={() => toggleSection(biomeId)}
+              onToggle={() => toggleBiome(biomeId)}
             />
-            {!isCollapsed && skillGroups.map(([skillId, skillActions]) => {
-              const subKey = `${biomeId}:${skillId}`;
-              const isSubCollapsed = showSubGroups && collapsed.has(subKey);
-              return (
-                <div key={skillId}>
-                  {showSubGroups && (
-                    <div
-                      className="skill-subgroup-title collapsible"
-                      onClick={() => toggleSection(subKey)}
-                    >
-                      <span className={`collapse-arrow ${isSubCollapsed ? "collapsed" : ""}`}>&#9662;</span>
-                      <GameIcon id={`skill_${skillId}`} size={16} />
-                      {SKILLS[skillId]?.name ?? skillId}
-                      <span className="section-count">{skillActions.length}</span>
+            {!isCollapsed && list.map((action) => {
+              if (foldedCards.has(action.id)) {
+                return (
+                  <div key={action.id} className="action-card folded" onClick={(e) => toggleCard(action.id, e)}>
+                    <div className="action-card-header">
+                      <span className="collapse-arrow collapsed">&#9662;</span>
+                      <span className="action-name">{action.name}</span>
+                      <span className="action-time">{(action.durationMs / 1000).toFixed(1)}s</span>
                     </div>
-                  )}
-                  {!isSubCollapsed && skillActions.map((action) => {
+                  </div>
+                );
+              }
               // Check tool requirements
               const missingTool = action.requiredTools?.find(
                 (t) => !hasTool(state, t)
@@ -103,6 +97,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                   onClick={() => !disabled && onStart(action)}
                 >
                   <div className="action-card-header">
+                    <span className="collapse-arrow" onClick={(e) => toggleCard(action.id, e)}>&#9662;</span>
                     <span className="action-name">
                       {action.name}
                       {isNew && <span className="new-badge">NEW</span>}
@@ -169,9 +164,6 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                   <div className="action-xp">
                     +{action.xpGain} {action.skillId} XP
                   </div>
-                </div>
-              );
-            })}
                 </div>
               );
             })}

@@ -1633,26 +1633,21 @@ body {
   opacity: 0.6;
 }
 
-/* Skill sub-group headers (collapsible within categories/biomes) */
-.skill-subgroup-title {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-dim);
-  padding: 4px 8px;
-  margin-top: 4px;
-}
-
-.skill-subgroup-title.collapsible {
+/* Folded (minimized) action/recipe cards */
+.action-card.folded {
+  padding: 4px 10px;
+  opacity: 0.6;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
-.skill-subgroup-title.collapsible:active {
-  opacity: 0.7;
+.action-card.folded .action-card-header {
+  margin-bottom: 0;
+}
+
+.action-card .collapse-arrow {
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-right: 2px;
 }
 
 /* Filter bar */
