@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 import type { Plugin } from "vite";
 
 function versionPlugin(): Plugin {
@@ -20,7 +21,50 @@ function versionPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), versionPlugin()],
+  plugins: [
+    react(),
+    versionPlugin(),
+    VitePWA({
+      registerType: "prompt",
+      workbox: {
+        // Precache the app shell — JS, CSS, HTML, fonts, banners.
+        // Game icons (~10 MB) are runtime-cached on first use instead.
+        globPatterns: ["**/*.{js,css,html,woff2,webp}"],
+        runtimeCaching: [
+          {
+            urlPattern: /\/icons\/.+\.png$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "game-icons",
+              expiration: { maxEntries: 500, maxAgeSeconds: 30 * 24 * 60 * 60 },
+            },
+          },
+        ],
+        // Don't precache PWA icons either (they're in public/ root)
+        globIgnores: ["**/icons/**"],
+      },
+      manifest: {
+        name: "SeaBound",
+        short_name: "SeaBound",
+        description:
+          "Tropical island castaway survival idle game — craft, gather, explore.",
+        theme_color: "#0c1a1a",
+        background_color: "#0c1a1a",
+        display: "standalone",
+        orientation: "portrait",
+        start_url: "/",
+        icons: [
+          { src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" },
+          {
+            src: "/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+        ],
+      },
+    }),
+  ],
   test: {
     environment: "node",
   },
