@@ -17,6 +17,7 @@ interface Props {
 
 export function ActionPanel({ actions, state, onStart, currentActionId, queueMode }: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [foldedCards, setFoldedCards] = useState<Set<string>>(new Set());
 
   const BIOME_ORDER = getBiomeOrder();
   const RESOURCES = getResources();
@@ -39,6 +40,16 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
     });
   };
 
+  const toggleCard = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFoldedCards((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   return (
     <div>
       {BIOME_ORDER.map((biomeId) => {
@@ -54,6 +65,17 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
               onToggle={() => toggleBiome(biomeId)}
             />
             {!isCollapsed && list.map((action) => {
+              if (foldedCards.has(action.id)) {
+                return (
+                  <div key={action.id} className="action-card folded" onClick={(e) => toggleCard(action.id, e)}>
+                    <div className="action-card-header">
+                      <span className="collapse-arrow collapsed">&#9662;</span>
+                      <span className="action-name">{action.name}</span>
+                      <span className="action-time">{(action.durationMs / 1000).toFixed(1)}s</span>
+                    </div>
+                  </div>
+                );
+              }
               // Check tool requirements
               const missingTool = action.requiredTools?.find(
                 (t) => !hasTool(state, t)
@@ -75,6 +97,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                   onClick={() => !disabled && onStart(action)}
                 >
                   <div className="action-card-header">
+                    <span className="collapse-arrow" onClick={(e) => toggleCard(action.id, e)}>&#9662;</span>
                     <span className="action-name">
                       {action.name}
                       {isNew && <span className="new-badge">NEW</span>}
@@ -148,6 +171,5 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
         );
       })}
     </div>
-
   );
 }

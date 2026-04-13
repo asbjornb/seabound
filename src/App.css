@@ -1633,6 +1633,23 @@ body {
   opacity: 0.6;
 }
 
+/* Folded (minimized) action/recipe cards */
+.action-card.folded {
+  padding: 4px 10px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.action-card.folded .action-card-header {
+  margin-bottom: 0;
+}
+
+.action-card .collapse-arrow {
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-right: 2px;
+}
+
 /* Filter bar */
 .filter-bar {
   margin-bottom: 8px;

@@ -33,6 +33,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
   const BUILDINGS = getBuildings();
   const openLookup = useItemLookup();
   const [collapsed, setCollapsed] = useState<Set<CategoryId>>(new Set());
+  const [foldedCards, setFoldedCards] = useState<Set<string>>(new Set());
   const [craftableOnly, setCraftableOnly] = useState(false);
 
   if (recipes.length === 0) {
@@ -48,6 +49,16 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
       const next = new Set(prev);
       if (next.has(catId)) next.delete(catId);
       else next.add(catId);
+      return next;
+    });
+  };
+
+  const toggleCard = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFoldedCards((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
   };
@@ -107,6 +118,17 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
               <span className="section-count">{list.length}</span>
             </div>
             {!isCollapsed && list.map((recipe) => {
+              if (foldedCards.has(recipe.id)) {
+                return (
+                  <div key={recipe.id} className="action-card folded" onClick={(e) => toggleCard(recipe.id, e)}>
+                    <div className="action-card-header">
+                      <span className="collapse-arrow collapsed">&#9662;</span>
+                      <span className="action-name">{recipe.name}</span>
+                      <span className="action-time">{(recipe.durationMs / 1000).toFixed(1)}s</span>
+                    </div>
+                  </div>
+                );
+              }
               const inputs = getEffectiveInputs(recipe, state);
               const canAffordInputs = inputs.every(
                 (inp) => canAffordInput(inp, state)
@@ -130,6 +152,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                   onMouseLeave={() => onHighlightResources?.(new Set())}
                 >
                   <div className="action-card-header">
+                    <span className="collapse-arrow" onClick={(e) => toggleCard(recipe.id, e)}>&#9662;</span>
                     <span className="action-name">
                       {recipe.name}
                       {isNew && <span className="new-badge">NEW</span>}
