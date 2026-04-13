@@ -438,8 +438,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       hazards: ["wildlife", "terrain", "endurance"],
       enemy: {
         name: "Temple Guardian",
-        hp: 150,
-        damage: 20,
+        hp: 165,
+        damage: 21,
         attackSpeed: 1.3,
         defense: 10,
         damageTypes: { physical: 0.8, wet: 0.2 },
@@ -516,7 +516,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       hazards: ["heat", "terrain", "endurance"],
       enemy: {
         name: "Volcanic Horror",
-        hp: 150,
+        hp: 155,
         damage: 22,
         attackSpeed: 1.2,
         defense: 10,
