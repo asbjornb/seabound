@@ -4659,7 +4659,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_sword",
       "relation": "requires_building"
     },
@@ -4684,7 +4684,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_shield",
       "relation": "requires_building"
     },
@@ -4704,7 +4704,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_helm",
       "relation": "requires_building"
     },
@@ -4729,7 +4729,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_cuirass",
       "relation": "requires_building"
     },
@@ -4754,7 +4754,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_greaves",
       "relation": "requires_building"
     },
@@ -4779,7 +4779,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:bloomery",
+      "from": "building:kiln",
       "to": "recipe:forge_bronze_boots",
       "relation": "requires_building"
     },
