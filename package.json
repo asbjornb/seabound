@@ -16,6 +16,8 @@
     "setup-hooks": "cp scripts/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit && echo 'Pre-commit hook installed.'"
   },
   "dependencies": {
+    "@fontsource/cinzel": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
     "@hpcc-js/wasm-graphviz": "^1.21.2",
     "d3": "^7.9.0",
     "jszip": "^3.10.1",
@@ -29,6 +31,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "typescript": "~5.7.0",
     "vite": "^6.0.0",
+    "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.2"
   }
 }

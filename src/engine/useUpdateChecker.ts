@@ -1,6 +1,7 @@
 declare const __BUILD_ID__: string;
 
 import { useEffect, useState } from "react";
+import { registerSW } from "virtual:pwa-register";
 
 const CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -8,7 +9,18 @@ export function useUpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
   useEffect(() => {
-    // Only check in production builds (dev has no version.json)
+    // Register the service worker for offline support.
+    // When a new SW is waiting, show the update bar. The existing
+    // update bar triggers window.location.reload() which activates it.
+    registerSW({
+      onNeedRefresh() {
+        setUpdateAvailable(true);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    // Version.json polling — catches deployments even before the SW update fires
     if (typeof __BUILD_ID__ === "undefined") return;
 
     const currentBuild = __BUILD_ID__;
