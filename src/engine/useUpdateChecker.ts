@@ -1,22 +1,24 @@
 declare const __BUILD_ID__: string;
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { registerSW } from "virtual:pwa-register";
 
 const CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 export function useUpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
+  const updateSWRef = useRef<((reloadPage?: boolean) => Promise<void>) | null>(null);
 
   useEffect(() => {
     // Register the service worker for offline support.
-    // When a new SW is waiting, show the update bar. The existing
-    // update bar triggers window.location.reload() which activates it.
-    registerSW({
+    // When a new SW is waiting, show the update bar. Calling applyUpdate()
+    // sends skipWaiting to the waiting SW and reloads the page.
+    const updateSW = registerSW({
       onNeedRefresh() {
         setUpdateAvailable(true);
       },
     });
+    updateSWRef.current = updateSW;
   }, []);
 
   useEffect(() => {
@@ -48,5 +50,15 @@ export function useUpdateChecker() {
     };
   }, []);
 
-  return updateAvailable;
+  const applyUpdate = useCallback(() => {
+    if (updateSWRef.current) {
+      // Activate the waiting service worker, then reload
+      updateSWRef.current(true);
+    } else {
+      // Fallback for version.json-only detection (no waiting SW)
+      window.location.reload();
+    }
+  }, []);
+
+  return { updateAvailable, applyUpdate };
 }
