@@ -607,10 +607,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
           "The dense undergrowth turns you back. You return with nothing useful.",
       },
     ],
-    lootTable: [
-      { resourceId: "sea_glass", amount: 1, chance: 0.20 },
-      { resourceId: "ancient_doubloon", amount: 1, chance: 0.04 },
-    ],
   },
   {
     id: "explore_interior",
@@ -658,10 +654,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "The jungle is thick and disorienting. You circle back to camp with nothing to show for it.",
       },
-    ],
-    lootTable: [
-      { resourceId: "exotic_feather", amount: 1, chance: 0.18 },
-      { resourceId: "glowing_fungus", amount: 1, chance: 0.05 },
     ],
   },
   {
@@ -720,10 +712,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "Rough seas slow the crossing. You arrive exhausted and return with nothing useful.",
       },
-    ],
-    lootTable: [
-      { resourceId: "volcanic_glass", amount: 1, chance: 0.20 },
-      { resourceId: "fire_opal", amount: 1, chance: 0.04 },
     ],
   },
   {
@@ -791,11 +779,6 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         description:
           "Strong currents push you off course. You return tired but safe.",
       },
-    ],
-    lootTable: [
-      { resourceId: "giant_clam_pearl", amount: 1, chance: 0.15 },
-      { resourceId: "ancient_map_fragment", amount: 1, chance: 0.04 },
-      { resourceId: "black_pearl", amount: 1, chance: 0.015 },
     ],
   },
   {
