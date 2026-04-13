@@ -1,9 +1,17 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "a94d7d7573dcaa5160924b691d1a4f528e74628f"
+    "newestReviewed": "df586641757747462bde2e4480fc4e8d26240cbb"
   },
   "entries": [
+    {
+      "date": "2026-04-13",
+      "changes": [
+        "Add offline support — game loads instantly from cache after first visit",
+        "Add PWA install option for mobile home screen",
+        "Self-host fonts (Inter and Cinzel) for faster offline loading"
+      ]
+    },
     {
       "date": "2026-04-13",
       "changes": [
