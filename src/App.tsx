@@ -58,6 +58,7 @@ import {
 } from "./engine/selectors";
 import { getActionById, getExpeditionById, getRecipeById } from "./data/registry";
 import { useGame } from "./engine/useGame";
+import { useTabGuard } from "./engine/useTabGuard";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
@@ -149,6 +150,7 @@ export default function App() {
   }
   const game = useGame();
   const { updateAvailable, applyUpdate } = useUpdateChecker();
+  const duplicateTab = useTabGuard();
   const [tab, setTab] = useState<GameTab>("gather");
   const tabRef = useRef<GameTab>("gather");
   const [screen, setScreen] = useState<GameScreen>(() => {
@@ -483,6 +485,11 @@ export default function App() {
       {updateAvailable && (
         <div className="update-bar" onClick={applyUpdate}>
           A new version is available — tap to refresh
+        </div>
+      )}
+      {duplicateTab && (
+        <div className="duplicate-tab-bar">
+          Game is open in another tab — playing in both may cause lost progress
         </div>
       )}
       {isOldDomain && !migrateBannerDismissed && (
