@@ -188,7 +188,7 @@ export const STATIONS: StationDef[] = [
     description:
       "Sketch the mainland coastline from memory and sailing notes. Each survey adds detail to your charts — eventually you'll pinpoint the mineral-rich cliffs.",
     skillId: "navigation",
-    durationMs: 90000, // 1.5 minutes
+    durationMs: 120000, // 2 minutes — 20 collections × 2 min = ~40 min total
     requiredBuildings: ["cartographers_table"],
     setupInputs: [
       { resourceId: "rope", amount: 1 },
@@ -197,7 +197,7 @@ export const STATIONS: StationDef[] = [
     yields: [
       { resourceId: "flat_stone", amount: 1, chance: 0.3 },
     ],
-    xpGain: 15,
+    xpGain: 25,
     chartBiome: "coastal_cliffs",
     chartIncrement: 0.05,
   },
@@ -207,7 +207,7 @@ export const STATIONS: StationDef[] = [
     description:
       "Cross-reference river charts with coastal surveys to map routes inland. Painstaking work — each session reveals a little more of the interior.",
     skillId: "navigation",
-    durationMs: 120000, // 2 minutes
+    durationMs: 180000, // 3 minutes — 20 collections × 3 min = ~60 min total
     requiredBuildings: ["cartographers_table"],
     requiredBiomes: ["coastal_cliffs"],
     setupInputs: [
@@ -217,7 +217,7 @@ export const STATIONS: StationDef[] = [
     yields: [
       { resourceId: "flat_stone", amount: 1, chance: 0.2 },
     ],
-    xpGain: 20,
+    xpGain: 35,
     chartBiome: "inland_hills",
     chartIncrement: 0.05,
   },
