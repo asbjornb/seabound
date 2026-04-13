@@ -7,41 +7,14 @@
     {
       "date": "2026-04-13",
       "changes": [
+        "Add non-combat scouting expeditions (Scout the Mainland Coastline, Chart the River Network) as slow, expensive alternative paths to discover Coastal Cliffs and Inland Hills without fighting",
+        "Add Cartographer's Table building and charting stations — a passive set-wait-collect path to discover mining biomes without combat",
+        "Add offline support — game loads instantly from cache after first visit, with PWA install option for mobile home screen",
+        "Self-host fonts (Inter and Cinzel) for faster offline loading",
+        "Remove rare loot drops from expeditions — expeditions now only produce useful materials",
         "Fix bronze equipment recipes now correctly requiring kiln instead of bloomery, making bronze tier accessible",
+        "Fix update banner not properly activating new version on tap",
         "Remove unnecessary building requirements from multiple recipes that didn't need them"
-      ]
-    },
-    {
-      "date": "2026-04-13",
-      "changes": [
-        "Fix update banner not properly activating new version on tap"
-      ]
-    },
-    {
-      "date": "2026-04-13",
-      "changes": [
-        "Add non-combat scouting expeditions (Scout the Mainland Coastline, Chart the River Network) as slow, expensive alternative paths to discover Coastal Cliffs and Inland Hills without fighting — requires dugout, consumes rope and bamboo each attempt",
-        "Add Cartographer's Table building and charting stations — a passive set-wait-collect path to discover mining biomes without combat (5% progress per collection, ~20 collections each)"
-      ]
-    },
-    {
-      "date": "2026-04-13",
-      "changes": [
-        "Remove rare loot drops from mainland expeditions (corroded medallion, sea-worn journal, cave crystal, phosphorescent algae, carved idol, ancient compass, raw gemstone, petrified wood, mountain crystal, eagle's plume, temple idol, cursed relic, magma core, star metal shard)"
-      ]
-    },
-    {
-      "date": "2026-04-13",
-      "changes": [
-        "Add offline support — game loads instantly from cache after first visit",
-        "Add PWA install option for mobile home screen",
-        "Self-host fonts (Inter and Cinzel) for faster offline loading"
-      ]
-    },
-    {
-      "date": "2026-04-13",
-      "changes": [
-        "Remove rare loot drops from island expeditions—expeditions now only produce useful materials"
       ]
     },
     {
@@ -53,45 +26,13 @@
     {
       "date": "2026-04-11",
       "changes": [
-        "Fix \"more\" dropdown menu becoming invisible on mainland biome"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
-        "Fix tabs \"More\" menu appearing unnecessarily when there are fewer than 8 tabs open"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
         "Remove smithing level requirements — craft, repair, and salvage equipment immediately if you have materials and buildings",
         "Remove double-output chance milestones from smithing — focus progression on speed bonuses instead",
-        "Compress smithing milestones into earlier levels — reach key efficiency bonuses faster"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
-        "Remove unused Sturdy affix from equipment rolls — this stat had no effect on gameplay"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
-        "Add 23 new expedition loot and treasure item icons (sea glass, ancient doubloon, exotic feather, glowing fungus, volcanic glass, fire opal, giant clam pearl, black pearl, ancient map fragment, corroded medallion, sea-worn journal, cave crystal, phosphorescent algae, carved idol, ancient compass, raw gemstone, petrified wood, mountain crystal, eagle's plume, temple idol, cursed relic, magma core, star metal shard)"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
-        "Fix mainland expeditions now returning empty water bottles after use",
-        "Remove duplicate empty water bottle drops from island expedition loot tables"
-      ]
-    },
-    {
-      "date": "2026-04-11",
-      "changes": [
+        "Compress smithing milestones into earlier levels — reach key efficiency bonuses faster",
+        "Remove unused Sturdy affix from equipment rolls — this stat had no effect on gameplay",
+        "Add 23 new expedition loot and treasure item icons",
+        "Fix \"more\" dropdown menu becoming invisible on mainland biome and appearing unnecessarily when fewer than 8 tabs open",
+        "Fix mainland expeditions now returning empty water bottles after use and remove duplicate drops from island loot tables",
         "Hide oceanic voyage expedition after reaching the mainland"
       ]
     },
@@ -104,45 +45,11 @@
     {
       "date": "2026-04-08",
       "changes": [
-        "Slow down mainland mining actions: copper mining now takes 16s (was 8s), tin mining takes 20s (was 10s), and iron mining takes 24s (was 12s) to create more deliberate pacing and make speed bonuses more impactful"
-      ]
-    },
-    {
-      "date": "2026-04-08",
-      "changes": [
-        "Remove bamboo cane from far island expedition loot table"
-      ]
-    },
-    {
-      "date": "2026-04-08",
-      "changes": [
+        "Slow down mainland mining actions: copper mining now takes 16s (was 8s), tin mining takes 20s (was 10s), and iron mining takes 24s (was 12s) to create more deliberate pacing and make speed bonuses more impactful",
         "Fix morale stacking bug that caused action durations to drop to 0ms and create exponential morale spiral",
         "Adjust morale speed bonus to use diminishing returns with a maximum 30% boost instead of unlimited scaling",
-        "Add 100ms minimum duration floor to prevent runaway action completion loops"
-      ]
-    },
-    {
-      "date": "2026-04-05",
-      "changes": [
-        "Fix station deploy buttons jumping when planting - deploy buttons now stay in place when new stations are planted"
-      ]
-    },
-    {
-      "date": "2026-04-05",
-      "changes": [
-        "Fix queue mode setting not persisting across page refreshes"
-      ]
-    },
-    {
-      "date": "2026-04-05",
-      "changes": [
-        "Fix icons in action queue display to show correct resource/tool/building icons instead of broken action IDs"
-      ]
-    },
-    {
-      "date": "2026-04-05",
-      "changes": [
-        "Fix dry grass action never stopping when output is full"
+        "Add 100ms minimum duration floor to prevent runaway action completion loops",
+        "Remove bamboo cane from far island expedition loot table"
       ]
     },
     {
@@ -151,9 +58,13 @@
         "Add biome discovery modal with banner images, name, and flavor text when discovering new biomes",
         "Add new 'Comb Rock Pools' action for Rocky Shore and 'Rock Pool Cache' building (+3 storage for fish, crabs, shells)",
         "Apply all Fishing skill milestones to both Wade Tidal Pool and Comb Rock Pools actions",
+        "Improve Spear Fishing: now has 15% chance to catch large fish and 15% chance to catch crabs, plus 10% faster at Fishing level 8",
+        "Fix station deploy buttons jumping when planting",
+        "Fix queue mode setting not persisting across page refreshes",
+        "Fix icons in action queue display to show correct resource/tool/building icons instead of broken action IDs",
+        "Fix dry grass action never stopping when output is full",
         "Fix expedition progress bar to show only undiscovered biomes for the current expedition",
-        "Fix mobile modal display and layering issues on Chrome Android",
-        "Improve Spear Fishing: now has 15% chance to catch large fish and 15% chance to catch crabs, plus 10% faster at Fishing level 8"
+        "Fix mobile modal display and layering issues on Chrome Android"
       ]
     },
     {
