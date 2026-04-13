@@ -2382,6 +2382,9 @@ body {
    ═══════════════════════════════════════ */
 .equipment-panel {
   padding: 8px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .loadout-section {
