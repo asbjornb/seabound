@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "d42772bc0cf0bb2696f6066184c295130766039d"
+    "newestReviewed": "a94d7d7573dcaa5160924b691d1a4f528e74628f"
   },
   "entries": [
+    {
+      "date": "2026-04-13",
+      "changes": [
+        "Remove rare loot drops from island expeditions—expeditions now only produce useful materials"
+      ]
+    },
     {
       "date": "2026-04-12",
       "changes": [
