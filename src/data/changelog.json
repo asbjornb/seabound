@@ -1,9 +1,16 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "670a6f6b20002b221b0b9e1c2503bea4721d7ec8"
+    "newestReviewed": "635fc77c154a8336cec3b960e54a508da3cc9f3d"
   },
   "entries": [
+    {
+      "date": "2026-04-13",
+      "changes": [
+        "Fix bronze equipment recipes now correctly requiring kiln instead of bloomery, making bronze tier accessible",
+        "Remove unnecessary building requirements from multiple recipes that didn't need them"
+      ]
+    },
     {
       "date": "2026-04-13",
       "changes": [
