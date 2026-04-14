@@ -1,4 +1,3 @@
-import { IMBUING_REAGENTS } from "../data/equipment";
 import { getDurationMultiplier } from "../data/milestones";
 import {
   getActions,
@@ -45,8 +44,6 @@ export function resourceHasUse(resourceId: string, state: GameState, _visited?: 
   const def = RESOURCES[resourceId];
   // Food/water resources are always useful — consumed by expeditions and survival
   if (def?.foodValue || def?.waterValue) return true;
-  // Imbuing reagents are consumed by the imbuement system (not recipes)
-  if (IMBUING_REAGENTS.some((r) => r.reagentId === resourceId)) return true;
   // Resources consumed by station setup are always useful
   if (getStations().some((station) => station.setupInputs?.some((inp) => inp.resourceId === resourceId))) return true;
   const BUILDINGS = getBuildings();
