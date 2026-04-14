@@ -1303,6 +1303,7 @@ body {
 .panel {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 12px 16px;
 }
 
@@ -2469,7 +2470,7 @@ body {
 
 .loadout-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 6px;
   margin-top: 6px;
 }
@@ -2483,6 +2484,8 @@ body {
   background: color-mix(in srgb, var(--bg-card) 80%, var(--bg-body));
   cursor: default;
   min-height: 52px;
+  min-width: 0;
+  overflow: hidden;
 }
 .loadout-slot.filled {
   border-color: color-mix(in srgb, var(--accent, #3ba5a5) 40%, transparent);
