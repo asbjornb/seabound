@@ -190,11 +190,12 @@ export function EquipmentPanel({
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  // Compute total stat bonuses from equipped items
+  // Compute total stat bonuses from equipped items (broken items contribute nothing)
   const totalStats = useMemo(() => {
     const stats: Record<string, number> = {};
     for (const item of state.equipmentInventory) {
       if (!equippedIds.has(item.instanceId)) continue;
+      if (item.condition === "broken") continue;
       const itemStats = computeItemStats(item);
       for (const [stat, value] of Object.entries(itemStats)) {
         stats[stat] = (stats[stat] ?? 0) + value;
@@ -210,6 +211,15 @@ export function EquipmentPanel({
     if (!def) return null;
     const isEquipped = equippedIds.has(item.instanceId);
     if (isEquipped) return null; // don't compare against yourself
+
+    // Broken items contribute no stats — show a clear message instead of a misleading diff
+    if (item.condition === "broken") {
+      return (
+        <div className="equip-compare">
+          <span className="compare-stat loss">Broken — no stats until repaired</span>
+        </div>
+      );
+    }
 
     const equippedItem = equippedBySlot[def.slot];
     const itemStats = computeItemStats(item);
@@ -232,7 +242,8 @@ export function EquipmentPanel({
       );
     }
 
-    const equippedStats = computeItemStats(equippedItem);
+    // If the equipped item is broken, compare as if the slot is empty
+    const equippedStats = equippedItem.condition === "broken" ? {} : computeItemStats(equippedItem);
     const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
     const diffs: { stat: string; diff: number }[] = [];
     for (const stat of allStatKeys) {
@@ -250,7 +261,7 @@ export function EquipmentPanel({
 
     return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}:</span>
+        <span className="compare-label">vs. {equippedDisplayName}{equippedItem.condition === "broken" ? " (broken)" : ""}:</span>
         <div className="compare-stats">
           {diffs.map(({ stat, diff }) => (
             <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
@@ -306,9 +317,9 @@ export function EquipmentPanel({
             </button>
           </span>
         </div>
-        {/* Inline stat preview — always visible */}
+        {/* Inline stat preview — always visible (struck through when broken) */}
         {statEntries.length > 0 && (
-          <div className="equip-stat-preview">
+          <div className={`equip-stat-preview${item.condition === "broken" ? " broken-stats" : ""}`}>
             {statEntries.map(([stat, value]) => (
               <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}`}>
                 {stat} {formatStat(value)}
@@ -497,6 +508,12 @@ export function EquipmentPanel({
               const RESOURCES = getResources();
               return (
                 <div className="equip-repair-details">
+                  {item.condition === "broken" && (
+                    <span className="repair-hint">Broken items give no stats. Repair to use in combat.</span>
+                  )}
+                  {(item.condition === "worn" || item.condition === "damaged") && (
+                    <span className="repair-hint">Stats unaffected — repair improves salvage yield.</span>
+                  )}
                   <span className="repair-details-label">Repair to {NEXT_CONDITION_LABEL[item.condition]}:</span>
                   {recipe.inputs.map((inp) => {
                     const rdef = RESOURCES[inp.resourceId];
