@@ -2262,6 +2262,10 @@ body {
   color: var(--warning);
   background: color-mix(in srgb, var(--warning) 8%, transparent);
 }
+.equip-stat-chip.degraded {
+  color: var(--text-dim);
+  background: color-mix(in srgb, var(--text-dim) 10%, transparent);
+}
 .equip-affix-hint {
   font-size: 0.65rem;
   color: var(--text-dim);
@@ -2331,6 +2335,13 @@ body {
   background: color-mix(in srgb, var(--error, #e06060) 10%, transparent);
   font-weight: 600;
 }
+.compare-now {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 2px;
+}
 
 /* Consolidated action bar */
 .equip-action-bar {
@@ -2344,6 +2355,10 @@ body {
 }
 
 /* Repair/salvage detail breakdowns */
+.equip-stat-preview.broken-stats {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
 .equip-repair-details,
 .equip-salvage-details {
   font-size: 0.68rem;
@@ -2353,6 +2368,12 @@ body {
   flex-wrap: wrap;
   gap: 2px 8px;
   align-items: center;
+}
+.repair-hint {
+  width: 100%;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--text-dim);
 }
 .repair-details-label,
 .salvage-details-label {

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { IMBUING_REAGENTS } from "../data/equipment";
 import { getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables, getResources, getItemDisplayName } from "../data/registry";
-import { EquipmentItem, GameState, RepairRecipeDef, SalvageTableDef } from "../data/types";
+import { CONDITION_STAT_MULTIPLIER, EquipmentItem, GameState, ItemCondition, RepairRecipeDef, SalvageTableDef } from "../data/types";
 
 type EquipSortKey = "name" | "tier" | "slot";
 
@@ -13,9 +13,9 @@ const EQUIP_SORT_LABELS: Record<EquipSortKey, string> = {
 
 const CONDITION_LABELS: Record<string, string> = {
   pristine: "Pristine",
-  worn: "Worn",
-  damaged: "Damaged",
-  broken: "Broken",
+  worn: "Worn \u2212 20%",
+  damaged: "Damaged \u2212 50%",
+  broken: "Broken \u2212 no stats",
 };
 
 const NEXT_CONDITION_LABEL: Record<string, string> = {
@@ -24,8 +24,33 @@ const NEXT_CONDITION_LABEL: Record<string, string> = {
   worn: "Pristine",
 };
 
-/** Compute total stats (base + affixes) for an equipment item. */
+/** Compute effective stats (base + affixes, scaled by condition). */
 export function computeItemStats(item: EquipmentItem): Record<string, number> {
+  const def = getEquipmentItemById(item.defId);
+  if (!def) return {};
+  const condMult = CONDITION_STAT_MULTIPLIER[item.condition] ?? 0;
+  if (condMult === 0) return {};
+  const stats: Record<string, number> = {};
+  for (const s of def.baseStats) {
+    stats[s.stat] = (stats[s.stat] ?? 0) + Math.round(s.value * condMult);
+  }
+  for (const a of item.affixes) {
+    const affixDef = getAffixById(a.affixId);
+    if (!affixDef) continue;
+    const range = affixDef.rollRange ?? { min: 1, max: 1 };
+    const scale = range.min + a.rollValue * (range.max - range.min);
+    for (const m of affixDef.modifiers) {
+      stats[m.stat] = (stats[m.stat] ?? 0) + Math.round(m.value * scale * condMult);
+    }
+  }
+  if (item.imbued) {
+    stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + Math.round(item.imbued.value * condMult);
+  }
+  return stats;
+}
+
+/** Compute pristine stats (base + affixes, ignoring condition). */
+export function computeItemStatsPristine(item: EquipmentItem): Record<string, number> {
   const def = getEquipmentItemById(item.defId);
   if (!def) return {};
   const stats: Record<string, number> = {};
@@ -41,7 +66,6 @@ export function computeItemStats(item: EquipmentItem): Record<string, number> {
       stats[m.stat] = (stats[m.stat] ?? 0) + Math.round(m.value * scale);
     }
   }
-  // Imbued stat bonus
   if (item.imbued) {
     stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + item.imbued.value;
   }
@@ -190,7 +214,7 @@ export function EquipmentPanel({
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  // Compute total stat bonuses from equipped items
+  // Compute total stat bonuses from equipped items (condition-scaled)
   const totalStats = useMemo(() => {
     const stats: Record<string, number> = {};
     for (const item of state.equipmentInventory) {
@@ -209,18 +233,19 @@ export function EquipmentPanel({
     const def = getEquipmentItemById(item.defId);
     if (!def) return null;
     const isEquipped = equippedIds.has(item.instanceId);
-    if (isEquipped) return null; // don't compare against yourself
+    if (isEquipped) return null;
 
     const equippedItem = equippedBySlot[def.slot];
-    const itemStats = computeItemStats(item);
+    const itemStatsCurrent = computeItemStats(item);
+    const itemStatsPristine = computeItemStatsPristine(item);
 
     if (!equippedItem) {
-      // No item in slot — show what you'd gain
-      const entries = Object.entries(itemStats);
+      const entries = Object.entries(itemStatsPristine);
       if (entries.length === 0) return null;
+      const isPristine = item.condition === "pristine";
       return (
         <div className="equip-compare">
-          <span className="compare-label">vs. empty slot:</span>
+          <span className="compare-label">vs. empty slot{!isPristine ? " (if repaired)" : ""}:</span>
           <div className="compare-stats">
             {entries.map(([stat, value]) => (
               <span key={stat} className={`compare-stat ${value > 0 ? "gain" : value < 0 ? "loss" : ""}`}>
@@ -228,36 +253,84 @@ export function EquipmentPanel({
               </span>
             ))}
           </div>
+          {!isPristine && (() => {
+            const nowEntries = Object.entries(itemStatsCurrent);
+            if (nowEntries.length === 0) return <span className="compare-now">now: no stats (broken)</span>;
+            return (
+              <span className="compare-now">
+                now: {nowEntries.map(([stat, value]) => `${stat} ${formatStat(value)}`).join(", ")}
+              </span>
+            );
+          })()}
         </div>
       );
     }
 
-    const equippedStats = computeItemStats(equippedItem);
-    const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
-    const diffs: { stat: string; diff: number }[] = [];
-    for (const stat of allStatKeys) {
-      const diff = (itemStats[stat] ?? 0) - (equippedStats[stat] ?? 0);
-      if (diff !== 0) diffs.push({ stat, diff });
+    const equippedPristine = computeItemStatsPristine(equippedItem);
+    const equippedCurrent = computeItemStats(equippedItem);
+    const eitherDegraded = item.condition !== "pristine" || equippedItem.condition !== "pristine";
+
+    // Pristine-vs-pristine comparison (the "is this item worth keeping?" answer)
+    const allPristineKeys = new Set([...Object.keys(itemStatsPristine), ...Object.keys(equippedPristine)]);
+    const pristineDiffs: { stat: string; diff: number }[] = [];
+    for (const stat of allPristineKeys) {
+      const diff = (itemStatsPristine[stat] ?? 0) - (equippedPristine[stat] ?? 0);
+      if (diff !== 0) pristineDiffs.push({ stat, diff });
     }
 
-    const equippedDisplayName = equippedItem ? getItemDisplayName(equippedItem) : "equipped";
-    if (diffs.length === 0) return (
-      <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}:</span>
-        <span className="compare-stat">identical stats</span>
-      </div>
-    );
+    // Current-vs-current comparison (the "what happens if I equip this right now?" answer)
+    const allCurrentKeys = new Set([...Object.keys(itemStatsCurrent), ...Object.keys(equippedCurrent)]);
+    const currentDiffs: { stat: string; diff: number }[] = [];
+    for (const stat of allCurrentKeys) {
+      const diff = (itemStatsCurrent[stat] ?? 0) - (equippedCurrent[stat] ?? 0);
+      if (diff !== 0) currentDiffs.push({ stat, diff });
+    }
 
+    const equippedDisplayName = getItemDisplayName(equippedItem);
+
+    // Both pristine — single comparison
+    if (!eitherDegraded) {
+      if (pristineDiffs.length === 0) return (
+        <div className="equip-compare">
+          <span className="compare-label">vs. {equippedDisplayName}:</span>
+          <span className="compare-stat">identical stats</span>
+        </div>
+      );
+      return (
+        <div className="equip-compare">
+          <span className="compare-label">vs. {equippedDisplayName}:</span>
+          <div className="compare-stats">
+            {pristineDiffs.map(({ stat, diff }) => (
+              <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
+                {stat} {diff > 0 ? "+" : ""}{diff}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // At least one item is degraded — show both potential and current
     return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}:</span>
-        <div className="compare-stats">
-          {diffs.map(({ stat, diff }) => (
-            <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
-              {stat} {diff > 0 ? "+" : ""}{diff}
-            </span>
-          ))}
-        </div>
+        <span className="compare-label">vs. {equippedDisplayName} (if repaired):</span>
+        {pristineDiffs.length === 0
+          ? <span className="compare-stat">identical stats</span>
+          : (
+            <div className="compare-stats">
+              {pristineDiffs.map(({ stat, diff }) => (
+                <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
+                  {stat} {diff > 0 ? "+" : ""}{diff}
+                </span>
+              ))}
+            </div>
+          )
+        }
+        <span className="compare-now">
+          now: {currentDiffs.length === 0
+            ? "identical"
+            : currentDiffs.map(({ stat, diff }) => `${stat} ${diff > 0 ? "+" : ""}${diff}`).join(", ")}
+        </span>
       </div>
     );
   };
@@ -270,9 +343,10 @@ export function EquipmentPanel({
     const conditionClass = item.condition === "broken" ? " broken" : item.condition === "damaged" ? " damaged" : "";
     const uniqueClass = def.unique ? " unique-item" : "";
 
-    // Compute stats for the inline preview
+    // Compute stats for the inline preview (condition-scaled)
     const itemStats = computeItemStats(item);
     const statEntries = Object.entries(itemStats);
+    const pristineStats = item.condition !== "pristine" ? computeItemStatsPristine(item) : null;
 
     return (
       <div
@@ -306,14 +380,24 @@ export function EquipmentPanel({
             </button>
           </span>
         </div>
-        {/* Inline stat preview — always visible */}
-        {statEntries.length > 0 && (
-          <div className="equip-stat-preview">
-            {statEntries.map(([stat, value]) => (
-              <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}`}>
-                {stat} {formatStat(value)}
-              </span>
-            ))}
+        {/* Inline stat preview — shows effective stats, with pristine in parens when degraded */}
+        {(statEntries.length > 0 || (item.condition === "broken" && pristineStats && Object.keys(pristineStats).length > 0)) && (
+          <div className={`equip-stat-preview${item.condition === "broken" ? " broken-stats" : ""}`}>
+            {item.condition === "broken"
+              ? Object.entries(pristineStats!).map(([stat, value]) => (
+                  <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}`}>
+                    {stat} {formatStat(value)}
+                  </span>
+                ))
+              : statEntries.map(([stat, value]) => {
+                  const full = pristineStats?.[stat];
+                  const isDegraded = full != null && full !== value;
+                  return (
+                    <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}${isDegraded ? " degraded" : ""}`}>
+                      {stat} {formatStat(value)}{isDegraded ? ` / ${formatStat(full)}` : ""}
+                    </span>
+                  );
+                })}
           </div>
         )}
         {isExpanded && (
@@ -497,6 +581,17 @@ export function EquipmentPanel({
               const RESOURCES = getResources();
               return (
                 <div className="equip-repair-details">
+                  {(() => {
+                    const nextCond = item.condition === "broken" ? "damaged" : item.condition === "damaged" ? "worn" : "pristine";
+                    const currentMult = CONDITION_STAT_MULTIPLIER[item.condition as ItemCondition];
+                    const nextMult = CONDITION_STAT_MULTIPLIER[nextCond as ItemCondition];
+                    const pctGain = Math.round((nextMult - currentMult) * 100);
+                    return (
+                      <span className="repair-hint">
+                        Restores stats to {Math.round(nextMult * 100)}% (+{pctGain}%)
+                      </span>
+                    );
+                  })()}
                   <span className="repair-details-label">Repair to {NEXT_CONDITION_LABEL[item.condition]}:</span>
                   {recipe.inputs.map((inp) => {
                     const rdef = RESOURCES[inp.resourceId];
