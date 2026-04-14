@@ -569,8 +569,8 @@ export function useGame() {
             next.currentAction.startedAt -= result.unusedMs;
           }
 
-          // If no action running, no completions happened, or no unused time, stop
-          if (!next.currentAction || result.completions.length === 0 || result.unusedMs === 0) break;
+          // If no action running or no unused time, stop
+          if (!next.currentAction || result.unusedMs === 0) break;
         }
 
         if (totalCompletions > 0) checkMilestones(next);
@@ -581,38 +581,52 @@ export function useGame() {
     const interval = setInterval(() => {
       setState((prev) => {
         const next = structuredClone(prev);
-        const result = processTick(next, Date.now());
-        for (const c of result.completions) {
-          processCompletionDiscoveries(next, c);
-          processAmbientLore(next, c);
-        }
+        const now = Date.now();
 
-        // Routine advancement
-        if (next.activeRoutine) {
-          // Track completions for step counting
-          if (result.completions.length > 0) {
-            next.activeRoutine.completionsInStep += result.completions.length;
+        // Use a multi-pass loop (same as offline processing) so that when the
+        // browser resumes from background/PWA suspend, accumulated time is
+        // properly credited across queue/routine transitions.
+        let totalCompletions = 0;
+        for (let pass = 0; pass < 100; pass++) {
+          const result = processTick(next, now);
+          for (const c of result.completions) {
+            processCompletionDiscoveries(next, c);
+            processAmbientLore(next, c);
           }
-          // Check if step should end due to completion count
-          const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
-          if (routine) {
-            const step = routine.steps[next.activeRoutine.currentStep];
-            if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
-              saveCurrentActionProgress(next);
-              next.currentAction = null;
+          totalCompletions += result.completions.length;
+
+          // Routine advancement
+          if (next.activeRoutine) {
+            if (result.completions.length > 0) {
+              next.activeRoutine.completionsInStep += result.completions.length;
+            }
+            const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
+            if (routine) {
+              const step = routine.steps[next.activeRoutine.currentStep];
+              if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
+                saveCurrentActionProgress(next);
+                next.currentAction = null;
+              }
+            }
+            if (!next.currentAction) {
+              advanceRoutine(next);
             }
           }
-          // If no current action, advance to next step
-          if (!next.currentAction) {
-            advanceRoutine(next);
+          // Queue advancement (only if no routine is active)
+          if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+            advanceQueue(next);
           }
-        }
-        // Queue advancement (only if no routine is active)
-        if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
-          advanceQueue(next);
+
+          // Credit remaining time to the newly started action
+          if (next.currentAction && result.unusedMs > 0) {
+            next.currentAction.startedAt -= result.unusedMs;
+          }
+
+          // If no action running or no unused time, stop
+          if (!next.currentAction || result.unusedMs === 0) break;
         }
 
-        if (result.completions.length > 0) checkMilestones(next);
+        if (totalCompletions > 0) checkMilestones(next);
         return next;
       });
     }, TICK_INTERVAL_MS);
