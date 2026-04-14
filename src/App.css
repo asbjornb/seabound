@@ -2615,6 +2615,32 @@ body {
   margin-left: 2px;
 }
 
+/* ── Equipment Drop Styles ── */
+
+.equipment-drops-section {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+
+.equip-drop {
+  color: var(--accent) !important;
+}
+
+.equip-drop-slot {
+  display: inline-block;
+  font-size: 0.65rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0 3px;
+  margin-right: 4px;
+  color: var(--text-dim);
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 .storage-group-info {
   margin-top: 2px;
   color: var(--text-dim);

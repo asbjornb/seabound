@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { getResources } from "../data/registry";
-import type { ExpeditionDef, GameState, LootDrop } from "../data/types";
+import { getResources, getEquipmentItemById, getEquipmentSlots } from "../data/registry";
+import type { EquipmentDropEntry, ExpeditionDef, GameState, LootDrop } from "../data/types";
 import { computeLoadoutStats, estimateWinRate, estimateGradeDistribution, combatEstimationKey } from "../engine/combat";
 import { getTotalFood, getTotalWater } from "../engine/gameState";
 import { GameIcon } from "./GameIcon";
@@ -117,6 +117,38 @@ function LootTableDisplay({ lootTable, resources, state }: { lootTable: LootDrop
             {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
             ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
             {found && <span className="loot-found-mark" title="Found!">&#10003;</span>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function EquipmentDropList({ drops }: { drops: EquipmentDropEntry[] }) {
+  const [expanded, setExpanded] = useState(false);
+  if (drops.length === 0) return null;
+
+  const SLOTS = getEquipmentSlots();
+
+  return (
+    <div className="action-drops equipment-drops-section">
+      <button
+        className="drop-list-toggle"
+        onClick={(e) => {
+          e.stopPropagation();
+          setExpanded(!expanded);
+        }}
+      >
+        {expanded ? "Hide equipment drops" : `${drops.length} equipment drops...`}
+      </button>
+      {expanded && drops.map((d, i) => {
+        const def = getEquipmentItemById(d.defId);
+        const slotName = def ? (SLOTS[def.slot]?.name ?? def.slot) : "";
+        return (
+          <div key={i} className="drop-row equip-drop">
+            <span className="equip-drop-slot">{slotName}</span>
+            {def?.name ?? d.defId}{" "}
+            ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
           </div>
         );
       })}
@@ -321,6 +353,9 @@ export function ExpeditionPanel({
             <DropList drops={getEffectiveDrops(exp, state)} resources={RESOURCES} />
             {exp.lootTable && exp.lootTable.length > 0 && (
               <LootTableDisplay lootTable={exp.lootTable} resources={RESOURCES} state={state} />
+            )}
+            {exp.equipmentDrops && exp.equipmentDrops.length > 0 && (
+              <EquipmentDropList drops={exp.equipmentDrops} />
             )}
           </div>
         );
