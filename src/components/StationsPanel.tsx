@@ -147,8 +147,11 @@ export function StationsPanel({
                 )}
                 {def.chartBiome && (
                   <div style={{ fontStyle: "italic", color: "#f0c040", fontSize: "0.9em", marginTop: 2 }}>
-                    Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
-                    {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}
+                    {state.discoveredBiomes.includes(def.chartBiome)
+                      ? "Charted: 100%"
+                      : <>Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
+                        {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}</>
+                    }
                   </div>
                 )}
                 <div className="action-drops">
@@ -231,7 +234,7 @@ export function StationsPanel({
                   </span>
                 </div>
                 <div className="action-desc">{station.description}</div>
-                {station.chartBiome && (
+                {station.chartBiome && !state.discoveredBiomes.includes(station.chartBiome) && (
                   <>
                     <div className="chart-progress-info">
                       <span style={{ fontStyle: "italic", color: "#f0c040" }}>
