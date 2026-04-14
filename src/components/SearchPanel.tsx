@@ -123,9 +123,10 @@ function buildIndex(
       description: e.description,
       skillId: e.skillId,
       inputs: e.inputs?.map((i) => resName(i.resourceId)) ?? [],
-      outputs: e.outcomes
-        .flatMap((o) => o.drops?.map((d) => resName(d.resourceId)) ?? [])
-        .filter((v, i, a) => a.indexOf(v) === i),
+      outputs: [
+        ...e.outcomes.flatMap((o) => o.drops?.map((d) => resName(d.resourceId)) ?? []),
+        ...(e.lootTable?.map((d) => resName(d.resourceId)) ?? []),
+      ].filter((v, i, a) => a.indexOf(v) === i),
       score: 0,
       def: e,
     });
