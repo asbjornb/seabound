@@ -613,6 +613,32 @@ export function EquipmentPanel({
         )}
       </div>
 
+      {/* ── Imbuing Reagents ── */}
+      {(() => {
+        const RESOURCES = getResources();
+        const owned = IMBUING_REAGENTS.filter((r) => (state.resources[r.reagentId] ?? 0) >= 1);
+        if (owned.length === 0) return null;
+        return (
+          <div className="reagent-section">
+            <h3 className="section-title">Imbuing Reagents</h3>
+            <div className="reagent-list">
+              {owned.map((r) => {
+                const rdef = RESOURCES[r.reagentId];
+                const count = state.resources[r.reagentId] ?? 0;
+                return (
+                  <div key={r.reagentId} className="reagent-row">
+                    <span className="reagent-name">{rdef?.name ?? r.reagentId}</span>
+                    {count > 1 && <span className="reagent-count">x{count}</span>}
+                    <span className="reagent-effect">{r.label}: {r.stat} +{r.value}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="reagent-hint">Expand an un-imbued item below to apply a reagent.</p>
+          </div>
+        );
+      })()}
+
       {/* ── Equipment Inventory ── */}
       <div className="equipment-inventory-section">
         <h3 className="section-title">Equipment ({state.equipmentInventory.length})</h3>

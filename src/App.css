@@ -2578,6 +2578,43 @@ body {
   color: var(--text-dim);
 }
 
+.reagent-section {
+  margin: 12px 0 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, #b48a3c 8%, transparent);
+  border: 1px solid color-mix(in srgb, #b48a3c 25%, transparent);
+}
+.reagent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.reagent-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+.reagent-name {
+  font-weight: 600;
+  color: #d4a843;
+}
+.reagent-count {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+.reagent-effect {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  font-style: italic;
+}
+.reagent-hint {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin: 6px 0 0;
+}
+
 .equipment-inventory-section {
   margin-top: 8px;
 }

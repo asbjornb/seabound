@@ -323,6 +323,11 @@ function processCompletionDiscoveries(
       const name = rdef?.name ?? resId.replace(/_/g, " ");
       addDiscovery(state, "resource", `Found ${name} for the first time`);
     }
+    // One-time tip when the player first discovers any imbuing reagent
+    if (c.newResources.some((id) => IMBUING_REAGENTS.some((r) => r.reagentId === id))) {
+      addAmbientLoreNote(state, "tip_imbue_reagent",
+        "Imbuing reagent acquired! Open the Equipment tab to permanently enhance a piece of gear.");
+    }
   }
   // Show failure insights for mainland expedition combat
   if (c.encounterResult && c.encounterResult.failureInsights.length > 0) {
