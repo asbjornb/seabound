@@ -67,7 +67,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
   rough_fiber: {
     id: "rough_fiber",
     name: "Rough Fiber",
-    description: "Fibrous bark stripped from bamboo. Needs processing.",
+    description: "Fibrous strands pulled from coconut husk. Needs processing.",
   },
   dried_fiber: {
     id: "dried_fiber",
@@ -368,6 +368,14 @@ export const RESOURCES: Record<string, ResourceDef> = {
     name: "Copper Ingot",
     description:
       "A bar of smelted copper. Soft and workable — the first true metal.",
+    tags: ["metal", "mainland"],
+  },
+
+  tin_ingot: {
+    id: "tin_ingot",
+    name: "Tin Ingot",
+    description:
+      "A bar of smelted tin. Soft and silvery — essential for alloying with copper to make bronze.",
     tags: ["metal", "mainland"],
   },
 

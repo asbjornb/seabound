@@ -6,6 +6,14 @@ This is a single-playthrough game — there is no prestige, rebirth, or reset lo
 
 Tech: TypeScript, React 19, Vite 6. Run `npm run dev` to start, `npm run build` to type-check + bundle.
 
+## Historical Accuracy vs. Gameplay
+
+The **island survival phase** aims for ethnographic realism — Polynesian-inspired tools, techniques, and materials. Dugout canoe construction, pandanus fiber processing, tidal weirs, pit-fired pottery, and outrigger canoe rigging are all grounded in documented Pacific Islander practices. Individual recipes and descriptions should remain technically plausible.
+
+The **mainland phase** intentionally shifts toward fantasy-RPG territory: magical imbuing reagents (Ridge Frost, Quarry Crystal, etc.), supernatural/ambiguous enemies (Temple Guardians, Volcanic Horrors), and environmental hazards modeled as combat encounters. This tonal shift is deliberate.
+
+**Metal progression** (copper → bronze → iron → steel) follows a RuneScape-inspired tiered gear convention. Within that, recipes should still be metallurgically defensible (e.g. bronze requires smelted tin + smelted copper, not raw ore + ingot). Armor availability is historically gated: copper is too soft for armor (shield only), bronze provides the Greek hoplite set (helm + cuirass + shield), and full armor sets unlock at iron tier. Leatherworking is under crafting, not smithing.
+
 ## Docs
 
 - `seabound-progression-v2.md` — Full progression design document with implementation status and mechanic specs

@@ -587,28 +587,6 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
     maxAffixes: 3,
     tags: ["metal", "armor"],
   },
-  bronze_greaves: {
-    id: "bronze_greaves",
-    name: "Bronze Greaves",
-    description: "Shin guards of beaten bronze. Protects the legs on rough marches.",
-    slot: "legs",
-    baseStats: [{ stat: "defense", value: 10 }, { stat: "speed", value: -1 }, { stat: "life", value: 15 }],
-    requiredSkills: [{ skillId: "combat", level: 4 }],
-    tier: 2,
-    maxAffixes: 3,
-    tags: ["metal", "armor"],
-  },
-  bronze_boots: {
-    id: "bronze_boots",
-    name: "Bronze-Shod Boots",
-    description: "Heavy leather boots reinforced with bronze plates at the toe and heel.",
-    slot: "feet",
-    baseStats: [{ stat: "defense", value: 7 }, { stat: "speed", value: 1 }, { stat: "wetResist", value: 4 }, { stat: "life", value: 8 }],
-    requiredSkills: [{ skillId: "combat", level: 4 }],
-    tier: 2,
-    maxAffixes: 3,
-    tags: ["metal", "armor"],
-  },
 
   // ── Tier 3: Iron-era gear (late mainland) ──
 
@@ -684,7 +662,7 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
   steel_sword: {
     id: "steel_sword",
     name: "Steel Sword",
-    description: "A carburized steel blade, honed to a mirror edge. The pinnacle of the smith's art.",
+    description: "A carburized steel blade, honed to a razor edge. The pinnacle of the smith's art.",
     slot: "weapon",
     baseStats: [{ stat: "offense", value: 32 }, { stat: "speed", value: 3 }, { stat: "attackSpeed", value: 6 }],
     requiredSkills: [{ skillId: "combat", level: 9 }],
@@ -695,7 +673,7 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
   steel_shield: {
     id: "steel_shield",
     name: "Steel Shield",
-    description: "A kite shield of polished steel. Near-impenetrable and perfectly balanced.",
+    description: "A broad shield of polished steel. Near-impenetrable and perfectly balanced.",
     slot: "offhand",
     baseStats: [{ stat: "defense", value: 22 }, { stat: "speed", value: -2 }, { stat: "life", value: 28 }],
     requiredSkills: [{ skillId: "combat", level: 8 }],
@@ -706,7 +684,7 @@ export const EQUIPMENT_ITEMS: Record<string, EquipmentItemDef> = {
   steel_helm: {
     id: "steel_helm",
     name: "Steel Helm",
-    description: "A full-face steel helmet with ventail. Nothing gets through.",
+    description: "A full-face steel helmet. Nothing gets through.",
     slot: "head",
     baseStats: [{ stat: "defense", value: 14 }, { stat: "coldResist", value: 6 }, { stat: "life", value: 18 }],
     requiredSkills: [{ skillId: "combat", level: 8 }],

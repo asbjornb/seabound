@@ -1725,6 +1725,19 @@
       "tags": ["mainland", "mineral", "ore"]
     },
     {
+      "id": "tin_ingot",
+      "object": "Smelted tin bar",
+      "description": "A small silvery-white bar of smelted tin with a soft sheen. Slightly uneven surface from hand-casting in a crucible. Lighter in color than copper or iron ingots.",
+      "use": "Inventory, bronze alloying input",
+      "theme": "metal",
+      "category": "ingot",
+      "chain": "bronze",
+      "chainRole": "intermediate",
+      "chainNote": "Smelted from tin ore, alloyed with copper ingot to produce bronze",
+      "size": 64,
+      "tags": ["mainland", "metal", "ingot"]
+    },
+    {
       "id": "bronze_ingot",
       "object": "Bronze alloy bar",
       "description": "A flat bar of golden-brown bronze alloy. Harder and more lustrous than copper, with a warm amber-gold tone. Slight patina beginning at the edges.",
@@ -2202,32 +2215,6 @@
       "chain": "equipment_t2_armor",
       "chainRole": "derived",
       "chainNote": "Same bronze as helm but shaped into chest protection",
-      "size": 64,
-      "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
-    },
-    {
-      "id": "bronze_greaves",
-      "object": "Bronze shin guards",
-      "description": "A pair of curved bronze shin guards shaped to the lower leg. Golden-brown metal with slightly darker edges. Straps visible on the back side. Matched set feel with the helm and cuirass.",
-      "use": "Equipment legs slot, Tier 2 leg armor",
-      "theme": "metal",
-      "category": "equipment_armor",
-      "chain": "equipment_t2_armor",
-      "chainRole": "derived",
-      "chainNote": "Same bronze as cuirass but shaped into leg protection",
-      "size": 64,
-      "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
-    },
-    {
-      "id": "bronze_boots",
-      "object": "Bronze-reinforced leather boots",
-      "description": "Heavy leather boots with bronze plates riveted at the toe and heel. Dark leather upper with golden-brown bronze reinforcement. The most substantial footwear in the game.",
-      "use": "Equipment feet slot, Tier 2 footwear",
-      "theme": "metal",
-      "category": "equipment_armor",
-      "chain": "equipment_t2_armor",
-      "chainRole": "derived",
-      "chainNote": "Leather boots reinforced with same bronze as the rest of the armor set",
       "size": 64,
       "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
     },
