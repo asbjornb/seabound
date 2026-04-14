@@ -485,7 +485,6 @@ export const RECIPES: RecipeDef[] = [
       "Stake a large bamboo frame into the ground for weaving broad pandanus mats and sails. A real loom.",
     skillId: "weaving",
     panel: "build",
-    requiredSkillLevel: 7,
     inputs: [
       { resourceId: "bamboo_cane", amount: 6 },
       { resourceId: "rope", amount: 2 },

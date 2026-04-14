@@ -715,12 +715,6 @@
       "category": "weaving"
     },
     {
-      "id": "skill:weaving:7",
-      "type": "skill_level",
-      "label": "Weaving Lv7",
-      "category": "weaving"
-    },
-    {
       "id": "skill:weaving:3",
       "type": "skill_level",
       "label": "Weaving Lv3",
@@ -2799,11 +2793,6 @@
       "from": "recipe:build_weaving_frame",
       "to": "skill:weaving",
       "relation": "trains"
-    },
-    {
-      "from": "skill:weaving:7",
-      "to": "recipe:build_weaving_frame",
-      "relation": "requires_skill"
     },
     {
       "from": "building:fiber_loom",
@@ -7285,26 +7274,6 @@
           "level": 5,
           "unlocks": [
             "recipe:craft_basket_trap"
-          ],
-          "trainedBy": [
-            "recipe:twist_cordage",
-            "recipe:braid_cordage",
-            "recipe:split_retted_pandanus",
-            "recipe:weave_pandanus_cordage",
-            "recipe:twist_rope",
-            "recipe:sew_sail",
-            "recipe:weave_basket",
-            "recipe:craft_basket_trap",
-            "recipe:build_fiber_loom",
-            "recipe:build_weaving_frame",
-            "recipe:weave_fiber_vest",
-            "station:soak_pandanus"
-          ]
-        },
-        {
-          "level": 7,
-          "unlocks": [
-            "recipe:build_weaving_frame"
           ],
           "trainedBy": [
             "recipe:twist_cordage",
