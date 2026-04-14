@@ -189,7 +189,7 @@ export function processTick(state: GameState, now: number): TickResult {
         remaining -= effectiveCraftDuration;
         const event = applyCraftCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
         if (event) completions.push(event);
-        if (isOutputFull(state)) {
+        if (def.output && isRecipeOutputBlocked(state, def.output.resourceId, effectiveInputs)) {
           unusedMs = remaining;
           state.currentAction = null;
           break;
