@@ -18,6 +18,7 @@ import { TOOLS } from "../src/data/tools";
 import { SKILLS } from "../src/data/skills";
 import { BUILDINGS } from "../src/data/buildings";
 import { BIOMES } from "../src/data/biomes";
+import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
 
 const isCheck = process.argv.includes("--check");
 
@@ -51,6 +52,7 @@ for (const id of Object.keys(TOOLS)) referencedIds.add(id);
 for (const id of Object.keys(SKILLS)) referencedIds.add(`skill_${id}`);
 for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
+for (const exp of [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS]) referencedIds.add(exp.id);
 for (const id of TAB_ICON_IDS) referencedIds.add(id);
 
 // Find missing
