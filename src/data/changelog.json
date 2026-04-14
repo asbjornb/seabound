@@ -7,14 +7,13 @@
     {
       "date": "2026-04-14",
       "changes": [
+        "Add Cartographer's Table building and charting stations — a non-combat path to discover mining biomes (5% progress per collection, ~20 collections each, 10% faster navigation expeditions)",
         "Fix PWA update banner: improve tap responsiveness on iOS and keep it visible when scrolling"
       ]
     },
     {
       "date": "2026-04-13",
       "changes": [
-        "Add non-combat scouting expeditions (Scout the Mainland Coastline, Chart the River Network) as slow, expensive alternative paths to discover Coastal Cliffs and Inland Hills without fighting",
-        "Add Cartographer's Table building and charting stations — a passive set-wait-collect path to discover mining biomes without combat",
         "Add offline support — game loads instantly from cache after first visit, with PWA install option for mobile home screen",
         "Self-host fonts (Inter and Cinzel) for faster offline loading",
         "Remove rare loot drops from expeditions — expeditions now only produce useful materials",
