@@ -61,17 +61,22 @@ export function StationsPanel({
     [state.stations, onCollect, onFlyup, RESOURCES]
   );
 
-  // Active stations with their defs
-  const activeStations = state.stations.map((placed, index) => {
-    const def = getStationById(placed.stationId);
-    const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
-    const isReady = now >= readyAt;
-    const remaining = readyAt - now;
-    const progress = def
-      ? Math.min(1, (now - placed.deployedAt) / def.durationMs)
-      : 1;
-    return { placed, def, index, isReady, remaining, progress };
-  });
+  // Active stations with their defs (exclude chart stations whose biome is already discovered)
+  const activeStations = state.stations
+    .map((placed, index) => {
+      const def = getStationById(placed.stationId);
+      const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
+      const isReady = now >= readyAt;
+      const remaining = readyAt - now;
+      const progress = def
+        ? Math.min(1, (now - placed.deployedAt) / def.durationMs)
+        : 1;
+      return { placed, def, index, isReady, remaining, progress };
+    })
+    .filter(({ def }) => {
+      if (!def?.chartBiome) return true;
+      return !state.discoveredBiomes.includes(def.chartBiome);
+    });
 
   // Ready stations first, then by remaining time ascending
   const sortedActiveStations = [...activeStations].sort((a, b) => {

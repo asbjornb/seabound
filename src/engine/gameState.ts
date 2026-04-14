@@ -381,6 +381,15 @@ export function normalizeGameState(raw: unknown): GameState | null {
       loaded.discoveredBiomes.push(biomeId);
     }
   }
+  // Migration: remove deployed chart stations whose biome is already discovered
+  if (loaded.stations?.length > 0) {
+    const stationDefs = new Map(getStations().map((s: StationDef) => [s.id, s]));
+    loaded.stations = loaded.stations.filter((placed: { stationId: string }) => {
+      const def = stationDefs.get(placed.stationId);
+      if (def?.chartBiome && loaded.discoveredBiomes.includes(def.chartBiome)) return false;
+      return true;
+    });
+  }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {
     const count = loaded.resources["corroded_medallion"];
