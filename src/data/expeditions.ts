@@ -661,14 +661,14 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     ],
     equipmentDrops: [
       {
-        defId: "bronze_greaves",
-        chance: 0.06,
+        defId: "bronze_shield",
+        chance: 0.04,
         dropsAsBroken: true,
         affixRange: { min: 2, max: 3 },
       },
       {
-        defId: "bronze_shield",
-        chance: 0.04,
+        defId: "bronze_cuirass",
+        chance: 0.05,
         dropsAsBroken: true,
         affixRange: { min: 2, max: 3 },
       },

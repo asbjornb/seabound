@@ -1203,7 +1203,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "cook_taro",
     name: "Cook Taro",
-    description: "Boil taro root until soft and safe to eat. A hearty staple.",
+    description: "Roast taro root until soft and safe to eat. A hearty staple.",
     skillId: "cooking",
     panel: "craft",
     requiredSkillLevel: 5,
@@ -1301,17 +1301,36 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 20,
   },
 
+  // Era 1b: Tin smelting
+  {
+    id: "smelt_tin",
+    name: "Smelt Tin",
+    description: "Melt tin ore in the crucible to produce a pure tin ingot.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "tin_ore", amount: 2 },
+      { resourceId: "charcoal", amount: 2 },
+    ],
+    output: { resourceId: "tin_ingot", amount: 1 },
+    requiredTools: ["crucible"],
+    requiredBuildings: ["kiln"],
+    durationMs: 10000,
+    repeatable: true,
+    xpGain: 18,
+  },
+
   // Era 2: Bronze
   {
     id: "smelt_bronze",
     name: "Smelt Bronze",
-    description: "Combine copper and tin in the crucible to forge a superior alloy.",
+    description: "Alloy copper and tin ingots in the crucible to forge a superior metal.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
       { resourceId: "copper_ingot", amount: 1 },
-      { resourceId: "tin_ore", amount: 2 },
-      { resourceId: "charcoal", amount: 3 },
+      { resourceId: "tin_ingot", amount: 1 },
+      { resourceId: "charcoal", amount: 2 },
     ],
     output: { resourceId: "bronze_ingot", amount: 1 },
     requiredTools: ["crucible"],
@@ -1534,7 +1553,7 @@ export const RECIPES: RecipeDef[] = [
     id: "cure_raw_hide",
     name: "Cure Raw Hide",
     description: "Smoke-cure raw hides over the kiln until supple and tough. Essential for proper armor.",
-    skillId: "smithing",
+    skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "raw_hide", amount: 2 },
@@ -1549,7 +1568,7 @@ export const RECIPES: RecipeDef[] = [
     id: "stitch_hide_armor",
     name: "Stitch Hide Armor",
     description: "Cut and stitch cured leather into a proper chest piece. The first real armor.",
-    skillId: "smithing",
+    skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "cured_leather", amount: 3 },
@@ -1564,7 +1583,7 @@ export const RECIPES: RecipeDef[] = [
     id: "stitch_hide_cap",
     name: "Stitch Hide Cap",
     description: "Shape and stitch cured leather into a fitted cap.",
-    skillId: "smithing",
+    skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "cured_leather", amount: 1 },
@@ -1580,7 +1599,7 @@ export const RECIPES: RecipeDef[] = [
     id: "stitch_hide_leggings",
     name: "Stitch Hide Leggings",
     description: "Cut and stitch leather panels into leggings. Good mobility with decent protection.",
-    skillId: "smithing",
+    skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "cured_leather", amount: 2 },
@@ -1596,7 +1615,7 @@ export const RECIPES: RecipeDef[] = [
     id: "stitch_hide_boots",
     name: "Stitch Hide Boots",
     description: "Sole and stitch sturdy leather boots. Ankle support for rough mainland terrain.",
-    skillId: "smithing",
+    skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "cured_leather", amount: 2 },
@@ -1674,38 +1693,6 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 22000,
     repeatable: false,
     xpGain: 60,
-  },
-  {
-    id: "forge_bronze_greaves",
-    name: "Forge Bronze Greaves",
-    description: "Beat bronze into shin guards. Protects the legs on rough marches.",
-    skillId: "smithing",
-    panel: "craft",
-    inputs: [
-      { resourceId: "bronze_ingot", amount: 2 },
-      { resourceId: "dried_fiber", amount: 2 },
-      { resourceId: "cordage", amount: 1 },
-    ],
-    equipmentOutput: "bronze_greaves",
-    durationMs: 16000,
-    repeatable: false,
-    xpGain: 45,
-  },
-  {
-    id: "forge_bronze_boots",
-    name: "Forge Bronze-Shod Boots",
-    description: "Reinforce leather boots with bronze plates at the toe and heel.",
-    skillId: "smithing",
-    panel: "craft",
-    inputs: [
-      { resourceId: "bronze_ingot", amount: 2 },
-      { resourceId: "dried_fiber", amount: 3 },
-      { resourceId: "cordage", amount: 1 },
-    ],
-    equipmentOutput: "bronze_boots",
-    durationMs: 16000,
-    repeatable: false,
-    xpGain: 45,
   },
 
   // ── Tier 3: Iron-Era Equipment ──
@@ -1813,7 +1800,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_steel_sword",
     name: "Forge Steel Sword",
-    description: "Carburize and fold steel into a razor-sharp blade. The finest weapon a castaway could dream of.",
+    description: "Carburize steel into a razor-sharp blade. The finest weapon a castaway could dream of.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
@@ -1829,7 +1816,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_steel_shield",
     name: "Forge Steel Shield",
-    description: "Hammer a kite shield from polished steel. Near-impenetrable and perfectly balanced.",
+    description: "Hammer a broad shield from polished steel. Near-impenetrable and perfectly balanced.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
@@ -1927,6 +1914,25 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 50,
   },
 
+  // Bellows tool (required for bloomery)
+  {
+    id: "craft_bellows",
+    name: "Bellows",
+    description:
+      "Stitch cured leather over a bamboo frame to pump air into the furnace. Essential for reaching iron-smelting temperatures.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [
+      { resourceId: "cured_leather", amount: 2 },
+      { resourceId: "bamboo_cane", amount: 2 },
+      { resourceId: "cordage", amount: 1 },
+    ],
+    toolOutput: "bellows",
+    durationMs: 10000,
+    oneTimeCraft: true,
+    xpGain: 30,
+  },
+
   // Bloomery building recipe
   {
     id: "build_bloomery",
@@ -1935,6 +1941,7 @@ export const RECIPES: RecipeDef[] = [
     skillId: "smithing",
     panel: "build",
     requiredSkills: [{ skillId: "construction", level: 10 }],
+    requiredTools: ["bellows"],
     inputs: [
       { resourceId: "clay", amount: 15 },
       { resourceId: "flat_stone", amount: 10 },

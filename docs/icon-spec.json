@@ -2206,32 +2206,6 @@
       "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
     },
     {
-      "id": "bronze_greaves",
-      "object": "Bronze shin guards",
-      "description": "A pair of curved bronze shin guards shaped to the lower leg. Golden-brown metal with slightly darker edges. Straps visible on the back side. Matched set feel with the helm and cuirass.",
-      "use": "Equipment legs slot, Tier 2 leg armor",
-      "theme": "metal",
-      "category": "equipment_armor",
-      "chain": "equipment_t2_armor",
-      "chainRole": "derived",
-      "chainNote": "Same bronze as cuirass but shaped into leg protection",
-      "size": 64,
-      "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
-    },
-    {
-      "id": "bronze_boots",
-      "object": "Bronze-reinforced leather boots",
-      "description": "Heavy leather boots with bronze plates riveted at the toe and heel. Dark leather upper with golden-brown bronze reinforcement. The most substantial footwear in the game.",
-      "use": "Equipment feet slot, Tier 2 footwear",
-      "theme": "metal",
-      "category": "equipment_armor",
-      "chain": "equipment_t2_armor",
-      "chainRole": "derived",
-      "chainNote": "Leather boots reinforced with same bronze as the rest of the armor set",
-      "size": 64,
-      "tags": ["mainland", "equipment", "armor", "tier2", "bronze"]
-    },
-    {
       "id": "iron_sword",
       "object": "Double-edged iron sword",
       "description": "A straight double-edged iron blade with a leather-wrapped grip. Dark grey metal with a slight bluish sheen. Longer and harder than bronze — a serious weapon. Simple crossguard.",

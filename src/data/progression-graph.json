@@ -315,6 +315,12 @@
       "category": "metal,mainland"
     },
     {
+      "id": "resource:tin_ingot",
+      "type": "resource",
+      "label": "Tin Ingot",
+      "category": "metal,mainland"
+    },
+    {
       "id": "resource:tin_ore",
       "type": "resource",
       "label": "Tin Ore",
@@ -1388,6 +1394,12 @@
       "category": "smithing"
     },
     {
+      "id": "recipe:smelt_tin",
+      "type": "recipe",
+      "label": "Smelt Tin",
+      "category": "smithing"
+    },
+    {
       "id": "recipe:smelt_bronze",
       "type": "recipe",
       "label": "Smelt Bronze",
@@ -1469,31 +1481,31 @@
       "id": "recipe:cure_raw_hide",
       "type": "recipe",
       "label": "Cure Raw Hide",
-      "category": "smithing"
+      "category": "crafting"
     },
     {
       "id": "recipe:stitch_hide_armor",
       "type": "recipe",
       "label": "Stitch Hide Armor",
-      "category": "smithing"
+      "category": "crafting"
     },
     {
       "id": "recipe:stitch_hide_cap",
       "type": "recipe",
       "label": "Stitch Hide Cap",
-      "category": "smithing"
+      "category": "crafting"
     },
     {
       "id": "recipe:stitch_hide_leggings",
       "type": "recipe",
       "label": "Stitch Hide Leggings",
-      "category": "smithing"
+      "category": "crafting"
     },
     {
       "id": "recipe:stitch_hide_boots",
       "type": "recipe",
       "label": "Stitch Hide Boots",
-      "category": "smithing"
+      "category": "crafting"
     },
     {
       "id": "recipe:forge_bronze_sword",
@@ -1517,18 +1529,6 @@
       "id": "recipe:forge_bronze_cuirass",
       "type": "recipe",
       "label": "Forge Bronze Cuirass",
-      "category": "smithing"
-    },
-    {
-      "id": "recipe:forge_bronze_greaves",
-      "type": "recipe",
-      "label": "Forge Bronze Greaves",
-      "category": "smithing"
-    },
-    {
-      "id": "recipe:forge_bronze_boots",
-      "type": "recipe",
-      "label": "Forge Bronze-Shod Boots",
       "category": "smithing"
     },
     {
@@ -1608,6 +1608,12 @@
       "type": "recipe",
       "label": "Cartographer's Table",
       "category": "construction"
+    },
+    {
+      "id": "recipe:craft_bellows",
+      "type": "recipe",
+      "label": "Bellows",
+      "category": "crafting"
     },
     {
       "id": "recipe:build_bloomery",
@@ -4174,6 +4180,36 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:smelt_tin",
+      "to": "resource:tin_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:tin_ore",
+      "to": "recipe:smelt_tin",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:smelt_tin",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:smelt_tin",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:crucible",
+      "to": "recipe:smelt_tin",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:smelt_tin",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:smelt_bronze",
       "to": "resource:bronze_ingot",
       "relation": "produces"
@@ -4184,7 +4220,7 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:tin_ore",
+      "from": "resource:tin_ingot",
       "to": "recipe:smelt_bronze",
       "relation": "consumes"
     },
@@ -4505,7 +4541,7 @@
     },
     {
       "from": "recipe:cure_raw_hide",
-      "to": "skill:smithing",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -4525,7 +4561,7 @@
     },
     {
       "from": "recipe:stitch_hide_armor",
-      "to": "skill:smithing",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -4545,7 +4581,7 @@
     },
     {
       "from": "recipe:stitch_hide_cap",
-      "to": "skill:smithing",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -4565,7 +4601,7 @@
     },
     {
       "from": "recipe:stitch_hide_leggings",
-      "to": "skill:smithing",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -4585,7 +4621,7 @@
     },
     {
       "from": "recipe:stitch_hide_boots",
-      "to": "skill:smithing",
+      "to": "skill:crafting",
       "relation": "trains"
     },
     {
@@ -4660,46 +4696,6 @@
     },
     {
       "from": "recipe:forge_bronze_cuirass",
-      "to": "skill:smithing",
-      "relation": "trains"
-    },
-    {
-      "from": "resource:bronze_ingot",
-      "to": "recipe:forge_bronze_greaves",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:dried_fiber",
-      "to": "recipe:forge_bronze_greaves",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cordage",
-      "to": "recipe:forge_bronze_greaves",
-      "relation": "consumes"
-    },
-    {
-      "from": "recipe:forge_bronze_greaves",
-      "to": "skill:smithing",
-      "relation": "trains"
-    },
-    {
-      "from": "resource:bronze_ingot",
-      "to": "recipe:forge_bronze_boots",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:dried_fiber",
-      "to": "recipe:forge_bronze_boots",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:cordage",
-      "to": "recipe:forge_bronze_boots",
-      "relation": "consumes"
-    },
-    {
-      "from": "recipe:forge_bronze_boots",
       "to": "skill:smithing",
       "relation": "trains"
     },
@@ -4969,6 +4965,31 @@
       "relation": "requires_skill"
     },
     {
+      "from": "recipe:craft_bellows",
+      "to": "tool:bellows",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:craft_bellows",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_bellows",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_bellows",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_bellows",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
       "from": "recipe:build_bloomery",
       "to": "building:bloomery",
       "relation": "builds"
@@ -5002,6 +5023,11 @@
       "from": "skill:construction:10",
       "to": "recipe:build_bloomery",
       "relation": "requires_skill"
+    },
+    {
+      "from": "tool:bellows",
+      "to": "recipe:build_bloomery",
+      "relation": "requires_tool"
     },
     {
       "from": "tool:bamboo_knife",
@@ -7184,7 +7210,13 @@
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
             "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_bamboo_sandals",
+            "recipe:cure_raw_hide",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:craft_bellows"
           ]
         },
         {
@@ -7222,7 +7254,13 @@
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
             "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_bamboo_sandals",
+            "recipe:cure_raw_hide",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:craft_bellows"
           ]
         },
         {
@@ -7260,7 +7298,13 @@
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
             "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_bamboo_sandals",
+            "recipe:cure_raw_hide",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:craft_bellows"
           ]
         },
         {
@@ -7298,7 +7342,13 @@
             "recipe:craft_fire_hardened_spear",
             "recipe:craft_stone_club",
             "recipe:craft_obsidian_dagger",
-            "recipe:craft_bamboo_sandals"
+            "recipe:craft_bamboo_sandals",
+            "recipe:cure_raw_hide",
+            "recipe:stitch_hide_armor",
+            "recipe:stitch_hide_cap",
+            "recipe:stitch_hide_leggings",
+            "recipe:stitch_hide_boots",
+            "recipe:craft_bellows"
           ]
         }
       ],
