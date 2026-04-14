@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "b43e5624f3733ca833de88861276935631b39340"
+    "newestReviewed": "6e6451e388cba03dfa976a30370f1fb5d2f01d81"
   },
   "entries": [
+    {
+      "date": "2026-04-14",
+      "changes": [
+        "Save recipe category and action card collapse/fold state to persist across page refreshes"
+      ]
+    },
     {
       "date": "2026-04-14",
       "changes": [
