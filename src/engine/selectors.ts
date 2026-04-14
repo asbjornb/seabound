@@ -195,8 +195,11 @@ export function selectAvailableStations(state: GameState): StationDef[] {
     if (station.requiredTool && !hasTool(state, station.requiredTool)) return false;
     if (station.requiredBuildings?.some((buildingId) => !state.buildings.includes(buildingId))) return false;
     if (station.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
-    // Hide charting stations once the target biome is discovered
-    if (station.chartBiome && state.discoveredBiomes.includes(station.chartBiome)) return false;
+    // Hide charting stations once the target biome is discovered or fully charted
+    if (station.chartBiome && (
+      state.discoveredBiomes.includes(station.chartBiome) ||
+      (state.chartProgress[station.chartBiome] ?? 0) >= 1
+    )) return false;
     // Hide stations whose setup inputs haven't been discovered yet
     if (station.setupInputs?.some((input) => !state.discoveredResources.includes(input.resourceId))) return false;
     // For stations with maxDeployedPerBuildings, check that at least one applicable building exists
@@ -217,6 +220,11 @@ export function selectLockedStations(state: GameState): StationDef[] {
   const availableIds = new Set(available.map((s) => s.id));
   return getStations().filter((station) => {
     if (availableIds.has(station.id)) return false;
+    // Hide charting stations once the target biome is discovered or fully charted
+    if (station.chartBiome && (
+      state.discoveredBiomes.includes(station.chartBiome) ||
+      (state.chartProgress[station.chartBiome] ?? 0) >= 1
+    )) return false;
     // Only show if locked specifically by skill level
     const skill = state.skills[station.skillId];
     if (!station.requiredSkillLevel || skill.level >= station.requiredSkillLevel) return false;

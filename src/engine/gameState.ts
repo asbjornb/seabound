@@ -375,6 +375,12 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (!loaded.chartProgress) {
     loaded.chartProgress = {};
   }
+  // Migration: fix inconsistent chart state — if chartProgress >= 1 but biome not discovered
+  for (const [biomeId, progress] of Object.entries(loaded.chartProgress)) {
+    if (progress >= 1 && !loaded.discoveredBiomes.includes(biomeId)) {
+      loaded.discoveredBiomes.push(biomeId);
+    }
+  }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {
     const count = loaded.resources["corroded_medallion"];
