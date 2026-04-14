@@ -16,8 +16,12 @@ interface Props {
 }
 
 export function ActionPanel({ actions, state, onStart, currentActionId, queueMode }: Props) {
-  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
-  const [foldedCards, setFoldedCards] = useState<Set<string>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(() => {
+    try { const v = localStorage.getItem("sb_action_collapsed"); return v ? new Set(JSON.parse(v)) : new Set(); } catch { return new Set(); }
+  });
+  const [foldedCards, setFoldedCards] = useState<Set<string>>(() => {
+    try { const v = localStorage.getItem("sb_action_folded"); return v ? new Set(JSON.parse(v)) : new Set(); } catch { return new Set(); }
+  });
 
   const BIOME_ORDER = getBiomeOrder();
   const RESOURCES = getResources();
@@ -36,6 +40,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
       const next = new Set(prev);
       if (next.has(biomeId)) next.delete(biomeId);
       else next.add(biomeId);
+      try { localStorage.setItem("sb_action_collapsed", JSON.stringify([...next])); } catch { /* */ }
       return next;
     });
   };
@@ -46,6 +51,7 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
+      try { localStorage.setItem("sb_action_folded", JSON.stringify([...next])); } catch { /* */ }
       return next;
     });
   };
