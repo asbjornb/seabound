@@ -715,7 +715,7 @@ function applyExpeditionCompletion(
     // Combat grade affects loot drops on mainland expeditions
     let lootGradeMult = 1;
     if (encounter) {
-      if (encounter.grade === "failure") lootGradeMult = 0.15;
+      if (encounter.grade === "failure") lootGradeMult = 0;
       else if (encounter.grade === "partial") lootGradeMult = 0.5;
     }
 

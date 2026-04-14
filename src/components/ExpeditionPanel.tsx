@@ -202,10 +202,16 @@ function LoadoutPreview({ state, exp }: { state: GameState; exp: ExpeditionDef }
       </div>
 
       {/* Grade distribution bar */}
-      <div className="combat-grade-bar" style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
-        {grades.success > 0 && <div style={{ width: `${grades.success * 100}%`, background: "#2ecc71" }} title={`Success: ${Math.round(grades.success * 100)}%`} />}
-        {grades.partial > 0 && <div style={{ width: `${grades.partial * 100}%`, background: "#f0c040" }} title={`Partial: ${Math.round(grades.partial * 100)}%`} />}
-        {grades.failure > 0 && <div style={{ width: `${grades.failure * 100}%`, background: "#e74c3c" }} title={`Failure: ${Math.round(grades.failure * 100)}%`} />}
+      <div className="combat-grade-bar" style={{ display: "flex", height: 6, borderRadius: 3, overflow: "hidden", marginBottom: 4 }}>
+        {grades.success > 0 && <div style={{ width: `${grades.success * 100}%`, background: "#2ecc71" }} />}
+        {grades.partial > 0 && <div style={{ width: `${grades.partial * 100}%`, background: "#f0c040" }} />}
+        {grades.failure > 0 && <div style={{ width: `${grades.failure * 100}%`, background: "#e74c3c" }} />}
+      </div>
+      {/* Grade legend */}
+      <div className="combat-grade-legend">
+        {grades.success > 0 && <span><span className="grade-dot" style={{ background: "#2ecc71" }} />{Math.round(grades.success * 100)}% full loot</span>}
+        {grades.partial > 0 && <span><span className="grade-dot" style={{ background: "#f0c040" }} />{Math.round(grades.partial * 100)}% half loot</span>}
+        {grades.failure > 0 && <span><span className="grade-dot" style={{ background: "#e74c3c" }} />{Math.round(grades.failure * 100)}% no rare loot</span>}
       </div>
 
       {/* Enemy info */}
