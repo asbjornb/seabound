@@ -1,9 +1,16 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "085f439c0e762fe4d980140e8f1f2fac0cca3772"
+    "newestReviewed": "b43e5624f3733ca833de88861276935631b39340"
   },
   "entries": [
+    {
+      "date": "2026-04-14",
+      "changes": [
+        "Remove 'Scout the Mainland Coastline' expedition",
+        "Remove 'Chart the River Network' expedition"
+      ]
+    },
     {
       "date": "2026-04-14",
       "changes": [
