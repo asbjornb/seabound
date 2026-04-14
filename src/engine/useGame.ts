@@ -346,6 +346,12 @@ function processCompletionDiscoveries(
         addDiscovery(state, "equipment", `Found ${eq.name}${condLabel}!`);
       }
     }
+    // One-time tip when the player first receives any equipment
+    addAmbientLoreNote(
+      state,
+      "tip_first_equipment",
+      "Equipment found! Check the Equipment tab to equip gear. Gear degrades in combat — broken items lose all stats."
+    );
   }
   // Generate detailed combat log entry for mainland expeditions
   if (c.encounterResult) {
@@ -579,6 +585,16 @@ export function useGame() {
         }
 
         if (totalCompletions > 0) checkMilestones(next);
+
+        // One-time tip when morale first drops below 80
+        if (next.morale < 80) {
+          addAmbientLoreNote(
+            next,
+            "tip_morale_low",
+            "Morale is dropping — actions slow down as spirits fall. Build comfort items like a sleeping mat to slow the decline."
+          );
+        }
+
         return next;
       });
     }
@@ -632,6 +648,16 @@ export function useGame() {
         }
 
         if (totalCompletions > 0) checkMilestones(next);
+
+        // One-time tip when morale first drops below 80
+        if (next.morale < 80) {
+          addAmbientLoreNote(
+            next,
+            "tip_morale_low",
+            "Morale is dropping — actions slow down as spirits fall. Build comfort items like a sleeping mat to slow the decline."
+          );
+        }
+
         return next;
       });
     }, TICK_INTERVAL_MS);
