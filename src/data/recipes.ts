@@ -484,15 +484,14 @@ export const RECIPES: RecipeDef[] = [
   // ═══════════════════════════════════════
   {
     id: "build_raft",
-    name: "Lash Log Raft",
+    name: "Lash Bamboo Raft",
     description:
-      "Lash driftwood logs and bamboo together into a raft. Enough to reach nearby islands.",
+      "Lash bamboo canes together into a buoyant raft. Enough to reach nearby islands.",
     skillId: "construction",
     panel: "craft",
     inputs: [
-      { resourceId: "driftwood_branch", amount: 6 },
+      { resourceId: "bamboo_cane", amount: 8 },
       { resourceId: "cordage", amount: 8 },
-      { resourceId: "bamboo_cane", amount: 4 },
     ],
     buildingOutput: "raft",
     durationMs: 20000,
@@ -949,7 +948,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "fire_clay_pot",
     name: "Fire Clay Pot",
-    description: "Fire a shaped pot in the firing pit. About 1 in 7 crack from uneven heat.",
+    description: "Fire a shaped pot in the firing pit. About 1 in 3 crack from the uneven heat of an open pit.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
@@ -958,7 +957,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
-    outputChance: 0.85,
+    outputChance: 0.70,
     requiredBuildings: ["firing_pit"],
     durationMs: 8000,
     repeatable: true,
@@ -968,7 +967,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "kiln_fire_pot",
     name: "Kiln-Fire Pot",
-    description: "Fire pots in the enclosed kiln. Even heat means fewer cracks.",
+    description: "Fire pots in the enclosed kiln. Even heat — only about 1 in 10 crack.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
@@ -976,7 +975,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
     ],
     output: { resourceId: "fired_clay_pot", amount: 1 },
-    outputChance: 0.85,
+    outputChance: 0.90,
     requiredBuildings: ["kiln"],
     durationMs: 5000,
     repeatable: true,
@@ -1041,7 +1040,7 @@ export const RECIPES: RecipeDef[] = [
     id: "seal_clay_jar",
     name: "Sealed Clay Jar",
     description:
-      "Coat a fired pot with clay slip and re-fire to create an airtight seal. Preserves food for long voyages.",
+      "Coat a fired pot with clay slip and re-fire at kiln temperatures to vitrify the seal. Airtight — preserves food for long voyages.",
     skillId: "cooking",
     panel: "craft",
     inputs: [
@@ -1051,7 +1050,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "sealed_clay_jar", amount: 1 },
-    requiredBuildings: ["firing_pit"],
+    requiredBuildings: ["kiln"],
     durationMs: 10000,
     repeatable: true,
     xpGain: 30,
@@ -1203,7 +1202,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "cook_taro",
     name: "Cook Taro",
-    description: "Roast taro root until soft and safe to eat. A hearty staple.",
+    description: "Boil taro root in water until soft and safe to eat. Raw taro is toxic — only boiling breaks down the oxalates.",
     skillId: "cooking",
     panel: "craft",
     requiredSkillLevel: 5,
@@ -1213,7 +1212,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "cooked_taro", amount: 2 },
-    requiredBuildings: ["camp_fire"],
+    requiredBuildings: ["camp_fire", "well"],
     durationMs: 5000,
     repeatable: true,
     xpGain: 12,
@@ -1359,7 +1358,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "hammer_iron_bloom",
     name: "Hammer Iron Bloom",
-    description: "Hammer the bloom repeatedly to drive out slag and consolidate the iron.",
+    description: "Reheat and hammer the bloom repeatedly to drive out slag and consolidate the iron.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
@@ -1367,6 +1366,8 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "charcoal", amount: 2 },
     ],
     output: { resourceId: "iron_ingot", amount: 1 },
+    requiredTools: ["hammerstone"],
+    requiredBuildings: ["bloomery"],
     durationMs: 15000,
     repeatable: true,
     xpGain: 60,
@@ -1376,7 +1377,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_steel",
     name: "Forge Steel",
-    description: "Carburize iron with charcoal at extreme heat. Slow, costly, but the metal is unmatched.",
+    description: "Pack iron and charcoal into a sealed crucible and fire it in the bloomery for hours. Slow, costly, but the metal is unmatched.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
@@ -1384,6 +1385,8 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "charcoal", amount: 8 },
     ],
     output: { resourceId: "steel_ingot", amount: 1 },
+    requiredTools: ["crucible"],
+    requiredBuildings: ["bloomery"],
     durationMs: 30000,
     repeatable: true,
     xpGain: 90,
@@ -1552,11 +1555,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "cure_raw_hide",
     name: "Cure Raw Hide",
-    description: "Smoke-cure raw hides over the kiln until supple and tough. Essential for proper armor.",
+    description: "Scrape, tan with coconut-husk tannins, and smoke-cure raw hides into supple, workable leather.",
     skillId: "crafting",
     panel: "craft",
     inputs: [
       { resourceId: "raw_hide", amount: 2 },
+      { resourceId: "coconut_husk", amount: 2 },
       { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
     ],
     output: { resourceId: "cured_leather", amount: 1 },
@@ -1634,12 +1638,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_bronze_sword",
     name: "Forge Bronze Sword",
-    description: "Cast and hammer a leaf-shaped bronze blade. Balanced and sharp — a true weapon.",
+    description: "Cast and hammer a leaf-shaped bronze blade with a wooden grip. Balanced and sharp — a true weapon.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
       { resourceId: "bronze_ingot", amount: 3 },
-      { resourceId: "bamboo_cane", amount: 1 },
+      { resourceId: "driftwood_branch", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
     equipmentOutput: "bronze_sword",
@@ -1701,12 +1705,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_iron_sword",
     name: "Forge Iron Sword",
-    description: "Hammer a double-edged iron blade from wrought iron. Harder and keener than bronze.",
+    description: "Hammer a double-edged iron blade from wrought iron. Leather-wrapped grip. Harder and keener than bronze.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
       { resourceId: "iron_ingot", amount: 3 },
-      { resourceId: "bamboo_cane", amount: 1 },
+      { resourceId: "cured_leather", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
     equipmentOutput: "iron_sword",
@@ -1800,12 +1804,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "forge_steel_sword",
     name: "Forge Steel Sword",
-    description: "Carburize steel into a razor-sharp blade. The finest weapon a castaway could dream of.",
+    description: "Forge a razor-sharp steel blade with a leather-wrapped grip. The finest weapon a castaway could dream of.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
       { resourceId: "steel_ingot", amount: 3 },
-      { resourceId: "bamboo_cane", amount: 1 },
+      { resourceId: "cured_leather", amount: 1 },
       { resourceId: "cordage", amount: 2 },
     ],
     equipmentOutput: "steel_sword",

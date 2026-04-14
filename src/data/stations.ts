@@ -134,7 +134,7 @@ export const STATIONS: StationDef[] = [
     name: "Burn Charcoal",
     description:
       "Seal large logs in the kiln and slow-burn them into charcoal. An ancient technique — the first industrial fuel.",
-    skillId: "cooking",
+    skillId: "woodworking",
     durationMs: 600000, // 10 minutes
     requiredBuildings: ["charcoal_kiln"],
     setupInputs: [{ resourceId: "large_log", amount: 3 }],

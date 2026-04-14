@@ -544,7 +544,7 @@
     {
       "id": "building:raft",
       "type": "building",
-      "label": "Log Raft"
+      "label": "Bamboo Raft"
     },
     {
       "id": "building:dugout",
@@ -1138,7 +1138,7 @@
     {
       "id": "recipe:build_raft",
       "type": "recipe",
-      "label": "Lash Log Raft",
+      "label": "Lash Bamboo Raft",
       "category": "construction"
     },
     {
@@ -1739,7 +1739,7 @@
       "id": "station:burn_charcoal",
       "type": "station",
       "label": "Burn Charcoal",
-      "category": "cooking"
+      "category": "woodworking"
     },
     {
       "id": "station:soak_pandanus",
@@ -2758,17 +2758,12 @@
       "relation": "builds"
     },
     {
-      "from": "resource:driftwood_branch",
+      "from": "resource:bamboo_cane",
       "to": "recipe:build_raft",
       "relation": "consumes"
     },
     {
       "from": "resource:cordage",
-      "to": "recipe:build_raft",
-      "relation": "consumes"
-    },
-    {
-      "from": "resource:bamboo_cane",
       "to": "recipe:build_raft",
       "relation": "consumes"
     },
@@ -3638,7 +3633,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:firing_pit",
+      "from": "building:kiln",
       "to": "recipe:seal_clay_jar",
       "relation": "requires_building"
     },
@@ -3973,6 +3968,11 @@
       "relation": "requires_building"
     },
     {
+      "from": "building:well",
+      "to": "recipe:cook_taro",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:roast_breadfruit",
       "to": "resource:roasted_breadfruit",
       "relation": "produces"
@@ -4273,6 +4273,16 @@
       "relation": "trains"
     },
     {
+      "from": "tool:hammerstone",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:forge_steel",
       "to": "resource:steel_ingot",
       "relation": "produces"
@@ -4291,6 +4301,16 @@
       "from": "recipe:forge_steel",
       "to": "skill:smithing",
       "relation": "trains"
+    },
+    {
+      "from": "tool:crucible",
+      "to": "recipe:forge_steel",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "building:bloomery",
+      "to": "recipe:forge_steel",
+      "relation": "requires_building"
     },
     {
       "from": "resource:bamboo_cane",
@@ -4518,6 +4538,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:coconut_husk",
+      "to": "recipe:cure_raw_hide",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:driftwood_branch",
       "to": "recipe:cure_raw_hide",
       "relation": "consumes"
@@ -4618,7 +4643,7 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:bamboo_cane",
+      "from": "resource:driftwood_branch",
       "to": "recipe:forge_bronze_sword",
       "relation": "consumes"
     },
@@ -4693,7 +4718,7 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:bamboo_cane",
+      "from": "resource:cured_leather",
       "to": "recipe:forge_iron_sword",
       "relation": "consumes"
     },
@@ -4808,7 +4833,7 @@
       "relation": "consumes"
     },
     {
-      "from": "resource:bamboo_cane",
+      "from": "resource:cured_leather",
       "to": "recipe:forge_steel_sword",
       "relation": "consumes"
     },
@@ -6479,7 +6504,7 @@
     },
     {
       "from": "station:burn_charcoal",
-      "to": "skill:cooking",
+      "to": "skill:woodworking",
       "relation": "trains"
     },
     {
@@ -6657,8 +6682,8 @@
       "skill:cooking:3",
       "resource:taro_root",
       "skill:cooking:5",
-      "skill:farming:10",
       "building:well",
+      "skill:farming:10",
       "resource:banana_shoot",
       "resource:breadfruit",
       "skill:cooking:8",
@@ -7667,8 +7692,7 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions",
-            "station:burn_charcoal"
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -7685,8 +7709,7 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions",
-            "station:burn_charcoal"
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -7703,8 +7726,7 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions",
-            "station:burn_charcoal"
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -7721,8 +7743,7 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions",
-            "station:burn_charcoal"
+            "recipe:pack_voyage_provisions"
           ]
         },
         {
@@ -7739,8 +7760,7 @@
             "recipe:cook_root_vegetable",
             "recipe:cook_taro",
             "recipe:roast_breadfruit",
-            "recipe:pack_voyage_provisions",
-            "station:burn_charcoal"
+            "recipe:pack_voyage_provisions"
           ]
         }
       ],
@@ -7814,7 +7834,8 @@
             "recipe:split_bamboo_cane",
             "recipe:char_log_interior",
             "recipe:scrape_hull",
-            "recipe:craft_bamboo_buckler"
+            "recipe:craft_bamboo_buckler",
+            "station:burn_charcoal"
           ]
         }
       ]

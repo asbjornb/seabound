@@ -8,6 +8,7 @@ export const RESOURCES: Record<string, ResourceDef> = {
     description: "A fallen coconut. Food and water source.",
     tags: ["food"],
     foodValue: 1,
+    waterValue: 1,
   },
   coconut_husk: {
     id: "coconut_husk",
