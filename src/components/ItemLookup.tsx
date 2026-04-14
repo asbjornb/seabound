@@ -8,6 +8,7 @@ import {
   getStations,
   getTools,
 } from "../data/registry";
+import { IMBUING_REAGENTS } from "../data/equipment";
 import { GameState } from "../data/types";
 import { GameIcon } from "./GameIcon";
 import { selectAvailableActions, selectAvailableRecipes, selectAvailableExpeditions } from "../engine/selectors";
@@ -96,7 +97,7 @@ export function ItemLookupWithBrowse({
 // ── Data helpers ─────────────────────────────────────────
 
 interface SourceEntry {
-  type: "action" | "recipe" | "expedition" | "station";
+  type: "action" | "recipe" | "expedition" | "station" | "imbue";
   name: string;
   detail: string;
   /** Item IDs referenced (inputs, requirements) — tappable */
@@ -273,6 +274,19 @@ function getUsesFor(itemId: string): SourceEntry[] {
       detail: `Expedition · ${e.skillId}`,
       refs: [],
     });
+  }
+
+  // Imbuing reagents
+  for (const reagent of IMBUING_REAGENTS) {
+    if (reagent.reagentId === itemId) {
+      uses.push({
+        type: "imbue",
+        name: "Imbue Equipment",
+        detail: `${reagent.label} · ${reagent.stat} +${reagent.value} · one per item`,
+        refs: [],
+      });
+      break;
+    }
   }
 
   return uses;
