@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback, useLayoutEffect, useRef } from "react";
 import { getStationInputAmount } from "../data/milestones";
-import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
+import { getBiomes, getBuildings, getResources, getSkills, getStationById } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { canDeploySharedStation, getBuildingCount, getResource, getSharedSlotInfo } from "../engine/gameState";
 import type { FlyupItem } from "./CollectFlyup";
@@ -36,6 +36,7 @@ export function StationsPanel({
   const RESOURCES = getResources();
   const BUILDINGS = getBuildings();
   const SKILLS = getSkills();
+  const BIOMES = getBiomes();
 
   const handleCollect = useCallback(
     (index: number, e: MouseEvent) => {
@@ -150,13 +151,10 @@ export function StationsPanel({
                 {isReady && (
                   <div className="station-collect-hint">Tap to collect</div>
                 )}
-                {def.chartBiome && (
+                {def.chartBiome && !state.discoveredBiomes.includes(def.chartBiome) && (
                   <div style={{ fontStyle: "italic", color: "#f0c040", fontSize: "0.9em", marginTop: 2 }}>
-                    {state.discoveredBiomes.includes(def.chartBiome)
-                      ? "Charted: 100%"
-                      : <>Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
-                        {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}</>
-                    }
+                    Discovering: {BIOMES[def.chartBiome]?.name ?? def.chartBiome} — {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
+                    {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}
                   </div>
                 )}
                 <div className="action-drops">
@@ -240,19 +238,17 @@ export function StationsPanel({
                 </div>
                 <div className="action-desc">{station.description}</div>
                 {station.chartBiome && !state.discoveredBiomes.includes(station.chartBiome) && (
-                  <>
-                    <div className="chart-progress-info">
-                      <span style={{ fontStyle: "italic", color: "#f0c040" }}>
-                        Charted: {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
-                      </span>
-                      <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
-                        <div
-                          className="progress-fill"
-                          style={{ width: `${(state.chartProgress[station.chartBiome] ?? 0) * 100}%` }}
-                        />
-                      </div>
+                  <div className="chart-progress-info">
+                    <span style={{ fontStyle: "italic", color: "#f0c040" }}>
+                      Discovering: {BIOMES[station.chartBiome]?.name ?? station.chartBiome} — {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
+                    </span>
+                    <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${(state.chartProgress[station.chartBiome] ?? 0) * 100}%` }}
+                      />
                     </div>
-                  </>
+                  </div>
                 )}
                 {station.maxDeployedPerBuildings && (
                   <div className="station-building-info">
