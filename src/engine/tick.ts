@@ -84,8 +84,10 @@ export function processTick(state: GameState, now: number): TickResult {
 
   if (!state.currentAction) {
     cleanupObsoleteResources(state);
-    // No action running — skip morale decay so idle players aren't punished
-    return { completions, elapsedMs, unusedMs: 0 };
+    // No action running — return elapsed time as unusedMs so offline/queue
+    // processing can credit it to the next queued action.
+    // Skip morale decay so idle players aren't punished.
+    return { completions, elapsedMs, unusedMs: elapsedMs };
   }
 
   // Guard against clock skew: if startedAt is in the future, reset it to now
