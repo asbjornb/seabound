@@ -170,12 +170,12 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "sew_sail",
     name: "Sew Sail",
-    description: "Stitch pandanus strips into a broad sail. The wind awaits.",
+    description: "Weave pandanus strips into a broad sail on the weaving frame. The wind awaits.",
     skillId: "weaving",
     panel: "craft",
     inputs: [{ resourceId: "pandanus_strip", amount: 50 }],
     output: { resourceId: "sail", amount: 1 },
-    requiredBuildings: ["fiber_loom"],
+    requiredBuildings: ["weaving_frame"],
     durationMs: 30000,
     oneTimeCraft: true,
     xpGain: 60,
@@ -477,6 +477,25 @@ export const RECIPES: RecipeDef[] = [
     requiredSkillLevel: 4,
     durationMs: 10000,
     xpGain: 30,
+  },
+  {
+    id: "build_weaving_frame",
+    name: "Weaving Frame",
+    description:
+      "Stake a large bamboo frame into the ground for weaving broad pandanus mats and sails. A real loom.",
+    skillId: "weaving",
+    panel: "build",
+    requiredSkillLevel: 7,
+    inputs: [
+      { resourceId: "bamboo_cane", amount: 6 },
+      { resourceId: "rope", amount: 2 },
+      { resourceId: "cordage", amount: 4 },
+    ],
+    requiredBuildings: ["fiber_loom"],
+    buildingOutput: "weaving_frame",
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 40,
   },
 
   // ═══════════════════════════════════════
@@ -1358,7 +1377,7 @@ export const RECIPES: RecipeDef[] = [
   {
     id: "hammer_iron_bloom",
     name: "Hammer Iron Bloom",
-    description: "Reheat and hammer the bloom repeatedly to drive out slag and consolidate the iron.",
+    description: "Reheat the bloom in the bloomery, then hammer it on the anvil to drive out slag. Repeat until the iron consolidates.",
     skillId: "smithing",
     panel: "craft",
     inputs: [
@@ -1366,7 +1385,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "charcoal", amount: 2 },
     ],
     output: { resourceId: "iron_ingot", amount: 1 },
-    requiredTools: ["hammerstone"],
+    requiredTools: ["hammerstone", "stone_anvil"],
     requiredBuildings: ["bloomery"],
     durationMs: 15000,
     repeatable: true,
@@ -1916,6 +1935,24 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 15000,
     oneTimeCraft: true,
     xpGain: 50,
+  },
+
+  // Stone Anvil (required for iron/steel hammering)
+  {
+    id: "craft_stone_anvil",
+    name: "Stone Anvil",
+    description:
+      "Shape a heavy flat stone into a broad striking surface. You can't hammer metal without something solid underneath.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [
+      { resourceId: "flat_stone", amount: 4 },
+    ],
+    requiredTools: ["hammerstone"],
+    toolOutput: "stone_anvil",
+    durationMs: 10000,
+    oneTimeCraft: true,
+    xpGain: 25,
   },
 
   // Bellows tool (required for bloomery)

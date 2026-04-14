@@ -542,6 +542,11 @@
       "label": "Fiber Loom"
     },
     {
+      "id": "building:weaving_frame",
+      "type": "building",
+      "label": "Weaving Frame"
+    },
+    {
       "id": "building:raft",
       "type": "building",
       "label": "Bamboo Raft"
@@ -707,6 +712,12 @@
       "id": "skill:weaving:4",
       "type": "skill_level",
       "label": "Weaving Lv4",
+      "category": "weaving"
+    },
+    {
+      "id": "skill:weaving:7",
+      "type": "skill_level",
+      "label": "Weaving Lv7",
       "category": "weaving"
     },
     {
@@ -1133,6 +1144,12 @@
       "id": "recipe:build_fiber_loom",
       "type": "recipe",
       "label": "Fiber Loom",
+      "category": "weaving"
+    },
+    {
+      "id": "recipe:build_weaving_frame",
+      "type": "recipe",
+      "label": "Weaving Frame",
       "category": "weaving"
     },
     {
@@ -1608,6 +1625,12 @@
       "type": "recipe",
       "label": "Cartographer's Table",
       "category": "construction"
+    },
+    {
+      "id": "recipe:craft_stone_anvil",
+      "type": "recipe",
+      "label": "Stone Anvil",
+      "category": "crafting"
     },
     {
       "id": "recipe:craft_bellows",
@@ -2308,7 +2331,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:fiber_loom",
+      "from": "building:weaving_frame",
       "to": "recipe:sew_sail",
       "relation": "requires_building"
     },
@@ -2751,6 +2774,41 @@
       "from": "skill:weaving:4",
       "to": "recipe:build_fiber_loom",
       "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:build_weaving_frame",
+      "to": "building:weaving_frame",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_weaving_frame",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rope",
+      "to": "recipe:build_weaving_frame",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:build_weaving_frame",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_weaving_frame",
+      "to": "skill:weaving",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:weaving:7",
+      "to": "recipe:build_weaving_frame",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "building:fiber_loom",
+      "to": "recipe:build_weaving_frame",
+      "relation": "requires_building"
     },
     {
       "from": "recipe:build_raft",
@@ -4278,6 +4336,11 @@
       "relation": "requires_tool"
     },
     {
+      "from": "tool:stone_anvil",
+      "to": "recipe:hammer_iron_bloom",
+      "relation": "requires_tool"
+    },
+    {
       "from": "building:bloomery",
       "to": "recipe:hammer_iron_bloom",
       "relation": "requires_building"
@@ -4976,6 +5039,26 @@
       "from": "skill:construction:10",
       "to": "recipe:build_cartographers_table",
       "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:craft_stone_anvil",
+      "to": "tool:stone_anvil",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_stone_anvil",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_stone_anvil",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:hammerstone",
+      "to": "recipe:craft_stone_anvil",
+      "relation": "requires_tool"
     },
     {
       "from": "recipe:craft_bellows",
@@ -7017,6 +7100,7 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:craft_stone_anvil",
             "recipe:craft_bellows"
           ]
         },
@@ -7061,6 +7145,7 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:craft_stone_anvil",
             "recipe:craft_bellows"
           ]
         },
@@ -7105,6 +7190,7 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:craft_stone_anvil",
             "recipe:craft_bellows"
           ]
         },
@@ -7149,6 +7235,7 @@
             "recipe:stitch_hide_cap",
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
+            "recipe:craft_stone_anvil",
             "recipe:craft_bellows"
           ]
         }
@@ -7169,6 +7256,7 @@
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
+            "recipe:build_weaving_frame",
             "recipe:weave_fiber_vest",
             "station:soak_pandanus"
           ]
@@ -7188,6 +7276,7 @@
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
+            "recipe:build_weaving_frame",
             "recipe:weave_fiber_vest",
             "station:soak_pandanus"
           ]
@@ -7207,6 +7296,27 @@
             "recipe:weave_basket",
             "recipe:craft_basket_trap",
             "recipe:build_fiber_loom",
+            "recipe:build_weaving_frame",
+            "recipe:weave_fiber_vest",
+            "station:soak_pandanus"
+          ]
+        },
+        {
+          "level": 7,
+          "unlocks": [
+            "recipe:build_weaving_frame"
+          ],
+          "trainedBy": [
+            "recipe:twist_cordage",
+            "recipe:braid_cordage",
+            "recipe:split_retted_pandanus",
+            "recipe:weave_pandanus_cordage",
+            "recipe:twist_rope",
+            "recipe:sew_sail",
+            "recipe:weave_basket",
+            "recipe:craft_basket_trap",
+            "recipe:build_fiber_loom",
+            "recipe:build_weaving_frame",
             "recipe:weave_fiber_vest",
             "station:soak_pandanus"
           ]

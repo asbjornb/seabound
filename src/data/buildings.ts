@@ -60,8 +60,15 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     id: "fiber_loom",
     name: "Fiber Loom",
     description:
-      "A bamboo frame for weaving fiber — cordage, mats, and sails.",
+      "A simple bamboo frame for braiding fibers into cordage more efficiently.",
     unlocks: "Braid cordage (also needs Weaving 5) — better fiber-to-cordage ratio",
+  },
+  weaving_frame: {
+    id: "weaving_frame",
+    name: "Weaving Frame",
+    description:
+      "A large bamboo frame staked into the ground for weaving broad pandanus mats. Much wider than the cordage loom.",
+    unlocks: "Sew sail — weave pandanus strips into an ocean-going sail",
   },
   raft: {
     id: "raft",
