@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { IMBUING_REAGENTS } from "../data/equipment";
 import { getEquipmentSlots, getEquipmentItemById, getAffixById, getRepairRecipes, getSalvageTables, getResources, getItemDisplayName } from "../data/registry";
-import { EquipmentItem, GameState, RepairRecipeDef, SalvageTableDef } from "../data/types";
+import { CONDITION_STAT_MULTIPLIER, EquipmentItem, GameState, ItemCondition, RepairRecipeDef, SalvageTableDef } from "../data/types";
 
 type EquipSortKey = "name" | "tier" | "slot";
 
@@ -13,9 +13,9 @@ const EQUIP_SORT_LABELS: Record<EquipSortKey, string> = {
 
 const CONDITION_LABELS: Record<string, string> = {
   pristine: "Pristine",
-  worn: "Worn",
-  damaged: "Damaged",
-  broken: "Broken",
+  worn: "Worn \u2212 20%",
+  damaged: "Damaged \u2212 50%",
+  broken: "Broken \u2212 no stats",
 };
 
 const NEXT_CONDITION_LABEL: Record<string, string> = {
@@ -24,8 +24,33 @@ const NEXT_CONDITION_LABEL: Record<string, string> = {
   worn: "Pristine",
 };
 
-/** Compute total stats (base + affixes) for an equipment item. */
+/** Compute effective stats (base + affixes, scaled by condition). */
 export function computeItemStats(item: EquipmentItem): Record<string, number> {
+  const def = getEquipmentItemById(item.defId);
+  if (!def) return {};
+  const condMult = CONDITION_STAT_MULTIPLIER[item.condition] ?? 0;
+  if (condMult === 0) return {};
+  const stats: Record<string, number> = {};
+  for (const s of def.baseStats) {
+    stats[s.stat] = (stats[s.stat] ?? 0) + Math.round(s.value * condMult);
+  }
+  for (const a of item.affixes) {
+    const affixDef = getAffixById(a.affixId);
+    if (!affixDef) continue;
+    const range = affixDef.rollRange ?? { min: 1, max: 1 };
+    const scale = range.min + a.rollValue * (range.max - range.min);
+    for (const m of affixDef.modifiers) {
+      stats[m.stat] = (stats[m.stat] ?? 0) + Math.round(m.value * scale * condMult);
+    }
+  }
+  if (item.imbued) {
+    stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + Math.round(item.imbued.value * condMult);
+  }
+  return stats;
+}
+
+/** Compute pristine stats (base + affixes, ignoring condition). */
+export function computeItemStatsPristine(item: EquipmentItem): Record<string, number> {
   const def = getEquipmentItemById(item.defId);
   if (!def) return {};
   const stats: Record<string, number> = {};
@@ -41,7 +66,6 @@ export function computeItemStats(item: EquipmentItem): Record<string, number> {
       stats[m.stat] = (stats[m.stat] ?? 0) + Math.round(m.value * scale);
     }
   }
-  // Imbued stat bonus
   if (item.imbued) {
     stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + item.imbued.value;
   }
@@ -190,12 +214,11 @@ export function EquipmentPanel({
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  // Compute total stat bonuses from equipped items (broken items contribute nothing)
+  // Compute total stat bonuses from equipped items (condition-scaled)
   const totalStats = useMemo(() => {
     const stats: Record<string, number> = {};
     for (const item of state.equipmentInventory) {
       if (!equippedIds.has(item.instanceId)) continue;
-      if (item.condition === "broken") continue;
       const itemStats = computeItemStats(item);
       for (const [stat, value] of Object.entries(itemStats)) {
         stats[stat] = (stats[stat] ?? 0) + value;
@@ -212,16 +235,8 @@ export function EquipmentPanel({
     const isEquipped = equippedIds.has(item.instanceId);
     if (isEquipped) return null; // don't compare against yourself
 
-    // Broken items contribute no stats — show a clear message instead of a misleading diff
-    if (item.condition === "broken") {
-      return (
-        <div className="equip-compare">
-          <span className="compare-stat loss">Broken — no stats until repaired</span>
-        </div>
-      );
-    }
-
     const equippedItem = equippedBySlot[def.slot];
+    // computeItemStats already applies condition scaling (broken → {}, worn → 80%, etc.)
     const itemStats = computeItemStats(item);
 
     if (!equippedItem) {
@@ -242,8 +257,7 @@ export function EquipmentPanel({
       );
     }
 
-    // If the equipped item is broken, compare as if the slot is empty
-    const equippedStats = equippedItem.condition === "broken" ? {} : computeItemStats(equippedItem);
+    const equippedStats = computeItemStats(equippedItem);
     const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
     const diffs: { stat: string; diff: number }[] = [];
     for (const stat of allStatKeys) {
@@ -261,7 +275,7 @@ export function EquipmentPanel({
 
     return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}{equippedItem.condition === "broken" ? " (broken)" : ""}:</span>
+        <span className="compare-label">vs. {equippedDisplayName}:</span>
         <div className="compare-stats">
           {diffs.map(({ stat, diff }) => (
             <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
@@ -281,9 +295,10 @@ export function EquipmentPanel({
     const conditionClass = item.condition === "broken" ? " broken" : item.condition === "damaged" ? " damaged" : "";
     const uniqueClass = def.unique ? " unique-item" : "";
 
-    // Compute stats for the inline preview
+    // Compute stats for the inline preview (condition-scaled)
     const itemStats = computeItemStats(item);
     const statEntries = Object.entries(itemStats);
+    const pristineStats = item.condition !== "pristine" ? computeItemStatsPristine(item) : null;
 
     return (
       <div
@@ -317,14 +332,24 @@ export function EquipmentPanel({
             </button>
           </span>
         </div>
-        {/* Inline stat preview — always visible (struck through when broken) */}
-        {statEntries.length > 0 && (
+        {/* Inline stat preview — shows effective stats, with pristine in parens when degraded */}
+        {(statEntries.length > 0 || (item.condition === "broken" && pristineStats && Object.keys(pristineStats).length > 0)) && (
           <div className={`equip-stat-preview${item.condition === "broken" ? " broken-stats" : ""}`}>
-            {statEntries.map(([stat, value]) => (
-              <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}`}>
-                {stat} {formatStat(value)}
-              </span>
-            ))}
+            {item.condition === "broken"
+              ? Object.entries(pristineStats!).map(([stat, value]) => (
+                  <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}`}>
+                    {stat} {formatStat(value)}
+                  </span>
+                ))
+              : statEntries.map(([stat, value]) => {
+                  const full = pristineStats?.[stat];
+                  const isDegraded = full != null && full !== value;
+                  return (
+                    <span key={stat} className={`equip-stat-chip${value < 0 ? " negative" : ""}${isDegraded ? " degraded" : ""}`}>
+                      {stat} {formatStat(value)}{isDegraded ? ` / ${formatStat(full)}` : ""}
+                    </span>
+                  );
+                })}
           </div>
         )}
         {isExpanded && (
@@ -508,12 +533,17 @@ export function EquipmentPanel({
               const RESOURCES = getResources();
               return (
                 <div className="equip-repair-details">
-                  {item.condition === "broken" && (
-                    <span className="repair-hint">Broken items give no stats. Repair to use in combat.</span>
-                  )}
-                  {(item.condition === "worn" || item.condition === "damaged") && (
-                    <span className="repair-hint">Stats unaffected — repair improves salvage yield.</span>
-                  )}
+                  {(() => {
+                    const nextCond = item.condition === "broken" ? "damaged" : item.condition === "damaged" ? "worn" : "pristine";
+                    const currentMult = CONDITION_STAT_MULTIPLIER[item.condition as ItemCondition];
+                    const nextMult = CONDITION_STAT_MULTIPLIER[nextCond as ItemCondition];
+                    const pctGain = Math.round((nextMult - currentMult) * 100);
+                    return (
+                      <span className="repair-hint">
+                        Restores stats to {Math.round(nextMult * 100)}% (+{pctGain}%)
+                      </span>
+                    );
+                  })()}
                   <span className="repair-details-label">Repair to {NEXT_CONDITION_LABEL[item.condition]}:</span>
                   {recipe.inputs.map((inp) => {
                     const rdef = RESOURCES[inp.resourceId];

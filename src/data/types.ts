@@ -165,6 +165,14 @@ export interface AffixDef {
 
 export type ItemCondition = "pristine" | "worn" | "damaged" | "broken";
 
+/** Stat multiplier per condition. Broken items can't be equipped at all. */
+export const CONDITION_STAT_MULTIPLIER: Record<ItemCondition, number> = {
+  pristine: 1.0,
+  worn: 0.8,
+  damaged: 0.5,
+  broken: 0,
+};
+
 export interface EquipmentItemDef {
   id: string;
   name: string;

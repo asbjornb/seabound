@@ -17,6 +17,7 @@
 import { getCombatStatBonuses } from "../data/milestones";
 import { getAffixById, getEquipmentItemById } from "../data/registry";
 import { levelFromXp } from "../data/skills";
+import { CONDITION_STAT_MULTIPLIER } from "../data/types";
 import type { ExpeditionDifficultyProfile, GameState } from "../data/types";
 
 // ═══════════════════════════════════════
@@ -121,13 +122,14 @@ function computeRawLoadoutStats(state: GameState): Record<string, number> {
 
   for (const item of state.equipmentInventory) {
     if (!equippedIds.has(item.instanceId)) continue;
-    if (item.condition === "broken") continue;
+    const condMult = CONDITION_STAT_MULTIPLIER[item.condition] ?? 0;
+    if (condMult === 0) continue;
 
     const def = getEquipmentItemById(item.defId);
     if (!def) continue;
 
     for (const mod of def.baseStats) {
-      stats[mod.stat] = (stats[mod.stat] ?? 0) + mod.value;
+      stats[mod.stat] = (stats[mod.stat] ?? 0) + Math.round(mod.value * condMult);
     }
 
     for (const affix of item.affixes) {
@@ -136,13 +138,13 @@ function computeRawLoadoutStats(state: GameState): Record<string, number> {
       const range = affixDef.rollRange ?? { min: 1, max: 1 };
       const scale = range.min + affix.rollValue * (range.max - range.min);
       for (const mod of affixDef.modifiers) {
-        stats[mod.stat] = (stats[mod.stat] ?? 0) + Math.round(mod.value * scale);
+        stats[mod.stat] = (stats[mod.stat] ?? 0) + Math.round(mod.value * scale * condMult);
       }
     }
 
-    // Imbued stat bonus (one per item, permanent)
+    // Imbued stat bonus (one per item, permanent) — also scaled by condition
     if (item.imbued) {
-      stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + item.imbued.value;
+      stats[item.imbued.stat] = (stats[item.imbued.stat] ?? 0) + Math.round(item.imbued.value * condMult);
     }
   }
 

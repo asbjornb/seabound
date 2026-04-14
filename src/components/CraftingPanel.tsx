@@ -270,8 +270,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
 
                     let comparison: React.ReactNode = null;
                     if (equippedItem) {
-                      // Broken items contribute no stats in combat
-                      const equippedStats = equippedItem.condition === "broken" ? {} : computeItemStats(equippedItem);
+                      const equippedStats = computeItemStats(equippedItem);
                       const allStats = new Set([...Object.keys(baseStats), ...Object.keys(equippedStats)]);
                       const diffs: { stat: string; diff: number }[] = [];
                       for (const stat of allStats) {
