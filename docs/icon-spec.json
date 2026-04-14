@@ -1870,43 +1870,6 @@
       "tags": ["mainland", "biome", "mining"]
     },
     {
-      "id": "terrain_essence",
-      "object": "Shimmering green-brown terrain essence crystal",
-      "description": "A small jagged crystal shard with swirling green and brown hues, faintly glowing. Looks like condensed earth and vegetation energy. Slight translucency with inner shimmer.",
-      "use": "Salvage reagent from terrain-affixed equipment, future affix crafting",
-      "theme": "magic",
-      "category": "resource",
-      "chain": "salvage_reagents",
-      "chainRole": "output",
-      "size": 64,
-      "tags": ["mainland", "reagent", "salvage"]
-    },
-    {
-      "id": "combat_essence",
-      "object": "Glowing red combat essence crystal",
-      "description": "A small jagged crystal shard pulsing with deep red energy. Looks like condensed fighting spirit. Faint inner glow with crimson highlights.",
-      "use": "Salvage reagent from offense/defense/endurance-affixed equipment, future affix crafting",
-      "theme": "magic",
-      "category": "resource",
-      "chain": "salvage_reagents",
-      "chainRole": "output",
-      "size": 64,
-      "tags": ["mainland", "reagent", "salvage"]
-    },
-    {
-      "id": "utility_essence",
-      "object": "Pale blue utility essence crystal",
-      "description": "A small jagged crystal shard with cool blue luminescence. Looks like condensed practical energy. Slight translucency with pale blue inner shimmer.",
-      "use": "Salvage reagent from utility-affixed equipment, future affix crafting",
-      "theme": "magic",
-      "category": "resource",
-      "chain": "salvage_reagents",
-      "chainRole": "output",
-      "size": 64,
-      "tags": ["mainland", "reagent", "salvage"]
-    },
-
-    {
       "id": "ruin_dust",
       "object": "Pile of fine grey-brown ancient stone dust",
       "description": "A small mound of fine powdery dust with faint sparkles, scraped from crumbling ancient stonework. Grey-brown with hints of ochre. A few tiny stone fragments mixed in. Looks dry and old.",

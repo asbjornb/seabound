@@ -993,13 +993,7 @@ export const REPAIR_RECIPES: RepairRecipeDef[] = [
 // Condition affects yield: pristine 100%, worn 75%, damaged 50%, broken 25%.
 // Items with affixes have a chance to also yield affix reagents (one roll per affix).
 
-const AFFIX_REAGENT_OUTPUTS: SalvageTableDef["affixReagentOutputs"] = [
-  { affixFamily: "terrain", resourceId: "terrain_essence", chance: 0.5 },
-  { affixFamily: "offense", resourceId: "combat_essence", chance: 0.5 },
-  { affixFamily: "defense", resourceId: "combat_essence", chance: 0.5 },
-  { affixFamily: "utility", resourceId: "utility_essence", chance: 0.5 },
-  { affixFamily: "endurance", resourceId: "combat_essence", chance: 0.4 },
-];
+const AFFIX_REAGENT_OUTPUTS: SalvageTableDef["affixReagentOutputs"] = [];
 
 export const SALVAGE_TABLES: SalvageTableDef[] = [
   {

@@ -399,24 +399,6 @@
       "category": "reagent,mainland,imbuing"
     },
     {
-      "id": "resource:terrain_essence",
-      "type": "resource",
-      "label": "Terrain Essence",
-      "category": "reagent,mainland"
-    },
-    {
-      "id": "resource:combat_essence",
-      "type": "resource",
-      "label": "Combat Essence",
-      "category": "reagent,mainland"
-    },
-    {
-      "id": "resource:utility_essence",
-      "type": "resource",
-      "label": "Utility Essence",
-      "category": "reagent,mainland"
-    },
-    {
       "id": "tool:bamboo_knife",
       "type": "tool",
       "label": "Bamboo Knife"
@@ -6842,87 +6824,9 @@
       "recipe:build_cleared_plot",
       "skill:construction:3"
     ],
-    "deadEnds": [
-      "resource:ruin_dust",
-      "resource:tidal_salt",
-      "resource:jungle_sap",
-      "resource:quarry_crystal",
-      "resource:ridge_frost",
-      "resource:temple_incense",
-      "resource:volcanic_shard"
-    ],
-    "unreachable": [
-      "resource:terrain_essence",
-      "resource:combat_essence",
-      "resource:utility_essence"
-    ],
-    "warnings": [
-      {
-        "type": "dead_end",
-        "nodeId": "resource:ruin_dust",
-        "message": "Ruin Dust is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:tidal_salt",
-        "message": "Tidal Salt is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:jungle_sap",
-        "message": "Jungle Sap is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:quarry_crystal",
-        "message": "Quarry Crystal is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:ridge_frost",
-        "message": "Ridge Frost is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:temple_incense",
-        "message": "Temple Incense is produced but never used as input"
-      },
-      {
-        "type": "dead_end",
-        "nodeId": "resource:volcanic_shard",
-        "message": "Volcanic Shard is produced but never used as input"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:terrain_essence",
-        "message": "Terrain Essence is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:combat_essence",
-        "message": "Combat Essence is not reachable from beach start"
-      },
-      {
-        "type": "unreachable",
-        "nodeId": "resource:utility_essence",
-        "message": "Utility Essence is not reachable from beach start"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:terrain_essence",
-        "message": "Terrain Essence is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:combat_essence",
-        "message": "Combat Essence is defined but has no production or consumption edges"
-      },
-      {
-        "type": "orphan_resource",
-        "nodeId": "resource:utility_essence",
-        "message": "Utility Essence is defined but has no production or consumption edges"
-      }
-    ],
+    "deadEnds": [],
+    "unreachable": [],
+    "warnings": [],
     "skillGates": {
       "mining": [
         {

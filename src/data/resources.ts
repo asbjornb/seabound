@@ -480,29 +480,4 @@ export const RESOURCES: Record<string, ResourceDef> = {
       "A sliver of glass-sharp volcanic rock that radiates heat. Too hot to hold for long.",
     tags: ["reagent", "mainland", "imbuing"],
   },
-
-  // ── Salvage reagents (affix catalysts) ──
-  // Recovered from salvaging affixed equipment. Used in future affix crafting recipes.
-
-  terrain_essence: {
-    id: "terrain_essence",
-    name: "Terrain Essence",
-    description:
-      "A residue extracted from weather-treated gear. Retains faint elemental properties.",
-    tags: ["reagent", "mainland"],
-  },
-  combat_essence: {
-    id: "combat_essence",
-    name: "Combat Essence",
-    description:
-      "Traces of martial energy drawn from well-honed weaponry and armor.",
-    tags: ["reagent", "mainland"],
-  },
-  utility_essence: {
-    id: "utility_essence",
-    name: "Utility Essence",
-    description:
-      "A versatile compound salvaged from cleverly-engineered gear.",
-    tags: ["reagent", "mainland"],
-  },
 };
