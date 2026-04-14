@@ -1725,6 +1725,19 @@
       "tags": ["mainland", "mineral", "ore"]
     },
     {
+      "id": "tin_ingot",
+      "object": "Smelted tin bar",
+      "description": "A small silvery-white bar of smelted tin with a soft sheen. Slightly uneven surface from hand-casting in a crucible. Lighter in color than copper or iron ingots.",
+      "use": "Inventory, bronze alloying input",
+      "theme": "metal",
+      "category": "ingot",
+      "chain": "bronze",
+      "chainRole": "intermediate",
+      "chainNote": "Smelted from tin ore, alloyed with copper ingot to produce bronze",
+      "size": 64,
+      "tags": ["mainland", "metal", "ingot"]
+    },
+    {
       "id": "bronze_ingot",
       "object": "Bronze alloy bar",
       "description": "A flat bar of golden-brown bronze alloy. Harder and more lustrous than copper, with a warm amber-gold tone. Slight patina beginning at the edges.",
