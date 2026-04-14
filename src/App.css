@@ -2335,6 +2335,13 @@ body {
   background: color-mix(in srgb, var(--error, #e06060) 10%, transparent);
   font-weight: 600;
 }
+.compare-now {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 2px;
+}
 
 /* Consolidated action bar */
 .equip-action-bar {

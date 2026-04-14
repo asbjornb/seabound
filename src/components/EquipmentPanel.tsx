@@ -233,19 +233,19 @@ export function EquipmentPanel({
     const def = getEquipmentItemById(item.defId);
     if (!def) return null;
     const isEquipped = equippedIds.has(item.instanceId);
-    if (isEquipped) return null; // don't compare against yourself
+    if (isEquipped) return null;
 
     const equippedItem = equippedBySlot[def.slot];
-    // computeItemStats already applies condition scaling (broken → {}, worn → 80%, etc.)
-    const itemStats = computeItemStats(item);
+    const itemStatsCurrent = computeItemStats(item);
+    const itemStatsPristine = computeItemStatsPristine(item);
 
     if (!equippedItem) {
-      // No item in slot — show what you'd gain
-      const entries = Object.entries(itemStats);
+      const entries = Object.entries(itemStatsPristine);
       if (entries.length === 0) return null;
+      const isPristine = item.condition === "pristine";
       return (
         <div className="equip-compare">
-          <span className="compare-label">vs. empty slot:</span>
+          <span className="compare-label">vs. empty slot{!isPristine ? " (if repaired)" : ""}:</span>
           <div className="compare-stats">
             {entries.map(([stat, value]) => (
               <span key={stat} className={`compare-stat ${value > 0 ? "gain" : value < 0 ? "loss" : ""}`}>
@@ -253,36 +253,84 @@ export function EquipmentPanel({
               </span>
             ))}
           </div>
+          {!isPristine && (() => {
+            const nowEntries = Object.entries(itemStatsCurrent);
+            if (nowEntries.length === 0) return <span className="compare-now">now: no stats (broken)</span>;
+            return (
+              <span className="compare-now">
+                now: {nowEntries.map(([stat, value]) => `${stat} ${formatStat(value)}`).join(", ")}
+              </span>
+            );
+          })()}
         </div>
       );
     }
 
-    const equippedStats = computeItemStats(equippedItem);
-    const allStatKeys = new Set([...Object.keys(itemStats), ...Object.keys(equippedStats)]);
-    const diffs: { stat: string; diff: number }[] = [];
-    for (const stat of allStatKeys) {
-      const diff = (itemStats[stat] ?? 0) - (equippedStats[stat] ?? 0);
-      if (diff !== 0) diffs.push({ stat, diff });
+    const equippedPristine = computeItemStatsPristine(equippedItem);
+    const equippedCurrent = computeItemStats(equippedItem);
+    const eitherDegraded = item.condition !== "pristine" || equippedItem.condition !== "pristine";
+
+    // Pristine-vs-pristine comparison (the "is this item worth keeping?" answer)
+    const allPristineKeys = new Set([...Object.keys(itemStatsPristine), ...Object.keys(equippedPristine)]);
+    const pristineDiffs: { stat: string; diff: number }[] = [];
+    for (const stat of allPristineKeys) {
+      const diff = (itemStatsPristine[stat] ?? 0) - (equippedPristine[stat] ?? 0);
+      if (diff !== 0) pristineDiffs.push({ stat, diff });
     }
 
-    const equippedDisplayName = equippedItem ? getItemDisplayName(equippedItem) : "equipped";
-    if (diffs.length === 0) return (
-      <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}:</span>
-        <span className="compare-stat">identical stats</span>
-      </div>
-    );
+    // Current-vs-current comparison (the "what happens if I equip this right now?" answer)
+    const allCurrentKeys = new Set([...Object.keys(itemStatsCurrent), ...Object.keys(equippedCurrent)]);
+    const currentDiffs: { stat: string; diff: number }[] = [];
+    for (const stat of allCurrentKeys) {
+      const diff = (itemStatsCurrent[stat] ?? 0) - (equippedCurrent[stat] ?? 0);
+      if (diff !== 0) currentDiffs.push({ stat, diff });
+    }
 
+    const equippedDisplayName = getItemDisplayName(equippedItem);
+
+    // Both pristine — single comparison
+    if (!eitherDegraded) {
+      if (pristineDiffs.length === 0) return (
+        <div className="equip-compare">
+          <span className="compare-label">vs. {equippedDisplayName}:</span>
+          <span className="compare-stat">identical stats</span>
+        </div>
+      );
+      return (
+        <div className="equip-compare">
+          <span className="compare-label">vs. {equippedDisplayName}:</span>
+          <div className="compare-stats">
+            {pristineDiffs.map(({ stat, diff }) => (
+              <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
+                {stat} {diff > 0 ? "+" : ""}{diff}
+              </span>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // At least one item is degraded — show both potential and current
     return (
       <div className="equip-compare">
-        <span className="compare-label">vs. {equippedDisplayName}:</span>
-        <div className="compare-stats">
-          {diffs.map(({ stat, diff }) => (
-            <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
-              {stat} {diff > 0 ? "+" : ""}{diff}
-            </span>
-          ))}
-        </div>
+        <span className="compare-label">vs. {equippedDisplayName} (if repaired):</span>
+        {pristineDiffs.length === 0
+          ? <span className="compare-stat">identical stats</span>
+          : (
+            <div className="compare-stats">
+              {pristineDiffs.map(({ stat, diff }) => (
+                <span key={stat} className={`compare-stat ${diff > 0 ? "gain" : "loss"}`}>
+                  {stat} {diff > 0 ? "+" : ""}{diff}
+                </span>
+              ))}
+            </div>
+          )
+        }
+        <span className="compare-now">
+          now: {currentDiffs.length === 0
+            ? "identical"
+            : currentDiffs.map(({ stat, diff }) => `${stat} ${diff > 0 ? "+" : ""}${diff}`).join(", ")}
+        </span>
       </div>
     );
   };
