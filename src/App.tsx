@@ -483,9 +483,9 @@ export default function App() {
         activeTab={activeTab}
       />
       {updateAvailable && (
-        <div className="update-bar" onClick={applyUpdate}>
+        <button className="update-bar" onClick={applyUpdate}>
           A new version is available — tap to refresh
-        </div>
+        </button>
       )}
       {duplicateTab && (
         <div className="duplicate-tab-bar">
