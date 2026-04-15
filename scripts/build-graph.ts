@@ -351,10 +351,26 @@ for (const e of ALL_EXPEDITIONS) {
     }
   }
 
-  // Loot table drops
+  // Loot table drops (expedition-level)
   if (e.lootTable) {
     for (const loot of e.lootTable) {
       addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
+    }
+  }
+
+  // Staged combat drops (per-stage loot tables and drops)
+  if (e.difficulty?.stages) {
+    for (const stage of e.difficulty.stages) {
+      if (stage.drops) {
+        for (const d of stage.drops) {
+          addEdge({ from: expId, to: `resource:${d.resourceId}`, relation: "produces" });
+        }
+      }
+      if (stage.lootTable) {
+        for (const loot of stage.lootTable) {
+          addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
+        }
+      }
     }
   }
 }

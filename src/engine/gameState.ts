@@ -143,7 +143,7 @@ export function createInitialState(): GameState {
  * Current mainland experimental version. Stamped on saves so future migrations
  * can detect which mainland format a save was created under.
  */
-export const MAINLAND_VERSION = 2;
+export const MAINLAND_VERSION = 3;
 
 const SAVE_KEY = "seabound_save";
 

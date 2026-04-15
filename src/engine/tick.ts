@@ -687,54 +687,116 @@ function applyExpeditionCompletion(
 
   // Equipment drops (mainland expeditions only, gated by encounter grade)
   let equipmentDropped: CompletionEvent["equipmentDropped"];
-  if (def.equipmentDrops && def.equipmentDrops.length > 0) {
-    // Grade-based chance multiplier: success = full chance, partial = halved, failure = none
-    let gradeChanceMult = 1;
-    if (encounter) {
-      if (encounter.grade === "failure") gradeChanceMult = 0;
-      else if (encounter.grade === "partial") gradeChanceMult = 0.5;
+  const stagesCleared = encounter?.stagesCleared;
+  const stages = def.difficulty?.stages;
+
+  if (stages && stages.length > 0 && stagesCleared != null) {
+    // ── Staged expedition: distribute per-stage rewards ──
+    for (let i = 0; i < stagesCleared; i++) {
+      const stage = stages[i];
+
+      // Stage guaranteed drops
+      if (stage.drops) {
+        for (const drop of stage.drops) {
+          const rolled = rollDrops([drop]);
+          for (const r of rolled) {
+            const baseAmount = dropBonus > 0
+              ? Math.round(r.amount * (1 + dropBonus))
+              : r.amount;
+            if (!state.discoveredResources.includes(r.resourceId)) {
+              newResources.push(r.resourceId);
+              state.discoveredResources.push(r.resourceId);
+            }
+            addResource(state, r.resourceId, baseAmount);
+            drops.push({ name: r.resourceId, amount: baseAmount });
+          }
+        }
+      }
+
+      // Stage equipment drops (always full chance for cleared stages)
+      if (stage.equipmentDrops && stage.equipmentDrops.length > 0) {
+        const rolledItems = rollEquipmentDrops(stage.equipmentDrops, 1, def.id);
+        for (const item of rolledItems) {
+          state.equipmentInventory.push(item);
+        }
+        if (rolledItems.length > 0) {
+          if (!equipmentDropped) equipmentDropped = [];
+          for (const item of rolledItems) {
+            equipmentDropped.push({ defId: item.defId, name: getItemDisplayName(item), condition: item.condition });
+          }
+        }
+      }
+
+      // Stage loot table
+      if (stage.lootTable && stage.lootTable.length > 0) {
+        const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
+        const rolledLoot = rollLootTable(stage.lootTable, lootChanceBonus, 1);
+        for (const loot of rolledLoot) {
+          if (!state.discoveredResources.includes(loot.resourceId)) {
+            newResources.push(loot.resourceId);
+            state.discoveredResources.push(loot.resourceId);
+          }
+          addResource(state, loot.resourceId, loot.amount);
+          drops.push({ name: loot.resourceId, amount: loot.amount });
+
+          if (!state.lootLog) state.lootLog = {};
+          const entry = state.lootLog[loot.resourceId];
+          if (entry) {
+            entry.count += loot.amount;
+          } else {
+            state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
+          }
+        }
+      }
+    }
+  } else {
+    // ── Non-staged expedition: use expedition-level equipment/loot ──
+    if (def.equipmentDrops && def.equipmentDrops.length > 0) {
+      // Grade-based chance multiplier: success = full chance, partial = halved, failure = none
+      let gradeChanceMult = 1;
+      if (encounter) {
+        if (encounter.grade === "failure") gradeChanceMult = 0;
+        else if (encounter.grade === "partial") gradeChanceMult = 0.5;
+      }
+
+      if (gradeChanceMult > 0) {
+        const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult, def.id);
+        for (const item of rolledItems) {
+          state.equipmentInventory.push(item);
+        }
+        if (rolledItems.length > 0) {
+          equipmentDropped = rolledItems.map((item) => {
+            return { defId: item.defId, name: getItemDisplayName(item), condition: item.condition };
+          });
+        }
+      }
     }
 
-    if (gradeChanceMult > 0) {
-      const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult, def.id);
-      for (const item of rolledItems) {
-        state.equipmentInventory.push(item);
+    // Loot table drops (rolled independently from outcomes)
+    if (def.lootTable && def.lootTable.length > 0) {
+      const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
+      let lootGradeMult = 1;
+      if (encounter) {
+        if (encounter.grade === "failure") lootGradeMult = 0;
+        else if (encounter.grade === "partial") lootGradeMult = 0.5;
       }
-      if (rolledItems.length > 0) {
-        equipmentDropped = rolledItems.map((item) => {
-          return { defId: item.defId, name: getItemDisplayName(item), condition: item.condition };
-        });
-      }
-    }
-  }
 
-  // Loot table drops (rolled independently from outcomes)
-  if (def.lootTable && def.lootTable.length > 0) {
-    // Loot chance bonus from navigation milestones
-    const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
-    // Combat grade affects loot drops on mainland expeditions
-    let lootGradeMult = 1;
-    if (encounter) {
-      if (encounter.grade === "failure") lootGradeMult = 0;
-      else if (encounter.grade === "partial") lootGradeMult = 0.5;
-    }
+      const rolledLoot = rollLootTable(def.lootTable, lootChanceBonus, lootGradeMult);
+      for (const loot of rolledLoot) {
+        if (!state.discoveredResources.includes(loot.resourceId)) {
+          newResources.push(loot.resourceId);
+          state.discoveredResources.push(loot.resourceId);
+        }
+        addResource(state, loot.resourceId, loot.amount);
+        drops.push({ name: loot.resourceId, amount: loot.amount });
 
-    const rolledLoot = rollLootTable(def.lootTable, lootChanceBonus, lootGradeMult);
-    for (const loot of rolledLoot) {
-      if (!state.discoveredResources.includes(loot.resourceId)) {
-        newResources.push(loot.resourceId);
-        state.discoveredResources.push(loot.resourceId);
-      }
-      addResource(state, loot.resourceId, loot.amount);
-      drops.push({ name: loot.resourceId, amount: loot.amount });
-
-      // Track in loot log
-      if (!state.lootLog) state.lootLog = {};
-      const entry = state.lootLog[loot.resourceId];
-      if (entry) {
-        entry.count += loot.amount;
-      } else {
-        state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
+        if (!state.lootLog) state.lootLog = {};
+        const entry = state.lootLog[loot.resourceId];
+        if (entry) {
+          entry.count += loot.amount;
+        } else {
+          state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
+        }
       }
     }
   }
