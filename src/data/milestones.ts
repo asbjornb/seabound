@@ -337,6 +337,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 4,
+      description: "Keen scavenger — +10% expedition loot chance",
+      effects: [
+        { type: "expedition_loot_chance", bonus: 0.10 },
+      ],
+    },
+    {
       level: 5,
       description: "Wayfinder's eye — expeditions 10% faster",
       effects: [
@@ -803,4 +810,25 @@ export function getCombatStatBonuses(
     }
   }
   return bonuses;
+}
+
+/**
+ * Get total expedition loot table chance bonus from milestones.
+ * E.g. 0.10 means +10% to all loot table drop chances.
+ */
+export function getExpeditionLootChanceBonus(
+  skillId: SkillId,
+  skillLevel: number
+): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let bonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "expedition_loot_chance") {
+        bonus += e.bonus;
+      }
+    }
+  }
+  return bonus;
 }
