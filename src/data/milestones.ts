@@ -804,3 +804,110 @@ export function getCombatStatBonuses(
   }
   return bonuses;
 }
+
+const COMBAT_STAT_LABELS: Record<string, string> = {
+  offense: "offense",
+  defense: "defense",
+  life: "life",
+  heatResist: "heat resist",
+  endurance: "endurance",
+  attackSpeed: "attack speed",
+  critChance: "% crit chance",
+  critMultiplier: "% crit damage",
+};
+
+/**
+ * Compute a human-readable summary of cumulative level bonuses
+ * from all milestones the player has reached, plus any per-level scaling.
+ * Returns an array of short description strings.
+ */
+export function getSkillBonusSummary(
+  skillId: SkillId,
+  skillLevel: number
+): string[] {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  const summaries: string[] = [];
+
+  // General speed bonus (wildcard "*" duration effects)
+  let wildcardSpeed = 1;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "duration" && e.actionId === "*") {
+        wildcardSpeed *= e.multiplier;
+      }
+    }
+  }
+  if (wildcardSpeed < 1) {
+    const pct = Math.round((1 - wildcardSpeed) * 100);
+    summaries.push(`${pct}% faster (all actions)`);
+  }
+
+  // General double output chance (non-recipe-specific)
+  let generalDouble = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "double_output" && !e.recipeId) {
+        generalDouble += e.chance;
+      }
+    }
+  }
+  if (generalDouble > 0) {
+    summaries.push(`${Math.round(generalDouble * 100)}% chance to double output`);
+  }
+
+  // Expedition drop bonus
+  let expedDropBonus = 0;
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "expedition_drop_bonus") expedDropBonus += e.bonus;
+    }
+  }
+  if (expedDropBonus > 0) {
+    summaries.push(`+${Math.round(expedDropBonus * 100)}% expedition drops`);
+  }
+
+  // Combat stat bonuses
+  const combatStats: Record<string, number> = {};
+  for (const m of milestones) {
+    if (m.level > skillLevel || !m.effects) continue;
+    for (const e of m.effects) {
+      if (e.type === "combat_stat_bonus") {
+        combatStats[e.stat] = (combatStats[e.stat] ?? 0) + e.bonus;
+      }
+    }
+  }
+  const statParts = Object.entries(combatStats)
+    .map(([stat, bonus]) => {
+      const label = COMBAT_STAT_LABELS[stat] ?? stat;
+      if (stat === "critChance" || stat === "critMultiplier") {
+        return `+${bonus}${label}`;
+      }
+      return `+${bonus} ${label}`;
+    });
+  if (statParts.length > 0) {
+    summaries.push(statParts.join(", "));
+  }
+
+  // Navigation per-level loot bonus (not from milestones — hardcoded in tick.ts)
+  if (skillId === "navigation") {
+    summaries.push(`+${skillLevel}% expedition loot chance (scales with level)`);
+  }
+
+  return summaries;
+}
+
+/**
+ * Get the highest authored milestone level for a skill.
+ * Returns 0 if no authored milestones exist.
+ */
+export function getMaxMilestoneLevel(skillId: SkillId): number {
+  const milestones = AUTHORED_MILESTONES[skillId] ?? [];
+  let max = 0;
+  for (const m of milestones) {
+    if (m.level > max) max = m.level;
+  }
+  return max;
+}

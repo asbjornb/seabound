@@ -1523,6 +1523,31 @@ body {
   margin-top: 2px;
 }
 
+/* Skill Bonus Summary */
+.skill-bonus-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.skill-bonus-tag {
+  font-size: 0.65rem;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.skill-bonus-note {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 1px 6px;
+}
+
 /* Milestones */
 .milestone-list {
   margin-top: 8px;
