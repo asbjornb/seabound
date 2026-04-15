@@ -54,7 +54,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
             {(achieved.length > 0 || preview.length > 0) && (
               <div className="milestone-list">
                 <div className="milestone-info">
-                  Leveling unlocks milestone bonuses below. Speed and drop bonuses only come from milestones.
+                  Leveling unlocks milestone bonuses below. Leveling beyond the last milestone has no effect currently, but more milestones will be added in the future.
                 </div>
                 {achieved.map((m, i) => (
                   <div key={`a-${i}`} className="milestone achieved">
