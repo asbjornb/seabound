@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback, useLayoutEffect, useRef } from "react";
 import { getStationInputAmount } from "../data/milestones";
-import { getBiomes, getBuildings, getResources, getSkills, getStationById } from "../data/registry";
+import { getBuildings, getResources, getSkills, getStationById, getStations } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { canDeploySharedStation, getBuildingCount, getResource, getSharedSlotInfo } from "../engine/gameState";
 import type { FlyupItem } from "./CollectFlyup";
@@ -36,7 +36,11 @@ export function StationsPanel({
   const RESOURCES = getResources();
   const BUILDINGS = getBuildings();
   const SKILLS = getSkills();
-  const BIOMES = getBiomes();
+
+  // Count how many biomes are still undiscovered across all chart stations
+  const undiscoveredChartBiomes = getStations()
+    .filter((s) => s.chartBiome && !state.discoveredBiomes.includes(s.chartBiome))
+    .length;
 
   const handleCollect = useCallback(
     (index: number, e: MouseEvent) => {
@@ -153,7 +157,8 @@ export function StationsPanel({
                 )}
                 {def.chartBiome && !state.discoveredBiomes.includes(def.chartBiome) && (
                   <div style={{ fontStyle: "italic", color: "#f0c040", fontSize: "0.9em", marginTop: 2 }}>
-                    Discovering: {BIOMES[def.chartBiome]?.name ?? def.chartBiome} — {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
+                    {undiscoveredChartBiomes} undiscovered {undiscoveredChartBiomes === 1 ? "area" : "areas"} remaining
+                    {" · "}Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
                     {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}
                   </div>
                 )}
@@ -185,20 +190,7 @@ export function StationsPanel({
       {availableStations.length > 0 && (
         <div ref={deployRef}>
           <div className="section-title">Deploy</div>
-          {(() => {
-            const chartStations = availableStations.filter((s) => s.chartBiome);
-            const undiscovered = chartStations.filter(
-              (s) => !state.discoveredBiomes.includes(s.chartBiome!)
-            ).length;
-            if (undiscovered > 0) {
-              return (
-                <div className="action-desc" style={{ fontStyle: "italic", color: "#f0c040", marginBottom: 8 }}>
-                  {undiscovered} undiscovered {undiscovered === 1 ? "area" : "areas"} remaining to chart
-                </div>
-              );
-            }
-            return null;
-          })()}
+          {/* undiscovered area count is shown per-card instead */}
           {availableStations.map((station) => {
             // Use bipartite matching to check if this station can actually be deployed
             const canDeploy = station.maxDeployedPerBuildings
@@ -240,7 +232,7 @@ export function StationsPanel({
                 {station.chartBiome && !state.discoveredBiomes.includes(station.chartBiome) && (
                   <div className="chart-progress-info">
                     <span style={{ fontStyle: "italic", color: "#f0c040" }}>
-                      Discovering: {BIOMES[station.chartBiome]?.name ?? station.chartBiome} — {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
+                      {undiscoveredChartBiomes} undiscovered {undiscoveredChartBiomes === 1 ? "area" : "areas"} remaining · Charted: {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
                     </span>
                     <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
                       <div
