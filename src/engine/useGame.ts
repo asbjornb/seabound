@@ -958,8 +958,11 @@ export function useGame() {
           if (!prev.discoveredBiomes.includes(biomeId)) return prev;
         }
       }
-      // Skip deploy if the chart biome is already discovered
-      if (station.chartBiome && prev.discoveredBiomes.includes(station.chartBiome)) return prev;
+      // Skip deploy if the chart biome is already discovered or fully charted
+      if (station.chartBiome && (
+        prev.discoveredBiomes.includes(station.chartBiome) ||
+        (prev.chartProgress[station.chartBiome] ?? 0) >= 1
+      )) return prev;
       // Check max deployed — use bipartite matching for shared building slots
       if (station.maxDeployedPerBuildings) {
         if (!canDeploySharedStation(station, prev.stations, prev)) return prev;

@@ -1,6 +1,6 @@
 import { type MouseEvent, useCallback, useLayoutEffect, useRef } from "react";
 import { getStationInputAmount } from "../data/milestones";
-import { getBuildings, getResources, getSkills, getStationById } from "../data/registry";
+import { getBuildings, getResources, getSkills, getStationById, getStations } from "../data/registry";
 import type { GameState, StationDef } from "../data/types";
 import { canDeploySharedStation, getBuildingCount, getResource, getSharedSlotInfo } from "../engine/gameState";
 import type { FlyupItem } from "./CollectFlyup";
@@ -37,6 +37,11 @@ export function StationsPanel({
   const BUILDINGS = getBuildings();
   const SKILLS = getSkills();
 
+  // Count how many biomes are still undiscovered across all chart stations
+  const undiscoveredChartBiomes = getStations()
+    .filter((s) => s.chartBiome && !state.discoveredBiomes.includes(s.chartBiome))
+    .length;
+
   const handleCollect = useCallback(
     (index: number, e: MouseEvent) => {
       const placed = state.stations[index];
@@ -61,17 +66,22 @@ export function StationsPanel({
     [state.stations, onCollect, onFlyup, RESOURCES]
   );
 
-  // Active stations with their defs
-  const activeStations = state.stations.map((placed, index) => {
-    const def = getStationById(placed.stationId);
-    const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
-    const isReady = now >= readyAt;
-    const remaining = readyAt - now;
-    const progress = def
-      ? Math.min(1, (now - placed.deployedAt) / def.durationMs)
-      : 1;
-    return { placed, def, index, isReady, remaining, progress };
-  });
+  // Active stations with their defs (exclude chart stations whose biome is already discovered)
+  const activeStations = state.stations
+    .map((placed, index) => {
+      const def = getStationById(placed.stationId);
+      const readyAt = placed.deployedAt + (def?.durationMs ?? 0);
+      const isReady = now >= readyAt;
+      const remaining = readyAt - now;
+      const progress = def
+        ? Math.min(1, (now - placed.deployedAt) / def.durationMs)
+        : 1;
+      return { placed, def, index, isReady, remaining, progress };
+    })
+    .filter(({ def }) => {
+      if (!def?.chartBiome) return true;
+      return !state.discoveredBiomes.includes(def.chartBiome);
+    });
 
   // Ready stations first, then by remaining time ascending
   const sortedActiveStations = [...activeStations].sort((a, b) => {
@@ -145,13 +155,11 @@ export function StationsPanel({
                 {isReady && (
                   <div className="station-collect-hint">Tap to collect</div>
                 )}
-                {def.chartBiome && (
+                {def.chartBiome && !state.discoveredBiomes.includes(def.chartBiome) && (
                   <div style={{ fontStyle: "italic", color: "#f0c040", fontSize: "0.9em", marginTop: 2 }}>
-                    {state.discoveredBiomes.includes(def.chartBiome)
-                      ? "Charted: 100%"
-                      : <>Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
-                        {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}</>
-                    }
+                    {undiscoveredChartBiomes} undiscovered {undiscoveredChartBiomes === 1 ? "area" : "areas"} remaining
+                    {" · "}Charted: {Math.round((state.chartProgress[def.chartBiome] ?? 0) * 100)}%
+                    {isReady && ` → ${Math.min(100, Math.round(((state.chartProgress[def.chartBiome] ?? 0) + (def.chartIncrement ?? 0)) * 100))}%`}
                   </div>
                 )}
                 <div className="action-drops">
@@ -182,20 +190,7 @@ export function StationsPanel({
       {availableStations.length > 0 && (
         <div ref={deployRef}>
           <div className="section-title">Deploy</div>
-          {(() => {
-            const chartStations = availableStations.filter((s) => s.chartBiome);
-            const undiscovered = chartStations.filter(
-              (s) => !state.discoveredBiomes.includes(s.chartBiome!)
-            ).length;
-            if (undiscovered > 0) {
-              return (
-                <div className="action-desc" style={{ fontStyle: "italic", color: "#f0c040", marginBottom: 8 }}>
-                  {undiscovered} undiscovered {undiscovered === 1 ? "area" : "areas"} remaining to chart
-                </div>
-              );
-            }
-            return null;
-          })()}
+          {/* undiscovered area count is shown per-card instead */}
           {availableStations.map((station) => {
             // Use bipartite matching to check if this station can actually be deployed
             const canDeploy = station.maxDeployedPerBuildings
@@ -235,19 +230,17 @@ export function StationsPanel({
                 </div>
                 <div className="action-desc">{station.description}</div>
                 {station.chartBiome && !state.discoveredBiomes.includes(station.chartBiome) && (
-                  <>
-                    <div className="chart-progress-info">
-                      <span style={{ fontStyle: "italic", color: "#f0c040" }}>
-                        Charted: {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
-                      </span>
-                      <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
-                        <div
-                          className="progress-fill"
-                          style={{ width: `${(state.chartProgress[station.chartBiome] ?? 0) * 100}%` }}
-                        />
-                      </div>
+                  <div className="chart-progress-info">
+                    <span style={{ fontStyle: "italic", color: "#f0c040" }}>
+                      {undiscoveredChartBiomes} undiscovered {undiscoveredChartBiomes === 1 ? "area" : "areas"} remaining · Charted: {Math.round((state.chartProgress[station.chartBiome] ?? 0) * 100)}%
+                    </span>
+                    <div className="progress-bar station-progress" style={{ marginTop: 4 }}>
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${(state.chartProgress[station.chartBiome] ?? 0) * 100}%` }}
+                      />
                     </div>
-                  </>
+                  </div>
                 )}
                 {station.maxDeployedPerBuildings && (
                   <div className="station-building-info">

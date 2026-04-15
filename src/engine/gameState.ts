@@ -375,6 +375,21 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (!loaded.chartProgress) {
     loaded.chartProgress = {};
   }
+  // Migration: fix inconsistent chart state — if chartProgress >= 1 but biome not discovered
+  for (const [biomeId, progress] of Object.entries(loaded.chartProgress)) {
+    if (progress >= 1 && !loaded.discoveredBiomes.includes(biomeId)) {
+      loaded.discoveredBiomes.push(biomeId);
+    }
+  }
+  // Migration: remove deployed chart stations whose biome is already discovered
+  if (loaded.stations?.length > 0) {
+    const stationDefs = new Map(getStations().map((s: StationDef) => [s.id, s]));
+    loaded.stations = loaded.stations.filter((placed: { stationId: string }) => {
+      const def = stationDefs.get(placed.stationId);
+      if (def?.chartBiome && loaded.discoveredBiomes.includes(def.chartBiome)) return false;
+      return true;
+    });
+  }
   // Migration: convert corroded_medallion resource to equipment item (now a trinket)
   if ((loaded.resources["corroded_medallion"] ?? 0) >= 1) {
     const count = loaded.resources["corroded_medallion"];
