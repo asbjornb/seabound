@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "42020ccac3203fa597fbf6cd066457858c25b842"
+    "newestReviewed": "deded0a29a79ccffcab85d41c9c303b3e2ca2753"
   },
   "entries": [
+    {
+      "date": "2026-04-15",
+      "changes": [
+        "Add icons for all 12 expeditions (5 island + 7 mainland) so they display properly in the expedition queue"
+      ]
+    },
     {
       "date": "2026-04-14",
       "changes": [
