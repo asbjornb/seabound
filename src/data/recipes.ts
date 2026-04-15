@@ -1058,7 +1058,7 @@ export const RECIPES: RecipeDef[] = [
     id: "seal_clay_jar",
     name: "Sealed Clay Jar",
     description:
-      "Coat a fired pot with clay slip and re-fire at kiln temperatures to vitrify the seal. Airtight — preserves food for long voyages.",
+      "Coat a fired pot with clay slip and re-fire to create an airtight seal. Preserves food for long voyages.",
     skillId: "cooking",
     panel: "craft",
     inputs: [
@@ -1068,7 +1068,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "dry_grass", amount: 1, removedByBuilding: "stone_hearth" },
     ],
     output: { resourceId: "sealed_clay_jar", amount: 1 },
-    requiredBuildings: ["kiln"],
+    requiredBuildings: ["firing_pit"],
     durationMs: 10000,
     repeatable: true,
     xpGain: 30,

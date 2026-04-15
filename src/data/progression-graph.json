@@ -3680,7 +3680,7 @@
       "relation": "trains"
     },
     {
-      "from": "building:kiln",
+      "from": "building:firing_pit",
       "to": "recipe:seal_clay_jar",
       "relation": "requires_building"
     },
