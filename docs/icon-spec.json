@@ -1050,6 +1050,18 @@
       "tags": ["phase1", "building", "weaving"]
     },
     {
+      "id": "weaving_frame",
+      "object": "Large ground-staked weaving frame",
+      "description": "A wide bamboo frame staked into the ground with ropes, broader than the fiber loom. Partially woven pandanus mat visible on the frame. Sturdy, practical.",
+      "use": "Settlement panel, building card",
+      "theme": "bamboo",
+      "category": "building_craft",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase2", "building", "weaving", "maritime"]
+    },
+    {
       "id": "raft",
       "object": "Simple log raft",
       "description": "A small raft of lashed-together logs with a basic mast/sail. Bobbing on blue water. Simple, hopeful.",
