@@ -20,6 +20,7 @@ import { RESOURCES } from "../src/data/resources";
 import { SKILLS } from "../src/data/skills";
 import { STATIONS } from "../src/data/stations";
 import { TOOLS } from "../src/data/tools";
+import { IMBUING_REAGENTS } from "../src/data/equipment";
 import type { BiomeId, SkillId } from "../src/data/types";
 
 // ───────────────────────────────────────────────
@@ -386,6 +387,9 @@ for (const s of STATIONS) {
   }
 }
 
+// Imbuing reagents — consumed when player imbues equipment (not a recipe, but tracked here for dead-end analysis)
+const imbuingReagentIds = new Set(IMBUING_REAGENTS.map(ir => `resource:${ir.reagentId}`));
+
 // ───────────────────────────────────────────────
 // Analysis: BFS/DFS utilities
 // ───────────────────────────────────────────────
@@ -682,7 +686,7 @@ function computeWarnings(reachable: Set<string>): Warning[] {
     }
   }
   for (const r of producedNodes) {
-    if (!consumedNodes.has(r)) {
+    if (!consumedNodes.has(r) && !imbuingReagentIds.has(r)) {
       const label = nodes.find(n => n.id === r)?.label ?? r;
       warnings.push({ type: "dead_end", nodeId: r, message: `${label} is produced but never used as input` });
     }
