@@ -1,4 +1,3 @@
-import { getSkillBonusSummary, getMaxMilestoneLevel } from "../data/milestones";
 import { getSkills, getMilestonesForSkill } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { GameState, SkillId } from "../data/types";
@@ -52,24 +51,11 @@ export function SkillsPanel({ state }: { state: GameState }) {
             <div className="xp-text">
               {xpIntoLevel} / {xpNeeded} XP to next level ({skill.xp} total)
             </div>
-            {(() => {
-              const bonuses = getSkillBonusSummary(id, skill.level);
-              const maxMilestone = getMaxMilestoneLevel(id);
-              const allAchieved = maxMilestone > 0 && skill.level >= maxMilestone;
-              if (bonuses.length === 0 && !allAchieved) return null;
-              return (
-                <div className="skill-bonus-summary">
-                  {bonuses.map((b, i) => (
-                    <span key={i} className="skill-bonus-tag">{b}</span>
-                  ))}
-                  {allAchieved && id !== "navigation" && (
-                    <span className="skill-bonus-note">All milestones reached</span>
-                  )}
-                </div>
-              );
-            })()}
             {(achieved.length > 0 || preview.length > 0) && (
               <div className="milestone-list">
+                <div className="milestone-info">
+                  Leveling unlocks milestone bonuses below. Speed and drop bonuses only come from milestones.
+                </div>
                 {achieved.map((m, i) => (
                   <div key={`a-${i}`} className="milestone achieved">
                     <span className="milestone-level">Lvl {m.level}</span>

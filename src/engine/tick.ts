@@ -1,4 +1,4 @@
-import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus, getOutputChanceBonus } from "../data/milestones";
+import { getDropChanceBonus, getDoubleOutputChance, getDurationMultiplier, getExpeditionBiomeBonus, getExpeditionDropBonus, getExpeditionLootChanceBonus, getOutputChanceBonus } from "../data/milestones";
 import {
   getActionById,
   getAffixes,
@@ -710,8 +710,8 @@ function applyExpeditionCompletion(
 
   // Loot table drops (rolled independently from outcomes)
   if (def.lootTable && def.lootTable.length > 0) {
-    // Navigation level provides a small bonus to loot drop chances (+1% per level)
-    const lootChanceBonus = navLevel * 0.01;
+    // Loot chance bonus from navigation milestones
+    const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
     // Combat grade affects loot drops on mainland expeditions
     let lootGradeMult = 1;
     if (encounter) {
