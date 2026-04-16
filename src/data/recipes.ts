@@ -2107,6 +2107,46 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 30,
   },
 
+  // Goat Pen building recipe
+  {
+    id: "build_goat_pen",
+    name: "Goat Pen",
+    description:
+      "Fence off a bamboo enclosure and pen your captured goat. A steady source of hide and meat without the dangers of combat.",
+    skillId: "construction",
+    panel: "build",
+    requiredItems: ["captured_goat"],
+    inputs: [
+      { resourceId: "captured_goat", amount: 1 },
+      { resourceId: "bamboo_cane", amount: 8 },
+      { resourceId: "rope", amount: 3 },
+      { resourceId: "flat_stone", amount: 2 },
+    ],
+    buildingOutput: "goat_pen",
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 50,
+  },
+
+  // Cure Goat Hide (worse ratio than raw hide — 3:1 vs 2:1)
+  {
+    id: "cure_goat_hide",
+    name: "Cure Goat Hide",
+    description:
+      "Scrape and tan goat hides into leather. Thinner than boar hide — more skins needed per piece.",
+    skillId: "crafting",
+    panel: "craft",
+    inputs: [
+      { resourceId: "goat_hide", amount: 3 },
+      { resourceId: "coconut_husk", amount: 2 },
+      { resourceId: "driftwood_branch", amount: 1, alternateResourceId: "charcoal" },
+    ],
+    output: { resourceId: "cured_leather", amount: 1 },
+    requiredBuildings: ["kiln"],
+    durationMs: 10000,
+    xpGain: 12,
+  },
+
   // Bloomery building recipe
   {
     id: "build_bloomery",

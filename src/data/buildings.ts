@@ -256,4 +256,11 @@ export const BUILDINGS: Record<string, BuildingDef> = {
       "A clay-walled shaft furnace fed by bellows. Hot enough to reduce iron ore into workable bloom.",
     unlocks: "Iron smelting — smelt iron ore into iron bloom",
   },
+  goat_pen: {
+    id: "goat_pen",
+    name: "Goat Pen",
+    description:
+      "A fenced enclosure of bamboo and rope for keeping mountain goats. The goats forage nearby scrub but need supplemental feed.",
+    unlocks: "Goat husbandry station — passive goat hide and meat production",
+  },
 };

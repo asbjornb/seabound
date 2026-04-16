@@ -427,6 +427,31 @@ export const RESOURCES: Record<string, ResourceDef> = {
     tags: ["metal", "mainland"],
   },
 
+  // ── Animal Husbandry ──
+
+  captured_goat: {
+    id: "captured_goat",
+    name: "Captured Goat",
+    description:
+      "A wild mountain goat, lured and bound with rope. Ready to pen.",
+    tags: ["mainland"],
+  },
+  goat_hide: {
+    id: "goat_hide",
+    name: "Goat Hide",
+    description:
+      "Thin but supple goat skin. Can be cured into serviceable leather, though less efficiently than combat-sourced raw hide.",
+    tags: ["mainland"],
+  },
+  goat_meat: {
+    id: "goat_meat",
+    name: "Goat Meat",
+    description:
+      "Lean meat from a penned goat. Tough but nourishing.",
+    tags: ["food", "mainland"],
+    foodValue: 3,
+  },
+
   // ── Imbuing reagents ──
   // Rare drops from specific mainland expeditions. Each imbues a single stat onto equipment.
   // Only one imbuement per item — choose wisely.

@@ -221,4 +221,24 @@ export const STATIONS: StationDef[] = [
     chartBiome: "inland_hills",
     chartIncrement: 0.05,
   },
+
+  // ═══════════════════════════════════════
+  // Goat Pen (Animal Husbandry)
+  // ═══════════════════════════════════════
+  {
+    id: "tend_goats",
+    name: "Tend Goats",
+    description:
+      "Feed the goats and let them graze. Periodically cull the herd for hide and meat — a slower but safer alternative to hunting.",
+    skillId: "farming",
+    durationMs: 480000, // 8 minutes
+    requiredBuildings: ["goat_pen"],
+    setupInputs: [{ resourceId: "dry_grass", amount: 5 }],
+    yields: [
+      { resourceId: "goat_hide", amount: 2 },
+      { resourceId: "goat_meat", amount: 2 },
+      { resourceId: "goat_meat", amount: 1, chance: 0.3 },
+    ],
+    xpGain: 40,
+  },
 ];

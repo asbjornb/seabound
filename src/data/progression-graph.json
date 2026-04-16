@@ -357,6 +357,24 @@
       "category": "metal,mainland"
     },
     {
+      "id": "resource:captured_goat",
+      "type": "resource",
+      "label": "Captured Goat",
+      "category": "mainland"
+    },
+    {
+      "id": "resource:goat_hide",
+      "type": "resource",
+      "label": "Goat Hide",
+      "category": "mainland"
+    },
+    {
+      "id": "resource:goat_meat",
+      "type": "resource",
+      "label": "Goat Meat",
+      "category": "food,mainland"
+    },
+    {
       "id": "resource:ruin_dust",
       "type": "resource",
       "label": "Ruin Dust",
@@ -682,6 +700,11 @@
       "id": "building:bloomery",
       "type": "building",
       "label": "Bloomery"
+    },
+    {
+      "id": "building:goat_pen",
+      "type": "building",
+      "label": "Goat Pen"
     },
     {
       "id": "skill:mining:5",
@@ -1704,6 +1727,18 @@
       "category": "crafting"
     },
     {
+      "id": "recipe:build_goat_pen",
+      "type": "recipe",
+      "label": "Goat Pen",
+      "category": "construction"
+    },
+    {
+      "id": "recipe:cure_goat_hide",
+      "type": "recipe",
+      "label": "Cure Goat Hide",
+      "category": "crafting"
+    },
+    {
       "id": "recipe:build_bloomery",
       "type": "recipe",
       "label": "Bloomery",
@@ -1852,6 +1887,12 @@
       "type": "station",
       "label": "Chart Inland Territory",
       "category": "navigation"
+    },
+    {
+      "id": "station:tend_goats",
+      "type": "station",
+      "label": "Tend Goats",
+      "category": "farming"
     }
   ],
   "edges": [
@@ -4201,6 +4242,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "recipe:pack_voyage_provisions",
+      "relation": "consumes"
+    },
+    {
       "from": "recipe:pack_voyage_provisions",
       "to": "skill:cooking",
       "relation": "trains"
@@ -5341,6 +5387,76 @@
       "relation": "trains"
     },
     {
+      "from": "recipe:build_goat_pen",
+      "to": "building:goat_pen",
+      "relation": "builds"
+    },
+    {
+      "from": "resource:captured_goat",
+      "to": "recipe:build_goat_pen",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:build_goat_pen",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rope",
+      "to": "recipe:build_goat_pen",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:build_goat_pen",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:build_goat_pen",
+      "to": "skill:construction",
+      "relation": "trains"
+    },
+    {
+      "from": "resource:captured_goat",
+      "to": "recipe:build_goat_pen",
+      "relation": "requires_item"
+    },
+    {
+      "from": "recipe:cure_goat_hide",
+      "to": "resource:cured_leather",
+      "relation": "produces"
+    },
+    {
+      "from": "resource:goat_hide",
+      "to": "recipe:cure_goat_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:coconut_husk",
+      "to": "recipe:cure_goat_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:driftwood_branch",
+      "to": "recipe:cure_goat_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:charcoal",
+      "to": "recipe:cure_goat_hide",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:cure_goat_hide",
+      "to": "skill:crafting",
+      "relation": "trains"
+    },
+    {
+      "from": "building:kiln",
+      "to": "recipe:cure_goat_hide",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:build_bloomery",
       "to": "building:bloomery",
       "relation": "builds"
@@ -5721,6 +5837,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "expedition:explore_beach",
+      "relation": "consumes"
+    },
+    {
       "from": "expedition:explore_beach",
       "to": "biome:coconut_grove",
       "relation": "discovers"
@@ -5802,6 +5923,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:explore_interior",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:explore_interior",
       "relation": "consumes"
     },
@@ -5907,6 +6033,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:sail_nearby_island",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:sail_nearby_island",
       "relation": "consumes"
     },
@@ -6027,6 +6158,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:dugout_voyage",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:dugout_voyage",
       "relation": "consumes"
     },
@@ -6196,6 +6332,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "expedition:coastal_ruins",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:fresh_water",
       "to": "expedition:coastal_ruins",
       "relation": "consumes"
@@ -6306,6 +6447,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "expedition:tidal_caves",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:fresh_water",
       "to": "expedition:tidal_caves",
       "relation": "consumes"
@@ -6407,6 +6553,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:overgrown_trail",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:overgrown_trail",
       "relation": "consumes"
     },
@@ -6531,6 +6682,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "expedition:flooded_quarry",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:fresh_water",
       "to": "expedition:flooded_quarry",
       "relation": "consumes"
@@ -6641,6 +6797,11 @@
       "relation": "consumes"
     },
     {
+      "from": "resource:goat_meat",
+      "to": "expedition:ridge_pass",
+      "relation": "consumes"
+    },
+    {
       "from": "resource:fresh_water",
       "to": "expedition:ridge_pass",
       "relation": "consumes"
@@ -6668,6 +6829,11 @@
     {
       "from": "expedition:ridge_pass",
       "to": "resource:copper_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:captured_goat",
       "relation": "produces"
     },
     {
@@ -6747,6 +6913,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:sunken_temple",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:sunken_temple",
       "relation": "consumes"
     },
@@ -6857,6 +7028,11 @@
     },
     {
       "from": "resource:roasted_breadfruit",
+      "to": "expedition:volcanic_rift",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:goat_meat",
       "to": "expedition:volcanic_rift",
       "relation": "consumes"
     },
@@ -7234,6 +7410,36 @@
       "from": "resource:charcoal",
       "to": "station:chart_inland_territory",
       "relation": "consumes"
+    },
+    {
+      "from": "station:tend_goats",
+      "to": "resource:goat_hide",
+      "relation": "produces"
+    },
+    {
+      "from": "station:tend_goats",
+      "to": "resource:goat_meat",
+      "relation": "produces"
+    },
+    {
+      "from": "station:tend_goats",
+      "to": "resource:goat_meat",
+      "relation": "produces"
+    },
+    {
+      "from": "station:tend_goats",
+      "to": "skill:farming",
+      "relation": "trains"
+    },
+    {
+      "from": "building:goat_pen",
+      "to": "station:tend_goats",
+      "relation": "requires_building"
+    },
+    {
+      "from": "resource:dry_grass",
+      "to": "station:tend_goats",
+      "relation": "consumes"
     }
   ],
   "analysis": {
@@ -7269,6 +7475,7 @@
       "resource:cooked_taro",
       "resource:banana",
       "resource:roasted_breadfruit",
+      "resource:goat_meat",
       "biome:coconut_grove",
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
@@ -7293,6 +7500,7 @@
       "recipe:cook_taro",
       "station:grow_bananas",
       "recipe:roast_breadfruit",
+      "station:tend_goats",
       "expedition:explore_beach",
       "resource:large_log",
       "resource:dry_grass",
@@ -7331,6 +7539,7 @@
       "resource:banana_shoot",
       "resource:breadfruit",
       "skill:cooking:8",
+      "building:goat_pen",
       "action:fell_large_tree",
       "action:collect_dry_grass",
       "expedition:coastal_ruins",
@@ -7368,6 +7577,7 @@
       "station:cultivate_taro",
       "recipe:build_well",
       "station:grow_breadfruit",
+      "recipe:build_goat_pen",
       "biome:jungle_interior",
       "tool:stone_axe",
       "tool:log_sled",
@@ -7404,6 +7614,7 @@
       "resource:clay",
       "skill:farming:12",
       "resource:breadfruit_cutting",
+      "resource:captured_goat",
       "recipe:craft_stone_axe",
       "recipe:craft_log_sled",
       "recipe:fill_water_pot",
@@ -7421,6 +7632,7 @@
       "recipe:split_bamboo_cane",
       "recipe:forge_steel",
       "recipe:cure_raw_hide",
+      "recipe:cure_goat_hide",
       "recipe:craft_stone_anvil",
       "recipe:strike_stone_flake",
       "recipe:build_charcoal_kiln",
@@ -7439,6 +7651,7 @@
       "building:pandanus_grove",
       "building:bloomery",
       "resource:raw_hide",
+      "resource:goat_hide",
       "tool:hammerstone",
       "resource:chert",
       "skill:construction:14",
@@ -7624,7 +7837,8 @@
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
             "recipe:craft_stone_anvil",
-            "recipe:craft_bellows"
+            "recipe:craft_bellows",
+            "recipe:cure_goat_hide"
           ]
         },
         {
@@ -7669,7 +7883,8 @@
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
             "recipe:craft_stone_anvil",
-            "recipe:craft_bellows"
+            "recipe:craft_bellows",
+            "recipe:cure_goat_hide"
           ]
         },
         {
@@ -7714,7 +7929,8 @@
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
             "recipe:craft_stone_anvil",
-            "recipe:craft_bellows"
+            "recipe:craft_bellows",
+            "recipe:cure_goat_hide"
           ]
         },
         {
@@ -7759,7 +7975,8 @@
             "recipe:stitch_hide_leggings",
             "recipe:stitch_hide_boots",
             "recipe:craft_stone_anvil",
-            "recipe:craft_bellows"
+            "recipe:craft_bellows",
+            "recipe:cure_goat_hide"
           ]
         }
       ],
@@ -7888,7 +8105,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -7921,7 +8139,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -7954,7 +8173,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -7987,7 +8207,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8020,7 +8241,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8053,7 +8275,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8086,7 +8309,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8121,7 +8345,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8154,7 +8379,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8187,7 +8413,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8220,7 +8447,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8253,7 +8481,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         },
         {
@@ -8286,7 +8515,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_goat_pen"
           ]
         }
       ],
@@ -8389,7 +8619,8 @@
             "station:grow_bananas",
             "station:grow_pandanus",
             "station:grow_breadfruit",
-            "station:harvest_pandanus_grove"
+            "station:harvest_pandanus_grove",
+            "station:tend_goats"
           ]
         },
         {
@@ -8403,7 +8634,8 @@
             "station:grow_bananas",
             "station:grow_pandanus",
             "station:grow_breadfruit",
-            "station:harvest_pandanus_grove"
+            "station:harvest_pandanus_grove",
+            "station:tend_goats"
           ]
         },
         {
@@ -8417,7 +8649,8 @@
             "station:grow_bananas",
             "station:grow_pandanus",
             "station:grow_breadfruit",
-            "station:harvest_pandanus_grove"
+            "station:harvest_pandanus_grove",
+            "station:tend_goats"
           ]
         },
         {
@@ -8431,7 +8664,8 @@
             "station:grow_bananas",
             "station:grow_pandanus",
             "station:grow_breadfruit",
-            "station:harvest_pandanus_grove"
+            "station:harvest_pandanus_grove",
+            "station:tend_goats"
           ]
         }
       ],

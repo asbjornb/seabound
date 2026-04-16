@@ -403,7 +403,15 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         ],
       },
       {
-        weight: 40,
+        weight: 10,
+        description:
+          "Beyond the wolves' territory, you spot mountain goats grazing in a sheltered hollow. With patience and a loop of rope, you lure and capture one.",
+        drops: [
+          { resourceId: "captured_goat", amount: 1 },
+        ],
+      },
+      {
+        weight: 30,
         description:
           "The wind drives you back before you reach the far side. You retreat, half-frozen, with nothing.",
       },
