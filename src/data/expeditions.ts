@@ -446,7 +446,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Temple Hierophant",
-          enemy: { name: "Temple Hierophant", hp: 110, damage: 24, attackSpeed: 1.4, defense: 12, damageTypes: { physical: 0.7, wet: 0.3 } },
+          enemy: { name: "Temple Hierophant", hp: 140, damage: 26, attackSpeed: 1.4, defense: 14, damageTypes: { physical: 0.7, wet: 0.3 } },
           lootTable: [
             { resourceId: "temple_incense", amount: 1, chance: 0.04 },
           ],
@@ -525,7 +525,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Magma Wyrm",
-          enemy: { name: "Magma Wyrm", hp: 110, damage: 26, attackSpeed: 1.3, defense: 12, damageTypes: { physical: 0.2, heat: 0.8 } },
+          enemy: { name: "Magma Wyrm", hp: 150, damage: 30, attackSpeed: 1.3, defense: 18, damageTypes: { physical: 0.2, heat: 0.8 } },
           lootTable: [
             { resourceId: "volcanic_shard", amount: 1, chance: 0.04 },
           ],
