@@ -172,9 +172,12 @@ function getSourcesFor(itemId: string): SourceEntry[] {
 
   // Expeditions that drop this (in outcomes or lootTable)
   for (const e of getExpeditions()) {
+    const inStages = e.difficulty?.stages?.some(
+      (s) => s.drops?.some((d) => d.resourceId === itemId) || s.lootTable?.some((d) => d.resourceId === itemId),
+    );
     const drops = e.outcomes.some(
       (o) => o.drops?.some((d) => d.resourceId === itemId),
-    ) || e.lootTable?.some((d) => d.resourceId === itemId);
+    ) || e.lootTable?.some((d) => d.resourceId === itemId) || inStages;
     if (drops) {
       sources.push({
         type: "expedition",
@@ -324,6 +327,12 @@ function getVisibleItems(state: GameState): string[] {
       if (o.drops) for (const d of o.drops) seen.add(d.resourceId);
     }
     if (e.lootTable) for (const d of e.lootTable) seen.add(d.resourceId);
+    if (e.difficulty?.stages) {
+      for (const s of e.difficulty.stages) {
+        if (s.drops) for (const d of s.drops) seen.add(d.resourceId);
+        if (s.lootTable) for (const d of s.lootTable) seen.add(d.resourceId);
+      }
+    }
   }
 
   // Owned tools and buildings

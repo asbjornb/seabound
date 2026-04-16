@@ -2501,6 +2501,47 @@ body {
   vertical-align: middle;
 }
 
+/* Staged combat display */
+.combat-stage-rates {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+}
+.combat-stage-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.combat-stage-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.combat-stage-stats {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+.staged-drops-section {
+  margin-top: 4px;
+}
+.staged-drop-group {
+  margin-top: 4px;
+  padding-left: 4px;
+  border-left: 2px solid color-mix(in srgb, var(--text-dim) 25%, transparent);
+  margin-bottom: 2px;
+}
+.staged-drop-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary, #b0b0b0);
+  margin-bottom: 1px;
+}
+
 /* ══════════════���════════════════════════
    Equipment Panel (dedicated tab)
    ═══════════════════════════════════════ */

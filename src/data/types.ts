@@ -366,12 +366,35 @@ export interface EnemyCombatProfile {
   };
 }
 
+/**
+ * A stage within a multi-stage combat expedition.
+ * Each stage has its own enemy and reward pool. HP carries over between stages.
+ */
+export interface CombatStage {
+  /** Display name for this stage (e.g. "Crumbling Walls", "Feral Boar"). */
+  name: string;
+  /** The enemy to fight in this stage. */
+  enemy: EnemyCombatProfile;
+  /** Guaranteed resource drops awarded for clearing this stage. */
+  drops?: Drop[];
+  /** Equipment that can drop when this stage is cleared. */
+  equipmentDrops?: EquipmentDropEntry[];
+  /** Loot table entries available after clearing this stage. */
+  lootTable?: LootDrop[];
+}
+
 /** Difficulty profile for a mainland combat expedition. */
 export interface ExpeditionDifficultyProfile {
   /** Primary hazard types present in this expedition (thematic). */
   hazards: HazardType[];
-  /** The enemy the player fights in a round-based combat simulation. */
-  enemy: EnemyCombatProfile;
+  /** The enemy the player fights — used when stages is not defined. */
+  enemy?: EnemyCombatProfile;
+  /**
+   * Multi-stage encounter. If set, the player fights each stage sequentially
+   * with HP carrying over. Rewards are distributed per-stage cleared.
+   * When present, the top-level `enemy` is ignored.
+   */
+  stages?: CombatStage[];
   /** Brief hint shown before departure (e.g. "Bring heat-resistant gear and a sturdy weapon"). */
   hint: string;
 }
@@ -520,6 +543,10 @@ export interface CombatLogEntry {
   equipmentDropped?: { defId: string; name: string; condition: string }[];
   /** Outcome flavor text. */
   outcomeMessage?: string;
+  /** Number of stages cleared in a multi-stage expedition (0 = failed at stage 1). */
+  stagesCleared?: number;
+  /** Total number of stages in the expedition (undefined for non-staged). */
+  totalStages?: number;
 }
 
 // ═══════════════════════════════════════

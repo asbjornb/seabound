@@ -30,6 +30,11 @@ export function CombatLogModal({
           {/* Grade */}
           <div className="combat-log-grade" style={{ color: grade.color }}>
             {grade.label}
+            {entry.totalStages != null && (
+              <span style={{ fontWeight: 400, fontSize: "0.85em", marginLeft: 8 }}>
+                ({entry.stagesCleared ?? 0}/{entry.totalStages} stages cleared)
+              </span>
+            )}
           </div>
 
           {/* Outcome message */}

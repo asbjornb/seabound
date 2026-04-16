@@ -3,14 +3,14 @@ import { estimateWinRateFromStats, PlayerCombatStats } from "../engine/combat";
 import { MAINLAND_EXPEDITIONS } from "../data/expeditions";
 
 /**
- * Combat balance regression tests.
+ * Combat balance regression tests for staged combat.
  *
- * These verify that specific gear loadouts hit target win-rate bands
- * against each mainland expedition. Uses high Monte Carlo runs (2000)
- * for stable results, with wide enough bands to absorb variance.
+ * Each mainland expedition now has 3 stages (gauntlet). Key metrics:
+ * - winRate (success + partial): player cleared at least 1 stage
+ * - success: player cleared ALL 3 stages with ≥50% HP (full clear)
  *
- * If a test fails, it means a data or formula change shifted balance
- * outside the intended range — investigate before adjusting the band.
+ * Uses high Monte Carlo runs (2000) for stable results, with wide
+ * enough bands to absorb variance.
  */
 
 const RUNS = 2000;
@@ -55,21 +55,6 @@ const TIER1_GEAR: PlayerCombatStats = {
   critMultiplier: 0,
 };
 
-/** Tier 1 gear with good affixes (sharp weapon, reinforced armor, vital helm). */
-const TIER1_GEARED: PlayerCombatStats = {
-  offense: 22,      // copper_spear 14 + affix_sharp ~6 + milestones 2
-  defense: 42,      // tier1 base 33 + affix_reinforced ~7 + milestones 2
-  life: 70,         // tier1 base 51 + affix_vital ~14 + milestones 5
-  attackSpeed: 4,
-  speed: 5,         // tier1 base 2 + affix_light ~3
-  endurance: 5,     // armor 2 + affix_enduring ~2 + milestone 1
-  heatResist: 1,
-  coldResist: 3,
-  wetResist: 3,
-  critChance: 0,
-  critMultiplier: 0,
-};
-
 /** Full tier 2 bronze gear, no affixes. */
 const TIER2_GEAR: PlayerCombatStats = {
   offense: 20,      // bronze_sword
@@ -85,143 +70,165 @@ const TIER2_GEAR: PlayerCombatStats = {
   critMultiplier: 0,
 };
 
-/** Tier 2 gear with a single strategic imbue — volcanic shard on weapon (+7 heatResist). */
-const TIER2_IMBUED_HEAT: PlayerCombatStats = {
-  ...TIER2_GEAR,
-  heatResist: 7,    // volcanic_shard imbue on weapon
-};
-
-/**
- * Tier 2 gear with all 6 pieces imbued — the endgame loadout.
- * Weapon: jungle_sap (+5 offense), Shield: ruin_dust (+5 defense),
- * Cuirass: quarry_crystal (+15 life), Helm: ridge_frost (+7 coldResist),
- * Greaves: temple_incense (+5 endurance), Boots: volcanic_shard (+7 heatResist).
- * One imbue per item, one stat per reagent.
- */
-const TIER2_FULL_IMBUED: PlayerCombatStats = {
-  offense: 25,      // 20 + jungle_sap 5
-  defense: 58,      // 53 + ruin_dust 5
-  life: 93,         // 78 + quarry_crystal 15
-  attackSpeed: 5,
-  speed: -1,
-  endurance: 8,     // 3 + temple_incense 5
-  heatResist: 7,    // volcanic_shard on boots
-  coldResist: 11,   // 4 + ridge_frost on helm
-  wetResist: 4,     // unchanged (tidal_salt not used — 6 items, 6 imbues, chose other stats)
+/** Iron gear with all 6 imbues applied. */
+const IRON_IMBUED: PlayerCombatStats = {
+  offense: 31,      // iron_sword 26 + jungle_sap 5
+  defense: 74,      // (shield 18 + cuirass 18 + helm 11 + greaves 13 + boots 9) + ruin_dust 5
+  life: 110,        // (shield 22 + cuirass 30 + helm 15 + greaves 18 + boots 10) + quarry_crystal 15
+  attackSpeed: 5,   // iron_sword
+  speed: -1,        // sword 2 + shield -3 + greaves -1 + boots 1
+  endurance: 9,     // cuirass 4 + temple_incense 5
+  heatResist: 7,    // volcanic_shard
+  coldResist: 12,   // helm 5 + ridge_frost 7
+  wetResist: 12,    // boots 5 + tidal_salt 7
   critChance: 0,
   critMultiplier: 0,
 };
 
+/** Full steel gear, no affixes. */
+const STEEL_GEAR: PlayerCombatStats = {
+  offense: 32,      // steel_sword
+  defense: 85,      // shield 22 + cuirass 22 + helm 14 + greaves 16 + boots 11
+  life: 118,        // shield 28 + cuirass 38 + helm 18 + greaves 22 + boots 12
+  attackSpeed: 6,   // steel_sword
+  speed: 2,         // sword 3 + shield -2 + greaves -1 + boots 2
+  endurance: 5,     // cuirass
+  heatResist: 0,
+  coldResist: 6,    // helm
+  wetResist: 6,     // boots
+  critChance: 0,
+  critMultiplier: 0,
+};
+
+/** Steel gear with all 6 imbues applied. */
+const STEEL_IMBUED: PlayerCombatStats = {
+  offense: 37,      // 32 + jungle_sap 5
+  defense: 90,      // 85 + ruin_dust 5
+  life: 133,        // 118 + quarry_crystal 15
+  attackSpeed: 6,
+  speed: 2,
+  endurance: 10,    // 5 + temple_incense 5
+  heatResist: 7,    // volcanic_shard
+  coldResist: 13,   // 6 + ridge_frost 7
+  wetResist: 13,    // 6 + tidal_salt 7
+  critChance: 0,
+  critMultiplier: 0,
+};
+
+/** Steel gear + imbues + heat resist affix (realistic endgame for volcanic rift). */
+const STEEL_ENDGAME: PlayerCombatStats = {
+  ...STEEL_IMBUED,
+  heatResist: 17,   // volcanic_shard 7 + affix_heat_resist 10
+};
+
 // ═══════════════════════════════════════
-// Balance Tests
+// Balance Tests — Stage Access (winRate = cleared at least 1 stage)
 // ═══════════════════════════════════════
 
-describe("combat balance: starter gear", () => {
-  it("coastal_ruins should be doable but hard (~30-55% win rate)", () => {
+describe("combat balance: starter gear stage access", () => {
+  it("coastal_ruins stage 1 should be clearable with starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("coastal_ruins"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.25);
-    expect(result.winRate).toBeLessThanOrEqual(0.55);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.95);
   });
 
-  it("tidal_caves should be very hard (<15% win rate)", () => {
+  it("tidal_caves stage 1 should be clearable with starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("tidal_caves"), RUNS);
-    expect(result.winRate).toBeLessThanOrEqual(0.15);
+    expect(result.winRate).toBeGreaterThanOrEqual(0.95);
   });
 
-  it("overgrown_trail should be near-impossible (<5% win rate)", () => {
+  it("overgrown_trail should be nearly impossible for starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("overgrown_trail"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.05);
   });
 
-  it("flooded_quarry should be near-impossible (<5% win rate)", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("flooded_quarry"), RUNS);
-    expect(result.winRate).toBeLessThanOrEqual(0.05);
-  });
-
-  it("ridge_pass should be near-impossible (<5% win rate)", () => {
+  it("ridge_pass should be impossible for starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("ridge_pass"), RUNS);
-    expect(result.winRate).toBeLessThanOrEqual(0.05);
+    expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 
-  it("sunken_temple should be impossible (<1% win rate)", () => {
+  it("sunken_temple should be impossible for starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("sunken_temple"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 
-  it("volcanic_rift should be impossible (<1% win rate)", () => {
+  it("volcanic_rift should be impossible for starter gear", () => {
     const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("volcanic_rift"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 });
 
-describe("combat balance: tier 1 gear progression", () => {
-  it("coastal_ruins should be comfortable with tier 1 gear (>80%)", () => {
+// ═══════════════════════════════════════
+// Balance Tests — Full Clear Progression (success = all 3 stages cleared)
+// ═══════════════════════════════════════
+
+describe("combat balance: entry tier full clears", () => {
+  it("starter gear should NOT full-clear coastal_ruins (<5%)", () => {
+    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("coastal_ruins"), RUNS);
+    expect(result.success).toBeLessThanOrEqual(0.05);
+  });
+
+  it("tier 1 gear should full-clear coastal_ruins reliably (>90%)", () => {
     const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("coastal_ruins"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.80);
+    expect(result.success).toBeGreaterThanOrEqual(0.90);
   });
 
-  it("tidal_caves should be comfortable with tier 1 gear (>70%)", () => {
+  it("tier 1 gear should full-clear tidal_caves sometimes (5-25%)", () => {
     const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("tidal_caves"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.70);
-  });
-
-  it("overgrown_trail should be a coin flip with tier 1 gear (30-70%)", () => {
-    const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("overgrown_trail"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.30);
-    expect(result.winRate).toBeLessThanOrEqual(0.70);
-  });
-
-  it("overgrown_trail should be comfortable with geared tier 1 (>65%)", () => {
-    const result = estimateWinRateFromStats(TIER1_GEARED, getExpedition("overgrown_trail"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.65);
-  });
-
-  it("sunken_temple should still be very hard for tier 1 (<15%)", () => {
-    const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("sunken_temple"), RUNS);
-    expect(result.winRate).toBeLessThanOrEqual(0.15);
+    expect(result.success).toBeGreaterThanOrEqual(0.05);
+    expect(result.success).toBeLessThanOrEqual(0.25);
   });
 });
 
-describe("combat balance: tier 2 gear progression", () => {
-  it("sunken_temple should be doable with tier 2 gear (>50%)", () => {
-    const result = estimateWinRateFromStats(TIER2_GEAR, getExpedition("sunken_temple"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.50);
+describe("combat balance: mid tier full clears", () => {
+  it("tier 2 bronze should NOT full-clear overgrown_trail (<5%)", () => {
+    const result = estimateWinRateFromStats(TIER2_GEAR, getExpedition("overgrown_trail"), RUNS);
+    expect(result.success).toBeLessThanOrEqual(0.05);
   });
 
-  it("volcanic_rift should still be hard without heat resist (<30%)", () => {
-    // Tier 2 bronze gear has no heat resist — volcanic rift punishes this
-    const result = estimateWinRateFromStats(TIER2_GEAR, getExpedition("volcanic_rift"), RUNS);
-    expect(result.winRate).toBeLessThanOrEqual(0.30);
+  it("iron imbued should full-clear overgrown_trail reliably (>90%)", () => {
+    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("overgrown_trail"), RUNS);
+    expect(result.success).toBeGreaterThanOrEqual(0.90);
+  });
+
+  it("iron imbued should full-clear ridge_pass reliably (>90%)", () => {
+    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("ridge_pass"), RUNS);
+    expect(result.success).toBeGreaterThanOrEqual(0.90);
   });
 });
 
-describe("combat balance: tier 2 imbued gear progression", () => {
-  it("volcanic_rift becomes doable with a single heat resist imbue (20-45%)", () => {
-    // A single volcanic_shard imbue is the "key" that unlocks the rift — risky but possible.
-    // This is the intended progression: farm the specific reagent to open specific content.
-    const result = estimateWinRateFromStats(TIER2_IMBUED_HEAT, getExpedition("volcanic_rift"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.20);
-    expect(result.winRate).toBeLessThanOrEqual(0.45);
+describe("combat balance: high tier full clears", () => {
+  it("iron imbued should struggle with sunken_temple (<10%)", () => {
+    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("sunken_temple"), RUNS);
+    expect(result.success).toBeLessThanOrEqual(0.10);
   });
 
-  it("sunken_temple should be safe with full imbues (>90%)", () => {
-    // Full imbued set (6 reagents across 6 pieces) represents huge investment.
-    // Sunken temple should be reliable at this point.
-    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("sunken_temple"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.90);
+  it("steel imbued should full-clear sunken_temple (>75%)", () => {
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("sunken_temple"), RUNS);
+    expect(result.success).toBeGreaterThanOrEqual(0.75);
+  });
+});
+
+describe("combat balance: endgame volcanic rift", () => {
+  it("steel without heat resist should NOT full-clear volcanic_rift (<3%)", () => {
+    const result = estimateWinRateFromStats(STEEL_GEAR, getExpedition("volcanic_rift"), RUNS);
+    expect(result.success).toBeLessThanOrEqual(0.03);
   });
 
-  it("volcanic_rift should be comfortable with full imbues but not risk-free (80-99%)", () => {
-    // Fully imbued T2 gear represents the endgame loadout (sans affixed rares).
-    // Volcanic rift should feel earned — comfortable but never truly trivial.
-    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("volcanic_rift"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.80);
-    expect(result.winRate).toBeLessThanOrEqual(0.99);
+  it("steel imbued (7 heatResist) should still struggle with volcanic_rift (<5%)", () => {
+    // Even a single imbue isn't enough — need affix stacking too
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("volcanic_rift"), RUNS);
+    expect(result.success).toBeLessThanOrEqual(0.05);
   });
 
-  it("coastal_ruins should be trivial with full imbues (>95%)", () => {
-    // Early content should be a cakewalk — confirms the progression curve.
-    const result = estimateWinRateFromStats(TIER2_FULL_IMBUED, getExpedition("coastal_ruins"), RUNS);
-    expect(result.winRate).toBeGreaterThanOrEqual(0.95);
+  it("steel endgame (17 heatResist) should make volcanic_rift possible (10-30%)", () => {
+    // Full endgame build: steel + imbues + heat resist affix. Aspirational content.
+    const result = estimateWinRateFromStats(STEEL_ENDGAME, getExpedition("volcanic_rift"), RUNS);
+    expect(result.success).toBeGreaterThanOrEqual(0.10);
+    expect(result.success).toBeLessThanOrEqual(0.30);
+  });
+
+  it("earlier expeditions should be trivial for endgame gear (>95%)", () => {
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("coastal_ruins"), RUNS);
+    expect(result.success).toBeGreaterThanOrEqual(0.95);
   });
 });

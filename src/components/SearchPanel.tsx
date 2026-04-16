@@ -126,6 +126,10 @@ function buildIndex(
       outputs: [
         ...e.outcomes.flatMap((o) => o.drops?.map((d) => resName(d.resourceId)) ?? []),
         ...(e.lootTable?.map((d) => resName(d.resourceId)) ?? []),
+        ...(e.difficulty?.stages?.flatMap((s) => [
+          ...(s.drops?.map((d) => resName(d.resourceId)) ?? []),
+          ...(s.lootTable?.map((d) => resName(d.resourceId)) ?? []),
+        ]) ?? []),
       ].filter((v, i, a) => a.indexOf(v) === i),
       score: 0,
       def: e,

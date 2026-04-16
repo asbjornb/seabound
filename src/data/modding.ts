@@ -216,6 +216,13 @@ export function validateModPack(pack: unknown): ValidationResult {
       for (const drop of outcome.drops ?? []) checkResourceRef(drop.resourceId, ctx);
     }
     for (const loot of exp.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
+    // Validate stage drops and loot tables
+    if (exp.difficulty?.stages) {
+      for (const stage of exp.difficulty.stages) {
+        for (const drop of stage.drops ?? []) checkResourceRef(drop.resourceId, ctx);
+        for (const loot of stage.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
+      }
+    }
   }
 
   // Validate stations

@@ -379,6 +379,8 @@ function processCompletionDiscoveries(
       xpGain: c.xpGain,
       equipmentDropped: c.equipmentDropped,
       outcomeMessage: c.expeditionMessage,
+      stagesCleared: c.encounterResult.stagesCleared,
+      totalStages: c.encounterResult.totalStages,
     });
     // Cap combat log to 50 entries to prevent unbounded growth
     if (state.combatLog.length > 50) {
@@ -404,7 +406,10 @@ function processCompletionDiscoveries(
     if (eqCount > 0) lootParts.push(`${eqCount} equipment`);
     const lootSummary = lootParts.length > 0 ? ` — ${lootParts.join(", ")}` : "";
     const hpPct = c.encounterResult.playerHpStart > 0 ? Math.round(c.encounterResult.playerHpEnd / c.encounterResult.playerHpStart * 100) : 0;
-    addDiscovery(state, "expedition", `${c.actionName}: ${gradeLabel} vs ${c.encounterResult.enemyName} (${hpPct}% HP remaining)${lootSummary}`);
+    const stageInfo = c.encounterResult.totalStages != null
+      ? ` [${c.encounterResult.stagesCleared ?? 0}/${c.encounterResult.totalStages} stages]`
+      : "";
+    addDiscovery(state, "expedition", `${c.actionName}: ${gradeLabel}${stageInfo} vs ${c.encounterResult.enemyName} (${hpPct}% HP remaining)${lootSummary}`);
   }
 }
 

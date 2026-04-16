@@ -5708,6 +5708,16 @@
     },
     {
       "from": "expedition:coastal_ruins",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
+      "to": "resource:raw_hide",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:coastal_ruins",
       "to": "resource:ruin_dust",
       "relation": "produces"
     },
@@ -5804,6 +5814,11 @@
     {
       "from": "expedition:tidal_caves",
       "to": "resource:native_copper",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:tidal_caves",
+      "to": "resource:flat_stone",
       "relation": "produces"
     },
     {
@@ -5918,6 +5933,16 @@
     },
     {
       "from": "expedition:overgrown_trail",
+      "to": "resource:coconut_husk",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
+      "to": "resource:flat_stone",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:overgrown_trail",
       "to": "resource:jungle_sap",
       "relation": "produces"
     },
@@ -6014,6 +6039,16 @@
     {
       "from": "expedition:flooded_quarry",
       "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:flooded_quarry",
+      "to": "resource:flat_stone",
       "relation": "produces"
     },
     {
@@ -6118,6 +6153,16 @@
     },
     {
       "from": "expedition:ridge_pass",
+      "to": "resource:charcoal",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
+      "to": "resource:iron_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:ridge_pass",
       "to": "resource:ridge_frost",
       "relation": "produces"
     },
@@ -6209,6 +6254,16 @@
     {
       "from": "expedition:sunken_temple",
       "to": "resource:copper_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:bronze_ingot",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:sunken_temple",
+      "to": "resource:flat_stone",
       "relation": "produces"
     },
     {
@@ -6319,6 +6374,16 @@
     {
       "from": "expedition:volcanic_rift",
       "to": "resource:tin_ore",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:obsidian",
+      "relation": "produces"
+    },
+    {
+      "from": "expedition:volcanic_rift",
+      "to": "resource:iron_ore",
       "relation": "produces"
     },
     {
@@ -6755,6 +6820,7 @@
       "action:mine_iron",
       "expedition:tidal_caves",
       "expedition:flooded_quarry",
+      "expedition:sunken_temple",
       "station:chart_coastal_regions",
       "station:chart_inland_territory",
       "recipe:shred_coconut_husk",
