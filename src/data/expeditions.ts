@@ -186,7 +186,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Jungle Thicket",
-          enemy: { name: "Jungle Thicket", hp: 35, damage: 8, attackSpeed: 0.8, defense: 2, damageTypes: { physical: 0.3, heat: 0.7 } },
+          enemy: { name: "Jungle Thicket", hp: 55, damage: 12, attackSpeed: 1.0, defense: 5, damageTypes: { physical: 0.3, heat: 0.7 } },
           drops: [
             { resourceId: "coconut_husk", amount: 2 },
             { resourceId: "flat_stone", amount: 1 },
@@ -197,7 +197,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Jungle Predator",
-          enemy: { name: "Jungle Predator", hp: 75, damage: 13, attackSpeed: 1.1, defense: 6, damageTypes: { physical: 0.5, heat: 0.5 } },
+          enemy: { name: "Jungle Predator", hp: 80, damage: 15, attackSpeed: 1.1, defense: 7, damageTypes: { physical: 0.5, heat: 0.5 } },
           equipmentDrops: [
             { defId: "vine_lash", chance: 0.03, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
           ],
@@ -267,7 +267,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Murky Descent",
-          enemy: { name: "Murky Descent", hp: 30, damage: 8, attackSpeed: 0.8, defense: 2, damageTypes: { physical: 0.2, wet: 0.8 } },
+          enemy: { name: "Murky Descent", hp: 55, damage: 12, attackSpeed: 1.0, defense: 5, damageTypes: { physical: 0.2, wet: 0.8 } },
           drops: [
             { resourceId: "tin_ore", amount: 1 },
             { resourceId: "flat_stone", amount: 1 },
@@ -278,7 +278,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Quarry Depths",
-          enemy: { name: "Quarry Depths", hp: 70, damage: 14, attackSpeed: 1.0, defense: 5, damageTypes: { physical: 0.3, wet: 0.7 } },
+          enemy: { name: "Quarry Depths", hp: 80, damage: 15, attackSpeed: 1.0, defense: 6, damageTypes: { physical: 0.3, wet: 0.7 } },
           equipmentDrops: [
             { defId: "quarry_crown", chance: 0.03, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
           ],
@@ -346,7 +346,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Exposed Climb",
-          enemy: { name: "Exposed Climb", hp: 35, damage: 9, attackSpeed: 0.8, defense: 2, damageTypes: { physical: 0.2, cold: 0.8 } },
+          enemy: { name: "Exposed Climb", hp: 70, damage: 14, attackSpeed: 1.0, defense: 7, damageTypes: { physical: 0.2, cold: 0.8 } },
           drops: [
             { resourceId: "charcoal", amount: 2 },
             { resourceId: "iron_ore", amount: 1 },
@@ -357,7 +357,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Ridge Wolves",
-          enemy: { name: "Ridge Wolves", hp: 75, damage: 15, attackSpeed: 1.0, defense: 6, damageTypes: { physical: 0.5, cold: 0.5 } },
+          enemy: { name: "Ridge Wolves", hp: 85, damage: 16, attackSpeed: 1.0, defense: 7, damageTypes: { physical: 0.5, cold: 0.5 } },
           equipmentDrops: [
             { defId: "bronze_helm", chance: 0.04, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
           ],
@@ -428,7 +428,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Collapsed Corridors",
-          enemy: { name: "Collapsed Corridors", hp: 45, damage: 10, attackSpeed: 0.9, defense: 3, damageTypes: { physical: 0.6, wet: 0.4 } },
+          enemy: { name: "Collapsed Corridors", hp: 80, damage: 16, attackSpeed: 1.0, defense: 8, damageTypes: { physical: 0.6, wet: 0.4 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
             { resourceId: "bronze_ingot", amount: 1 },
@@ -439,7 +439,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Temple Guardian",
-          enemy: { name: "Temple Guardian", hp: 100, damage: 17, attackSpeed: 1.2, defense: 8, damageTypes: { physical: 0.8, wet: 0.2 } },
+          enemy: { name: "Temple Guardian", hp: 110, damage: 19, attackSpeed: 1.2, defense: 9, damageTypes: { physical: 0.8, wet: 0.2 } },
           equipmentDrops: [
             { defId: "bronze_sword", chance: 0.08, dropsAsBroken: true, affixRange: { min: 2, max: 3 } },
           ],
@@ -507,7 +507,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Steam Vents",
-          enemy: { name: "Steam Vents", hp: 40, damage: 12, attackSpeed: 0.9, defense: 2, damageTypes: { physical: 0.1, heat: 0.9 } },
+          enemy: { name: "Steam Vents", hp: 75, damage: 18, attackSpeed: 1.0, defense: 7, damageTypes: { physical: 0.1, heat: 0.9 } },
           drops: [
             { resourceId: "obsidian", amount: 1 },
             { resourceId: "iron_ore", amount: 1 },
@@ -518,7 +518,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
         },
         {
           name: "Volcanic Horror",
-          enemy: { name: "Volcanic Horror", hp: 95, damage: 18, attackSpeed: 1.1, defense: 8, damageTypes: { physical: 0.3, heat: 0.7 } },
+          enemy: { name: "Volcanic Horror", hp: 105, damage: 20, attackSpeed: 1.1, defense: 9, damageTypes: { physical: 0.3, heat: 0.7 } },
           equipmentDrops: [
             { defId: "bronze_cuirass", chance: 0.05, dropsAsBroken: true, affixRange: { min: 2, max: 3 } },
           ],
