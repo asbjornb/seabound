@@ -23,7 +23,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Crumbling Walls",
-          enemy: { name: "Crumbling Walls", hp: 25, damage: 5, attackSpeed: 0.8, defense: 1, damageTypes: { physical: 1.0 } },
+          enemy: { name: "Crumbling Walls", hp: 40, damage: 8, attackSpeed: 1.0, defense: 2, damageTypes: { physical: 1.0 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
             { resourceId: "raw_hide", amount: 1 },
@@ -105,7 +105,7 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
       stages: [
         {
           name: "Tidal Surge",
-          enemy: { name: "Tidal Surge", hp: 25, damage: 7, attackSpeed: 0.8, defense: 0, damageTypes: { wet: 1.0 } },
+          enemy: { name: "Tidal Surge", hp: 35, damage: 9, attackSpeed: 1.0, defense: 2, damageTypes: { physical: 0.3, wet: 0.7 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
           ],
