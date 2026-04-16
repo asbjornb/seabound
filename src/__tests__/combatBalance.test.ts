@@ -70,32 +70,17 @@ const TIER2_GEAR: PlayerCombatStats = {
   critMultiplier: 0,
 };
 
-/** Full iron gear, no affixes. */
-const IRON_GEAR: PlayerCombatStats = {
-  offense: 26,      // iron_sword
-  defense: 69,      // shield 18 + cuirass 18 + helm 11 + greaves 13 + boots 9
-  life: 95,         // shield 22 + cuirass 30 + helm 15 + greaves 18 + boots 10
-  attackSpeed: 5,   // iron_sword
-  speed: -1,        // sword 2 + shield -3 + greaves -1 + boots 1
-  endurance: 4,     // cuirass
-  heatResist: 0,
-  coldResist: 5,    // helm
-  wetResist: 5,     // boots
-  critChance: 0,
-  critMultiplier: 0,
-};
-
 /** Iron gear with all 6 imbues applied. */
 const IRON_IMBUED: PlayerCombatStats = {
-  offense: 31,      // 26 + jungle_sap 5
-  defense: 74,      // 69 + ruin_dust 5
-  life: 110,        // 95 + quarry_crystal 15
-  attackSpeed: 5,
-  speed: -1,
-  endurance: 9,     // 4 + temple_incense 5
+  offense: 31,      // iron_sword 26 + jungle_sap 5
+  defense: 74,      // (shield 18 + cuirass 18 + helm 11 + greaves 13 + boots 9) + ruin_dust 5
+  life: 110,        // (shield 22 + cuirass 30 + helm 15 + greaves 18 + boots 10) + quarry_crystal 15
+  attackSpeed: 5,   // iron_sword
+  speed: -1,        // sword 2 + shield -3 + greaves -1 + boots 1
+  endurance: 9,     // cuirass 4 + temple_incense 5
   heatResist: 7,    // volcanic_shard
-  coldResist: 12,   // 5 + ridge_frost 7
-  wetResist: 12,    // 5 + tidal_salt 7
+  coldResist: 12,   // helm 5 + ridge_frost 7
+  wetResist: 12,    // boots 5 + tidal_salt 7
   critChance: 0,
   critMultiplier: 0,
 };
