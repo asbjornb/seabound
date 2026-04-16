@@ -1274,6 +1274,46 @@ export const RECIPES: RecipeDef[] = [
     xpGain: 25,
   },
 
+  // ═══════════════════════════════════════
+  // Woodworking Tools — Island Upgrades
+  // ═══════════════════════════════════════
+  {
+    id: "craft_wooden_pulley",
+    name: "Wooden Pulley",
+    description:
+      "Carve a hardwood wheel and mount it on a bamboo axle with rope. Hauling heavy materials for building goes much faster.",
+    skillId: "woodworking",
+    panel: "craft",
+    requiredSkillLevel: 6,
+    inputs: [
+      { resourceId: "large_log", amount: 1 },
+      { resourceId: "cordage", amount: 3 },
+      { resourceId: "flat_stone", amount: 2 },
+    ],
+    toolOutput: "wooden_pulley",
+    durationMs: 12000,
+    oneTimeCraft: true,
+    xpGain: 30,
+  },
+  {
+    id: "craft_log_sled",
+    name: "Log Sled",
+    description:
+      "Lash two runners to bamboo crossbeams. Dragging felled logs back to camp takes less time.",
+    skillId: "woodworking",
+    panel: "craft",
+    requiredSkillLevel: 8,
+    inputs: [
+      { resourceId: "large_log", amount: 1 },
+      { resourceId: "rope", amount: 1 },
+      { resourceId: "bamboo_cane", amount: 4 },
+    ],
+    toolOutput: "log_sled",
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 40,
+  },
+
   // Crucible (Construction 13, requires kiln)
   {
     id: "craft_crucible",
@@ -1408,6 +1448,100 @@ export const RECIPES: RecipeDef[] = [
     durationMs: 30000,
     repeatable: true,
     xpGain: 90,
+  },
+
+  // ═══════════════════════════════════════
+  // MAINLAND — Metal Survival Tools
+  // ═══════════════════════════════════════
+  // Non-combat tools that make gathering and processing faster.
+  // No skill gates — the metal cost is the gate.
+
+  {
+    id: "forge_copper_knife",
+    name: "Copper Knife",
+    description:
+      "Hammer a copper blade and bind it to a bamboo grip. Holds a much cleaner edge than bamboo for cutting fiber and plants.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "copper_ingot", amount: 1 },
+      { resourceId: "bamboo_splinter", amount: 1 },
+      { resourceId: "cordage", amount: 1 },
+    ],
+    toolOutput: "copper_knife",
+    durationMs: 10000,
+    oneTimeCraft: true,
+    xpGain: 20,
+  },
+  {
+    id: "forge_bronze_axe_tool",
+    name: "Bronze Axe (Tool)",
+    description:
+      "Cast a heavy bronze axe head and haft it with bamboo. Fells trees and cuts wood far faster than stone.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "bronze_ingot", amount: 2 },
+      { resourceId: "bamboo_cane", amount: 2 },
+      { resourceId: "cordage", amount: 2 },
+    ],
+    toolOutput: "bronze_axe",
+    durationMs: 15000,
+    oneTimeCraft: true,
+    xpGain: 35,
+  },
+  {
+    id: "forge_iron_pickaxe",
+    name: "Iron Pickaxe",
+    description:
+      "Forge an iron pick head and mount it on a sturdy haft. The first tool hard enough to properly break rock.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "iron_ingot", amount: 2 },
+      { resourceId: "bamboo_cane", amount: 1 },
+      { resourceId: "cordage", amount: 1 },
+    ],
+    requiredTools: ["stone_anvil"],
+    toolOutput: "iron_pickaxe",
+    durationMs: 18000,
+    oneTimeCraft: true,
+    xpGain: 50,
+  },
+  {
+    id: "forge_steel_pickaxe",
+    name: "Steel Pickaxe",
+    description:
+      "Forge a tempered steel pick. Shatters ore veins that iron barely dents.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "steel_ingot", amount: 2 },
+      { resourceId: "bamboo_cane", amount: 1 },
+      { resourceId: "cured_leather", amount: 1 },
+    ],
+    requiredTools: ["stone_anvil"],
+    toolOutput: "steel_pickaxe",
+    durationMs: 25000,
+    oneTimeCraft: true,
+    xpGain: 75,
+  },
+  {
+    id: "forge_steel_knife",
+    name: "Steel Knife",
+    description:
+      "Forge a razor-edged steel blade. Slices through fiber, bark, and hide like nothing before it.",
+    skillId: "smithing",
+    panel: "craft",
+    inputs: [
+      { resourceId: "steel_ingot", amount: 1 },
+      { resourceId: "cured_leather", amount: 1 },
+    ],
+    requiredTools: ["stone_anvil"],
+    toolOutput: "steel_knife",
+    durationMs: 20000,
+    oneTimeCraft: true,
+    xpGain: 65,
   },
 
   // ── Tier 0: Improvised Equipment (Island Materials) ──

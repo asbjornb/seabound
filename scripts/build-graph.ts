@@ -837,7 +837,11 @@ const outPath = "src/data/progression-graph.json";
 if (process.argv.includes("--check")) {
   try {
     const existing = readFileSync(outPath, "utf-8");
-    if (existing === json) {
+    // Compare parsed structures rather than raw strings to avoid
+    // byte-level differences across Node versions / JSON.stringify formatting.
+    const existingParsed = JSON.parse(existing);
+    const generatedParsed = JSON.parse(json);
+    if (JSON.stringify(existingParsed) === JSON.stringify(generatedParsed)) {
       console.log("progression-graph.json is up to date.");
       process.exit(0);
     } else {

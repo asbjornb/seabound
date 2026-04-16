@@ -454,6 +454,41 @@
       "label": "Digging Stick"
     },
     {
+      "id": "tool:wooden_pulley",
+      "type": "tool",
+      "label": "Wooden Pulley"
+    },
+    {
+      "id": "tool:log_sled",
+      "type": "tool",
+      "label": "Log Sled"
+    },
+    {
+      "id": "tool:copper_knife",
+      "type": "tool",
+      "label": "Copper Knife"
+    },
+    {
+      "id": "tool:bronze_axe",
+      "type": "tool",
+      "label": "Bronze Axe"
+    },
+    {
+      "id": "tool:iron_pickaxe",
+      "type": "tool",
+      "label": "Iron Pickaxe"
+    },
+    {
+      "id": "tool:steel_pickaxe",
+      "type": "tool",
+      "label": "Steel Pickaxe"
+    },
+    {
+      "id": "tool:steel_knife",
+      "type": "tool",
+      "label": "Steel Knife"
+    },
+    {
       "id": "biome:beach",
       "type": "biome",
       "label": "beach"
@@ -845,6 +880,18 @@
       "type": "skill_level",
       "label": "Farming Lv12",
       "category": "farming"
+    },
+    {
+      "id": "skill:woodworking:6",
+      "type": "skill_level",
+      "label": "Woodworking Lv6",
+      "category": "woodworking"
+    },
+    {
+      "id": "skill:woodworking:8",
+      "type": "skill_level",
+      "label": "Woodworking Lv8",
+      "category": "woodworking"
     },
     {
       "id": "skill:woodworking:4",
@@ -1375,6 +1422,18 @@
       "category": "cooking"
     },
     {
+      "id": "recipe:craft_wooden_pulley",
+      "type": "recipe",
+      "label": "Wooden Pulley",
+      "category": "woodworking"
+    },
+    {
+      "id": "recipe:craft_log_sled",
+      "type": "recipe",
+      "label": "Log Sled",
+      "category": "woodworking"
+    },
+    {
       "id": "recipe:craft_crucible",
       "type": "recipe",
       "label": "Crucible",
@@ -1414,6 +1473,36 @@
       "id": "recipe:forge_steel",
       "type": "recipe",
       "label": "Forge Steel",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_copper_knife",
+      "type": "recipe",
+      "label": "Copper Knife",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_bronze_axe_tool",
+      "type": "recipe",
+      "label": "Bronze Axe (Tool)",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_iron_pickaxe",
+      "type": "recipe",
+      "label": "Iron Pickaxe",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_pickaxe",
+      "type": "recipe",
+      "label": "Steel Pickaxe",
+      "category": "smithing"
+    },
+    {
+      "id": "recipe:forge_steel_knife",
+      "type": "recipe",
+      "label": "Steel Knife",
       "category": "smithing"
     },
     {
@@ -4122,6 +4211,66 @@
       "relation": "requires_building"
     },
     {
+      "from": "recipe:craft_wooden_pulley",
+      "to": "tool:wooden_pulley",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "recipe:craft_wooden_pulley",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:craft_wooden_pulley",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:flat_stone",
+      "to": "recipe:craft_wooden_pulley",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_wooden_pulley",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:woodworking:6",
+      "to": "recipe:craft_wooden_pulley",
+      "relation": "requires_skill"
+    },
+    {
+      "from": "recipe:craft_log_sled",
+      "to": "tool:log_sled",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:large_log",
+      "to": "recipe:craft_log_sled",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:rope",
+      "to": "recipe:craft_log_sled",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:craft_log_sled",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:craft_log_sled",
+      "to": "skill:woodworking",
+      "relation": "trains"
+    },
+    {
+      "from": "skill:woodworking:8",
+      "to": "recipe:craft_log_sled",
+      "relation": "requires_skill"
+    },
+    {
       "from": "recipe:craft_crucible",
       "to": "tool:crucible",
       "relation": "crafts_tool"
@@ -4345,6 +4494,141 @@
       "from": "building:bloomery",
       "to": "recipe:forge_steel",
       "relation": "requires_building"
+    },
+    {
+      "from": "recipe:forge_copper_knife",
+      "to": "tool:copper_knife",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:copper_ingot",
+      "to": "recipe:forge_copper_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_splinter",
+      "to": "recipe:forge_copper_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_copper_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_copper_knife",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:forge_bronze_axe_tool",
+      "to": "tool:bronze_axe",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:bronze_ingot",
+      "to": "recipe:forge_bronze_axe_tool",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_bronze_axe_tool",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_bronze_axe_tool",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_bronze_axe_tool",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "recipe:forge_iron_pickaxe",
+      "to": "tool:iron_pickaxe",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:iron_ingot",
+      "to": "recipe:forge_iron_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_iron_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cordage",
+      "to": "recipe:forge_iron_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_iron_pickaxe",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:stone_anvil",
+      "to": "recipe:forge_iron_pickaxe",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "recipe:forge_steel_pickaxe",
+      "to": "tool:steel_pickaxe",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:bamboo_cane",
+      "to": "recipe:forge_steel_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_pickaxe",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_pickaxe",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:stone_anvil",
+      "to": "recipe:forge_steel_pickaxe",
+      "relation": "requires_tool"
+    },
+    {
+      "from": "recipe:forge_steel_knife",
+      "to": "tool:steel_knife",
+      "relation": "crafts_tool"
+    },
+    {
+      "from": "resource:steel_ingot",
+      "to": "recipe:forge_steel_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "resource:cured_leather",
+      "to": "recipe:forge_steel_knife",
+      "relation": "consumes"
+    },
+    {
+      "from": "recipe:forge_steel_knife",
+      "to": "skill:smithing",
+      "relation": "trains"
+    },
+    {
+      "from": "tool:stone_anvil",
+      "to": "recipe:forge_steel_knife",
+      "relation": "requires_tool"
     },
     {
       "from": "resource:bamboo_cane",
@@ -5129,6 +5413,241 @@
     {
       "from": "tool:obsidian_blade",
       "to": "recipe:shred_coconut_husk",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_stone_hearth",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_palm_leaf_pile",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_rock_pool_cache",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_sleeping_mat",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_hammock",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_thatched_hut",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_drying_rack",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_fenced_perimeter",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_log_rack",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_fiber_loom",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_weaving_frame",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_firing_pit",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_kiln",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_pottery_wheel",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_charcoal_kiln",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_soaking_pit",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_stone_tidal_weir",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_cleared_plot",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_well",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:upgrade_tended_garden",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:upgrade_farm_plot",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_pandanus_grove",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_storage_shelf",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_cartographers_table",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:wooden_pulley",
+      "to": "recipe:build_bloomery",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:log_sled",
+      "to": "action:fell_large_tree",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:copper_knife",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:copper_knife",
+      "to": "recipe:cut_pandanus_strips",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:copper_knife",
+      "to": "recipe:split_bamboo_cane",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:copper_knife",
+      "to": "recipe:dry_pandanus_leaf",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:copper_knife",
+      "to": "recipe:split_retted_pandanus",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bronze_axe",
+      "to": "action:fell_large_tree",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bronze_axe",
+      "to": "action:harvest_bamboo",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bronze_axe",
+      "to": "recipe:char_log_interior",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:bronze_axe",
+      "to": "recipe:scrape_hull",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:iron_pickaxe",
+      "to": "action:prospect_copper",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:iron_pickaxe",
+      "to": "action:prospect_tin",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:iron_pickaxe",
+      "to": "action:mine_iron",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_pickaxe",
+      "to": "action:prospect_copper",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_pickaxe",
+      "to": "action:prospect_tin",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_pickaxe",
+      "to": "action:mine_iron",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:shred_coconut_husk",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:cut_pandanus_strips",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:split_bamboo_cane",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:dry_pandanus_leaf",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:split_retted_pandanus",
+      "relation": "speeds_up"
+    },
+    {
+      "from": "tool:steel_knife",
+      "to": "recipe:cure_raw_hide",
       "relation": "speeds_up"
     },
     {
@@ -6733,6 +7252,7 @@
       "resource:charred_log",
       "tool:shell_adze",
       "tool:obsidian_blade",
+      "tool:bronze_axe",
       "resource:dried_fiber",
       "building:fiber_loom",
       "resource:pandanus_strip",
@@ -6753,6 +7273,7 @@
       "recipe:char_log_interior",
       "recipe:craft_shell_adze",
       "recipe:knap_obsidian_blade",
+      "recipe:forge_bronze_axe_tool",
       "recipe:dry_fiber",
       "recipe:build_fiber_loom",
       "recipe:cut_pandanus_strips",
@@ -6781,12 +7302,16 @@
       "resource:large_shell",
       "resource:obsidian",
       "resource:flat_stone",
+      "resource:bronze_ingot",
       "resource:rough_fiber",
       "building:drying_rack",
       "resource:palm_frond",
       "skill:weaving:4",
+      "tool:wooden_pulley",
       "resource:dried_pandanus_leaf",
       "tool:bamboo_knife",
+      "tool:copper_knife",
+      "tool:steel_knife",
       "resource:retted_pandanus",
       "biome:rocky_shore",
       "tool:bamboo_spear",
@@ -6823,11 +7348,15 @@
       "expedition:sunken_temple",
       "station:chart_coastal_regions",
       "station:chart_inland_territory",
+      "recipe:smelt_bronze",
       "recipe:shred_coconut_husk",
       "recipe:build_drying_rack",
       "action:collect_palm_frond",
+      "recipe:craft_wooden_pulley",
       "recipe:dry_pandanus_leaf",
       "recipe:craft_bamboo_knife",
+      "recipe:forge_copper_knife",
+      "recipe:forge_steel_knife",
       "station:soak_pandanus",
       "recipe:craft_bamboo_spear",
       "recipe:craft_gorge_hook",
@@ -6841,18 +7370,28 @@
       "station:grow_breadfruit",
       "biome:jungle_interior",
       "tool:stone_axe",
+      "tool:log_sled",
       "resource:fresh_water",
       "biome:coastal_cliffs",
       "tool:bow_drill_kit",
       "building:raft",
       "biome:nearby_island",
       "skill:mining:5",
+      "tool:iron_pickaxe",
+      "tool:steel_pickaxe",
       "skill:mining:10",
       "biome:inland_hills",
       "building:cartographers_table",
       "resource:rope",
+      "resource:copper_ingot",
+      "resource:tin_ingot",
+      "tool:crucible",
+      "skill:woodworking:6",
       "resource:pandanus_leaves",
       "resource:bamboo_splinter",
+      "resource:steel_ingot",
+      "resource:cured_leather",
+      "tool:stone_anvil",
       "resource:shell",
       "skill:crafting:6",
       "resource:stone_flake",
@@ -6866,45 +7405,70 @@
       "skill:farming:12",
       "resource:breadfruit_cutting",
       "recipe:craft_stone_axe",
+      "recipe:craft_log_sled",
       "recipe:fill_water_pot",
       "recipe:craft_bow_drill",
       "recipe:build_raft",
+      "recipe:forge_iron_pickaxe",
+      "recipe:forge_steel_pickaxe",
       "recipe:build_cartographers_table",
       "recipe:twist_rope",
+      "recipe:smelt_copper",
+      "recipe:smelt_tin",
+      "recipe:craft_crucible",
       "station:grow_pandanus",
       "station:harvest_pandanus_grove",
       "recipe:split_bamboo_cane",
+      "recipe:forge_steel",
+      "recipe:cure_raw_hide",
+      "recipe:craft_stone_anvil",
       "recipe:strike_stone_flake",
       "recipe:build_charcoal_kiln",
       "action:dig_clay",
       "resource:stone_blade",
+      "skill:woodworking:8",
       "resource:fired_clay_pot",
+      "resource:iron_ingot",
       "skill:construction:10",
+      "resource:copper_ore",
+      "resource:native_copper",
+      "building:kiln",
+      "resource:tin_ore",
+      "skill:construction:13",
       "resource:pandanus_cutting",
       "building:pandanus_grove",
-      "resource:chert",
+      "building:bloomery",
+      "resource:raw_hide",
       "tool:hammerstone",
+      "resource:chert",
       "skill:construction:14",
-      "building:kiln",
       "building:stone_hearth",
       "recipe:knap_stone_blade",
       "recipe:fire_clay_pot",
       "recipe:kiln_fire_pot",
-      "recipe:build_pandanus_grove",
-      "recipe:craft_hammerstone",
+      "recipe:hammer_iron_bloom",
+      "action:prospect_copper",
       "recipe:build_kiln",
+      "recipe:build_pandanus_grove",
+      "recipe:build_bloomery",
+      "recipe:craft_hammerstone",
       "recipe:build_stone_hearth",
       "resource:shaped_clay_pot",
       "building:firing_pit",
+      "resource:iron_bloom",
+      "skill:construction:11",
       "skill:farming:7",
       "building:farm_plot",
-      "skill:construction:11",
+      "tool:bellows",
       "skill:construction:12",
       "recipe:shape_clay_pot",
       "recipe:wheel_shape_clay_pot",
       "recipe:build_firing_pit",
+      "recipe:smelt_iron_bloom",
       "recipe:upgrade_farm_plot",
+      "recipe:craft_bellows",
       "building:pottery_wheel",
+      "resource:iron_ore",
       "skill:construction:8",
       "building:tended_garden",
       "recipe:build_pottery_wheel",
@@ -7883,6 +8447,42 @@
             "recipe:split_bamboo_cane",
             "recipe:char_log_interior",
             "recipe:scrape_hull",
+            "recipe:craft_wooden_pulley",
+            "recipe:craft_log_sled",
+            "recipe:craft_bamboo_buckler",
+            "station:burn_charcoal"
+          ]
+        },
+        {
+          "level": 6,
+          "unlocks": [
+            "recipe:craft_wooden_pulley"
+          ],
+          "trainedBy": [
+            "action:harvest_bamboo",
+            "action:fell_large_tree",
+            "recipe:split_bamboo_cane",
+            "recipe:char_log_interior",
+            "recipe:scrape_hull",
+            "recipe:craft_wooden_pulley",
+            "recipe:craft_log_sled",
+            "recipe:craft_bamboo_buckler",
+            "station:burn_charcoal"
+          ]
+        },
+        {
+          "level": 8,
+          "unlocks": [
+            "recipe:craft_log_sled"
+          ],
+          "trainedBy": [
+            "action:harvest_bamboo",
+            "action:fell_large_tree",
+            "recipe:split_bamboo_cane",
+            "recipe:char_log_interior",
+            "recipe:scrape_hull",
+            "recipe:craft_wooden_pulley",
+            "recipe:craft_log_sled",
             "recipe:craft_bamboo_buckler",
             "station:burn_charcoal"
           ]
