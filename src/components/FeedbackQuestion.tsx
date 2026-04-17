@@ -18,9 +18,10 @@ const SHOW_DELAY_MS = 15_000; // 15s after page load
 
 // Early questions — best for players still learning the game
 const EARLY_QUESTIONS = [
-  "What was the most confusing moment when you first started playing?",
-  "What resource feels the most tedious to gather?",
+  "Is anything tedious in a way that actually bothers you?",
   "What was the last thing that made you feel stuck?",
+  "What would make the interface clearer or easier to learn?",
+  "Any suggestions for simplifying what's on screen?",
 ];
 
 // Later questions — better after the player has seen more content
