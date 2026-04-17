@@ -20,8 +20,8 @@ const SHOW_DELAY_MS = 15_000; // 15s after page load
 const EARLY_QUESTIONS = [
   "Is anything tedious in a way that actually bothers you?",
   "What was the last thing that made you feel stuck?",
-  "What part of the interface felt confusing or hard to use?",
-  "Is anything on screen cluttered or overwhelming right now?",
+  "What would make the interface clearer or easier to learn?",
+  "Any suggestions for simplifying what's on screen?",
 ];
 
 // Later questions — better after the player has seen more content
