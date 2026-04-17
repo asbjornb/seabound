@@ -18,7 +18,6 @@ const SHOW_DELAY_MS = 15_000; // 15s after page load
 
 // Early questions — best for players still learning the game
 const EARLY_QUESTIONS = [
-  "What was the most confusing moment when you first started playing?",
   "What resource feels the most tedious to gather?",
   "What was the last thing that made you feel stuck?",
 ];
