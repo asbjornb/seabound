@@ -175,15 +175,16 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "spear_fish",
     name: "Spear Fish",
-    description: "Use your bamboo spear to reliably catch fish.",
+    description:
+      "Wade the shallows with your bamboo spear — quick strikes on fish, crabs, and shells.",
     skillId: "fishing",
     panel: "gather",
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.15 },
-      { resourceId: "crab", amount: 1, chance: 0.15 },
-      { resourceId: "shell", amount: 1, chance: 0.3 },
+      { resourceId: "crab", amount: 1, chance: 0.3 },
+      { resourceId: "shell", amount: 1, chance: 0.25 },
+      { resourceId: "large_fish", amount: 1, chance: 0.05 },
     ],
     requiredTools: ["bamboo_spear"],
     xpGain: 12,
@@ -194,14 +195,14 @@ export const ACTIONS: ActionDef[] = [
     id: "drop_line_fish",
     name: "Drop Line Fishing",
     description:
-      "Lower a baited gorge hook into deeper water. Slower, but catches bigger fish.",
+      "Lower a baited gorge hook into deep water. Slower, but targets bigger fish.",
     skillId: "fishing",
     panel: "gather",
     durationMs: 8000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.25 },
-      { resourceId: "shell", amount: 1, chance: 0.2 },
+      { resourceId: "large_fish", amount: 1, chance: 0.5 },
+      { resourceId: "large_shell", amount: 1, chance: 0.08 },
     ],
     requiredTools: ["gorge_hook"],
     xpGain: 18,

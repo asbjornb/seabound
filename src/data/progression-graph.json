@@ -2067,17 +2067,17 @@
     },
     {
       "from": "action:spear_fish",
-      "to": "resource:large_fish",
-      "relation": "produces"
-    },
-    {
-      "from": "action:spear_fish",
       "to": "resource:crab",
       "relation": "produces"
     },
     {
       "from": "action:spear_fish",
       "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "resource:large_fish",
       "relation": "produces"
     },
     {
@@ -2102,7 +2102,7 @@
     },
     {
       "from": "action:drop_line_fish",
-      "to": "resource:shell",
+      "to": "resource:large_shell",
       "relation": "produces"
     },
     {
