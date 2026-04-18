@@ -20,9 +20,12 @@ function canAfford(exp: ExpeditionDef, state: GameState): boolean {
 }
 
 function undiscoveredBiomeCount(exp: ExpeditionDef, state: GameState): number {
-  const biomes = exp.outcomes
-    .filter((o) => o.biomeDiscovery)
-    .map((o) => o.biomeDiscovery!);
+  const biomes = [
+    ...exp.outcomes.filter((o) => o.biomeDiscovery).map((o) => o.biomeDiscovery!),
+    ...(exp.difficulty?.stages ?? [])
+      .filter((s) => s.biomeDiscovery)
+      .map((s) => s.biomeDiscovery!),
+  ];
   return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
 }
 
@@ -179,13 +182,16 @@ function formatDamageTypes(dmgTypes: { physical?: number; heat?: number; cold?: 
   return labels.join(", ");
 }
 
+/** Format a drop chance as "(X%)" or "(guaranteed)". */
+function formatDropChance(chance: number | undefined): string {
+  if (chance == null || chance >= 1) return "guaranteed";
+  return `${(chance * 100).toFixed(chance < 0.01 ? 1 : 0)}%`;
+}
+
 /** Display per-stage rewards for a staged expedition. */
 function StagedDropsDisplay({ stages, resources, state }: { stages: CombatStage[]; resources: Record<string, { name?: string }>; state: GameState }) {
   const [expanded, setExpanded] = useState(false);
   const SLOTS = getEquipmentSlots();
-
-  const totalEquip = stages.reduce((sum, s) => sum + (s.equipmentDrops?.length ?? 0), 0);
-  const totalLoot = stages.reduce((sum, s) => sum + (s.lootTable?.length ?? 0), 0);
 
   return (
     <div className="action-drops staged-drops-section">
@@ -196,7 +202,7 @@ function StagedDropsDisplay({ stages, resources, state }: { stages: CombatStage[
           setExpanded(!expanded);
         }}
       >
-        {expanded ? "Hide stage rewards" : `${totalEquip} equipment, ${totalLoot} rare across ${stages.length} stages...`}
+        {expanded ? "Hide stage rewards" : "Show stage rewards"}
       </button>
       {expanded && stages.map((stage, si) => (
         <div key={si} className="staged-drop-group">
@@ -204,7 +210,8 @@ function StagedDropsDisplay({ stages, resources, state }: { stages: CombatStage[
           {stage.drops && stage.drops.map((d, i) => (
             <div key={`d${i}`} className="drop-row">
               <GameIcon id={d.resourceId} size={16} />
-              {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}
+              {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
+              ({formatDropChance(d.chance)})
             </div>
           ))}
           {stage.equipmentDrops && stage.equipmentDrops.map((d, i) => {
@@ -214,7 +221,7 @@ function StagedDropsDisplay({ stages, resources, state }: { stages: CombatStage[
               <div key={`e${i}`} className="drop-row equip-drop">
                 <span className="equip-drop-slot">{slotName}</span>
                 {def?.name ?? d.defId}{" "}
-                ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
+                ({formatDropChance(d.chance)})
               </div>
             );
           })}
@@ -224,11 +231,18 @@ function StagedDropsDisplay({ stages, resources, state }: { stages: CombatStage[
               <div key={`l${i}`} className="drop-row loot-drop">
                 <GameIcon id={d.resourceId} size={16} />
                 {d.amount}x {resources[d.resourceId]?.name ?? d.resourceId}{" "}
-                ({(d.chance * 100).toFixed(d.chance < 0.01 ? 1 : 0)}%)
+                ({formatDropChance(d.chance)})
                 {found && <span className="loot-found-mark" title="Found!">&#10003;</span>}
               </div>
             );
           })}
+          {stage.biomeDiscovery && !state.discoveredBiomes.includes(stage.biomeDiscovery) && (
+            <div className="drop-row biome-drop">
+              <GameIcon id={`biome_${stage.biomeDiscovery}`} size={16} />
+              Discover: {stage.biomeDiscovery.replace(/_/g, " ")}{" "}
+              ({formatDropChance(stage.biomeDiscoveryChance)})
+            </div>
+          )}
         </div>
       ))}
     </div>

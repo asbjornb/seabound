@@ -358,7 +358,7 @@ for (const e of ALL_EXPEDITIONS) {
     }
   }
 
-  // Staged combat drops (per-stage loot tables and drops)
+  // Staged combat drops (per-stage loot tables, drops, and biome discoveries)
   if (e.difficulty?.stages) {
     for (const stage of e.difficulty.stages) {
       if (stage.drops) {
@@ -369,6 +369,14 @@ for (const e of ALL_EXPEDITIONS) {
       if (stage.lootTable) {
         for (const loot of stage.lootTable) {
           addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
+        }
+      }
+      if (stage.biomeDiscovery) {
+        addEdge({ from: expId, to: `biome:${stage.biomeDiscovery}`, relation: "discovers" });
+      }
+      if (stage.biomeDiscoveryRequires) {
+        for (const req of stage.biomeDiscoveryRequires) {
+          addEdge({ from: `biome:${req}`, to: expId, relation: "requires_biome_discovered" });
         }
       }
     }

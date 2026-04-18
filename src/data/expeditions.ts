@@ -26,7 +26,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           enemy: { name: "Crumbling Walls", hp: 40, damage: 8, attackSpeed: 1.0, defense: 2, damageTypes: { physical: 1.0 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
-            { resourceId: "raw_hide", amount: 1 },
+            { resourceId: "raw_hide", amount: 2, chance: 0.25 },
+            { resourceId: "coconut_husk", amount: 3, chance: 0.25 },
+            { resourceId: "native_copper", amount: 2, chance: 0.15 },
           ],
           equipmentDrops: [
             { defId: "corroded_medallion", chance: 0.18, dropsAsBroken: true, affixRange: { min: 0, max: 2 } },
@@ -57,35 +59,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 30,
+        weight: 100,
         description:
-          "You navigate the ruins carefully, finding useful stone and metal scraps among the rubble.",
-        drops: [
-          { resourceId: "flat_stone", amount: 3 },
-        ],
-      },
-      {
-        weight: 25,
-        description:
-          "A wild boar charges from a collapsed doorway. You fend it off and skin the carcass before claiming the den's contents.",
-        drops: [
-          { resourceId: "raw_hide", amount: 2 },
-          { resourceId: "coconut_husk", amount: 3 },
-          { resourceId: "flat_stone", amount: 1 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "Deep in a half-buried chamber, you find a corroded copper deposit in the walls.",
-        drops: [
-          { resourceId: "native_copper", amount: 2 },
-        ],
-      },
-      {
-        weight: 30,
-        description:
-          "The ruins are too unstable to explore safely. You retreat before the walls collapse.",
+          "You pick your way through the ruins, fending off wildlife and scavenging what you can from the rubble.",
       },
     ],
   },
@@ -108,6 +84,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           enemy: { name: "Tidal Surge", hp: 35, damage: 9, attackSpeed: 1.0, defense: 2, damageTypes: { physical: 0.3, wet: 0.7 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
+            { resourceId: "copper_ore", amount: 3, chance: 0.45 },
+            { resourceId: "native_copper", amount: 1, chance: 0.15 },
           ],
           equipmentDrops: [
             { defId: "bamboo_buckler", chance: 0.08, dropsAsBroken: true, affixRange: { min: 0, max: 1 } },
@@ -119,6 +97,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           equipmentDrops: [
             { defId: "coral_encrusted_buckler", chance: 0.04, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
           ],
+          biomeDiscovery: "coastal_cliffs",
+          biomeDiscoveryChance: 0.3,
         },
         {
           name: "Drowned Sentinel",
@@ -135,35 +115,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 30,
+        weight: 100,
         description:
-          "The cave opens onto towering sea cliffs with exposed mineral veins — green-streaked copper glints in the rock face! You chip away what you can before the tide turns.",
-        biomeDiscovery: "coastal_cliffs",
-        drops: [
-          { resourceId: "copper_ore", amount: 2 },
-        ],
-      },
-      {
-        weight: 25,
-        description:
-          "You find a cache of flat stones wedged between tide pools, smoothed by centuries of waves.",
-        drops: [
-          { resourceId: "flat_stone", amount: 4 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "A collapsed section reveals a vein of greenish ore — malachite, rich in copper.",
-        drops: [
-          { resourceId: "copper_ore", amount: 3 },
-          { resourceId: "native_copper", amount: 1 },
-        ],
-      },
-      {
-        weight: 30,
-        description:
-          "The tide comes in faster than expected. You scramble out with soaked gear and nothing to show for it.",
+          "You wade through the tide pools and chip at the mineral veins before the sea rushes back in.",
       },
     ],
   },
@@ -189,7 +143,8 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           enemy: { name: "Jungle Thicket", hp: 55, damage: 12, attackSpeed: 1.0, defense: 5, damageTypes: { physical: 0.3, heat: 0.7 } },
           drops: [
             { resourceId: "coconut_husk", amount: 2 },
-            { resourceId: "flat_stone", amount: 1 },
+            { resourceId: "flat_stone", amount: 2 },
+            { resourceId: "native_copper", amount: 3, chance: 0.4 },
           ],
           equipmentDrops: [
             { defId: "copper_spear", chance: 0.05, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
@@ -201,6 +156,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           equipmentDrops: [
             { defId: "vine_lash", chance: 0.03, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
           ],
+          biomeDiscovery: "inland_hills",
+          biomeDiscoveryChance: 0.25,
+          biomeDiscoveryRequires: ["coastal_cliffs"],
         },
         {
           name: "Alpha Stalker",
@@ -217,37 +175,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 25,
+        weight: 100,
         description:
-          "You push through the brush and crest a ridge — rolling hills of red earth stretch ahead, iron-rich deposits visible just beneath the surface! You also spot copper ore glinting in an exposed vein.",
-        biomeDiscovery: "inland_hills",
-        requiredBiomes: ["coastal_cliffs"],
-        drops: [
-          { resourceId: "native_copper", amount: 3 },
-        ],
-      },
-      {
-        weight: 20,
-        description:
-          "You stumble on a nest of vipers but dispatch them with your weapon. Their nest sits atop useful materials.",
-        drops: [
-          { resourceId: "coconut_husk", amount: 2 },
-          { resourceId: "flat_stone", amount: 2 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "The trail opens to a moss-covered ruin with remarkably preserved stonework. You salvage what you can.",
-        drops: [
-          { resourceId: "flat_stone", amount: 4 },
-          { resourceId: "native_copper", amount: 1 },
-        ],
-      },
-      {
-        weight: 40,
-        description:
-          "The heat saps your strength and you're forced to turn back before reaching anything of value.",
+          "You press inland through the heat and undergrowth, hacking past vipers and loose footing to claim what the trail yields.",
       },
     ],
   },
@@ -269,8 +199,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           name: "Murky Descent",
           enemy: { name: "Murky Descent", hp: 55, damage: 12, attackSpeed: 1.0, defense: 5, damageTypes: { physical: 0.2, wet: 0.8 } },
           drops: [
-            { resourceId: "tin_ore", amount: 1 },
-            { resourceId: "flat_stone", amount: 1 },
+            { resourceId: "tin_ore", amount: 2 },
+            { resourceId: "flat_stone", amount: 2 },
+            { resourceId: "copper_ore", amount: 2, chance: 0.2 },
           ],
           equipmentDrops: [
             { defId: "copper_shield", chance: 0.06, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
@@ -298,35 +229,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 25,
+        weight: 100,
         description:
-          "You wade to the quarry floor and pry dark cassiterite pebbles from the exposed rock face.",
-        drops: [
-          { resourceId: "tin_ore", amount: 2 },
-          { resourceId: "flat_stone", amount: 2 },
-        ],
-      },
-      {
-        weight: 20,
-        description:
-          "Beneath a collapsed pillar you find a pocket of ore — both copper and tin, side by side.",
-        drops: [
-          { resourceId: "tin_ore", amount: 1 },
-          { resourceId: "copper_ore", amount: 2 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "The deepest chamber holds a cache of corroded bronze tools, too far gone to use but rich in salvageable metal.",
-        drops: [
-          { resourceId: "tin_ore", amount: 3 },
-        ],
-      },
-      {
-        weight: 40,
-        description:
-          "The water rises suddenly — an underground spring surging. You climb out with nothing but soaked clothes.",
+          "You wade chest-deep through the flooded pits, prying cassiterite from the rock face before the water rises.",
       },
     ],
   },
@@ -348,8 +253,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           name: "Exposed Climb",
           enemy: { name: "Exposed Climb", hp: 70, damage: 14, attackSpeed: 1.0, defense: 7, damageTypes: { physical: 0.2, cold: 0.8 } },
           drops: [
-            { resourceId: "charcoal", amount: 2 },
-            { resourceId: "iron_ore", amount: 1 },
+            { resourceId: "charcoal", amount: 3 },
+            { resourceId: "iron_ore", amount: 2 },
+            { resourceId: "copper_ore", amount: 2, chance: 0.15 },
           ],
           equipmentDrops: [
             { defId: "windrunner_boots", chance: 0.03, dropsAsBroken: true, affixRange: { min: 1, max: 2 } },
@@ -377,35 +283,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 25,
+        weight: 100,
         description:
-          "Beyond the ridge, you find an exposed cliff face veined with red-brown iron ore. You fill your pack.",
-        drops: [
-          { resourceId: "iron_ore", amount: 2 },
-        ],
-      },
-      {
-        weight: 20,
-        description:
-          "At the summit you discover a collapsed cairn. Among the stones: charcoal and ore, left by someone long gone.",
-        drops: [
-          { resourceId: "iron_ore", amount: 1 },
-          { resourceId: "charcoal", amount: 4 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "A sheltered hollow on the far side holds a seam of both iron and copper ore, still untouched.",
-        drops: [
-          { resourceId: "iron_ore", amount: 2 },
-          { resourceId: "copper_ore", amount: 2 },
-        ],
-      },
-      {
-        weight: 40,
-        description:
-          "The wind drives you back before you reach the far side. You retreat, half-frozen, with nothing.",
+          "You push across the windswept ridge, prying iron-rich stone from the cliffs before the cold drives you back down.",
       },
     ],
   },
@@ -431,7 +311,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           enemy: { name: "Collapsed Corridors", hp: 80, damage: 16, attackSpeed: 1.0, defense: 8, damageTypes: { physical: 0.6, wet: 0.4 } },
           drops: [
             { resourceId: "flat_stone", amount: 2 },
-            { resourceId: "bronze_ingot", amount: 1 },
+            { resourceId: "bronze_ingot", amount: 3 },
+            { resourceId: "tin_ore", amount: 2, chance: 0.2 },
+            { resourceId: "copper_ingot", amount: 2, chance: 0.2 },
           ],
           equipmentDrops: [
             { defId: "bronze_cuirass", chance: 0.05, dropsAsBroken: true, affixRange: { min: 1, max: 3 } },
@@ -459,35 +341,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 20,
+        weight: 100,
         description:
-          "You fight through collapsing corridors and feral animals denning in the inner chambers. In the deepest room, bronze artifacts lie undisturbed on a stone altar.",
-        drops: [
-          { resourceId: "bronze_ingot", amount: 3 },
-          { resourceId: "tin_ore", amount: 2 },
-        ],
-      },
-      {
-        weight: 20,
-        description:
-          "The lower level is flooded, but you wade through and find a collapsed storeroom. Corroded bronze vessels and tools — heavy, but worth the haul.",
-        drops: [
-          { resourceId: "bronze_ingot", amount: 2 },
-          { resourceId: "copper_ingot", amount: 2 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "Behind a fallen column, you discover a sealed alcove with remarkably preserved metalwork. The bronze gleams as if it were forged yesterday.",
-        drops: [
-          { resourceId: "bronze_ingot", amount: 4 },
-        ],
-      },
-      {
-        weight: 45,
-        description:
-          "The ceiling groans and a section collapses behind you. You barely escape with your life — and nothing else.",
+          "You descend past collapsing corridors and flooded storerooms, gathering bronze artifacts from undisturbed altars deep in the temple.",
       },
     ],
   },
@@ -509,8 +365,10 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
           name: "Steam Vents",
           enemy: { name: "Steam Vents", hp: 75, damage: 18, attackSpeed: 1.0, defense: 7, damageTypes: { physical: 0.1, heat: 0.9 } },
           drops: [
-            { resourceId: "obsidian", amount: 1 },
-            { resourceId: "iron_ore", amount: 1 },
+            { resourceId: "obsidian", amount: 2 },
+            { resourceId: "iron_ore", amount: 3 },
+            { resourceId: "charcoal", amount: 6, chance: 0.2 },
+            { resourceId: "tin_ore", amount: 3, chance: 0.1 },
           ],
           equipmentDrops: [
             { defId: "bronze_shield", chance: 0.04, dropsAsBroken: true, affixRange: { min: 2, max: 3 } },
@@ -538,36 +396,9 @@ export const MAINLAND_EXPEDITIONS: ExpeditionDef[] = [
     },
     outcomes: [
       {
-        weight: 20,
+        weight: 100,
         description:
-          "You descend along a narrow ledge, shielding your face from the heat. In a cooled lava tube, you find iron ore deposits of extraordinary purity.",
-        drops: [
-          { resourceId: "iron_ore", amount: 4 },
-          { resourceId: "charcoal", amount: 6 },
-        ],
-      },
-      {
-        weight: 15,
-        description:
-          "Deep in the rift, volcanic glass and metallic deposits line the walls. You chip away what you can carry.",
-        drops: [
-          { resourceId: "iron_ore", amount: 3 },
-          { resourceId: "obsidian", amount: 3 },
-        ],
-      },
-      {
-        weight: 10,
-        description:
-          "At the deepest point, you find a vein of dense, dark ore fused by volcanic heat. It's heavier than anything you've seen — practically steel.",
-        drops: [
-          { resourceId: "iron_ore", amount: 5 },
-          { resourceId: "tin_ore", amount: 3 },
-        ],
-      },
-      {
-        weight: 55,
-        description:
-          "A geyser of superheated steam erupts ahead of you. The path is impassable — you turn back, dehydrated and empty-handed.",
+          "You brave the rift's superheated vents, chipping iron and volcanic glass from the walls while the heat tests your every step.",
       },
     ],
   },

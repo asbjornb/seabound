@@ -113,7 +113,9 @@ function buildIndex(
   }
 
   for (const e of expeditions) {
-    const firstBiome = e.outcomes.find((o) => o.biomeDiscovery)?.biomeDiscovery;
+    const firstBiome =
+      e.outcomes.find((o) => o.biomeDiscovery)?.biomeDiscovery ??
+      e.difficulty?.stages?.find((s) => s.biomeDiscovery)?.biomeDiscovery;
     const iconId = firstBiome ? `biome_${firstBiome}` : e.skillId;
     results.push({
       type: "explore",

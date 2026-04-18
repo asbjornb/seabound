@@ -635,18 +635,13 @@ function applyExpeditionCompletion(
   const biomeBonus = getExpeditionBiomeBonus(def.skillId, navLevel);
   const outcome = pickWeightedOutcome(def.outcomes, state, pityCount, biomeBonus);
 
-  // Apply biome discovery and update pity counter
+  // Apply outcome-level biome discovery (island expeditions) and update pity counter.
+  // Stage-level biome discovery (mainland ventures) is resolved below per cleared stage.
+  let biomeDiscoveredThisRun: BiomeId | undefined;
   if (outcome.biomeDiscovery && !state.discoveredBiomes.includes(outcome.biomeDiscovery)) {
     state.discoveredBiomes.push(outcome.biomeDiscovery);
+    biomeDiscoveredThisRun = outcome.biomeDiscovery;
     state.expeditionPity[expeditionId] = 0;
-  } else {
-    // Check if there are any undiscovered biomes left on this expedition
-    const hasUndiscoveredBiome = def.outcomes.some(
-      (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery)
-    );
-    if (hasUndiscoveredBiome) {
-      state.expeditionPity[expeditionId] = pityCount + 1;
-    }
   }
 
   // Apply drops (with expedition drop bonus from milestones + encounter multiplier)
@@ -748,6 +743,26 @@ function applyExpeditionCompletion(
           }
         }
       }
+
+      // Stage biome discovery (rolled on clear, with pity from expeditionPity + milestone bonus)
+      if (
+        stage.biomeDiscovery &&
+        !state.discoveredBiomes.includes(stage.biomeDiscovery) &&
+        !biomeDiscoveredThisRun
+      ) {
+        const reqsMet =
+          !stage.biomeDiscoveryRequires ||
+          stage.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r));
+        if (reqsMet) {
+          const base = stage.biomeDiscoveryChance ?? 1;
+          const roll = Math.min(1, base + pityCount * 0.1 + biomeBonus * 0.01);
+          if (Math.random() < roll) {
+            state.discoveredBiomes.push(stage.biomeDiscovery);
+            biomeDiscoveredThisRun = stage.biomeDiscovery;
+            state.expeditionPity[expeditionId] = 0;
+          }
+        }
+      }
     }
   } else {
     // ── Non-staged expedition: use expedition-level equipment/loot ──
@@ -801,6 +816,23 @@ function applyExpeditionCompletion(
     }
   }
 
+  // Accumulate pity if we rolled for a biome discovery but didn't find one.
+  if (!biomeDiscoveredThisRun) {
+    const hasUndiscoveredOutcomeBiome = def.outcomes.some(
+      (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery)
+    );
+    const hasReachableUndiscoveredStageBiome = stages?.some(
+      (s) =>
+        s.biomeDiscovery &&
+        !state.discoveredBiomes.includes(s.biomeDiscovery) &&
+        (!s.biomeDiscoveryRequires ||
+          s.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r)))
+    );
+    if (hasUndiscoveredOutcomeBiome || hasReachableUndiscoveredStageBiome) {
+      state.expeditionPity[expeditionId] = pityCount + 1;
+    }
+  }
+
   // XP for expeditions (encounter result modifies XP)
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
@@ -824,7 +856,7 @@ function applyExpeditionCompletion(
     xpGain,
     skillId: def.skillId,
     levelUp: skill.level > prevLevel ? skill.level : undefined,
-    biomeDiscovery: outcome.biomeDiscovery,
+    biomeDiscovery: biomeDiscoveredThisRun,
     expeditionMessage: outcome.description,
     newResources: newResources.length > 0 ? newResources : undefined,
     victory: def.victory,
