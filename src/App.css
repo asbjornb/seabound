@@ -3583,6 +3583,47 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  position: relative;
+}
+
+.feedback-minimize-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.feedback-minimize-btn:hover {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.feedback-banner-minimized {
+  padding: 4px;
+  gap: 0;
+}
+
+.feedback-minimized-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.6;
+}
+
+.feedback-minimized-btn:hover {
+  opacity: 1;
+  color: var(--accent);
 }
 
 .feedback-blurb {

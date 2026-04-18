@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const WEB3FORMS_URL = "https://api.web3forms.com/submit";
 const WEB3FORMS_KEY = "b6727ec3-6cf2-443e-aa55-587b1964ec32";
+const MINIMIZED_KEY = "seabound.feedbackBanner.minimized";
 
 function getDeviceType(): string {
   const hasTouchScreen = navigator.maxTouchPoints > 0;
@@ -15,6 +16,21 @@ export function FeedbackBanner() {
     "idle"
   );
   const [expanded, setExpanded] = useState(false);
+  const [minimized, setMinimized] = useState(() => {
+    try {
+      return localStorage.getItem(MINIMIZED_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(MINIMIZED_KEY, minimized ? "1" : "0");
+    } catch {
+      // ignore
+    }
+  }, [minimized]);
 
   const submit = async () => {
     if (!text.trim()) return;
@@ -49,8 +65,35 @@ export function FeedbackBanner() {
     }
   };
 
+  if (minimized) {
+    return (
+      <footer className="feedback-banner feedback-banner-minimized">
+        <button
+          className="feedback-minimized-btn"
+          onClick={() => setMinimized(false)}
+          aria-label="Show feedback options"
+        >
+          Feedback
+        </button>
+      </footer>
+    );
+  }
+
   return (
     <footer className="feedback-banner">
+      <button
+        className="feedback-minimize-btn"
+        onClick={() => {
+          setMinimized(true);
+          setExpanded(false);
+          setText("");
+          setStatus("idle");
+        }}
+        aria-label="Minimize feedback banner"
+        title="Minimize"
+      >
+        –
+      </button>
       <p className="feedback-blurb">
         This is a very early version. Find anything unintuitive, historically
         infeasible or unrealistic, a bug, something you hate or some other
