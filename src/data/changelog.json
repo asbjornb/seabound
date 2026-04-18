@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "a846c0169996ab0293ad240a2c4381f8f1cc3e2c"
+    "newestReviewed": "0ae5bb654fa0c6deea35fb189938c20369bf29e9"
   },
   "entries": [
+    {
+      "date": "2026-04-18",
+      "changes": [
+        "Fix cure_raw_hide recipe now repeats properly instead of stopping after one cycle"
+      ]
+    },
     {
       "date": "2026-04-15",
       "changes": [
