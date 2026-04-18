@@ -19,6 +19,8 @@ import { SKILLS } from "../src/data/skills";
 import { BUILDINGS } from "../src/data/buildings";
 import { BIOMES } from "../src/data/biomes";
 import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
+import { ACTIONS } from "../src/data/actions";
+import { RECIPES } from "../src/data/recipes";
 
 const isCheck = process.argv.includes("--check");
 
@@ -54,6 +56,20 @@ for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
 for (const exp of [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS]) referencedIds.add(exp.id);
 for (const id of TAB_ICON_IDS) referencedIds.add(id);
+
+// Actions with no drops fall back to action.id as their icon
+// (see getQueuedActionIcon in App.tsx — queued/active-action display)
+for (const action of ACTIONS) {
+  if (!action.drops || action.drops.length === 0) referencedIds.add(action.id);
+}
+
+// Recipes with no output/toolOutput/buildingOutput/equipmentOutput fall back to recipe.id
+// (see getStepIcon in RoutinesPanel.tsx + getQueuedActionIcon in App.tsx + SearchPanel iconId)
+for (const recipe of RECIPES) {
+  if (!recipe.output && !recipe.toolOutput && !recipe.buildingOutput && !recipe.equipmentOutput) {
+    referencedIds.add(recipe.id);
+  }
+}
 
 // Find missing
 const missing = [...referencedIds].filter((id) => !specIds.has(id)).sort();
