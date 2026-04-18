@@ -50,10 +50,12 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
     },
     {
       level: 8,
-      description: "Big game — 15% chance to spear a large fish, 10% faster",
+      description: "Crab connoisseur — +10% crab chance across all shore fishing",
       effects: [
-        { type: "drop_chance", actionId: "spear_fish", resourceId: "large_fish", bonus: 0.15 },
-        { type: "duration", actionId: "spear_fish", multiplier: 0.9 },
+        { type: "drop_chance", actionId: "spear_fish", resourceId: "crab", bonus: 0.1 },
+        { type: "drop_chance", actionId: "drop_line_fish", resourceId: "crab", bonus: 0.1 },
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "crab", bonus: 0.1 },
+        { type: "drop_chance", actionId: "comb_rock_pools", resourceId: "crab", bonus: 0.1 },
       ],
     },
     {

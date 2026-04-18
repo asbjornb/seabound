@@ -181,12 +181,13 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.15 },
+      { resourceId: "large_fish", amount: 1, chance: 0.1 },
       { resourceId: "crab", amount: 1, chance: 0.15 },
       { resourceId: "shell", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["bamboo_spear"],
     xpGain: 12,
+    hideWhen: [{ type: "has_tool", toolId: "gorge_hook" }],
   },
 
   // Fishing (drop line tier)
@@ -194,17 +195,17 @@ export const ACTIONS: ActionDef[] = [
     id: "drop_line_fish",
     name: "Drop Line Fishing",
     description:
-      "Lower a baited gorge hook into deeper water. Slower, but catches bigger fish.",
+      "Lower a baited gorge hook into deep water. Slower, but far better fish yields.",
     skillId: "fishing",
     panel: "gather",
     durationMs: 8000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.25 },
-      { resourceId: "shell", amount: 1, chance: 0.2 },
+      { resourceId: "large_fish", amount: 1, chance: 0.6 },
+      { resourceId: "crab", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["gorge_hook"],
-    xpGain: 18,
+    xpGain: 20,
   },
 
   // Basket trap moved to stations system (set-wait-collect)
