@@ -201,8 +201,8 @@ export const ACTIONS: ActionDef[] = [
     durationMs: 8000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.5 },
-      { resourceId: "crab", amount: 1, chance: 0.2 },
+      { resourceId: "large_fish", amount: 1, chance: 0.6 },
+      { resourceId: "crab", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["gorge_hook"],
     xpGain: 20,
