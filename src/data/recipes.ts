@@ -2112,9 +2112,8 @@ export const RECIPES: RecipeDef[] = [
     id: "build_bloomery",
     name: "Bloomery",
     description: "Construct a clay shaft furnace with bellows. Required for iron smelting.",
-    skillId: "smithing",
+    skillId: "construction",
     panel: "build",
-    requiredSkills: [{ skillId: "construction", level: 10 }],
     requiredTools: ["bellows"],
     inputs: [
       { resourceId: "clay", amount: 15 },

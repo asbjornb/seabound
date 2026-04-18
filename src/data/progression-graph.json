@@ -449,6 +449,16 @@
       "label": "Crucible"
     },
     {
+      "id": "tool:bellows",
+      "type": "tool",
+      "label": "Bellows"
+    },
+    {
+      "id": "tool:stone_anvil",
+      "type": "tool",
+      "label": "Stone Anvil"
+    },
+    {
       "id": "tool:digging_stick",
       "type": "tool",
       "label": "Digging Stick"
@@ -1707,7 +1717,7 @@
       "id": "recipe:build_bloomery",
       "type": "recipe",
       "label": "Bloomery",
-      "category": "smithing"
+      "category": "construction"
     },
     {
       "id": "expedition:explore_beach",
@@ -5367,13 +5377,8 @@
     },
     {
       "from": "recipe:build_bloomery",
-      "to": "skill:smithing",
+      "to": "skill:construction",
       "relation": "trains"
-    },
-    {
-      "from": "skill:construction:10",
-      "to": "recipe:build_bloomery",
-      "relation": "requires_skill"
     },
     {
       "from": "tool:bellows",
@@ -7888,7 +7893,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -7921,7 +7927,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -7954,7 +7961,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -7987,7 +7995,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8020,7 +8029,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8053,7 +8063,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8086,15 +8097,15 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
           "level": 10,
           "unlocks": [
             "recipe:build_pandanus_grove",
-            "recipe:build_cartographers_table",
-            "recipe:build_bloomery"
+            "recipe:build_cartographers_table"
           ],
           "trainedBy": [
             "action:dig_drainage_trench",
@@ -8121,7 +8132,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8154,7 +8166,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8187,7 +8200,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8220,7 +8234,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8253,7 +8268,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         },
         {
@@ -8286,7 +8302,8 @@
             "recipe:upgrade_farm_plot",
             "recipe:build_pandanus_grove",
             "recipe:craft_crucible",
-            "recipe:build_cartographers_table"
+            "recipe:build_cartographers_table",
+            "recipe:build_bloomery"
           ]
         }
       ],
