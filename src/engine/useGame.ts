@@ -8,6 +8,7 @@ import {
   getExpeditionById,
   getPhases,
   getRecipeById,
+  getRecipes,
   getRepairRecipes,
   getResources,
   getSalvageTables,
@@ -1338,6 +1339,12 @@ export function useGame() {
     broken: 0.4,
   };
 
+  /** Retention rates for recipe-derived salvage. Metals recover better than organics. */
+  const METAL_RETENTION = 0.75;
+  const ORGANIC_RETENTION = 0.5;
+  /** Smelting fuels — consumed during crafting, never returned by salvage. */
+  const SALVAGE_FUEL_BLACKLIST = new Set(["charcoal"]);
+
   const salvageItem = useCallback((instanceId: string) => {
     setState((prev) => {
       const itemIdx = prev.equipmentInventory.findIndex((i) => i.instanceId === instanceId);
@@ -1350,7 +1357,7 @@ export function useGame() {
       const def = getEquipmentItemById(item.defId);
       if (!def) return prev;
 
-      // Find matching salvage table by tag
+      // Find matching salvage table by tag (used for skill gate, XP, affix reagents, and as a fallback)
       const salvageTables = getSalvageTables();
       const table = salvageTables.find((t) =>
         t.targetTags.some((tag) => def.tags?.includes(tag))
@@ -1366,12 +1373,37 @@ export function useGame() {
       // Calculate condition multiplier
       const condMult = CONDITION_SALVAGE_MULT[item.condition] ?? 0.5;
 
-      // Grant base material outputs
-      for (const output of table.outputs) {
-        const chance = output.chance ?? 1;
-        if (Math.random() > chance) continue;
-        const amount = Math.max(1, Math.round(output.amount * condMult));
-        next.resources[output.resourceId] = (next.resources[output.resourceId] ?? 0) + amount;
+      // Prefer deriving outputs from the recipe that produced this item — metals return
+      // their own ingots (bronze_sword → bronze_ingot, not native_copper), and non-metal
+      // inputs like wood/cordage come back with a higher loss. Falls back to the static
+      // salvage table for items without a forge recipe (e.g. expedition-exclusive loot).
+      const recipe = getRecipes().find((r) => r.equipmentOutput === item.defId);
+
+      const rollResource = (resourceId: string, expected: number) => {
+        if (expected <= 0) return;
+        const whole = Math.floor(expected);
+        const frac = expected - whole;
+        let amount = whole;
+        if (frac > 0 && Math.random() < frac) amount += 1;
+        if (amount <= 0) return;
+        next.resources[resourceId] = (next.resources[resourceId] ?? 0) + amount;
+      };
+
+      if (recipe) {
+        for (const input of recipe.inputs) {
+          if (SALVAGE_FUEL_BLACKLIST.has(input.resourceId)) continue;
+          const isMetal = input.resourceId.endsWith("_ingot");
+          const retention = isMetal ? METAL_RETENTION : ORGANIC_RETENTION;
+          rollResource(input.resourceId, input.amount * retention * condMult);
+        }
+      } else {
+        // Legacy fallback: use the static salvage table outputs
+        for (const output of table.outputs) {
+          const chance = output.chance ?? 1;
+          if (Math.random() > chance) continue;
+          const amount = Math.max(1, Math.round(output.amount * condMult));
+          next.resources[output.resourceId] = (next.resources[output.resourceId] ?? 0) + amount;
+        }
       }
 
       // Roll affix reagent outputs (one roll per affix on the item)

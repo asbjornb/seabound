@@ -1050,11 +1050,10 @@ export const SALVAGE_TABLES: SalvageTableDef[] = [
   {
     id: "salvage_metal",
     name: "Salvage Metal Gear",
-    description: "Melt down metal equipment to recover copper fragments.",
+    description: "Break down scavenged metal equipment to recover raw fragments.",
     targetTags: ["metal"],
     outputs: [
-      { resourceId: "native_copper", amount: 3 },
-      { resourceId: "charcoal", amount: 1, chance: 0.75 },
+      { resourceId: "native_copper", amount: 2 },
     ],
     affixReagentOutputs: AFFIX_REAGENT_OUTPUTS,
     requiredSkillLevel: 0,
