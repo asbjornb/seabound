@@ -7,9 +7,10 @@ import {
   getExpeditionById,
   getItemDisplayName,
   getRecipeById,
+  getVentureById,
 } from "../data/registry";
 import { levelFromXp } from "../data/skills";
-import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionOutcome, GameState, LootDrop } from "../data/types";
+import type { BiomeId, Drop, EquipmentDropEntry, EquipmentItem, ExpeditionDef, ExpeditionOutcome, GameState, LootDrop, VentureDef } from "../data/types";
 import { resolveEncounter, type EncounterResult } from "./combat";
 import { addResource, canAffordInput, deductFood, deductWater, getEffectiveInputs, getEffectiveMaxCount, getGroupBuildingCount, isAtStorageCap, isRecipeOutputBlocked, resolveAlternateInputs, resolveTagInputs, getMoraleDurationMultiplier, getToolSpeedMultiplier, getToolOutputBonusChance, getEffectiveDecayInterval, getTotalFood, getTotalWater, getBuildingExpeditionSpeedMultiplier } from "./gameState";
 import { applyRepetitiveXp, getFullXpThreshold } from "./repetitiveXp";
@@ -243,7 +244,9 @@ export function processTick(state: GameState, now: number): TickResult {
     }
   } else if (action.type === "expedition") {
     const expeditionId = action.expeditionId;
-    const def = expeditionId ? getExpeditionById(expeditionId) : undefined;
+    const expedition = expeditionId ? getExpeditionById(expeditionId) : undefined;
+    const venture = !expedition && expeditionId ? getVentureById(expeditionId) : undefined;
+    const def: ExpeditionDef | VentureDef | undefined = expedition ?? venture;
     if (!def) {
       state.currentAction = null;
       return { completions, elapsedMs, unusedMs: 0 };
@@ -289,12 +292,14 @@ export function processTick(state: GameState, now: number): TickResult {
       }
 
       remaining -= effectiveExpDuration;
-      const event = applyExpeditionCompletion(state, def.id, state.repetitiveActionCount, fullXpThreshold);
+      const event = expedition
+        ? applyExpeditionCompletion(state, expedition, state.repetitiveActionCount, fullXpThreshold)
+        : applyVentureCompletion(state, venture!, state.repetitiveActionCount, fullXpThreshold);
       if (event) completions.push(event);
 
-      // Stop looping if all discoverable biomes have been found
-      if (def.hideWhenAllFound) {
-        const allFound = def.outcomes
+      // Stop looping if all discoverable biomes have been found (expedition-only)
+      if (expedition && expedition.hideWhenAllFound) {
+        const allFound = expedition.outcomes
           .filter((o) => o.biomeDiscovery)
           .every((o) => state.discoveredBiomes.includes(o.biomeDiscovery!));
         if (allFound) {
@@ -619,45 +624,33 @@ function rollEquipmentDrops(
 
 function applyExpeditionCompletion(
   state: GameState,
-  expeditionId: string,
+  def: ExpeditionDef,
   repetitiveCount: number,
   fullXpThreshold: number
 ): CompletionEvent | null {
-  const def = getExpeditionById(expeditionId);
-  if (!def) return null;
-
-  // Resolve combat encounter for mainland expeditions with difficulty profiles
-  const encounter = def.difficulty ? resolveEncounter(state, def.difficulty) : undefined;
-
   // Pick a random outcome weighted by weight (with pity for biome discoveries)
-  const pityCount = state.expeditionPity[expeditionId] ?? 0;
+  const pityCount = state.expeditionPity[def.id] ?? 0;
   const navLevel = state.skills[def.skillId]?.level ?? 1;
   const biomeBonus = getExpeditionBiomeBonus(def.skillId, navLevel);
   const outcome = pickWeightedOutcome(def.outcomes, state, pityCount, biomeBonus);
 
-  // Apply outcome-level biome discovery (island expeditions) and update pity counter.
-  // Stage-level biome discovery (mainland ventures) is resolved below per cleared stage.
   let biomeDiscoveredThisRun: BiomeId | undefined;
   if (outcome.biomeDiscovery && !state.discoveredBiomes.includes(outcome.biomeDiscovery)) {
     state.discoveredBiomes.push(outcome.biomeDiscovery);
     biomeDiscoveredThisRun = outcome.biomeDiscovery;
-    state.expeditionPity[expeditionId] = 0;
+    state.expeditionPity[def.id] = 0;
   }
 
-  // Apply drops (with expedition drop bonus from milestones + encounter multiplier)
   const drops: { name: string; amount: number }[] = [];
   const newResources: string[] = [];
   const dropBonus = getExpeditionDropBonus(def.skillId, navLevel);
-  const encounterDropMult = encounter?.dropMultiplier ?? 1;
   if (outcome.drops) {
     for (const drop of outcome.drops) {
       const rolled = rollDrops([drop]);
       for (const r of rolled) {
-        const baseAmount = dropBonus > 0
+        const finalAmount = dropBonus > 0
           ? Math.round(r.amount * (1 + dropBonus))
           : r.amount;
-        // Apply encounter multiplier (mainland combat outcomes reduce/maintain drops)
-        const finalAmount = Math.max(1, Math.round(baseAmount * encounterDropMult));
         if (!state.discoveredResources.includes(r.resourceId)) {
           newResources.push(r.resourceId);
           state.discoveredResources.push(r.resourceId);
@@ -680,169 +673,23 @@ function applyExpeditionCompletion(
     }
   }
 
-  // Equipment drops (mainland expeditions only, gated by encounter grade)
-  let equipmentDropped: CompletionEvent["equipmentDropped"];
-  const stagesCleared = encounter?.stagesCleared;
-  const stages = def.difficulty?.stages;
-
-  if (stages && stages.length > 0 && stagesCleared != null) {
-    // ── Staged expedition: distribute per-stage rewards ──
-    for (let i = 0; i < stagesCleared; i++) {
-      const stage = stages[i];
-
-      // Stage guaranteed drops
-      if (stage.drops) {
-        for (const drop of stage.drops) {
-          const rolled = rollDrops([drop]);
-          for (const r of rolled) {
-            const baseAmount = dropBonus > 0
-              ? Math.round(r.amount * (1 + dropBonus))
-              : r.amount;
-            if (!state.discoveredResources.includes(r.resourceId)) {
-              newResources.push(r.resourceId);
-              state.discoveredResources.push(r.resourceId);
-            }
-            addResource(state, r.resourceId, baseAmount);
-            drops.push({ name: r.resourceId, amount: baseAmount });
-          }
-        }
-      }
-
-      // Stage equipment drops (always full chance for cleared stages)
-      if (stage.equipmentDrops && stage.equipmentDrops.length > 0) {
-        const rolledItems = rollEquipmentDrops(stage.equipmentDrops, 1, def.id);
-        for (const item of rolledItems) {
-          state.equipmentInventory.push(item);
-        }
-        if (rolledItems.length > 0) {
-          if (!equipmentDropped) equipmentDropped = [];
-          for (const item of rolledItems) {
-            equipmentDropped.push({ defId: item.defId, name: getItemDisplayName(item), condition: item.condition });
-          }
-        }
-      }
-
-      // Stage loot table
-      if (stage.lootTable && stage.lootTable.length > 0) {
-        const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
-        const rolledLoot = rollLootTable(stage.lootTable, lootChanceBonus, 1);
-        for (const loot of rolledLoot) {
-          if (!state.discoveredResources.includes(loot.resourceId)) {
-            newResources.push(loot.resourceId);
-            state.discoveredResources.push(loot.resourceId);
-          }
-          addResource(state, loot.resourceId, loot.amount);
-          drops.push({ name: loot.resourceId, amount: loot.amount });
-
-          if (!state.lootLog) state.lootLog = {};
-          const entry = state.lootLog[loot.resourceId];
-          if (entry) {
-            entry.count += loot.amount;
-          } else {
-            state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
-          }
-        }
-      }
-
-      // Stage biome discovery (rolled on clear, with pity from expeditionPity + milestone bonus)
-      if (
-        stage.biomeDiscovery &&
-        !state.discoveredBiomes.includes(stage.biomeDiscovery) &&
-        !biomeDiscoveredThisRun
-      ) {
-        const reqsMet =
-          !stage.biomeDiscoveryRequires ||
-          stage.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r));
-        if (reqsMet) {
-          const base = stage.biomeDiscoveryChance ?? 1;
-          const roll = Math.min(1, base + pityCount * 0.1 + biomeBonus * 0.01);
-          if (Math.random() < roll) {
-            state.discoveredBiomes.push(stage.biomeDiscovery);
-            biomeDiscoveredThisRun = stage.biomeDiscovery;
-            state.expeditionPity[expeditionId] = 0;
-          }
-        }
-      }
-    }
-  } else {
-    // ── Non-staged expedition: use expedition-level equipment/loot ──
-    if (def.equipmentDrops && def.equipmentDrops.length > 0) {
-      // Grade-based chance multiplier: success = full chance, partial = halved, failure = none
-      let gradeChanceMult = 1;
-      if (encounter) {
-        if (encounter.grade === "failure") gradeChanceMult = 0;
-        else if (encounter.grade === "partial") gradeChanceMult = 0.5;
-      }
-
-      if (gradeChanceMult > 0) {
-        const rolledItems = rollEquipmentDrops(def.equipmentDrops, gradeChanceMult, def.id);
-        for (const item of rolledItems) {
-          state.equipmentInventory.push(item);
-        }
-        if (rolledItems.length > 0) {
-          equipmentDropped = rolledItems.map((item) => {
-            return { defId: item.defId, name: getItemDisplayName(item), condition: item.condition };
-          });
-        }
-      }
-    }
-
-    // Loot table drops (rolled independently from outcomes)
-    if (def.lootTable && def.lootTable.length > 0) {
-      const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, navLevel);
-      let lootGradeMult = 1;
-      if (encounter) {
-        if (encounter.grade === "failure") lootGradeMult = 0;
-        else if (encounter.grade === "partial") lootGradeMult = 0.5;
-      }
-
-      const rolledLoot = rollLootTable(def.lootTable, lootChanceBonus, lootGradeMult);
-      for (const loot of rolledLoot) {
-        if (!state.discoveredResources.includes(loot.resourceId)) {
-          newResources.push(loot.resourceId);
-          state.discoveredResources.push(loot.resourceId);
-        }
-        addResource(state, loot.resourceId, loot.amount);
-        drops.push({ name: loot.resourceId, amount: loot.amount });
-
-        if (!state.lootLog) state.lootLog = {};
-        const entry = state.lootLog[loot.resourceId];
-        if (entry) {
-          entry.count += loot.amount;
-        } else {
-          state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
-        }
-      }
-    }
-  }
-
   // Accumulate pity if we rolled for a biome discovery but didn't find one.
   if (!biomeDiscoveredThisRun) {
     const hasUndiscoveredOutcomeBiome = def.outcomes.some(
       (o) => o.biomeDiscovery && !state.discoveredBiomes.includes(o.biomeDiscovery)
     );
-    const hasReachableUndiscoveredStageBiome = stages?.some(
-      (s) =>
-        s.biomeDiscovery &&
-        !state.discoveredBiomes.includes(s.biomeDiscovery) &&
-        (!s.biomeDiscoveryRequires ||
-          s.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r)))
-    );
-    if (hasUndiscoveredOutcomeBiome || hasReachableUndiscoveredStageBiome) {
-      state.expeditionPity[expeditionId] = pityCount + 1;
+    if (hasUndiscoveredOutcomeBiome) {
+      state.expeditionPity[def.id] = pityCount + 1;
     }
   }
 
-  // XP for expeditions (encounter result modifies XP)
   const skill = state.skills[def.skillId];
   const prevLevel = skill.level;
-  const encounterXpMult = encounter?.xpMultiplier ?? 1;
-  const xpGain = Math.round(applyRepetitiveXp(def.xpGain, repetitiveCount, fullXpThreshold) * encounterXpMult);
+  const xpGain = applyRepetitiveXp(def.xpGain, repetitiveCount, fullXpThreshold);
   skill.xp += xpGain;
   skill.level = levelFromXp(skill.xp);
   state.repetitiveActionCount += 1;
 
-  // Victory expeditions win the game
   if (def.victory) {
     state.victory = true;
     state.currentAction = null;
@@ -860,6 +707,144 @@ function applyExpeditionCompletion(
     expeditionMessage: outcome.description,
     newResources: newResources.length > 0 ? newResources : undefined,
     victory: def.victory,
+  };
+}
+
+function applyVentureCompletion(
+  state: GameState,
+  def: VentureDef,
+  repetitiveCount: number,
+  fullXpThreshold: number
+): CompletionEvent | null {
+  const encounter = resolveEncounter(state, def);
+
+  const pityCount = state.expeditionPity[def.id] ?? 0;
+  const skillLevel = state.skills[def.skillId]?.level ?? 1;
+  const biomeBonus = getExpeditionBiomeBonus(def.skillId, skillLevel);
+  const dropBonus = getExpeditionDropBonus(def.skillId, skillLevel);
+
+  const drops: { name: string; amount: number }[] = [];
+  const newResources: string[] = [];
+  let biomeDiscoveredThisRun: BiomeId | undefined;
+  let equipmentDropped: CompletionEvent["equipmentDropped"];
+
+  // Return empty water containers (~85% survive the trip)
+  if (def.waterCost && def.waterCost > 0) {
+    let potsReturned = 0;
+    for (let i = 0; i < def.waterCost; i++) {
+      if (Math.random() < 0.85) potsReturned++;
+    }
+    if (potsReturned > 0) {
+      addResource(state, "fired_clay_pot", potsReturned);
+      drops.push({ name: "fired_clay_pot", amount: potsReturned });
+    }
+  }
+
+  const stagesCleared = encounter.stagesCleared ?? 0;
+  for (let i = 0; i < stagesCleared; i++) {
+    const stage = def.stages[i];
+
+    if (stage.drops) {
+      for (const drop of stage.drops) {
+        const rolled = rollDrops([drop]);
+        for (const r of rolled) {
+          const baseAmount = dropBonus > 0
+            ? Math.round(r.amount * (1 + dropBonus))
+            : r.amount;
+          if (!state.discoveredResources.includes(r.resourceId)) {
+            newResources.push(r.resourceId);
+            state.discoveredResources.push(r.resourceId);
+          }
+          addResource(state, r.resourceId, baseAmount);
+          drops.push({ name: r.resourceId, amount: baseAmount });
+        }
+      }
+    }
+
+    if (stage.equipmentDrops && stage.equipmentDrops.length > 0) {
+      const rolledItems = rollEquipmentDrops(stage.equipmentDrops, 1, def.id);
+      for (const item of rolledItems) {
+        state.equipmentInventory.push(item);
+      }
+      if (rolledItems.length > 0) {
+        if (!equipmentDropped) equipmentDropped = [];
+        for (const item of rolledItems) {
+          equipmentDropped.push({ defId: item.defId, name: getItemDisplayName(item), condition: item.condition });
+        }
+      }
+    }
+
+    if (stage.lootTable && stage.lootTable.length > 0) {
+      const lootChanceBonus = getExpeditionLootChanceBonus(def.skillId, skillLevel);
+      const rolledLoot = rollLootTable(stage.lootTable, lootChanceBonus, 1);
+      for (const loot of rolledLoot) {
+        if (!state.discoveredResources.includes(loot.resourceId)) {
+          newResources.push(loot.resourceId);
+          state.discoveredResources.push(loot.resourceId);
+        }
+        addResource(state, loot.resourceId, loot.amount);
+        drops.push({ name: loot.resourceId, amount: loot.amount });
+
+        if (!state.lootLog) state.lootLog = {};
+        const entry = state.lootLog[loot.resourceId];
+        if (entry) {
+          entry.count += loot.amount;
+        } else {
+          state.lootLog[loot.resourceId] = { count: loot.amount, firstFound: Date.now() };
+        }
+      }
+    }
+
+    if (
+      stage.biomeDiscovery &&
+      !state.discoveredBiomes.includes(stage.biomeDiscovery) &&
+      !biomeDiscoveredThisRun
+    ) {
+      const reqsMet =
+        !stage.biomeDiscoveryRequires ||
+        stage.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r));
+      if (reqsMet) {
+        const base = stage.biomeDiscoveryChance ?? 1;
+        const roll = Math.min(1, base + pityCount * 0.1 + biomeBonus * 0.01);
+        if (Math.random() < roll) {
+          state.discoveredBiomes.push(stage.biomeDiscovery);
+          biomeDiscoveredThisRun = stage.biomeDiscovery;
+          state.expeditionPity[def.id] = 0;
+        }
+      }
+    }
+  }
+
+  if (!biomeDiscoveredThisRun) {
+    const hasReachableUndiscoveredStageBiome = def.stages.some(
+      (s) =>
+        s.biomeDiscovery &&
+        !state.discoveredBiomes.includes(s.biomeDiscovery) &&
+        (!s.biomeDiscoveryRequires ||
+          s.biomeDiscoveryRequires.every((r) => state.discoveredBiomes.includes(r)))
+    );
+    if (hasReachableUndiscoveredStageBiome) {
+      state.expeditionPity[def.id] = pityCount + 1;
+    }
+  }
+
+  const skill = state.skills[def.skillId];
+  const prevLevel = skill.level;
+  const xpGain = Math.round(applyRepetitiveXp(def.xpGain, repetitiveCount, fullXpThreshold) * encounter.xpMultiplier);
+  skill.xp += xpGain;
+  skill.level = levelFromXp(skill.xp);
+  state.repetitiveActionCount += 1;
+
+  return {
+    actionId: def.id,
+    actionType: "expedition",
+    actionName: def.name,
+    drops,
+    xpGain,
+    skillId: def.skillId,
+    levelUp: skill.level > prevLevel ? skill.level : undefined,
+    biomeDiscovery: biomeDiscoveredThisRun,
+    newResources: newResources.length > 0 ? newResources : undefined,
     encounterResult: encounter,
     equipmentDropped,
   };

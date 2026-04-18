@@ -7,11 +7,12 @@ import {
   getResources,
   getStations,
   getTools,
+  getVentures,
 } from "../data/registry";
 import { IMBUING_REAGENTS } from "../data/equipment";
 import { GameState } from "../data/types";
 import { GameIcon } from "./GameIcon";
-import { selectAvailableActions, selectAvailableRecipes, selectAvailableExpeditions } from "../engine/selectors";
+import { selectAvailableActions, selectAvailableRecipes, selectAvailableExpeditions, selectAvailableVentures } from "../engine/selectors";
 
 // ── Context ──────────────────────────────────────────────
 
@@ -170,19 +171,31 @@ function getSourcesFor(itemId: string): SourceEntry[] {
     }
   }
 
-  // Expeditions that drop this (in outcomes or lootTable)
+  // Expeditions that drop this (in outcomes)
   for (const e of getExpeditions()) {
-    const inStages = e.difficulty?.stages?.some(
-      (s) => s.drops?.some((d) => d.resourceId === itemId) || s.lootTable?.some((d) => d.resourceId === itemId),
-    );
     const drops = e.outcomes.some(
       (o) => o.drops?.some((d) => d.resourceId === itemId),
-    ) || e.lootTable?.some((d) => d.resourceId === itemId) || inStages;
+    );
     if (drops) {
       sources.push({
         type: "expedition",
         name: e.name,
         detail: `Expedition · ${e.skillId}`,
+        refs: [],
+      });
+    }
+  }
+
+  // Ventures that drop this (per-stage drops or lootTable)
+  for (const v of getVentures()) {
+    const inStages = v.stages.some(
+      (s) => s.drops?.some((d) => d.resourceId === itemId) || s.lootTable?.some((d) => d.resourceId === itemId),
+    );
+    if (inStages) {
+      sources.push({
+        type: "expedition",
+        name: v.name,
+        detail: `Venture · ${v.skillId}`,
         refs: [],
       });
     }
@@ -279,6 +292,17 @@ function getUsesFor(itemId: string): SourceEntry[] {
     });
   }
 
+  // Ventures that require this as input
+  for (const v of getVentures()) {
+    if (!v.inputs?.some((inp) => inp.resourceId === itemId)) continue;
+    uses.push({
+      type: "expedition",
+      name: v.name,
+      detail: `Venture · ${v.skillId}`,
+      refs: [],
+    });
+  }
+
   // Imbuing reagents
   for (const reagent of IMBUING_REAGENTS) {
     if (reagent.reagentId === itemId) {
@@ -326,12 +350,14 @@ function getVisibleItems(state: GameState): string[] {
     for (const o of e.outcomes) {
       if (o.drops) for (const d of o.drops) seen.add(d.resourceId);
     }
-    if (e.lootTable) for (const d of e.lootTable) seen.add(d.resourceId);
-    if (e.difficulty?.stages) {
-      for (const s of e.difficulty.stages) {
-        if (s.drops) for (const d of s.drops) seen.add(d.resourceId);
-        if (s.lootTable) for (const d of s.lootTable) seen.add(d.resourceId);
-      }
+  }
+
+  // Available ventures — inputs/outputs (per-stage)
+  for (const v of selectAvailableVentures(state)) {
+    if (v.inputs) for (const inp of v.inputs) seen.add(inp.resourceId);
+    for (const s of v.stages) {
+      if (s.drops) for (const d of s.drops) seen.add(d.resourceId);
+      if (s.lootTable) for (const d of s.lootTable) seen.add(d.resourceId);
     }
   }
 

@@ -12,6 +12,7 @@ import { FeedbackQuestion } from "./components/FeedbackQuestion";
 import { DevGraphDot } from "./components/DevGraphDot";
 import { DevWiki } from "./components/DevWiki";
 import { ExpeditionPanel } from "./components/ExpeditionPanel";
+import { VenturePanel } from "./components/VenturePanel";
 import { EquipmentPanel } from "./components/EquipmentPanel";
 import { InventoryPanel } from "./components/InventoryPanel";
 import { IslandBanner } from "./components/IslandBanner";
@@ -45,7 +46,6 @@ import {
   selectCraftRecipes,
   selectCurrentActionName,
   selectCurrentSkillInfo,
-  selectExpeditionsByScreen,
   selectHasAnyResource,
   selectHasAnyXp,
   selectHasFoodAccess,
@@ -56,7 +56,7 @@ import {
   selectUndiscoveredBiomeCount,
   selectVisibleTabs,
 } from "./engine/selectors";
-import { getActionById, getExpeditionById, getRecipeById } from "./data/registry";
+import { getActionById, getExpeditionById, getRecipeById, getVentureById } from "./data/registry";
 import { useGame } from "./engine/useGame";
 import { useTabGuard } from "./engine/useTabGuard";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
@@ -83,7 +83,7 @@ function getQueuedActionName(q: QueuedAction, routines: Routine[]): string {
     return getActionById(q.actionId)?.name ?? q.actionId;
   }
   if (q.actionType === "expedition") {
-    return getExpeditionById(q.actionId)?.name ?? q.actionId;
+    return (getExpeditionById(q.actionId) ?? getVentureById(q.actionId))?.name ?? q.actionId;
   }
   if (q.actionType === "routine") {
     return routines.find((r) => r.id === q.actionId)?.name ?? q.actionId;
@@ -314,10 +314,8 @@ export default function App() {
     () => selectRecipesByScreen(game.availableRecipes, screen),
     [game.availableRecipes, screen]
   );
-  const screenExpeditions = useMemo(
-    () => selectExpeditionsByScreen(game.availableExpeditions, screen),
-    [game.availableExpeditions, screen]
-  );
+  // Island screen shows expeditions (exploration); mainland shows ventures (combat).
+  // The two lists are already type-separated in the engine.
 
   // Split by panel metadata
   const craftRecipes = useMemo(
@@ -861,9 +859,16 @@ export default function App() {
                 onHighlightResources={setHighlightedResources}
               />
             )}
-            {activeTab === "explore" && (
+            {activeTab === "explore" && screen === "mainland" && (
+              <VenturePanel
+                ventures={game.availableVentures}
+                state={game.state}
+                onStart={handleStartExpedition}
+              />
+            )}
+            {activeTab === "explore" && screen !== "mainland" && (
               <ExpeditionPanel
-                expeditions={screenExpeditions}
+                expeditions={game.availableExpeditions}
                 state={game.state}
                 onStart={handleStartExpedition}
               />
@@ -912,6 +917,7 @@ export default function App() {
           recipes={game.availableRecipes}
           stations={game.availableStations}
           expeditions={game.availableExpeditions}
+          ventures={game.availableVentures}
           onStartAction={handleStartAction}
           onStartCraft={handleStartCraft}
           onDeployStation={game.deployStation}

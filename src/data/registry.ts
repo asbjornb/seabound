@@ -11,13 +11,14 @@ import { ACTIONS } from "./actions";
 import { BIOMES } from "./biomes";
 import { BUILDINGS } from "./buildings";
 import { AFFIXES, EQUIPMENT_ITEMS, EQUIPMENT_SLOTS, IMBUING_REAGENTS, REPAIR_RECIPES, SALVAGE_TABLES } from "./equipment";
-import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "./expeditions";
+import { EXPEDITIONS } from "./expeditions";
 import { PHASES } from "./phases";
 import { RECIPES } from "./recipes";
 import { RESOURCES } from "./resources";
 import { SKILLS } from "./skills";
 import { STATIONS } from "./stations";
 import { TOOLS } from "./tools";
+import { VENTURES } from "./ventures";
 import type {
   ActionDef,
   AffixDef,
@@ -36,6 +37,7 @@ import type {
   SkillMilestone,
   StationDef,
   ToolDef,
+  VentureDef,
 } from "./types";
 
 // ═══════════════════════════════════════
@@ -56,6 +58,7 @@ export interface GameDataPack {
   actions: ActionDef[];
   recipes: RecipeDef[];
   expeditions: ExpeditionDef[];
+  ventures: VentureDef[];
   stations: StationDef[];
   milestones: Partial<Record<string, SkillMilestone[]>>;
   equipmentSlots: Record<string, EquipmentSlotDef>;
@@ -94,7 +97,8 @@ export function createBaseGamePack(): GameDataPack {
     phases: [...PHASES],
     actions: [...ACTIONS],
     recipes: [...RECIPES],
-    expeditions: [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS],
+    expeditions: [...EXPEDITIONS],
+    ventures: [...VENTURES],
     stations: [...STATIONS],
     milestones: buildBaseMilestones(),
     equipmentSlots: { ...EQUIPMENT_SLOTS },
@@ -115,6 +119,7 @@ let _pack: GameDataPack = createBaseGamePack();
 let _actionsByIdCache: Record<string, ActionDef> = {};
 let _recipesByIdCache: Record<string, RecipeDef> = {};
 let _expeditionsByIdCache: Record<string, ExpeditionDef> = {};
+let _venturesByIdCache: Record<string, VentureDef> = {};
 let _stationsByIdCache: Record<string, StationDef> = {};
 let _biomeOrderCache: string[] = [];
 let _foodValuesCache: { id: string; value: number }[] = [];
@@ -129,6 +134,9 @@ function rebuildCaches(): void {
 
   _expeditionsByIdCache = {};
   for (const e of _pack.expeditions) _expeditionsByIdCache[e.id] = e;
+
+  _venturesByIdCache = {};
+  for (const v of _pack.ventures) _venturesByIdCache[v.id] = v;
 
   _stationsByIdCache = {};
   for (const s of _pack.stations) _stationsByIdCache[s.id] = s;
@@ -181,6 +189,7 @@ export function getPhases(): PhaseDef[] { return _pack.phases; }
 export function getActions(): ActionDef[] { return _pack.actions; }
 export function getRecipes(): RecipeDef[] { return _pack.recipes; }
 export function getExpeditions(): ExpeditionDef[] { return _pack.expeditions; }
+export function getVentures(): VentureDef[] { return _pack.ventures; }
 export function getStations(): StationDef[] { return _pack.stations; }
 export function getMilestonesForSkill(skillId: string): SkillMilestone[] {
   return _pack.milestones[skillId] ?? [];
@@ -189,6 +198,7 @@ export function getMilestonesForSkill(skillId: string): SkillMilestone[] {
 export function getActionById(id: string): ActionDef | undefined { return _actionsByIdCache[id]; }
 export function getRecipeById(id: string): RecipeDef | undefined { return _recipesByIdCache[id]; }
 export function getExpeditionById(id: string): ExpeditionDef | undefined { return _expeditionsByIdCache[id]; }
+export function getVentureById(id: string): VentureDef | undefined { return _venturesByIdCache[id]; }
 export function getStationById(id: string): StationDef | undefined { return _stationsByIdCache[id]; }
 
 export function getBiomeOrder(): string[] { return _biomeOrderCache; }

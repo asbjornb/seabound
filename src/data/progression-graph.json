@@ -1743,43 +1743,43 @@
       "id": "expedition:coastal_ruins",
       "type": "expedition",
       "label": "Explore Coastal Ruins",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:tidal_caves",
       "type": "expedition",
       "label": "Search the Tidal Caves",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:overgrown_trail",
       "type": "expedition",
       "label": "Follow the Overgrown Trail",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:flooded_quarry",
       "type": "expedition",
       "label": "Descend into the Flooded Quarry",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:ridge_pass",
       "type": "expedition",
       "label": "Cross the Windswept Ridge",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:sunken_temple",
       "type": "expedition",
       "label": "Enter the Sunken Temple",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "expedition:volcanic_rift",
       "type": "expedition",
       "label": "Brave the Volcanic Rift",
-      "category": "navigation"
+      "category": "combat"
     },
     {
       "id": "station:deploy_basket_trap",
@@ -6132,7 +6132,7 @@
     },
     {
       "from": "expedition:coastal_ruins",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6227,7 +6227,7 @@
     },
     {
       "from": "expedition:tidal_caves",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6322,7 +6322,7 @@
     },
     {
       "from": "expedition:overgrown_trail",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6422,7 +6422,7 @@
     },
     {
       "from": "expedition:flooded_quarry",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6512,7 +6512,7 @@
     },
     {
       "from": "expedition:ridge_pass",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6602,7 +6602,7 @@
     },
     {
       "from": "expedition:sunken_temple",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {
@@ -6697,7 +6697,7 @@
     },
     {
       "from": "expedition:volcanic_rift",
-      "to": "skill:navigation",
+      "to": "skill:combat",
       "relation": "trains"
     },
     {

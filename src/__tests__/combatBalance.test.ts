@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { estimateWinRateFromStats, PlayerCombatStats } from "../engine/combat";
-import { MAINLAND_EXPEDITIONS } from "../data/expeditions";
+import { VENTURES } from "../data/ventures";
 
 /**
  * Combat balance regression tests for staged combat.
  *
- * Each mainland expedition now has 3 stages (gauntlet). Key metrics:
+ * Each mainland venture now has 3 stages (gauntlet). Key metrics:
  * - winRate (success + partial): player cleared at least 1 stage
  * - success: player cleared ALL 3 stages with ≥50% HP (full clear)
  *
@@ -15,10 +15,10 @@ import { MAINLAND_EXPEDITIONS } from "../data/expeditions";
 
 const RUNS = 2000;
 
-function getExpedition(id: string) {
-  const exp = MAINLAND_EXPEDITIONS.find((e) => e.id === id);
-  if (!exp?.difficulty) throw new Error(`Expedition ${id} not found or has no difficulty`);
-  return exp.difficulty;
+function getVenture(id: string) {
+  const venture = VENTURES.find((v) => v.id === id);
+  if (!venture) throw new Error(`Venture ${id} not found`);
+  return venture;
 }
 
 // ═══════════════════════════════════════
@@ -127,32 +127,32 @@ const STEEL_ENDGAME: PlayerCombatStats = {
 
 describe("combat balance: starter gear stage access", () => {
   it("coastal_ruins stage 1 should be clearable with starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("coastal_ruins"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("coastal_ruins"), RUNS);
     expect(result.winRate).toBeGreaterThanOrEqual(0.95);
   });
 
   it("tidal_caves stage 1 should be clearable with starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("tidal_caves"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("tidal_caves"), RUNS);
     expect(result.winRate).toBeGreaterThanOrEqual(0.95);
   });
 
   it("overgrown_trail should be nearly impossible for starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("overgrown_trail"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("overgrown_trail"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.05);
   });
 
   it("ridge_pass should be impossible for starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("ridge_pass"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("ridge_pass"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 
   it("sunken_temple should be impossible for starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("sunken_temple"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("sunken_temple"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 
   it("volcanic_rift should be impossible for starter gear", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("volcanic_rift"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("volcanic_rift"), RUNS);
     expect(result.winRate).toBeLessThanOrEqual(0.01);
   });
 });
@@ -163,17 +163,17 @@ describe("combat balance: starter gear stage access", () => {
 
 describe("combat balance: entry tier full clears", () => {
   it("starter gear should NOT full-clear coastal_ruins (<5%)", () => {
-    const result = estimateWinRateFromStats(STARTER_GEAR, getExpedition("coastal_ruins"), RUNS);
+    const result = estimateWinRateFromStats(STARTER_GEAR, getVenture("coastal_ruins"), RUNS);
     expect(result.success).toBeLessThanOrEqual(0.05);
   });
 
   it("tier 1 gear should full-clear coastal_ruins reliably (>90%)", () => {
-    const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("coastal_ruins"), RUNS);
+    const result = estimateWinRateFromStats(TIER1_GEAR, getVenture("coastal_ruins"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.90);
   });
 
   it("tier 1 gear should full-clear tidal_caves sometimes (5-25%)", () => {
-    const result = estimateWinRateFromStats(TIER1_GEAR, getExpedition("tidal_caves"), RUNS);
+    const result = estimateWinRateFromStats(TIER1_GEAR, getVenture("tidal_caves"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.05);
     expect(result.success).toBeLessThanOrEqual(0.25);
   });
@@ -181,54 +181,54 @@ describe("combat balance: entry tier full clears", () => {
 
 describe("combat balance: mid tier full clears", () => {
   it("tier 2 bronze should NOT full-clear overgrown_trail (<5%)", () => {
-    const result = estimateWinRateFromStats(TIER2_GEAR, getExpedition("overgrown_trail"), RUNS);
+    const result = estimateWinRateFromStats(TIER2_GEAR, getVenture("overgrown_trail"), RUNS);
     expect(result.success).toBeLessThanOrEqual(0.05);
   });
 
   it("iron imbued should full-clear overgrown_trail reliably (>90%)", () => {
-    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("overgrown_trail"), RUNS);
+    const result = estimateWinRateFromStats(IRON_IMBUED, getVenture("overgrown_trail"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.90);
   });
 
   it("iron imbued should full-clear ridge_pass reliably (>90%)", () => {
-    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("ridge_pass"), RUNS);
+    const result = estimateWinRateFromStats(IRON_IMBUED, getVenture("ridge_pass"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.90);
   });
 });
 
 describe("combat balance: high tier full clears", () => {
   it("iron imbued should struggle with sunken_temple (<10%)", () => {
-    const result = estimateWinRateFromStats(IRON_IMBUED, getExpedition("sunken_temple"), RUNS);
+    const result = estimateWinRateFromStats(IRON_IMBUED, getVenture("sunken_temple"), RUNS);
     expect(result.success).toBeLessThanOrEqual(0.10);
   });
 
   it("steel imbued should full-clear sunken_temple (>75%)", () => {
-    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("sunken_temple"), RUNS);
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getVenture("sunken_temple"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.75);
   });
 });
 
 describe("combat balance: endgame volcanic rift", () => {
   it("steel without heat resist should NOT full-clear volcanic_rift (<3%)", () => {
-    const result = estimateWinRateFromStats(STEEL_GEAR, getExpedition("volcanic_rift"), RUNS);
+    const result = estimateWinRateFromStats(STEEL_GEAR, getVenture("volcanic_rift"), RUNS);
     expect(result.success).toBeLessThanOrEqual(0.03);
   });
 
   it("steel imbued (7 heatResist) should still struggle with volcanic_rift (<5%)", () => {
     // Even a single imbue isn't enough — need affix stacking too
-    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("volcanic_rift"), RUNS);
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getVenture("volcanic_rift"), RUNS);
     expect(result.success).toBeLessThanOrEqual(0.05);
   });
 
   it("steel endgame (17 heatResist) should make volcanic_rift possible (10-30%)", () => {
     // Full endgame build: steel + imbues + heat resist affix. Aspirational content.
-    const result = estimateWinRateFromStats(STEEL_ENDGAME, getExpedition("volcanic_rift"), RUNS);
+    const result = estimateWinRateFromStats(STEEL_ENDGAME, getVenture("volcanic_rift"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.10);
     expect(result.success).toBeLessThanOrEqual(0.30);
   });
 
   it("earlier expeditions should be trivial for endgame gear (>95%)", () => {
-    const result = estimateWinRateFromStats(STEEL_IMBUED, getExpedition("coastal_ruins"), RUNS);
+    const result = estimateWinRateFromStats(STEEL_IMBUED, getVenture("coastal_ruins"), RUNS);
     expect(result.success).toBeGreaterThanOrEqual(0.95);
   });
 });

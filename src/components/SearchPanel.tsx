@@ -6,6 +6,7 @@ import type {
   RecipeDef,
   StationDef,
   ExpeditionDef,
+  VentureDef,
 } from "../data/types";
 import type { GameScreen } from "../engine/selectors";
 import { CloseIcon } from "./CloseIcon";
@@ -23,7 +24,7 @@ interface SearchResult {
   inputs: string[];
   outputs: string[];
   score: number;
-  def: ActionDef | RecipeDef | StationDef | ExpeditionDef;
+  def: ActionDef | RecipeDef | StationDef | ExpeditionDef | VentureDef;
 }
 
 interface Props {
@@ -34,10 +35,11 @@ interface Props {
   recipes: RecipeDef[];
   stations: StationDef[];
   expeditions: ExpeditionDef[];
+  ventures: VentureDef[];
   onStartAction: (action: ActionDef) => void;
   onStartCraft: (recipe: RecipeDef) => void;
   onDeployStation: (station: StationDef) => void;
-  onStartExpedition: (expedition: ExpeditionDef) => void;
+  onStartExpedition: (expedition: ExpeditionDef | VentureDef) => void;
   onJumpToTab: (tab: string) => void;
   screen?: GameScreen;
 }
@@ -47,6 +49,7 @@ function buildIndex(
   recipes: RecipeDef[],
   stations: StationDef[],
   expeditions: ExpeditionDef[],
+  ventures: VentureDef[],
 ): SearchResult[] {
   const RESOURCES = getResources();
   const resName = (id: string) => RESOURCES[id]?.name ?? id;
@@ -113,9 +116,7 @@ function buildIndex(
   }
 
   for (const e of expeditions) {
-    const firstBiome =
-      e.outcomes.find((o) => o.biomeDiscovery)?.biomeDiscovery ??
-      e.difficulty?.stages?.find((s) => s.biomeDiscovery)?.biomeDiscovery;
+    const firstBiome = e.outcomes.find((o) => o.biomeDiscovery)?.biomeDiscovery;
     const iconId = firstBiome ? `biome_${firstBiome}` : e.skillId;
     results.push({
       type: "explore",
@@ -125,16 +126,33 @@ function buildIndex(
       description: e.description,
       skillId: e.skillId,
       inputs: e.inputs?.map((i) => resName(i.resourceId)) ?? [],
-      outputs: [
-        ...e.outcomes.flatMap((o) => o.drops?.map((d) => resName(d.resourceId)) ?? []),
-        ...(e.lootTable?.map((d) => resName(d.resourceId)) ?? []),
-        ...(e.difficulty?.stages?.flatMap((s) => [
-          ...(s.drops?.map((d) => resName(d.resourceId)) ?? []),
-          ...(s.lootTable?.map((d) => resName(d.resourceId)) ?? []),
-        ]) ?? []),
-      ].filter((v, i, a) => a.indexOf(v) === i),
+      outputs: e.outcomes
+        .flatMap((o) => o.drops?.map((d) => resName(d.resourceId)) ?? [])
+        .filter((v, i, a) => a.indexOf(v) === i),
       score: 0,
       def: e,
+    });
+  }
+
+  for (const v of ventures) {
+    const firstBiome = v.stages.find((s) => s.biomeDiscovery)?.biomeDiscovery;
+    const iconId = firstBiome ? `biome_${firstBiome}` : v.skillId;
+    results.push({
+      type: "explore",
+      id: v.id,
+      iconId,
+      name: v.name,
+      description: v.description,
+      skillId: v.skillId,
+      inputs: v.inputs?.map((i) => resName(i.resourceId)) ?? [],
+      outputs: v.stages
+        .flatMap((s) => [
+          ...(s.drops?.map((d) => resName(d.resourceId)) ?? []),
+          ...(s.lootTable?.map((d) => resName(d.resourceId)) ?? []),
+        ])
+        .filter((vv, i, a) => a.indexOf(vv) === i),
+      score: 0,
+      def: v,
     });
   }
 
@@ -208,6 +226,7 @@ export function SearchPanel({
   recipes,
   stations,
   expeditions,
+  ventures,
   onStartAction,
   onStartCraft,
   onDeployStation,
@@ -232,8 +251,8 @@ export function SearchPanel({
   }, [onClose]);
 
   const index = useMemo(
-    () => buildIndex(actions, recipes, stations, expeditions),
-    [actions, recipes, stations, expeditions],
+    () => buildIndex(actions, recipes, stations, expeditions, ventures),
+    [actions, recipes, stations, expeditions, ventures],
   );
 
   const results = useMemo(() => {
@@ -260,7 +279,7 @@ export function SearchPanel({
     } else if (type === "tend") {
       onDeployStation(def as StationDef);
     } else if (type === "explore") {
-      onStartExpedition(def as ExpeditionDef);
+      onStartExpedition(def as ExpeditionDef | VentureDef);
     }
     onClose();
   };

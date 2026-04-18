@@ -1,11 +1,11 @@
 /**
  * One-off balance probe: how do different gear profiles perform against
- * every mainland expedition? Used to diagnose "everything too easy" complaints.
+ * every mainland venture? Used to diagnose "everything too easy" complaints.
  *
  * Run: npx tsx scripts/probe-balance.ts
  */
 import { estimateWinRateFromStats, PlayerCombatStats } from "../src/engine/combat";
-import { MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
+import { VENTURES } from "../src/data/ventures";
 
 const RUNS = 2000;
 
@@ -68,8 +68,8 @@ console.log(header);
 for (const [gearName, player] of Object.entries(GEAR)) {
   const row: string[] = [pad(gearName, 18)];
   for (const expId of EXPED_ORDER) {
-    const exp = MAINLAND_EXPEDITIONS.find(e => e.id === expId)!;
-    const r = estimateWinRateFromStats(player, exp.difficulty!, RUNS);
+    const venture = VENTURES.find(v => v.id === expId)!;
+    const r = estimateWinRateFromStats(player, venture, RUNS);
     row.push(pad(pct(r.winRate), 18));
   }
   console.log(row.join("| "));
@@ -80,8 +80,8 @@ console.log(header);
 for (const [gearName, player] of Object.entries(GEAR)) {
   const row: string[] = [pad(gearName, 18)];
   for (const expId of EXPED_ORDER) {
-    const exp = MAINLAND_EXPEDITIONS.find(e => e.id === expId)!;
-    const r = estimateWinRateFromStats(player, exp.difficulty!, RUNS);
+    const venture = VENTURES.find(v => v.id === expId)!;
+    const r = estimateWinRateFromStats(player, venture, RUNS);
     row.push(pad(pct(r.success), 18));
   }
   console.log(row.join("| "));
@@ -89,8 +89,8 @@ for (const [gearName, player] of Object.entries(GEAR)) {
 
 console.log("\n== clear-or-partial breakdown for SCREENSHOT ==");
 for (const expId of EXPED_ORDER) {
-  const exp = MAINLAND_EXPEDITIONS.find(e => e.id === expId)!;
-  const r = estimateWinRateFromStats(GEAR.SCREENSHOT, exp.difficulty!, RUNS);
+  const venture = VENTURES.find(v => v.id === expId)!;
+  const r = estimateWinRateFromStats(GEAR.SCREENSHOT, venture, RUNS);
   console.log(
     `${pad(expId, 18)}  win=${pct(r.winRate)}  full=${pct(r.success)}  partial=${pct(r.partial)}  fail=${pct(r.failure)}`,
   );

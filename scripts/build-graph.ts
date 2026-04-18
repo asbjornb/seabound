@@ -14,7 +14,8 @@
 import { writeFileSync, readFileSync } from "fs";
 import { ACTIONS } from "../src/data/actions";
 import { BUILDINGS } from "../src/data/buildings";
-import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
+import { EXPEDITIONS } from "../src/data/expeditions";
+import { VENTURES } from "../src/data/ventures";
 import { RECIPES } from "../src/data/recipes";
 import { RESOURCES } from "../src/data/resources";
 import { SKILLS } from "../src/data/skills";
@@ -294,21 +295,17 @@ for (const t of toolsWithOutput) {
   }
 }
 
-// Expeditions
-const ALL_EXPEDITIONS = [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS];
-for (const e of ALL_EXPEDITIONS) {
+// Expeditions (exploration) — weighted outcomes + biome discovery
+for (const e of EXPEDITIONS) {
   const expId = `expedition:${e.id}`;
   addNode({ id: expId, type: "expedition", label: e.name, category: "navigation" });
 
-  // Trains navigation
-  addEdge({ from: expId, to: `skill:navigation`, relation: "trains" });
+  addEdge({ from: expId, to: `skill:${e.skillId}`, relation: "trains" });
 
-  // Required vessel (now a building)
   if (e.requiredVessel) {
     addEdge({ from: `building:${e.requiredVessel}`, to: expId, relation: "requires_vessel" });
   }
 
-  // Expeditions consume food/water generically — link all food-tagged resources
   if (e.foodCost) {
     for (const r of Object.values(RESOURCES)) {
       if (r.tags?.includes("food")) {
@@ -319,21 +316,18 @@ for (const e of ALL_EXPEDITIONS) {
   if (e.waterCost) {
     addEdge({ from: `resource:fresh_water`, to: expId, relation: "consumes" });
   }
-  // Specific resource inputs
   if (e.inputs) {
     for (const inp of e.inputs) {
       addEdge({ from: `resource:${inp.resourceId}`, to: expId, relation: "consumes" });
     }
   }
 
-  // Required biomes to see expedition
   if (e.requiredBiomes) {
     for (const b of e.requiredBiomes) {
       addEdge({ from: `biome:${b}`, to: expId, relation: "requires_biome_discovered" });
     }
   }
 
-  // Outcomes
   for (const o of e.outcomes) {
     if (o.biomeDiscovery) {
       addEdge({ from: expId, to: `biome:${o.biomeDiscovery}`, relation: "discovers" });
@@ -343,41 +337,60 @@ for (const e of ALL_EXPEDITIONS) {
         addEdge({ from: expId, to: `resource:${d.resourceId}`, relation: "produces" });
       }
     }
-    // Outcome-level biome requirements
     if (o.requiredBiomes) {
       for (const b of o.requiredBiomes) {
         addEdge({ from: `biome:${b}`, to: expId, relation: "requires_biome_discovered" });
       }
     }
   }
+}
 
-  // Loot table drops (expedition-level)
-  if (e.lootTable) {
-    for (const loot of e.lootTable) {
-      addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
+// Ventures (mainland combat) — staged enemies + per-stage drops and biome discovery
+for (const v of VENTURES) {
+  const ventureId = `expedition:${v.id}`;
+  addNode({ id: ventureId, type: "expedition", label: v.name, category: v.skillId });
+
+  addEdge({ from: ventureId, to: `skill:${v.skillId}`, relation: "trains" });
+
+  if (v.foodCost) {
+    for (const r of Object.values(RESOURCES)) {
+      if (r.tags?.includes("food")) {
+        addEdge({ from: `resource:${r.id}`, to: ventureId, relation: "consumes" });
+      }
+    }
+  }
+  if (v.waterCost) {
+    addEdge({ from: `resource:fresh_water`, to: ventureId, relation: "consumes" });
+  }
+  if (v.inputs) {
+    for (const inp of v.inputs) {
+      addEdge({ from: `resource:${inp.resourceId}`, to: ventureId, relation: "consumes" });
     }
   }
 
-  // Staged combat drops (per-stage loot tables, drops, and biome discoveries)
-  if (e.difficulty?.stages) {
-    for (const stage of e.difficulty.stages) {
-      if (stage.drops) {
-        for (const d of stage.drops) {
-          addEdge({ from: expId, to: `resource:${d.resourceId}`, relation: "produces" });
-        }
+  if (v.requiredBiomes) {
+    for (const b of v.requiredBiomes) {
+      addEdge({ from: `biome:${b}`, to: ventureId, relation: "requires_biome_discovered" });
+    }
+  }
+
+  for (const stage of v.stages) {
+    if (stage.drops) {
+      for (const d of stage.drops) {
+        addEdge({ from: ventureId, to: `resource:${d.resourceId}`, relation: "produces" });
       }
-      if (stage.lootTable) {
-        for (const loot of stage.lootTable) {
-          addEdge({ from: expId, to: `resource:${loot.resourceId}`, relation: "produces" });
-        }
+    }
+    if (stage.lootTable) {
+      for (const loot of stage.lootTable) {
+        addEdge({ from: ventureId, to: `resource:${loot.resourceId}`, relation: "produces" });
       }
-      if (stage.biomeDiscovery) {
-        addEdge({ from: expId, to: `biome:${stage.biomeDiscovery}`, relation: "discovers" });
-      }
-      if (stage.biomeDiscoveryRequires) {
-        for (const req of stage.biomeDiscoveryRequires) {
-          addEdge({ from: `biome:${req}`, to: expId, relation: "requires_biome_discovered" });
-        }
+    }
+    if (stage.biomeDiscovery) {
+      addEdge({ from: ventureId, to: `biome:${stage.biomeDiscovery}`, relation: "discovers" });
+    }
+    if (stage.biomeDiscoveryRequires) {
+      for (const req of stage.biomeDiscoveryRequires) {
+        addEdge({ from: `biome:${req}`, to: ventureId, relation: "requires_biome_discovered" });
       }
     }
   }
@@ -648,12 +661,22 @@ function computeReachable(): Set<string> {
       }
     }
 
-    for (const e of ALL_EXPEDITIONS) {
+    for (const e of EXPEDITIONS) {
       const id = `expedition:${e.id}`;
       if (reachable.has(id)) continue;
       const vesselMet = !e.requiredVessel || reachable.has(`building:${e.requiredVessel}`);
       const biomesMet = !e.requiredBiomes?.length || e.requiredBiomes.every(b => reachable.has(`biome:${b}`));
       if (vesselMet && biomesMet) {
+        reachable.add(id);
+        changed = true;
+      }
+    }
+
+    for (const v of VENTURES) {
+      const id = `expedition:${v.id}`;
+      if (reachable.has(id)) continue;
+      const biomesMet = !v.requiredBiomes?.length || v.requiredBiomes.every(b => reachable.has(`biome:${b}`));
+      if (biomesMet) {
         reachable.add(id);
         changed = true;
       }

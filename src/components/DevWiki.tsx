@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations } from "../data/registry";
+import { getActions, getBuildings, getExpeditions, getRecipes, getResources, getTools, getSkills, getMilestonesForSkill, getStations, getVentures } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { MilestoneEffect, SkillId, SkillMilestone } from "../data/types";
 import changelogData from "../data/changelog.json";
@@ -369,6 +369,7 @@ export function DevWiki() {
   const ACTIONS = getActions();
   const RECIPES = getRecipes();
   const EXPEDITIONS = getExpeditions();
+  const VENTURES = getVentures();
   const skillIds = Object.keys(SKILLS) as SkillId[];
 
   return (
@@ -424,6 +425,7 @@ export function DevWiki() {
         <a href="#recipes" style={styles.link}>Recipes</a> ·{" "}
         <a href="#buildings" style={styles.link}>Buildings</a> ·{" "}
         <a href="#expeditions" style={styles.link}>Expeditions</a> ·{" "}
+        <a href="#ventures" style={styles.link}>Ventures</a> ·{" "}
         <a href="#milestones" style={styles.link}>Milestones</a>
       </nav>
 
@@ -728,6 +730,56 @@ export function DevWiki() {
                     </tr>
                   );
                 })}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </section>
+
+      {/* ── Ventures ── */}
+      <section id="ventures">
+        <h2 style={styles.h2}>Ventures ({VENTURES.length})</h2>
+        {VENTURES.map((v) => (
+          <div key={v.id} style={styles.card}>
+            <h3 style={styles.h3}>
+              {v.name} <span style={styles.dim}>({v.id})</span>
+            </h3>
+            <p style={styles.desc}>{v.description}</p>
+            <p style={styles.meta}>
+              Skill: {v.skillId} · Duration: {(v.durationMs / 1000).toFixed(1)}s · XP:{" "}
+              {v.xpGain}
+              {v.foodCost ? ` · Food: ${v.foodCost}` : ""}
+              {v.waterCost ? ` · Water: ${v.waterCost}` : ""}
+              {v.hazards.length > 0 ? ` · Hazards: ${v.hazards.join(", ")}` : ""}
+            </p>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Stage</th>
+                  <th style={styles.th}>Enemy (HP / dmg / def)</th>
+                  <th style={styles.th}>Drops</th>
+                  <th style={styles.th}>Loot Table</th>
+                  <th style={styles.th}>Biome Discovery</th>
+                </tr>
+              </thead>
+              <tbody>
+                {v.stages.map((s, i) => (
+                  <tr key={i} style={styles.tr}>
+                    <td style={styles.td}>{i + 1}. {s.name}</td>
+                    <td style={styles.tdSmall}>
+                      {s.enemy.hp} HP / {s.enemy.damage} dmg / {s.enemy.defense} def
+                    </td>
+                    <td style={styles.tdSmall}>
+                      {s.drops?.map((d) => `${d.amount}× ${d.resourceId}${d.chance != null && d.chance < 1 ? ` (${Math.round(d.chance * 100)}%)` : ""}`).join(", ") || "—"}
+                    </td>
+                    <td style={styles.tdSmall}>
+                      {s.lootTable?.map((d) => `${d.amount}× ${d.resourceId} (${(d.chance * 100).toFixed(1)}%)`).join(", ") || "—"}
+                    </td>
+                    <td style={styles.tdSmall}>
+                      {s.biomeDiscovery ? `${s.biomeDiscovery}${s.biomeDiscoveryChance != null ? ` (${Math.round(s.biomeDiscoveryChance * 100)}%)` : ""}` : "—"}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

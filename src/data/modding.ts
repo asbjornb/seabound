@@ -146,6 +146,7 @@ export function validateModPack(pack: unknown): ValidationResult {
   if (!Array.isArray(p.actions)) errors.push("Missing 'actions' array");
   if (!Array.isArray(p.recipes)) errors.push("Missing 'recipes' array");
   if (!Array.isArray(p.expeditions)) errors.push("Missing 'expeditions' array");
+  if (!Array.isArray(p.ventures)) errors.push("Missing 'ventures' array");
   if (!Array.isArray(p.stations)) errors.push("Missing 'stations' array");
 
   if (errors.length > 0) {
@@ -215,13 +216,17 @@ export function validateModPack(pack: unknown): ValidationResult {
       if (outcome.biomeDiscovery) checkBiomeRef(outcome.biomeDiscovery, ctx);
       for (const drop of outcome.drops ?? []) checkResourceRef(drop.resourceId, ctx);
     }
-    for (const loot of exp.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
-    // Validate stage drops and loot tables
-    if (exp.difficulty?.stages) {
-      for (const stage of exp.difficulty.stages) {
-        for (const drop of stage.drops ?? []) checkResourceRef(drop.resourceId, ctx);
-        for (const loot of stage.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
-      }
+  }
+
+  // Validate ventures (mainland combat)
+  for (const venture of p.ventures!) {
+    if (!venture.id) { errors.push("Venture missing 'id'"); continue; }
+    const ctx = `venture '${venture.id}'`;
+    checkSkillRef(venture.skillId, ctx);
+    for (const stage of venture.stages ?? []) {
+      for (const drop of stage.drops ?? []) checkResourceRef(drop.resourceId, ctx);
+      for (const loot of stage.lootTable ?? []) checkResourceRef(loot.resourceId, ctx);
+      if (stage.biomeDiscovery) checkBiomeRef(stage.biomeDiscovery, ctx);
     }
   }
 
@@ -257,6 +262,7 @@ function normalizeModPack(pack: GameDataPack): GameDataPack {
   if (!pack.affixes) pack.affixes = {};
   if (!pack.repairRecipes) pack.repairRecipes = [];
   if (!pack.salvageTables) pack.salvageTables = [];
+  if (!pack.ventures) pack.ventures = [];
   return pack;
 }
 

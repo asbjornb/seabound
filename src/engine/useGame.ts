@@ -13,6 +13,7 @@ import {
   getSalvageTables,
   getStationById,
   getTools,
+  getVentureById,
 } from "../data/registry";
 import { IMBUING_REAGENTS } from "../data/equipment";
 import { levelFromXp } from "../data/skills";
@@ -36,6 +37,7 @@ import type {
   Routine,
   RoutineStep,
   StationDef,
+  VentureDef,
 } from "../data/types";
 import { getMaxQueueSize, isQueueUnlocked } from "../data/queue";
 
@@ -73,6 +75,7 @@ import {
   selectAvailableExpeditions,
   selectAvailableRecipes,
   selectAvailableStations,
+  selectAvailableVentures,
   selectLockedStations,
   selectCurrentActionTiming,
 } from "./selectors";
@@ -172,21 +175,23 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
 
   if (step.actionType === "expedition") {
     const expedition = getExpeditionById(step.actionId);
-    if (!expedition) return false;
-    if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
-    if (expedition.foodCost && getTotalFood(state) < expedition.foodCost) return false;
-    if (expedition.waterCost && getTotalWater(state) < expedition.waterCost) return false;
-    if (expedition.inputs?.some((inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount)) return false;
+    const venture = !expedition ? getVentureById(step.actionId) : undefined;
+    const def = expedition ?? venture;
+    if (!def) return false;
+    if (expedition?.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
+    if (def.foodCost && getTotalFood(state) < def.foodCost) return false;
+    if (def.waterCost && getTotalWater(state) < def.waterCost) return false;
+    if (def.inputs?.some((inp) => (state.resources[inp.resourceId] ?? 0) < inp.amount)) return false;
 
     saveCurrentActionProgress(state);
-    resetRepetitiveCountOnManualActionChange(state, `expedition:${expedition.id}`);
+    resetRepetitiveCountOnManualActionChange(state, `expedition:${def.id}`);
     state.currentAction = {
-      actionId: expedition.id,
+      actionId: def.id,
       startedAt: Date.now(),
       type: "expedition",
-      expeditionId: expedition.id,
+      expeditionId: def.id,
     };
-    restoreActionProgress(state, `expedition:${expedition.id}`);
+    restoreActionProgress(state, `expedition:${def.id}`);
     return true;
   }
 
@@ -817,10 +822,11 @@ export function useGame() {
   );
 
   const startExpedition = useCallback(
-    (expedition: ExpeditionDef) => {
+    (expedition: ExpeditionDef | VentureDef) => {
       setState((prev) => {
-        // Check vessel requirement — higher-tier vessels satisfy lower-tier ones
-        if (expedition.requiredVessel && !hasVessel(prev, expedition.requiredVessel)) {
+        // Vessel requirement applies only to expeditions
+        const vessel = (expedition as ExpeditionDef).requiredVessel;
+        if (vessel && !hasVessel(prev, vessel)) {
           return prev;
         }
         // Check food, water, and resource input costs
@@ -1492,6 +1498,7 @@ export function useGame() {
   const availableActions = selectAvailableActions(state);
   const availableRecipes = selectAvailableRecipes(state);
   const availableExpeditions = selectAvailableExpeditions(state);
+  const availableVentures = selectAvailableVentures(state);
   const availableStations = selectAvailableStations(state);
   const lockedStations = selectLockedStations(state);
   const { actionProgress, actionDuration } = selectCurrentActionTiming(state);
@@ -1501,6 +1508,7 @@ export function useGame() {
     availableActions,
     availableRecipes,
     availableExpeditions,
+    availableVentures,
     availableStations,
     lockedStations,
     actionProgress,

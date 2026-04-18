@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions } from "../data/registry";
+import { getResources, getTools, getActions, getRecipes, getStations, getExpeditions, getVentures } from "../data/registry";
 import { ResourceId, ToolId, GameState } from "../data/types";
 import { getMoraleDurationMultiplier, getStorageLimit, isAtStorageCap, getStorageGroupMembers } from "../engine/gameState";
 import { resourceHasUse } from "../engine/selectors";
@@ -53,12 +53,14 @@ function buildResourceSourceMap(): Record<string, string[]> {
         add(drop.resourceId, exp.name);
       }
     }
-    for (const stage of exp.difficulty?.stages ?? []) {
+  }
+  for (const venture of getVentures()) {
+    for (const stage of venture.stages) {
       for (const drop of stage.drops ?? []) {
-        add(drop.resourceId, exp.name);
+        add(drop.resourceId, venture.name);
       }
       for (const drop of stage.lootTable ?? []) {
-        add(drop.resourceId, exp.name);
+        add(drop.resourceId, venture.name);
       }
     }
   }

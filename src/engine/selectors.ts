@@ -12,9 +12,11 @@ import {
   getSkills,
   getStationById,
   getStations,
+  getVentureById,
+  getVentures,
 } from "../data/registry";
 import { xpForLevel } from "../data/skills";
-import type { ActionDef, ExpeditionDef, GameState, RecipeDef, SkillId, StationDef } from "../data/types";
+import type { ActionDef, ExpeditionDef, GameState, RecipeDef, SkillId, StationDef, VentureDef } from "../data/types";
 import {
   getBuildingCount,
   getBuildingExpeditionSpeedMultiplier,
@@ -177,18 +179,20 @@ export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
-      const discoverableBiomes = [
-        ...expedition.outcomes
-          .filter((outcome) => outcome.biomeDiscovery)
-          .map((outcome) => outcome.biomeDiscovery!),
-        ...(expedition.difficulty?.stages ?? [])
-          .filter((stage) => stage.biomeDiscovery)
-          .map((stage) => stage.biomeDiscovery!),
-      ];
+      const discoverableBiomes = expedition.outcomes
+        .filter((outcome) => outcome.biomeDiscovery)
+        .map((outcome) => outcome.biomeDiscovery!);
       if (discoverableBiomes.length > 0 && discoverableBiomes.every((biomeId) => state.discoveredBiomes.includes(biomeId))) {
         return false;
       }
     }
+    return true;
+  });
+}
+
+export function selectAvailableVentures(state: GameState): VentureDef[] {
+  return getVentures().filter((venture) => {
+    if (venture.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     return true;
   });
 }
@@ -290,7 +294,7 @@ export function selectCurrentActionTiming(
   }
 
   const expeditionId = state.currentAction.expeditionId;
-  const expedition = expeditionId ? getExpeditionById(expeditionId) : undefined;
+  const expedition = expeditionId ? (getExpeditionById(expeditionId) ?? getVentureById(expeditionId)) : undefined;
   if (!expedition) return { actionProgress: 0, actionDuration: 0 };
   const expSkillLevel = state.skills[expedition.skillId]?.level ?? 1;
   const expMilestoneMultiplier = getDurationMultiplier(expedition.skillId, expSkillLevel, expedition.id);
@@ -312,9 +316,9 @@ export function selectCurrentActionName(state: GameState): string | null {
       ? getRecipeById(state.currentAction.recipeId)?.name ?? null
       : null;
   }
-  return state.currentAction.expeditionId
-    ? getExpeditionById(state.currentAction.expeditionId)?.name ?? null
-    : null;
+  const expId = state.currentAction.expeditionId;
+  if (!expId) return null;
+  return (getExpeditionById(expId) ?? getVentureById(expId))?.name ?? null;
 }
 
 export interface CurrentSkillInfo {
@@ -337,8 +341,9 @@ export function selectCurrentSkillInfo(state: GameState): CurrentSkillInfo | nul
       ? getRecipeById(state.currentAction.recipeId)?.skillId
       : undefined;
   } else {
-    skillId = state.currentAction.expeditionId
-      ? getExpeditionById(state.currentAction.expeditionId)?.skillId
+    const expId = state.currentAction.expeditionId;
+    skillId = expId
+      ? (getExpeditionById(expId) ?? getVentureById(expId))?.skillId
       : undefined;
   }
 
@@ -367,12 +372,12 @@ export function selectUndiscoveredBiomeCount(state: GameState, expeditionId?: st
   if (expeditionId) {
     const exp = getExpeditionById(expeditionId);
     if (exp) {
-      const biomes = [
-        ...exp.outcomes.filter((o) => o.biomeDiscovery).map((o) => o.biomeDiscovery!),
-        ...(exp.difficulty?.stages ?? [])
-          .filter((s) => s.biomeDiscovery)
-          .map((s) => s.biomeDiscovery!),
-      ];
+      const biomes = exp.outcomes.filter((o) => o.biomeDiscovery).map((o) => o.biomeDiscovery!);
+      return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
+    }
+    const venture = getVentureById(expeditionId);
+    if (venture) {
+      const biomes = venture.stages.filter((s) => s.biomeDiscovery).map((s) => s.biomeDiscovery!);
       return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
     }
   }
@@ -414,13 +419,6 @@ export function selectRecipesByScreen(recipes: RecipeDef[], screen: GameScreen):
     const isMainland = MAINLAND_SKILLS.has(r.skillId) || !!r.equipmentOutput;
     return screen === "mainland" ? isMainland : !isMainland;
   });
-}
-
-/** Filter expeditions to only those belonging to the given screen. */
-export function selectExpeditionsByScreen(expeditions: ExpeditionDef[], screen: GameScreen): ExpeditionDef[] {
-  return expeditions.filter((e) =>
-    screen === "mainland" ? !!e.mainland : !e.mainland
-  );
 }
 
 export function selectHasAnyXp(state: GameState): boolean {

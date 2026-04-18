@@ -1,5 +1,5 @@
 /**
- * D2-inspired round-based combat simulation for mainland expeditions.
+ * D2-inspired round-based combat simulation for mainland ventures.
  *
  * Instead of independent stat checks, combat plays out as a round-by-round fight:
  * - Player and enemy trade hits based on attack speed
@@ -18,7 +18,7 @@ import { getCombatStatBonuses } from "../data/milestones";
 import { getAffixById, getEquipmentItemById } from "../data/registry";
 import { levelFromXp } from "../data/skills";
 import { CONDITION_STAT_MULTIPLIER } from "../data/types";
-import type { CombatStage, EnemyCombatProfile, ExpeditionDifficultyProfile, GameState } from "../data/types";
+import type { EnemyCombatProfile, GameState, VentureDef } from "../data/types";
 
 // ═══════════════════════════════════════
 // Constants
@@ -66,18 +66,10 @@ function mulberry32(seed: number): () => number {
   };
 }
 
-/** Get all enemies from a difficulty profile (stages or single enemy). */
-function getEnemies(difficulty: ExpeditionDifficultyProfile): EnemyCombatProfile[] {
-  if (difficulty.stages && difficulty.stages.length > 0) {
-    return difficulty.stages.map(s => s.enemy);
-  }
-  return difficulty.enemy ? [difficulty.enemy] : [];
-}
-
-/** Derive a deterministic seed from player stats + enemy difficulty. */
+/** Derive a deterministic seed from player stats + venture stage enemies. */
 function computeCombatSeed(
   player: PlayerCombatStats,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): number {
   let hash = 0x9e3779b9;
   const values: number[] = [
@@ -85,8 +77,8 @@ function computeCombatSeed(
     player.speed, player.endurance, player.heatResist, player.coldResist,
     player.wetResist, player.critChance, player.critMultiplier,
   ];
-  for (const enemy of getEnemies(difficulty)) {
-    values.push(enemy.hp, enemy.damage, enemy.defense, enemy.attackSpeed);
+  for (const stage of venture.stages) {
+    values.push(stage.enemy.hp, stage.enemy.damage, stage.enemy.defense, stage.enemy.attackSpeed);
   }
   for (const v of values) {
     hash = ((hash << 5) - hash + Math.round(v * 1000)) | 0;
@@ -101,9 +93,9 @@ function computeCombatSeed(
  */
 export function combatEstimationKey(
   state: GameState,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): number {
-  return computeCombatSeed(getPlayerCombatStats(state), difficulty);
+  return computeCombatSeed(getPlayerCombatStats(state), venture);
 }
 
 // ═══════════════════════════════════════
@@ -443,136 +435,89 @@ function generateInsights(
 }
 
 /**
- * Run a full combat simulation (single enemy or multi-stage gauntlet).
- * For staged expeditions, HP carries over between stages.
+ * Run a full multi-stage combat simulation for a venture.
+ * HP carries over between stages.
  */
 function simulateCombat(
   player: PlayerCombatStats,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
   rng: () => number = Math.random,
 ): Omit<EncounterResult, "estimatedWinRate"> {
   const playerMaxHp = BASE_PLAYER_HP + player.life;
-  const stages = difficulty.stages;
+  const stages = venture.stages;
 
-  // ── Multi-stage gauntlet ──
-  if (stages && stages.length > 0) {
-    let currentHp = playerMaxHp;
-    let totalRounds = 0;
-    let totalDealt = 0;
-    let totalTaken = 0;
-    let totalCrits = 0;
-    let totalDodges = 0;
-    let stagesCleared = 0;
-    let lastEnemyHpEnd = 0;
+  let currentHp = playerMaxHp;
+  let totalRounds = 0;
+  let totalDealt = 0;
+  let totalTaken = 0;
+  let totalCrits = 0;
+  let totalDodges = 0;
+  let stagesCleared = 0;
+  let lastEnemyHpEnd = 0;
 
-    for (const stage of stages) {
-      const result = simulateSingleCombat(player, stage.enemy, rng, currentHp);
-      totalRounds += result.rounds;
-      totalDealt += result.damageDealt;
-      totalTaken += result.damageTaken;
-      totalCrits += result.crits;
-      totalDodges += result.dodgeCount;
-      currentHp = result.playerHpEnd;
-      lastEnemyHpEnd = result.enemyHpEnd;
+  for (const stage of stages) {
+    const result = simulateSingleCombat(player, stage.enemy, rng, currentHp);
+    totalRounds += result.rounds;
+    totalDealt += result.damageDealt;
+    totalTaken += result.damageTaken;
+    totalCrits += result.crits;
+    totalDodges += result.dodgeCount;
+    currentHp = result.playerHpEnd;
+    lastEnemyHpEnd = result.enemyHpEnd;
 
-      if (!result.won) break;
-      stagesCleared++;
-    }
-
-    // Grade based on stages cleared
-    let grade: EncounterGrade;
-    let dropMultiplier: number;
-    let xpMultiplier: number;
-    const totalStages = stages.length;
-
-    if (stagesCleared === 0) {
-      grade = "failure";
-      dropMultiplier = 0.15;
-      xpMultiplier = 0.6;
-    } else if (stagesCleared < totalStages) {
-      grade = "partial";
-      dropMultiplier = 0.5;
-      xpMultiplier = 0.8 + (stagesCleared / totalStages) * 0.2;
-    } else {
-      // Full clear — grade depends on remaining HP
-      if (currentHp / playerMaxHp >= 0.5) {
-        grade = "success";
-        dropMultiplier = 1.0;
-        xpMultiplier = 1.2;
-      } else {
-        grade = "partial";
-        dropMultiplier = 0.85;
-        xpMultiplier = 1.0;
-      }
-    }
-
-    const enemies = stages.map(s => s.enemy);
-    const lastIdx = Math.min(stagesCleared, stages.length - 1);
-    const insights = generateInsights(player, enemies, grade, lastIdx, lastEnemyHpEnd, difficulty.hint);
-    const enemyNames = stages.slice(0, stagesCleared + 1).map(s => s.enemy.name);
-
-    return {
-      grade,
-      enemyName: enemyNames.join(", "),
-      roundsFought: totalRounds,
-      playerHpStart: playerMaxHp,
-      playerHpEnd: Math.max(0, currentHp),
-      enemyHpStart: stages.reduce((sum, s) => sum + s.enemy.hp, 0),
-      enemyHpEnd: lastEnemyHpEnd,
-      totalDamageDealt: totalDealt,
-      totalDamageTaken: totalTaken,
-      critsLanded: totalCrits,
-      dodges: totalDodges,
-      dropMultiplier,
-      xpMultiplier,
-      failureInsights: insights,
-      stagesCleared,
-      totalStages,
-    };
+    if (!result.won) break;
+    stagesCleared++;
   }
 
-  // ── Single enemy (legacy) ──
-  const enemy = difficulty.enemy!;
-  const result = simulateSingleCombat(player, enemy, rng);
-
+  // Grade based on stages cleared
   let grade: EncounterGrade;
   let dropMultiplier: number;
   let xpMultiplier: number;
+  const totalStages = stages.length;
 
-  if (result.won) {
-    const hpPercent = result.playerHpEnd / playerMaxHp;
-    if (hpPercent >= 0.5) {
+  if (stagesCleared === 0) {
+    grade = "failure";
+    dropMultiplier = 0.15;
+    xpMultiplier = 0.6;
+  } else if (stagesCleared < totalStages) {
+    grade = "partial";
+    dropMultiplier = 0.5;
+    xpMultiplier = 0.8 + (stagesCleared / totalStages) * 0.2;
+  } else {
+    // Full clear — grade depends on remaining HP
+    if (currentHp / playerMaxHp >= 0.5) {
       grade = "success";
       dropMultiplier = 1.0;
       xpMultiplier = 1.2;
     } else {
       grade = "partial";
-      dropMultiplier = 0.5;
+      dropMultiplier = 0.85;
       xpMultiplier = 1.0;
     }
-  } else {
-    grade = "failure";
-    dropMultiplier = 0.15;
-    xpMultiplier = 0.6;
   }
 
-  const insights = generateInsights(player, [enemy], grade, 0, result.enemyHpEnd, difficulty.hint);
+  const enemies = stages.map(s => s.enemy);
+  const lastIdx = Math.min(stagesCleared, stages.length - 1);
+  const insights = generateInsights(player, enemies, grade, lastIdx, lastEnemyHpEnd, venture.hint);
+  const enemyNames = stages.slice(0, stagesCleared + 1).map(s => s.enemy.name);
 
   return {
     grade,
-    enemyName: enemy.name,
-    roundsFought: result.rounds,
+    enemyName: enemyNames.join(", "),
+    roundsFought: totalRounds,
     playerHpStart: playerMaxHp,
-    playerHpEnd: result.playerHpEnd,
-    enemyHpStart: enemy.hp,
-    enemyHpEnd: result.enemyHpEnd,
-    totalDamageDealt: result.damageDealt,
-    totalDamageTaken: result.damageTaken,
-    critsLanded: result.crits,
-    dodges: result.dodgeCount,
+    playerHpEnd: Math.max(0, currentHp),
+    enemyHpStart: stages.reduce((sum, s) => sum + s.enemy.hp, 0),
+    enemyHpEnd: lastEnemyHpEnd,
+    totalDamageDealt: totalDealt,
+    totalDamageTaken: totalTaken,
+    critsLanded: totalCrits,
+    dodges: totalDodges,
     dropMultiplier,
     xpMultiplier,
     failureInsights: insights,
+    stagesCleared,
+    totalStages,
   };
 }
 
@@ -583,17 +528,17 @@ function simulateCombat(
 /**
  * Estimate win rate by running many combat simulations.
  * Returns a number 0–1 representing the fraction of wins (success + partial).
- * Uses a seeded PRNG so the same stats + difficulty always produce the same result.
+ * Uses a seeded PRNG so the same stats + venture always produce the same result.
  */
 export function estimateWinRate(
   state: GameState,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): number {
   const player = getPlayerCombatStats(state);
-  const rng = mulberry32(computeCombatSeed(player, difficulty));
+  const rng = mulberry32(computeCombatSeed(player, venture));
   let wins = 0;
   for (let i = 0; i < MONTE_CARLO_RUNS; i++) {
-    const result = simulateCombat(player, difficulty, rng);
+    const result = simulateCombat(player, venture, rng);
     if (result.grade !== "failure") wins++;
   }
   return wins / MONTE_CARLO_RUNS;
@@ -602,19 +547,18 @@ export function estimateWinRate(
 /**
  * Estimate the grade distribution by running many simulations.
  * Returns { success, partial, failure } as fractions 0–1.
- * Uses a seeded PRNG so the same stats + difficulty always produce the same result.
  */
 export function estimateGradeDistribution(
   state: GameState,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): { success: number; partial: number; failure: number } {
   const player = getPlayerCombatStats(state);
-  const rng = mulberry32(computeCombatSeed(player, difficulty));
+  const rng = mulberry32(computeCombatSeed(player, venture));
   let success = 0;
   let partial = 0;
   let failure = 0;
   for (let i = 0; i < MONTE_CARLO_RUNS; i++) {
-    const result = simulateCombat(player, difficulty, rng);
+    const result = simulateCombat(player, venture, rng);
     if (result.grade === "success") success++;
     else if (result.grade === "partial") partial++;
     else failure++;
@@ -632,15 +576,15 @@ export function estimateGradeDistribution(
  */
 export function estimateWinRateFromStats(
   player: PlayerCombatStats,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
   runs: number = MONTE_CARLO_RUNS,
 ): { winRate: number; success: number; partial: number; failure: number } {
-  const rng = mulberry32(computeCombatSeed(player, difficulty));
+  const rng = mulberry32(computeCombatSeed(player, venture));
   let success = 0;
   let partial = 0;
   let failure = 0;
   for (let i = 0; i < runs; i++) {
-    const result = simulateCombat(player, difficulty, rng);
+    const result = simulateCombat(player, venture, rng);
     if (result.grade === "success") success++;
     else if (result.grade === "partial") partial++;
     else failure++;
@@ -654,20 +598,18 @@ export function estimateWinRateFromStats(
 }
 
 /**
- * For staged expeditions, estimate the distribution of stages cleared.
+ * Estimate the distribution of stages cleared for a venture.
  * Returns an array of length (totalStages + 1) where index i = fraction of runs clearing exactly i stages.
- * E.g. for 3 stages: [failedStage1, clearedOnly1, clearedOnly2, clearedAll3].
  */
 export function estimateStageClearRates(
   state: GameState,
-  stages: CombatStage[],
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): number[] {
   const player = getPlayerCombatStats(state);
-  const rng = mulberry32(computeCombatSeed(player, difficulty));
-  const counts = new Array(stages.length + 1).fill(0);
+  const rng = mulberry32(computeCombatSeed(player, venture));
+  const counts = new Array(venture.stages.length + 1).fill(0);
   for (let i = 0; i < MONTE_CARLO_RUNS; i++) {
-    const result = simulateCombat(player, difficulty, rng);
+    const result = simulateCombat(player, venture, rng);
     const cleared = result.stagesCleared ?? 0;
     counts[cleared]++;
   }
@@ -679,15 +621,15 @@ export function estimateStageClearRates(
 // ═══════════════════════════════════════
 
 /**
- * Resolve an expedition encounter: run one combat simulation and return the result.
- * This is called once when an expedition completes.
+ * Resolve a venture encounter: run one combat simulation and return the result.
+ * This is called once when a venture completes.
  */
 export function resolveEncounter(
   state: GameState,
-  difficulty: ExpeditionDifficultyProfile,
+  venture: VentureDef,
 ): EncounterResult {
   const player = getPlayerCombatStats(state);
-  const winRate = estimateWinRate(state, difficulty);
-  const sim = simulateCombat(player, difficulty);
+  const winRate = estimateWinRate(state, venture);
+  const sim = simulateCombat(player, venture);
   return { ...sim, estimatedWinRate: winRate };
 }

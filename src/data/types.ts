@@ -367,10 +367,32 @@ export interface EnemyCombatProfile {
 }
 
 /**
- * A stage within a multi-stage combat expedition.
+ * Island exploration expedition — weighted outcomes + optional loot.
+ * No combat. Used for biome discovery, scouting, and gathering from distant locations.
+ * Mainland combat uses `VentureDef` instead.
+ */
+export interface ExpeditionDef {
+  id: string;
+  name: string;
+  description: string;
+  skillId: SkillId;
+  durationMs: number;
+  foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
+  waterCost?: number; // total water items consumed per cycle
+  requiredVessel?: BuildingId;
+  requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
+  hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
+  inputs?: { resourceId: ResourceId; amount: number }[]; // consumed each cycle (e.g. voyage provisions)
+  outcomes: ExpeditionOutcome[];
+  xpGain: number;
+  victory?: boolean; // if true, completing this expedition wins the game
+}
+
+/**
+ * A stage within a multi-stage venture (mainland combat).
  * Each stage has its own enemy and reward pool. HP carries over between stages.
  */
-export interface CombatStage {
+export interface VentureStage {
   /** Display name for this stage (e.g. "Crumbling Walls", "Feral Boar"). */
   name: string;
   /** The enemy to fight in this stage. */
@@ -389,45 +411,28 @@ export interface CombatStage {
   biomeDiscoveryRequires?: BiomeId[];
 }
 
-/** Difficulty profile for a mainland combat expedition. */
-export interface ExpeditionDifficultyProfile {
-  /** Primary hazard types present in this expedition (thematic). */
-  hazards: HazardType[];
-  /** The enemy the player fights — used when stages is not defined. */
-  enemy?: EnemyCombatProfile;
-  /**
-   * Multi-stage encounter. If set, the player fights each stage sequentially
-   * with HP carrying over. Rewards are distributed per-stage cleared.
-   * When present, the top-level `enemy` is ignored.
-   */
-  stages?: CombatStage[];
-  /** Brief hint shown before departure (e.g. "Bring heat-resistant gear and a sturdy weapon"). */
-  hint: string;
-}
-
-export interface ExpeditionDef {
+/**
+ * Mainland venture — a staged combat encounter with hazard/gear checks.
+ * Distinct from `ExpeditionDef` in that rewards come from per-stage clears,
+ * not weighted outcome rolls.
+ */
+export interface VentureDef {
   id: string;
   name: string;
   description: string;
   skillId: SkillId;
   durationMs: number;
-  foodCost?: number; // total food items consumed per cycle (drawn from any food resource)
-  waterCost?: number; // total water items consumed per cycle
-  requiredVessel?: BuildingId;
-  requiredBiomes?: BiomeId[]; // must have discovered these biomes to see this expedition
-  hideWhenAllFound?: boolean; // hide expedition once all its discoverable biomes have been found
-  inputs?: { resourceId: ResourceId; amount: number }[]; // consumed each cycle (e.g. voyage provisions)
-  outcomes: ExpeditionOutcome[];
+  foodCost?: number;
+  waterCost?: number;
+  requiredBiomes?: BiomeId[];
+  inputs?: { resourceId: ResourceId; amount: number }[];
   xpGain: number;
-  victory?: boolean; // if true, completing this expedition wins the game
-  /** If true, this expedition is only available after mainland is unlocked. */
-  mainland?: boolean;
-  /** Combat difficulty profile — present on mainland expeditions with hazard/gear checks. */
-  difficulty?: ExpeditionDifficultyProfile;
-  /** Equipment drops that can be awarded on success (separate from resource drops). */
-  equipmentDrops?: EquipmentDropEntry[];
-  /** Loot table — rolled independently from outcomes. Each entry has its own drop chance and rarity. */
-  lootTable?: LootDrop[];
+  /** Primary hazard types present in this venture (thematic). */
+  hazards: HazardType[];
+  /** Multi-stage encounter — player fights each stage sequentially, HP carries over. */
+  stages: VentureStage[];
+  /** Brief hint shown before departure. */
+  hint: string;
 }
 
 /** An equipment item that can drop from an expedition outcome. */

@@ -31,7 +31,8 @@ src/
     buildings.ts  # Settlement buildings (includes vesselTier)
     biomes.ts     # Biome definitions (name, order, startingBiome)
     phases.ts     # Game phase definitions (conditions that trigger each phase)
-    expeditions.ts # Expeditions + RNG outcomes
+    expeditions.ts # Island expeditions — weighted RNG outcomes + biome discovery
+    ventures.ts   # Mainland ventures — staged combat encounters
     milestones.ts # Skill level milestone effects (including station effects)
     stations.ts   # Passive set-wait-collect stations
     registry.ts   # Central data registry — all engine/UI reads from here

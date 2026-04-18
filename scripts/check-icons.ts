@@ -18,7 +18,8 @@ import { TOOLS } from "../src/data/tools";
 import { SKILLS } from "../src/data/skills";
 import { BUILDINGS } from "../src/data/buildings";
 import { BIOMES } from "../src/data/biomes";
-import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
+import { EXPEDITIONS } from "../src/data/expeditions";
+import { VENTURES } from "../src/data/ventures";
 import { ACTIONS } from "../src/data/actions";
 import { RECIPES } from "../src/data/recipes";
 
@@ -54,7 +55,8 @@ for (const id of Object.keys(TOOLS)) referencedIds.add(id);
 for (const id of Object.keys(SKILLS)) referencedIds.add(`skill_${id}`);
 for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
-for (const exp of [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS]) referencedIds.add(exp.id);
+for (const exp of EXPEDITIONS) referencedIds.add(exp.id);
+for (const v of VENTURES) referencedIds.add(v.id);
 for (const id of TAB_ICON_IDS) referencedIds.add(id);
 
 // Actions with no drops fall back to action.id as their icon
