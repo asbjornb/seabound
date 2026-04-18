@@ -1718,6 +1718,7 @@ export const RECIPES: RecipeDef[] = [
     output: { resourceId: "cured_leather", amount: 1 },
     requiredBuildings: ["kiln"],
     durationMs: 8000,
+    repeatable: true,
     xpGain: 15,
   },
   {
