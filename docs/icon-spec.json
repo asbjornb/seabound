@@ -2587,9 +2587,33 @@
       "chainNote": "Steel-era upgrade to copper knife — sharper, broader utility",
       "size": 64,
       "tags": ["tool", "metal", "steel", "mainland"]
+    },
+    {
+      "id": "dig_drainage_trench",
+      "object": "Shallow drainage trench dug around a camp edge",
+      "description": "A freshly-dug earth channel curving past a shelter corner, loose dirt piled along one side. A large shell rests at the trench edge as the digging tool. Muddy, sun-warmed earth — hard-labor feel.",
+      "use": "Queue/active action icon for the build-panel labor action (no drops)",
+      "theme": "bare_hands",
+      "category": "action_construction",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase0", "action", "construction", "labor"]
+    },
+    {
+      "id": "maintain_camp",
+      "object": "Hands re-tying cordage lashings on a bamboo shelter frame",
+      "description": "Close-up of weathered hands repairing a palm-thatch shelter — tightening fiber cordage around bamboo poles, tucking loose thatch back into place. Warm tropical light, worn tools beside.",
+      "use": "Queue/active action icon for the camp-maintenance recipe (no resource output)",
+      "theme": "bare_hands",
+      "category": "action_construction",
+      "chain": null,
+      "chainRole": "standalone",
+      "size": 64,
+      "tags": ["phase1", "action", "construction", "maintenance"]
     }
   ],
   "states": {},
   "createdAt": "2026-03-27T00:00:00Z",
-  "updatedAt": "2026-04-14T00:00:00Z"
+  "updatedAt": "2026-04-18T00:00:00Z"
 }
