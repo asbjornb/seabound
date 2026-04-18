@@ -175,16 +175,15 @@ export const ACTIONS: ActionDef[] = [
   {
     id: "spear_fish",
     name: "Spear Fish",
-    description:
-      "Wade the shallows with your bamboo spear — quick strikes on fish, crabs, and shells.",
+    description: "Use your bamboo spear to reliably catch fish.",
     skillId: "fishing",
     panel: "gather",
     durationMs: 5000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "crab", amount: 1, chance: 0.3 },
-      { resourceId: "shell", amount: 1, chance: 0.25 },
-      { resourceId: "large_fish", amount: 1, chance: 0.05 },
+      { resourceId: "large_fish", amount: 1, chance: 0.1 },
+      { resourceId: "crab", amount: 1, chance: 0.15 },
+      { resourceId: "shell", amount: 1, chance: 0.3 },
     ],
     requiredTools: ["bamboo_spear"],
     xpGain: 12,
@@ -195,17 +194,17 @@ export const ACTIONS: ActionDef[] = [
     id: "drop_line_fish",
     name: "Drop Line Fishing",
     description:
-      "Lower a baited gorge hook into deep water. Slower, but targets bigger fish.",
+      "Lower a baited gorge hook into deep water. Slower, but far better fish yields.",
     skillId: "fishing",
     panel: "gather",
     durationMs: 8000,
     drops: [
       { resourceId: "small_fish", amount: 1 },
-      { resourceId: "large_fish", amount: 1, chance: 0.5 },
-      { resourceId: "large_shell", amount: 1, chance: 0.08 },
+      { resourceId: "large_fish", amount: 1, chance: 0.75 },
+      { resourceId: "shell", amount: 1, chance: 0.2 },
     ],
     requiredTools: ["gorge_hook"],
-    xpGain: 18,
+    xpGain: 20,
   },
 
   // Basket trap moved to stations system (set-wait-collect)
