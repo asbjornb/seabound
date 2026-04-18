@@ -745,6 +745,28 @@
       "tags": ["phase2", "tool", "fire", "clay"]
     },
     {
+      "id": "bellows",
+      "object": "Leather bellows",
+      "description": "A teardrop-shaped leather bag with two bamboo handles and a tapered nozzle. Stitched seams visible, weathered cured-hide color with darker scorch marks near the nozzle from forge heat.",
+      "use": "Tool slot, required to build the bloomery for iron smelting",
+      "theme": "fire",
+      "category": "tool_fire",
+      "chain": null,
+      "size": 64,
+      "tags": ["phase2", "tool", "fire", "leather", "smithing"]
+    },
+    {
+      "id": "stone_anvil",
+      "object": "Flat stone anvil",
+      "description": "A heavy block of grey-blue stone with a broad flat striking surface, slightly worn and pocked from hammering. Squat and solid, sitting low to the ground. Hammer-mark divots on top.",
+      "use": "Tool slot, required for hammering iron blooms into ingots",
+      "theme": "stone",
+      "category": "tool_stone",
+      "chain": null,
+      "size": 64,
+      "tags": ["phase2", "tool", "stone", "smithing"]
+    },
+    {
       "id": "skill_foraging",
       "object": "Hand picking a leaf/berry",
       "description": "An open hand reaching for a green leaf or small plant. Suggests gathering from nature. Warm skin tone, lush green plant.",
