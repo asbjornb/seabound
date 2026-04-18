@@ -2102,7 +2102,7 @@
     },
     {
       "from": "action:drop_line_fish",
-      "to": "resource:shell",
+      "to": "resource:crab",
       "relation": "produces"
     },
     {
