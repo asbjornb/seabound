@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "0ae5bb654fa0c6deea35fb189938c20369bf29e9"
+    "newestReviewed": "71c9b51fd2bf45970038ecf46a43e810263c1b88"
   },
   "entries": [
+    {
+      "date": "2026-04-18",
+      "changes": [
+        "Fix sidebars scrolling independently on desktop instead of scrolling the entire page"
+      ]
+    },
     {
       "date": "2026-04-18",
       "changes": [
