@@ -53,6 +53,14 @@ function buildResourceSourceMap(): Record<string, string[]> {
         add(drop.resourceId, exp.name);
       }
     }
+    for (const stage of exp.difficulty?.stages ?? []) {
+      for (const drop of stage.drops ?? []) {
+        add(drop.resourceId, exp.name);
+      }
+      for (const drop of stage.lootTable ?? []) {
+        add(drop.resourceId, exp.name);
+      }
+    }
   }
   return map;
 }

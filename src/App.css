@@ -2737,6 +2737,14 @@ body {
   margin-left: 2px;
 }
 
+.biome-drop {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent);
+  font-style: italic;
+}
+
 /* ── Equipment Drop Styles ── */
 
 .equipment-drops-section {

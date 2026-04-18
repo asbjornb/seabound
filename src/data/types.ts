@@ -375,12 +375,18 @@ export interface CombatStage {
   name: string;
   /** The enemy to fight in this stage. */
   enemy: EnemyCombatProfile;
-  /** Guaranteed resource drops awarded for clearing this stage. */
+  /** Resource drops awarded for clearing this stage. Each Drop can be guaranteed (no chance) or chance-based. */
   drops?: Drop[];
   /** Equipment that can drop when this stage is cleared. */
   equipmentDrops?: EquipmentDropEntry[];
   /** Loot table entries available after clearing this stage. */
   lootTable?: LootDrop[];
+  /** Biome discovered on clearing this stage, rolled with pity carryover. */
+  biomeDiscovery?: BiomeId;
+  /** Base probability of discovering the biome on clear (0-1, defaults to 1). */
+  biomeDiscoveryChance?: number;
+  /** Biome discovery only fires if all listed biomes are already discovered. */
+  biomeDiscoveryRequires?: BiomeId[];
 }
 
 /** Difficulty profile for a mainland combat expedition. */

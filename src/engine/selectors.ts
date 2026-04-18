@@ -177,9 +177,14 @@ export function selectAvailableExpeditions(state: GameState): ExpeditionDef[] {
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.requiredBiomes?.some((biomeId) => !state.discoveredBiomes.includes(biomeId))) return false;
     if (expedition.hideWhenAllFound) {
-      const discoverableBiomes = expedition.outcomes
-        .filter((outcome) => outcome.biomeDiscovery)
-        .map((outcome) => outcome.biomeDiscovery!);
+      const discoverableBiomes = [
+        ...expedition.outcomes
+          .filter((outcome) => outcome.biomeDiscovery)
+          .map((outcome) => outcome.biomeDiscovery!),
+        ...(expedition.difficulty?.stages ?? [])
+          .filter((stage) => stage.biomeDiscovery)
+          .map((stage) => stage.biomeDiscovery!),
+      ];
       if (discoverableBiomes.length > 0 && discoverableBiomes.every((biomeId) => state.discoveredBiomes.includes(biomeId))) {
         return false;
       }
@@ -362,9 +367,12 @@ export function selectUndiscoveredBiomeCount(state: GameState, expeditionId?: st
   if (expeditionId) {
     const exp = getExpeditionById(expeditionId);
     if (exp) {
-      const biomes = exp.outcomes
-        .filter((o) => o.biomeDiscovery)
-        .map((o) => o.biomeDiscovery!);
+      const biomes = [
+        ...exp.outcomes.filter((o) => o.biomeDiscovery).map((o) => o.biomeDiscovery!),
+        ...(exp.difficulty?.stages ?? [])
+          .filter((s) => s.biomeDiscovery)
+          .map((s) => s.biomeDiscovery!),
+      ];
       return biomes.filter((b) => !state.discoveredBiomes.includes(b)).length;
     }
   }
