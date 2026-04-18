@@ -2941,6 +2941,10 @@ body {
 @media (min-width: 768px) {
   .app {
     max-width: 1120px;
+    /* Bound the app to viewport height so sidebars and main panel scroll independently */
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .inventory-sidebar {
@@ -2951,6 +2955,7 @@ body {
     flex-shrink: 0;
     padding: 12px;
     overflow-y: auto;
+    min-height: 0;
     background: var(--bg);
   }
 
