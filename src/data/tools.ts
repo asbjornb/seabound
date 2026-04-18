@@ -68,6 +68,18 @@ export const TOOLS: Record<string, ToolDef> = {
     description:
       "A thick-walled clay vessel that withstands extreme heat. Required for smelting ore.",
   },
+  bellows: {
+    id: "bellows",
+    name: "Bellows",
+    description:
+      "Leather bag on a bamboo frame that pumps air into a furnace. Essential for reaching iron-smelting temperatures.",
+  },
+  stone_anvil: {
+    id: "stone_anvil",
+    name: "Stone Anvil",
+    description:
+      "A heavy flat stone shaped into a broad striking surface. You can't hammer metal without something solid underneath.",
+  },
   digging_stick: {
     id: "digging_stick",
     name: "Digging Stick",
