@@ -2,7 +2,10 @@ import { useState } from "react";
 import { getSkills, getMilestonesForSkill } from "../data/registry";
 import { xpForLevel } from "../data/skills";
 import { GameState, SkillId } from "../data/types";
+import { CloseIcon } from "./CloseIcon";
 import { GameIcon } from "./GameIcon";
+
+const HINT_DISMISSED_KEY = "sb_skill_collapse_hint_dismissed";
 
 export function SkillsPanel({ state }: { state: GameState }) {
   const SKILLS = getSkills();
@@ -19,6 +22,15 @@ export function SkillsPanel({ state }: { state: GameState }) {
     }
   });
 
+  const [hintDismissed, setHintDismissed] = useState(
+    () => localStorage.getItem(HINT_DISMISSED_KEY) === "true"
+  );
+
+  const dismissHint = () => {
+    setHintDismissed(true);
+    try { localStorage.setItem(HINT_DISMISSED_KEY, "true"); } catch { /* */ }
+  };
+
   const toggleSkill = (id: string) => {
     setCollapsed((prev) => {
       const next = new Set(prev);
@@ -27,6 +39,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
       try { localStorage.setItem("sb_skill_collapsed", JSON.stringify([...next])); } catch { /* */ }
       return next;
     });
+    dismissHint();
   };
 
   if (skillIds.length === 0) {
@@ -39,8 +52,21 @@ export function SkillsPanel({ state }: { state: GameState }) {
     );
   }
 
+  const anyHasMilestones = skillIds.some(
+    (id) => getMilestonesForSkill(id).length > 0
+  );
+  const showHint = !hintDismissed && anyHasMilestones;
+
   return (
     <div>
+      {showHint && (
+        <div className="skill-collapse-hint">
+          <span>Tip: click a skill to hide its milestones.</span>
+          <button className="skill-collapse-hint-dismiss" onClick={dismissHint} title="Dismiss">
+            <CloseIcon size={10} />
+          </button>
+        </div>
+      )}
       {skillIds.map((id) => {
         const skill = state.skills[id];
         const currentLevelXp = xpForLevel(skill.level);
