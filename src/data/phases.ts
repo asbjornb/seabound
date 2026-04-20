@@ -15,8 +15,6 @@ export const PHASES: PhaseDef[] = [
     order: 1,
     conditions: [
       { type: "has_biome", id: "bamboo_grove" },
-      { type: "has_resource", id: "bamboo_cane" },
-      { type: "has_tool", id: "bamboo_knife" },
     ],
   },
   {
