@@ -1,9 +1,16 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "14659d0f5c3cc21db44d29381ff2d45c730f8b3a"
+    "newestReviewed": "b6ed8e6f9ffc860c45da5e02e814fe662a356443"
   },
   "entries": [
+    {
+      "date": "2026-04-20",
+      "changes": [
+        "Simplify phase progression by removing intermediate item tracking — phases now only require final crafted items",
+        "Remove raft building requirement from phase 4 progression"
+      ]
+    },
     {
       "date": "2026-04-18",
       "changes": [
