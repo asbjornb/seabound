@@ -592,8 +592,9 @@ export function useGame() {
 
         if (totalCompletions > 0) checkMilestones(next);
 
-        // One-time tip when morale first drops below 80
-        if (next.morale < 80) {
+        // Starting morale is 55; only surface the tip once morale has actually
+        // decayed below that, so players get some time before the first toast.
+        if (next.morale < 50) {
           addAmbientLoreNote(
             next,
             "tip_morale_low",
@@ -655,8 +656,9 @@ export function useGame() {
 
         if (totalCompletions > 0) checkMilestones(next);
 
-        // One-time tip when morale first drops below 80
-        if (next.morale < 80) {
+        // Starting morale is 55; only surface the tip once morale has actually
+        // decayed below that, so players get some time before the first toast.
+        if (next.morale < 50) {
           addAmbientLoreNote(
             next,
             "tip_morale_low",
