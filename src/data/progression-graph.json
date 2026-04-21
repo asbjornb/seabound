@@ -5326,6 +5326,11 @@
       "relation": "requires_tool"
     },
     {
+      "from": "building:bloomery",
+      "to": "recipe:craft_stone_anvil",
+      "relation": "requires_building"
+    },
+    {
       "from": "recipe:craft_bellows",
       "to": "tool:bellows",
       "relation": "crafts_tool"

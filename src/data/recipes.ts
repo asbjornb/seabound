@@ -2083,6 +2083,7 @@ export const RECIPES: RecipeDef[] = [
       { resourceId: "flat_stone", amount: 4 },
     ],
     requiredTools: ["hammerstone"],
+    requiredBuildings: ["bloomery"],
     toolOutput: "stone_anvil",
     durationMs: 10000,
     oneTimeCraft: true,
