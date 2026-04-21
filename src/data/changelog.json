@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "6782c5188e78cc61206854b2e22b3d0992e10aeb"
+    "newestReviewed": "8c679d46c7abf4cc47c7eea63c1d931ce9cc9639"
   },
   "entries": [
+    {
+      "date": "2026-04-21",
+      "changes": [
+        "Add bloomery building requirement for crafting stone anvil"
+      ]
+    },
     {
       "date": "2026-04-21",
       "changes": [
