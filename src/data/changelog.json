@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "632f496e088547902cf4f129f85525f2b8c7d089"
+    "newestReviewed": "97f018db7e80c232036cb704e476396670c15149"
   },
   "entries": [
+    {
+      "date": "2026-04-21",
+      "changes": [
+        "Delay low morale tip notification until morale drops below 50 (previously triggered at 80)"
+      ]
+    },
     {
       "date": "2026-04-20",
       "changes": [
