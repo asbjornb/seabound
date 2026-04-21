@@ -21,6 +21,7 @@ import { BIOMES } from "../src/data/biomes";
 import { EXPEDITIONS, MAINLAND_EXPEDITIONS } from "../src/data/expeditions";
 import { ACTIONS } from "../src/data/actions";
 import { RECIPES } from "../src/data/recipes";
+import { EQUIPMENT_ITEMS } from "../src/data/equipment";
 
 const isCheck = process.argv.includes("--check");
 
@@ -54,6 +55,7 @@ for (const id of Object.keys(TOOLS)) referencedIds.add(id);
 for (const id of Object.keys(SKILLS)) referencedIds.add(`skill_${id}`);
 for (const id of Object.keys(BUILDINGS)) referencedIds.add(id);
 for (const id of Object.keys(BIOMES)) referencedIds.add(`biome_${id}`);
+for (const id of Object.keys(EQUIPMENT_ITEMS)) referencedIds.add(id);
 for (const exp of [...EXPEDITIONS, ...MAINLAND_EXPEDITIONS]) referencedIds.add(exp.id);
 for (const id of TAB_ICON_IDS) referencedIds.add(id);
 
