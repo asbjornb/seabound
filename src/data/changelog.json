@@ -1,9 +1,18 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "97f018db7e80c232036cb704e476396670c15149"
+    "newestReviewed": "295c5907704667918bb6418ac1ef055bad347342"
   },
   "entries": [
+    {
+      "date": "2026-04-21",
+      "changes": [
+        "Add visual icons for bellows crafting tool",
+        "Add visual icons for stone anvil crafting station",
+        "Add visual icons for drainage trench digging activity",
+        "Add visual icons for camp maintenance"
+      ]
+    },
     {
       "date": "2026-04-21",
       "changes": [
