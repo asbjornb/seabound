@@ -430,15 +430,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         requiredBiomes: ["coconut_grove"],
       },
       {
-        weight: 25,
-        description:
-          "You find some useful stones along a creek bed, but nothing remarkable.",
-        drops: [
-          { resourceId: "flat_stone", amount: 2 },
-        ],
-      },
-      {
-        weight: 35,
+        weight: 55,
         description:
           "The dense undergrowth turns you back. You return with nothing useful.",
       },
@@ -468,25 +460,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         biomeDiscovery: "jungle_interior",
       },
       {
-        weight: 25,
-        description:
-          "You find some useful materials deeper in the brush.",
-        drops: [
-          { resourceId: "bamboo_cane", amount: 2 },
-          { resourceId: "dry_grass", amount: 1 },
-        ],
-      },
-      {
-        weight: 20,
-        description:
-          "You discover a small clearing with useful stones and shells scattered about.",
-        drops: [
-          { resourceId: "flat_stone", amount: 2 },
-          { resourceId: "large_shell", amount: 1, chance: 0.5 },
-        ],
-      },
-      {
-        weight: 37,
+        weight: 82,
         description:
           "The jungle is thick and disorienting. You circle back to camp with nothing to show for it.",
       },
@@ -538,13 +512,7 @@ export const EXPEDITIONS: ExpeditionDef[] = [
         drops: [{ resourceId: "taro_corm", amount: 2 }],
       },
       {
-        weight: 10,
-        description:
-          "You find useful flat stones of a different composition on the island shore.",
-        drops: [{ resourceId: "flat_stone", amount: 3 }],
-      },
-      {
-        weight: 25,
+        weight: 35,
         description:
           "Rough seas slow the crossing. You arrive exhausted and return with nothing useful.",
       },
