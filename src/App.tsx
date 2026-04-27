@@ -564,10 +564,10 @@ export default function App() {
       )}
 
       <div className="app-body">
-        {/* Desktop left sidebar: skills */}
+        {/* Desktop left sidebar: skills (compact view; full view stays in the Skills tab) */}
         {hasAnyXp && (
           <aside className="inventory-sidebar sidebar-left">
-            <SkillsPanel state={game.state} />
+            <SkillsPanel state={game.state} compact />
           </aside>
         )}
 
