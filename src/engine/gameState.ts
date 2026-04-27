@@ -10,6 +10,7 @@ import {
   getWaterValues,
 } from "../data/registry";
 import type { BuildingId, DiscoveryEntry, GameState, RecipeDef, RecipeInput, ResourceId, StationDef, TagInput, ToolId } from "../data/types";
+import { isQueueUnlocked } from "../data/queue";
 
 /** Return recipe inputs with building-removed inputs filtered out. */
 export function getEffectiveInputs(recipe: RecipeDef, state: GameState): RecipeInput[] {
@@ -316,6 +317,11 @@ export function normalizeGameState(raw: unknown): GameState | null {
   }
   if (!loaded.seenLoreNotes) {
     loaded.seenLoreNotes = [];
+  }
+  // Migration: existing saves that are already past the queue-unlock threshold
+  // shouldn't get the introduction toast retroactively.
+  if (isQueueUnlocked(loaded) && !loaded.seenLoreNotes.includes("queue_unlocked")) {
+    loaded.seenLoreNotes.push("queue_unlocked");
   }
   if (loaded.activePlayTimeMs == null) {
     loaded.activePlayTimeMs = 0;
