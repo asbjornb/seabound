@@ -23,6 +23,7 @@ import {
   getEffectiveMaxCount,
   getMoraleDurationMultiplier,
   getResource,
+  getStorageGroupTotal,
   getStorageLimit,
   getToolSpeedMultiplier,
   getTotalFood,
@@ -536,9 +537,46 @@ export function selectActionStatusInfo(state: GameState): ActionStatusInfo | nul
       need: inp.amount,
     }));
 
-    const craftsRemaining = resolvedInputs.length > 0
+    const craftsByInputs = resolvedInputs.length > 0
       ? Math.min(...resolvedInputs.map((inp) => Math.floor(getResource(state, inp.resourceId) / inp.amount)))
       : undefined;
+
+    const outputCaps: number[] = [];
+    if (recipe.output && recipe.output.amount > 0) {
+      const outputDef = RESOURCES[recipe.output.resourceId];
+      const limit = getStorageLimit(state, recipe.output.resourceId);
+      const groupId = outputDef?.storageCapGroup;
+      const used = groupId
+        ? getStorageGroupTotal(state, groupId)
+        : (state.resources[recipe.output.resourceId] ?? 0);
+      const available = Math.max(0, limit - used);
+      let freedPerCraft = 0;
+      if (groupId) {
+        for (const inp of resolvedInputs) {
+          if (RESOURCES[inp.resourceId]?.storageCapGroup === groupId) {
+            freedPerCraft += inp.amount;
+          }
+        }
+      }
+      const netPerCraft = recipe.output.amount - freedPerCraft;
+      if (netPerCraft > 0) {
+        outputCaps.push(Math.floor(available / netPerCraft));
+      }
+    }
+    if (recipe.buildingOutput) {
+      const remaining = getEffectiveMaxCount(state, recipe.buildingOutput) - getGroupBuildingCount(state, recipe.buildingOutput);
+      outputCaps.push(Math.max(0, remaining));
+    }
+    if (recipe.toolOutput) {
+      outputCaps.push(state.tools.includes(recipe.toolOutput) ? 0 : 1);
+    }
+    if (recipe.oneTimeCraft) {
+      outputCaps.push(1);
+    }
+
+    const craftsRemaining = craftsByInputs === undefined
+      ? (outputCaps.length > 0 ? Math.min(...outputCaps) : undefined)
+      : Math.min(craftsByInputs, ...outputCaps);
 
     const outputs: ActionStatusInfo["outputs"] = [];
     if (recipe.output) {
