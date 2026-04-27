@@ -559,7 +559,7 @@ export interface CombatLogEntry {
 // Discovery Log
 // ═══════════════════════════════════════
 
-export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore" | "expedition" | "equipment";
+export type DiscoveryType = "biome" | "level" | "craft" | "building" | "resource" | "tool" | "lore" | "tip" | "expedition" | "equipment";
 
 export interface DiscoveryEntry {
   id: number;

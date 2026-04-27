@@ -424,7 +424,10 @@ function bumpActionCompletionCount(state: GameState, actionType: string, actionI
 function addAmbientLoreNote(state: GameState, loreId: string, message: string): void {
   if (state.seenLoreNotes.includes(loreId)) return;
   state.seenLoreNotes.push(loreId);
-  addDiscovery(state, "lore", message);
+  // Gameplay tips (id prefix `tip_`) and atmospheric lore share this one-shot
+  // channel but want different visual treatment downstream.
+  const type = loreId.startsWith("tip_") ? "tip" : "lore";
+  addDiscovery(state, type, message);
 }
 
 /** Surface a one-time tip the first time a tidal-pool gather stops because
