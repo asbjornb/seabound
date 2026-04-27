@@ -117,16 +117,26 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                   {visibleDrops.length > 0 ? (
                     <div className="action-drops">
                       Drops:
-                      {visibleDrops
-                        .map((d) => ({
-                          ...d,
-                          effectiveChance: Math.min(
-                            1,
-                            (d.chance ?? 1) +
-                              getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)
-                          ),
-                        }))
-                        .filter((d) => d.effectiveChance > 0)
+                      {Array.from(
+                        visibleDrops
+                          .map((d) => ({
+                            ...d,
+                            effectiveChance: Math.min(
+                              1,
+                              (d.chance ?? 1) +
+                                getDropChanceBonus(action.skillId, state.skills[action.skillId].level, action.id, d.resourceId)
+                            ),
+                          }))
+                          .filter((d) => d.effectiveChance > 0)
+                          .reduce((acc, d) => {
+                            const key = `${d.resourceId}:${d.amount}`;
+                            const existing = acc.get(key);
+                            if (existing) existing.effectiveChance += d.effectiveChance;
+                            else acc.set(key, { ...d });
+                            return acc;
+                          }, new Map<string, typeof visibleDrops[0] & { effectiveChance: number }>())
+                          .values()
+                      )
                         .sort((a, b) => b.effectiveChance - a.effectiveChance)
                         .map((d, i) => {
                           const full = isAtStorageCap(state, d.resourceId);
