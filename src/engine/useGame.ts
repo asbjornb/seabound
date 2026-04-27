@@ -442,6 +442,15 @@ function maybeTipSecondaryDrops(state: GameState, actionId: string): void {
 function processAmbientLore(state: GameState, c: CompletionEvent): void {
   const completionCount = bumpActionCompletionCount(state, c.actionType, c.actionId);
 
+  // First time any skill crosses the queue-unlock threshold: introduce the feature.
+  if (isQueueUnlocked(state)) {
+    addAmbientLoreNote(
+      state,
+      "queue_unlocked",
+      "You’ve found a rhythm. Tap Queue to line up your next task while one is running."
+    );
+  }
+
   if (c.actionType === "gather" && c.actionId === "drop_line_fish" && completionCount === 4) {
     addAmbientLoreNote(
       state,
