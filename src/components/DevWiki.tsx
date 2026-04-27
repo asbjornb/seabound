@@ -161,6 +161,14 @@ interface FunnelEntry {
   medianActions: number | null;
 }
 
+interface RoutinesSummary {
+  playersStarted: number;
+  adoptionRate: number;
+  totalStarts: number;
+  medianStepCount: number | null;
+  stopReasons: Record<string, number>;
+}
+
 interface AnalyticsSummary {
   period: string;
   totalEvents: number;
@@ -172,6 +180,7 @@ interface AnalyticsSummary {
   funnel: FunnelEntry[];
   dropOff: Record<string, number>;
   victories: number;
+  routines?: RoutinesSummary;
 }
 
 function AnalyticsDashboard() {
@@ -339,6 +348,56 @@ function AnalyticsDashboard() {
                       <div style={{ color: "#7a9a8a", fontSize: "0.75rem" }}>{phase.replace(/_/g, " ")}</div>
                     </div>
                   ))}
+              </div>
+            </>
+          )}
+
+          {/* Routines */}
+          {data.routines && (
+            <>
+              <h4 style={{ color: "#e8e4d8", marginTop: "1rem", marginBottom: "0.5rem" }}>
+                Routines
+              </h4>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                {[
+                  {
+                    label: "Players Started",
+                    value: `${data.routines.playersStarted} (${data.routines.adoptionRate}%)`,
+                  },
+                  { label: "Total Starts", value: data.routines.totalStarts },
+                  {
+                    label: "Median Steps",
+                    value: data.routines.medianStepCount ?? "—",
+                  },
+                  {
+                    label: "Stopped: manual",
+                    value: data.routines.stopReasons.manual ?? 0,
+                  },
+                  {
+                    label: "Stopped: output full",
+                    value: data.routines.stopReasons.output_full ?? 0,
+                  },
+                  {
+                    label: "Stopped: can't proceed",
+                    value: data.routines.stopReasons.cant_proceed ?? 0,
+                  },
+                ].map((card) => (
+                  <div
+                    key={card.label}
+                    style={{
+                      background: "#1e3a3a",
+                      borderRadius: 6,
+                      padding: "0.5rem 0.75rem",
+                      minWidth: 110,
+                      textAlign: "center",
+                    }}
+                  >
+                    <div style={{ color: "#f0a050", fontSize: "1.1rem", fontWeight: 700 }}>
+                      {card.value}
+                    </div>
+                    <div style={{ color: "#7a9a8a", fontSize: "0.75rem" }}>{card.label}</div>
+                  </div>
+                ))}
               </div>
             </>
           )}
