@@ -22,6 +22,10 @@ export interface TickResult {
    *  (e.g. storage full, inputs ran out). Used by offline processing to credit
    *  remaining time to the next queued/routine action. */
   unusedMs: number;
+  /** Set when a gather action stopped this tick because its outputs hit cap.
+   *  Lets useGame surface a one-time tip explaining that re-clicking ignores
+   *  already-full drops and keeps gathering the secondaries. */
+  gatherStoppedFull?: { actionId: string };
 }
 
 export interface CompletionEvent {
@@ -81,6 +85,7 @@ export function processTick(state: GameState, now: number): TickResult {
   state.totalPlayTimeMs += elapsedMs;
 
   const completions: CompletionEvent[] = [];
+  let gatherStoppedFull: { actionId: string } | undefined;
 
   if (!state.currentAction) {
     cleanupObsoleteResources(state);
@@ -133,6 +138,7 @@ export function processTick(state: GameState, now: number): TickResult {
       if (event) completions.push(event);
       if (isOutputFull(state)) {
         unusedMs = remaining;
+        gatherStoppedFull = { actionId: def.id };
         state.currentAction = null;
         break;
       }
@@ -325,7 +331,7 @@ export function processTick(state: GameState, now: number): TickResult {
   state.actionCompletions += completions.length;
 
   cleanupObsoleteResources(state);
-  return { completions, elapsedMs, unusedMs };
+  return { completions, elapsedMs, unusedMs, ...(gatherStoppedFull && { gatherStoppedFull }) };
 }
 
 /** Clean up resources that have no remaining use in any recipe. */

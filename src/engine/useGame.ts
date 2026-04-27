@@ -427,6 +427,18 @@ function addAmbientLoreNote(state: GameState, loreId: string, message: string): 
   addDiscovery(state, "lore", message);
 }
 
+/** Surface a one-time tip the first time a tidal-pool gather stops because
+ *  shells filled up — re-clicking ignores already-full drops, so the player
+ *  can keep gathering crabs/fish. */
+function maybeTipSecondaryDrops(state: GameState, actionId: string): void {
+  if (actionId !== "wade_tidal_pool" && actionId !== "comb_rock_pools") return;
+  addAmbientLoreNote(
+    state,
+    "tip_secondary_drops_full",
+    "Shell storage is full, but the tidal pools still hold crabs and fish. Click the action again if you want to just gather fish and crabs."
+  );
+}
+
 function processAmbientLore(state: GameState, c: CompletionEvent): void {
   const completionCount = bumpActionCompletionCount(state, c.actionType, c.actionId);
 
@@ -557,6 +569,7 @@ export function useGame() {
               // Don't let discovery/lore processing errors break offline progress
             }
           }
+          if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
 
           // Routine advancement for offline progress
@@ -621,6 +634,7 @@ export function useGame() {
             processCompletionDiscoveries(next, c);
             processAmbientLore(next, c);
           }
+          if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
 
           // Routine advancement
