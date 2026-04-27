@@ -60,6 +60,7 @@ import { getActionById, getExpeditionById, getRecipeById } from "./data/registry
 import { useGame } from "./engine/useGame";
 import { useTabGuard } from "./engine/useTabGuard";
 import { useUpdateChecker } from "./engine/useUpdateChecker";
+import { projectQueueState } from "./engine/queueProjection";
 import { getFullXpThreshold, getRepetitiveXpMultiplier } from "./engine/repetitiveXp";
 import "./App.css";
 
@@ -349,6 +350,13 @@ export default function App() {
   );
   const maxQueueSize = useMemo(
     () => getMaxQueueSize(game.state),
+    [game.state]
+  );
+  // Optimistic projection of state after the current action and queue finish.
+  // Used by panels in queue mode so cards become clickable when the queue will
+  // produce the missing materials.
+  const projectedState = useMemo(
+    () => projectQueueState(game.state),
     [game.state]
   );
   const routinesUnlocked = useMemo(
@@ -821,6 +829,7 @@ export default function App() {
                 onStart={handleStartAction}
                 currentActionId={game.state.currentAction?.type === "gather" ? game.state.currentAction.actionId : null}
                 queueMode={queueMode && !!game.state.currentAction}
+                projectedState={projectedState}
               />
             )}
             {activeTab === "inventory" && (
@@ -838,6 +847,7 @@ export default function App() {
                 onCraft={handleStartCraft}
                 onHighlightResources={setHighlightedResources}
                 queueMode={queueMode && !!game.state.currentAction}
+                projectedState={projectedState}
               />
             )}
             {activeTab === "tend" && (

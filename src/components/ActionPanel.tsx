@@ -13,9 +13,13 @@ interface Props {
   onStart: (action: ActionDef) => void;
   currentActionId?: string | null;
   queueMode?: boolean;
+  /** Optimistic projection of state after queue finishes — used in queue mode
+   *  so cards become clickable when their tool/resource gates will be met. */
+  projectedState?: GameState;
 }
 
-export function ActionPanel({ actions, state, onStart, currentActionId, queueMode }: Props) {
+export function ActionPanel({ actions, state, onStart, currentActionId, queueMode, projectedState }: Props) {
+  const feasState = queueMode && projectedState ? projectedState : state;
   const [collapsed, setCollapsed] = useState<Set<string>>(() => {
     try { const v = localStorage.getItem("sb_action_collapsed"); return v ? new Set(JSON.parse(v)) : new Set(); } catch { return new Set(); }
   });
@@ -82,13 +86,14 @@ export function ActionPanel({ actions, state, onStart, currentActionId, queueMod
                   </div>
                 );
               }
-              // Check tool requirements
+              // Check tool requirements (use projection in queue mode so a
+              // queued recipe that produces the tool unlocks the gate)
               const missingTool = action.requiredTools?.find(
-                (t) => !hasTool(state, t)
+                (t) => !hasTool(feasState, t)
               );
               // Check resource requirements
               const missingResource = action.requiredResources?.find(
-                (r) => getResource(state, r) < 1
+                (r) => getResource(feasState, r) < 1
               );
               const disabled = !!missingTool || !!missingResource;
               const isActive = currentActionId === action.id;

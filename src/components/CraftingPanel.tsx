@@ -13,6 +13,10 @@ interface Props {
   onCraft: (recipe: RecipeDef) => void;
   onHighlightResources?: (ids: Set<string>) => void;
   queueMode?: boolean;
+  /** When in queue mode, an optimistic projection of state after the current
+   *  action and queue finish — used to decide whether a recipe is queueable
+   *  even if its inputs aren't currently in inventory. Falls back to `state`. */
+  projectedState?: GameState;
 }
 
 type CategoryId = "tools" | "repeatable";
@@ -27,7 +31,8 @@ function isOneTimeCraft(recipe: RecipeDef): boolean {
   return !!(recipe.oneTimeCraft || (recipe.buildingOutput && !BUILDINGS[recipe.buildingOutput]?.maxCount));
 }
 
-export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, queueMode }: Props) {
+export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, queueMode, projectedState }: Props) {
+  const feasState = queueMode && projectedState ? projectedState : state;
   const RESOURCES = getResources();
   const TOOLS = getTools();
   const BUILDINGS = getBuildings();
@@ -79,12 +84,13 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
     grouped.set(catId, list);
   }
 
-  // Count craftable for the filter badge
+  // Count craftable for the filter badge — uses projected state in queue mode
+  // so the count matches what the cards will accept.
   const craftableCount = recipes.filter((r) => {
-    const inputs = getEffectiveInputs(r, state);
-    return inputs.every((inp) => getResource(state, inp.resourceId) >= inp.amount)
-    && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
-    && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
+    const inputs = getEffectiveInputs(r, feasState);
+    return inputs.every((inp) => getResource(feasState, inp.resourceId) >= inp.amount)
+    && (!r.tagInputs || canAffordTagInputs(r.tagInputs, feasState))
+    && !(r.output && isRecipeOutputBlocked(feasState, r.output.resourceId, inputs));
   }).length;
 
   const newCount = recipes.filter((r) => !state.completedRecipes.includes(r.id)).length;
@@ -111,12 +117,12 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
 
         if (craftableOnly) {
           list = list.filter((r) => {
-            const inputs = getEffectiveInputs(r, state);
+            const inputs = getEffectiveInputs(r, feasState);
             return inputs.every(
-              (inp) => getResource(state, inp.resourceId) >= inp.amount
+              (inp) => getResource(feasState, inp.resourceId) >= inp.amount
             )
-            && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
-            && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
+            && (!r.tagInputs || canAffordTagInputs(r.tagInputs, feasState))
+            && !(r.output && isRecipeOutputBlocked(feasState, r.output.resourceId, inputs));
           });
         }
         if (newOnly) {
@@ -147,12 +153,12 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
                   </div>
                 );
               }
-              const inputs = getEffectiveInputs(recipe, state);
+              const inputs = getEffectiveInputs(recipe, feasState);
               const canAffordInputs = inputs.every(
-                (inp) => canAffordInput(inp, state)
+                (inp) => canAffordInput(inp, feasState)
               );
-              const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, state);
-              const outputFull = !!(recipe.output && isRecipeOutputBlocked(state, recipe.output.resourceId, inputs));
+              const canAffordTags = !recipe.tagInputs || canAffordTagInputs(recipe.tagInputs, feasState);
+              const outputFull = !!(recipe.output && isRecipeOutputBlocked(feasState, recipe.output.resourceId, inputs));
               const disabled = !canAffordInputs || !canAffordTags || outputFull;
 
               // Resolve which tagged resources would be used (for display)
