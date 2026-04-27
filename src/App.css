@@ -1593,6 +1593,28 @@ body {
   opacity: 0.6;
 }
 
+/* Compact sidebar: next-milestone preview line */
+.skill-next-milestone {
+  display: flex;
+  gap: 8px;
+  font-size: 0.7rem;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.skill-next-milestone .milestone-level {
+  flex-shrink: 0;
+  font-weight: 600;
+  min-width: 36px;
+  color: var(--text-dim);
+}
+
+.skill-next-milestone .milestone-desc {
+  color: var(--text-dim);
+  opacity: 0.85;
+}
+
 /* Discovery Log */
 .log-entry {
   font-size: 0.78rem;

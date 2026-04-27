@@ -7,7 +7,7 @@ import { GameIcon } from "./GameIcon";
 
 const HINT_DISMISSED_KEY = "sb_skill_collapse_hint_dismissed";
 
-export function SkillsPanel({ state }: { state: GameState }) {
+export function SkillsPanel({ state, compact = false }: { state: GameState; compact?: boolean }) {
   const SKILLS = getSkills();
   const skillIds = (Object.keys(SKILLS) as SkillId[]).filter(
     (id) => state.skills[id].xp > 0
@@ -55,7 +55,7 @@ export function SkillsPanel({ state }: { state: GameState }) {
   const anyHasMilestones = skillIds.some(
     (id) => getMilestonesForSkill(id).length > 0
   );
-  const showHint = !hintDismissed && anyHasMilestones;
+  const showHint = !compact && !hintDismissed && anyHasMilestones;
 
   return (
     <div>
@@ -76,8 +76,40 @@ export function SkillsPanel({ state }: { state: GameState }) {
         const progress = xpNeeded > 0 ? xpIntoLevel / xpNeeded : 1;
 
         const milestones = getMilestonesForSkill(id);
-        const achieved = milestones.filter((m) => m.level <= skill.level);
         const upcoming = milestones.filter((m) => m.level > skill.level);
+
+        if (compact) {
+          const nextMilestone = upcoming[0];
+          return (
+            <div key={id} className="skill-card">
+              <div className="skill-header">
+                <span className="skill-name">
+                  <GameIcon id={`skill_${id}`} /> {SKILLS[id].name}
+                </span>
+                <span className="skill-level">Lvl {skill.level}</span>
+              </div>
+              <div className="xp-bar">
+                <div
+                  className="xp-fill"
+                  style={{ width: `${progress * 100}%` }}
+                />
+              </div>
+              <div className="xp-text">
+                {xpIntoLevel} / {xpNeeded} XP to next level ({skill.xp} total)
+              </div>
+              {nextMilestone && (
+                <div className="skill-next-milestone">
+                  <span className="milestone-level">Lvl {nextMilestone.level}</span>
+                  <span className="milestone-desc">
+                    {nextMilestone.hidden ? "???" : nextMilestone.description}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        }
+
+        const achieved = milestones.filter((m) => m.level <= skill.level);
         const previewCount = 3;
         const preview = upcoming.slice(0, previewCount);
         const hasMilestones = achieved.length > 0 || preview.length > 0;
