@@ -168,7 +168,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Charcoal Board",
     description:
       "A flat piece of driftwood with charcoal-scrawled plans. Writing things down helps you stay organized.",
-    unlocks: "+1 routine slot — plan your work ahead",
+    unlocks: "+1 action queue slot — line up another task",
   },
   soaking_pit: {
     id: "soaking_pit",

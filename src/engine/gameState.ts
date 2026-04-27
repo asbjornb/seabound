@@ -126,8 +126,6 @@ export function createInitialState(): GameState {
     seenLoreNotes: [],
     activePlayTimeMs: 0,
     sentMilestones: [],
-    routines: [],
-    activeRoutine: null,
     actionQueue: [],
     queueMode: false,
     equipmentInventory: [],
@@ -323,16 +321,16 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (!loaded.sentMilestones) {
     loaded.sentMilestones = [];
   }
-  // Migration: ensure routines fields exist
-  if (!loaded.routines) {
-    loaded.routines = [];
-  }
-  if (loaded.activeRoutine === undefined) {
-    loaded.activeRoutine = null;
-  }
-  // Migration: ensure actionQueue exists
+  // Migration: drop removed routine fields if present in older saves
+  delete (loaded as { routines?: unknown }).routines;
+  delete (loaded as { activeRoutine?: unknown }).activeRoutine;
+  // Migration: ensure actionQueue exists; drop legacy "routine" entries
   if (!loaded.actionQueue) {
     loaded.actionQueue = [];
+  } else {
+    loaded.actionQueue = loaded.actionQueue.filter(
+      (q) => q.actionType === "gather" || q.actionType === "craft" || q.actionType === "expedition"
+    );
   }
   // Migration: ensure queueMode exists
   if (loaded.queueMode === undefined) {

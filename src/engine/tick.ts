@@ -20,7 +20,7 @@ export interface TickResult {
   elapsedMs: number;
   /** Milliseconds of action time unused when the action was stopped mid-window
    *  (e.g. storage full, inputs ran out). Used by offline processing to credit
-   *  remaining time to the next queued/routine action. */
+   *  remaining time to the next queued action. */
   unusedMs: number;
   /** Set when a gather action stopped this tick because its outputs hit cap.
    *  Lets useGame surface a one-time tip explaining that re-clicking ignores

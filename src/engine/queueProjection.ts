@@ -11,7 +11,7 @@ import { getEffectiveInputs, resolveAlternateInputs, resolveTagInputs } from "./
  * - Crafts: deterministic — apply effective inputs (with alternates), tag inputs,
  *   resource/tool/building outputs. Chance-based outputs are assumed to succeed.
  * - Gathers: assume each drop produces its full amount (chance treated as 1).
- * - Expeditions & routines: skipped — their outcomes are too RNG-heavy / open-ended
+ * - Expeditions: skipped — their outcomes are too RNG-heavy / open-ended
  *   to project usefully.
  */
 export function projectQueueState(state: GameState): GameState {
@@ -49,7 +49,7 @@ function applyQueuedAction(state: GameState, queued: QueuedAction): void {
     const action = getActionById(queued.actionId);
     if (action) applyGatherToProjection(state, action);
   }
-  // expeditions, routines: no projection
+  // expeditions: no projection
 }
 
 function applyCraftToProjection(state: GameState, recipe: RecipeDef): void {

@@ -19,6 +19,11 @@ export const QUEUE_UPGRADES: QueueUpgrade[] = [
     maxQueue: 1,
     description: "Clay Tablet — marking your next task keeps you on track. +1 queue slot.",
   },
+  {
+    buildingId: "charcoal_board",
+    maxQueue: 1,
+    description: "Charcoal Board — writing plans down keeps you organized. +1 queue slot.",
+  },
 ];
 
 export function isQueueUnlocked(state: GameState): boolean {

@@ -486,29 +486,7 @@ export interface PlacedStation {
 
 export interface QueuedAction {
   actionId: string;
-  actionType: "gather" | "craft" | "expedition" | "routine";
-}
-
-// ═══════════════════════════════════════
-// Routines (automation chains)
-// ═══════════════════════════════════════
-
-export interface RoutineStep {
-  actionId: string;
   actionType: "gather" | "craft" | "expedition";
-  count: number; // 0 = run until natural stop, >0 = stop after N completions
-}
-
-export interface Routine {
-  id: string;
-  name: string;
-  steps: RoutineStep[];
-}
-
-export interface RoutineProgress {
-  routineId: string;
-  currentStep: number;
-  completionsInStep: number;
 }
 
 // ═══════════════════════════════════════
@@ -609,8 +587,6 @@ export interface GameState {
   mainlandUnlocked?: boolean; // true when player opts into experimental mainland content post-victory
   mainlandVersion?: number; // experimental version marker — bumped when mainland format changes, triggers reset
   modId?: string; // if set, this save belongs to a specific mod
-  routines: Routine[];
-  activeRoutine: RoutineProgress | null;
   actionQueue: QueuedAction[];
   queueMode: boolean;
 

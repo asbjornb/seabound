@@ -50,9 +50,7 @@
 
 ### Next Up (After Visual Polish)
 
-- **Routines** — Lightweight action sequences. Player can define a short queue of actions that run in order instead of a single action. Not full automation — just "do A, then B, then C" convenience.
-  - *Gating options (TBD)*: Either unlock when any skill first reaches level 20 (natural mid-game milestone), or gate behind lore scraps found on a new island expedition (thematic — "you find weathered instructions for an efficient workflow"). The expedition gate adds more narrative flavor; the level gate is simpler to implement.
-  - Keep routines short (3-5 steps max initially) to stay lightweight and not overwhelm idle balance.
+- **Action queue** — Lightweight "do A, then B" convenience: when an action is running, the player can queue follow-ups that auto-start when the current one finishes. Implemented and live; queue size grows with the Clay Tablet and Charcoal Board buildings. Routines (saved multi-step sequences) were prototyped and removed in favor of queueing — the queue covers most of the same use cases with much simpler UX.
 
 ### Design Ideas (Not Yet Planned)
 

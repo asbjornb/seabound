@@ -23,8 +23,6 @@ import {
   trackSalvageItem,
   trackCombatLogClear,
   trackOptionalitySnapshot,
-  trackRoutineStarted,
-  trackRoutineStopped,
 } from "../lib/analytics-events";
 import type {
   ActionDef,
@@ -34,8 +32,6 @@ import type {
   ItemCondition,
   QueuedAction,
   RecipeDef,
-  Routine,
-  RoutineStep,
   StationDef,
 } from "../data/types";
 import { getMaxQueueSize, isQueueUnlocked } from "../data/queue";
@@ -115,10 +111,10 @@ function restoreActionProgress(state: GameState, actionKey: string): void {
   }
 }
 
-/** Try to start a routine step by directly mutating state. Returns true if successful. */
-function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
-  if (step.actionType === "gather") {
-    const action = getActionById(step.actionId);
+/** Try to start a queued action by directly mutating state. Returns true if successful. */
+function tryStartQueuedAction(state: GameState, queued: QueuedAction): boolean {
+  if (queued.actionType === "gather") {
+    const action = getActionById(queued.actionId);
     if (!action) return false;
     const skill = state.skills[action.skillId];
     if (action.requiredSkillLevel && skill.level < action.requiredSkillLevel) return false;
@@ -142,8 +138,8 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
     return true;
   }
 
-  if (step.actionType === "craft") {
-    const recipe = getRecipeById(step.actionId);
+  if (queued.actionType === "craft") {
+    const recipe = getRecipeById(queued.actionId);
     if (!recipe) return false;
     const skill = state.skills[recipe.skillId];
     if (recipe.requiredSkillLevel && skill.level < recipe.requiredSkillLevel) return false;
@@ -171,8 +167,8 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
     return true;
   }
 
-  if (step.actionType === "expedition") {
-    const expedition = getExpeditionById(step.actionId);
+  if (queued.actionType === "expedition") {
+    const expedition = getExpeditionById(queued.actionId);
     if (!expedition) return false;
     if (expedition.requiredVessel && !hasVessel(state, expedition.requiredVessel)) return false;
     if (expedition.foodCost && getTotalFood(state) < expedition.foodCost) return false;
@@ -194,79 +190,12 @@ function tryStartRoutineStep(state: GameState, step: RoutineStep): boolean {
   return false;
 }
 
-/** Advance the active routine to the next step. Deactivates if no step can start. */
-function advanceRoutine(state: GameState): void {
-  if (!state.activeRoutine) return;
-  const routine = state.routines.find((r) => r.id === state.activeRoutine!.routineId);
-  if (!routine || routine.steps.length === 0) {
-    state.activeRoutine = null;
-    return;
-  }
-
-  const progress = state.activeRoutine;
-  const wasLastStep = progress.currentStep >= routine.steps.length - 1;
-
-  // If on the last step, check if output is full → stop routine
-  if (wasLastStep) {
-    const step = routine.steps[progress.currentStep];
-    let outputFull = false;
-    if (step.actionType === "gather") {
-      const action = getActionById(step.actionId);
-      if (action) {
-        const guaranteed = action.drops.filter((d) => !d.chance || d.chance >= 1);
-        const relevant = guaranteed.length > 0 ? guaranteed : action.drops;
-        outputFull = relevant.length > 0 && relevant.every((d) => isAtStorageCap(state, d.resourceId));
-      }
-    } else if (step.actionType === "craft") {
-      const recipe = getRecipeById(step.actionId);
-      if (recipe?.output) {
-        outputFull = isAtStorageCap(state, recipe.output.resourceId);
-      }
-    }
-    if (outputFull) {
-      state.activeRoutine = null;
-      trackRoutineStopped(state, "output_full");
-      return;
-    }
-  }
-
-  // Try each step starting from the next one
-  const numSteps = routine.steps.length;
-  for (let i = 0; i < numSteps; i++) {
-    const nextIndex = (progress.currentStep + 1 + i) % numSteps;
-    const step = routine.steps[nextIndex];
-    if (tryStartRoutineStep(state, step)) {
-      progress.currentStep = nextIndex;
-      progress.completionsInStep = 0;
-      return;
-    }
-  }
-
-  // No step could start — deactivate routine
-  state.activeRoutine = null;
-  trackRoutineStopped(state, "cant_proceed");
-}
-
 /** Try to start the next queued action. Removes the entry on success or if it can't start. */
 function advanceQueue(state: GameState): void {
   while (state.actionQueue.length > 0) {
     const queued = state.actionQueue[0];
     state.actionQueue.shift();
-
-    if (queued.actionType === "routine") {
-      const routine = state.routines.find((r) => r.id === queued.actionId);
-      if (!routine || routine.steps.length === 0) continue;
-      state.activeRoutine = { routineId: queued.actionId, currentStep: 0, completionsInStep: 0 };
-      const step = routine.steps[0];
-      if (!tryStartRoutineStep(state, step)) {
-        advanceRoutine(state);
-        if (!state.activeRoutine) continue;
-      }
-      return;
-    }
-
-    const step: RoutineStep = { actionId: queued.actionId, actionType: queued.actionType, count: 0 };
-    if (tryStartRoutineStep(state, step)) {
+    if (tryStartQueuedAction(state, queued)) {
       return;
     }
     // If the queued action can't start (e.g. missing resources), skip it and try the next
@@ -558,7 +487,7 @@ export function useGame() {
         const next = structuredClone(prev);
         const now = Date.now();
 
-        // Loop offline processing: when an action completes and a routine/queue
+        // Loop offline processing: when an action completes and the queue
         // advances to a new action, apply remaining offline time to the new action.
         // Cap iterations to prevent infinite loops from edge cases.
         let totalCompletions = 0;
@@ -575,25 +504,8 @@ export function useGame() {
           if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
 
-          // Routine advancement for offline progress
-          if (next.activeRoutine) {
-            if (result.completions.length > 0) {
-              next.activeRoutine.completionsInStep += result.completions.length;
-            }
-            const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
-            if (routine) {
-              const step = routine.steps[next.activeRoutine.currentStep];
-              if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
-                saveCurrentActionProgress(next);
-                next.currentAction = null;
-              }
-            }
-            if (!next.currentAction) {
-              advanceRoutine(next);
-            }
-          }
-          // Queue advancement for offline progress (only if no routine is active)
-          if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          // Queue advancement for offline progress
+          if (!next.currentAction && next.actionQueue.length > 0) {
             advanceQueue(next);
           }
 
@@ -629,7 +541,7 @@ export function useGame() {
 
         // Use a multi-pass loop (same as offline processing) so that when the
         // browser resumes from background/PWA suspend, accumulated time is
-        // properly credited across queue/routine transitions.
+        // properly credited across queue transitions.
         let totalCompletions = 0;
         for (let pass = 0; pass < 100; pass++) {
           const result = processTick(next, now);
@@ -640,25 +552,8 @@ export function useGame() {
           if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
 
-          // Routine advancement
-          if (next.activeRoutine) {
-            if (result.completions.length > 0) {
-              next.activeRoutine.completionsInStep += result.completions.length;
-            }
-            const routine = next.routines.find((r) => r.id === next.activeRoutine!.routineId);
-            if (routine) {
-              const step = routine.steps[next.activeRoutine.currentStep];
-              if (step?.count > 0 && next.activeRoutine.completionsInStep >= step.count) {
-                saveCurrentActionProgress(next);
-                next.currentAction = null;
-              }
-            }
-            if (!next.currentAction) {
-              advanceRoutine(next);
-            }
-          }
-          // Queue advancement (only if no routine is active)
-          if (!next.activeRoutine && !next.currentAction && next.actionQueue.length > 0) {
+          // Queue advancement
+          if (!next.currentAction && next.actionQueue.length > 0) {
             advanceQueue(next);
           }
 
@@ -749,7 +644,6 @@ export function useGame() {
         return prev;
       }
       const next = structuredClone(prev);
-      next.activeRoutine = null; // manual action cancels any running routine
       next.actionQueue = []; // manual action clears the queue
       saveCurrentActionProgress(next);
       resetRepetitiveCountOnManualActionChange(next, `gather:${action.id}`);
@@ -815,7 +709,6 @@ export function useGame() {
         // Block if output resource storage is full (but allow if inputs free space in the same group)
         if (recipe.output && isRecipeOutputBlocked(prev, recipe.output.resourceId, inputs)) return prev;
         const next = structuredClone(prev);
-        next.activeRoutine = null; // manual craft cancels any running routine
         next.actionQueue = []; // manual craft clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `craft:${recipe.id}`);
@@ -856,7 +749,6 @@ export function useGame() {
           return prev;
         }
         const next = structuredClone(prev);
-        next.activeRoutine = null; // manual expedition cancels any running routine
         next.actionQueue = []; // manual expedition clears the queue
         saveCurrentActionProgress(next);
         resetRepetitiveCountOnManualActionChange(next, `expedition:${expedition.id}`);
@@ -880,7 +772,6 @@ export function useGame() {
       const next = structuredClone(prev);
       saveCurrentActionProgress(next);
       next.currentAction = null;
-      next.activeRoutine = null; // also stop any running routine
       // If queue has items, let the next tick advance it (don't reset repetition count)
       // If queue is empty, this is a full stop — reset repetition
       if (next.actionQueue.length === 0) {
@@ -910,62 +801,6 @@ export function useGame() {
 
   const toggleQueueMode = useCallback(() => {
     setState((prev) => ({ ...prev, queueMode: !prev.queueMode }));
-  }, []);
-
-  const saveRoutine = useCallback((routine: Routine) => {
-    setState((prev) => {
-      const next = structuredClone(prev);
-      const idx = next.routines.findIndex((r) => r.id === routine.id);
-      if (idx >= 0) {
-        next.routines[idx] = routine;
-      } else {
-        next.routines.push(routine);
-      }
-      return next;
-    });
-  }, []);
-
-  const deleteRoutine = useCallback((routineId: string) => {
-    setState((prev) => {
-      const next = structuredClone(prev);
-      next.routines = next.routines.filter((r) => r.id !== routineId);
-      if (next.activeRoutine?.routineId === routineId) {
-        next.activeRoutine = null;
-      }
-      return next;
-    });
-  }, []);
-
-  const startRoutine = useCallback((routineId: string) => {
-    setState((prev) => {
-      const routine = prev.routines.find((r) => r.id === routineId);
-      if (!routine || routine.steps.length === 0) return prev;
-      const next = structuredClone(prev);
-      // Start from step 0
-      next.activeRoutine = { routineId, currentStep: 0, completionsInStep: 0 };
-      // Try to start the first step; if it fails, try others
-      const step = routine.steps[0];
-      if (!tryStartRoutineStep(next, step)) {
-        // Try advancing from step 0
-        advanceRoutine(next);
-        // If still no active routine after trying all steps, bail
-        if (!next.activeRoutine) return prev;
-      }
-      trackRoutineStarted(next, routine);
-      return next;
-    });
-  }, []);
-
-  const stopRoutine = useCallback(() => {
-    setState((prev) => {
-      if (!prev.activeRoutine) return prev;
-      const next = structuredClone(prev);
-      next.activeRoutine = null;
-      saveCurrentActionProgress(next);
-      next.currentAction = null;
-      trackRoutineStopped(next, "manual");
-      return next;
-    });
   }, []);
 
   const deployStation = useCallback((station: StationDef) => {
@@ -1563,10 +1398,6 @@ export function useGame() {
     queueAction,
     clearQueue,
     toggleQueueMode,
-    saveRoutine,
-    deleteRoutine,
-    startRoutine,
-    stopRoutine,
     deployStation,
     collectStation,
     collectAllStations,
