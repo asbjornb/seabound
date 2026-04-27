@@ -84,7 +84,7 @@ export const ACTIONS: ActionDef[] = [
     drops: [
       { resourceId: "small_fish", amount: 1, chance: 0.1 },
       { resourceId: "crab", amount: 1, chance: 0.1 },
-      { resourceId: "shell", amount: 1 },
+      { resourceId: "shell", amount: 1, chance: 0.5 },
       { resourceId: "large_shell", amount: 1, chance: 0.01 },
     ],
     xpGain: 8,
@@ -101,7 +101,7 @@ export const ACTIONS: ActionDef[] = [
     drops: [
       { resourceId: "small_fish", amount: 1, chance: 0.15 },
       { resourceId: "crab", amount: 1, chance: 0.35 },
-      { resourceId: "shell", amount: 1 },
+      { resourceId: "shell", amount: 1, chance: 0.5 },
       { resourceId: "large_shell", amount: 1, chance: 0.01 },
     ],
     requiredBiome: "rocky_shore",
