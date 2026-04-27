@@ -1,9 +1,15 @@
 {
   "meta": {
     "oldestReviewed": "74a9dc24cd5ed4d727fd475099460474cd261343",
-    "newestReviewed": "5465838280d145e3dc949ff022e1fab7e73794ca"
+    "newestReviewed": "999bdc2211c27392ef3b07aaeee368d5571064b9"
   },
   "entries": [
+    {
+      "date": "2026-04-27",
+      "changes": [
+        "Fix 'stop if full' feature to stop gathering when any drop hits storage cap, rather than waiting for all guaranteed drops to fill simultaneously"
+      ]
+    },
     {
       "date": "2026-04-21",
       "changes": [
