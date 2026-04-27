@@ -1648,7 +1648,9 @@ body {
 .log-building .log-type { color: var(--accent); background: #f0a05018; }
 .log-resource .log-type { color: var(--bar-xp); background: #38bdf818; }
 .log-craft .log-type { color: #c084fc; background: #c084fc18; }
-.log-lore .log-type { color: #9ca3af; background: #9ca3af18; }
+.log-lore .log-type { color: #d4c5a8; background: rgba(200, 176, 144, 0.12); }
+.log-lore { font-style: italic; }
+.log-tip .log-type { color: #bae6fd; background: #38bdf818; }
 
 .log-count {
   margin-left: auto;
@@ -2969,7 +2971,37 @@ body {
 .toast-level { border-left: 3px solid var(--warning); color: var(--warning); }
 .toast-resource { border-left: 3px solid var(--bar-xp); color: var(--bar-xp); }
 .toast-craft { border-left: 3px solid #c084fc; color: #c084fc; }
-.toast-lore { border-left: 3px solid #9ca3af; color: #cbd5e1; font-weight: 500; }
+.toast-tip { border-left: 3px solid var(--bar-xp); color: #bae6fd; }
+
+/* Lore is flavor text — render it like a journal entry rather than a notification:
+   italic, no left border, warm sepia tint, framed by quotation marks. */
+.toast-lore {
+  border: 1px solid rgba(200, 176, 144, 0.25);
+  background: linear-gradient(180deg, rgba(200, 176, 144, 0.08), rgba(200, 176, 144, 0.03));
+  color: #d4c5a8;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(200, 176, 144, 0.04);
+}
+.toast-lore .toast-message::before {
+  content: "\201C";
+  margin-right: 4px;
+  color: rgba(200, 176, 144, 0.55);
+  font-style: normal;
+  font-size: 1.2em;
+  line-height: 0;
+  vertical-align: -0.15em;
+}
+.toast-lore .toast-message::after {
+  content: "\201D";
+  margin-left: 2px;
+  color: rgba(200, 176, 144, 0.55);
+  font-style: normal;
+  font-size: 1.2em;
+  line-height: 0;
+  vertical-align: -0.15em;
+}
 
 @keyframes toast-in {
   from {

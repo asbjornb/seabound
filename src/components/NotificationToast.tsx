@@ -34,7 +34,7 @@ export function NotificationToast({
       if (entry.type === "biome" && entry.biomeId) {
         newBiomeEntries.push(entry);
       }
-      if (entry.type === "lore" || entry.type === "expedition") {
+      if (entry.type === "lore" || entry.type === "tip" || entry.type === "expedition") {
         newLoreEntries.push(entry);
       }
     }

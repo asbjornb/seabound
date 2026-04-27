@@ -9,9 +9,10 @@ const TYPE_LABELS: Record<string, string> = {
   resource: "Discovery",
   tool: "Tooling",
   lore: "Omen",
+  tip: "Tip",
 };
 
-const FILTER_ORDER: DiscoveryType[] = ["biome", "resource", "lore", "building", "craft", "tool", "level"];
+const FILTER_ORDER: DiscoveryType[] = ["biome", "resource", "lore", "tip", "building", "craft", "tool", "level"];
 
 export function LogPanel({ entries }: { entries: DiscoveryEntry[] }) {
   const [includedTypes, setIncludedTypes] = useState<DiscoveryType[]>([]);
