@@ -39,6 +39,7 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
     try { const v = localStorage.getItem("sb_craft_folded"); return v ? new Set(JSON.parse(v)) : new Set(); } catch { return new Set(); }
   });
   const [craftableOnly, setCraftableOnly] = useState(false);
+  const [newOnly, setNewOnly] = useState(false);
 
   if (recipes.length === 0) {
     return (
@@ -86,6 +87,8 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
     && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
   }).length;
 
+  const newCount = recipes.filter((r) => !state.completedRecipes.includes(r.id)).length;
+
   return (
     <div>
       <div className="filter-bar">
@@ -94,6 +97,12 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
           onClick={() => setCraftableOnly(!craftableOnly)}
         >
           Craftable now{craftableOnly ? "" : ` (${craftableCount})`}
+        </button>
+        <button
+          className={`filter-toggle ${newOnly ? "active" : ""}`}
+          onClick={() => setNewOnly(!newOnly)}
+        >
+          New{newOnly ? "" : ` (${newCount})`}
         </button>
       </div>
       {CATEGORIES.map(({ id: catId, label }) => {
@@ -109,8 +118,11 @@ export function CraftingPanel({ recipes, state, onCraft, onHighlightResources, q
             && (!r.tagInputs || canAffordTagInputs(r.tagInputs, state))
             && !(r.output && isRecipeOutputBlocked(state, r.output.resourceId, inputs));
           });
-          if (list.length === 0) return null;
         }
+        if (newOnly) {
+          list = list.filter((r) => !state.completedRecipes.includes(r.id));
+        }
+        if (list.length === 0) return null;
 
         const isCollapsed = collapsed.has(catId);
         return (
