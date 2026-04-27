@@ -5,9 +5,7 @@ import { getActionById, getRecipeById } from "../data/registry";
 import { makeState } from "./testHelpers";
 
 describe("stop-if-full", () => {
-  it("stops gathering when all guaranteed drops are at storage cap", () => {
-    // Bug regression: after snapshot refactor, the chance>=1 filter was lost,
-    // so stop-if-full checked ALL drops including rare ones and never triggered.
+  it("stops gathering when any drop hits storage cap mid-action", () => {
     const action = getActionById("collect_driftwood")!;
     expect(action).toBeDefined();
     // collect_driftwood drops driftwood_branch (guaranteed, chance=1)
@@ -37,8 +35,10 @@ describe("stop-if-full", () => {
     expect(result.completions.length).toBeLessThanOrEqual(1);
   });
 
-  it("does NOT stop when only rare drops are full but guaranteed drops are not", () => {
+  it("does NOT stop on drops that were already full when action started", () => {
     // gather_coconuts: coconut (guaranteed), coconut_husk (chance=0.4)
+    // If husk is already at cap when the player clicks, fullAtStart excludes it
+    // so the action keeps gathering coconuts until coconut also fills.
     const action = getActionById("gather_coconuts")!;
     expect(action).toBeDefined();
 
@@ -47,20 +47,18 @@ describe("stop-if-full", () => {
         actionId: "gather_coconuts",
         startedAt: 0,
         type: "gather",
+        fullAtStart: ["coconut_husk"],
       },
       discoveredBiomes: ["beach", "coconut_grove"],
       discoveredResources: ["coconut", "coconut_husk"],
     });
 
-    // Fill coconut_husk (rare drop) to cap, but leave coconut (guaranteed) below cap
     const huskLimit = getStorageLimit(state, "coconut_husk");
     state.resources["coconut_husk"] = huskLimit;
     state.resources["coconut"] = 0;
 
-    // Process enough time for several completions
     processTick(state, action.durationMs * 3);
 
-    // Action should still be running because the guaranteed drop (coconut) isn't full
     expect(state.currentAction).not.toBeNull();
   });
 
