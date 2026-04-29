@@ -245,16 +245,23 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
   crafting: [
     {
       level: 3,
-      description: "Sun-dried mastery — 50% chance to double drying output",
+      description: "Steady carver — shell beads crafted 15% faster",
       effects: [
-        { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
+        { type: "duration", actionId: "craft_shell_beads", multiplier: 0.85 },
+      ],
+    },
+    {
+      level: 4,
+      description: "Husking hands — 15% chance to double rough fiber from husking",
+      effects: [
+        { type: "double_output", chance: 0.15, recipeId: "shred_coconut_husk" },
       ],
     },
     {
       level: 5,
-      description: "Efficient strips — 25% chance to cut extra pandanus strips",
+      description: "Sun-dried mastery — 50% chance to double drying output",
       effects: [
-        { type: "double_output", chance: 0.25, recipeId: "cut_pandanus_strips" },
+        { type: "double_output", chance: 0.5, recipeId: "dry_fiber" },
       ],
     },
     {
@@ -284,6 +291,13 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       description: "Seasoned crafter — all crafting recipes 10% faster",
       effects: [
         { type: "duration", actionId: "*", multiplier: 0.9 },
+      ],
+    },
+    {
+      level: 11,
+      description: "Efficient strips — 25% chance to cut extra pandanus strips",
+      effects: [
+        { type: "double_output", chance: 0.25, recipeId: "cut_pandanus_strips" },
       ],
     },
     {
