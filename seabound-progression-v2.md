@@ -4,59 +4,68 @@
 
 ## IMPLEMENTATION STATUS
 
-*Last updated: 2026-03-29*
+*Last updated: 2026-04-29*
 
 ### What's Built
 
-- **Phase 0 gameplay loop** — Beach gathering actions (coconuts, driftwood, palm fronds, tidal pool wading). Biomes discovered via scouting expeditions: coconut grove and rocky shore from beach exploration (rocky shore requires coconut grove), bamboo grove and jungle interior from interior exploration (both require coconut grove).
-- **Biome-gated gathering** — Gather panel organized by biome. Rocky shore biome gates stones, dry grass, and chert (single "Comb Rocky Shore" action). Coconut grove gates coconuts and palm fronds. Bamboo grove gates bamboo. Jungle interior gates clay and fresh water.
-- **Phase 1 bamboo tier** — Bamboo harvesting, splitting, coconut husk fiber/cordage chain, bamboo knife, bow drill kit, bamboo spear, digging stick. No skill level gates — crafting chain dependencies are the gates.
-- **Phase 1b fire** — Camp Fire as a settlement building gating cooking and fire-hardened spear.
-- **Spear fishing** — Bamboo spear enables spear fishing action (5s, Fishing XP, small fish + shell 30% chance). Fishing 8 milestone unlocks 5% chance of large fish.
-- **Drop line fishing** — Gorge hook (Crafting 6, requires stone flake) enables drop line fishing (Fishing 8). 25% large fish chance, slower but better yield.
-- **Basket trap** — Woven basket trap (Weaving 5 + Fishing 8, requires obsidian blade) deployed as a station (Fishing 10). Semi-idle set-wait-collect: 2min timer, yields small fish ×2, crab/large fish chances.
-- **Shell adze** — Large shell drops from tidal pool wading (1% chance) and interior expeditions. Shell adze crafted from large shell + cordage + driftwood. Used in dugout hull scraping.
-- **Stone tools** — No skill level gates. Progression driven by material/tool chain: flat stone → hammerstone → stone flake (requires chert + hammerstone) → stone blade → stone axe. Each step requires output of previous.
-- **Clay & pottery** — Jungle interior biome discovered via expedition. Dig clay action (Foraging 5). Full pottery chain: shaped clay pot → fired clay pot → sealed clay jar → crucible. Firing Pit and Kiln buildings.
-- **Maritime vessels** — Raft for coastal voyages. Dugout canoe chain: fell large tree → char log interior → scrape hull (shell adze) → assemble dugout. No skill level gates on construction — material chains are the gates.
-- **Settlement buildings (15)** — Camp Fire, Stone Hearth, Palm Leaf Pile, Drying Rack, Fenced Perimeter, Firing Pit, Kiln, Fiber Loom, Woven Basket (repeatable), Log Raft, Dugout Canoe, Cleared Plot, Well, Tended Garden, Farm Plot. Buildings gate recipes/actions and grant storage bonuses.
-- **Expedition system (4 expeditions)** — Explore Beach (coconut grove, rocky shore discovery), Explore Interior (bamboo grove, jungle interior discovery), Sail Nearby Island (requires raft; nearby island biome, obsidian, wild seeds, taro corms), Dugout Voyage (requires dugout; banana shoots, breadfruit cuttings, obsidian, logs). Auto-repeating with food/water costs. Navigation XP on completion.
-- **Morale system** — Shell Beads recipe grants +2 morale (repeatable crafting XP source with morale reward).
-- **Skill milestone system** — Authored milestones with mechanical effects (drop chance bonuses, duration multipliers, double output chances) + auto-generated unlock previews from skill-gated actions/recipes.
-- **Inventory limits** — Per-item cap of 10, increased by building storage bonuses (Palm Leaf Pile +10 all, Drying Rack +10 dried, Camp Fire +10 food, Stone Hearth +10 food, Woven Basket +1 non-food/non-large per basket up to 20).
-- **Action switching** — Starting a new action cancels the current one with full resource refund.
-- **Discovery-driven progression** — Core progression gated by biome discovery and crafting chains, not skill levels. Skill levels gate optional efficiency improvements (better yields, advanced techniques). Gather panel grouped by biome to reinforce exploration as progression.
-- **9 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation.
-- **Weaving recipes** — Weave Basket (palm fronds ×5 + cordage ×3 → woven basket building, repeatable).
-- **Cooking recipes** — Cook Fish, Cook Crab (Cooking 2), Cook Large Fish (Cooking 4), Cook Root Vegetable (Cooking 3), Cook Taro (Cooking 5), Roast Breadfruit (Cooking 8). All require camp fire. Stone Hearth removes dry grass kindling from cooking recipes.
-- **Voyage Provisions** — Pack 5 food + sealed clay jar into voyage provisions. Efficient expedition fuel.
-- **Fresh water** — Collect Fresh Water action (jungle interior biome, requires fired clay pot). Used as expedition fuel for longer voyages.
-- **Cordage braiding** — Fiber Loom building enables efficient Braid Cordage recipe alongside basic Twist Cordage.
-- **Farming system** — Digging stick (fire-hardened tool) → Cleared Plot (Construction 3) → Well (Construction 6) → Tended Garden (Construction 7) → Farm Plot (Construction 10). Stations: Plant Wild Seeds (3 seeds, yields fiber + root vegetables), Cultivate Taro (Farming 5, needs well), Grow Bananas (Farming 10, needs farm plot), Grow Breadfruit (Farming 12, needs farm plot). Seeds from expedition drops and foraging milestones. Taro corms from nearby island expedition, banana shoots and breadfruit cuttings from dugout voyage.
-- **Camp maintenance** — Maintain Camp recipe (cordage + driftwood, Construction XP + morale).
-- **Drainage trench** — Dig Drainage Trench action (requires large shell, Construction XP).
-- **Offline progress** — All action types progress while away.
-- **Save/load** — With migration support for old save formats.
+#### Island Arc — Phases 0–5
+
+- **Phase 0 — Bare Hands** — Beach gathering: coconuts, driftwood, palm fronds, tidal pool wading, comb rocky shore (chert + flat stones), collect dry grass. Drainage trench action (Construction XP, requires large shell). Beach exploration expedition discovers coconut grove and rocky shore (rocky shore requires coconut grove first).
+- **Phase 1 — Bamboo** — Triggered by discovering bamboo grove. Bamboo harvesting, splitting, coconut husk fiber/cordage chain, bamboo knife, bow drill kit, bamboo spear, digging stick. Discovery-driven; no skill level gates on core progression.
+- **Phase 1b — Fire** — Camp Fire as a settlement building. Gates cooking, fire-hardened tools, char log step.
+- **Phase 2 — Stone & Clay** — Triggered by acquiring fired clay pot. Stone tool chain (hammerstone → flake → blade → axe), shell adze, full pottery chain (shaped → fired → sealed jar → crucible), Firing Pit and Kiln buildings.
+- **Phase 3 — Maritime** — Triggered by building the dugout canoe. Bamboo raft (early water access) and dugout canoe (4-step build: fell large tree → char log → scrape hull with shell adze → assemble) unlock new expeditions.
+- **Phase 4 — Voyage** — Triggered by building the outrigger canoe (dugout + woven sail + bamboo battens + rigging). Unlocks the **Oceanic Voyage** expedition — the victory condition that ends the island arc.
+
+#### Mainland Arc (post-victory, experimental)
+
+After winning the Oceanic Voyage, players can opt into the mainland sandbox via a confirmation modal on the victory screen. Mainland adds three new skills (Combat, Mining, Smithing), two new biomes (Coastal Cliffs, Inland Hills), and a fully-built post-game loop. See **TAB 9: MAINLAND** below for the full design.
+
+- **Mining** — Three actions: prospect copper vein (Coastal Cliffs), prospect tin deposit (Coastal Cliffs, Mining 5), mine iron ore (Inland Hills, Mining 10). Iron pickaxe / steel pickaxe speed bonuses.
+- **Smithing chain** — Smelt copper (crucible + kiln), smelt tin, alloy bronze (Cu + Sn), smelt iron bloom (bloomery + bellows), hammer bloom on stone anvil → iron ingot, forge steel (iron + 8 charcoal in sealed crucible).
+- **Equipment & combat** — Round-based simulated combat per expedition, Monte Carlo win-rate previews, equipment in 7 slots (weapon, offhand, head, body, legs, feet, trinket), 4 gear tiers, item conditions (broken/damaged/worn/pristine), affixes, repair, salvage, and one-shot imbuement with 7 rare reagents (one per mainland expedition).
+- **7 mainland expeditions** — Coastal Ruins, Tidal Caves, Overgrown Trail, Flooded Quarry, Ridge Pass, Sunken Temple, Volcanic Rift. Each has 3 combat stages, typed damage, equipment drops (often broken), unique chase rewards, and an exclusive imbuement reagent.
+- **Cartographer's Table** — Non-combat path to discover mainland mining biomes via slow charting sessions (Chart Coastal Regions, Chart Inland Territory). Also gives a 10% expedition speed bonus to Navigation expeditions.
+
+#### Cross-cutting Systems
+
+- **12 skills** — Foraging, Fishing, Woodworking, Crafting, Cooking, Weaving, Construction, Farming, Navigation, **Combat**, **Mining**, **Smithing**.
+- **8 biomes** — Beach, Coconut Grove, Rocky Shore, Bamboo Grove, Jungle Interior, Nearby Island, Coastal Cliffs (mainland), Inland Hills (mainland). Biome discovery shows a banner image + flavor text modal.
+- **Skill milestone system** — Hand-authored milestones across all skills with effects: action speed, drop chance bonuses, double-output chances, combat stat bonuses (offense/defense/life/attackSpeed/critChance/critMultiplier), and reduced setup costs. Auto-generated unlock previews are shown alongside.
+- **Routines** — Unlocked when any skill reaches level 15. Chain 2+ actions into a repeating sequence. Building upgrades expand the system: Charcoal Board (+1 routine slot), Storage Shelf (+1 step + step-completion counts), Outrigger Canoe (+2 steps).
+- **Action queue** — Multi-step queue for one-time crafts and gathers. Clay Tablet building grants +1 queue slot.
+- **Stations (12)** — Passive set-wait-collect: Basket Trap, Tidal Weir (Fishing 11, requires Stone Tidal Weir building), 5 farming stations (Plant Wild Seeds, Cultivate Taro, Grow Bananas, Grow Pandanus, Grow Breadfruit), Burn Charcoal (Charcoal Kiln), Soak Pandanus (Soaking Pit), Harvest Pandanus Grove, Chart Coastal Regions, Chart Inland Territory.
+- **Pandanus fiber chain** — Mid-game fiber path: pandanus cuttings (from dugout voyage) → grove or farm plot → leaves → dry / soak → strips → pandanus cordage / rope → sail. Sail unlocks the outrigger canoe.
+- **Charcoal as fuel** — Charcoal Kiln converts large logs (3 → 15 charcoal). Charcoal substitutes for driftwood in most fire-based recipes.
+- **29 buildings** — Camp Fire, Stone Hearth, Palm Leaf Pile, Drying Rack, Fenced Perimeter, Firing Pit, Kiln, Pottery Wheel, Charcoal Kiln, Fiber Loom, Weaving Frame, Soaking Pit, Woven Basket (×20), Raft, Dugout, Outrigger Canoe, Cleared Plot, Tended Garden, Farm Plot, Pandanus Grove, Well, Sleeping Mat, Hammock, Thatched Hut, Log Rack, Clay Storage Jar (×5), Storage Shelf, Clay Tablet, Charcoal Board, Rock Pool Cache, Stone Tidal Weir, Cartographer's Table (mainland), Bloomery (mainland).
+- **Morale system** — Decay over active play, slowed by comfort buildings (mat/hammock/thatched hut). Shell Beads and Maintain Camp recipes restore morale. Low morale slows actions; high morale provides up to a 30% speed boost (diminishing returns).
+- **Inventory caps & storage bonuses** — Per-item cap with bonuses from buildings, tagged by category (food, dried, large, charcoal, pandanus, tidal, etc.). Stash collapses when inventory exceeds 15 items.
+- **Voyage Provisions** — Pack 5 food + sealed clay jar → voyage provisions. Efficient expedition fuel; required for the Oceanic Voyage.
+- **Fresh water** — Fill Water Pot recipe at the Well (Construction-gated). Used as expedition fuel. Fired clay pots and fresh water share a combined storage cap.
+- **Discovery-driven progression** — Core progression gated by biome discovery and crafting chains. Skill levels gate optional efficiency improvements. Gather panel grouped by biome.
+- **Phase tracking** — Phase chips at the top of the screen reflect the player's current arc. Chapter banner images for each phase.
+- **Search panel** — Global search across actions, recipes, stations, expeditions by name/inputs/outputs with quick-start buttons.
+- **Mod system** — Full game data exportable as a `.zip` data pack (data.json + icons/). Validation on import. Activate / deactivate / delete mods from the Mods panel; each mod gets its own save namespace.
+- **Offline progress** — All action types (gather, craft, station, expedition) progress while away.
+- **Save/load** — Versioned migrations. Mainland progress is gated by `mainlandUnlocked` and tracked separately so it can be reset without affecting island progression.
+- **Analytics** — Cloudflare Worker → R2 pipeline. Events: session_start, session_end, heartbeat (every 5 min), milestone. View funnel/drop-off via `?dev` panel.
+- **Update banner** — PWA service worker; banner prompts users to refresh when a new build is available.
 
 ### What's Next
 
-- Phase 2 fishing tiers: stone weir (Fishing 20 + Construction 25), net fishing (Fishing 40 + Weaving 35)
-- More settlement buildings (Smoking Rack, Workbench, Bone Station)
-- More authored skill milestones
-- More Weaving and Construction skill actions
-- Navigation effects on expedition odds
-- Outrigger canoe and sailing canoe (extending maritime chain beyond dugout)
-- Metal tier (ore from island chain expeditions, smithing skill)
-
-### Next Up (After Visual Polish)
-
-- **Routines** — Lightweight action sequences. Player can define a short queue of actions that run in order instead of a single action. Not full automation — just "do A, then B, then C" convenience.
-  - *Gating options (TBD)*: Either unlock when any skill first reaches level 20 (natural mid-game milestone), or gate behind lore scraps found on a new island expedition (thematic — "you find weathered instructions for an efficient workflow"). The expedition gate adds more narrative flavor; the level gate is simpler to implement.
-  - Keep routines short (3-5 steps max initially) to stay lightweight and not overwhelm idle balance.
+- More authored skill milestones (especially Mining, Smithing, Construction, Weaving)
+- Stone Hearth → Cooking Hearth tier (smoking, preserved food)
+- Smoking Rack, Workbench, Bone Station buildings
+- Net fishing (Fishing 40 + Weaving 35) as a higher-tier alternative to the basket trap and stone weir
+- Distant archipelago expeditions (rarer affix pools, deeper imbuement system)
+- More uniques and limited imbuement variants
+- Magic / supernatural systems (currently hinted at via mainland flavor)
+- Automation / NPC helpers for late-game stations
 
 ### Design Ideas (Not Yet Planned)
 
-- **Resource obsolescence** — As players progress, early-phase resources (e.g. rough_fiber, round_stone) should become obsolete. Unlike Unnamed Space Idle's approach of making early resources infinite, we need a thematic solution. Possible approaches: auto-conversion (rough fiber → fiber when you unlock it), removal of obsolete actions/recipes from the UI once superseded, or a "mastery" mechanic where reaching a skill threshold trivializes early resources. Goal: reduce inventory clutter and action list bloat in late game without breaking the castaway theme.
+- **Resource obsolescence** — As players progress, early-phase resources (e.g. rough_fiber, flat stones) should become obsolete. Unlike Unnamed Space Idle's approach of making early resources infinite, we want a thematic solution. Possible approaches: auto-conversion (rough fiber → fiber when you unlock it), removal of obsolete actions/recipes from the UI once superseded, or a "mastery" mechanic where reaching a skill threshold trivializes early resources. Goal: reduce inventory clutter and action list bloat in late game without breaking the castaway theme.
+- **Salvage reagent yields** — `affixReagentOutputs` is wired through the type system but the table is currently empty. Open question: should salvage be a meaningful path to imbuement reagents, or should reagents stay strictly expedition-locked?
 
 ---
 
@@ -126,8 +135,10 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 | **Construction** | Structures, buildings, platforms, stone-work |
 | **Farming** | Plot clearing, planting, tending, harvesting, seed saving |
 | **Navigation** | Improves expedition outcomes — discovery chance, loot quality, risk reduction |
-> **Smithing** is designed for late game (smelting, casting, forging metal tools) but not yet added as a skill. Will unlock when metal content exists.
->
+| **Combat** *(mainland)* | Trained by mainland expeditions. Milestone-only stat bonuses (offense/defense/life/attackSpeed/crit). Never the primary success determinant — gear and planning dominate. |
+| **Mining** *(mainland)* | Extracting ore from cliffs and hills. Higher levels gate richer veins (tin Mining 5, iron Mining 10) and give speed bonuses. |
+| **Smithing** *(mainland)* | Smelting and forging copper, bronze, iron, and steel. Drives the metal tier, including repair and salvage of equipment. |
+
 > **Preservation** was considered as a skill (drying, smoking, fermenting, sealing) but removed — its recipes are covered by Cooking and Crafting instead. May return if it gets enough distinct content to justify a standalone skill.
 
 ### Notes on Specific Skills
@@ -142,7 +153,11 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 - Reduction of bad-weather risk on long voyages
 - Chance of finding multiple things on a single expedition
 
-**Smithing** unlocks when the player acquires ore (found via water expeditions) and builds a crucible. It's a full mid-to-late game skill arc with its own progression: copper → bronze → iron. Not yet in the code as a skill.
+**Smithing** powers the mainland metal tier. Smelt copper and tin in the crucible (over the Kiln), alloy them into bronze, then advance to iron via the bloomery (a separate furnace requiring bellows and stone anvil), and finally steel (iron + heavy charcoal in a sealed crucible fired in the bloomery). Smithing also handles repair and salvage of all metal equipment.
+
+**Combat** is intentionally light-touch. Combat skill grants only small flat stat bonuses via authored milestones — gear, affixes, imbuement, and route choice are the real success drivers. This is the design's "optionality principle": a player who minimises combat investment can still progress through slower alternatives (mining, charting, smithing efficient gear).
+
+**Mining** gates the deeper ore tiers by skill level (tin Mining 5, iron Mining 10) but the *biome discovery* itself isn't level-gated — players can enter Coastal Cliffs / Inland Hills via either combat expeditions or the non-combat Cartographer's Table charting path.
 
 ---
 
@@ -155,16 +170,18 @@ Skill level gates are reserved for **optional/efficiency** unlocks, not core pro
 | Foraging 5 | Dig clay action (jungle interior) | Efficiency | ✅ |
 | Foraging 9 | Wild seed chance from dry grass (milestone) | Milestone bonus | ✅ |
 | Fishing 8 | Large fish chance from spear fishing (milestone) | Milestone bonus | ✅ |
+| Fishing 11 | Tidal Weir station (set / 8 min / collect) | Advanced technique | ✅ |
 | Crafting 6 | Gorge hook recipe | Advanced technique | ✅ |
 | Woodworking 10 | Fell large tree action | Advanced technique | ✅ |
-| Weaving 15 | Basket trap recipe | Advanced technique | *Not yet built* |
-| Weaving 35 | Fishing net recipe | Advanced technique | *Not yet built* |
-| Weaving 50 | Sail cloth recipe | Advanced technique | *Not yet built* |
-| Construction 25 | Stone tidal weir blueprint | Advanced technique | *Not yet built* |
+| Weaving 4 | Fiber Loom (efficient cordage) | Efficiency | ✅ |
+| Construction 13 | Crucible recipe | Advanced technique | ✅ |
 | Cooking 12 | Sealed clay jar recipe | Advanced technique | ✅ |
-| Construction 15 | Crucible recipe | Advanced technique | ✅ |
+| Any skill 15 | Routines unlock | System unlock | ✅ |
+| Mining 5 | Prospect tin deposit | Advanced technique | ✅ |
+| Mining 10 | Mine iron ore | Advanced technique | ✅ |
+| Combat 2–9 | Equipment tier requirements (copper Lv2–3, bronze 4–5, iron 6–7, steel 8–9) | Gear gates | ✅ |
 
-**Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade.
+**Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade. Smithing recipes (smelt/forge) intentionally have no skill-level gates either — material cost and building requirements are the gate.
 
 ---
 
@@ -271,13 +288,14 @@ Cordage is the multiplier: it enables lashing (tools), trapping, fishing lines, 
 | Tier | Action | Gates | Key Feature |
 |---|---|---|---|
 | 1 | Wade tidal pool | None | Available from start. Low yield. ✅ |
-| 2 | Spear fish | Bamboo spear (crafted) | Better yield, large fish at Fishing 8 milestone. ✅ |
-| 3 | Drop line | Fishing 8 + Gorge hook (Crafting 6 + stone flake) | 25% large fish chance, slower but reliable. ✅ |
-| 4 | Basket trap | Weaving 5 + Fishing 8 + obsidian blade → craft trap; Fishing 10 to deploy | **Semi-idle station: set → 2min timer → tap to collect.** ✅ |
-| 5 | Stone tidal weir | Fishing 20 + Construction 25 | **Semi-idle: set → timer → tap to collect.** *Not yet built.* |
-| 6 | Net fishing | Fishing 40 + Weaving 35 + net crafted | Bulk catch, rare fish chance. *Not yet built.* |
+| 1b | Comb rock pools | Rocky Shore + Rock Pool Cache building | Improved tidal yields, +3 tidal storage. ✅ |
+| 2 | Spear fish | Bamboo spear (crafted) | Reliable yield, +15% large fish and crab chance via milestone. ✅ |
+| 3 | Drop line | Gorge hook (Crafting 6, stone flake) | 60% large fish chance, slower but bulk-friendly. ✅ |
+| 4 | Basket trap | Woven basket trap (Weaving + Fishing 8, obsidian blade) | **Semi-idle station: set → 2 min timer → tap to collect.** ✅ |
+| 5 | Stone tidal weir | Fishing 11 + Stone Tidal Weir building | **Semi-idle station: set → 8 min timer → bulk yield.** ✅ |
+| 6 | Net fishing | Future | Bulk catch, rare fish chance. *Not yet built.* |
 
-Both the basket trap and stone weir are semi-idle: set them, let the timer run, tap to collect. The weir is simply larger, more permanent, and higher yield — a major construction investment that pays off in volume.
+Both the basket trap and stone weir are semi-idle: set them, let the timer run, tap to collect. The weir is larger, more permanent, and higher yield — a major construction investment that pays off in volume.
 
 ---
 
@@ -285,29 +303,31 @@ Both the basket trap and stone weir are semi-idle: set them, let the timer run, 
 
 ### Fire Tier
 ```
-Camp Fire  →  Stone Hearth  →  Cooking Hearth
+Camp Fire  →  Stone Hearth  →  (Cooking Hearth — future)
 ```
 
 | Building | Unlock Req | Adds | Status |
 |---|---|---|---|
-| Camp Fire | Bow drill kit (tool) | Cooking, hardening, basic fire crafting. +10 food storage. | ✅ |
-| Stone Hearth | Construction 14, requires camp fire + firing pit | Removes dry grass kindling from cooking. +10 food storage. | ✅ |
-| Cooking Hearth | Construction 20 | Full cooking range, smoking access | *Not yet built* |
+| Camp Fire | Bow drill kit (tool) + materials | Cooking, hardening, basic fire crafting. +10 food storage. | ✅ |
+| Stone Hearth | Materials + camp fire + firing pit | Removes dry grass kindling from cooking. +10 food storage. | ✅ |
+| Cooking Hearth | Future | Full cooking range, smoking access | *Not yet built* |
 
 ---
 
 ### Storage Tier
-```
-Palm Leaf Pile  →  Fenced Perimeter  →  Woven Basket  →  Raised Cache  →  Storage Hut
-```
 
-| Building | Unlock | Capacity / Notes |
-|---|---|---|
-| Palm Leaf Pile | Construction (palm frond ×8, driftwood ×2) | +10 all item storage | ✅ |
-| Fenced Perimeter | Construction 2 (bamboo cane ×6, cordage ×4, driftwood ×3) | Organization (no storage bonus) | ✅ |
-| Woven Basket | Weaving (palm frond ×5, cordage ×3). Repeatable, up to 20. | +1 non-food/non-large storage per basket | ✅ |
-| Raised Cache | Construction 10 | Larger, off-ground, rain proof | *Not yet built* |
-| Storage Hut | Construction 25 | Large, fully weatherproof | *Not yet built* |
+A wide layer of complementary storage buildings rather than a strict upgrade chain. Each has its own niche.
+
+| Building | Unlock | Capacity / Notes | Status |
+|---|---|---|---|
+| Palm Leaf Pile | Construction (palm fronds + driftwood) | +10 all item storage | ✅ |
+| Fenced Perimeter | Construction (bamboo + cordage + driftwood) | +5 large item storage; +5 max woven baskets | ✅ |
+| Woven Basket | Weaving (palm fronds + cordage). Repeatable, up to 20 (or 25 with fenced perimeter) | +1 non-food/non-large storage per basket | ✅ |
+| Log Rack | Construction (after large logs available) | +10 large item storage | ✅ |
+| Clay Storage Jar | Crafting (sealed clay jar derivative). Up to 5. | +1 food storage per jar | ✅ |
+| Storage Shelf | Construction (after thatched hut) | +5 storage for small non-food items; also unlocks +1 routine step + step counts | ✅ |
+| Rock Pool Cache | Construction (Rocky Shore biome) | +3 storage for fish / crabs / shells | ✅ |
+| Drying Rack | Crafting (bamboo + palm frond) | +10 dried item storage; gates fiber drying | ✅ |
 
 ---
 
@@ -321,9 +341,9 @@ Sleeping Mat  →  Hammock  →  Thatched Hut
 
 | Building | Unlock | Effect | Status |
 |---|---|---|---|
-| Sleeping Mat | Construction 4 (palm frond ×6, dry grass ×4) | Slows morale decay by 20% | ✅ |
-| Hammock | Construction 8 (cordage ×6, dried fiber ×4, driftwood ×2). Replaces sleeping mat. | Slows morale decay by 35% | ✅ |
-| Thatched Hut | Construction 11 (bamboo cane ×8, palm frond ×10, cordage ×6, clay ×4). Replaces hammock. | Slows morale decay by 50% | ✅ |
+| Sleeping Mat | Construction 4 + materials | Slows morale decay by 20% | ✅ |
+| Hammock | Construction 7 + materials. Replaces sleeping mat. | Slows morale decay by 35% | ✅ |
+| Thatched Hut | Construction 9 + materials. Replaces hammock. | Slows morale decay by 50%, +5 food storage | ✅ |
 
 Morale decays at 1 point per 2 minutes of active play. Comfort buildings stretch that interval (e.g. thatched hut → 1 point per 4 minutes). Players still use Shell Beads and Maintain Camp for active morale boosts; comfort is the passive mitigation layer.
 
@@ -333,13 +353,19 @@ Morale decays at 1 point per 2 minutes of active play. Comfort buildings stretch
 
 | Building | Unlock Req | Enables | Status |
 |---|---|---|---|
-| Drying Rack | Crafting (bamboo cane ×4, palm frond ×4) | Dried fiber. +10 dried storage. | ✅ Built |
-| Fiber Loom | Weaving 4 (bamboo cane ×4, cordage ×3, palm frond ×2) | Efficient cordage braiding (Braid Cordage: 2 dried fiber → 2 cordage). | ✅ Built |
-| Firing Pit | Construction (flat stone ×6, driftwood ×4, clay ×3) | Basic pottery (shape/fire clay). | ✅ Built |
-| Kiln | Construction 10 (clay ×10, flat stone ×8, driftwood ×6, cordage ×4). Requires firing pit. | Advanced pottery, crucible. | ✅ Built |
-| Smoking Rack | Crafting 8 + Hearth | Smoked fish/meat — long-duration expedition food | *Not yet built* |
-| Workbench | Crafting 15 | Crafting speed bonus, additional recipes | *Not yet built* |
-| Bone Station | Crafting 10 | Bone hooks, needles, awls | *Not yet built* |
+| Drying Rack | Crafting (bamboo + palm fronds) | Dried fiber. +10 dried storage. | ✅ |
+| Fiber Loom | Weaving 4 + materials | Efficient cordage braiding (Braid Cordage: 2 dried fiber → 2 cordage). | ✅ |
+| Weaving Frame | Weaving + Fiber Loom built | Sew Sail recipe — pandanus strips → ocean-going sail. | ✅ |
+| Soaking Pit | Weaving + Firing Pit | Soak Pandanus station — passive retting (5 min cycle). +5 pandanus storage. | ✅ |
+| Firing Pit | Construction (flat stone + driftwood + clay) | Basic pottery (shape/fire clay). | ✅ |
+| Pottery Wheel | Crafting + Firing Pit | Halves pot shaping time — Wheel-Throw / Kiln-Fire pot recipes. | ✅ |
+| Kiln | Construction 11 + Firing Pit | Advanced pottery, crucible, leather curing. | ✅ |
+| Charcoal Kiln | Construction + Kiln + Stone Hearth | Burn Charcoal station (3 large logs → 15 charcoal). +20 charcoal storage. | ✅ |
+| Cartographer's Table *(mainland)* | Construction 10 + materials | Charting stations to non-combat-discover Coastal Cliffs and Inland Hills; 10% faster Navigation expeditions. | ✅ |
+| Bloomery *(mainland)* | Construction + bellows tool + materials | Iron smelting and steel forging. | ✅ |
+| Smoking Rack | Future | Smoked fish/meat — long-duration expedition food | *Not yet built* |
+| Workbench | Future | Crafting speed bonus, additional recipes | *Not yet built* |
+| Bone Station | Future | Bone hooks, needles, awls | *Not yet built* |
 
 ---
 
@@ -347,10 +373,11 @@ Morale decays at 1 point per 2 minutes of active play. Comfort buildings stretch
 
 | Structure | Unlock | Notes | Status |
 |---|---|---|---|
-| Cleared plot | Construction 3 + digging stick (flat stone ×3, driftwood ×2, cordage ×2). Max 3. | Single crop slot. Semi-idle: plant → timer → tap to harvest. | ✅ Built |
-| Well | Construction 6 + digging stick (flat stone ×6, clay ×4, cordage ×3) | Water source required for taro and later crops. | ✅ Built |
-| Tended garden | Construction 7 + digging stick. Requires cleared plot + well. Replaces cleared plot. Max 3. | Irrigated, supports real crops (taro). | ✅ Built |
-| Farm plot | Construction 10 + digging stick. Requires tended garden + firing pit. Replaces tended garden. Max 3. | Advanced crops (bananas, breadfruit). | ✅ Built |
+| Cleared plot | Construction 3 + digging stick. Max 3. | Single crop slot. Semi-idle: plant → timer → tap to harvest. | ✅ |
+| Well | Digging stick + materials (no level gate) | Water source required for taro and later crops; required for the Fill Water Pot recipe. | ✅ |
+| Tended garden | Construction 6 + digging stick. Requires cleared plot + well. Replaces cleared plot. Max 3. | Irrigated, supports real crops (taro). | ✅ |
+| Farm plot | Construction 8 + digging stick. Requires tended garden + firing pit. Replaces tended garden. Max 3. | Advanced crops (bananas, breadfruit). | ✅ |
+| Pandanus Grove | Construction 10 + Farming 7 + well + farm plot | Auto-regrowing pandanus harvest station — no replanting. | ✅ |
 
 ---
 
@@ -428,8 +455,10 @@ Obsidian blade is the best cutting tool before metal — improves action speed a
 
 ### Vessel Progression
 ```
-Raft (coastal)  →  Dugout (near-shore)  →  Outrigger Canoe  →  Sailing Canoe (open water)
+Raft (coastal)  →  Dugout (near-shore)  →  Outrigger Canoe (open water — endgame)
 ```
+
+The vessel chain ends at the outrigger canoe, which fits a sail and outrigger float onto an existing dugout. The outrigger unlocks the **Oceanic Voyage** — the win condition.
 
 ### Raft ✅
 
@@ -437,49 +466,49 @@ The raft is an early, low-investment water vessel — enough to reach the nearby
 
 | Recipe | Skill Req | Inputs |
 |---|---|---|
-| Build raft | Construction 5 | Driftwood branch ×6, Cordage ×8, Bamboo cane ×4 |
+| Lash Bamboo Raft | Construction (no level gate) | Bamboo cane + cordage |
 
 ### Dugout ✅
 
-Long build process — the first real construction project.
+A multi-step construction project — the first real engineering effort.
 
 | Step | Skill Req | Inputs | Notes |
 |---|---|---|---|
 | 1. Fell large tree | Woodworking 10 (action) | Stone axe (tool) | Yields large log. Key level gate. |
-| 2. Char log interior | — (item-gated) | Large log ×1, Dry grass ×4, Coconut husk ×4, Driftwood ×4 | Camp fire required. Yields charred log. |
-| 3. Scrape hull | — (item-gated) | Charred log ×1, Shell adze (tool) | Yields shaped hull. |
-| 4. Assemble dugout | Construction (recipe, no level gate — gated by tree felling chain) | Shaped hull ×1, Bamboo cane ×4, Cordage ×6 | **Dugout complete** — near-shore expeditions |
+| 2. Char log interior | Item-gated | Large log + dry grass + driftwood/charcoal | Camp fire required. Yields charred log. |
+| 3. Scrape hull | Tool-gated | Charred log + shell adze | Yields shaped hull. |
+| 4. Assemble dugout | Construction (no level gate) | Shaped hull + cordage + bamboo cane | **Dugout complete** — Far Island expedition unlocked. |
 
-### Outrigger
+### Outrigger Canoe ✅
 
-| Component | Skill Req | Inputs |
-|---|---|---|
-| Outrigger float | Crafting 22 | Curved log + Cordage ×5 |
-| Outrigger boom | Crafting 22 | Bamboo ×4 + Cordage ×4 |
-| Assemble | Construction 22 | Dugout + float + boom |
+The endgame vessel — fits a sail (woven from pandanus strips) and an outrigger float onto an existing dugout. Building the outrigger triggers the **Voyage** phase. Pandanus is the bottleneck: dugout voyages return cuttings, the player establishes a grove or farm-plot crop, processes leaves into strips, and weaves them on the Weaving Frame into a sail.
 
-### Sailing Canoe
+| Step | Skill Req | Inputs | Notes |
+|---|---|---|---|
+| Sew Sail | Weaving + Weaving Frame | Pandanus strips + rope | One-time craft. |
+| Fit Outrigger & Sail | Construction | Dugout + sail + bamboo cane + rope | Replaces dugout building. Triggers Voyage phase. |
 
-| Component | Skill Req | Inputs |
-|---|---|---|
-| Mast + step | Construction 25, Crafting 25 | Hardwood + lashing |
-| Woven sail | Weaving 50, Crafting 25 | Sail cloth ×6 + bamboo battens |
-| Rigging | Crafting 25 | Cordage ×10 |
-| **Complete** | All above | Open water unlocked |
+The outrigger is the final vessel. There is no separate "sailing canoe" tier — the outrigger fills that role.
 
 ---
 
 ### Expedition Zones
 
-| Zone | Vessel Req | Food/Water Cost | RNG Notes | Status |
+| Zone | Vessel Req | Food/Water Cost | Notes | Status |
 |---|---|---|---|---|
-| **Explore beach** | None | 5 food | Discover coconut grove, rocky shore (requires coconut grove), or find flat stones. | ✅ |
-| **Explore interior** | None (requires coconut grove) | 8 food | Discover bamboo grove, jungle interior (clay deposits), find materials/shells. | ✅ |
-| **Sail nearby island** | Raft or Dugout | 3 food | Discover nearby island biome, find obsidian, wild seeds, taro corms, flat stones. | ✅ |
-| **Dugout voyage** | Dugout | 10 food, 3 water | Find banana shoots, breadfruit cuttings, obsidian, large logs, materials. | ✅ |
-| **Island reef** | Dugout | Food ×2, Water ×1 | New fish species, coral, sea urchin. | *Not yet built* |
-| **Island chain** | Sailing canoe | Food ×10 preserved, Water ×4 | Rare hardwoods, metal ore, new biomes. | *Not yet built* |
-| **Distant archipelago** | Sailing canoe | Food ×20 preserved, Water ×8 | Rarest loot, unique building unlocks, affix items. | *Not yet built* |
+| **Explore beach** | None | 4 food | Discover coconut grove, rocky shore (requires coconut grove). | ✅ |
+| **Explore interior** | None (requires coconut grove) | 6 food | Discover bamboo grove, jungle interior (clay deposits). | ✅ |
+| **Sail to nearby island** | Raft or Dugout | 7 food | Nearby island biome, obsidian, wild seeds, taro corms. | ✅ |
+| **Sail to far island** (Dugout Voyage) | Dugout | 10 food, 3 water | Banana shoots, breadfruit cuttings, pandanus cuttings, obsidian. | ✅ |
+| **Oceanic Voyage** | Outrigger Canoe | 10 voyage_provisions, 10 water | Victory expedition — ends the island arc. Returns spare jars. | ✅ |
+| **Coastal Ruins** *(mainland)* | Mainland unlocked | 8 food, 2 water | 3 combat stages. Native copper, raw hide, broken Tier-0 gear. Ruin Dust reagent. | ✅ |
+| **Tidal Caves** *(mainland)* | Mainland unlocked | 6 food, 2 water | 3 combat stages, wet damage. Discovers Coastal Cliffs (30%). Tidal Salt reagent. | ✅ |
+| **Overgrown Trail** *(mainland)* | Mainland unlocked | 10 food, 4 water | 3 combat stages, heat damage. Discovers Inland Hills (25%, requires Coastal Cliffs). Jungle Sap reagent. | ✅ |
+| **Flooded Quarry** *(mainland)* | Mainland unlocked | 10 food, 5 water | 3 combat stages, wet damage. Tin ore. Quarry Crystal reagent. | ✅ |
+| **Ridge Pass** *(mainland)* | Mainland unlocked | 12 food, 5 water | 3 combat stages, cold damage. Iron ore + charcoal. Ridge Frost reagent. | ✅ |
+| **Sunken Temple** *(mainland)* | Mainland unlocked | 15 food, 6 water | 3 combat stages, late-tier. Bronze ingots, idol unique. Temple Incense reagent. | ✅ |
+| **Volcanic Rift** *(mainland)* | Mainland unlocked | 18 food, 8 water | 3 combat stages, severe heat. Iron ore, obsidian, magma uniques. Volcanic Shard reagent. | ✅ |
+| **Distant archipelago** | Future | High-tier provisions | Rarer affix pools, deeper imbuement variants. | *Not yet built* |
 
 ### Navigation Skill Effects
 
@@ -496,114 +525,185 @@ High Navigation means you find things faster and better — not that you can go 
 ## TAB 8: FULL TECH TREE
 
 ```
-PHASE 0: BARE HANDS
+PHASE 0: BARE HANDS ✅
 │
-├── Forage: coconuts (coconut grove), driftwood branches,
-│           palm fronds (coconut grove), dry grass (rocky shore)
+├── Forage: coconuts (coconut grove), driftwood branches, palm fronds (coconut grove), dry grass (rocky shore)
 ├── Comb rocky shore: flat stones (20%), chert (15%)
-├── Wade tidal pool: shells, small fish (10%), crab (10%), large shell (1%)
+├── Wade tidal pool / Comb rock pools: shells, small fish, crab, large shell (rare)
 ├── Dig drainage trench (requires large shell, Construction XP)
-└── [Expedition] Explore Beach (5 food — discover coconut grove, then rocky shore)
+└── [Expedition] Explore Beach (4 food) → discover coconut grove, then rocky shore
     │
     ▼
-PHASE 1: BAMBOO TIER ✅
+PHASE 1: BAMBOO ✅
 │
-├── [Expedition] Explore Interior (8 food, requires coconut grove — discover bamboo grove, jungle interior)
+├── [Expedition] Explore Interior (6 food, requires coconut grove) → bamboo grove, jungle interior
 ├── Harvest bamboo cane → Split → Bamboo splinter
-├── Shred coconut husk → Rough fiber → Dry fiber (drying rack, crafting skill) → Twist/Braid → Cordage
-├── Bamboo knife (bamboo splinter)
-├── Shell beads (shells → morale +2, crafting XP)
-├── Shell adze (large shell + cordage + driftwood)
-├── Weave basket (palm fronds ×5 + cordage ×3 → woven basket building, repeatable)
-├── Maintain camp (cordage + driftwood → Construction XP + morale)
+├── Shred coconut husk → Rough fiber → Dry fiber (drying rack) → Twist/Braid → Cordage
+├── Bamboo knife, Shell beads (morale), Shell adze, Maintain camp
 │
 ├── FIRE CHAIN (parallel) ✅
-│   ├── Collect dry grass (rocky shore)
-│   ├── Craft bow drill kit → Light camp fire → Camp Fire [BUILDING: cook, harden, +10 food storage]
-│   ├── Bamboo spear (requires bamboo knife + camp fire) [ITEM TRIGGER: spear fishing]
-│   └── Digging stick (bamboo + driftwood + camp fire) [ITEM TRIGGER: farming]
-│
-├── SETTLEMENT ✅
-│   ├── Palm leaf pile (+10 all storage)
-│   ├── Drying rack (+10 dried storage, gates fiber drying)
-│   ├── Fenced perimeter (Construction 2)
-│   └── Fiber loom (Weaving 4, efficient cordage braiding)
+│   ├── Bow drill kit → Light camp fire → Camp Fire [BUILDING]
+│   ├── Bamboo spear (camp fire required) → Spear Fishing
+│   └── Digging stick → Farming chain
 │
 └── FISHING ✅
-    ├── Spear fish (spear crafted) ✅
-    ├── Drop line (Fishing 8 + gorge hook: Crafting 6 + stone flake) ✅
-    ├── Basket trap (Weaving 5 + Fishing 8 + obsidian blade → craft; Fishing 10 to deploy as station) ✅
-    └── Stone weir (Fishing 20 + Construction 25) ← NOT YET BUILT
+    ├── Spear fish → Drop line (gorge hook) → Basket trap (station) → Stone Tidal Weir (station, Fishing 11)
     │
     ▼
 PHASE 2: STONE & CLAY ✅
 │
-├── STONE TOOLS ✅
-│   ├── Collect chert (rocky shore, 15% from Comb Rocky Shore)
-│   ├── Craft hammerstone (flat stone ×2, materials only)
-│   ├── Strike stone flake → Knap stone blade (both require hammerstone tool)
-│   └── Stone axe (materials only: stone blade ×2 + driftwood ×2 + cordage ×3) ← PHASE GATE for large timber
+├── STONE TOOLS — Hammerstone → Stone flake → Stone blade → Stone axe (gate for large timber)
+├── POTTERY — Shape pot → Fire (firing pit, 70%) / Wheel-throw (pottery wheel) / Kiln-fire (90%) → Sealed jar → Crucible
+├── PANDANUS FIBER — Cuttings (dugout voyage) → Grove/Farm plot → leaves → dry/soak → strips → cordage/rope/Sail
+├── CHARCOAL — Charcoal Kiln station: 3 large logs → 15 charcoal (alternate fuel, +20 storage)
+└── FARMING — Cleared plot → Tended garden → Farm plot. Wild seeds, taro, bananas, pandanus, breadfruit.
+    │
+    ▼
+PHASE 3: MARITIME ✅
 │
-├── [Expedition] Explore Interior → Discover Bamboo Grove, Jungle Interior ✅
-│   └── Dig clay (Foraging 5), Collect fresh water (requires fired clay pot)
+├── Raft → Sail to Nearby Island (obsidian, wild seeds, taro corms)
+├── Fell large tree (Woodworking 10) → Char log → Scrape hull (shell adze) → Assemble dugout
+└── Dugout → Sail to Far Island (banana shoots, breadfruit cuttings, pandanus cuttings)
+    │
+    ▼
+PHASE 4: VOYAGE ✅
 │
-├── POTTERY ✅
-│   ├── Shape clay pot → Fire clay pot (firing pit) → Seal clay jar (Cooking 12, firing pit)
-│   ├── Firing Pit [BUILDING: materials only]
-│   ├── Kiln [BUILDING: Construction 10, requires firing pit]
-│   └── Crucible (Construction 15 + Kiln) ← gates future SMITHING
+├── Pack Voyage Provisions (5 food + sealed jar)
+├── Sew Sail (pandanus strips on weaving frame)
+├── Fit Outrigger & Sail → Outrigger Canoe [VESSEL TIER 3]
+└── Oceanic Voyage (10 voyage_provisions + 10 water) → VICTORY — landfall on the mainland
+    │
+    ▼  (player opt-in — experimental)
+PHASE 5: MAINLAND ✅
 │
-├── MARITIME ✅
-│   ├── Raft (Construction 5) → Sail Nearby Island expedition
-│   │   └── May find: nearby island biome, OBSIDIAN, wild seeds, taro corms
-│   │       └── Obsidian blade (materials only, requires obsidian item) ← best pre-metal cutting tool
-│   ├── Fell large tree (Woodworking 10, stone axe, jungle interior) ← KEY LEVEL GATE
-│   ├── Dugout chain: char log (camp fire) → scrape hull (shell adze) → assemble (Construction 8)
-│   └── Dugout voyage expedition (5 food + 3 water) → banana shoots, breadfruit cuttings
+├── EXPEDITIONS (combat, multi-stage) ✅
+│   ├── Coastal Ruins, Tidal Caves (entry tier — copper/native copper)
+│   ├── Overgrown Trail, Flooded Quarry, Ridge Pass (mid tier — bronze/iron ores)
+│   └── Sunken Temple, Volcanic Rift (high risk — bronze/iron, unique chase rewards)
 │
-├── FARMING ✅
-│   ├── Digging stick (fire-hardened tool, requires camp fire)
-│   ├── Cleared plot (Construction 3) → Well (Construction 6) → Tended garden (Construction 7) → Farm plot (Construction 10)
-│   ├── Plant wild seeds (station: 3 seeds → fiber, root vegetables, seed chance)
-│   ├── Cultivate taro (Farming 5, requires well, taro corms from nearby island expedition)
-│   ├── Grow bananas (Farming 10, requires farm plot, shoots from dugout voyage)
-│   └── Grow breadfruit (Farming 12, requires farm plot, cuttings from dugout voyage)
+├── BIOME DISCOVERY
+│   ├── Combat path — Coastal Cliffs from Tidal Caves; Inland Hills from Overgrown Trail
+│   └── Non-combat path — Cartographer's Table charting stations (slow, multi-session)
 │
-├── COOKING ✅
-│   ├── Cook Fish / Cook Crab (Cooking 2) / Cook Large Fish (Cooking 4) / Cook Root Vegetable (Cooking 3)
-│   ├── Cook Taro (Cooking 5) / Roast Breadfruit (Cooking 8)
-│   ├── Stone Hearth (Construction 14, requires camp fire + firing pit) → removes kindling from cooking
-│   └── Voyage Provisions (sealed clay jar + 5 food → efficient expedition fuel)
+├── MINING — Prospect copper, Prospect tin (Mining 5), Mine iron (Mining 10)
 │
-└── FUTURE SETTLEMENT
-    ├── Cooking Hearth (Construction 20)
-    ├── Smoking rack (preserved food for expeditions)
-    └── Workbench, Bone station
-        │
-        ▼
-PHASE 3: ADVANCED MARITIME — NOT YET BUILT
+├── SMITHING ✅
+│   ├── Crucible recipes — Smelt copper, Smelt tin, Alloy bronze
+│   ├── Bloomery (building) — Smelt iron bloom + bellows + stone anvil → Hammer bloom → Iron ingot
+│   └── Forge steel (iron + heavy charcoal in sealed crucible, fired in bloomery)
 │
-├── Outrigger (Construction 22)
-├── Sailing Canoe (Weaving 50 + Crafting 25) ← OPEN WATER
+├── EQUIPMENT (4 gear tiers) ✅
+│   ├── Tier 0 — Improvised: fire-hardened spear, stone club, obsidian dagger, woven fiber vest, bamboo sandals, bamboo buckler
+│   ├── Tier 1 — Copper: copper spear, copper axe, copper shield + hide gear set
+│   ├── Tier 2 — Bronze: sword, helm, cuirass, shield (Greek-hoplite set)
+│   ├── Tier 3 — Iron: full armor set (sword, shield, helm, cuirass, greaves, boots)
+│   └── Tier 4 — Steel: full endgame set
 │
-├── WEAVING DEPTH
-│   ├── Trap (Weaving 15) → Net (Weaving 35)
-│   └── Sail cloth (Weaving 50) ← gates SAILING CANOE
+├── METAL SURVIVAL TOOLS — Copper knife, Bronze axe, Iron pickaxe, Steel pickaxe, Steel knife (speed bonuses on gathering/crafting)
 │
-└── Island chain expeditions
-    └── Metal ore → Smithing skill → Copper → Bronze → Iron
-TAB 9: FUTURE SYSTEMS
-System
-Notes
-Metal tier
-Ore found via island chain expeditions. Crucible + Kiln required. Smithing skill: copper → bronze → iron. Full additional act.
-Combat
-Arrives with island chain (ruins, hostile wildlife). Bone/stone weapons already in tree as stepping stones.
-Automation
-Late game — NPC helpers for passive structures. Extends the check-in loop at scale.
-Rare loot with affixes
-Island chain and distant archipelago loot tables. Diablo 2-style rare drops reward long maritime investment.
-Magic
-Seeded early as strange expedition finds (carved idol, odd herb). Pays off much later.
-Other people / lore
-No signs of other people until lore is deliberately introduced. The island and surroundings are pristine. Deferred.
+└── DEPTH SYSTEMS ✅
+    ├── Affixes — 25+ families, expedition-exclusive variants, condition multipliers (broken/damaged/worn/pristine)
+    ├── Repair — Smithing recipe per material tag (wood/stone/fiber/hide/metal); upgrades condition by one step
+    ├── Salvage — Break down gear into base materials + (future) reagent yields
+    └── Imbuement — One stat per item, permanent. 7 reagents, one per mainland expedition.
+```
+
+---
+
+## TAB 9: MAINLAND
+
+The mainland is an experimental post-victory phase. Entry is gated by the Oceanic Voyage win and an explicit opt-in modal that warns the content is experimental and may be reset between releases. Mainland progress is tracked under separate flags so it can be wiped without affecting the island save.
+
+### Design pillars
+
+1. **Optionality** — Combat, mining, smithing are *optional* efficiency levers. The island game stands on its own. A player who only dabbles in mainland can still progress (the Cartographer's Table provides a non-combat way to discover mining biomes; the smithing chain has no skill-level gates beyond materials and buildings).
+2. **Gear over level** — Combat skill provides only small milestone stat bonuses. Win rates are dominated by gear, affixes, condition, route choice, and supplies — not raw level.
+3. **Survival economy stays alive** — Food and water remain real costs. Mainland expeditions have steep food/water budgets, keeping fishing and farming permanently relevant.
+4. **Tonal shift, deliberate** — The island survival phase aims for ethnographic realism. The mainland intentionally shifts toward fantasy-RPG: imbuing reagents (Ridge Frost, Quarry Crystal), supernatural enemies (Temple Guardian, Volcanic Horror), environmental hazards modeled as combat encounters. Metal recipes remain metallurgically defensible (bronze needs smelted tin and copper, not raw ore).
+
+### Combat resolution
+
+Mainland expeditions use a deterministic round-based simulation (see `src/engine/combat.ts`):
+
+- Player and enemies trade hits each round based on `attackSpeed` (0.05 hits/round per point above 1.0).
+- Player damage = `offense * (1 - enemy_defense_reduction)`, with crit chance/multiplier from affixes.
+- Enemy damage splits across damage types (physical / heat / cold / wet); each portion is reduced by the matching resist stat. Endurance grants flat damage reduction on top.
+- All reductions use diminishing returns: `stat * scale / (stat * scale + 100)`.
+- Speed grants dodge chance.
+- Win the encounter by reducing all-stage enemies to 0 HP before the round limit.
+- Multi-stage expeditions carry HP between stages.
+
+The expedition panel runs **Monte Carlo simulations** (200 runs per encounter, seeded so the same loadout always produces the same preview) and shows a win-rate estimate plus a stage-clear distribution before commit.
+
+Outcome grades:
+- **Success** — full clear with ≥50% HP. Drops 100%, XP 120%.
+- **Partial** — clear with low HP, or partial-stage clear. Drops 50–85%, XP 80–100%.
+- **Failure** — wipe stage 1. Drops 15%, XP 60%.
+
+### Equipment system
+
+| Slot | Items |
+|---|---|
+| Weapon | Spears, daggers, swords, axes, harpoons, vine lash |
+| Off-hand | Shields, idols, bucklers |
+| Head | Helms, caps, crowns |
+| Body | Vests, cuirasses |
+| Legs | Wraps, leggings, greaves |
+| Feet | Sandals, boots |
+| Trinket | Medallions, necklaces |
+
+**Conditions** apply a multiplier to all stats (including affixes and imbuement): pristine 1.0×, worn ~0.8×, damaged ~0.5×, broken 0× (cannot equip).
+
+**Affixes** roll within bounded ranges. Families: terrain (heat/cold/wet resist), offense, defense, utility, life, attack speed, crit, plus expedition-exclusive variants (e.g. `affix_ruin_walker` only rolls from Coastal Ruins drops). Each item has a `maxAffixes` limit (typically tier + 1).
+
+**Repair** recipes are tagged by material (wood / stone / fiber / hide / metal) and improve condition one step per use. Smithing-skill scaling is wired in but no current recipe has a level gate (recipes were simplified for accessibility — see 2026-04-11 changelog).
+
+**Salvage** destroys gear and returns base materials scaled by condition (pristine 100% → broken 25%). The reagent-yield path is wired but currently empty.
+
+**Imbuement** consumes one of seven rare reagents (one per mainland expedition) to permanently grant a flat stat bonus to a single item. One imbue per item, ever.
+
+| Reagent | Stat | Source |
+|---|---|---|
+| Ruin Dust | +5 defense | Coastal Ruins |
+| Tidal Salt | +7 wet resist | Tidal Caves |
+| Jungle Sap | +5 offense | Overgrown Trail |
+| Quarry Crystal | +15 life | Flooded Quarry |
+| Ridge Frost | +7 cold resist | Ridge Pass |
+| Temple Incense | +5 endurance | Sunken Temple |
+| Volcanic Shard | +7 heat resist | Volcanic Rift |
+
+### Smithing chain
+
+```
+Crucible (Construction 13, kiln-built)
+    ├── Smelt Copper        (copper ore → copper ingot)
+    ├── Smelt Tin           (tin ore → tin ingot)
+    └── Alloy Bronze        (Cu + Sn ingots → bronze ingot)
+
+Bloomery (building, requires bellows tool)
+    ├── Smelt Iron Bloom    (iron ore → iron bloom, in bloomery)
+    ├── Hammer Iron Bloom   (bloom → iron ingot, requires stone anvil)
+    └── Forge Steel         (iron + 8 charcoal in sealed crucible — slow, costly)
+```
+
+Forge recipes consume ingots + materials → equipment outputs (one-time crafts). All forge recipes are gated by the kiln (bronze tier) or bloomery (iron+); no skill-level gates apply.
+
+### Mainland expedition table
+
+See **TAB 7: Expedition Zones**. Briefly: 7 expeditions across three difficulty bands (low / mid / high-risk), each a 3-stage gauntlet with typed damage, base resource drops, equipment drops (often broken), and a unique chase reward + exclusive imbuement reagent.
+
+---
+
+## TAB 10: FUTURE SYSTEMS
+
+| System | Notes |
+|---|---|
+| **Distant archipelago expeditions** | Higher-tier mainland expeditions with deeper affix pools, rarer uniques. |
+| **Magic / supernatural** | Currently hinted at via mainland flavor (idols, reagents, supernatural enemies). Could pay off as a distinct skill or item subsystem. |
+| **Automation** | Late-game NPC helpers or upgraded stations that run while away. Extends the check-in loop. |
+| **More uniques** | Fixed-affix chase items per expedition. Currently 5 uniques across mainland — room for more. |
+| **Limited imbuement variants** | Multiple reagents per stat, narrow-band re-rolls. Currently only one reagent → one stat. |
+| **Net fishing** | Higher-tier fishing alternative to basket trap and stone weir. Sketched in early designs but not built. |
+| **Smoking Rack / Cooking Hearth** | Preserved food for very long voyages. Currently the sealed clay jar covers expedition fuel. |
+| **Workbench / Bone Station** | Crafting speed bonuses and bone tool subcategory. Bone tools were sketched in early design but not built. |
+| **Other people / lore** | The mainland's ruins, idols, and sentinels imply prior civilizations. Living factions remain deliberately absent — no NPCs or hostile humans. |

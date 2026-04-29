@@ -1,5 +1,7 @@
 # Plan: Stone Tools + Water/Clay Jar Gate + Dugout Canoe
 
+> **Status: SHIPPED.** This is a historical implementation plan; the work it describes is fully built. See `seabound-progression-v2.md` for the live progression design and current state. The dugout-tier "Explore Island Reef" expedition outlined in Step 6 was reworked into the broader Far Island / Oceanic Voyage maritime chain rather than shipped under that name.
+
 ## Summary
 
 Add the stone tool chain, water resource (clay jars only), and dugout canoe. Water costs apply **only to dugout-tier expeditions**, making clay jars the gate for the next exploration tier.

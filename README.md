@@ -8,6 +8,8 @@ Choose an action, watch the progress bar fill, collect resources, level up skill
 
 Unlike many such survival craft games early progression takes place on a tropical island start so early tech is bamboo focused, weaving baskets, foraging for coconuts and tidewater pool fishing, building shade. Later the player can explore nearby islands to get access to obsidian for better early game tools.
 
+The first arc ends with an outrigger canoe and an oceanic voyage that lands the castaway on the mainland. From there an experimental post-victory phase opens up: mining, smithing (copper → bronze → iron → steel), equipment with affixes and uniques, and turn-based expedition combat.
+
 ## Core Gameplay Loop
 
 1. **Choose an action** — collect coconuts, harvest bamboo, fish, craft, explore
@@ -57,12 +59,13 @@ Some areas may be gated by combat strength, required consumables (food), or skil
 
 As the player progresses, the camp gradually grows into a small settlement. New buildings unlock new systems:
 
-- **Campfire** — cooking, warmth, crafting stations
-- **Clay firing pit → Kiln** — pottery, bricks, smelting
-- **Workbenches** — better tool crafting
-- **Farms** — crop growing for food and materials
-- **Workshops** — specialized crafting stations
-- **Storage buildings** — expanded inventory
+- **Campfire / Stone Hearth** — cooking, warmth, fire-hardened tools
+- **Firing Pit → Kiln → Bloomery** — pottery, crucibles, smelting and iron-smelting
+- **Pottery Wheel, Charcoal Kiln, Cartographer's Table** — specialized production stations
+- **Farms** — cleared plot → tended garden → farm plot, plus pandanus grove
+- **Maritime** — bamboo raft → dugout canoe → outrigger canoe (the way home)
+- **Comfort tier** — sleeping mat → hammock → thatched hut (slows morale decay)
+- **Storage buildings** — palm leaf pile, woven baskets, log rack, storage shelf, clay storage jars
 
 ## Early Game Progression
 
@@ -89,7 +92,18 @@ With some food and water you start exploring and find a bamboo grove which unloc
 
 Soon you are building shelter, weaving baskets and transplanting fruit trees.
 
-Over time your camp grows into a small settlement with workshops, farms, and specialized production.
+Over time your camp grows into a small settlement with workshops, farms, and specialized production. Eventually you fit out an outrigger canoe and sail for the mainland, where an experimental post-victory phase opens up combat, mining, and metalworking.
+
+## Mainland Phase (post-victory, experimental)
+
+After completing the Oceanic Voyage, players can opt into a mainland sandbox that adds:
+
+- **Mining** — copper, tin, and iron deposits in coastal cliffs and inland hills
+- **Smithing** — full historical metal progression: copper → bronze → iron → steel
+- **Equipment with affixes** — weapons, armor, shields, trinkets across four tiers, with rolled affix bonuses, item conditions (broken / damaged / worn / pristine), repair, salvage, and one-shot imbuement from rare expedition reagents
+- **Turn-based expedition combat** — multi-stage encounters resolved as round-by-round simulations (no twitch). Player vs enemy HP exchanges with typed damage (physical, heat, cold, wet) and resists. Win-rate previews via Monte Carlo so you can plan loadouts before committing
+- **Mainland expeditions** — coastal ruins, tidal caves, overgrown trails, flooded quarry, windswept ridge, sunken temple, volcanic rift. Each has a unique chase reward and an exclusive imbuement reagent
+- **Cartographer's Table** — non-combat path to discover mainland mining biomes via slow charting sessions, for players who don't want to fight
 
 ## Design Goals
 
@@ -102,21 +116,23 @@ Over time your camp grows into a small settlement with workshops, farms, and spe
 - Systems that unlock gradually and interconnect over time
 - A sandbox endgame where players show off found and crafted gear or cool modular automations
 
-## MVP Scope
+## What's Built
 
-- Gathering actions with progress timers
-- Crafting recipes
-- Skill leveling with unlock thresholds
-- Exploration system
-- Settlement upgrades
+- Gathering actions with progress timers and offline progress
+- Crafting and building recipes (130+) across 12 skills
+- Six island phases (Bare Hands → Bamboo → Fire → Stone & Clay → Maritime → Voyage) plus the post-victory mainland sandbox
+- Skill leveling with hand-authored milestones (speed, drop chances, double output, combat stat bonuses)
+- Expedition system — 5 island expeditions for biome discovery, 7 mainland expeditions with multi-stage combat
+- Settlement with 29 buildings (cooking, storage, comfort, processing, farming, maritime, mainland)
+- Routines — chain 2+ actions into repeating sequences, unlocked at any skill level 15
+- Equipment & affix system — 4 gear tiers (improvised → copper → bronze → iron → steel), 25+ affix families, repair, salvage, imbuement
+- Mod system — full game data is exportable/importable as a `.zip` data pack with custom icons
 
 ## Future Ideas
 
-- Rare loot with affixes (Diablo 2 style)
-- Equipment and gear
-- Combat system
-- Magic
-- Automation / idle upgrades
+- Magic / supernatural systems hinted at in the mainland phase
+- Automation / NPC helpers for late-game stations
+- Distant archipelago expedition tier with rarer affix pools
 
 ## Tech
 

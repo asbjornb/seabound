@@ -1,5 +1,7 @@
 # Mainland Expansion Spec — Expedition Combat, Loot, Mining & Smithing
 
+> **Status: SHIPPED.** Every checklist item in `TODO-mainland-combat.md` is complete. The mainland phase, round-based expedition combat, equipment / affix / condition system, repair, salvage, imbuement, full metal progression (copper → bronze → iron → steel), and 7 mainland expeditions are all live. This document is preserved as the original design spec that drove the implementation. For the current live state see the **TAB 9: MAINLAND** section of `seabound-progression-v2.md`.
+
 ## Vision
 
 After the current outrigger expedition victory state, players can choose **Keep Playing** to enter an experimental mainland phase. This phase adds ARPG-inspired expedition combat and equipment planning while preserving SeaBound's survival/economy identity.

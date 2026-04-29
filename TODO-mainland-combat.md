@@ -1,5 +1,7 @@
 # Mainland Expedition Combat — Implementation Todo
 
+> **Status: COMPLETE.** Every section below has shipped. See `seabound-progression-v2.md` (TAB 9: MAINLAND) for the live design and current state.
+
 Tracks progress on the [Mainland Expedition Combat Spec](plan-mainland-expedition-combat.md). Each section maps to the spec's numbered sections.
 
 ## 0) Product Framing & Safety
