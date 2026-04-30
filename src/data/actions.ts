@@ -239,7 +239,6 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "flat_stone", amount: 1, chance: 0.1 },
     ],
     requiredBiome: "coastal_cliffs",
-    requiredSkillLevel: 5,
     xpGain: 22,
   },
   {
@@ -254,7 +253,6 @@ export const ACTIONS: ActionDef[] = [
       { resourceId: "flat_stone", amount: 1, chance: 0.15 },
     ],
     requiredBiome: "inland_hills",
-    requiredSkillLevel: 10,
     xpGain: 35,
   },
 ];
