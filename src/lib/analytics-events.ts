@@ -344,7 +344,7 @@ const SNAPSHOT_MILESTONES = new Set([
   "phase_voyage",
   "victory",
 ]);
-const SNAPSHOT_PROBABILITY = 0.5;
+const SNAPSHOT_PROBABILITY = 0.2;
 const SNAPSHOT_FLAG_PREFIX = "seabound_save_snapshot_sent_";
 
 function maybeUploadSaveSnapshot(state: GameState, milestoneId: string): void {
