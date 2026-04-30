@@ -20,7 +20,6 @@ import { LogPanel } from "./components/LogPanel";
 import { ModPanel } from "./components/ModPanel";
 import { NotificationToast } from "./components/NotificationToast";
 import { ResourcePanel } from "./components/ResourcePanel";
-import { RoutinesPanel } from "./components/RoutinesPanel";
 import { SearchPanel } from "./components/SearchPanel";
 import { SettlementPanel } from "./components/SettlementPanel";
 import { SkillsPanel } from "./components/SkillsPanel";
@@ -31,10 +30,9 @@ import { GameIcon } from "./components/GameIcon";
 import { ItemLookupWithBrowse, useOpenBrowse } from "./components/ItemLookup";
 import { getActiveModId } from "./data/modding";
 import { isQueueUnlocked, getMaxQueueSize } from "./data/queue";
-import { isRoutinesUnlocked } from "./data/routines";
 import { CombatLogModal } from "./components/CombatLogModal";
 import { trackCombatLogOpen } from "./lib/analytics-events";
-import { CombatLogEntry, DiscoveryEntry, QueuedAction, Routine, RoutineStep } from "./data/types";
+import { CombatLogEntry, DiscoveryEntry, QueuedAction } from "./data/types";
 import { getCurrentPhase, PhaseInfo } from "./engine/phases";
 import {
   GameScreen,
@@ -79,20 +77,17 @@ function getTabLabel(tab: GameTab, screen: GameScreen): string {
   return tab.charAt(0).toUpperCase() + tab.slice(1);
 }
 
-function getQueuedActionName(q: QueuedAction, routines: Routine[]): string {
+function getQueuedActionName(q: QueuedAction): string {
   if (q.actionType === "gather") {
     return getActionById(q.actionId)?.name ?? q.actionId;
   }
   if (q.actionType === "expedition") {
     return getExpeditionById(q.actionId)?.name ?? q.actionId;
   }
-  if (q.actionType === "routine") {
-    return routines.find((r) => r.id === q.actionId)?.name ?? q.actionId;
-  }
   return getRecipeById(q.actionId)?.name ?? q.actionId;
 }
 
-function getQueuedActionIcon(q: QueuedAction, routines: Routine[]): string {
+function getQueuedActionIcon(q: QueuedAction): string {
   if (q.actionType === "gather") {
     const action = getActionById(q.actionId);
     if (action && action.drops.length > 0) return action.drops[0].resourceId;
@@ -105,30 +100,8 @@ function getQueuedActionIcon(q: QueuedAction, routines: Routine[]): string {
     }
   } else if (q.actionType === "expedition") {
     return q.actionId;
-  } else if (q.actionType === "routine") {
-    const routine = routines.find((r) => r.id === q.actionId);
-    if (routine && routine.steps.length > 0) {
-      return getQueuedActionIcon({ actionId: routine.steps[0].actionId, actionType: routine.steps[0].actionType }, routines);
-    }
-    return "tab_routines";
   }
   return q.actionId;
-}
-
-function getStepIcon(step: RoutineStep): string {
-  if (step.actionType === "gather") {
-    const action = getActionById(step.actionId);
-    if (action && action.drops.length > 0) return action.drops[0].resourceId;
-    return "biome_beach";
-  }
-  const recipe = getRecipeById(step.actionId);
-  if (recipe) {
-    if (recipe.output) return recipe.output.resourceId;
-    if (recipe.toolOutput) return recipe.toolOutput;
-    if (recipe.buildingOutput) return recipe.buildingOutput;
-    return recipe.id;
-  }
-  return "tab_craft";
 }
 
 function GuideHeaderButton() {
@@ -359,11 +332,6 @@ export default function App() {
     () => projectQueueState(game.state),
     [game.state]
   );
-  const routinesUnlocked = useMemo(
-    () => isRoutinesUnlocked(game.state),
-    [game.state]
-  );
-
   const hasEquipment = game.state.equipmentInventory.length > 0;
 
   const visibleTabs = useMemo(() => {
@@ -378,7 +346,6 @@ export default function App() {
       buildingCount: game.state.buildings.length,
       availableStationCount: screen === "mainland" ? 0 : game.availableStations.length,
       deployedStationCount: screen === "mainland" ? 0 : game.state.stations.length,
-      routinesUnlocked: screen === "mainland" ? false : routinesUnlocked,
       gatherActionCount: gatherActions.length,
       screen,
     });
@@ -394,7 +361,6 @@ export default function App() {
     game.state.buildings.length,
     game.availableStations.length,
     game.state.stations.length,
-    routinesUnlocked,
     screen,
   ]);
 
@@ -457,14 +423,6 @@ export default function App() {
       game.startExpedition(expedition);
     }
   }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startExpedition, game.queueAction]);
-
-  const handleStartRoutine = useCallback((routineId: string) => {
-    if (queueMode && game.state.currentAction && game.state.actionQueue.length < maxQueueSize) {
-      game.queueAction({ actionId: routineId, actionType: "routine" });
-    } else {
-      game.startRoutine(routineId);
-    }
-  }, [queueMode, game.state.currentAction, game.state.actionQueue.length, maxQueueSize, game.startRoutine, game.queueAction]);
 
   return (
     <ItemLookupWithBrowse state={game.state}>
@@ -657,30 +615,12 @@ export default function App() {
                 <div className="action-queue-row">
                   <span className="queue-label">Next:</span>
                   <div className="queued-actions">
-                    {game.state.actionQueue.map((q, i) => {
-                      if (q.actionType === "routine") {
-                        const routine = game.state.routines.find((r) => r.id === q.actionId);
-                        return (
-                          <span key={i} className="queued-action-tag queued-routine-tag">
-                            <span className="queued-routine-label">{routine?.name ?? q.actionId}</span>
-                            <span className="queued-routine-steps">
-                              {routine?.steps.map((step, idx) => (
-                                <span key={idx} className="queued-routine-step">
-                                  <GameIcon id={getStepIcon(step)} size={12} />
-                                  {idx < (routine?.steps.length ?? 0) - 1 && <span className="queued-routine-arrow">{"\u2192"}</span>}
-                                </span>
-                              ))}
-                            </span>
-                          </span>
-                        );
-                      }
-                      return (
-                        <span key={i} className="queued-action-tag">
-                          <GameIcon id={getQueuedActionIcon(q, game.state.routines)} size={14} />
-                          {getQueuedActionName(q, game.state.routines)}
-                        </span>
-                      );
-                    })}
+                    {game.state.actionQueue.map((q, i) => (
+                      <span key={i} className="queued-action-tag">
+                        <GameIcon id={getQueuedActionIcon(q)} size={14} />
+                        {getQueuedActionName(q)}
+                      </span>
+                    ))}
                     <button className="queue-clear-btn" onClick={game.clearQueue} title="Clear queue">
                       ✕
                     </button>
@@ -876,17 +816,6 @@ export default function App() {
                 expeditions={screenExpeditions}
                 state={game.state}
                 onStart={handleStartExpedition}
-              />
-            )}
-            {activeTab === "routines" && (
-              <RoutinesPanel
-                state={game.state}
-                availableActions={game.availableActions}
-                availableRecipes={game.availableRecipes}
-                onSaveRoutine={game.saveRoutine}
-                onDeleteRoutine={game.deleteRoutine}
-                onStartRoutine={handleStartRoutine}
-                onStopRoutine={game.stopRoutine}
               />
             )}
             {activeTab === "skills" && <SkillsPanel state={game.state} />}

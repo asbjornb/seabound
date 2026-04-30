@@ -103,9 +103,6 @@ interface AnalyticsEvent {
   isNewPlayer?: boolean;
   screenWidth?: number;
   screenHeight?: number;
-  // Routine fields
-  stepCount?: number;
-  reason?: string;
 }
 
 interface PlayerSummary {
@@ -220,7 +217,7 @@ async function handleAnalyticsSummary(
   // Build milestone funnel
   const milestoneIds = [
     "phase_bamboo", "phase_fire", "phase_stone_clay",
-    "raft_built", "first_skill_5", "first_routine_created",
+    "raft_built", "first_skill_5",
     "first_skill_10", "phase_maritime", "dugout_built",
     "first_skill_15", "outrigger_built", "phase_voyage", "victory",
   ];
@@ -281,25 +278,6 @@ async function handleAnalyticsSummary(
     }
   }
 
-  // Routine adoption + stop-reason breakdown
-  const routinePlayersStarted = new Set<string>();
-  const routineStepCounts: number[] = [];
-  let routineTotalStarts = 0;
-  const routineStopReasons: Record<string, number> = {
-    manual: 0,
-    output_full: 0,
-    cant_proceed: 0,
-  };
-  for (const e of events) {
-    if (e.event === "routine_started") {
-      routineTotalStarts++;
-      if (e.playerId) routinePlayersStarted.add(e.playerId);
-      if (typeof e.stepCount === "number") routineStepCounts.push(e.stepCount);
-    } else if (e.event === "routine_stopped" && e.reason) {
-      routineStopReasons[e.reason] = (routineStopReasons[e.reason] ?? 0) + 1;
-    }
-  }
-
   // Returning players
   const returningPlayers = [...players.values()].filter((p) => p.sessions > 1).length;
 
@@ -325,15 +303,6 @@ async function handleAnalyticsSummary(
     funnel,
     dropOff,
     victories: [...players.values()].filter((p) => p.victory).length,
-    routines: {
-      playersStarted: routinePlayersStarted.size,
-      adoptionRate: totalPlayers > 0
-        ? Math.round((routinePlayersStarted.size / totalPlayers) * 100)
-        : 0,
-      totalStarts: routineTotalStarts,
-      medianStepCount: median(routineStepCounts),
-      stopReasons: routineStopReasons,
-    },
   };
 
   return json(summary, 200, cors);
