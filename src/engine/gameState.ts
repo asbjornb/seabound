@@ -126,8 +126,6 @@ export function createInitialState(): GameState {
     seenLoreNotes: [],
     activePlayTimeMs: 0,
     sentMilestones: [],
-    routines: [],
-    activeRoutine: null,
     actionQueue: [],
     queueMode: false,
     equipmentInventory: [],
@@ -323,16 +321,16 @@ export function normalizeGameState(raw: unknown): GameState | null {
   if (!loaded.sentMilestones) {
     loaded.sentMilestones = [];
   }
-  // Migration: ensure routines fields exist
-  if (!loaded.routines) {
-    loaded.routines = [];
-  }
-  if (loaded.activeRoutine === undefined) {
-    loaded.activeRoutine = null;
-  }
-  // Migration: ensure actionQueue exists
+  // Routines were removed but their save data is preserved untouched on
+  // `loaded.routines` / `loaded.activeRoutine` so the feature can be revived.
+  // Migration: ensure actionQueue exists, and strip any legacy "routine"-typed entries
   if (!loaded.actionQueue) {
     loaded.actionQueue = [];
+  } else {
+    loaded.actionQueue = loaded.actionQueue.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (q: any) => q && q.actionType !== "routine"
+    );
   }
   // Migration: ensure queueMode exists
   if (loaded.queueMode === undefined) {

@@ -40,7 +40,6 @@ const TAB_ICON_IDS = [
   "tab_build",
   "tab_explore",
   "tab_skills",
-  "tab_routines",
   // Mainland-renamed tab icons
   "tab_harvest",
   "tab_forge",
@@ -66,7 +65,7 @@ for (const action of ACTIONS) {
 }
 
 // Recipes with no output/toolOutput/buildingOutput/equipmentOutput fall back to recipe.id
-// (see getStepIcon in RoutinesPanel.tsx + getQueuedActionIcon in App.tsx + SearchPanel iconId)
+// (see getQueuedActionIcon in App.tsx + SearchPanel iconId)
 for (const recipe of RECIPES) {
   if (!recipe.output && !recipe.toolOutput && !recipe.buildingOutput && !recipe.equipmentOutput) {
     referencedIds.add(recipe.id);
