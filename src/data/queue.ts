@@ -24,16 +24,6 @@ export const QUEUE_UPGRADES: QueueUpgrade[] = [
     maxQueue: 1,
     description: "Charcoal Board — writing plans down keeps you organized. +1 queue slot.",
   },
-  {
-    buildingId: "storage_shelf",
-    maxQueue: 1,
-    description: "Storage Shelf — organized supplies, organized work. +1 queue slot.",
-  },
-  {
-    buildingId: "outrigger_canoe",
-    maxQueue: 2,
-    description: "Outrigger Canoe — you've mastered large-effort projects and find rituals for completing work. +2 queue slots.",
-  },
 ];
 
 export function isQueueUnlocked(state: GameState): boolean {

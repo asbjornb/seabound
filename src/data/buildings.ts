@@ -145,7 +145,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Storage Shelf",
     description:
       "A bamboo shelf lined with clay pots and jars. Keeps supplies tidy and off the ground.",
-    unlocks: "Extra storage for small non-food items, +1 action queue slot",
+    unlocks: "Extra storage for small non-food items",
     storageBonus: [{ excludeTags: ["food", "large"], amount: 5 }],
   },
   charcoal_kiln: {
@@ -221,7 +221,7 @@ export const BUILDINGS: Record<string, BuildingDef> = {
     name: "Outrigger Canoe",
     description:
       "A dugout canoe fitted with a bamboo outrigger and woven sail. Built to cross open ocean.",
-    unlocks: "Oceanic Voyage expedition — the way home; +2 action queue slots",
+    unlocks: "Oceanic Voyage expedition — the way home",
     vesselTier: 3,
   },
   rock_pool_cache: {
