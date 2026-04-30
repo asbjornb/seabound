@@ -11,7 +11,7 @@
  */
 
 import type { GameState } from "../data/types";
-import { trackEvent } from "./analytics";
+import { trackEvent, WORKER_URL } from "./analytics";
 
 const PLAYER_ID_KEY = "seabound_analytics_id";
 const HEARTBEAT_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
@@ -322,7 +322,68 @@ export function checkMilestones(state: GameState): string[] {
       milestoneId: m.id,
       ...progressSnapshot(state),
     });
+
+    maybeUploadSaveSnapshot(state, m.id);
   }
 
   return newlyReached;
+}
+
+// ── Save snapshot collection ───────────────────────────────────
+//
+// On phase/victory milestones, upload a sampled copy of the player's save
+// to R2 so we can manually inspect representative end-of-phase states. Each
+// player uploads at most one snapshot per milestone (localStorage dedup),
+// gated by a 50% probability roll to keep total volume low.
+
+const SNAPSHOT_MILESTONES = new Set([
+  "phase_bamboo",
+  "phase_fire",
+  "phase_stone_clay",
+  "phase_maritime",
+  "phase_voyage",
+  "victory",
+]);
+const SNAPSHOT_PROBABILITY = 0.5;
+const SNAPSHOT_FLAG_PREFIX = "seabound_save_snapshot_sent_";
+
+function maybeUploadSaveSnapshot(state: GameState, milestoneId: string): void {
+  if (!SNAPSHOT_MILESTONES.has(milestoneId)) return;
+  // Only on production origins (matches analytics gate).
+  if (
+    typeof window === "undefined" ||
+    !(window.location.hostname === "seabound.dev" ||
+      window.location.hostname.endsWith(".seabound.pages.dev"))
+  ) return;
+  const flagKey = SNAPSHOT_FLAG_PREFIX + milestoneId;
+  if (localStorage.getItem(flagKey)) return;
+  if (Math.random() >= SNAPSHOT_PROBABILITY) {
+    // Skipped this time, but keep the flag unset so a future session retries.
+    return;
+  }
+
+  // Mark before upload so a fast retry doesn't double-post on flaky networks.
+  localStorage.setItem(flagKey, String(Date.now()));
+
+  const phase = milestoneId.startsWith("phase_")
+    ? milestoneId.slice("phase_".length)
+    : milestoneId;
+  const body = JSON.stringify({
+    playerId: getPlayerId(),
+    phase,
+    milestoneId,
+    save: state,
+    capturedAt: Date.now(),
+  });
+
+  fetch(`${WORKER_URL}/api/save-snapshot`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body,
+    keepalive: true,
+  }).catch(() => {
+    // Snapshot upload is best-effort. If it fails, clear the flag so a later
+    // session can try again.
+    localStorage.removeItem(flagKey);
+  });
 }

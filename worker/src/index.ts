@@ -106,6 +106,13 @@ interface AnalyticsEvent {
   // Routine fields
   stepCount?: number;
   reason?: string;
+  // first_action / early_heartbeat fields
+  actionId?: string;
+  actionType?: string;
+  msSinceSessionStart?: number;
+  isFirstActionEver?: boolean;
+  bucket?: string;
+  referrer?: string | null;
 }
 
 interface PlayerSummary {
@@ -300,6 +307,31 @@ async function handleAnalyticsSummary(
     }
   }
 
+  // Early engagement funnel: session_start → first_action → 30s → 2m
+  // Tracked per (playerId, sessionStartTs) to avoid double-counting heartbeats.
+  const sessionStarts = events.filter((e) => e.event === "session_start" && e.playerId).length;
+  const playersWithFirstAction = new Set<string>();
+  const playersWithEarly30s = new Set<string>();
+  const playersWithEarly2m = new Set<string>();
+  // First-action breakdown by actionId — which actions retain vs. drop
+  const firstActionByActionId: Record<string, number> = {};
+  // Median ms-to-first-action (engagement speed)
+  const firstActionDelays: number[] = [];
+  for (const e of events) {
+    if (e.event === "first_action" && e.playerId) {
+      playersWithFirstAction.add(e.playerId);
+      if (e.actionId) {
+        firstActionByActionId[e.actionId] = (firstActionByActionId[e.actionId] ?? 0) + 1;
+      }
+      if (typeof e.msSinceSessionStart === "number") {
+        firstActionDelays.push(e.msSinceSessionStart);
+      }
+    } else if (e.event === "early_heartbeat" && e.playerId) {
+      if (e.bucket === "30s") playersWithEarly30s.add(e.playerId);
+      else if (e.bucket === "2m") playersWithEarly2m.add(e.playerId);
+    }
+  }
+
   // Returning players
   const returningPlayers = [...players.values()].filter((p) => p.sessions > 1).length;
 
@@ -334,9 +366,65 @@ async function handleAnalyticsSummary(
       medianStepCount: median(routineStepCounts),
       stopReasons: routineStopReasons,
     },
+    earlyFunnel: {
+      sessionStarts,
+      uniquePlayersStarted: totalPlayers,
+      playersWithFirstAction: playersWithFirstAction.size,
+      playersWithEarly30s: playersWithEarly30s.size,
+      playersWithEarly2m: playersWithEarly2m.size,
+      medianMsToFirstAction: median(firstActionDelays),
+      firstActionByActionId,
+    },
   };
 
   return json(summary, 200, cors);
+}
+
+/** POST /api/save-snapshot — write a sampled save snapshot to R2 (no auth, low-volume). */
+async function handleSaveSnapshot(
+  request: Request,
+  env: Env,
+  cors: Record<string, string>,
+): Promise<Response> {
+  const body = await request.text();
+  if (!body || body.length > 200_000) {
+    return json({ error: "Invalid payload" }, 400, cors);
+  }
+
+  let parsed: { playerId?: string; phase?: string; save?: unknown };
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return json({ error: "Invalid JSON" }, 400, cors);
+  }
+  const playerId = (parsed.playerId ?? "unknown").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 40);
+  const phase = (parsed.phase ?? "unknown").replace(/[^a-z0-9_]/g, "").slice(0, 24);
+  const date = new Date().toISOString().slice(0, 10);
+  const key = `save-snapshots/${phase}/${date}/${playerId}-${Date.now()}.json`;
+
+  await env.BUCKET.put(key, body, {
+    httpMetadata: { contentType: "application/json" },
+  });
+
+  return json({ ok: true, key }, 200, cors);
+}
+
+/** GET /api/save-snapshots — list snapshots (auth required). */
+async function handleSaveSnapshotsList(
+  env: Env,
+  cors: Record<string, string>,
+  prefix: string,
+): Promise<Response> {
+  const listed = await env.BUCKET.list({
+    prefix: `save-snapshots/${prefix}`,
+    limit: 200,
+  });
+  const keys = listed.objects.map((o) => ({
+    key: o.key,
+    size: o.size,
+    uploaded: o.uploaded.toISOString(),
+  }));
+  return json({ keys }, 200, cors);
 }
 
 /** PUT /api/store/:path — write arbitrary files (CI auth required) */
@@ -418,6 +506,20 @@ export default {
     // POST /api/analytics
     if (path === "/api/analytics" && request.method === "POST") {
       return handleAnalytics(request, env, cors);
+    }
+
+    // POST /api/save-snapshot — sampled save uploads from the game (no auth)
+    if (path === "/api/save-snapshot" && request.method === "POST") {
+      return handleSaveSnapshot(request, env, cors);
+    }
+
+    // GET /api/save-snapshots[?prefix=phase/...] — list snapshots (auth required)
+    if (path === "/api/save-snapshots" && request.method === "GET") {
+      if (!isAuthorized(request, env)) {
+        return json({ error: "Unauthorized" }, 401, cors);
+      }
+      const prefix = url.searchParams.get("prefix") ?? "";
+      return handleSaveSnapshotsList(env, cors, prefix);
     }
 
     // GET /api/analytics/summary — aggregated dashboard

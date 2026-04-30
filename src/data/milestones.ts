@@ -44,6 +44,14 @@ const AUTHORED_MILESTONES: Partial<Record<SkillId, SkillMilestone[]>> = {
       ],
     },
     {
+      level: 6,
+      description: "Beachcomber's eye — 1% chance to spot a large shell in tidal pools",
+      effects: [
+        { type: "drop_chance", actionId: "wade_tidal_pool", resourceId: "large_shell", bonus: 0.01 },
+        { type: "drop_chance", actionId: "comb_rock_pools", resourceId: "large_shell", bonus: 0.01 },
+      ],
+    },
+    {
       level: 7,
       description: "Practiced angler — all fishing 10% faster",
       effects: [

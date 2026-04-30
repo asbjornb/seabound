@@ -169,6 +169,16 @@ interface RoutinesSummary {
   stopReasons: Record<string, number>;
 }
 
+interface EarlyFunnel {
+  sessionStarts: number;
+  uniquePlayersStarted: number;
+  playersWithFirstAction: number;
+  playersWithEarly30s: number;
+  playersWithEarly2m: number;
+  medianMsToFirstAction: number | null;
+  firstActionByActionId: Record<string, number>;
+}
+
 interface AnalyticsSummary {
   period: string;
   totalEvents: number;
@@ -181,6 +191,7 @@ interface AnalyticsSummary {
   dropOff: Record<string, number>;
   victories: number;
   routines?: RoutinesSummary;
+  earlyFunnel?: EarlyFunnel;
 }
 
 function AnalyticsDashboard() {
@@ -401,6 +412,79 @@ function AnalyticsDashboard() {
               </div>
             </>
           )}
+
+          {/* Early engagement funnel */}
+          {data.earlyFunnel && (() => {
+            const ef = data.earlyFunnel;
+            const players = ef.uniquePlayersStarted || 1;
+            const pct = (n: number) => Math.round((n / players) * 100);
+            const cards = [
+              { label: "Sessions Started", value: ef.sessionStarts },
+              { label: "Players w/ First Action", value: `${ef.playersWithFirstAction} (${pct(ef.playersWithFirstAction)}%)` },
+              { label: "Reached 30s", value: `${ef.playersWithEarly30s} (${pct(ef.playersWithEarly30s)}%)` },
+              { label: "Reached 2m", value: `${ef.playersWithEarly2m} (${pct(ef.playersWithEarly2m)}%)` },
+              {
+                label: "Median Time to First Action",
+                value: ef.medianMsToFirstAction != null
+                  ? `${(ef.medianMsToFirstAction / 1000).toFixed(1)}s`
+                  : "—",
+              },
+            ];
+            const sortedActions = Object.entries(ef.firstActionByActionId)
+              .sort(([, a], [, b]) => b - a);
+            return (
+              <>
+                <h4 style={{ color: "#e8e4d8", marginTop: "1rem", marginBottom: "0.5rem" }}>
+                  Early Engagement (% of unique players)
+                </h4>
+                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                  {cards.map((card) => (
+                    <div key={card.label} style={{
+                      background: "#1e3a3a",
+                      borderRadius: 6,
+                      padding: "0.5rem 0.75rem",
+                      minWidth: 110,
+                      textAlign: "center",
+                    }}>
+                      <div style={{ color: "#f0a050", fontSize: "1.05rem", fontWeight: 700 }}>
+                        {card.value}
+                      </div>
+                      <div style={{ color: "#7a9a8a", fontSize: "0.75rem" }}>{card.label}</div>
+                    </div>
+                  ))}
+                </div>
+                {sortedActions.length > 0 && (
+                  <>
+                    <h4 style={{ color: "#e8e4d8", marginTop: "1rem", marginBottom: "0.5rem" }}>
+                      First Action Picked
+                    </h4>
+                    <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+                      <table style={{ ...styles.table, minWidth: 320 }}>
+                        <thead>
+                          <tr>
+                            <th style={styles.th}>Action</th>
+                            <th style={{ ...styles.th, textAlign: "right" }}>Players</th>
+                            <th style={{ ...styles.th, textAlign: "right" }}>Share</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sortedActions.map(([actionId, count]) => (
+                            <tr key={actionId} style={styles.tr}>
+                              <td style={{ ...styles.td, whiteSpace: "nowrap" }}>{actionId}</td>
+                              <td style={{ ...styles.td, textAlign: "right" }}>{count}</td>
+                              <td style={{ ...styles.td, textAlign: "right" }}>
+                                {Math.round((count / ef.playersWithFirstAction) * 100)}%
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                )}
+              </>
+            );
+          })()}
 
           <div style={{ color: "#5a7a6a", fontSize: "0.75rem", marginTop: "0.75rem" }}>
             {data.period} — {data.totalEvents} events processed
