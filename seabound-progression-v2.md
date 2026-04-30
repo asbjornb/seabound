@@ -54,9 +54,11 @@ After winning the Oceanic Voyage, players can opt into the mainland sandbox via 
 ### What's Next
 
 - More authored skill milestones (especially Mining, Smithing, Construction, Weaving)
-- Stone Hearth → Cooking Hearth tier (smoking, preserved food)
-- Smoking Rack, Workbench, Bone Station buildings
-- Net fishing (Fishing 40 + Weaving 35) as a higher-tier alternative to the basket trap and stone weir
+- More mainland sandbox depth — settling, processing chains, and non-combat play that complements the expedition loop
+- Livestock — penning and tending animals for hides, tallow, milk, and meat
+- Oil / tallow / soap chain — rendering fats into useful materials (illumination, lubrication, hygiene)
+- Bone tools — an intermediary tier between knapped stone and cast metal (needles, fishhooks, awls, scrapers)
+- Net fishing as a higher-tier alternative to the basket trap and stone weir
 - Distant archipelago expeditions (rarer affix pools, deeper imbuement system)
 - More uniques and limited imbuement variants
 - Magic / supernatural systems (currently hinted at via mainland flavor)
@@ -65,7 +67,6 @@ After winning the Oceanic Voyage, players can opt into the mainland sandbox via 
 ### Design Ideas (Not Yet Planned)
 
 - **Resource obsolescence** — As players progress, early-phase resources (e.g. rough_fiber, flat stones) should become obsolete. Unlike Unnamed Space Idle's approach of making early resources infinite, we want a thematic solution. Possible approaches: auto-conversion (rough fiber → fiber when you unlock it), removal of obsolete actions/recipes from the UI once superseded, or a "mastery" mechanic where reaching a skill threshold trivializes early resources. Goal: reduce inventory clutter and action list bloat in late game without breaking the castaway theme.
-- **Salvage reagent yields** — `affixReagentOutputs` is wired through the type system but the table is currently empty. Open question: should salvage be a meaningful path to imbuement reagents, or should reagents stay strictly expedition-locked?
 
 ---
 
@@ -157,7 +158,7 @@ This creates a natural check-in loop: you set your traps, go do other things, co
 
 **Combat** is intentionally light-touch. Combat skill grants only small flat stat bonuses via authored milestones — gear, affixes, imbuement, and route choice are the real success drivers. This is the design's "optionality principle": a player who minimises combat investment can still progress through slower alternatives (mining, charting, smithing efficient gear).
 
-**Mining** gates the deeper ore tiers by skill level (tin Mining 5, iron Mining 10) but the *biome discovery* itself isn't level-gated — players can enter Coastal Cliffs / Inland Hills via either combat expeditions or the non-combat Cartographer's Table charting path.
+**Mining** biomes (Coastal Cliffs, Inland Hills) are reached either via mainland combat expeditions or via the non-combat Cartographer's Table charting path. As with the other skills, mining levels should *enable efficiency* (faster swings, better yields, double drops) rather than gate which ores you can extract.
 
 ---
 
@@ -177,11 +178,11 @@ Skill level gates are reserved for **optional/efficiency** unlocks, not core pro
 | Construction 13 | Crucible recipe | Advanced technique | ✅ |
 | Cooking 12 | Sealed clay jar recipe | Advanced technique | ✅ |
 | Any skill 15 | Routines unlock | System unlock | ✅ |
-| Mining 5 | Prospect tin deposit | Advanced technique | ✅ |
-| Mining 10 | Mine iron ore | Advanced technique | ✅ |
 | Combat 2–9 | Equipment tier requirements (copper Lv2–3, bronze 4–5, iron 6–7, steel 8–9) | Gear gates | ✅ |
 
 **Removed level gates** (now gated by discovery/crafting chains only): Hammerstone, Stone Flake, Stone Blade, Shell Adze, Stone Axe, Bamboo Knife, Bow Drill Kit, Split Bamboo Cane, Obsidian Blade. Smithing recipes (smelt/forge) intentionally have no skill-level gates either — material cost and building requirements are the gate.
+
+**Soft gates to revisit:** Prospect Tin (currently Mining 5) and Mine Iron Ore (currently Mining 10) hard-gate the higher ore tiers by skill level. The design intent is for mining levels to make extraction *faster and richer*, not to lock players out of ores entirely — these gates should likely become efficiency milestones instead.
 
 ---
 
