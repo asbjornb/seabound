@@ -60,7 +60,7 @@ After winning the Oceanic Voyage, players can opt into the mainland sandbox via 
 - Distant archipelago expeditions (rarer affix pools, deeper imbuement system)
 - More uniques and limited imbuement variants
 - Magic / supernatural systems (currently hinted at via mainland flavor)
-- Automation / NPC helpers for late-game stations
+- Automation for late-game stations
 
 ### Design Ideas (Not Yet Planned)
 
@@ -700,7 +700,7 @@ See **TAB 7: Expedition Zones**. Briefly: 7 expeditions across three difficulty 
 |---|---|
 | **Distant archipelago expeditions** | Higher-tier mainland expeditions with deeper affix pools, rarer uniques. |
 | **Magic / supernatural** | Currently hinted at via mainland flavor (idols, reagents, supernatural enemies). Could pay off as a distinct skill or item subsystem. |
-| **Automation** | Late-game NPC helpers or upgraded stations that run while away. Extends the check-in loop. |
+| **Automation** | Upgraded stations that run while away. Extends the check-in loop. |
 | **More uniques** | Fixed-affix chase items per expedition. Currently 5 uniques across mainland — room for more. |
 | **Limited imbuement variants** | Multiple reagents per stat, narrow-band re-rolls. Currently only one reagent → one stat. |
 | **Net fishing** | Higher-tier fishing alternative to basket trap and stone weir. Sketched in early designs but not built. |

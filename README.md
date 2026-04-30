@@ -131,7 +131,7 @@ After completing the Oceanic Voyage, players can opt into a mainland sandbox tha
 ## Future Ideas
 
 - Magic / supernatural systems hinted at in the mainland phase
-- Automation / NPC helpers for late-game stations
+- Automation for late-game stations
 - Distant archipelago expedition tier with rarer affix pools
 
 ## Tech
