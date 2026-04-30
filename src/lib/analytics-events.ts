@@ -15,8 +15,15 @@ import { trackEvent } from "./analytics";
 
 const PLAYER_ID_KEY = "seabound_analytics_id";
 const HEARTBEAT_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+const EARLY_HEARTBEAT_DELAYS_MS: { bucket: string; delay: number }[] = [
+  { bucket: "30s", delay: 30 * 1000 },
+  { bucket: "2m", delay: 2 * 60 * 1000 },
+];
 
 let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+let earlyHeartbeatTimers: ReturnType<typeof setTimeout>[] = [];
+let sessionStartedAt = 0;
+let firstActionFiredThisSession = false;
 
 /** Get or create a persistent anonymous player ID. */
 function getPlayerId(): string {
@@ -61,11 +68,36 @@ function progressSnapshot(state: GameState): Record<string, unknown> {
 
 /** Fire on game load. Gives unique players + return rate. */
 export function trackSessionStart(state: GameState): void {
+  sessionStartedAt = Date.now();
+  firstActionFiredThisSession = false;
   trackEvent("session_start", {
     ...progressSnapshot(state),
     isNewPlayer: state.totalPlayTimeMs === 0,
+    referrer: typeof document !== "undefined" ? document.referrer || null : null,
     screenWidth: window.screen.width,
     screenHeight: window.screen.height,
+  });
+}
+
+/**
+ * Fire once per session on the first completed action. Captures which action
+ * the player engaged with first and how long it took, separating "loaded but
+ * never clicked" from "engaged briefly then bounced".
+ */
+export function trackFirstAction(
+  state: GameState,
+  actionId: string,
+  actionType: string,
+): void {
+  if (firstActionFiredThisSession) return;
+  firstActionFiredThisSession = true;
+  const msSinceSessionStart = sessionStartedAt > 0 ? Date.now() - sessionStartedAt : 0;
+  trackEvent("first_action", {
+    ...progressSnapshot(state),
+    actionId,
+    actionType,
+    msSinceSessionStart,
+    isFirstActionEver: state.actionCompletions <= 1,
   });
 }
 
@@ -79,6 +111,21 @@ export function trackSessionEnd(state: GameState): void {
 /** Start periodic heartbeat. The last heartbeat before churn = drop-off point. */
 export function startHeartbeat(getState: () => GameState): void {
   stopHeartbeat();
+
+  // Early one-shot heartbeats — capture first-2-min behavior at higher
+  // resolution than the recurring 5-min interval, where most early churn lives.
+  for (const { bucket, delay } of EARLY_HEARTBEAT_DELAYS_MS) {
+    const timer = setTimeout(() => {
+      const state = getState();
+      trackEvent("early_heartbeat", {
+        ...progressSnapshot(state),
+        bucket,
+        msSinceSessionStart: delay,
+      });
+    }, delay);
+    earlyHeartbeatTimers.push(timer);
+  }
+
   heartbeatTimer = setInterval(() => {
     const state = getState();
     trackEvent("heartbeat", progressSnapshot(state));
@@ -90,6 +137,8 @@ export function stopHeartbeat(): void {
     clearInterval(heartbeatTimer);
     heartbeatTimer = null;
   }
+  for (const timer of earlyHeartbeatTimers) clearTimeout(timer);
+  earlyHeartbeatTimers = [];
 }
 
 // ── Milestones ──────────────────────────────────────────────────

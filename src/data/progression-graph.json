@@ -1972,11 +1972,6 @@
     },
     {
       "from": "action:wade_tidal_pool",
-      "to": "resource:large_shell",
-      "relation": "produces"
-    },
-    {
-      "from": "action:wade_tidal_pool",
       "to": "skill:fishing",
       "relation": "trains"
     },
@@ -1993,11 +1988,6 @@
     {
       "from": "action:comb_rock_pools",
       "to": "resource:shell",
-      "relation": "produces"
-    },
-    {
-      "from": "action:comb_rock_pools",
-      "to": "resource:large_shell",
       "relation": "produces"
     },
     {
@@ -2088,6 +2078,11 @@
     {
       "from": "action:spear_fish",
       "to": "resource:shell",
+      "relation": "produces"
+    },
+    {
+      "from": "action:spear_fish",
+      "to": "resource:large_shell",
       "relation": "produces"
     },
     {
@@ -7398,7 +7393,6 @@
       "action:fell_large_tree",
       "action:collect_driftwood",
       "recipe:build_camp_fire",
-      "action:wade_tidal_pool",
       "station:soak_pandanus",
       "biome:jungle_interior",
       "tool:stone_axe",

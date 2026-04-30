@@ -66,6 +66,7 @@ import {
   checkMilestones,
   startHeartbeat,
   stopHeartbeat,
+  trackFirstAction,
   trackSessionEnd,
   trackSessionStart,
 } from "../lib/analytics-events";
@@ -571,6 +572,7 @@ export function useGame() {
             } catch {
               // Don't let discovery/lore processing errors break offline progress
             }
+            trackFirstAction(next, c.actionId, c.actionType);
           }
           if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
@@ -636,6 +638,7 @@ export function useGame() {
           for (const c of result.completions) {
             processCompletionDiscoveries(next, c);
             processAmbientLore(next, c);
+            trackFirstAction(next, c.actionId, c.actionType);
           }
           if (result.gatherStoppedFull) maybeTipSecondaryDrops(next, result.gatherStoppedFull.actionId);
           totalCompletions += result.completions.length;
