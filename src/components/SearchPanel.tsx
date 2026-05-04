@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo, useRef, useEffect, useState } from "react";
 import { getResources, getSkills } from "../data/registry";
 import { RESOURCE_ICONS, SKILL_ICONS } from "../data/icons";
 import type {
@@ -27,8 +27,6 @@ interface SearchResult {
 }
 
 interface Props {
-  query: string;
-  onChangeQuery: (q: string) => void;
   onClose: () => void;
   actions: ActionDef[];
   recipes: RecipeDef[];
@@ -201,8 +199,6 @@ function getTypeLabel(type: SearchResultType, screen?: GameScreen): string {
 }
 
 export function SearchPanel({
-  query,
-  onChangeQuery,
   onClose,
   actions,
   recipes,
@@ -215,6 +211,7 @@ export function SearchPanel({
   onJumpToTab,
   screen,
 }: Props) {
+  const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const SKILLS = getSkills();
 
@@ -280,7 +277,7 @@ export function SearchPanel({
             className="search-input"
             placeholder="Search actions, recipes, resources..."
             value={query}
-            onChange={(e) => onChangeQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <button className="modal-close-btn" onClick={onClose}>
             <CloseIcon size={16} />
