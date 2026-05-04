@@ -141,7 +141,6 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [hideFlavorText, setHideFlavorText] = useState(
     () => localStorage.getItem("seabound_hideFlavorText") === "true"
   );
@@ -696,7 +695,7 @@ export default function App() {
             </nav>
             <button
               className="search-toggle-btn"
-              onClick={() => { setSearchOpen(true); setSearchQuery(""); }}
+              onClick={() => setSearchOpen(true)}
               title="Search actions, recipes, resources..."
             >
               🔍
@@ -844,8 +843,6 @@ export default function App() {
 
       {searchOpen && (
         <SearchPanel
-          query={searchQuery}
-          onChangeQuery={setSearchQuery}
           onClose={() => setSearchOpen(false)}
           actions={game.availableActions}
           recipes={game.availableRecipes}
